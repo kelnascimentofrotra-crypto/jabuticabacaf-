@@ -899,7 +899,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 
 <div data-pxscene="2" style="position:absolute;left:0;bottom:0;width:100%;display:flex;flex-direction:column;gap:clamp(13px,1.6vw,20px);opacity:0">
-<span data-accent="text" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#E4C79C">02 / Precisão</span>
+<span data-accent="text" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#E4C79C">02 / Análise</span>
 <h2 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(26px,3vw,44px);line-height:1.18;color:#FBF9F5">Cada detalhe influencia o resultado.</h2>
 <p style="margin:0;max-width:38ch;font-size:12.5px;line-height:1.85;color:rgba(244,241,234,0.66)">Conexões, vedação, fluxo e carga de gás — medidos, não estimados.</p>
 </div>
@@ -915,7 +915,12 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 
 <div data-pxscene="4" style="position:absolute;left:0;bottom:0;width:100%;display:flex;flex-direction:column;gap:clamp(14px,1.7vw,22px);opacity:0">
-<span data-accent="text" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#E4C79C">04 / Resultado</span>
+<span data-accent="text" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#E4C79C">04 / Teste</span>
+<h2 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(26px,3vw,44px);line-height:1.18;color:#FBF9F5">Nada é entregue sem medição.</h2>
+<p style="margin:0;max-width:46ch;font-size:clamp(12px,1vw,14px);line-height:1.75;color:rgba(244,241,234,0.62)">Pressões, temperatura de saída e estanqueidade conferidas antes de liberar o equipamento.</p>
+</div>
+<div data-pxscene="5" style="position:absolute;left:0;bottom:0;width:100%;display:flex;flex-direction:column;gap:clamp(14px,1.7vw,22px);opacity:0">
+<span data-accent="text" style="font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:#E4C79C">05 / Resultado</span>
 <h2 style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(26px,3vw,44px);line-height:1.18;color:#FBF9F5">O ambiente responde.</h2>
 <div style="display:flex;align-items:flex-end;gap:clamp(18px,2.4vw,34px);flex-wrap:wrap">
 <div style="display:flex;align-items:baseline;gap:2px"><span data-el="pxTemp" style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(40px,4.2vw,62px);line-height:0.9;color:#FBF9F5">26</span><span style="font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(19px,1.9vw,26px);color:rgba(244,241,234,0.6)">°C</span></div>
@@ -1509,7 +1514,8 @@ class Component extends DCLogic {
       c.spots[i].style.transform = 'translate3d(0,' + ((1 - v) * 8).toFixed(1) + 'px,0)';
     }
 
-    const win = [[0, 0.06, 0.10, 0.17], [0.15, 0.21, 0.28, 0.34], [0.37, 0.43, 0.50, 0.56], [0.59, 0.65, 0.70, 0.76], [0.78, 0.84, 0.88, 0.93]];
+    const win = [[0, 0.04, 0.08, 0.13], [0.12, 0.17, 0.22, 0.27], [0.26, 0.31, 0.36, 0.41],
+      [0.40, 0.45, 0.50, 0.55], [0.54, 0.59, 0.64, 0.69], [0.68, 0.73, 0.85, 0.91]];
     for (let i = 0; i < c.scenes.length; i++) {
       const w = win[i];
       const v = easeOut(span(p, w[0], w[1])) * (1 - easeIO(span(p, w[2], w[3])));
@@ -1518,19 +1524,19 @@ class Component extends DCLogic {
       c.scenes[i].style.filter = v < 0.99 ? 'blur(' + ((1 - v) * 5).toFixed(2) + 'px)' : 'none';
     }
     for (let i = 0; i < c.inds.length; i++) {
-      const v = easeOut(span(p, 0.19 + i * 0.03, 0.26 + i * 0.03)) * (1 - easeIO(span(p, 0.28, 0.34)));
+      const v = easeOut(span(p, 0.165 + i * 0.025, 0.225 + i * 0.025)) * (1 - easeIO(span(p, 0.22, 0.27)));
       c.inds[i].style.opacity = v.toFixed(3);
       c.inds[i].style.transform = 'translate3d(0,' + ((1 - v) * 14).toFixed(1) + 'px,0)';
     }
     for (let i = 0; i < c.datas.length; i++) {
-      const v = easeOut(span(p, 0.63 + i * 0.03, 0.70 + i * 0.03)) * (1 - easeIO(span(p, 0.70, 0.76)));
+      const v = easeOut(span(p, 0.445 + i * 0.025, 0.505 + i * 0.025)) * (1 - easeIO(span(p, 0.50, 0.55)));
       c.datas[i].style.opacity = v.toFixed(3);
       c.datas[i].style.transform = 'translate3d(0,' + ((1 - v) * 14).toFixed(1) + 'px,0)';
     }
 
-    c.temp.textContent = Math.round(26 - 4 * easeIO(span(p, 0.80, 0.90)));
+    c.temp.textContent = Math.round(26 - 4 * easeIO(span(p, 0.74, 0.84)));
     c.railLine.style.transform = (this._pxMob ? 'scaleX(' : 'scaleY(') + p.toFixed(4) + ')';
-    const marks = [0.06, 0.33, 0.56, 0.76, 0.90];
+    const marks = [0.14, 0.28, 0.42, 0.56, 0.70];
     const accent = this.props.accent || '#E4C79C';
     let active = 0;
     for (let i = 0; i < marks.length; i++) if (p >= marks[i] - 0.03) active = i;
