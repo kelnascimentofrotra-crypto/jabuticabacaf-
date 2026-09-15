@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.className+=' js';</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F2EA">
+<title>Jabuticaba · Confeitaria Gourmet em Teresina – PI</title>
+<meta name="description" content="Confeitaria gourmet em Teresina – PI. Bolos, brigadeiros, doces finos e kits festa artesanais, preparados sob encomenda para transformar cada ocasião em uma experiência inesquecível.">
+<link rel="canonical" href="https://xn--jabuticabacaf-nhb.com.br/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:site_name" content="Jabuticaba Confeitaria">
+<meta property="og:title" content="Jabuticaba · Confeitaria Gourmet em Teresina – PI">
+<meta property="og:description" content="Pequenos detalhes. Grandes momentos. Doces artesanais sob encomenda em Teresina – PI.">
+<meta property="og:image" content="assets/img/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="assets/img/hero-doce.jpg" fetchpriority="high">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/cormorantgaramond-300-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/jost-300-normal-latin.woff2" crossorigin>
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Bakery",
+  "name": "Jabuticaba Confeitaria Gourmet",
+  "description": "Confeitaria gourmet em Teresina – PI: bolos, brigadeiros, doces finos e kits festa sob encomenda.",
+  "image": "assets/img/og-cover.jpg",
+  "servesCuisine": "Confeitaria",
+  "priceRange": "$$",
+  "areaServed": "Teresina, PI",
+  "address": { "@type": "PostalAddress", "addressLocality": "Teresina", "addressRegion": "PI", "addressCountry": "BR" }
+}
+</script>
+</head>
+<body>
+
+<!-- ============================================ ABERTURA CINEMATOGRÁFICA -->
+<div class="intro" id="intro" aria-hidden="true">
+  <canvas class="intro__particles" id="introParticles"></canvas>
+  <div class="intro__glow"></div>
+  <div class="intro__center">
+    <p class="intro__eyebrow" id="introEyebrow">Confeitaria Gourmet</p>
+    <h1 class="intro__logo" id="introLogo">Jabuticaba</h1>
+    <span class="intro__rule" id="introRule"></span>
+  </div>
+  <div class="intro__reveal" id="introReveal">
+    <img src="assets/img/hero-doce.jpg" alt="" width="1200" height="1500">
+  </div>
+</div>
+
+<!-- ============================================================ CABEÇALHO -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top" aria-label="Jabuticaba Confeitaria — início">
+    <span class="nav__mark">J</span>
+    <span class="nav__name">Jabuticaba<em>confeitaria</em></span>
+  </a>
+  <nav class="nav__links" aria-label="Navegação principal">
+    <a href="#experiencia">Experiência</a>
+    <a href="#especialidades">Especialidades</a>
+    <a href="#ocasioes">Ocasiões</a>
+    <a href="#kits">Kits</a>
+    <a href="#localizacao">Contato</a>
+  </nav>
+  <a class="nav__cta" data-wa data-wa-msg="Olá! Gostaria de fazer uma encomenda na Jabuticaba Confeitaria.">Encomendar</a>
+  <button class="nav__toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="Abrir menu">
+    <span></span><span></span>
+  </button>
+</header>
+
+<div class="menu" id="navMenu" hidden>
+  <nav aria-label="Navegação">
+    <a href="#experiencia"><i>01</i>Experiência</a>
+    <a href="#especialidades"><i>02</i>Especialidades</a>
+    <a href="#cena"><i>03</i>A confeitaria</a>
+    <a href="#ocasioes"><i>04</i>Ocasiões</a>
+    <a href="#kits"><i>05</i>Kits festa</a>
+    <a href="#localizacao"><i>06</i>Contato</a>
+  </nav>
+  <a class="menu__cta" data-wa data-wa-msg="Olá! Gostaria de fazer uma encomenda na Jabuticaba Confeitaria.">Encomendar pelo WhatsApp</a>
+</div>
+
+<main id="top">
+
+<!-- ================================================================ HERO -->
+<section class="hero" id="hero">
+  <div class="hero__inner">
+    <div class="hero__text">
+      <p class="eyebrow reveal">Confeitaria Gourmet <span class="dot">•</span> Teresina – PI</p>
+      <h1 class="hero__title display">
+        <span class="line"><span class="line__in">Pequenos detalhes.</span></span>
+        <span class="line"><span class="line__in"><em>Grandes</em> momentos.</span></span>
+      </h1>
+      <p class="hero__sub reveal">Doces artesanais preparados para transformar cada ocasião em uma experiência inesquecível.</p>
+      <div class="hero__actions reveal">
+        <a class="btn btn--solid" data-wa data-wa-msg="Olá! Gostaria de encomendar doces na Jabuticaba Confeitaria.">
+          <span>Encomendar agora</span>
+        </a>
+        <a class="btn btn--ghost" href="#experiencia"><span>Conhecer a confeitaria</span></a>
+      </div>
+      <div class="hero__meta reveal">
+        <span>Feito à mão</span><i></i><span>Sob encomenda</span><i></i><span>Entrega combinada</span>
+      </div>
+    </div>
+
+    <div class="hero__visual" id="heroVisual">
+      <div class="hero__frame">
+        <img id="heroImg" src="assets/img/hero-doce.jpg" alt="Brigadeiros gourmet de chocolate belga sobre superfície clara" width="1200" height="1500" fetchpriority="high" decoding="async">
+        <span class="hero__wash"></span>
+      </div>
+      <div class="floaters" id="floaters" aria-hidden="true">
+        <span class="floater floater--choco" data-depth="1.6" style="--x:-6%;  --y:14%;  --s:66px"></span>
+        <span class="floater floater--choco" data-depth="2.4" style="--x:92%;  --y:30%;  --s:42px"></span>
+        <span class="floater floater--choco" data-depth="1.1" style="--x:78%;  --y:88%;  --s:54px"></span>
+        <span class="floater floater--leaf"  data-depth="2.0" style="--x:-2%;  --y:70%;  --s:58px"></span>
+        <span class="floater floater--gold"  data-depth="3.0" style="--x:86%;  --y:8%;   --s:120px"></span>
+        <span class="floater floater--gold"  data-depth="2.2" style="--x:4%;   --y:42%;  --s:90px"></span>
+        <span class="floater floater--sugar" data-depth="3.4" style="--x:24%;  --y:6%;   --s:7px"></span>
+        <span class="floater floater--sugar" data-depth="2.8" style="--x:64%;  --y:16%;  --s:5px"></span>
+        <span class="floater floater--sugar" data-depth="3.8" style="--x:96%;  --y:62%;  --s:6px"></span>
+        <span class="floater floater--sugar" data-depth="3.2" style="--x:12%;  --y:92%;  --s:5px"></span>
+      </div>
+    </div>
+  </div>
+
+  <a class="hero__scroll" href="#experiencia" aria-label="Rolar para a próxima seção">
+    <span class="hero__scroll-line"></span>
+    <span class="hero__scroll-label">Role</span>
+  </a>
+</section>
+
+<!-- ======================================================= 02 EXPERIÊNCIA -->
+<section class="exp" id="experiencia" data-section="01 — Experiência">
+  <div class="exp__track">
+    <div class="exp__stage">
+      <div class="exp__media">
+        <div class="exp__mask" id="expMask">
+          <img id="expImg" src="assets/img/macro-chocolate.jpg" alt="Macro de chocolate derretido com brilho quente" width="1700" height="1118" loading="lazy" decoding="async">
+        </div>
+      </div>
+      <div class="exp__copy">
+        <h2 class="display exp__title">
+          <span class="line"><span class="line__in">Não é apenas</span></span>
+          <span class="line"><span class="line__in">um doce.</span></span>
+        </h2>
+        <p class="display exp__title exp__title--2" id="expTitle2">
+          <span class="line"><span class="line__in">É o sabor de</span></span>
+          <span class="line"><span class="line__in"><em>um momento.</em></span></span>
+        </p>
+      </div>
+      <ul class="exp__words" id="expWords">
+        <li>feito à mão</li>
+        <li>ingredientes selecionados</li>
+        <li>acabamento impecável</li>
+        <li>feito para você</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==================================================== 03 ESPECIALIDADES -->
+<section class="esp" id="especialidades" data-section="02 — Especialidades">
+  <header class="esp__head">
+    <p class="eyebrow reveal">Especialidades</p>
+    <h2 class="display reveal-line">
+      <span class="line"><span class="line__in">Feitos para</span></span>
+      <span class="line"><span class="line__in">despertar <em>desejo.</em></span></span>
+    </h2>
+    <p class="esp__hint reveal" aria-hidden="true">Arraste <span>→</span></p>
+  </header>
+
+  <div class="esp__viewport" id="espViewport">
+    <div class="esp__rail" id="espRail">
+
+      <article class="panel" data-i="01">
+        <div class="panel__media"><img src="assets/img/esp-bolos.jpg" alt="Bolo com cobertura de ganache brilhante" width="760" height="950" loading="lazy" decoding="async"></div>
+        <div class="panel__body">
+          <h3>Bolos</h3>
+          <p>Camadas generosas, recheios equilibrados e um acabamento que impressiona antes da primeira garfada.</p>
+        </div>
+        <span class="panel__ornament" aria-hidden="true"></span>
+      </article>
+
+      <article class="panel" data-i="02">
+        <div class="panel__media"><img src="assets/img/esp-brigadeiros.jpg" alt="Brigadeiros gourmet finalizados um a um" width="760" height="950" loading="lazy" decoding="async"></div>
+        <div class="panel__body">
+          <h3>Brigadeiros</h3>
+          <p>Ponto exato, brilho profundo e aquele sabor que faz a festa ser lembrada muito depois do último doce.</p>
+        </div>
+        <span class="panel__ornament" aria-hidden="true"></span>
+      </article>
+
+      <article class="panel" data-i="03">
+        <div class="panel__media"><img src="assets/img/esp-doces.jpg" alt="Doces finos com caramelo artesanal" width="760" height="950" loading="lazy" decoding="async"></div>
+        <div class="panel__body">
+          <h3>Doces gourmet</h3>
+          <p>Caramelo, chocolate e frutas selecionadas em pequenas porções de sofisticação.</p>
+        </div>
+        <span class="panel__ornament" aria-hidden="true"></span>
+      </article>
+
+      <article class="panel" data-i="04">
+        <div class="panel__media"><img src="assets/img/esp-kits.jpg" alt="Composição de kit festa completo" width="760" height="950" loading="lazy" decoding="async"></div>
+        <div class="panel__body">
+          <h3>Kits festa</h3>
+          <p>Tudo o que a comemoração precisa reunido em uma única encomenda — bolo, salgados e doces.</p>
+        </div>
+        <span class="panel__ornament" aria-hidden="true"></span>
+      </article>
+
+      <article class="panel" data-i="05">
+        <div class="panel__media"><img src="assets/img/esp-encomendas.jpg" alt="Detalhe de creme artesanal em preparo" width="760" height="950" loading="lazy" decoding="async"></div>
+        <div class="panel__body">
+          <h3>Encomendas especiais</h3>
+          <p>Projetos sob medida para datas que merecem algo único, do conceito ao último detalhe.</p>
+        </div>
+        <span class="panel__ornament" aria-hidden="true"></span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================ 04 MOMENTO CINEMATOGRÁFICO -->
+<section class="cena" id="cena" data-section="03 — A confeitaria">
+  <div class="cena__track">
+    <div class="cena__stage">
+      <div class="cena__bg"><img id="cenaImg" src="assets/img/mesa-cinematica.jpg" alt="Mesa de confeitaria sofisticada com doces finos" width="1900" height="1108" loading="lazy" decoding="async"></div>
+      <span class="cena__sweep" aria-hidden="true"></span>
+      <div class="cena__inner">
+        <p class="eyebrow cena__eyebrow">Momento</p>
+        <h2 class="display cena__title" id="cenaTitle">
+          <span class="line"><span class="line__in">Cada celebração merece</span></span>
+          <span class="line"><span class="line__in">um sabor <em>inesquecível.</em></span></span>
+        </h2>
+      </div>
+      <canvas class="cena__dust" id="cenaDust" aria-hidden="true"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- ==================================================== 05 FEITO COM CUIDADO -->
+<section class="cuidado" id="cuidado" data-section="04 — Feito com cuidado">
+  <div class="cuidado__media">
+    <div class="cuidado__frame"><img id="cuidadoImg" src="assets/img/preparo-creme.jpg" alt="Detalhe macro do creme sendo trabalhado à mão" width="1100" height="1375" loading="lazy" decoding="async"></div>
+    <span class="cuidado__badge">desde o primeiro ingrediente</span>
+  </div>
+
+  <div class="cuidado__copy">
+    <p class="eyebrow reveal">Feito com cuidado</p>
+    <h2 class="display reveal-line">
+      <span class="line"><span class="line__in">Do primeiro ingrediente</span></span>
+      <span class="line"><span class="line__in">ao <em>último detalhe.</em></span></span>
+    </h2>
+    <p class="lead reveal">Cada pedido é preparado individualmente, no tempo que o doce pede. Nada é produzido em série: a massa, o recheio e a finalização recebem a mesma atenção do início ao fim.</p>
+
+    <div class="steps" id="steps">
+      <span class="steps__line" id="stepsLine" aria-hidden="true"></span>
+      <ol>
+        <li><span class="steps__n">01</span><h3>Seleção de ingredientes</h3><p>Chocolate, laticínios e frutas escolhidos um a um, sempre frescos.</p></li>
+        <li><span class="steps__n">02</span><h3>Preparo artesanal</h3><p>Ponto conferido à mão, em pequenas quantidades, sem pressa.</p></li>
+        <li><span class="steps__n">03</span><h3>Acabamento</h3><p>O detalhe que transforma um doce bom em um doce memorável.</p></li>
+        <li><span class="steps__n">04</span><h3>Entrega no ponto certo</h3><p>Embalagem cuidadosa para o doce chegar exatamente como saiu daqui.</p></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== 06 OCASIÕES -->
+<section class="oc" id="ocasioes" data-section="05 — Ocasiões">
+  <header class="oc__head">
+    <p class="eyebrow reveal">Ocasiões</p>
+    <h2 class="display reveal-line">
+      <span class="line"><span class="line__in">Para os dias que</span></span>
+      <span class="line"><span class="line__in">merecem ser <em>lembrados.</em></span></span>
+    </h2>
+  </header>
+
+  <div class="oc__grid" id="ocGrid">
+    <figure class="oc__card" data-speed="0.14"><img src="assets/img/oc-aniversarios.jpg" alt="Doce para aniversário" width="660" height="880" loading="lazy" decoding="async"><figcaption>Aniversários</figcaption></figure>
+    <figure class="oc__card" data-speed="-0.10"><img src="assets/img/oc-casamentos.jpg" alt="Doce fino para casamento" width="660" height="880" loading="lazy" decoding="async"><figcaption>Casamentos</figcaption></figure>
+    <figure class="oc__card" data-speed="0.20"><img src="assets/img/oc-cafe.jpg" alt="Doces para o café da tarde" width="660" height="880" loading="lazy" decoding="async"><figcaption>Café da tarde</figcaption></figure>
+    <figure class="oc__card" data-speed="-0.16"><img src="assets/img/oc-presentes.jpg" alt="Caixa de doces para presente" width="660" height="880" loading="lazy" decoding="async"><figcaption>Presentes</figcaption></figure>
+    <figure class="oc__card" data-speed="0.10"><img src="assets/img/oc-datas.jpg" alt="Doces para datas especiais" width="660" height="880" loading="lazy" decoding="async"><figcaption>Datas especiais</figcaption></figure>
+    <figure class="oc__card" data-speed="-0.20"><img src="assets/img/oc-eventos.jpg" alt="Mesa de doces para eventos" width="660" height="880" loading="lazy" decoding="async"><figcaption>Eventos</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============================================================== 07 KITS -->
+<section class="kits" id="kits" data-section="06 — Kits festa">
+  <header class="kits__head">
+    <p class="eyebrow reveal">Kits festa</p>
+    <h2 class="display reveal-line">
+      <span class="line"><span class="line__in">A festa completa,</span></span>
+      <span class="line"><span class="line__in">em uma <em>única encomenda.</em></span></span>
+    </h2>
+  </header>
+
+  <ul class="kits__list">
+    <li class="kit reveal">
+      <div class="kit__name"><h3>Kit Festa Surpresa</h3><span>1 bolo de 1 kg</span></div>
+      <p class="kit__items">20 canudinhos · 40 salgados · 10 brigadeiros · 10 beijinhos</p>
+      <p class="kit__price"><i>R$</i>98<sup>,95</sup></p>
+      <a class="kit__cta" data-wa data-wa-msg="Olá! Tenho interesse no Kit Festa Surpresa (R$ 98,95)." aria-label="Pedir o Kit Festa Surpresa pelo WhatsApp">Pedir</a>
+    </li>
+    <li class="kit reveal">
+      <div class="kit__name"><h3>Kit Festa 02</h3><span>bolo para 10 a 15 pessoas</span></div>
+      <p class="kit__items">1 torta de frango · 100 salgados · 25 doces</p>
+      <p class="kit__price"><i>R$</i>124<sup>,99</sup></p>
+      <a class="kit__cta" data-wa data-wa-msg="Olá! Tenho interesse no Kit Festa 02 (R$ 124,99)." aria-label="Pedir o Kit Festa 02 pelo WhatsApp">Pedir</a>
+    </li>
+    <li class="kit reveal">
+      <div class="kit__name"><h3>Kit Festa Temático</h3><span>bolo temático para 10 a 15 pessoas</span></div>
+      <p class="kit__items">1 torta de frango · 50 salgados · 25 doces</p>
+      <p class="kit__price"><i>R$</i>134<sup>,99</sup></p>
+      <a class="kit__cta" data-wa data-wa-msg="Olá! Tenho interesse no Kit Festa Temático (R$ 134,99)." aria-label="Pedir o Kit Festa Temático pelo WhatsApp">Pedir</a>
+    </li>
+  </ul>
+  <p class="kits__note reveal">Valores referentes ao topo simples. Topo fotográfico, temas personalizados e quantidades maiores sob consulta.</p>
+</section>
+
+<!-- ============================================================ 08 DESEJO -->
+<section class="desejo" id="desejo" data-section="07 — Desejo">
+  <div class="desejo__media"><img id="desejoImg" src="assets/img/desejo.jpg" alt="Sobremesa gourmet em destaque sobre fundo claro" width="1600" height="1263" loading="lazy" decoding="async"></div>
+  <div class="desejo__inner">
+    <h2 class="display reveal-line">
+      <span class="line"><span class="line__in">Você já sabe o que</span></span>
+      <span class="line"><span class="line__in">vai <em>escolher?</em></span></span>
+    </h2>
+    <a class="btn btn--solid btn--lg reveal" data-wa data-wa-msg="Olá! Quero fazer meu pedido na Jabuticaba Confeitaria."><span>Fazer meu pedido</span></a>
+    <p class="desejo__hint reveal">Atendimento e orçamento pelo WhatsApp</p>
+  </div>
+</section>
+
+<!-- ======================================================= 09 LOCALIZAÇÃO -->
+<section class="local" id="localizacao" data-section="08 — Teresina">
+  <div class="local__bg"><img id="localImg" src="assets/img/teresina.jpg" alt="" width="1500" height="947" loading="lazy" decoding="async"></div>
+  <div class="local__inner">
+    <div class="local__copy">
+      <p class="eyebrow reveal">Teresina – Piauí</p>
+      <h2 class="display reveal-line">
+        <span class="line"><span class="line__in">Do nosso forno para</span></span>
+        <span class="line"><span class="line__in">momentos especiais</span></span>
+        <span class="line"><span class="line__in">em <em>Teresina.</em></span></span>
+      </h2>
+      <a class="btn btn--ghost reveal" data-wa data-wa-msg="Olá! Gostaria de falar com a Jabuticaba Confeitaria."><span>Fale conosco</span></a>
+    </div>
+    <dl class="local__info reveal">
+      <div><dt>Atendimento</dt><dd>Pedidos e orçamentos pelo WhatsApp</dd></div>
+      <div><dt>Encomendas</dt><dd>Sob encomenda, com data combinada na confirmação</dd></div>
+      <div><dt>Entrega</dt><dd>Teresina e região — retirada ou entrega combinada</dd></div>
+      <div><dt>Instagram</dt><dd><a data-ig>@jabuticabaconfeitaria</a></dd></div>
+    </dl>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================================================== RODAPÉ -->
+<footer class="foot">
+  <div class="foot__top">
+    <a class="foot__brand" href="#top">Jabuticaba<em>confeitaria gourmet</em></a>
+    <nav class="foot__links" aria-label="Links">
+      <a data-ig>Instagram</a>
+      <a data-wa data-wa-msg="Olá! Vim pelo site da Jabuticaba Confeitaria.">WhatsApp</a>
+      <a href="#especialidades">Especialidades</a>
+      <a href="#kits">Kits festa</a>
+    </nav>
+  </div>
+  <div class="foot__bottom">
+    <span>Teresina – Piauí</span>
+    <span>© <span id="year">2026</span> Jabuticaba Confeitaria</span>
+  </div>
+</footer>
+
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/vendor/ScrollTrigger.min.js" defer></script>
+<script src="assets/vendor/lenis.min.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
