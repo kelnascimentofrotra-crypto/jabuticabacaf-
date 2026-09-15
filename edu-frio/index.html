@@ -722,6 +722,263 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 </section>
 
+<style>
+/* ===== ENGENHARIA DO CONFORTO =====================================
+   Capitulo proprio: fundo mais profundo que o resto do site, fios
+   finissimos, dourado so como detalhe. Coordenadas do schematic vivem
+   no espaco de pixels da fotografia (viewBox 770x516), entao as
+   marcacoes caem sobre o equipamento em qualquer largura. */
+#engenharia{
+  --en-ink:#05080B; --en-panel:#071019;
+  --en-line:rgba(214,226,238,.10); --en-line-2:rgba(214,226,238,.18);
+  --en-text:#E6ECF3; --en-dim:rgba(230,238,246,.56); --en-faint:rgba(230,238,246,.52);
+  --en-gold:#E4C79C;
+  position:relative; background:var(--en-ink); color:var(--en-text);
+  border-top:1px solid var(--en-line); border-bottom:1px solid var(--en-line);
+}
+#engenharia .en-stage{position:sticky;top:0;height:100vh;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:clamp(56px,8vh,90px) clamp(20px,4vw,56px) clamp(40px,6vh,64px)}
+#engenharia .en-lbl{font-size:9.5px;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--en-faint);padding-left:.42em}
+
+/* --- abertura --- */
+#engenharia .en-intro{position:absolute;inset:auto;max-width:min(76vw,860px);
+  display:flex;flex-direction:column;gap:clamp(18px,2.6vh,30px);align-items:center;text-align:center;
+  will-change:opacity,transform}
+#engenharia .en-h{margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;
+  font-size:clamp(27px,4.1vw,62px);line-height:1.13;color:#FBFCFE;text-wrap:balance}
+#engenharia .en-mask{display:block;overflow:hidden;padding-bottom:.06em}
+#engenharia .en-mask > span{display:block;will-change:transform,opacity,filter}
+#engenharia .en-lead{margin:0;max-width:56ch;font-size:clamp(12.5px,1.05vw,14.5px);
+  line-height:1.72;color:var(--en-dim)}
+
+/* --- placa fotografica --- */
+#engenharia .en-plate{position:relative;will-change:opacity,transform}
+#engenharia .en-frame{position:relative;width:min(56vw,860px);aspect-ratio:770/516;
+  max-height:54vh;overflow:hidden;background:var(--en-panel);
+  outline:1px solid var(--en-line);outline-offset:0;will-change:transform,filter}
+#engenharia .en-frame > .en-img{position:absolute;inset:0;will-change:transform}
+#engenharia .en-frame img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(.62) contrast(1.06) brightness(.72)}
+#engenharia .en-veil{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen}
+#engenharia .en-shade{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% 45%,rgba(5,8,11,0) 38%,rgba(5,8,11,.72) 100%)}
+#engenharia .en-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+#engenharia .en-svg path,#engenharia .en-svg line{fill:none;stroke:var(--en-gold);
+  vector-effect:non-scaling-stroke}
+
+/* cantos tecnicos */
+#engenharia .en-tick{position:absolute;width:13px;height:13px;pointer-events:none;
+  border:0 solid var(--en-line-2)}
+#engenharia .en-tick.tl{top:9px;left:9px;border-top-width:1px;border-left-width:1px}
+#engenharia .en-tick.tr{top:9px;right:9px;border-top-width:1px;border-right-width:1px}
+#engenharia .en-tick.bl{bottom:9px;left:9px;border-bottom-width:1px;border-left-width:1px}
+#engenharia .en-tick.br{bottom:9px;right:9px;border-bottom-width:1px;border-right-width:1px}
+
+/* --- marcacoes sobre a foto --- */
+#engenharia .en-hot{position:absolute;transform:translate(-50%,-50%);pointer-events:none;
+  will-change:opacity}
+#engenharia .en-dot{display:block;width:6px;height:6px;border-radius:50%;background:var(--en-gold);
+  box-shadow:0 0 0 4px rgba(228,199,156,.14),0 0 14px rgba(228,199,156,.7)}
+#engenharia .en-call{position:absolute;top:50%;transform:translateY(-50%);
+  width:max-content;max-width:178px;padding:9px 13px;background:rgba(5,8,11,.94);
+  border:1px solid var(--en-line-2);display:flex;flex-direction:column;gap:5px;
+  will-change:opacity,transform,filter}
+#engenharia .en-call.r{left:20px} #engenharia .en-call.l{right:20px;align-items:flex-end;text-align:right}
+#engenharia .en-cn{font-size:8px;letter-spacing:.3em;color:var(--en-gold)}
+#engenharia .en-ct{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#FBFCFE}
+#engenharia .en-cd{font-size:10.5px;line-height:1.5;color:var(--en-dim);letter-spacing:.01em}
+
+/* --- faixa inferior: narrativa + leitura --- */
+#engenharia .en-row{width:min(56vw,860px);display:flex;align-items:flex-end;
+  justify-content:space-between;gap:clamp(20px,3vw,46px);margin-top:clamp(18px,2.6vh,30px)}
+#engenharia .en-narr{position:relative;flex:1 1 auto;min-width:0;min-height:96px}
+#engenharia .en-step{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;gap:9px;
+  will-change:opacity,transform,filter}
+#engenharia .en-sn{display:flex;align-items:baseline;gap:11px}
+#engenharia .en-si{font-size:9px;letter-spacing:.26em;color:var(--en-gold)}
+#engenharia .en-st{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(20px,2vw,29px);
+  line-height:1;color:#FBFCFE}
+#engenharia .en-sd{font-size:clamp(11.5px,.92vw,13px);line-height:1.6;color:var(--en-dim);max-width:40ch}
+
+#engenharia .en-read{position:relative;flex:0 0 auto;min-width:clamp(168px,17vw,236px);min-height:96px}
+#engenharia .en-blk{position:absolute;left:0;right:0;bottom:0;display:flex;flex-direction:column;
+  align-items:flex-end;gap:8px;will-change:opacity,transform}
+#engenharia .en-temp{display:flex;align-items:baseline;gap:5px;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+#engenharia .en-tv{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(34px,3.6vw,54px);
+  line-height:.9;color:#FBFCFE}
+#engenharia .en-tu{font-size:12px;color:var(--en-dim)}
+#engenharia .en-bar{display:flex;gap:3px}
+#engenharia .en-bar i{display:block;width:9px;height:3px;background:rgba(230,238,246,.16)}
+#engenharia .en-on{display:flex;align-items:center;gap:8px;font-size:9px;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--en-dim)}
+#engenharia .en-on b{display:block;width:5px;height:5px;border-radius:50%;background:var(--en-gold);font-weight:400}
+#engenharia .en-metrics{display:flex;flex-direction:column;gap:5px;align-items:flex-end;width:100%}
+#engenharia .en-m{display:flex;align-items:baseline;justify-content:space-between;gap:14px;width:100%;
+  padding-bottom:4px;border-bottom:1px solid var(--en-line);
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+#engenharia .en-mk{font-size:8.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--en-faint)}
+#engenharia .en-mv{font-size:14px;color:#FBFCFE}
+#engenharia .en-demo{font-size:7.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--en-faint);border:1px solid var(--en-line);padding:3px 7px;align-self:flex-end}
+
+/* --- linha do tempo --- */
+#engenharia .en-spine{width:min(56vw,860px);margin-top:clamp(16px,2.4vh,26px);
+  display:flex;flex-direction:column;gap:10px}
+#engenharia .en-rail{position:relative;height:1px;background:var(--en-line)}
+#engenharia .en-fill{position:absolute;inset:0;transform-origin:0 50%;background:var(--en-gold);opacity:.55}
+#engenharia .en-marks{display:flex;justify-content:space-between}
+#engenharia .en-mark{font-size:8.5px;letter-spacing:.26em;text-transform:uppercase;
+  color:rgba(230,238,246,.5);transition:color 420ms ease,letter-spacing 420ms ease}
+
+/* --- desfecho --- */
+#engenharia .en-final{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:clamp(20px,3vh,34px);text-align:center;
+  padding:0 clamp(20px,5vw,72px);background:rgba(5,8,11,.8);pointer-events:none;will-change:opacity}
+#engenharia .en-fh{margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;
+  font-size:clamp(28px,5vw,74px);line-height:1.08;color:#FBFCFE;letter-spacing:.005em;text-wrap:balance}
+#engenharia .en-fh em{font-style:normal;color:var(--en-gold)}
+#engenharia .en-fs{margin:0;font-size:clamp(12px,1.05vw,14.5px);letter-spacing:.2em;
+  text-transform:uppercase;color:var(--en-dim)}
+#engenharia .en-cta{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:13px;
+  padding:16px 30px;border:1px solid rgba(228,199,156,.34);color:var(--en-gold);
+  font-size:10px;letter-spacing:.24em;text-transform:uppercase;pointer-events:auto;
+  transition:border-color 420ms ease,background-color 420ms ease,padding 420ms cubic-bezier(.16,1,.3,1)}
+#engenharia .en-cta:hover,#engenharia .en-cta:focus-visible{border-color:rgba(228,199,156,.85);
+  background-color:rgba(228,199,156,.07);padding-left:34px;padding-right:34px;color:var(--en-gold)}
+#engenharia .en-cta svg{transition:transform 420ms cubic-bezier(.16,1,.3,1)}
+#engenharia .en-cta:hover svg,#engenharia .en-cta:focus-visible svg{transform:translateX(5px)}
+#engenharia .en-sheen{position:absolute;top:0;left:-140%;width:55%;height:100%;pointer-events:none;
+  background:linear-gradient(100deg,rgba(228,199,156,0),rgba(228,199,156,.16),rgba(228,199,156,0))}
+#engenharia .en-cta:hover .en-sheen,#engenharia .en-cta:focus-visible .en-sheen{
+  animation:enSheen 1.1s cubic-bezier(.3,0,.2,1)}
+@keyframes enSheen{from{left:-140%}to{left:190%}}
+
+/* --- telas estreitas: sequencia vertical, imagem protagonista --- */
+#engenharia .en-callmob{display:none}
+@media (max-width:759px){
+  #engenharia .en-stage{padding:clamp(40px,6vh,64px) 18px clamp(28px,4vh,40px);justify-content:center}
+  #engenharia .en-intro{max-width:92vw}
+  #engenharia .en-frame{width:92vw;max-height:none}
+  #engenharia .en-row,#engenharia .en-spine{width:92vw}
+  #engenharia .en-call{display:none}
+  #engenharia .en-callmob{display:flex;gap:9px;align-items:baseline;min-height:16px;
+    margin-top:11px;width:92vw;will-change:opacity}
+  #engenharia .en-callmob .en-cn{flex:0 0 auto}
+  #engenharia .en-callmob .en-cd{color:var(--en-dim)}
+  #engenharia .en-row{flex-direction:column;align-items:flex-start;gap:14px;margin-top:14px}
+  #engenharia .en-narr{width:100%;min-height:64px}
+  #engenharia .en-read{width:100%;min-height:62px}
+  #engenharia .en-blk{align-items:flex-start}
+  #engenharia .en-metrics{align-items:flex-start}
+  #engenharia .en-demo{align-self:flex-start}
+  #engenharia .en-mark{font-size:7.5px;letter-spacing:.16em}
+}
+@media (max-width:359px){
+  #engenharia .en-mark{letter-spacing:.08em}
+}
+</style>
+<section id="engenharia" data-el="enTrack" style="height:420vh">
+<div class="en-stage" data-el="enStage">
+
+<div class="en-intro" data-el="enIntro">
+<span class="en-lbl" data-accent="text">Tecnologia • Precisão • Performance</span>
+<h2 class="en-h">
+<span class="en-mask"><span data-enline="0">Conforto não é apenas</span></span>
+<span class="en-mask"><span data-enline="1">sentir a temperatura.</span></span>
+<span class="en-mask"><span data-enline="2">É controlar o ambiente.</span></span>
+</h2>
+<p class="en-lead">Cada ambiente possui necessidades diferentes. A solução certa nasce da análise, da tecnologia e de uma execução precisa.</p>
+</div>
+
+<div class="en-plate" data-el="enPlate">
+<div class="en-frame" data-el="enFrame">
+<div class="en-img" data-el="enImg">
+<img src="assets/img/instalacao-split.png" alt="Unidade interna de ar-condicionado split instalada em uma parede, com marcações técnicas sobre os pontos de fluxo de ar, temperatura, eficiência e controle" loading="lazy" decoding="async">
+</div>
+<div class="en-veil" data-el="enWarm" style="opacity:0;background:linear-gradient(160deg,rgba(214,142,62,.34),rgba(150,88,30,.16) 55%,rgba(60,32,10,0))"></div>
+<div class="en-veil" data-el="enCool" style="opacity:0;background:linear-gradient(200deg,rgba(96,158,210,.3),rgba(58,110,166,.14) 58%,rgba(18,40,70,0))"></div>
+<div class="en-shade"></div>
+
+<svg class="en-svg" data-el="enSvg" viewBox="0 0 770 516" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+<g data-el="enGrid" opacity="0" stroke="rgba(214,226,238,.34)" stroke-width="1">
+<path d="M 0 386 H 770"></path>
+<path d="M 62 58 V 462"></path>
+<path d="M 150 476 H 640"></path>
+<path d="M 150 468 V 484"></path>
+<path d="M 640 468 V 484"></path>
+<path d="M 54 58 H 70"></path>
+<path d="M 54 462 H 70"></path>
+</g>
+<path data-el="enTrace" d="M -20 300 H 140 L 185 250 L 185 160 L 158 130 L 150 130 L 555 120 L 638 120 L 655 175 L 706 226 H 790" stroke-width="1.15" opacity="0"></path>
+<circle data-el="enRun0" r="2.6" fill="#E4C79C" opacity="0"></circle>
+<circle data-el="enRun1" r="1.7" fill="#E4C79C" opacity="0"></circle>
+</svg>
+
+<div class="en-hot" data-enhot="0" style="left:24.0%;top:48.4%"><span class="en-dot"></span><div class="en-call r" data-encall="0" data-cy="-50"><span class="en-cn">01</span><span class="en-ct">Fluxo de ar</span><span class="en-cd">Distribuição uniforme do ar.</span></div></div>
+<div class="en-hot" data-enhot="1" style="left:19.5%;top:25.2%"><span class="en-dot"></span><div class="en-call r" data-encall="1" data-cy="-50"><span class="en-cn">02</span><span class="en-ct">Temperatura</span><span class="en-cd">Leitura na serpentina.</span></div></div>
+<div class="en-hot" data-enhot="2" style="left:72.1%;top:23.3%"><span class="en-dot"></span><div class="en-call l" data-encall="2" data-cy="-128"><span class="en-cn">03</span><span class="en-ct">Eficiência</span><span class="en-cd">Troca térmica sem perda.</span></div></div>
+<div class="en-hot" data-enhot="3" style="left:85.1%;top:33.9%"><span class="en-dot"></span><div class="en-call l" data-encall="3" data-cy="18"><span class="en-cn">04</span><span class="en-ct">Controle</span><span class="en-cd">Ajuste fino da operação.</span></div></div>
+
+<span class="en-tick tl"></span><span class="en-tick tr"></span>
+<span class="en-tick bl"></span><span class="en-tick br"></span>
+</div>
+<div class="en-callmob" data-el="enCallMob">
+<span class="en-cn" data-el="enCallMobN">Fluxo de ar</span><span class="en-cd" data-el="enCallMobT">Distribuição uniforme do ar.</span>
+</div>
+</div>
+
+<div class="en-row" data-el="enRow">
+<div class="en-narr">
+<div class="en-step" data-enstep="0"><span class="en-sn"><span class="en-si">01</span><span class="en-st">Analisar</span></span><span class="en-sd">Primeiro, entendemos o ambiente.</span></div>
+<div class="en-step" data-enstep="1"><span class="en-sn"><span class="en-si">02</span><span class="en-st">Dimensionar</span></span><span class="en-sd">A solução precisa acompanhar o espaço.</span></div>
+<div class="en-step" data-enstep="2"><span class="en-sn"><span class="en-si">03</span><span class="en-st">Climatizar</span></span><span class="en-sd">O ambiente encontra o próprio equilíbrio.</span></div>
+<div class="en-step" data-enstep="3"><span class="en-sn"><span class="en-si">04</span><span class="en-st">Otimizar</span></span><span class="en-sd">Ajuste fino até o sistema se estabilizar.</span></div>
+</div>
+<div class="en-read">
+
+<div class="en-blk" data-el="enBlkA">
+<span class="en-temp"><span class="en-tv" data-el="enTemp">28</span><span class="en-tu">°C</span></span>
+<span class="en-bar" data-el="enBar"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+<span class="en-on" data-el="enOn"><b data-accent="bg"></b>Conforto ativo</span>
+</div>
+
+<div class="en-blk" data-el="enBlkB">
+<span class="en-demo" title="Valores ilustrativos da narrativa, não são medições de um equipamento instalado">Demonstrativo</span>
+<span class="en-metrics">
+<span class="en-m"><span class="en-mk">Performance</span><span class="en-mv" data-el="enP1">0%</span></span>
+<span class="en-m"><span class="en-mk">Eficiência</span><span class="en-mv" data-el="enP2">↑</span></span>
+<span class="en-m"><span class="en-mk">Estabilidade</span><span class="en-mv" data-el="enP3">0%</span></span>
+</span>
+</div>
+
+</div>
+</div>
+
+<div class="en-spine" data-el="enSpine">
+<div class="en-rail"><span class="en-fill" data-el="enFill" data-accent="bg" style="transform:scaleX(0)"></span></div>
+<div class="en-marks">
+<span class="en-mark" data-enmark="0">Analisar</span>
+<span class="en-mark" data-enmark="1">Dimensionar</span>
+<span class="en-mark" data-enmark="2">Climatizar</span>
+<span class="en-mark" data-enmark="3">Otimizar</span>
+</div>
+</div>
+
+<div class="en-final" data-el="enFinal">
+<h2 class="en-fh" data-el="enFinA">Quando a tecnologia desaparece,<br>o <em data-accent="text">conforto</em> permanece.</h2>
+<p class="en-fs" data-el="enFinB">É assim que pensamos cada projeto.</p>
+<a class="en-cta" data-el="enCta" data-wa="1" href="https://wa.me/559891717286" target="_blank" rel="noopener">
+<span class="en-sheen" aria-hidden="true"></span>
+<span style="position:relative">Conheça nossa forma de trabalhar</span>
+<span style="position:relative;display:flex"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true" focusable="false"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+</a>
+</div>
+
+</div>
+</section>
 <section id="contato" style="padding:clamp(60px,9vh,112px) clamp(20px,4vw,56px);background:#0C1424;border-top:1px solid rgba(228,199,156,0.12)">
 <div style="max-width:1320px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(30px,4vw,64px);flex-wrap:wrap">
 <div style="display:flex;flex-direction:column;gap:clamp(14px,1.6vw,22px)">
@@ -1209,7 +1466,16 @@ class Component extends DCLogic {
 
     const fin = easeOut(span(p, 0.90, 0.97));
     c.final.style.opacity = fin.toFixed(3);
-    c.final.style.pointerEvents = fin > 0.6 ? 'auto' : 'none';
+    const open = fin > 0.6;
+    c.final.style.pointerEvents = open ? 'auto' : 'none';
+    // Enquanto o desfecho esta invisivel o link dentro dele nao pode receber
+    // foco por teclado: `inert` tira da tabulacao e da arvore de acessibilidade.
+    if (c._open !== open) {
+      c._open = open;
+      if (open) c.final.removeAttribute('inert'); else c.final.setAttribute('inert', '');
+      const cta = c.finals[c.finals.length - 1];
+      if (cta) cta.tabIndex = open ? 0 : -1;
+    }
     for (let i = 0; i < c.finals.length; i++) {
       const v = easeOut(span(p, 0.90 + i * 0.018, 0.965 + i * 0.018));
       c.finals[i].style.opacity = v.toFixed(3);
@@ -1217,6 +1483,202 @@ class Component extends DCLogic {
     }
     c.stack.style.opacity = (1 - easeIO(span(p, 0.88, 0.94))).toFixed(3);
     c.veil.style.opacity = (1 - 0.34 * easeIO(span(p, 0.74, 0.95))).toFixed(3);
+  }
+
+  // ===== ENGENHARIA DO CONFORTO ====================================
+  // Mesma mecanica de comfort()/precision(): o scroll dentro do track
+  // vira um progresso 0..1 e todo o resto e derivado dele. A diferenca
+  // conceitual e o fim: aqui as marcacoes tecnicas sao apagadas, nao
+  // acumuladas -- e disso que trata a frase de desfecho.
+  engineering(vh, m) {
+    if (!this.en) {
+      const q = s => document.querySelector(s);
+      const all = s => Array.from(document.querySelectorAll(s));
+      const track = q('[data-el="enTrack"]');
+      if (!track) { this.en = { off: true }; return; }
+      const trace = q('[data-el="enTrace"]');
+      const len = trace && trace.getTotalLength ? trace.getTotalLength() : 1800;
+      trace.style.strokeDasharray = len;
+      trace.style.strokeDashoffset = len;
+      this.enp = 0;
+      this.en = {
+        track: track, trace: trace, len: len,
+        intro: q('[data-el="enIntro"]'), lines: all('[data-enline]'),
+        plate: q('[data-el="enPlate"]'), frame: q('[data-el="enFrame"]'), img: q('[data-el="enImg"]'),
+        warm: q('[data-el="enWarm"]'), cool: q('[data-el="enCool"]'), grid: q('[data-el="enGrid"]'),
+        runs: [q('[data-el="enRun0"]'), q('[data-el="enRun1"]')],
+        hots: all('[data-enhot]'), calls: all('[data-encall]'),
+        callMob: q('[data-el="enCallMob"]'), callMobN: q('[data-el="enCallMobN"]'), callMobT: q('[data-el="enCallMobT"]'),
+        row: q('[data-el="enRow"]'), steps: all('[data-enstep]'),
+        blkA: q('[data-el="enBlkA"]'), blkB: q('[data-el="enBlkB"]'),
+        temp: q('[data-el="enTemp"]'), bars: all('[data-el="enBar"] i'), on: q('[data-el="enOn"]'),
+        p1: q('[data-el="enP1"]'), p3: q('[data-el="enP3"]'),
+        spine: q('[data-el="enSpine"]'), fill: q('[data-el="enFill"]'), marks: all('[data-enmark]'),
+        final: q('[data-el="enFinal"]'),
+        finals: [q('[data-el="enFinA"]'), q('[data-el="enFinB"]'), q('[data-el="enCta"]')]
+      };
+      // Estado inicial aplicado por JS, nao no HTML: sem script a secao
+      // continua legivel em vez de ficar permanentemente invisivel.
+      const c0 = this.en;
+      [c0.plate, c0.row, c0.spine, c0.final, c0.blkA, c0.blkB, c0.on, c0.callMob]
+        .concat(c0.hots, c0.calls, c0.steps, c0.finals)
+        .forEach(n => { if (n) n.style.opacity = '0'; });
+      c0.lines.forEach(n => { n.style.opacity = '0'; n.style.transform = 'translate3d(0,112%,0)'; });
+      c0.final.style.pointerEvents = 'none';
+      track.style.height = (this.isMob ? 320 : 420) + 'vh';
+    }
+    const c = this.en;
+    if (c.off) return;
+    const r = c.track.getBoundingClientRect();
+    if (r.bottom < -80 || r.top > vh + 80) return;
+    const raw = clamp(-r.top / ((r.height - vh) || 1), 0, 1);
+    if (this.reduced) this.enp = raw;
+    else this.enp = Math.abs(raw - this.enp) < 0.0002 ? raw : mix(this.enp, raw, 0.09);
+    const p = this.enp;
+    const mob = this.isMob;
+    const mm = this.reduced ? 0 : m * (mob ? 0.5 : 1);
+    const accent = this.props.accent || '#E4C79C';
+
+    // --- abertura: as linhas do headline sobem uma a uma, saindo do desfoque
+    for (let i = 0; i < c.lines.length; i++) {
+      const v = easeOut(span(p, 0.004 + i * 0.024, 0.052 + i * 0.024));
+      c.lines[i].style.opacity = v.toFixed(3);
+      c.lines[i].style.transform = 'translate3d(0,' + ((1 - v) * 112).toFixed(1) + '%,0)';
+      c.lines[i].style.filter = v < 0.995 ? 'blur(' + ((1 - v) * 7).toFixed(2) + 'px)' : 'none';
+    }
+    const introOut = easeIO(span(p, 0.10, 0.19));
+    c.intro.style.opacity = (1 - introOut).toFixed(3);
+    c.intro.style.transform = 'translate3d(0,' + (-36 * mm * introOut).toFixed(1) + 'px,0)';
+    c.intro.style.pointerEvents = introOut > 0.5 ? 'none' : 'auto';
+
+    // --- a placa abre a partir do centro
+    c.plate.style.opacity = easeOut(span(p, 0.06, 0.20)).toFixed(3);
+    c.frame.style.clipPath = 'inset(' + ((1 - easeIO(span(p, 0.07, 0.23))) * 50).toFixed(2) + '% 0)';
+
+    // --- camera: aproximacao lenta e um respiro de foco nas viradas
+    const cam = easeOut(p);
+    const sc = 1 + (this.reduced ? 0 : (mob ? 0.04 : 0.08)) * cam;
+    c.img.style.transform = 'translate3d(0,' + (-2.4 * mm * cam).toFixed(2) + '%,0) scale(' + sc.toFixed(4) + ')';
+    const near = a => Math.max(0, 1 - Math.abs(p - a) / 0.032);
+    const blur = (this.reduced || mob) ? 0 : 2.3 * Math.max(near(0.32), near(0.54), near(0.72));
+    c.frame.style.filter = blur > 0.03 ? 'blur(' + blur.toFixed(2) + 'px)' : 'none';
+
+    // --- luz: quente na analise, equilibrada depois de climatizar
+    c.warm.style.opacity = (0.52 * (1 - easeIO(span(p, 0.40, 0.66)))).toFixed(3);
+    c.cool.style.opacity = (0.30 * easeIO(span(p, 0.48, 0.70)) * (1 - 0.55 * easeIO(span(p, 0.86, 0.96)))).toFixed(3);
+
+    // --- schematic: desenha ate 0.60, recolhe a partir de 0.86
+    const fade = 1 - easeIO(span(p, 0.86, 0.94));
+    c.grid.setAttribute('opacity', (easeOut(span(p, 0.24, 0.34)) * fade).toFixed(3));
+    c.trace.style.opacity = (easeOut(span(p, 0.26, 0.33)) * fade).toFixed(3);
+    const shown = clamp(easeIO(span(p, 0.28, 0.60)) - easeIO(span(p, 0.86, 0.94)), 0, 1);
+    c.trace.style.strokeDashoffset = (c.len * (1 - shown)).toFixed(1);
+    const running = shown > 0.02 && shown < 0.999 && !this.reduced;
+    for (let i = 0; i < 2; i++) {
+      if (running && c.trace.getPointAtLength) {
+        const pt = c.trace.getPointAtLength(c.len * clamp(shown - i * 0.05, 0, 1));
+        c.runs[i].setAttribute('cx', pt.x.toFixed(1));
+        c.runs[i].setAttribute('cy', pt.y.toFixed(1));
+      }
+      c.runs[i].setAttribute('opacity', running ? (i ? '0.45' : '0.9') : '0');
+    }
+
+    // --- pontos tecnicos e suas informacoes
+    const hotAt = [0.36, 0.42, 0.50, 0.58];
+    for (let i = 0; i < c.hots.length; i++) {
+      const v = easeOut(span(p, hotAt[i], hotAt[i] + 0.05)) * fade;
+      c.hots[i].style.opacity = v.toFixed(3);
+      c.hots[i].style.transform = 'translate(-50%,-50%) scale(' + (0.55 + 0.45 * v).toFixed(3) + ')';
+    }
+    const callWin = [[0.37, 0.41, 0.47, 0.51], [0.44, 0.48, 0.54, 0.58], [0.52, 0.56, 0.62, 0.66], [0.60, 0.64, 0.72, 0.76]];
+    let active = -1;
+    for (let i = 0; i < c.calls.length; i++) {
+      const w = callWin[i];
+      const v = easeOut(span(p, w[0], w[1])) * (1 - easeIO(span(p, w[2], w[3])));
+      c.calls[i].style.opacity = v.toFixed(3);
+      c.calls[i].style.filter = v < 0.99 ? 'blur(' + ((1 - v) * 4).toFixed(2) + 'px)' : 'none';
+      c.calls[i].style.transform = 'translateY(' + (c.calls[i].getAttribute('data-cy') || -50) + '%) translate3d('
+        + ((1 - v) * (i < 2 ? -10 : 10)).toFixed(1) + 'px,0,0)';
+      if (v > 0.5) active = i;
+    }
+    // Em tela estreita o balao nao cabe sobre a foto: vira uma linha sob a placa.
+    if (mob) {
+      c.callMob.style.opacity = (active >= 0 ? fade : 0).toFixed(3);
+      if (active >= 0 && c._call !== active) {
+        c._call = active;
+        c.callMobN.textContent = c.calls[active].children[1].textContent;
+        c.callMobT.textContent = c.calls[active].children[2].textContent;
+      }
+    } else if (c.callMob.style.opacity !== '0') {
+      c.callMob.style.opacity = '0';
+    }
+
+    // --- narrativa das quatro etapas
+    const band = easeOut(span(p, 0.12, 0.22)) * (1 - easeIO(span(p, 0.86, 0.92)));
+    c.row.style.opacity = band.toFixed(3);
+    c.spine.style.opacity = band.toFixed(3);
+    const stepWin = [[0.13, 0.19, 0.29, 0.35], [0.33, 0.39, 0.51, 0.57], [0.55, 0.61, 0.67, 0.73], [0.71, 0.77, 0.84, 0.89]];
+    for (let i = 0; i < c.steps.length; i++) {
+      const w = stepWin[i];
+      const v = easeOut(span(p, w[0], w[1])) * (1 - easeIO(span(p, w[2], w[3])));
+      c.steps[i].style.opacity = v.toFixed(3);
+      c.steps[i].style.transform = 'translate3d(0,' + ((1 - v) * 16).toFixed(1) + 'px,0)';
+      c.steps[i].style.filter = v < 0.99 ? 'blur(' + ((1 - v) * 4).toFixed(2) + 'px)' : 'none';
+    }
+
+    // --- leituras
+    const aV = easeOut(span(p, 0.14, 0.21)) * (1 - easeIO(span(p, 0.70, 0.76)));
+    c.blkA.style.opacity = aV.toFixed(3);
+    c.blkA.style.transform = 'translate3d(0,' + ((1 - aV) * 12).toFixed(1) + 'px,0)';
+    const bV = easeOut(span(p, 0.72, 0.79)) * (1 - easeIO(span(p, 0.86, 0.92)));
+    c.blkB.style.opacity = bV.toFixed(3);
+    c.blkB.style.transform = 'translate3d(0,' + ((1 - bV) * 12).toFixed(1) + 'px,0)';
+
+    const tv = Math.round(28 - 4 * easeIO(span(p, 0.34, 0.47)) - 3 * easeIO(span(p, 0.56, 0.67)));
+    if (c._t !== tv) { c._t = tv; c.temp.textContent = tv; }
+    const lit = Math.round(8 * easeIO(span(p, 0.38, 0.53)));
+    for (let i = 0; i < c.bars.length; i++) {
+      const on = i < lit;
+      if (c.bars[i]._on !== on) { c.bars[i]._on = on; c.bars[i].style.background = on ? accent : 'rgba(230,238,246,.16)'; }
+    }
+    c.on.style.opacity = easeOut(span(p, 0.60, 0.67)).toFixed(3);
+    const perf = easeIO(span(p, 0.74, 0.85));
+    const v1 = Math.round(98 * perf), v3 = Math.round(100 * perf);
+    if (c._v1 !== v1) { c._v1 = v1; c.p1.textContent = v1 + '%'; }
+    if (c._v3 !== v3) { c._v3 = v3; c.p3.textContent = v3 + '%'; }
+
+    // --- linha do tempo
+    c.fill.style.transform = 'scaleX(' + clamp(span(p, 0.12, 0.88), 0, 1).toFixed(4) + ')';
+    const markAt = [0.16, 0.36, 0.58, 0.74];
+    let act = 0;
+    for (let i = 0; i < markAt.length; i++) if (p >= markAt[i]) act = i;
+    for (let i = 0; i < c.marks.length; i++) {
+      const now = i === act && p > 0.13;
+      c.marks[i].style.color = now ? '#FBFCFE' : (p >= markAt[i] ? 'rgba(230,238,246,.68)' : 'rgba(230,238,246,.5)');
+      c.marks[i].style.letterSpacing = now ? (mob ? '.2em' : '.32em') : (mob ? '.16em' : '.26em');
+    }
+
+    // --- desfecho, sobre a fotografia ja limpa
+    const fin = easeOut(span(p, 0.90, 0.97));
+    c.final.style.opacity = fin.toFixed(3);
+    const open = fin > 0.6;
+    c.final.style.pointerEvents = open ? 'auto' : 'none';
+    // Enquanto o desfecho esta invisivel o link dentro dele nao pode receber
+    // foco por teclado: `inert` tira da tabulacao e da arvore de acessibilidade.
+    if (c._open !== open) {
+      c._open = open;
+      if (open) c.final.removeAttribute('inert'); else c.final.setAttribute('inert', '');
+      const cta = c.finals[c.finals.length - 1];
+      if (cta) cta.tabIndex = open ? 0 : -1;
+    }
+    for (let i = 0; i < c.finals.length; i++) {
+      const v = easeOut(span(p, 0.905 + i * 0.022, 0.968 + i * 0.022));
+      c.finals[i].style.opacity = v.toFixed(3);
+      if (i < 2) {
+        c.finals[i].style.transform = 'translate3d(0,' + ((1 - v) * 22).toFixed(1) + 'px,0)';
+        c.finals[i].style.filter = v < 0.99 ? 'blur(' + ((1 - v) * 8).toFixed(2) + 'px)' : 'none';
+      }
+    }
   }
 
   bindMagnetic(btn) {
@@ -1318,6 +1780,7 @@ class Component extends DCLogic {
 
     this.comfort(vh, m);
     this.precision(vh, m);
+    this.engineering(vh, m);
     const pm = this.isMob ? m * 0.35 : m;
     photo.style.transform = 'translate3d(0,' + (-3.4 * pm * p).toFixed(3) + '%,0) scale(' + (1 + 0.11 * pm * p).toFixed(4) + ')';
     scrim.style.opacity = (0.92 + 0.08 * easeOut(p)).toFixed(3);
