@@ -13,7 +13,21 @@ SRC = os.path.join(BASE, 'assets/img/produtos/originais')
 OUT = os.path.join(BASE, 'assets/img/produtos')
 
 # destino -> (arquivo original, recorte em fracoes, ajuste extra)
-CORTES = {}   # preenchido quando as fotos chegarem
+CORTES = {
+    # destino:            (origem,      (esq, topo, dir, base),   ajuste)
+    'manifolds':          ('foto-1.jpg', (0.39, 0.02, 0.83, 0.26), None),
+    'flangeador':         ('foto-1.jpg', (0.26, 0.22, 0.78, 0.55), None),
+    'tubo-de-cobre':      ('foto-2.jpg', (0.05, 0.38, 1.00, 0.72), None),
+    'amperimetro':        ('foto-3.jpg', (0.00, 0.25, 0.44, 0.52), None),
+    'mangueiras':         ('foto-3.jpg', (0.04, 0.50, 0.54, 0.79), None),
+    'oleos':              ('foto-4.jpg', (0.14, 0.06, 0.44, 0.95), None),
+    'gas-refrigerante':   ('foto-4.jpg', (0.40, 0.03, 0.99, 0.99), None),
+    'suportes':           ('foto-5.jpg', (0.02, 0.02, 0.98, 0.62), None),
+    'motor-condensadora': ('foto-6.jpg', (0.28, 0.40, 0.66, 0.60), None),
+    'placa-eletronica':   ('foto-7.jpg', (0.29, 0.40, 0.67, 0.60), None),
+    'controles-remotos':  ('foto-9.jpg', (0.00, 0.02, 0.62, 0.36), None),
+    'tubo-capilar':       ('foto-9.jpg', (0.55, 0.11, 0.98, 0.38), None),
+}
 
 def tratar(im):
     """Mesma grade do restante do site, com um respiro a mais de luz porque
@@ -26,7 +40,7 @@ def tratar(im):
     b = b.point(lambda v: min(255, int(v * 1.03)))
     return Image.merge('RGB', (r, g, b))
 
-def quadro(im, alvo=(1200, 900)):
+def quadro(im, alvo=(800, 600)):
     """Recorta para 4:3 pelo centro do que sobrou e redimensiona."""
     want = alvo[0] / alvo[1]
     w, h = im.size

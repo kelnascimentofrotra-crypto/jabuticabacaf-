@@ -5,3 +5,7 @@ edu-frio/build-from-canvas.py
 CNAME
 saveweb2zip-com-jabuticabacef-lovable-app.zip
 .claude
+# Fotos originais da loja: material de origem, o site usa os recortes
+edu-frio/assets/img/produtos/originais
+edu-frio/assets/img/produtos/LEIA-ME.txt
+edu-frio/processar-fotos.py
