@@ -1,0 +1,24 @@
+Fotos dos produtos
+==================
+
+Coloque aqui uma foto por categoria, com estes nomes exatos:
+
+  manifolds.jpg
+  gas-refrigerante.jpg
+  tubo-de-cobre.jpg
+  ferramentas.jpg
+  mangueiras.jpg
+  suportes.jpg
+  oleos.jpg
+  componentes.jpg
+
+Formato: 4:3 (ex. 1200x900), JPG ou WebP.
+
+Como fotografar
+---------------
+1. Tire o produto da vitrine. O vidro cria reflexo e mata a foto.
+2. Um produto por foto, de frente, preenchendo o quadro.
+3. Fundo neutro: parede clara, papel branco ou a bancada limpa.
+4. Luz da porta ou da janela, vindo de lado. Sem flash.
+5. Celular na horizontal, a uns 40 cm, tocando na tela para focar.
+6. Tire a etiqueta de preço antes.
