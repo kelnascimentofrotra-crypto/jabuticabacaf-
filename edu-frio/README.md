@@ -85,6 +85,54 @@ split. O conceito pedia um ambiente acabado e sofisticado; se surgir essa foto,
 trocar é uma linha em `assets/img/`, **desde que a proporção 3:2 seja mantida**,
 senão as marcações saem de lugar.
 
+## Imagens
+
+Todas as fotografias são WebP. O acervo inteiro pesa **580 KB**; em PNG eram
+5,1 MB — o site ficou 94% mais leve sem perder pixel visível.
+
+**Enquadramento.** `object-fit: cover` recorta de forma diferente em cada caixa,
+e o padrão é o centro geométrico, que não sabe onde está o assunto. Cada foto
+tem agora seu `object-position` medido caixa a caixa (bloco de estilo no
+`<head>`). Antes disso o técnico da seção "por que escolher a gente" aparecia
+decapitado, e o celular jogava fora 74% da largura do hero.
+
+**Hero no celular.** Em vez de deixar o navegador recortar, existe
+`hero-vertical.webp`, um corte da região útil feito na resolução original e
+servido por `<picture>` abaixo de 760px. Aparecem o equipamento, o técnico e o
+pôr do sol, em vez de uma fatia de céu.
+
+**Coloração.** As fotos vêm de bancos diferentes e brigavam entre si. Todas
+receberam a mesma grade na origem — saturação 0,80, contraste 1,07, brilho 0,96
+e um leve desvio para o frio — com ajuste extra em três casos (a parede magenta
+da assistência técnica desceu para 0,52 de saturação).
+
+**Peças.** A imagem é uma montagem de catálogo com fundo branco, que abria um
+buraco claro na grade escura. O fundo foi removido por preenchimento a partir
+das quinas — só o fundo conectado sai, as partes brancas dos produtos ficam — e
+as peças passam a flutuar sobre o mesmo painel dos outros cards.
+
+O teto de qualidade aqui é o material de origem: são fotos de banco em
+resoluções modestas. Fotografia própria em alta resolução é o que faria a
+próxima diferença real.
+
+## Vídeo no hero
+
+O hero aceita um vídeo de fundo, sem nenhuma alteração de código. Coloque o
+arquivo em `assets/video/` e aponte para ele:
+
+```html
+<div data-el="photoWrap" data-video="assets/video/hero.mp4" ...>
+```
+
+A fotografia continua sendo o poster: o vídeo entra por cima com uma transição
+de 1,2s quando começa a tocar. Se o atributo estiver vazio nada é carregado, e
+se o arquivo falhar ou o navegador bloquear o autoplay o elemento se remove e a
+foto permanece. Com `prefers-reduced-motion` o vídeo nem é criado.
+
+Recomendado: MP4 (H.264), sem áudio, 8 a 12 segundos em loop, 1920x1080,
+até uns 3 MB. Vídeo pesado no hero atrasa o carregamento e vale menos que uma
+boa fotografia.
+
 ## Verificação
 
 Chromium (Playwright), com a intro completa e a página percorrida até o fim:
@@ -97,6 +145,7 @@ Chromium (Playwright), com a intro completa e a página percorrida até o fim:
 | Teclado | *skip link* funciona; foco visível em toda a navegação |
 | `prefers-reduced-motion: reduce` | nenhum conteúdo fica oculto |
 | Contraste (texto normal, AA 4.5:1) | 12 pares verificados, menor 4.70:1 |
+| Peso das imagens | 580 KB no total (era 5,1 MB) |
 | FPS na seção com scroll contínuo | 59–60 em 320, 390, 768 e 1440px |
 
 Não verificado: leitor de tela, desempenho medido em rede real e o contraste do

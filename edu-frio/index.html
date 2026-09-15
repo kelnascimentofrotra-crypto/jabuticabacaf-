@@ -6,16 +6,17 @@
 <title>Edu Frio Refrigeração | Ar-condicionado, peças e assistência em São Luís</title>
 <meta name="description" content="Instalação, manutenção, assistência técnica e peças para refrigeração em São Luís e região. Ar-condicionado, refrigeração comercial e câmaras frias, com atendimento emergencial 24h.">
 <meta name="theme-color" content="#0A111E">
-<link rel="icon" href="assets/img/logo-edu-frio.png" type="image/png">
-<link rel="apple-touch-icon" href="assets/img/logo-edu-frio.png">
+<link rel="icon" href="assets/img/logo-edu-frio.webp" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/logo-edu-frio.webp">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Edu Frio Refrigeração">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Edu Frio Refrigeração | Ar-condicionado, peças e assistência em São Luís">
 <meta property="og:description" content="Instalação, manutenção, assistência técnica e peças para refrigeração em São Luís e região. Ar-condicionado, refrigeração comercial e câmaras frias, com atendimento emergencial 24h.">
-<meta property="og:image" content="assets/img/hero-instalacao-split.png">
+<meta property="og:image" content="assets/img/hero-instalacao-split.webp">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preload" as="image" href="assets/img/hero-instalacao-split.png" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/hero-instalacao-split.webp" fetchpriority="high" media="(min-width:760px)">
+<link rel="preload" as="image" href="assets/img/hero-vertical.webp" fetchpriority="high" media="(max-width:759px)">
 <style>/* cyrillic-ext */
 @font-face {
   font-family: 'Cormorant Garamond';
@@ -382,6 +383,32 @@ image-slot *{touch-action:pan-y pinch-zoom}
   #engenharia .en-mark{letter-spacing:.08em}
 }
 </style>
+<style>
+/* Enquadramento das fotografias: o recorte de `cover` muda por caixa e por
+   largura de tela. Sem isto o centro geometrico vence e corta o assunto --
+   era o que decapitava o tecnico na secao "por que escolher a gente". */
+.hero-pic{display:block;width:100%;height:100%}
+#svc-1{object-position:50% 40%}
+#svc-2{object-position:50% 45%}
+#svc-3{object-position:45% 45%}
+#svc-4{object-position:50% 32%}
+#svc-6{object-position:50% 45%}
+#site-why{object-position:50% 6%}
+#cf-room{object-position:50% 42%}
+#site-stats{object-position:50% 62%}
+#px-1{object-position:45% 45%}
+#px-2{object-position:50% 42%}
+#px-3{object-position:50% 45%}
+#px-4{object-position:50% 36%}
+@media (max-width:759px){
+  #cf-room{object-position:46% 42%}
+  #px-1{object-position:42% 50%}
+}
+/* Video opcional do hero: entra por cima da fotografia, que continua sendo o
+   poster. Sem arquivo declarado nada e carregado. */
+[data-el="heroVideo"]{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:0;transition:opacity 1.2s ease}
+</style>
 <script type="application/ld+json">{
   "@context": "https://schema.org",
   "@type": "HVACBusiness",
@@ -411,7 +438,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <div data-el="introInner" style="display:flex;flex-direction:column;align-items:center;gap:clamp(16px,2.8vh,30px);padding:24px;transition:transform 1050ms cubic-bezier(.16,1,.3,1)">
 <div style="position:relative;display:flex;align-items:center;justify-content:center;animation:logoIn 1.7s cubic-bezier(.16,1,.3,1) 0.35s both">
 <span style="position:absolute;width:132%;height:210%;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at center,rgba(56,158,228,0.26),rgba(56,158,228,0.07) 46%,rgba(56,158,228,0) 70%);animation:haloIn 2.2s ease 0.55s both"></span>
-<img src="assets/img/logo-edu-frio.png" alt="Edu Frio" style="position:relative;display:block;width:min(52vw,340px);height:auto;filter:drop-shadow(0 20px 50px rgba(30,120,200,0.32))">
+<img src="assets/img/logo-edu-frio.webp" alt="Edu Frio" style="position:relative;display:block;width:min(52vw,340px);height:auto;filter:drop-shadow(0 20px 50px rgba(30,120,200,0.32))">
 </div>
 <div style="overflow:hidden;padding-bottom:2px">
 <div style="animation:lineUp 1.15s cubic-bezier(.16,1,.3,1) 1.35s both;font-size:clamp(30px,5.6vw,62px);font-weight:300;line-height:1.05;letter-spacing:0.2em;padding-left:0.2em;color:#FBF9F5">EDU FRIO</div>
@@ -424,7 +451,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 
 <header data-el="header" data-gate="1" style="position:fixed;top:0;left:0;right:0;z-index:65;display:flex;align-items:center;justify-content:space-between;gap:clamp(16px,3vw,40px);padding:26px clamp(20px,4vw,56px);border-bottom:1px solid rgba(244,241,234,0);transition:padding 500ms cubic-bezier(.16,1,.3,1),background-color 500ms ease,border-color 500ms ease;animation:softIn 1.2s ease 0.2s both;animation-play-state:paused">
 <a href="#inicio" style="display:flex;align-items:center;gap:13px">
-<img src="assets/img/logo-edu-frio.png" alt="Edu Frio" style="display:block;height:30px;width:auto">
+<img src="assets/img/logo-edu-frio.webp" alt="Edu Frio" style="display:block;height:30px;width:auto">
 <span style="display:flex;flex-direction:column;gap:3px">
 <span style="font-size:13.5px;font-weight:500;letter-spacing:0.22em;line-height:1">EDU FRIO</span>
 <span style="font-size:8.5px;letter-spacing:0.34em;line-height:1;color:rgba(244,241,234,0.55)">REFRIGERAÇÃO</span>
@@ -442,9 +469,9 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <div id="inicio" data-el="track" style="position:relative;height:260vh">
 <div data-el="stage" style="position:sticky;top:0;height:100vh;overflow:hidden;z-index:1">
 
-<div data-el="photoWrap" data-gate="1" style="position:absolute;inset:0;overflow:hidden;animation:ivReveal 1.9s cubic-bezier(0.16,1,0.3,1) 0.1s both;animation-play-state:paused">
+<div data-el="photoWrap" data-video="" data-gate="1" style="position:absolute;inset:0;overflow:hidden;animation:ivReveal 1.9s cubic-bezier(0.16,1,0.3,1) 0.1s both;animation-play-state:paused">
 <div data-el="photo" data-gate="1" style="position:absolute;inset:0;will-change:transform;animation:ivScale 2.6s cubic-bezier(0.16,1,0.3,1) 0.1s both;animation-play-state:paused">
-<img id="site-hero" src="assets/img/hero-instalacao-split.png" alt="Técnicos da Edu Frio instalando a unidade externa de um ar-condicionado split, com a cidade ao fundo no fim da tarde" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover">
+<picture class="hero-pic"><source media="(max-width:759px)" srcset="assets/img/hero-vertical.webp" width="685" height="941"><img id="site-hero" src="assets/img/hero-instalacao-split.webp" alt="Técnicos da Edu Frio instalando a unidade externa de um ar-condicionado split, com a cidade ao fundo no fim da tarde" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover"></picture>
 </div>
 </div>
 <div data-el="scrim" style="position:absolute;inset:0;pointer-events:none;opacity:1;background:linear-gradient(180deg,rgba(10,17,30,0.72) 0%,rgba(10,17,30,0.12) 26%,rgba(10,17,30,0.10) 46%,rgba(10,17,30,0.72) 88%,rgba(10,17,30,0.95) 100%)"></div>
@@ -502,7 +529,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <div data-grid="svcCards" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.4vw,22px)">
 <div data-reveal="1" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-1" src="assets/img/instalacao-split.png" alt="Técnico instalando a unidade interna de um ar-condicionado split" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-1" src="assets/img/instalacao-split.webp" srcset="assets/img/instalacao-split-440.webp 440w, assets/img/instalacao-split.webp 770w" sizes="(max-width:759px) 92vw, (max-width:1100px) 44vw, 25vw" alt="Técnico instalando a unidade interna de um ar-condicionado split" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wind" aria-hidden="true" focusable="false"><path d="M12.8 19.6A2 2 0 1 0 14 16H2"></path><path d="M17.5 8a2.5 2.5 0 1 1 2 4H2"></path><path d="M9.8 4.4A2 2 0 1 1 11 8H2"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -513,7 +540,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 <div data-reveal="2" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-2" src="assets/img/manutencao.png" alt="Manutenção preventiva sendo feita em um aparelho de ar-condicionado" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-2" src="assets/img/manutencao.webp" srcset="assets/img/manutencao-440.webp 440w, assets/img/manutencao.webp 770w" sizes="(max-width:759px) 92vw, (max-width:1100px) 44vw, 25vw" alt="Manutenção preventiva sendo feita em um aparelho de ar-condicionado" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench" aria-hidden="true" focusable="false"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -524,7 +551,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 <div data-reveal="3" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-3" src="assets/img/refrigeracao-comercial.png" alt="Equipamento de refrigeração comercial em operação" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-3" src="assets/img/refrigeracao-comercial.webp" srcset="assets/img/refrigeracao-comercial-440.webp 440w, assets/img/refrigeracao-comercial.webp 770w" sizes="(max-width:759px) 92vw, (max-width:1100px) 44vw, 25vw" alt="Equipamento de refrigeração comercial em operação" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refrigerator" aria-hidden="true" focusable="false"><path d="M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z"></path><path d="M5 10h14"></path><path d="M15 7v6"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -535,7 +562,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 <div data-reveal="4" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-4" src="assets/img/camara-fria.png" alt="Interior de uma câmara fria" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-4" src="assets/img/camara-fria.webp" alt="Interior de uma câmara fria" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-thermometer-snowflake" aria-hidden="true" focusable="false"><path d="m10 20-1.25-2.5L6 18"></path><path d="M10 4 8.75 6.5 6 6"></path><path d="M10.585 15H10"></path><path d="M2 12h6.5L10 9"></path><path d="M20 14.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0z"></path><path d="m4 10 1.5 2L4 14"></path><path d="m7 21 3-6-1.5-3"></path><path d="m7 3 3 6h2"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -546,7 +573,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 <div data-reveal="5" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:#EEF1F4"><img id="svc-5" src="assets/img/pecas-refrigeracao.png" alt="Peças e componentes para refrigeração" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-5" src="assets/img/pecas-refrigeracao-recorte.webp" alt="Peças e componentes para refrigeração" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package" aria-hidden="true" focusable="false"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"></path><path d="M12 22V12"></path><polyline points="3.29 7 12 12 20.71 7"></polyline><path d="m7.5 4.27 9 5.15"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -557,7 +584,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </div>
 <div data-reveal="6" data-spot="1" style="position:relative;overflow:hidden;border:1px solid rgba(228,199,156,0.12);background:#0E1829">
 <span data-glow="1" style="position:absolute;top:0;left:0;width:300px;height:300px;margin:-150px 0 0 -150px;border-radius:50%;opacity:0;transition:opacity 500ms ease;pointer-events:none;background:radial-gradient(circle,rgba(228,199,156,0.16),rgba(228,199,156,0) 68%)"></span>
-<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-6" src="assets/img/assistencia-tecnica.png" alt="Assistência técnica em equipamento de refrigeração" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div style="position:relative;aspect-ratio:16/11;background:rgba(244,241,234,0.04)"><img id="svc-6" src="assets/img/assistencia-tecnica.webp" srcset="assets/img/assistencia-tecnica-440.webp 440w, assets/img/assistencia-tecnica.webp 770w" sizes="(max-width:759px) 92vw, (max-width:1100px) 44vw, 25vw" alt="Assistência técnica em equipamento de refrigeração" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:relative;display:flex;gap:11px;padding:15px 16px 18px">
 <span data-accent="text" style="flex:0 0 auto;color:#E4C79C;padding-top:2px"><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headset" aria-hidden="true" focusable="false"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"></path><path d="M21 16v2a4 4 0 0 1-4 4h-5"></path></svg></span>
 <span style="display:flex;flex-direction:column;gap:8px">
@@ -572,7 +599,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 
 <section id="sobre" data-grid="whyOuter" style="display:grid;grid-template-columns:minmax(0,0.78fr) minmax(0,1.22fr);align-items:stretch;background:#0C1424">
 <div style="position:relative;overflow:hidden;min-height:clamp(320px,52vh,560px)">
-<div data-px="26" style="position:absolute;inset:-6% 0;will-change:transform"><img id="site-why" src="assets/img/equipe-tecnica.png" alt="Técnico da Edu Frio em atendimento" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-px="26" style="position:absolute;inset:-6% 0;will-change:transform"><img id="site-why" src="assets/img/equipe-tecnica.webp" alt="Técnico da Edu Frio em atendimento" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(10,17,30,0.2),rgba(12,20,36,0.55))"></div>
 </div>
 <div data-grid="whyInner" style="display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,0.65fr);gap:clamp(32px,4vw,64px);padding:clamp(56px,9vh,110px) clamp(20px,4vw,56px)">
@@ -647,7 +674,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 
 <div data-el="cfMediaBox" style="position:relative;overflow:hidden;height:min(64vh,560px);min-width:0;background:#05090F">
 <div data-el="cfMedia" style="position:absolute;inset:-4%;will-change:transform,filter">
-<img id="cf-room" src="assets/img/instalacao-split.png" alt="Ambiente climatizado por um ar-condicionado split" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+<img id="cf-room" src="assets/img/instalacao-split.webp" alt="Ambiente climatizado por um ar-condicionado split" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
 </div>
 <div data-el="cfWarm" style="position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;background:linear-gradient(165deg,rgba(255,150,54,0.55),rgba(255,86,24,0.3) 62%,rgba(120,40,10,0.28))"></div>
 <div data-el="cfCool" style="position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:overlay;background:linear-gradient(200deg,rgba(120,190,255,0.42),rgba(36,92,160,0.24))"></div>
@@ -694,7 +721,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 </section>
 
 <section style="position:relative;overflow:hidden">
-<div data-px="34" style="position:absolute;inset:-8% 0;will-change:transform"><img id="site-stats" src="assets/img/hero-instalacao-split.png" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-px="34" style="position:absolute;inset:-8% 0;will-change:transform"><img id="site-stats" src="assets/img/hero-instalacao-split.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,14,25,0.965),rgba(8,14,25,0.93))"></div>
 <div style="position:relative;max-width:1320px;margin:0 auto;padding:clamp(48px,7.5vh,86px) clamp(20px,4vw,56px);display:flex;align-items:center;justify-content:space-between;gap:clamp(28px,4vw,60px);flex-wrap:wrap">
 <h2 data-lines="1" style="margin:0;font-family:'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(26px,2.6vw,38px);line-height:1.22;color:#FBF9F5;min-width:min(240px,100%)">
@@ -776,10 +803,10 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <div data-el="pxStage" style="position:sticky;top:0;height:100vh;overflow:hidden">
 
 <div data-el="pxMediaBox" style="position:absolute;inset:0;overflow:hidden">
-<div data-pxlayer="0" style="position:absolute;inset:0;will-change:transform,filter"><img id="px-1" src="assets/img/manutencao.png" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
-<div data-pxlayer="1" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-2" src="assets/img/assistencia-tecnica.png" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
-<div data-pxlayer="2" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-3" src="assets/img/instalacao-split.png" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
-<div data-pxlayer="3" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-4" src="assets/img/refrigeracao-comercial.png" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-pxlayer="0" style="position:absolute;inset:0;will-change:transform,filter"><img id="px-1" src="assets/img/refrigeracao-comercial.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-pxlayer="1" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-2" src="assets/img/instalacao-split.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-pxlayer="2" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-3" src="assets/img/assistencia-tecnica.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
+<div data-pxlayer="3" style="position:absolute;inset:0;clip-path:inset(100% 0 0 0);will-change:transform,clip-path"><img id="px-4" src="assets/img/camara-fria.webp" alt="" aria-hidden="true" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover"></div>
 <div data-el="pxVeil" style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,rgba(4,8,14,0.9) 0%,rgba(4,8,14,0.66) 42%,rgba(4,8,14,0.24) 74%,rgba(4,8,14,0.5) 100%)"></div>
 <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(4,8,14,0.62) 0%,rgba(4,8,14,0) 26%,rgba(4,8,14,0) 62%,rgba(4,8,14,0.78) 100%)"></div>
 
@@ -896,7 +923,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <div class="en-plate" data-el="enPlate">
 <div class="en-frame" data-el="enFrame">
 <div class="en-img" data-el="enImg">
-<img src="assets/img/instalacao-split.png" alt="Unidade interna de ar-condicionado split instalada em uma parede, com marcações técnicas sobre os pontos de fluxo de ar, temperatura, eficiência e controle" loading="lazy" decoding="async">
+<img src="assets/img/instalacao-split.webp" alt="Unidade interna de ar-condicionado split instalada em uma parede, com marcações técnicas sobre os pontos de fluxo de ar, temperatura, eficiência e controle" loading="lazy" decoding="async">
 </div>
 <div class="en-veil" data-el="enWarm" style="opacity:0;background:linear-gradient(160deg,rgba(214,142,62,.34),rgba(150,88,30,.16) 55%,rgba(60,32,10,0))"></div>
 <div class="en-veil" data-el="enCool" style="opacity:0;background:linear-gradient(200deg,rgba(96,158,210,.3),rgba(58,110,166,.14) 58%,rgba(18,40,70,0))"></div>
@@ -1003,7 +1030,7 @@ image-slot *{touch-action:pan-y pinch-zoom}
 <footer style="padding:clamp(26px,3.4vh,38px) clamp(20px,4vw,56px);background:#0A111E;border-top:1px solid rgba(244,241,234,0.08)">
 <div style="max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap">
 <div style="display:flex;align-items:center;gap:11px">
-<img src="assets/img/logo-edu-frio.png" alt="Edu Frio" style="display:block;height:22px;width:auto;opacity:0.9">
+<img src="assets/img/logo-edu-frio.webp" alt="Edu Frio" style="display:block;height:22px;width:auto;opacity:0.9">
 <span style="font-size:10px;letter-spacing:0.26em;text-transform:uppercase;color:rgba(244,241,234,0.6)">Edu Frio Refrigeração</span>
 </div>
 <div style="display:flex;gap:clamp(16px,2.4vw,32px);font-size:9.5px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(244,241,234,0.5)">
@@ -1072,6 +1099,7 @@ class Component extends DCLogic {
     this.paintProps();
     this.icons();
     this.runIntro();
+    this.heroVideo();
     this.bindSpotlights();
     this.bindCardScroll();
     this.bindReveals();
@@ -1087,6 +1115,26 @@ class Component extends DCLogic {
     window.addEventListener('resize', this.onResize);
     this.onResize();
     this.raf = requestAnimationFrame(this.tick);
+  }
+
+  // Video de fundo do hero, opcional: entra so quando `data-video` aponta
+  // para um arquivo. A fotografia continua sendo o poster, entao sem arquivo
+  // nada muda e nenhuma requisicao e feita.
+  heroVideo() {
+    const wrap = document.querySelector('[data-el="photoWrap"]');
+    const src = wrap && wrap.getAttribute('data-video');
+    if (!src || this.reduced) return;
+    const v = document.createElement('video');
+    v.setAttribute('data-el', 'heroVideo');
+    v.muted = true; v.loop = true; v.playsInline = true;
+    v.autoplay = true; v.preload = 'auto';
+    v.setAttribute('aria-hidden', 'true');
+    v.src = src;
+    v.addEventListener('playing', () => { v.style.opacity = '1'; }, { once: true });
+    v.addEventListener('error', () => { v.remove(); });   // cai para a foto
+    wrap.appendChild(v);
+    const play = v.play();
+    if (play && play.catch) play.catch(() => v.remove());  // autoplay bloqueado
   }
 
   runIntro() {
