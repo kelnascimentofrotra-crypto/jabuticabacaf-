@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
+<script>document.documentElement.className+=" js";</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -65,6 +66,7 @@
 </head>
 <body>
 <a class="skip-link" href="#servicos">Ir para o conteúdo</a>
+<div class="progress" id="progress" aria-hidden="true"><span></span></div>
 
 <!-- ============ TOPBAR ============ -->
 <div class="topbar">
@@ -130,28 +132,28 @@
   <div class="hero__bg" aria-hidden="true"></div>
   <div class="container hero__in">
     <div class="hero__copy">
-      <p class="eyebrow">Especialistas em climatização <span aria-hidden="true">❄️</span></p>
-      <h1>Seu ar-condicionado gelando <em>de verdade</em>, o ano inteiro.</h1>
-      <p class="hero__lead">
+      <p class="eyebrow" data-enter="1">Especialistas em climatização <span aria-hidden="true">❄️</span></p>
+      <h1 data-enter="2">Seu <span class="nb">ar-condicionado</span> gelando <em>de verdade</em>, o ano inteiro.</h1>
+      <p class="hero__lead" data-enter="3">
         Instalação, manutenção, limpeza e conserto de ar-condicionado em São Luís e região.
         Equipe especializada, atendimento rápido, serviço com garantia e preço justo —
         para residências, comércios e indústrias.
       </p>
-      <div class="hero__btns">
+      <div class="hero__btns" data-enter="4">
         <a class="btn btn--primary js-wa" href="#" data-wa-msg="Olá! Quero solicitar um orçamento de ar-condicionado.">
           <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-wa"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
           Falar no WhatsApp
         </a>
         <a class="btn btn--ghost" href="#servicos">Ver serviços</a>
       </div>
-      <ul class="hero__badges">
+      <ul class="hero__badges" data-enter="5">
         <li><strong>Atendimento rápido</strong><span>resposta no mesmo dia</span></li>
         <li><strong>Equipe especializada</strong><span>técnicos experientes</span></li>
         <li><strong>Serviço com garantia</strong><span>mão de obra garantida</span></li>
       </ul>
     </div>
 
-    <div class="hero__art" aria-hidden="true">
+    <div class="hero__art" data-enter="3" aria-hidden="true">
       <div class="art-card">
         <div class="art-split">
           <span class="art-split__body"></span>
@@ -171,25 +173,37 @@
   </div>
 </section>
 
+<!-- ============ MARQUEE ============ -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Instalação</span><i>❄</i><span>Manutenção preventiva</span><i>❄</i><span>Higienização</span><i>❄</i>
+    <span>Conserto e reparo</span><i>❄</i><span>Carga de gás</span><i>❄</i><span>PMOC</span><i>❄</i>
+    <span>Split Inverter</span><i>❄</i><span>Cassete</span><i>❄</i><span>Piso-teto</span><i>❄</i>
+    <span>Instalação</span><i>❄</i><span>Manutenção preventiva</span><i>❄</i><span>Higienização</span><i>❄</i>
+    <span>Conserto e reparo</span><i>❄</i><span>Carga de gás</span><i>❄</i><span>PMOC</span><i>❄</i>
+    <span>Split Inverter</span><i>❄</i><span>Cassete</span><i>❄</i><span>Piso-teto</span><i>❄</i>
+  </div>
+</div>
+
 <!-- ============ CARDS RÁPIDOS ============ -->
 <section class="quick">
   <div class="container quick__grid">
-    <article class="quick__item reveal">
+    <article class="quick__item" data-anim="up">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9"/><path d="M6 14h12"/><path d="M8 17v2M16 17v2"/></svg>
       <h3>Instalação</h3>
       <p>Split, inverter, multi-split, cassete e piso-teto com projeto correto.</p>
     </article>
-    <article class="quick__item reveal">
+    <article class="quick__item" data-anim="up">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1 5 5L21 13l-3 3-8 8-3-3 8-8 3-3Z"/><path d="M6 6l3 3"/></svg>
       <h3>Manutenção</h3>
       <p>Preventiva e corretiva para economizar energia e evitar quebras.</p>
     </article>
-    <article class="quick__item reveal">
+    <article class="quick__item" data-anim="up">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9Z"/></svg>
       <h3>Limpeza</h3>
       <p>Higienização profunda que elimina mofo, odores e bactérias.</p>
     </article>
-    <article class="quick__item reveal">
+    <article class="quick__item" data-anim="up">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
       <h3>Conserto</h3>
       <p>Diagnóstico preciso, troca de peças e carga de gás no mesmo dia.</p>
@@ -200,7 +214,7 @@
 <!-- ============ SERVIÇOS ============ -->
 <section class="section" id="servicos">
   <div class="container">
-    <header class="section__head reveal">
+    <header class="section__head" data-anim="up">
       <p class="eyebrow eyebrow--center">O que fazemos</p>
       <h2>Serviços de refrigeração do começo ao fim</h2>
       <p class="section__lead">Cuidamos do seu equipamento em todas as etapas: do dimensionamento e instalação
@@ -208,7 +222,7 @@
     </header>
 
     <div class="cards">
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9"/><path d="M6 14h12"/><path d="M8 17v2M16 17v2"/></svg></span>
         <h3>Instalação de ar-condicionado</h3>
         <p>Dimensionamento correto de BTUs, escolha do ponto ideal, tubulação, dreno e vácuo feitos
@@ -221,7 +235,7 @@
         <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero um orçamento de INSTALAÇÃO de ar-condicionado.">Solicitar orçamento →</a>
       </article>
 
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1 5 5L21 13l-3 3-8 8-3-3 8-8 3-3Z"/><path d="M6 6l3 3"/></svg></span>
         <h3>Manutenção preventiva</h3>
         <p>Revisão completa que mantém o desempenho: filtros, serpentina, dreno, pressões e parte
@@ -234,7 +248,7 @@
         <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero contratar MANUTENÇÃO PREVENTIVA de ar-condicionado.">Solicitar orçamento →</a>
       </article>
 
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9Z"/></svg></span>
         <h3>Higienização e limpeza</h3>
         <p>Limpeza profunda da evaporadora e da condensadora com produtos próprios para refrigeração.
@@ -247,7 +261,7 @@
         <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero agendar uma LIMPEZA / HIGIENIZAÇÃO do meu ar-condicionado.">Solicitar orçamento →</a>
       </article>
 
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
         <h3>Conserto e reparo</h3>
         <p>Não gela, pinga água, faz barulho ou desliga sozinho? Fazemos o diagnóstico na hora e
@@ -260,7 +274,7 @@
         <a class="card__link js-wa" href="#" data-wa-msg="Olá! Meu ar-condicionado está com defeito e preciso de CONSERTO.">Solicitar orçamento →</a>
       </article>
 
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21h10a2 2 0 0 0 2-2V9l-5-6H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"/><path d="M14 3v6h5"/></svg></span>
         <h3>Carga de gás</h3>
         <p>Localizamos o vazamento antes de completar o gás — recarga sem reparo é dinheiro jogado
@@ -273,7 +287,7 @@
         <a class="card__link js-wa" href="#" data-wa-msg="Olá! Preciso de CARGA DE GÁS no meu ar-condicionado.">Solicitar orçamento →</a>
       </article>
 
-      <article class="card reveal">
+      <article class="card" data-anim="up">
         <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
         <h3>Contrato mensal e PMOC</h3>
         <p>Para empresas que não podem parar: visitas programadas, prioridade no atendimento e
@@ -292,7 +306,7 @@
 <!-- ============ PÚBLICO-ALVO ============ -->
 <section class="section section--soft" id="publico">
   <div class="container">
-    <header class="section__head reveal">
+    <header class="section__head" data-anim="up">
       <p class="eyebrow eyebrow--center">Público atendido</p>
       <h2>Do quarto de casa ao galpão industrial</h2>
       <p class="section__lead">Cada ambiente pede uma solução diferente de climatização. Atendemos os três
@@ -300,7 +314,7 @@
     </header>
 
     <div class="audience">
-      <article class="aud reveal">
+      <article class="aud" data-anim="up">
         <span class="aud__tag">Residencial</span>
         <h3>Sua casa no clima certo</h3>
         <p>Instalação e manutenção em quartos, salas e apartamentos, com atenção ao acabamento,
@@ -311,7 +325,7 @@
           <li>Limpeza periódica para quem tem alergia</li>
         </ul>
       </article>
-      <article class="aud aud--featured reveal">
+      <article class="aud aud--featured" data-anim="zoom">
         <span class="aud__tag">Comercial</span>
         <h3>Cliente confortável, loja cheia</h3>
         <p>Lojas, salões, clínicas, escritórios e restaurantes: equipamentos sempre gelando,
@@ -322,7 +336,7 @@
           <li>Planos de manutenção programada</li>
         </ul>
       </article>
-      <article class="aud reveal">
+      <article class="aud" data-anim="up">
         <span class="aud__tag">Industrial</span>
         <h3>Produção sem parada</h3>
         <p>Climatização e refrigeração de maior porte, com atendimento ágil para reduzir ao máximo
@@ -335,7 +349,7 @@
       </article>
     </div>
 
-    <div class="area reveal">
+    <div class="area" data-anim="up">
       <div>
         <h3>Área de atendimento</h3>
         <p>São Luís e toda a Grande Ilha — São José de Ribamar, Paço do Lumiar e Raposa.
@@ -349,7 +363,7 @@
 <!-- ============ DIFERENCIAIS ============ -->
 <section class="section" id="diferenciais">
   <div class="container why">
-    <div class="why__copy reveal">
+    <div class="why__copy" data-anim="left">
       <p class="eyebrow">Por que a Tá No Clima</p>
       <h2>Serviço técnico de verdade, com preço que cabe no bolso</h2>
       <p>Refrigeração malfeita custa duas vezes: no reparo errado e no aparelho que quebra de novo.
@@ -376,7 +390,7 @@
       </ul>
     </div>
 
-    <div class="why__side reveal">
+    <div class="why__side" data-anim="right">
       <div class="stats">
         <div class="stat"><b class="js-count" data-to="100" data-suffix="%">0</b><span>dos serviços com garantia</span></div>
         <div class="stat"><b class="js-count" data-to="24" data-suffix="h">0</b><span>para retorno do orçamento</span></div>
@@ -394,17 +408,17 @@
 <!-- ============ PROCESSO ============ -->
 <section class="section section--dark" id="processo">
   <div class="container">
-    <header class="section__head reveal">
+    <header class="section__head" data-anim="up">
       <p class="eyebrow eyebrow--center">Como funciona</p>
       <h2>Do primeiro contato ao ar gelando</h2>
       <p class="section__lead">Um processo simples, sem enrolação e sem custo surpresa.</p>
     </header>
 
     <ol class="steps">
-      <li class="reveal"><span class="steps__num">01</span><h3>Você chama no WhatsApp</h3><p>Conte o que está acontecendo, o tipo de aparelho e o endereço. Fotos ajudam muito.</p></li>
-      <li class="reveal"><span class="steps__num">02</span><h3>Diagnóstico técnico</h3><p>Avaliamos o equipamento e o ambiente para indicar a solução certa — não a mais cara.</p></li>
-      <li class="reveal"><span class="steps__num">03</span><h3>Orçamento fechado</h3><p>Valor, prazo e o que está incluso, tudo combinado antes de começar.</p></li>
-      <li class="reveal"><span class="steps__num">04</span><h3>Execução e garantia</h3><p>Serviço feito no horário marcado, ambiente limpo no fim e garantia da mão de obra.</p></li>
+      <li data-anim="up"><span class="steps__num">01</span><h3>Você chama no WhatsApp</h3><p>Conte o que está acontecendo, o tipo de aparelho e o endereço. Fotos ajudam muito.</p></li>
+      <li data-anim="up"><span class="steps__num">02</span><h3>Diagnóstico técnico</h3><p>Avaliamos o equipamento e o ambiente para indicar a solução certa — não a mais cara.</p></li>
+      <li data-anim="up"><span class="steps__num">03</span><h3>Orçamento fechado</h3><p>Valor, prazo e o que está incluso, tudo combinado antes de começar.</p></li>
+      <li data-anim="up"><span class="steps__num">04</span><h3>Execução e garantia</h3><p>Serviço feito no horário marcado, ambiente limpo no fim e garantia da mão de obra.</p></li>
     </ol>
   </div>
 </section>
@@ -412,11 +426,11 @@
 <!-- ============ EQUIPAMENTOS ============ -->
 <section class="section section--soft">
   <div class="container">
-    <header class="section__head reveal">
+    <header class="section__head" data-anim="up">
       <p class="eyebrow eyebrow--center">Equipamentos</p>
       <h2>Atendemos todos os tipos e marcas</h2>
     </header>
-    <ul class="chips reveal">
+    <ul class="chips" data-anim="up">
       <li>Split Hi-Wall</li><li>Split Inverter</li><li>Multi-split</li><li>Cassete</li>
       <li>Piso-teto</li><li>Janela</li><li>Portátil</li><li>Ar de teto dutado</li>
       <li>Câmara fria</li><li>Bebedouro industrial</li><li>Freezer e expositor</li><li>Balcão refrigerado</li>
@@ -427,7 +441,7 @@
 <!-- ============ FAQ ============ -->
 <section class="section" id="faq">
   <div class="container faq">
-    <div class="faq__intro reveal">
+    <div class="faq__intro" data-anim="left">
       <p class="eyebrow">Dúvidas frequentes</p>
       <h2>O que todo mundo pergunta antes de contratar</h2>
       <p>Se a sua dúvida não estiver aqui, é só chamar no WhatsApp — respondemos sem compromisso.</p>
@@ -435,34 +449,34 @@
     </div>
 
     <div class="faq__list">
-      <details class="acc reveal" open>
+      <details class="acc" data-anim="right" open>
         <summary>De quanto em quanto tempo devo fazer a limpeza?</summary>
         <div class="acc__body"><p>Em residências, a cada 6 meses costuma ser suficiente. Em comércios,
           clínicas e ambientes com muita poeira ou uso intenso, o ideal é a cada 3 meses. Em São Luís,
           por causa da maresia e da umidade, quanto mais frequente, melhor para a vida útil do aparelho.</p></div>
       </details>
-      <details class="acc reveal">
+      <details class="acc" data-anim="right">
         <summary>Meu ar não está gelando. É falta de gás?</summary>
         <div class="acc__body"><p>Nem sempre. Filtro sujo, serpentina obstruída, capacitor ou placa com defeito
           causam o mesmo sintoma. Por isso fazemos o diagnóstico antes: completar gás sem achar o vazamento
           resolve por poucas semanas e o problema volta.</p></div>
       </details>
-      <details class="acc reveal">
+      <details class="acc" data-anim="right">
         <summary>Vocês fazem a instalação com a infraestrutura?</summary>
         <div class="acc__body"><p>Sim. Fazemos furo, fixação dos suportes, tubulação, dreno, vácuo e testes.
           Se o ponto elétrico precisar de adequação, avaliamos junto e informamos no orçamento.</p></div>
       </details>
-      <details class="acc reveal">
+      <details class="acc" data-anim="right">
         <summary>Qual a garantia do serviço?</summary>
         <div class="acc__body"><p>Todo serviço executado tem garantia de mão de obra. Peças e equipamentos
           seguem a garantia do fabricante. As condições ficam registradas no seu orçamento.</p></div>
       </details>
-      <details class="acc reveal">
+      <details class="acc" data-anim="right">
         <summary>Quanto tempo demora para atender?</summary>
         <div class="acc__body"><p>Respondemos no mesmo dia e, sempre que a agenda permite, atendemos em até 24h.
           Para emergências de comércio e indústria, damos prioridade.</p></div>
       </details>
-      <details class="acc reveal">
+      <details class="acc" data-anim="right">
         <summary>Qual a forma de pagamento?</summary>
         <div class="acc__body"><p>Trabalhamos com Pix, dinheiro e cartão. Combinamos tudo no orçamento,
           antes de iniciar o serviço — sem cobrança extra no final.</p></div>
@@ -473,7 +487,7 @@
 
 <!-- ============ CTA ============ -->
 <section class="cta">
-  <div class="container cta__in reveal">
+  <div class="container cta__in" data-anim="zoom">
     <div>
       <p class="eyebrow eyebrow--light">Está no calor? A gente resolve</p>
       <h2>Peça seu orçamento agora — é rápido e sem compromisso</h2>
@@ -492,14 +506,14 @@
 <!-- ============ CONTATO ============ -->
 <section class="section" id="contato">
   <div class="container">
-    <header class="section__head reveal">
+    <header class="section__head" data-anim="up">
       <p class="eyebrow eyebrow--center">Contato</p>
       <h2>Vamos deixar seu ambiente no clima</h2>
       <p class="section__lead">Preencha os dados e o pedido abre direto no WhatsApp, já preenchido.</p>
     </header>
 
     <div class="contact">
-      <div class="contact__info reveal">
+      <div class="contact__info" data-anim="left">
         <ul class="info">
           <li>
             <span class="info__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
@@ -526,7 +540,7 @@
         </div>
       </div>
 
-      <form class="form reveal" id="form">
+      <form class="form" data-anim="right" id="form">
         <div class="form__row">
           <label>Nome<input type="text" name="nome" required placeholder="Seu nome"></label>
           <label>WhatsApp<input type="tel" name="fone" required placeholder="(98) 9 0000-0000"></label>

@@ -62,16 +62,40 @@ const CONFIG = {
     });
   }
 
-  /* ---------- 3. header com sombra ao rolar ---------- */
+  /* ---------- 3. scroll: header, progresso, topo e parallax ---------- */
   const header = $('#header');
   const totop = $('#totop');
-  function onScroll() {
+  const bar = $('#progress span');
+  const art = $('.art-card');
+  const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let ultimoY = window.pageYOffset;
+  let agendado = false;
+
+  function aoRolar() {
     const y = window.pageYOffset;
-    if (header) header.classList.toggle('is-stuck', y > 10);
+    const alturaRolavel = document.documentElement.scrollHeight - window.innerHeight;
+
+    if (header) {
+      header.classList.toggle('is-stuck', y > 10);
+      // esconde ao descer, revela ao subir (só depois do hero)
+      header.classList.toggle('is-hidden', y > 420 && y > ultimoY + 4);
+    }
     if (totop) totop.classList.toggle('is-on', y > 600);
+    if (bar) bar.style.width = (alturaRolavel > 0 ? (y / alturaRolavel) * 100 : 0) + '%';
+    if (art && !reduzido && y < window.innerHeight) {
+      art.style.transform = 'translate3d(0,' + (y * -0.07).toFixed(1) + 'px,0)';
+    }
+    if (window.__varrerAnimados) window.__varrerAnimados();
+    ultimoY = y;
+    agendado = false;
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+
+  window.addEventListener('scroll', function () {
+    if (agendado) return;
+    agendado = true;
+    requestAnimationFrame(aoRolar);
+  }, { passive: true });
+  aoRolar();
 
   if (totop) {
     totop.addEventListener('click', function () {
@@ -97,19 +121,49 @@ const CONFIG = {
     sections.forEach(function (s) { spy.observe(s); });
   }
 
-  /* ---------- 5. animação de entrada ---------- */
-  const revealables = $$('.reveal');
-  if ('IntersectionObserver' in window) {
+  /* ---------- 5. animações de entrada e de scroll ---------- */
+  // entrada do hero assim que a página carrega
+  function ligarEntrada() { document.documentElement.classList.add('is-loaded'); }
+  if (document.readyState === 'complete') ligarEntrada();
+  else window.addEventListener('load', ligarEntrada);
+  // rede de segurança: nunca deixar conteúdo preso invisível
+  setTimeout(ligarEntrada, 900);
+
+  const animados = $$('[data-anim]');
+  let pendentes = animados.slice();
+  function mostrarTudo() { animados.forEach(function (el) { el.classList.add('is-in'); }); pendentes = []; }
+
+  // quem já passou pela tela (saltos de âncora, recarga no meio da página) entra sem esperar
+  window.__varrerAnimados = function () {
+    if (!pendentes.length) return;
+    pendentes = pendentes.filter(function (el) {
+      if (el.getBoundingClientRect().bottom > 120) return true;
+      el.style.transitionDelay = '0ms';
+      el.classList.add('is-in');
+      return false;
+    });
+  };
+
+  if ('IntersectionObserver' in window && !reduzido) {
     const io = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (e, i) {
+      entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        setTimeout(function () { e.target.classList.add('is-in'); }, (i % 4) * 90);
+        const irmaos = e.target.parentElement ? $$('[data-anim]', e.target.parentElement) : [];
+        const ordem = Math.max(0, irmaos.indexOf(e.target));
+        e.target.style.transitionDelay = Math.min(ordem, 5) * 110 + 'ms';
+        e.target.classList.add('is-in');
         obs.unobserve(e.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px' });
-    revealables.forEach(function (el) { io.observe(el); });
+    }, { threshold: 0.12, rootMargin: '0px 0px -70px' });
+    animados.forEach(function (el) { io.observe(el); });
+    // o que já está visível na primeira tela entra junto com o hero
+    setTimeout(function () {
+      animados.forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('is-in');
+      });
+    }, 120);
   } else {
-    revealables.forEach(function (el) { el.classList.add('is-in'); });
+    mostrarTudo();
   }
 
   /* ---------- 6. contadores ---------- */
