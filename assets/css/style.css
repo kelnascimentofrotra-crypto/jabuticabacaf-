@@ -112,7 +112,7 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   background:linear-gradient(90deg,transparent,var(--blue) 20%,var(--ice) 50%,var(--blue) 80%,transparent);
   box-shadow:0 0 18px rgba(30,155,224,.75)}
 .intro__skip{position:absolute;right:clamp(18px,3vw,34px);bottom:clamp(18px,3vw,30px);
-  padding:9px 17px;border:1px solid rgba(238,246,252,.2);border-radius:999px;background:transparent;
+  min-height:44px;padding:9px 20px;border:1px solid rgba(238,246,252,.2);border-radius:999px;background:transparent;
   font-family:var(--head);font-size:.62rem;letter-spacing:.24em;text-transform:uppercase;
   color:var(--faint);cursor:pointer;animation:softIn 1s ease 2.5s both}
 .intro__skip:hover{color:#fff;border-color:var(--ice)}
