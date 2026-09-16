@@ -277,61 +277,80 @@ const CONFIG = {
   let varrer = null;   // rede de segurança das revelações, chamada a cada quadro
 
   function montarCiclo() {
-    const track = $('[data-el="cyTrack"]');
+    const track = $('[data-el="cfTrack"]');
     if (!track) return null;
-    return {
-      track: track,
-      warm: $('[data-el="cyWarm"]'), cool: $('[data-el="cyCool"]'), flow: $('[data-el="cyFlow"]'),
-      sweep: $('[data-el="cySweep"]'), temp: $('[data-el="cyTemp"]'), fill: $('[data-el="cyFill"]'),
-      final: $('[data-el="cyFinal"]'), room: $('.cy__room'),
-      passos: $$('[data-cystep]'), marcas: $$('[data-cymark]')
+    const c = {
+      track: track, box: $('[data-el="cfMediaBox"]'), media: $('[data-el="cfMedia"]'),
+      warm: $('[data-el="cfWarm"]'), cool: $('[data-el="cfCool"]'), flow: $('[data-el="cfFlow"]'),
+      sweep: $('[data-el="cfSweep"]'), bar: $('[data-el="cfBar"]'), temp: $('[data-el="cfTemp"]'),
+      linhas: [$('[data-el="cfR0"]'), $('[data-el="cfR1"]'), $('[data-el="cfLead"]'), $('[data-el="cfR2"]')],
+      cards: $$('[data-cfcard]'),
+      estados: [$('[data-el="cfState0"]'), $('[data-el="cfState1"]'), $('[data-el="cfState2"]')],
+      paradas: [$('[data-el="cfStop0"]'), $('[data-el="cfStop1"]'), $('[data-el="cfStop2"]')]
     };
+    c.linhas.concat(c.cards).forEach(function (n) { if (n) n.style.willChange = 'opacity,transform'; });
+    return c;
   }
 
+  // Capítulo do resfriamento: o progresso da trilha comanda o desfoque de
+  // entrada, a troca da camada quente pela fria, o fluxo de ar, a varredura,
+  // o termômetro, as etapas e a entrada escalonada do texto e dos cards.
   function rodarCiclo(vh) {
     if (!ciclo) return;
     const c = ciclo;
     const r = c.track.getBoundingClientRect();
     if (r.bottom < -80 || r.top > vh + 80) return;
 
-    const alvo = clamp(-r.top / ((r.height - vh) || 1), 0, 1);
-    pCiclo = reduzido ? alvo : (Math.abs(alvo - pCiclo) < 0.0002 ? alvo : mix(pCiclo, alvo, 0.09));
+    const cru = clamp(-r.top / ((r.height - vh) || 1), 0, 1);
+    if (reduzido) pCiclo = cru < 0.02 ? 0 : 1;
+    else pCiclo = Math.abs(cru - pCiclo) < 0.0002 ? cru : mix(pCiclo, cru, 0.09);
     const p = pCiclo;
+    const mm = reduzido ? 0 : 1;
 
-    // ambiente esquentando -> gelando
-    c.warm.style.opacity = (0.95 * (1 - easeIO(span(p, 0.14, 0.62)))).toFixed(3);
-    c.cool.style.opacity = (0.9 * easeIO(span(p, 0.42, 0.9))).toFixed(3);
-    c.flow.style.opacity = (0.95 * easeOut(span(p, 0.3, 0.55))).toFixed(3);
+    // a cena entra desfocada e vai ganhando nitidez e brilho
+    const entrada = easeOut(span(p, 0, 0.1));
+    c.media.style.filter = 'blur(' + ((1 - entrada) * 14).toFixed(2) + 'px) saturate(' +
+      (1.22 - 0.22 * span(p, 0.2, 0.8)).toFixed(3) + ') brightness(' +
+      (0.86 + 0.16 * span(p, 0.15, 0.85)).toFixed(3) + ')';
+    c.media.style.opacity = (0.45 + 0.55 * entrada).toFixed(3);
+    const deriva = span(p, 0, 1);
+    c.media.style.transform = 'translate3d(0,' + (-2.6 * mm * deriva).toFixed(2) + '%,0) scale(' +
+      (1.07 - 0.05 * entrada + 0.035 * mm * deriva).toFixed(4) + ')';
 
-    // varredura de limpeza atravessando o ambiente
-    const sw = span(p, 0.22, 0.72);
-    c.sweep.style.opacity = (sw > 0.01 && sw < 0.99 ? 1 : 0).toFixed(2);
-    const larg = c.room ? c.room.getBoundingClientRect().width : 520;
-    c.sweep.style.transform = 'translateX(' + (-140 + sw * (larg + 260)).toFixed(0) + 'px)';
+    // quente sai, frio entra
+    c.warm.style.opacity = (0.92 * (1 - easeIO(span(p, 0.16, 0.6)))).toFixed(3);
+    c.cool.style.opacity = (0.85 * easeIO(span(p, 0.44, 0.88))).toFixed(3);
+    c.flow.style.opacity = (0.9 * easeOut(span(p, 0.26, 0.5)) * (1 - 0.35 * span(p, 0.88, 1))).toFixed(3);
 
-    // termômetro 32° -> 21°
-    c.temp.textContent = Math.round(32 - 11 * easeIO(span(p, 0.16, 0.86)));
+    // varredura atravessando a cena
+    const sw = span(p, 0.2, 0.74);
+    c.sweep.style.opacity = (sw > 0 && sw < 1 ? 1 : 0).toFixed(2);
+    const larg = c.box ? c.box.getBoundingClientRect().width : 600;
+    c.sweep.style.transform = 'translateX(' + (-160 + sw * (larg + 300)).toFixed(0) + 'px)';
 
-    // trilho e marcas
-    c.fill.style.transform = 'scaleX(' + p.toFixed(4) + ')';
-    const etapa = p < 0.26 ? 0 : p < 0.5 ? 1 : p < 0.74 ? 2 : 3;
-    c.marcas.forEach(function (m, i) { m.classList.toggle('on', i === etapa); });
+    // termômetro e trilho
+    c.bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+    c.temp.textContent = Math.round(32 - 10 * easeIO(span(p, 0.14, 0.84)));
 
-    // narrativa: um passo por vez, entrando e saindo
-    const janelas = [[0.02, 0.28], [0.26, 0.52], [0.5, 0.76], [0.74, 1.01]];
-    c.passos.forEach(function (n, i) {
-      const j = janelas[i];
-      const dentro = easeOut(span(p, j[0], j[0] + 0.07));
-      const fora = i === 3 ? 0 : easeIO(span(p, j[1] - 0.05, j[1]));
-      const v = dentro * (1 - fora);
+    const etapa = p < 0.36 ? 0 : p < 0.7 ? 1 : 2;
+    for (let i = 0; i < 3; i++) {
+      c.estados[i].style.color = i === etapa ? '#7FD4F5' : 'rgba(238,246,252,.32)';
+      c.paradas[i].style.color = i === etapa ? 'rgba(238,246,252,.9)' : 'rgba(238,246,252,.3)';
+    }
+
+    // texto e cards entrando em cascata
+    for (let i = 0; i < c.linhas.length; i++) {
+      const n = c.linhas[i];
+      if (!n) continue;
+      const v = easeOut(span(p, 0.04 + i * 0.05, 0.2 + i * 0.05));
       n.style.opacity = v.toFixed(3);
-      n.style.transform = 'translate3d(0,' + ((1 - dentro) * 22 + fora * -18).toFixed(1) + 'px,0)';
-    });
-
-    // desfecho
-    const f = easeIO(span(p, 0.9, 1));
-    c.final.style.opacity = f.toFixed(3);
-    c.final.style.pointerEvents = f > 0.6 ? 'auto' : 'none';
+      n.style.transform = 'translate3d(0,' + ((1 - v) * 22 * (mm || 1)).toFixed(1) + 'px,0)';
+    }
+    for (let i = 0; i < c.cards.length; i++) {
+      const v = easeOut(span(p, 0.46 + i * 0.07, 0.62 + i * 0.07));
+      c.cards[i].style.opacity = v.toFixed(3);
+      c.cards[i].style.transform = 'translate3d(0,' + ((1 - v) * 26 * (mm || 1)).toFixed(1) + 'px,0)';
+    }
   }
 
   function quadro() {
