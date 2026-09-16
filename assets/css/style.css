@@ -94,7 +94,7 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.9;stroke-l
 .topbar__phone:hover{color:var(--ice)}
 
 /* ---------- header ---------- */
-.header{position:sticky;top:0;z-index:90;background:#fff;box-shadow:0 1px 0 var(--line);transition:box-shadow .25s ease}
+.header{position:sticky;top:env(safe-area-inset-top, 0px);z-index:90;background:#fff;box-shadow:0 1px 0 var(--line);transition:box-shadow .25s ease}
 .header.is-stuck{box-shadow:0 12px 30px -18px rgba(11,46,89,.5)}
 .header__in{display:flex;align-items:center;gap:20px;min-height:82px}
 .brand{display:flex;align-items:center;gap:12px;margin-right:auto}
@@ -406,3 +406,11 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.9;stroke-l
   .cta__btns .btn{flex:1 1 100%}
   .footer__bottom{justify-content:center;text-align:center}
 }
+
+/* cartão de mapa usado na versão publicada como Artifact */
+.map--link{display:flex;align-items:center;gap:16px;padding:26px 24px;background:var(--soft);
+  border:1px solid var(--line);border-radius:var(--radius);transition:border-color .2s,transform .2s}
+.map--link:hover{border-color:var(--blue);transform:translateY(-3px)}
+.map--link svg{width:34px;height:34px;color:var(--blue);flex:none}
+.map--link strong{display:block;font-family:var(--head);color:var(--navy);font-size:1.05rem}
+.map--link span{font-size:.92rem;color:var(--muted);line-height:1.5}
