@@ -100,7 +100,8 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   padding:24px;transition:transform 1.05s var(--ease)}
 .intro__mark{position:relative;display:grid;place-items:center;
   animation:markIn 1.6s var(--ease) .3s both}
-.intro__mark img{position:relative;width:min(38vw,150px);height:auto}
+.intro__mark img{position:relative;width:min(34vw,120px);height:auto;border-radius:50%;
+  box-shadow:0 0 0 2px rgba(127,212,245,.4),0 20px 50px -18px rgba(0,0,0,.9)}
 .intro__halo{position:absolute;width:210%;height:210%;border-radius:50%;pointer-events:none;
   background:radial-gradient(circle,rgba(30,155,224,.34),rgba(30,155,224,.06) 48%,transparent 70%);
   animation:haloIn 2.2s ease .5s both}
@@ -135,7 +136,8 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   border-bottom:1px solid transparent;
   transition:padding .5s var(--ease),background-color .5s ease,border-color .5s ease}
 .hd__brand{display:flex;align-items:center;gap:12px}
-.hd__brand img{width:42px;height:42px;flex:none}
+.hd__brand img{width:42px;height:42px;flex:none;border-radius:50%;
+  box-shadow:0 0 0 1px rgba(127,212,245,.35),0 6px 16px -8px rgba(0,0,0,.8)}
 .hd__brand b{display:block;font-family:var(--head);font-weight:700;font-size:.9rem;letter-spacing:.16em;line-height:1}
 .hd__brand i{display:block;font-style:normal;font-size:.56rem;letter-spacing:.3em;text-transform:uppercase;
   color:var(--faint);margin-top:5px}
@@ -388,7 +390,8 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 /* a versão com texto da logo fica ilegível em 104px: aqui vale a marca
    limpa com o nome em texto, como no cabeçalho */
 .ft__mark{display:inline-flex;align-items:center;gap:12px;margin-bottom:16px}
-.ft__mark img{width:52px;height:52px;flex:none}
+.ft__mark img{width:52px;height:52px;flex:none;border-radius:50%;
+  box-shadow:0 0 0 1px rgba(127,212,245,.3)}
 .ft__mark b{display:block;font-family:var(--head);font-weight:700;font-size:1rem;
   letter-spacing:.14em;color:#fff;line-height:1}
 .ft__mark i{display:block;font-style:normal;font-size:.58rem;letter-spacing:.24em;
@@ -535,7 +538,8 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   background:radial-gradient(70% 60% at 50% 46%,transparent 40%,rgba(0,0,0,.72) 100%)}
 .intro__in{animation:introPush 5s var(--ease) both}
 @keyframes introPush{from{transform:scale(.965)}to{transform:scale(1)}}
-.intro__mark img{width:min(40vw,160px)}
+.intro__mark img{width:min(34vw,120px);border-radius:50%;
+  box-shadow:0 0 0 2px rgba(127,212,245,.4),0 20px 50px -18px rgba(0,0,0,.9)}
 @keyframes introSheen{to{transform:translateX(130%)}}
 
 /* =========================================================

@@ -96,6 +96,19 @@ Tudo isso roda no mesmo `requestAnimationFrame` do resto do site, com o
 progresso suavizado por interpolação. Não há biblioteca de animação: a mecânica
 que o GSAP ScrollTrigger daria com `scrub` já existe no projeto.
 
+## A marca
+
+`assets/img/logo.png` é o logo da loja, recortado em círculo com fundo
+transparente a partir da foto de perfil enviada (`logo-original-perfil.png`,
+139 × 142). Por isso ele aparece no site em tamanhos pequenos — 42px no
+cabeçalho, 52px no rodapé, 120px na abertura — onde a resolução da origem dá
+conta. O nome vem em texto ao lado, não dentro da imagem, então "TÁ NO CLIMA"
+continua legível em qualquer tela.
+
+Se um dia aparecer o arquivo vetorial do logo (`.svg`, `.ai`, `.eps` ou `.pdf`),
+trocar vale a pena: aí a marca pode crescer sem limite e a assinatura dentro
+dela fica nítida.
+
 ## Fotografias
 
 O site funciona sem nenhuma foto: onde ela falta, entra uma cena desenhada em
@@ -105,6 +118,7 @@ dentro de `assets/img/` — não é preciso mexer no código.
 | Arquivo | Onde aparece | Tamanho sugerido | O que fotografar |
 | --- | --- | --- | --- |
 | `tecnico-split.png` | fundo do topo | hoje 915 × 514 — o ideal é 1920 × 1080 | técnico instalando ou consertando um split (**já está no site**) |
+| `logo.png` | marca no cabeçalho, abertura, rodapé e favicon | 278 × 278 circular | **já está no site** — recorte circular com fundo transparente, gerado a partir de `logo-original-perfil.png` |
 | `ambiente.jpg` | seção "Do calor ao conforto" | 1200 × 900 | ambiente já climatizado, com o ar-condicionado visível na parede |
 
 Dicas de enquadramento:
