@@ -2,22 +2,20 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tá No Clima — Refrigeração e Serviço | Ar-condicionado em São Luís - MA</title>
 <meta name="description" content="Instalação, manutenção, higienização e conserto de ar-condicionado em São Luís - MA. Atendimento rápido, equipe especializada, serviço com garantia e preço justo. Residencial, comercial e industrial.">
-<meta name="theme-color" content="#0B2E59">
+<meta name="theme-color" content="#061529">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/favicon.svg">
-
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:title" content="Tá No Clima — Refrigeração e Serviço">
 <meta property="og:description" content="Especialistas em climatização em São Luís - MA. Instalação, manutenção, limpeza e conserto de ar-condicionado com garantia.">
 <meta property="og:image" content="assets/img/logo-full.svg">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script>document.documentElement.className+=" js";</script>
 <script type="application/ld+json">
@@ -54,583 +52,465 @@
   ]
 }
 </script>
-
 <!--
   ===========================================================
-  DADOS PARA ATUALIZAR ANTES DE PUBLICAR
-  Todos os telefones, WhatsApp, e-mail, redes sociais e horário
-  ficam em UM lugar só: assets/js/main.js -> objeto CONFIG.
-  Edite lá e o site inteiro é atualizado automaticamente.
+  DADOS PARA ATUALIZAR: assets/js/main.js -> objeto CONFIG.
+  Telefone, WhatsApp, e-mail, horário e redes ficam lá.
   ===========================================================
 -->
 </head>
 <body>
-<a class="skip-link" href="#servicos">Ir para o conteúdo</a>
-<div class="progress" id="progress" aria-hidden="true"><span></span></div>
+<a class="skip" href="#servicos">Pular para o conteúdo</a>
 
-<!-- ============ TOPBAR ============ -->
-<div class="topbar">
-  <div class="container topbar__in">
-    <ul class="topbar__info">
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        R. Daniel De La Touche, 50 — Vila Mauro Fecury I, São Luís/MA
-      </li>
-      <li class="topbar__hide">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/></svg>
-        <span data-config="hours">Seg a Sáb, 7h às 18h</span>
-      </li>
-    </ul>
-    <div class="topbar__cta">
-      <span class="topbar__tag">Emergência? Ligamos de volta em minutos</span>
-      <a class="topbar__phone" data-config="tel-href" href="#">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h3l2 5-2.2 1.4a12 12 0 0 0 5.8 5.8L16 13l5 2v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 6.2 2 2 0 0 1 6 4Z"/></svg>
-        <span data-config="phone">(98) 9 9999-9999</span>
-      </a>
+<div class="prog" aria-hidden="true"><i data-el="progFill"></i></div>
+
+<!-- ============ ABERTURA ============ -->
+<div class="intro" data-el="intro">
+  <div class="intro__in" data-el="introIn">
+    <div class="intro__mark">
+      <span class="intro__halo"></span>
+      <img src="assets/img/logo-mark.svg" alt="" width="150" height="150">
     </div>
+    <div class="mask"><span class="intro__name">TÁ NO CLIMA</span></div>
+    <span class="intro__rule"></span>
+    <span class="intro__sub">Refrigeração e Serviço</span>
   </div>
+  <button class="intro__skip" data-el="skip" type="button">Pular</button>
 </div>
 
-<!-- ============ HEADER ============ -->
-<header class="header" id="header">
-  <div class="container header__in">
-    <a class="brand" href="#topo" aria-label="Tá No Clima — Refrigeração e Serviço, página inicial">
-      <img class="brand__mark" src="assets/img/logo-mark.svg" alt="" width="58" height="58">
-      <span class="brand__text">
-        <strong>TÁ NO CLIMA</strong>
-        <small>Refrigeração e Serviço</small>
-      </span>
+<!-- ============ CABEÇALHO ============ -->
+<header class="hd" data-el="header">
+  <a class="hd__brand" href="#inicio" aria-label="Tá No Clima, início">
+    <img src="assets/img/logo-mark.svg" alt="" width="42" height="42">
+    <span><b>TÁ NO CLIMA</b><i>Refrigeração e Serviço</i></span>
+  </a>
+  <nav class="hd__nav" data-el="nav" aria-label="Menu principal">
+    <a href="#servicos">Serviços</a>
+    <a href="#publico">Atendemos</a>
+    <a href="#ciclo">Como funciona</a>
+    <a href="#diferenciais">Diferenciais</a>
+    <a href="#faq">Dúvidas</a>
+    <a href="#contato">Contato</a>
+  </nav>
+  <div class="hd__end">
+    <a class="btn btn--solid js-wa" href="#" data-wa-msg="Olá! Vim pelo site e gostaria de um orçamento." data-spot>
+      <span data-glow></span><span>Orçamento</span>
     </a>
-
-    <nav class="nav" id="nav" aria-label="Menu principal">
-      <ul>
-        <li><a href="#topo" class="is-active">Início</a></li>
-        <li><a href="#servicos">Serviços</a></li>
-        <li><a href="#publico">Atendemos</a></li>
-        <li><a href="#diferenciais">Diferenciais</a></li>
-        <li><a href="#processo">Como funciona</a></li>
-        <li><a href="#faq">Dúvidas</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </nav>
-
-    <div class="header__actions">
-      <a class="btn btn--primary btn--sm js-wa" href="#" data-wa-msg="Olá! Vim pelo site e gostaria de um orçamento.">
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-wa"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
-        Orçamento rápido
-      </a>
-      <button class="burger" id="burger" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
+    <button class="burger" data-el="burger" type="button" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span>
+    </button>
   </div>
 </header>
 
-<main>
-<!-- ============ HERO ============ -->
-<section class="hero" id="topo">
-  <div class="hero__bg" aria-hidden="true"></div>
-  <div class="container hero__in">
-    <div class="hero__copy">
-      <p class="eyebrow" data-enter="1">Especialistas em climatização <span aria-hidden="true">❄️</span></p>
-      <h1 data-enter="2">Seu <span class="nb">ar-condicionado</span> gelando <em>de verdade</em>, o ano inteiro.</h1>
-      <p class="hero__lead" data-enter="3">
-        Instalação, manutenção, limpeza e conserto de ar-condicionado em São Luís e região.
-        Equipe especializada, atendimento rápido, serviço com garantia e preço justo —
-        para residências, comércios e indústrias.
-      </p>
-      <div class="hero__btns" data-enter="4">
-        <a class="btn btn--primary js-wa" href="#" data-wa-msg="Olá! Quero solicitar um orçamento de ar-condicionado.">
-          <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-wa"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
-          Falar no WhatsApp
-        </a>
-        <a class="btn btn--ghost" href="#servicos">Ver serviços</a>
+<!-- ============ HERÓI (trilha alta + palco fixo) ============ -->
+<div class="track" id="inicio" data-el="track">
+  <div class="stage" data-el="stage">
+
+    <div class="scene" data-el="scene" aria-hidden="true">
+      <div class="scene__glow"></div>
+      <div class="scene__grid"></div>
+      <div class="scene__unit">
+        <svg viewBox="0 0 520 300" width="520" height="300">
+          <defs>
+            <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFDFF3"/>
+            </linearGradient>
+            <linearGradient id="g-air" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#7FD4F5" stop-opacity=".95"/>
+              <stop offset="1" stop-color="#7FD4F5" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <rect x="60" y="40" width="400" height="92" rx="30" fill="url(#g-body)"/>
+          <rect x="88" y="104" width="344" height="14" rx="7" fill="#1E9BE0"/>
+          <circle cx="424" cy="66" r="6" fill="#E02B28"/>
+          <g class="scene__air">
+            <rect x="140" y="140" width="10" height="70" rx="5" fill="url(#g-air)"/>
+            <rect x="215" y="140" width="10" height="104" rx="5" fill="url(#g-air)"/>
+            <rect x="292" y="140" width="10" height="82" rx="5" fill="url(#g-air)"/>
+            <rect x="366" y="140" width="10" height="60" rx="5" fill="url(#g-air)"/>
+          </g>
+        </svg>
       </div>
-      <ul class="hero__badges" data-enter="5">
-        <li><strong>Atendimento rápido</strong><span>resposta no mesmo dia</span></li>
-        <li><strong>Equipe especializada</strong><span>técnicos experientes</span></li>
-        <li><strong>Serviço com garantia</strong><span>mão de obra garantida</span></li>
-      </ul>
+      <div class="scene__flakes"></div>
+    </div>
+    <div class="scene__veil" aria-hidden="true"></div>
+
+    <div class="heroui" data-el="heroui">
+      <div class="heroui__main">
+        <div class="mask"><span class="eyebrow" data-gate style="--d:.45s">Especialistas em climatização</span></div>
+        <h1 data-lines>
+          <span class="mask"><span data-line data-gate style="--d:.58s">Seu ambiente no clima certo,</span></span>
+          <span class="mask"><span data-line data-gate style="--d:.70s">o ano inteiro.</span></span>
+        </h1>
+        <p class="heroui__lead" data-gate style="--d:.86s">
+          Instalação, manutenção, higienização e conserto de ar-condicionado em São Luís e região —
+          para residências, comércios e indústrias.
+        </p>
+        <div class="heroui__btns" data-gate style="--d:1s">
+          <a class="btn btn--solid btn--lg js-wa" href="#" data-wa-msg="Olá! Quero solicitar um orçamento de ar-condicionado." data-spot data-magnet>
+            <span data-glow></span><span>Solicitar orçamento</span>
+            <svg viewBox="0 0 24 24" class="arw" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a class="lnk" href="#servicos">Conheça os serviços
+            <span class="lnk__circ"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+          </a>
+        </div>
+      </div>
+      <div class="heroui__side" data-gate style="--d:1.2s">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+        <span>Atendimento em<br>São Luís e região</span>
+      </div>
     </div>
 
-    <div class="hero__art" data-enter="3" aria-hidden="true">
-      <div class="art-card">
-        <div class="art-split">
-          <span class="art-split__body"></span>
-          <span class="art-split__vent"></span>
-          <span class="art-flow art-flow--1"></span>
-          <span class="art-flow art-flow--2"></span>
-          <span class="art-flow art-flow--3"></span>
-        </div>
-        <div class="art-temp">
-          <b>21<sup>°</sup></b>
-          <small>Temperatura ideal</small>
-        </div>
-      </div>
-      <div class="art-chip art-chip--a">❄️ Ar gelado sem barulho</div>
-      <div class="art-chip art-chip--b">💧 Higienização completa</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ MARQUEE ============ -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee__track">
-    <span>Instalação</span><i>❄</i><span>Manutenção preventiva</span><i>❄</i><span>Higienização</span><i>❄</i>
-    <span>Conserto e reparo</span><i>❄</i><span>Carga de gás</span><i>❄</i><span>PMOC</span><i>❄</i>
-    <span>Split Inverter</span><i>❄</i><span>Cassete</span><i>❄</i><span>Piso-teto</span><i>❄</i>
-    <span>Instalação</span><i>❄</i><span>Manutenção preventiva</span><i>❄</i><span>Higienização</span><i>❄</i>
-    <span>Conserto e reparo</span><i>❄</i><span>Carga de gás</span><i>❄</i><span>PMOC</span><i>❄</i>
-    <span>Split Inverter</span><i>❄</i><span>Cassete</span><i>❄</i><span>Piso-teto</span><i>❄</i>
   </div>
 </div>
 
-<!-- ============ CARDS RÁPIDOS ============ -->
-<section class="quick">
-  <div class="container quick__grid">
-    <article class="quick__item" data-anim="up">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9"/><path d="M6 14h12"/><path d="M8 17v2M16 17v2"/></svg>
-      <h3>Instalação</h3>
-      <p>Split, inverter, multi-split, cassete e piso-teto com projeto correto.</p>
-    </article>
-    <article class="quick__item" data-anim="up">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1 5 5L21 13l-3 3-8 8-3-3 8-8 3-3Z"/><path d="M6 6l3 3"/></svg>
-      <h3>Manutenção</h3>
-      <p>Preventiva e corretiva para economizar energia e evitar quebras.</p>
-    </article>
-    <article class="quick__item" data-anim="up">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9Z"/></svg>
-      <h3>Limpeza</h3>
-      <p>Higienização profunda que elimina mofo, odores e bactérias.</p>
-    </article>
-    <article class="quick__item" data-anim="up">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
-      <h3>Conserto</h3>
-      <p>Diagnóstico preciso, troca de peças e carga de gás no mesmo dia.</p>
-    </article>
-  </div>
-</section>
+<!-- ============ CORTINA ============ -->
+<div class="curtain">
 
-<!-- ============ SERVIÇOS ============ -->
-<section class="section" id="servicos">
-  <div class="container">
-    <header class="section__head" data-anim="up">
-      <p class="eyebrow eyebrow--center">O que fazemos</p>
-      <h2>Serviços de refrigeração do começo ao fim</h2>
-      <p class="section__lead">Cuidamos do seu equipamento em todas as etapas: do dimensionamento e instalação
-        à manutenção periódica que faz o ar durar muito mais.</p>
-    </header>
+<!-- ---------- SERVIÇOS ---------- -->
+<section id="servicos" class="sec">
+  <div class="wrap svc">
+    <div class="svc__intro">
+      <span class="eyebrow" data-reveal="1">O que fazemos</span>
+      <h2 data-lines>
+        <span class="mask"><span data-line>Do quarto de casa</span></span>
+        <span class="mask"><span data-line>ao galpão industrial,</span></span>
+        <span class="mask"><span data-line>tudo em refrigeração.</span></span>
+      </h2>
+      <p data-reveal="1" data-d="180">Cuidamos do equipamento em todas as etapas — do dimensionamento e da
+        instalação à manutenção que faz o ar durar muito mais e gastar menos energia.</p>
+      <a class="btn btn--line" data-reveal="1" data-d="260" href="#contato">Pedir orçamento
+        <svg viewBox="0 0 24 24" class="arw" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
 
-    <div class="cards">
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9"/><path d="M6 14h12"/><path d="M8 17v2M16 17v2"/></svg></span>
-        <h3>Instalação de ar-condicionado</h3>
-        <p>Dimensionamento correto de BTUs, escolha do ponto ideal, tubulação, dreno e vácuo feitos
-          dentro da norma — sem vazamento e sem gelar demais na conta de luz.</p>
-        <ul class="card__list">
-          <li>Split e Split Inverter</li>
-          <li>Multi-split, cassete e piso-teto</li>
-          <li>Infraestrutura e ponto elétrico</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero um orçamento de INSTALAÇÃO de ar-condicionado.">Solicitar orçamento →</a>
+    <div class="svc__grid">
+      <article class="card" data-reveal="1" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M3 17V8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v9"/><path d="M6 14h12"/><path d="M8 17v2M16 17v2"/></svg>
+        <h3>Instalação</h3>
+        <p>BTUs dimensionados, tubulação, dreno e vácuo dentro da norma. Split, inverter, multi-split, cassete e piso-teto.</p>
       </article>
-
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1 5 5L21 13l-3 3-8 8-3-3 8-8 3-3Z"/><path d="M6 6l3 3"/></svg></span>
+      <article class="card" data-reveal="2" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 1 5 5L21 13l-3 3-8 8-3-3 8-8 3-3Z"/><path d="M6 6l3 3"/></svg>
         <h3>Manutenção preventiva</h3>
-        <p>Revisão completa que mantém o desempenho: filtros, serpentina, dreno, pressões e parte
-          elétrica. Aparelho limpo gela mais rápido e gasta menos energia.</p>
-        <ul class="card__list">
-          <li>Check-up completo do equipamento</li>
-          <li>Planos periódicos para empresas</li>
-          <li>Relatório do que foi feito</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero contratar MANUTENÇÃO PREVENTIVA de ar-condicionado.">Solicitar orçamento →</a>
+        <p>Filtros, serpentina, dreno, pressões e parte elétrica revisados. Aparelho limpo gela mais rápido e consome menos.</p>
       </article>
-
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9Z"/></svg></span>
-        <h3>Higienização e limpeza</h3>
-        <p>Limpeza profunda da evaporadora e da condensadora com produtos próprios para refrigeração.
-          Adeus cheiro de mofo, fungos e alergia em casa e no escritório.</p>
-        <ul class="card__list">
-          <li>Limpeza técnica completa</li>
-          <li>Eliminação de odores e mofo</li>
-          <li>Desobstrução de dreno</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Quero agendar uma LIMPEZA / HIGIENIZAÇÃO do meu ar-condicionado.">Solicitar orçamento →</a>
+      <article class="card" data-reveal="3" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M12 3s5 5.5 5 9a5 5 0 0 1-10 0c0-3.5 5-9 5-9Z"/></svg>
+        <h3>Higienização</h3>
+        <p>Limpeza profunda da evaporadora e da condensadora com produtos próprios. Sem cheiro de mofo, sem fungos.</p>
       </article>
-
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
+      <article class="card" data-reveal="4" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
         <h3>Conserto e reparo</h3>
-        <p>Não gela, pinga água, faz barulho ou desliga sozinho? Fazemos o diagnóstico na hora e
-          explicamos o problema antes de qualquer serviço.</p>
-        <ul class="card__list">
-          <li>Troca de placa, capacitor e motor</li>
-          <li>Correção de vazamentos</li>
-          <li>Reparo elétrico e de dreno</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Meu ar-condicionado está com defeito e preciso de CONSERTO.">Solicitar orçamento →</a>
+        <p>Não gela, pinga, faz barulho ou desliga sozinho? Diagnóstico na hora, com o problema explicado antes do serviço.</p>
       </article>
-
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 21h10a2 2 0 0 0 2-2V9l-5-6H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"/><path d="M14 3v6h5"/></svg></span>
+      <article class="card" data-reveal="5" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M7 21h10a2 2 0 0 0 2-2V9l-5-6H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2Z"/><path d="M14 3v6h5"/></svg>
         <h3>Carga de gás</h3>
-        <p>Localizamos o vazamento antes de completar o gás — recarga sem reparo é dinheiro jogado
-          fora. Trabalhamos com R-410A, R-32 e R-22.</p>
-        <ul class="card__list">
-          <li>Teste de estanqueidade</li>
-          <li>Vácuo e recarga correta</li>
-          <li>Verificação de pressões</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Preciso de CARGA DE GÁS no meu ar-condicionado.">Solicitar orçamento →</a>
+        <p>Achamos o vazamento antes de completar o gás. Teste de estanqueidade, vácuo e recarga em R-410A, R-32 e R-22.</p>
       </article>
-
-      <article class="card" data-anim="up">
-        <span class="card__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
-        <h3>Contrato mensal e PMOC</h3>
-        <p>Para empresas que não podem parar: visitas programadas, prioridade no atendimento e
-          documentação da manutenção de cada equipamento.</p>
-        <ul class="card__list">
-          <li>Visitas programadas</li>
-          <li>Prioridade em emergências</li>
-          <li>Controle por equipamento</li>
-        </ul>
-        <a class="card__link js-wa" href="#" data-wa-msg="Olá! Tenho interesse em CONTRATO MENSAL / PMOC de climatização.">Solicitar orçamento →</a>
+      <article class="card" data-reveal="6" data-spot>
+        <span data-glow></span>
+        <svg viewBox="0 0 24 24" class="card__ic" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <h3>Contrato e PMOC</h3>
+        <p>Para quem não pode parar: visitas programadas, prioridade em emergências e o histórico de cada equipamento.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ============ PÚBLICO-ALVO ============ -->
-<section class="section section--soft" id="publico">
-  <div class="container">
-    <header class="section__head" data-anim="up">
-      <p class="eyebrow eyebrow--center">Público atendido</p>
-      <h2>Do quarto de casa ao galpão industrial</h2>
-      <p class="section__lead">Cada ambiente pede uma solução diferente de climatização. Atendemos os três
-        com o mesmo cuidado técnico.</p>
-    </header>
+<!-- ---------- FAIXA ---------- -->
+<section class="band" aria-label="Diferenciais">
+  <div class="wrap band__grid">
+    <div class="band__it">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+      <span><b>Resposta no mesmo dia</b><i>Atendimento rápido</i></span>
+    </div>
+    <div class="band__it">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8.2-8 9-4.6-.8-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+      <span><b>Mão de obra garantida</b><i>Serviço com garantia</i></span>
+    </div>
+    <div class="band__it">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 6.5v11"/><path d="M14.5 9.5c-.6-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4 0 1.1-1.1 2-2.5 2-1.1 0-2-.4-2.6-1.2"/></svg>
+      <span><b>Orçamento fechado antes</b><i>Preço justo e transparente</i></span>
+    </div>
+  </div>
+</section>
 
-    <div class="audience">
-      <article class="aud" data-anim="up">
-        <span class="aud__tag">Residencial</span>
-        <h3>Sua casa no clima certo</h3>
-        <p>Instalação e manutenção em quartos, salas e apartamentos, com atenção ao acabamento,
-          ao ruído e ao consumo de energia da sua conta.</p>
-        <ul>
-          <li>Casas e apartamentos</li>
-          <li>Instalação com acabamento limpo</li>
-          <li>Limpeza periódica para quem tem alergia</li>
-        </ul>
+<!-- ---------- PÚBLICO ---------- -->
+<section id="publico" class="sec sec--alt">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow" data-reveal="1">Público atendido</span>
+      <h2 data-lines><span class="mask"><span data-line>Três realidades, o mesmo cuidado técnico</span></span></h2>
+    </div>
+    <div class="aud">
+      <article data-reveal="1" data-spot><span data-glow></span>
+        <b>01</b><h3>Residencial</h3>
+        <p>Quartos, salas e apartamentos, com atenção ao acabamento, ao ruído e ao consumo na sua conta de luz.</p>
+        <ul><li>Casas e apartamentos</li><li>Instalação com acabamento limpo</li><li>Limpeza periódica para quem tem alergia</li></ul>
       </article>
-      <article class="aud aud--featured" data-anim="zoom">
-        <span class="aud__tag">Comercial</span>
-        <h3>Cliente confortável, loja cheia</h3>
-        <p>Lojas, salões, clínicas, escritórios e restaurantes: equipamentos sempre gelando,
-          com manutenção fora do horário de pico quando necessário.</p>
-        <ul>
-          <li>Lojas, clínicas e escritórios</li>
-          <li>Salões, bares e restaurantes</li>
-          <li>Planos de manutenção programada</li>
-        </ul>
+      <article data-reveal="2" data-spot><span data-glow></span>
+        <b>02</b><h3>Comercial</h3>
+        <p>Lojas, salões, clínicas, escritórios e restaurantes sempre gelando — com manutenção fora do horário de pico.</p>
+        <ul><li>Lojas, clínicas e escritórios</li><li>Salões, bares e restaurantes</li><li>Planos de manutenção programada</li></ul>
       </article>
-      <article class="aud" data-anim="up">
-        <span class="aud__tag">Industrial</span>
-        <h3>Produção sem parada</h3>
-        <p>Climatização e refrigeração de maior porte, com atendimento ágil para reduzir ao máximo
-          o tempo de máquina parada.</p>
-        <ul>
-          <li>Galpões, fábricas e depósitos</li>
-          <li>Equipamentos de grande porte</li>
-          <li>Atendimento emergencial</li>
-        </ul>
+      <article data-reveal="3" data-spot><span data-glow></span>
+        <b>03</b><h3>Industrial</h3>
+        <p>Climatização e refrigeração de maior porte, com atendimento ágil para reduzir o tempo de máquina parada.</p>
+        <ul><li>Galpões, fábricas e depósitos</li><li>Equipamentos de grande porte</li><li>Atendimento emergencial</li></ul>
       </article>
     </div>
-
-    <div class="area" data-anim="up">
-      <div>
-        <h3>Área de atendimento</h3>
+    <div class="area" data-reveal="1">
+      <div><h3>Área de atendimento</h3>
         <p>São Luís e toda a Grande Ilha — São José de Ribamar, Paço do Lumiar e Raposa.
-          Ficou em dúvida se atendemos seu bairro? Chame no WhatsApp e confirmamos na hora.</p>
-      </div>
-      <a class="btn btn--primary js-wa" href="#" data-wa-msg="Olá! Vocês atendem no meu bairro em São Luís?">Consultar meu bairro</a>
+          Em dúvida se atendemos seu bairro? Confirmamos na hora.</p></div>
+      <a class="btn btn--solid js-wa" href="#" data-wa-msg="Olá! Vocês atendem no meu bairro em São Luís?" data-spot>
+        <span data-glow></span><span>Consultar meu bairro</span>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ============ DIFERENCIAIS ============ -->
-<section class="section" id="diferenciais">
-  <div class="container why">
-    <div class="why__copy" data-anim="left">
-      <p class="eyebrow">Por que a Tá No Clima</p>
-      <h2>Serviço técnico de verdade, com preço que cabe no bolso</h2>
-      <p>Refrigeração malfeita custa duas vezes: no reparo errado e no aparelho que quebra de novo.
-        Trabalhamos com diagnóstico claro, peças adequadas e execução dentro da norma — e explicamos
-        cada etapa antes de colocar a mão no equipamento.</p>
+<!-- ---------- CAPÍTULO ROLÁVEL: O CICLO ---------- -->
+<section id="ciclo" class="cy" data-el="cyTrack">
+  <div class="cy__stage">
+    <div class="cy__head">
+      <span class="eyebrow" data-el="cyEyebrow">Como funciona</span>
+      <h2 class="cy__h">Do calor de São Luís ao ar que você queria</h2>
+    </div>
 
+    <div class="cy__scene" aria-hidden="true">
+      <div class="cy__room">
+        <span class="cy__warm" data-el="cyWarm"></span>
+        <span class="cy__cool" data-el="cyCool"></span>
+        <svg class="cy__svg" viewBox="0 0 400 240">
+          <rect x="70" y="26" width="260" height="58" rx="19" fill="url(#g-body)" stroke="rgba(255,255,255,.35)"/>
+          <rect x="88" y="66" width="224" height="9" rx="4.5" fill="#1E9BE0"/>
+          <g data-el="cyFlow" opacity="0">
+            <rect x="125" y="92" width="7" height="46" rx="3.5" fill="url(#g-air)"/>
+            <rect x="182" y="92" width="7" height="68" rx="3.5" fill="url(#g-air)"/>
+            <rect x="240" y="92" width="7" height="54" rx="3.5" fill="url(#g-air)"/>
+          </g>
+        </svg>
+        <span class="cy__sweep" data-el="cySweep"></span>
+      </div>
+      <div class="cy__read">
+        <div class="cy__temp"><b data-el="cyTemp">32</b><i>°C</i></div>
+        <span class="cy__lbl">Temperatura do ambiente</span>
+      </div>
+    </div>
+
+    <div class="cy__narr">
+      <div class="cy__step" data-cystep><i>01</i><b>Você chama no WhatsApp</b><span>Conte o que está acontecendo, o tipo de aparelho e o endereço. Fotos ajudam muito.</span></div>
+      <div class="cy__step" data-cystep><i>02</i><b>Diagnóstico técnico</b><span>Avaliamos o equipamento e o ambiente para indicar a solução certa — não a mais cara.</span></div>
+      <div class="cy__step" data-cystep><i>03</i><b>Orçamento fechado</b><span>Valor, prazo e o que está incluso combinados antes de qualquer serviço começar.</span></div>
+      <div class="cy__step" data-cystep><i>04</i><b>Execução e garantia</b><span>Serviço no horário marcado, ambiente limpo no fim e a mão de obra garantida.</span></div>
+    </div>
+
+    <div class="cy__rail">
+      <span class="cy__railbg"><i data-el="cyFill"></i></span>
+      <div class="cy__marks">
+        <span data-cymark>Contato</span><span data-cymark>Diagnóstico</span><span data-cymark>Orçamento</span><span data-cymark>Entrega</span>
+      </div>
+    </div>
+
+    <div class="cy__final" data-el="cyFinal">
+      <h3>21°C e a certeza de que <em>vai continuar assim</em>.</h3>
+      <a class="btn btn--solid btn--lg js-wa" href="#" data-wa-msg="Olá! Quero começar um atendimento." data-spot data-magnet>
+        <span data-glow></span><span>Começar pelo WhatsApp</span>
+        <svg viewBox="0 0 24 24" class="arw" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ---------- DIFERENCIAIS ---------- -->
+<section id="diferenciais" class="sec">
+  <div class="wrap why">
+    <div class="why__copy">
+      <span class="eyebrow" data-reveal="1">Por que a Tá No Clima</span>
+      <h2 data-lines>
+        <span class="mask"><span data-line>Serviço técnico de verdade,</span></span>
+        <span class="mask"><span data-line>com preço que cabe no bolso.</span></span>
+      </h2>
+      <p data-reveal="1" data-d="160">Refrigeração malfeita custa duas vezes: no reparo errado e no aparelho que
+        quebra de novo. Trabalhamos com diagnóstico claro, peças adequadas e execução dentro da norma —
+        e explicamos cada etapa antes de encostar no equipamento.</p>
       <ul class="why__list">
-        <li>
-          <span class="why__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg></span>
-          <div><strong>Atendimento rápido</strong><p>Resposta no mesmo dia e agendamento ágil, inclusive para emergências.</p></div>
-        </li>
-        <li>
-          <span class="why__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 3 7l9 4 9-4-9-4Z"/><path d="M3 12l9 4 9-4"/></svg></span>
-          <div><strong>Equipe especializada</strong><p>Técnicos com experiência prática em todas as marcas e tipos de equipamento.</p></div>
-        </li>
-        <li>
-          <span class="why__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.4 8.2-8 9-4.6-.8-8-4-8-9V6l8-3Z"/><path d="M9 12l2 2 4-4"/></svg></span>
-          <div><strong>Garantia no serviço</strong><p>Mão de obra garantida. Deu problema no que fizemos? Voltamos para resolver.</p></div>
-        </li>
-        <li>
-          <span class="why__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5c-.6-.8-1.5-1.2-2.5-1.2-1.4 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4 0 1.1-1.1 2-2.5 2-1.1 0-2-.4-2.6-1.2"/><path d="M12 6.5v11"/></svg></span>
-          <div><strong>Preço justo e transparente</strong><p>Orçamento fechado antes do serviço. Sem surpresa no fim e sem taxa escondida.</p></div>
-        </li>
+        <li data-reveal="1"><b>Atendimento rápido</b><span>Resposta no mesmo dia e agendamento ágil, inclusive para emergências.</span></li>
+        <li data-reveal="2"><b>Equipe especializada</b><span>Técnicos com experiência prática em todas as marcas e tipos de equipamento.</span></li>
+        <li data-reveal="3"><b>Garantia no serviço</b><span>Mão de obra garantida. Deu problema no que fizemos? Voltamos para resolver.</span></li>
+        <li data-reveal="4"><b>Preço justo</b><span>Orçamento fechado antes do serviço. Sem surpresa no fim e sem taxa escondida.</span></li>
       </ul>
     </div>
-
-    <div class="why__side" data-anim="right">
+    <aside class="why__side">
       <div class="stats">
-        <div class="stat"><b class="js-count" data-to="100" data-suffix="%">0</b><span>dos serviços com garantia</span></div>
-        <div class="stat"><b class="js-count" data-to="24" data-suffix="h">0</b><span>para retorno do orçamento</span></div>
-        <div class="stat"><b class="js-count" data-to="3">0</b><span>perfis atendidos: casa, comércio e indústria</span></div>
-        <div class="stat"><b class="js-count" data-to="6">0</b><span>serviços completos de refrigeração</span></div>
+        <div data-reveal="1"><b class="js-count" data-to="100" data-suffix="%">0</b><span>dos serviços com garantia</span></div>
+        <div data-reveal="2"><b class="js-count" data-to="24" data-suffix="h">0</b><span>para retorno do orçamento</span></div>
+        <div data-reveal="3"><b class="js-count" data-to="6">0</b><span>serviços completos</span></div>
+        <div data-reveal="4"><b class="js-count" data-to="3">0</b><span>perfis atendidos</span></div>
       </div>
-      <div class="why__call">
-        <p>Prefere resolver falando?</p>
-        <a class="btn btn--dark js-wa" href="#" data-wa-msg="Olá! Gostaria de tirar uma dúvida sobre climatização.">Chamar no WhatsApp</a>
+      <div class="why__chips" data-reveal="1" data-d="200">
+        <span>Split Hi-Wall</span><span>Inverter</span><span>Multi-split</span><span>Cassete</span>
+        <span>Piso-teto</span><span>Janela</span><span>Dutado</span><span>Câmara fria</span>
+        <span>Freezer</span><span>Balcão refrigerado</span>
       </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ---------- DÚVIDAS ---------- -->
+<section id="faq" class="sec sec--alt">
+  <div class="wrap faq">
+    <div class="faq__intro">
+      <span class="eyebrow" data-reveal="1">Dúvidas frequentes</span>
+      <h2 data-lines><span class="mask"><span data-line>O que perguntam antes de contratar</span></span></h2>
+      <p data-reveal="1" data-d="160">Se a sua dúvida não estiver aqui, chame no WhatsApp — respondemos sem compromisso.</p>
+      <a class="btn btn--line js-wa" data-reveal="1" data-d="240" href="#" data-wa-msg="Olá! Tenho uma dúvida sobre os serviços de vocês.">Tirar dúvida agora</a>
     </div>
-  </div>
-</section>
-
-<!-- ============ PROCESSO ============ -->
-<section class="section section--dark" id="processo">
-  <div class="container">
-    <header class="section__head" data-anim="up">
-      <p class="eyebrow eyebrow--center">Como funciona</p>
-      <h2>Do primeiro contato ao ar gelando</h2>
-      <p class="section__lead">Um processo simples, sem enrolação e sem custo surpresa.</p>
-    </header>
-
-    <ol class="steps">
-      <li data-anim="up"><span class="steps__num">01</span><h3>Você chama no WhatsApp</h3><p>Conte o que está acontecendo, o tipo de aparelho e o endereço. Fotos ajudam muito.</p></li>
-      <li data-anim="up"><span class="steps__num">02</span><h3>Diagnóstico técnico</h3><p>Avaliamos o equipamento e o ambiente para indicar a solução certa — não a mais cara.</p></li>
-      <li data-anim="up"><span class="steps__num">03</span><h3>Orçamento fechado</h3><p>Valor, prazo e o que está incluso, tudo combinado antes de começar.</p></li>
-      <li data-anim="up"><span class="steps__num">04</span><h3>Execução e garantia</h3><p>Serviço feito no horário marcado, ambiente limpo no fim e garantia da mão de obra.</p></li>
-    </ol>
-  </div>
-</section>
-
-<!-- ============ EQUIPAMENTOS ============ -->
-<section class="section section--soft">
-  <div class="container">
-    <header class="section__head" data-anim="up">
-      <p class="eyebrow eyebrow--center">Equipamentos</p>
-      <h2>Atendemos todos os tipos e marcas</h2>
-    </header>
-    <ul class="chips" data-anim="up">
-      <li>Split Hi-Wall</li><li>Split Inverter</li><li>Multi-split</li><li>Cassete</li>
-      <li>Piso-teto</li><li>Janela</li><li>Portátil</li><li>Ar de teto dutado</li>
-      <li>Câmara fria</li><li>Bebedouro industrial</li><li>Freezer e expositor</li><li>Balcão refrigerado</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ============ FAQ ============ -->
-<section class="section" id="faq">
-  <div class="container faq">
-    <div class="faq__intro" data-anim="left">
-      <p class="eyebrow">Dúvidas frequentes</p>
-      <h2>O que todo mundo pergunta antes de contratar</h2>
-      <p>Se a sua dúvida não estiver aqui, é só chamar no WhatsApp — respondemos sem compromisso.</p>
-      <a class="btn btn--primary js-wa" href="#" data-wa-msg="Olá! Tenho uma dúvida sobre os serviços de vocês.">Tirar dúvida agora</a>
-    </div>
-
     <div class="faq__list">
-      <details class="acc" data-anim="right" open>
+      <details class="acc" data-reveal="1" open>
         <summary>De quanto em quanto tempo devo fazer a limpeza?</summary>
-        <div class="acc__body"><p>Em residências, a cada 6 meses costuma ser suficiente. Em comércios,
-          clínicas e ambientes com muita poeira ou uso intenso, o ideal é a cada 3 meses. Em São Luís,
-          por causa da maresia e da umidade, quanto mais frequente, melhor para a vida útil do aparelho.</p></div>
+        <div><p>Em residências, a cada 6 meses costuma bastar. Em comércios, clínicas e ambientes com muita
+          poeira, o ideal é a cada 3 meses. Em São Luís, com a maresia e a umidade, quanto mais frequente,
+          melhor para a vida útil do aparelho.</p></div>
       </details>
-      <details class="acc" data-anim="right">
+      <details class="acc" data-reveal="2">
         <summary>Meu ar não está gelando. É falta de gás?</summary>
-        <div class="acc__body"><p>Nem sempre. Filtro sujo, serpentina obstruída, capacitor ou placa com defeito
-          causam o mesmo sintoma. Por isso fazemos o diagnóstico antes: completar gás sem achar o vazamento
-          resolve por poucas semanas e o problema volta.</p></div>
+        <div><p>Nem sempre. Filtro sujo, serpentina obstruída, capacitor ou placa com defeito dão o mesmo
+          sintoma. Por isso o diagnóstico vem antes: completar gás sem achar o vazamento resolve por poucas
+          semanas e o problema volta.</p></div>
       </details>
-      <details class="acc" data-anim="right">
+      <details class="acc" data-reveal="3">
         <summary>Vocês fazem a instalação com a infraestrutura?</summary>
-        <div class="acc__body"><p>Sim. Fazemos furo, fixação dos suportes, tubulação, dreno, vácuo e testes.
-          Se o ponto elétrico precisar de adequação, avaliamos junto e informamos no orçamento.</p></div>
+        <div><p>Sim. Furo, fixação dos suportes, tubulação, dreno, vácuo e testes. Se o ponto elétrico
+          precisar de adequação, avaliamos junto e informamos no orçamento.</p></div>
       </details>
-      <details class="acc" data-anim="right">
+      <details class="acc" data-reveal="4">
         <summary>Qual a garantia do serviço?</summary>
-        <div class="acc__body"><p>Todo serviço executado tem garantia de mão de obra. Peças e equipamentos
-          seguem a garantia do fabricante. As condições ficam registradas no seu orçamento.</p></div>
+        <div><p>Todo serviço executado tem garantia de mão de obra. Peças e equipamentos seguem a garantia
+          do fabricante. As condições ficam registradas no seu orçamento.</p></div>
       </details>
-      <details class="acc" data-anim="right">
+      <details class="acc" data-reveal="5">
         <summary>Quanto tempo demora para atender?</summary>
-        <div class="acc__body"><p>Respondemos no mesmo dia e, sempre que a agenda permite, atendemos em até 24h.
-          Para emergências de comércio e indústria, damos prioridade.</p></div>
+        <div><p>Respondemos no mesmo dia e, sempre que a agenda permite, atendemos em até 24h. Para
+          emergências de comércio e indústria, damos prioridade.</p></div>
       </details>
-      <details class="acc" data-anim="right">
+      <details class="acc" data-reveal="6">
         <summary>Qual a forma de pagamento?</summary>
-        <div class="acc__body"><p>Trabalhamos com Pix, dinheiro e cartão. Combinamos tudo no orçamento,
-          antes de iniciar o serviço — sem cobrança extra no final.</p></div>
+        <div><p>Pix, dinheiro e cartão. Tudo combinado no orçamento, antes de iniciar o serviço — sem
+          cobrança extra no final.</p></div>
       </details>
     </div>
   </div>
 </section>
 
-<!-- ============ CTA ============ -->
-<section class="cta">
-  <div class="container cta__in" data-anim="zoom">
-    <div>
-      <p class="eyebrow eyebrow--light">Está no calor? A gente resolve</p>
-      <h2>Peça seu orçamento agora — é rápido e sem compromisso</h2>
-      <p class="cta__lead">Atendimento para residências, comércios e indústrias em São Luís e região.</p>
+<!-- ---------- CONTATO ---------- -->
+<section id="contato" class="sec">
+  <div class="wrap">
+    <div class="head">
+      <span class="eyebrow" data-reveal="1">Contato</span>
+      <h2 data-lines><span class="mask"><span data-line>Vamos deixar seu ambiente no clima</span></span></h2>
+      <p data-reveal="1" data-d="160">Preencha os dados e o pedido abre direto no WhatsApp, já escrito.</p>
     </div>
-    <div class="cta__btns">
-      <a class="btn btn--light js-wa" href="#" data-wa-msg="Olá! Quero um orçamento sem compromisso.">
-        <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-wa"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
-        WhatsApp
-      </a>
-      <a class="btn btn--outline-light" data-config="tel-href" href="#"><span data-config="phone">(98) 9 9999-9999</span></a>
-    </div>
-  </div>
-</section>
 
-<!-- ============ CONTATO ============ -->
-<section class="section" id="contato">
-  <div class="container">
-    <header class="section__head" data-anim="up">
-      <p class="eyebrow eyebrow--center">Contato</p>
-      <h2>Vamos deixar seu ambiente no clima</h2>
-      <p class="section__lead">Preencha os dados e o pedido abre direto no WhatsApp, já preenchido.</p>
-    </header>
-
-    <div class="contact">
-      <div class="contact__info" data-anim="left">
+    <div class="ct">
+      <div class="ct__info" data-reveal="1">
         <ul class="info">
           <li>
-            <span class="info__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg></span>
-            <div><strong>Endereço</strong><p>R. Daniel De La Touche, 50 — Vila Mauro Fecury I<br>São Luís - MA, 65045-250</p></div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+            <div><b>Endereço</b><p>R. Daniel De La Touche, 50 — Vila Mauro Fecury I<br>São Luís - MA, 65045-250</p></div>
           </li>
           <li>
-            <span class="info__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h3l2 5-2.2 1.4a12 12 0 0 0 5.8 5.8L16 13l5 2v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 6.2 2 2 0 0 1 6 4Z"/></svg></span>
-            <div><strong>Telefone / WhatsApp</strong><p><a data-config="tel-href" href="#"><span data-config="phone">(98) 9 9999-9999</span></a></p></div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h3l2 5-2.2 1.4a12 12 0 0 0 5.8 5.8L16 13l5 2v3a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 4 6.2 2 2 0 0 1 6 4Z"/></svg>
+            <div><b>Telefone / WhatsApp</b><p><a data-config="tel-href" href="#"><span data-config="phone">(98) 9 9999-9999</span></a></p></div>
           </li>
           <li>
-            <span class="info__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
-            <div><strong>E-mail</strong><p><a data-config="mail-href" href="#"><span data-config="email">contato@tanoclima.com.br</span></a></p></div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            <div><b>E-mail</b><p><a data-config="mail-href" href="#"><span data-config="email">contato@tanoclima.com.br</span></a></p></div>
           </li>
           <li>
-            <span class="info__ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/></svg></span>
-            <div><strong>Horário</strong><p><span data-config="hours">Seg a Sáb, 7h às 18h</span><br>Emergências: consulte disponibilidade</p></div>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/></svg>
+            <div><b>Horário</b><p><span data-config="hours">Seg a Sáb, 7h às 18h</span><br>Emergências: consulte disponibilidade</p></div>
           </li>
         </ul>
         <div class="map">
-          <iframe
-            title="Mapa — R. Daniel De La Touche, 50, São Luís - MA"
+          <iframe title="Mapa — R. Daniel De La Touche, 50, São Luís - MA"
             src="https://www.google.com/maps?q=R.+Daniel+De+La+Touche,+50+-+Vila+Mauro+Fecury+I,+S%C3%A3o+Lu%C3%ADs+-+MA,+65045-250&output=embed"
             loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
       </div>
 
-      <form class="form" data-anim="right" id="form">
+      <form class="form" id="form" data-reveal="2">
         <div class="form__row">
-          <label>Nome<input type="text" name="nome" required placeholder="Seu nome"></label>
-          <label>WhatsApp<input type="tel" name="fone" required placeholder="(98) 9 0000-0000"></label>
+          <label>Nome<input id="f-nome" type="text" name="nome" required placeholder="Seu nome"></label>
+          <label>WhatsApp<input id="f-fone" type="tel" name="fone" required placeholder="(98) 9 0000-0000"></label>
         </div>
         <label>Tipo de atendimento
-          <select name="perfil">
-            <option>Residencial</option><option>Comercial</option><option>Industrial</option>
-          </select>
+          <select id="f-perfil" name="perfil"><option>Residencial</option><option>Comercial</option><option>Industrial</option></select>
         </label>
         <label>Serviço desejado
-          <select name="servico">
+          <select id="f-servico" name="servico">
             <option>Instalação</option><option>Manutenção preventiva</option><option>Limpeza / higienização</option>
             <option>Conserto / reparo</option><option>Carga de gás</option><option>Contrato mensal / PMOC</option>
             <option>Outro / não sei</option>
           </select>
         </label>
-        <label>Bairro<input type="text" name="bairro" placeholder="Ex.: Vila Mauro Fecury, Cohama, Renascença"></label>
+        <label>Bairro<input id="f-bairro" type="text" name="bairro" placeholder="Ex.: Vila Mauro Fecury, Cohama, Renascença"></label>
         <label>Conte o que está acontecendo
-          <textarea name="msg" rows="4" placeholder="Ex.: split de 12.000 BTUs na sala, não está gelando bem."></textarea>
+          <textarea id="f-msg" name="msg" rows="4" placeholder="Ex.: split de 12.000 BTUs na sala, não está gelando bem."></textarea>
         </label>
-        <button class="btn btn--primary btn--block" type="submit">
-          <svg viewBox="0 0 24 24" aria-hidden="true" class="ico-wa"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
-          Enviar pelo WhatsApp
-        </button>
+        <button class="btn btn--solid btn--block" type="submit" data-spot><span data-glow></span><span>Enviar pelo WhatsApp</span></button>
         <p class="form__note">Ao enviar, abrimos o WhatsApp com sua mensagem pronta. Nenhum dado é armazenado neste site.</p>
       </form>
     </div>
   </div>
 </section>
-</main>
 
-<!-- ============ FOOTER ============ -->
-<footer class="footer">
-  <div class="container footer__grid">
-    <div class="footer__brand">
-      <img src="assets/img/logo-full.svg" alt="Tá No Clima — Refrigeração e Serviço" width="120" height="120">
+<!-- ---------- RODAPÉ ---------- -->
+<footer class="ft">
+  <div class="wrap ft__grid">
+    <div class="ft__brand">
+      <img src="assets/img/logo-full.svg" alt="Tá No Clima — Refrigeração e Serviço" width="104" height="104">
       <p>Especialistas em climatização em São Luís - MA. Instalação, manutenção, limpeza e conserto
         de ar-condicionado para residências, comércios e indústrias.</p>
-      <div class="social">
-        <a data-config="ig-href" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" stroke="none"/></svg></a>
+      <div class="ft__social">
+        <a data-config="ig-href" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></a>
         <a data-config="fb-href" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4.5h-3A4 4 0 0 0 10 8.5V11H7.5v3.5H10V21h3.5v-6.5H16l.5-3.5H13.5V9a1 1 0 0 1 1-1Z"/></svg></a>
-        <a class="js-wa" href="#" aria-label="WhatsApp" data-wa-msg="Olá! Vim pelo site da Tá No Clima."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Z"/></svg></a>
       </div>
     </div>
-
-    <div class="footer__col">
-      <h4>Serviços</h4>
-      <ul>
-        <li><a href="#servicos">Instalação</a></li>
-        <li><a href="#servicos">Manutenção preventiva</a></li>
-        <li><a href="#servicos">Higienização e limpeza</a></li>
-        <li><a href="#servicos">Conserto e reparo</a></li>
-        <li><a href="#servicos">Carga de gás</a></li>
-        <li><a href="#servicos">Contrato mensal / PMOC</a></li>
-      </ul>
-    </div>
-
-    <div class="footer__col">
-      <h4>Atendemos</h4>
-      <ul>
-        <li><a href="#publico">Residencial</a></li>
-        <li><a href="#publico">Comercial</a></li>
-        <li><a href="#publico">Industrial</a></li>
-        <li><a href="#processo">Como funciona</a></li>
-        <li><a href="#faq">Dúvidas frequentes</a></li>
-      </ul>
-    </div>
-
-    <div class="footer__col">
-      <h4>Contato</h4>
-      <ul class="footer__contact">
-        <li>R. Daniel De La Touche, 50<br>Vila Mauro Fecury I<br>São Luís - MA, 65045-250</li>
-        <li><a data-config="tel-href" href="#"><span data-config="phone">(98) 9 9999-9999</span></a></li>
-        <li><a data-config="mail-href" href="#"><span data-config="email">contato@tanoclima.com.br</span></a></li>
-        <li><span data-config="hours">Seg a Sáb, 7h às 18h</span></li>
-      </ul>
-    </div>
+    <div><h4>Serviços</h4><ul>
+      <li><a href="#servicos">Instalação</a></li><li><a href="#servicos">Manutenção preventiva</a></li>
+      <li><a href="#servicos">Higienização</a></li><li><a href="#servicos">Conserto e reparo</a></li>
+      <li><a href="#servicos">Carga de gás</a></li><li><a href="#servicos">Contrato e PMOC</a></li></ul></div>
+    <div><h4>Atendemos</h4><ul>
+      <li><a href="#publico">Residencial</a></li><li><a href="#publico">Comercial</a></li>
+      <li><a href="#publico">Industrial</a></li><li><a href="#ciclo">Como funciona</a></li>
+      <li><a href="#faq">Dúvidas</a></li></ul></div>
+    <div><h4>Contato</h4><ul class="ft__ct">
+      <li>R. Daniel De La Touche, 50<br>Vila Mauro Fecury I<br>São Luís - MA, 65045-250</li>
+      <li><a data-config="tel-href" href="#"><span data-config="phone">(98) 9 9999-9999</span></a></li>
+      <li><a data-config="mail-href" href="#"><span data-config="email">contato@tanoclima.com.br</span></a></li>
+      <li><span data-config="hours">Seg a Sáb, 7h às 18h</span></li></ul></div>
   </div>
-  <div class="container footer__bottom">
-    <p>© <span id="year">2026</span> Tá No Clima — Refrigeração e Serviço. Todos os direitos reservados.</p>
+  <div class="wrap ft__end">
+    <p>© <span data-el="year">2026</span> Tá No Clima — Refrigeração e Serviço.</p>
     <p>São Luís - MA · Climatização residencial, comercial e industrial</p>
   </div>
 </footer>
+</div><!-- /curtain -->
 
-<a class="wa-float js-wa" href="#" aria-label="Falar no WhatsApp" data-wa-msg="Olá! Vim pelo site e quero um orçamento.">
+<a class="wa js-wa" href="#" aria-label="Falar no WhatsApp" data-wa-msg="Olá! Vim pelo site e quero um orçamento.">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5 0-1.1.2-3.5-.8-2.9-1.2-4.7-4.2-4.9-4.4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9 1-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.3.3c-.1.1-.2.3-.1.5.2.3.8 1.3 1.7 2.1 1.1 1 2 1.3 2.3 1.4.2.1.4.1.5-.1l.8-1c.2-.2.3-.2.5-.1l2 1c.2.1.4.2.4.3.1.2.1.6 0 1Z"/></svg>
 </a>
-<button class="totop" id="totop" type="button" aria-label="Voltar ao topo">
-  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 14 6-6 6 6"/></svg>
-</button>
 
 <script src="assets/js/main.js" defer></script>
 </body>
