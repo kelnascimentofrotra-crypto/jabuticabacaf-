@@ -352,7 +352,7 @@ const CONFIG = {
 
     // termômetro e trilho
     c.bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
-    c.temp.textContent = Math.round(32 - 10 * easeIO(span(p, 0.14, 0.84)));
+    escrever(c.temp, String(Math.round(32 - 10 * easeIO(span(p, 0.14, 0.84)))));
 
     const etapa = p < 0.36 ? 0 : p < 0.7 ? 1 : 2;
     for (let i = 0; i < 3; i++) {
@@ -384,6 +384,13 @@ const CONFIG = {
      ========================================================= */
   let ar = null, pAr = 0;
 
+  // escrever texto é caro: só troca quando o valor muda de fato
+  function escrever(el, valor) {
+    if (!el || el.__v === valor) return;
+    el.__v = valor;
+    el.textContent = valor;
+  }
+
   function montarAr() {
     const track = $('[data-el="arTrack"]');
     if (!track) return null;
@@ -398,7 +405,7 @@ const CONFIG = {
       hud: $('[data-el="arHud"]'),
       hudFlow: $('[data-el="arHudFlow"]'), hudDelta: $('[data-el="arHudDelta"]'),
       hudCirc: $('[data-el="arHudCirc"]'), hudEff: $('[data-el="arHudEff"]'),
-      eyebrow: $('[data-el="arEyebrow"]'), atos: $$('[data-aract]'),
+      eyebrow: $('[data-el="arEyebrow"]'), atos: $$('[data-aract]'), hint: $('[data-el="arHint"]'),
       prog: $('[data-el="arProg"]'),
       canvas: $('[data-el="arFlow"]'), particulas: [], ctx: null, w: 0, h: 0, dpr: 1,
       profundidade: $$('.ar__depth', track)
@@ -450,15 +457,11 @@ const CONFIG = {
     });
   }
 
-  function desenharAr(a, forca, frio) {
+  function desenharAr(a, forca, frio, origem) {
     const ctx = a.ctx;
     if (!ctx) return;
     ctx.clearRect(0, 0, a.w, a.h);
-    if (forca <= 0.01) { a.particulas.length = 0; return; }
-
-    const r = a.unit.getBoundingClientRect();
-    const s = a.stage.getBoundingClientRect();
-    const origem = { x: r.left - s.left + r.width * 0.3, y: r.bottom - s.top - 2, w: r.width * 0.6 };
+    if (forca <= 0.01 || !origem) { a.particulas.length = 0; return; }
 
     const nascer = Math.round(forca * (a.w < 760 ? 3 : 6));
     for (let i = 0; i < nascer; i++) emitirAr(a, origem, forca);
@@ -503,9 +506,15 @@ const CONFIG = {
       return;
     }
 
+    // Medir antes de escrever: um getBoundingClientRect() depois de mexer no
+    // estilo obriga o navegador a recalcular o layout no meio do quadro.
+    const ru = a.unit.getBoundingClientRect();
+    const rs = a.stage.getBoundingClientRect();
+    const origem = { x: ru.left - rs.left + ru.width * 0.3, y: ru.bottom - rs.top - 2, w: ru.width * 0.6 };
+
     const cru = clamp(-r.top / ((r.height - vh) || 1), 0, 1);
     if (reduzido) pAr = cru;
-    else pAr = Math.abs(cru - pAr) < 0.0002 ? cru : mix(pAr, cru, 0.08);
+    else pAr = Math.abs(cru - pAr) < 0.0002 ? cru : mix(pAr, cru, 0.065);
     const p = pAr;
     const mm = reduzido ? 0 : 1;
 
@@ -519,15 +528,22 @@ const CONFIG = {
     a.cam.style.transform = 'translate3d(0,0,' + (z * mm).toFixed(1) + 'px) rotateY(' +
       (giroY * mm).toFixed(2) + 'deg) rotateX(' + (giroX * mm).toFixed(2) + 'deg)';
 
-    /* --- profundidade de campo: o fundo entra desfocado e resolve --- */
+    /* --- profundidade de campo: o fundo entra desfocado e resolve ---
+       blur() em camada do tamanho da tela é caro: cada valor novo obriga o
+       navegador a rasterizar tudo de novo. Aqui o valor é arredondado em
+       passos de 0,5px e só é escrito quando muda de passo — fora da entrada
+       e da saída o filtro sai de cena por completo. */
     const foco = easeOut(span(p, 0, 0.15));
     a.profundidade.forEach(function (d) {
       const fg = d.classList.contains('ar__depth--fg');
       const perto = d.classList.contains('ar__depth--plant');
-      const desfoque = fg ? mix(8, 4, foco) + recua * 3
+      const bruto = fg ? mix(8, 4, foco) + recua * 3
         : perto ? mix(3.4, 0.4, foco) + recua * 1.6
         : mix(5.5, 0, foco) + recua * 2.2;
-      d.style.filter = 'blur(' + Math.max(0, desfoque).toFixed(2) + 'px)';
+      const passo = Math.round(Math.max(0, bruto) * 2) / 2;
+      if (d.__blur === passo) return;
+      d.__blur = passo;
+      d.style.filter = passo < 0.25 ? 'none' : 'blur(' + passo + 'px)';
     });
 
     /* --- luz: sol duro vira luz equilibrada --- */
@@ -553,7 +569,7 @@ const CONFIG = {
       const d = Math.sin(performance.now() / 780 + i * 0.7) * forca * 3.6 * mm;
       f.style.transform = 'rotate(' + d.toFixed(2) + 'deg)';
     });
-    desenharAr(a, forca, esfria);
+    desenharAr(a, forca, esfria, origem);
 
     /* --- leitura técnica: linhas desenhadas sobre o ambiente --- */
     const tecnica = easeIO(span(p, 0.66, 0.78));
@@ -575,10 +591,10 @@ const CONFIG = {
     a.hud.style.transform = (a.w < 860 ? '' : 'translateY(-50%) ') +
       'translate3d(' + ((1 - tecnica) * 26 * mm).toFixed(1) + 'px,0,0)';
     const leitura = easeOut(span(p, 0.66, 0.86));
-    a.hudFlow.textContent = (3.2 * leitura).toFixed(1).replace('.', ',');
-    a.hudDelta.textContent = Math.round(11 * leitura);
-    a.hudCirc.textContent = Math.round(96 * leitura);
-    a.hudEff.textContent = '-' + Math.round(28 * leitura);
+    escrever(a.hudFlow, (3.2 * leitura).toFixed(1).replace('.', ','));
+    escrever(a.hudDelta, String(Math.round(11 * leitura)));
+    escrever(a.hudCirc, String(Math.round(96 * leitura)));
+    escrever(a.hudEff, '-' + Math.round(28 * leitura));
 
     /* --- textos: entram e saem com a composição --- */
     const janelas = [[0.03, 0.2], [0.44, 0.62], [0.68, 0.84], [0.9, 1.01]];
@@ -592,6 +608,11 @@ const CONFIG = {
       n.style.filter = 'blur(' + ((1 - dentro) * 7).toFixed(2) + 'px)';
       n.style.pointerEvents = v > 0.6 ? 'auto' : 'none';
     });
+
+    if (a.hint) {
+      const mostra = easeOut(span(p, 0.005, 0.045)) * (1 - easeIO(span(p, 0.1, 0.17)));
+      a.hint.style.opacity = mostra.toFixed(3);
+    }
 
     const saiEyebrow = easeIO(span(p, 0.88, 1));
     a.eyebrow.style.opacity = (easeOut(span(p, 0, 0.06)) * (1 - saiEyebrow)).toFixed(3);

@@ -543,7 +543,9 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
    A cena é montada em camadas com profundidade real (translateZ)
    dentro de uma câmera que orbita e aproxima conforme a rolagem.
    ========================================================= */
-.ar{position:relative;height:480vh;background:#040E1B}
+/* Trilha longa de propósito: quanto mais alta, menor o avanço de cada clique
+   da roda. Em 900vh uma rolagem comum move ~1,2% da cena, contra ~2,9% antes. */
+.ar{position:relative;height:900vh;background:#040E1B}
 .ar__stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#040E1B;isolation:isolate}
 
 .ar__camera{position:absolute;inset:0;z-index:0;perspective:1100px;perspective-origin:52% 48%;
@@ -653,7 +655,7 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 
 /* mobile: a cena se reorganiza em retrato, sem perder ato nenhum */
 @media (max-width:860px){
-  .ar{height:400vh}
+  .ar{height:700vh}
   .ar__stage{height:100svh}
   .ar__camera{perspective:820px;perspective-origin:50% 44%}
   .ar__depth--wall{transform:translateZ(-520px) scale(1.634)}
@@ -694,3 +696,27 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   .lnk{padding-block:8px}
   .hd__brand{padding-block:4px}
 }
+
+/* ---------- aviso de rolagem da cena ---------- */
+.ar__hint{position:absolute;z-index:7;left:50%;transform:translateX(-50%);
+  bottom:calc(clamp(26px,4vh,40px) + 26px);display:flex;flex-direction:column;align-items:center;gap:10px;
+  pointer-events:none;opacity:0}
+.ar__hintline{position:relative;display:block;width:1px;height:38px;
+  background:linear-gradient(180deg,transparent,rgba(127,212,245,.35))}
+.ar__hintline i{position:absolute;left:-2px;top:0;width:5px;height:5px;border-radius:50%;
+  background:var(--ice);box-shadow:0 0 10px rgba(127,212,245,.9);
+  animation:hintDrop 2.1s cubic-bezier(.5,0,.5,1) infinite}
+@keyframes hintDrop{
+  0%{transform:translateY(0);opacity:0}
+  18%{opacity:1}
+  70%{opacity:1}
+  100%{transform:translateY(33px);opacity:0}
+}
+.ar__hinttxt{font-family:var(--head);font-size:.6rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--dim);white-space:nowrap}
+@media (max-width:860px){
+  .ar__hint{bottom:calc(clamp(26px,4vh,40px) + 20px);gap:8px}
+  .ar__hintline{height:30px}
+  @keyframes hintDrop{0%{transform:translateY(0);opacity:0}18%{opacity:1}70%{opacity:1}100%{transform:translateY(25px);opacity:0}}
+}
+@media (prefers-reduced-motion:reduce){ .ar__hintline i{animation:none} }
