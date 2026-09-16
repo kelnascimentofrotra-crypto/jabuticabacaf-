@@ -512,3 +512,162 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   .scene__photo img{object-position:52% 46%}
   .cf__photo img{object-position:48% 44%}
 }
+
+/* =========================================================
+   ABERTURA — refinamento cinematográfico
+   ========================================================= */
+.intro__vig{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(70% 60% at 50% 46%,transparent 40%,rgba(0,0,0,.72) 100%)}
+.intro__in{animation:introPush 5s var(--ease) both}
+@keyframes introPush{from{transform:scale(.965)}to{transform:scale(1)}}
+.intro__mark img{width:min(40vw,160px)}
+.intro__sheen{position:absolute;inset:-6% -12%;pointer-events:none;border-radius:50%;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.5) 50%,transparent 62%);
+  transform:translateX(-130%);animation:introSheen 1.5s var(--ease) 1.5s both}
+@keyframes introSheen{to{transform:translateX(130%)}}
+.intro__sub{display:block;font-family:var(--head);font-size:clamp(.58rem,1.5vw,.8rem);
+  letter-spacing:.42em;text-transform:uppercase;padding-left:.42em;color:var(--dim);
+  animation:lineUp 1.1s var(--ease) 2.25s both}
+
+/* =========================================================
+   O AR QUE TRANSFORMA O AMBIENTE
+   A cena é montada em camadas com profundidade real (translateZ)
+   dentro de uma câmera que orbita e aproxima conforme a rolagem.
+   ========================================================= */
+.ar{position:relative;height:480vh;background:#040E1B}
+.ar__stage{position:sticky;top:0;height:100vh;overflow:hidden;background:#040E1B;isolation:isolate}
+
+.ar__camera{position:absolute;inset:0;z-index:0;perspective:1100px;perspective-origin:52% 48%;
+  background:linear-gradient(178deg,#56697A 0%,#44586A 44%,#2B3B4B 72%,#16212D 100%)}
+.ar__room{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.ar__depth{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform,filter}
+.ar__depth--wall{transform:translateZ(-520px) scale(1.473)}
+.ar__depth--win{transform:translateZ(-500px) scale(1.455)}
+.ar__depth--curt{transform:translateZ(-430px) scale(1.391)}
+.ar__depth--unit{transform:translateZ(-380px) scale(1.345)}
+.ar__depth--plant{transform:translateZ(-150px) scale(1.136)}
+.ar__depth--floor{transform:translateZ(-510px) scale(1.464)}
+.ar__depth--fg{transform:translateZ(190px) scale(.827)}
+
+/* parede e rodapé */
+.ar__wall{position:absolute;inset:0;
+  background:linear-gradient(178deg,#5E7284 0%,#4A5E70 46%,#38495A 100%)}
+.ar__baseboard{position:absolute;left:0;right:0;bottom:25%;height:2.2%;
+  background:linear-gradient(180deg,#6E8294,#43566A)}
+
+/* janela e luz do sol */
+.ar__window{position:absolute;left:19%;top:16%;width:22%;height:36%;
+  border-radius:6px;overflow:hidden;box-shadow:0 0 0 10px rgba(226,236,244,.9),0 40px 90px -30px rgba(0,0,0,.6)}
+.ar__pane{position:absolute;inset:0;background:linear-gradient(170deg,#FFF6E2,#FFE2AE 52%,#FFD188)}
+.ar__mullion{position:absolute;left:50%;top:0;bottom:0;width:8px;margin-left:-4px;
+  background:rgba(226,236,244,.92)}
+.ar__sun{position:absolute;inset:-60%;pointer-events:none;
+  background:radial-gradient(circle at 42% 40%,rgba(255,236,190,1),rgba(255,198,110,.5) 42%,transparent 72%)}
+.ar__shimmer{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;
+  background:repeating-linear-gradient(101deg,rgba(255,255,255,.16) 0 3px,transparent 3px 9px);
+  animation:arShim 3.4s ease-in-out infinite}
+@keyframes arShim{0%,100%{transform:translate3d(0,0,0) skewY(0)}50%{transform:translate3d(3px,-5px,0) skewY(.5deg)}}
+.ar__beam{position:absolute;left:21%;top:18%;width:50%;height:66%;pointer-events:none;
+  transform-origin:0 0;transform:skewX(16deg);
+  background:linear-gradient(168deg,rgba(255,224,160,.5),rgba(255,206,120,.16) 46%,transparent 78%);
+  filter:blur(6px)}
+
+/* cortinas */
+.ar__curtain{position:absolute;top:12%;height:45%;width:6.4%;border-radius:4px;
+  background:linear-gradient(90deg,rgba(238,244,250,.94),rgba(206,220,232,.82));
+  box-shadow:0 30px 60px -28px rgba(0,0,0,.55);transform-origin:50% 0;will-change:transform}
+.ar__curtain--l{left:14%}
+.ar__curtain--r{left:39%}
+
+/* ar-condicionado */
+.ar__unit{position:absolute;right:15%;top:17%;width:24%;aspect-ratio:3.1/1}
+.ar__unitbody{position:absolute;inset:0;border-radius:14px;
+  background:linear-gradient(180deg,#FFFFFF,#D6E7F3);
+  box-shadow:0 26px 48px -20px rgba(0,0,0,.6),inset 0 -6px 12px -6px rgba(0,0,0,.2)}
+.ar__unitvent{position:absolute;left:7%;right:7%;bottom:16%;height:12%;border-radius:6px;
+  background:linear-gradient(180deg,#2E9AD8,#1E7FBC)}
+.ar__unitled{position:absolute;right:8%;top:22%;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.ar__unitglow{position:absolute;inset:-70% -30% -180%;pointer-events:none;opacity:0;
+  background:radial-gradient(60% 70% at 50% 8%,rgba(127,212,245,.55),transparent 72%)}
+
+/* planta e chão */
+.ar__plant{position:absolute;right:7%;bottom:3%;width:12%;height:auto;
+  filter:drop-shadow(0 26px 30px rgba(0,0,0,.5))}
+.ar__leaf{transform-origin:100px 130px;will-change:transform}
+.ar__floor{position:absolute;left:-12%;right:-12%;bottom:0;height:25%;
+  background:linear-gradient(180deg,#2B3B4B,#16212D);
+  box-shadow:inset 0 30px 60px -30px rgba(0,0,0,.9)}
+.ar__fg{position:absolute;left:-6%;right:-6%;bottom:-6%;height:26%;border-radius:20px 20px 0 0;
+  background:linear-gradient(180deg,rgba(12,22,34,.9),rgba(6,14,24,1));filter:blur(9px)}
+
+/* corrente de ar e leitura técnica */
+.ar__flow{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none}
+.ar__tech{position:absolute;inset:0;z-index:4;width:100%;height:100%;pointer-events:none;opacity:0}
+.ar__tech path{stroke-linecap:round}
+
+.ar__hud{position:absolute;z-index:6;right:clamp(20px,4vw,56px);top:50%;transform:translateY(-50%);
+  width:min(230px,42vw);padding:16px 18px;border:1px solid var(--line);
+  background:rgba(4,14,27,.72);backdrop-filter:blur(12px);opacity:0;will-change:opacity,transform}
+.ar__hudtag{display:block;font-family:var(--head);font-size:.52rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--faint);border-bottom:1px solid var(--line);padding-bottom:9px;margin-bottom:11px}
+.ar__hudrows{display:grid;gap:10px}
+.ar__hudrows div{display:grid;grid-template-columns:1fr auto auto;align-items:baseline;gap:5px}
+.ar__hudrows i{grid-column:1/-1;font-style:normal;font-size:.56rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--faint)}
+.ar__hudrows b{font-family:var(--head);font-weight:600;font-size:1.15rem;color:#fff;
+  font-variant-numeric:tabular-nums}
+.ar__hudrows u{text-decoration:none;font-size:.62rem;color:var(--ice)}
+
+/* atmosfera */
+.ar__warm{position:absolute;inset:0;z-index:3;pointer-events:none;mix-blend-mode:overlay;
+  background:linear-gradient(168deg,rgba(255,158,58,.62),rgba(255,96,28,.32) 60%,rgba(120,44,12,.3))}
+.ar__cool{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;mix-blend-mode:overlay;
+  background:linear-gradient(196deg,rgba(126,196,255,.5),rgba(32,92,164,.3))}
+.ar__vig{position:absolute;inset:0;z-index:5;pointer-events:none;
+  background:radial-gradient(78% 68% at 52% 46%,transparent 42%,rgba(2,9,18,.86) 100%)}
+
+/* textos */
+.ar__eyebrow{position:absolute;z-index:7;left:clamp(20px,4vw,56px);top:clamp(88px,12vh,124px);will-change:opacity,transform}
+.ar__act{position:absolute;z-index:7;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);
+  bottom:clamp(64px,13vh,132px);opacity:0;pointer-events:none;will-change:opacity,transform,filter}
+.ar__act h2{margin:0;font-size:clamp(1.7rem,4.2vw,3.5rem);line-height:1.12;color:#fff;
+  max-width:19ch;text-shadow:0 18px 44px rgba(0,0,0,.6)}
+.ar__act--d{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(18px,3vh,30px)}
+.ar__act--d a{pointer-events:auto}
+.ar__techlabel{margin:0;max-width:26ch;font-family:var(--head);font-weight:600;
+  font-size:clamp(1.05rem,1.9vw,1.55rem);line-height:1.4;color:#fff;
+  text-shadow:0 14px 34px rgba(0,0,0,.65)}
+.ar__progress{position:absolute;z-index:7;left:clamp(20px,4vw,56px);right:clamp(20px,4vw,56px);
+  bottom:clamp(26px,4vh,40px);height:1px;background:rgba(127,212,245,.16)}
+.ar__progress i{display:block;height:100%;transform:scaleX(0);transform-origin:0 50%;
+  background:linear-gradient(90deg,var(--blue),var(--ice))}
+
+/* mobile: a cena se reorganiza em retrato, sem perder ato nenhum */
+@media (max-width:860px){
+  .ar{height:400vh}
+  .ar__stage{height:100svh}
+  .ar__camera{perspective:820px;perspective-origin:50% 44%}
+  .ar__depth--wall{transform:translateZ(-520px) scale(1.634)}
+  .ar__depth--win{transform:translateZ(-500px) scale(1.61)}
+  .ar__depth--curt{transform:translateZ(-430px) scale(1.524)}
+  .ar__depth--unit{transform:translateZ(-380px) scale(1.463)}
+  .ar__depth--plant{transform:translateZ(-150px) scale(1.183)}
+  .ar__depth--floor{transform:translateZ(-510px) scale(1.622)}
+  .ar__depth--fg{transform:translateZ(190px) scale(.768)}
+  .ar__window{left:6%;top:11%;width:35%;height:27%}
+  .ar__unit{right:6%;top:30%;width:45%}
+  .ar__plant{right:5%;bottom:18%;width:20%}
+  .ar__curtain{top:8%;height:42%;width:9%}
+  .ar__curtain--l{left:2%}
+  .ar__curtain--r{left:45%}
+  /* o painel desce para uma faixa própria, abaixo do aparelho */
+  .ar__hud{right:20px;left:20px;top:auto;bottom:calc(clamp(56px,10vh,96px) + 128px);
+    transform:none;width:auto;padding:13px 15px}
+  .ar__hudrows{grid-template-columns:1fr 1fr;gap:9px 16px}
+  .ar__hudrows b{font-size:1.02rem}
+  .ar__act{bottom:clamp(56px,10vh,96px)}
+  .ar__act h2{font-size:clamp(1.5rem,6.4vw,2.2rem);max-width:16ch}
+}
+@media (prefers-reduced-motion:reduce){
+  .ar__shimmer,.ar__leaf,.intro__sheen,.intro__in{animation:none!important}
+}

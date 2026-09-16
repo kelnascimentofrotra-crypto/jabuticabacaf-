@@ -375,6 +375,229 @@ const CONFIG = {
     }
   }
 
+
+  /* =========================================================
+     O AR QUE TRANSFORMA O AMBIENTE
+     Cinco atos num único progresso. Nada aqui é uma animação
+     independente: câmera, luz, calor, partículas e leitura
+     técnica são funções da mesma variável de rolagem.
+     ========================================================= */
+  let ar = null, pAr = 0;
+
+  function montarAr() {
+    const track = $('[data-el="arTrack"]');
+    if (!track) return null;
+    const a = {
+      track: track, stage: $('.ar__stage', track), cam: $('.ar__room', track),
+      sun: $('[data-el="arSun"]'), shim: $('[data-el="arShim"]'), beam: $('[data-el="arBeam"]'),
+      curtL: $('[data-el="arCurtL"]'), curtR: $('[data-el="arCurtR"]'),
+      folhas: $$('.ar__leaf'), unit: $('[data-el="arUnit"]'), unitGlow: $('[data-el="arUnitGlow"]'),
+      warm: $('[data-el="arWarm"]'), cool: $('[data-el="arCool"]'),
+      tech: $('[data-el="arTech"]'), linhas: $$('[data-el="arTechLines"] path'),
+      bandas: $$('[data-el="arTechBands"] rect'), pontos: $$('[data-el="arTechDots"] circle'),
+      hud: $('[data-el="arHud"]'),
+      hudFlow: $('[data-el="arHudFlow"]'), hudDelta: $('[data-el="arHudDelta"]'),
+      hudCirc: $('[data-el="arHudCirc"]'), hudEff: $('[data-el="arHudEff"]'),
+      eyebrow: $('[data-el="arEyebrow"]'), atos: $$('[data-aract]'),
+      prog: $('[data-el="arProg"]'),
+      canvas: $('[data-el="arFlow"]'), particulas: [], ctx: null, w: 0, h: 0, dpr: 1,
+      profundidade: $$('.ar__depth', track)
+    };
+
+    a.linhas.forEach(function (l) {
+      const c = l.getTotalLength ? l.getTotalLength() : 600;
+      l.style.strokeDasharray = c;
+      l.style.strokeDashoffset = c;
+      l.dataset.len = c;
+    });
+    a.bandas.forEach(function (b) { b.style.transformOrigin = '120px 0'; b.style.transform = 'scaleX(0)'; });
+    a.pontos.forEach(function (d) { d.style.opacity = '0'; });
+
+    if (a.canvas && a.canvas.getContext) {
+      a.ctx = a.canvas.getContext('2d');
+      dimensionarAr(a);
+      window.addEventListener('resize', function () { dimensionarAr(a); }, { passive: true });
+    }
+    return a;
+  }
+
+  function dimensionarAr(a) {
+    if (!a.ctx) return;
+    const r = a.stage.getBoundingClientRect();
+    a.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    a.w = Math.max(1, Math.round(r.width));
+    a.h = Math.max(1, Math.round(r.height));
+    a.canvas.width = Math.round(a.w * a.dpr);
+    a.canvas.height = Math.round(a.h * a.dpr);
+    a.ctx.setTransform(a.dpr, 0, 0, a.dpr, 0, 0);
+    a.max = a.w < 760 ? 70 : 150;
+  }
+
+  // Emite a partir da saída do aparelho, com profundidade: partícula distante
+  // é menor, mais lenta e mais apagada. Sem fumaça — corrente com direção.
+  function emitirAr(a, origem, forca) {
+    if (a.particulas.length >= a.max * forca) return;
+    const z = Math.random();
+    a.particulas.push({
+      x: origem.x + (Math.random() - 0.5) * origem.w,
+      y: origem.y + (Math.random() - 0.5) * 10,
+      z: z,
+      vx: -(0.9 + z * 2.6) * (0.7 + Math.random() * 0.6),
+      vy: (0.14 + Math.random() * 0.4) * (0.5 + z),
+      vida: 0,
+      total: 150 + Math.random() * 120,
+      giro: Math.random() * Math.PI * 2
+    });
+  }
+
+  function desenharAr(a, forca, frio) {
+    const ctx = a.ctx;
+    if (!ctx) return;
+    ctx.clearRect(0, 0, a.w, a.h);
+    if (forca <= 0.01) { a.particulas.length = 0; return; }
+
+    const r = a.unit.getBoundingClientRect();
+    const s = a.stage.getBoundingClientRect();
+    const origem = { x: r.left - s.left + r.width * 0.3, y: r.bottom - s.top - 2, w: r.width * 0.6 };
+
+    const nascer = Math.round(forca * (a.w < 760 ? 3 : 6));
+    for (let i = 0; i < nascer; i++) emitirAr(a, origem, forca);
+
+    for (let i = a.particulas.length - 1; i >= 0; i--) {
+      const p = a.particulas[i];
+      p.vida++;
+      if (p.vida > p.total || p.x < -40 || p.y > a.h + 40) { a.particulas.splice(i, 1); continue; }
+
+      p.giro += 0.012;
+      p.x += p.vx * forca;
+      p.y += p.vy + Math.sin(p.giro) * 0.36;
+
+      const v = p.vida / p.total;
+      const alpha = Math.sin(Math.min(v, 1) * Math.PI) * (0.24 + p.z * 0.62) * forca;
+      const raio = (1 + p.z * 2.8) * (a.w < 760 ? 0.82 : 1);
+      const azul = 150 + Math.round(frio * 70);
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(' + (188 - Math.round(frio * 40)) + ',' + (222 + Math.round(frio * 10)) + ',' + Math.min(255, azul + 70) + ',' + alpha.toFixed(3) + ')';
+      ctx.arc(p.x, p.y, raio, 0, 6.2832);
+      ctx.fill();
+
+      // rastro curto: dá direção ao fluxo sem virar fumaça
+      if (p.z > 0.55) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(200,236,255,' + (alpha * 0.4).toFixed(3) + ')';
+        ctx.lineWidth = raio * 0.6;
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(p.x - p.vx * 5, p.y - p.vy * 5);
+        ctx.stroke();
+      }
+    }
+  }
+
+  function rodarAr(vh) {
+    if (!ar) return;
+    const a = ar;
+    const r = a.track.getBoundingClientRect();
+    const visivel = r.bottom > -100 && r.top < vh + 100;
+    if (!visivel) {
+      if (a.particulas.length) { a.particulas.length = 0; if (a.ctx) a.ctx.clearRect(0, 0, a.w, a.h); }
+      return;
+    }
+
+    const cru = clamp(-r.top / ((r.height - vh) || 1), 0, 1);
+    if (reduzido) pAr = cru;
+    else pAr = Math.abs(cru - pAr) < 0.0002 ? cru : mix(pAr, cru, 0.08);
+    const p = pAr;
+    const mm = reduzido ? 0 : 1;
+
+    /* --- câmera: aproxima, orbita e recua --- */
+    const entra = easeOut(span(p, 0, 0.16));          // ato 1: aproximação
+    const orbita = easeIO(span(p, 0.16, 0.66));       // ato 2 e 3: giro
+    const recua = easeIO(span(p, 0.86, 1));           // ato 5: afastamento
+    const z = mix(-130, 45, entra) - recua * 250;
+    const giroY = mix(-14, 16, orbita) * (1 - recua * 0.55);
+    const giroX = mix(3.4, -1.6, orbita) + recua * 2.2;
+    a.cam.style.transform = 'translate3d(0,0,' + (z * mm).toFixed(1) + 'px) rotateY(' +
+      (giroY * mm).toFixed(2) + 'deg) rotateX(' + (giroX * mm).toFixed(2) + 'deg)';
+
+    /* --- profundidade de campo: o fundo entra desfocado e resolve --- */
+    const foco = easeOut(span(p, 0, 0.15));
+    a.profundidade.forEach(function (d) {
+      const fg = d.classList.contains('ar__depth--fg');
+      const perto = d.classList.contains('ar__depth--plant');
+      const desfoque = fg ? mix(8, 4, foco) + recua * 3
+        : perto ? mix(3.4, 0.4, foco) + recua * 1.6
+        : mix(5.5, 0, foco) + recua * 2.2;
+      d.style.filter = 'blur(' + Math.max(0, desfoque).toFixed(2) + 'px)';
+    });
+
+    /* --- luz: sol duro vira luz equilibrada --- */
+    const esfria = easeIO(span(p, 0.2, 0.62));
+    a.sun.style.opacity = (1 - esfria * 0.72).toFixed(3);
+    a.sun.style.transform = 'scale(' + (1 + 0.16 * (1 - esfria)).toFixed(3) + ')';
+    a.beam.style.opacity = (0.95 - esfria * 0.8).toFixed(3);
+    a.shim.style.opacity = (1 - easeOut(span(p, 0.14, 0.44))).toFixed(3);
+    a.warm.style.opacity = (0.95 * (1 - esfria)).toFixed(3);
+    a.cool.style.opacity = (0.88 * easeIO(span(p, 0.42, 0.9))).toFixed(3);
+
+    /* --- corrente de ar --- */
+    const forca = easeOut(span(p, 0.26, 0.5)) * (1 - 0.45 * span(p, 0.9, 1));
+    a.unitGlow.style.opacity = (0.95 * easeOut(span(p, 0.4, 0.58)) * (1 - 0.5 * span(p, 0.86, 1))).toFixed(3);
+    const destaque = easeOut(span(p, 0.44, 0.6)) * (1 - span(p, 0.82, 1));
+    a.unit.style.transform = 'scale(' + (1 + 0.1 * destaque * mm).toFixed(4) + ')';
+
+    /* --- o ambiente reage ao fluxo --- */
+    const balanco = Math.sin(performance.now() / 900) * forca * mm;
+    a.curtL.style.transform = 'rotate(' + (balanco * 3.4).toFixed(2) + 'deg) skewX(' + (balanco * 2.2).toFixed(2) + 'deg)';
+    a.curtR.style.transform = 'rotate(' + (-balanco * 4.2).toFixed(2) + 'deg) skewX(' + (-balanco * 2.8).toFixed(2) + 'deg)';
+    a.folhas.forEach(function (f, i) {
+      const d = Math.sin(performance.now() / 780 + i * 0.7) * forca * 3.6 * mm;
+      f.style.transform = 'rotate(' + d.toFixed(2) + 'deg)';
+    });
+    desenharAr(a, forca, esfria);
+
+    /* --- leitura técnica: linhas desenhadas sobre o ambiente --- */
+    const tecnica = easeIO(span(p, 0.66, 0.78));
+    const saiTecnica = easeIO(span(p, 0.86, 0.94));
+    const tec = tecnica * (1 - saiTecnica);
+    a.tech.style.opacity = tec.toFixed(3);
+    a.linhas.forEach(function (l, i) {
+      const t = easeOut(span(p, 0.66 + i * 0.025, 0.8 + i * 0.025));
+      l.style.strokeDashoffset = (parseFloat(l.dataset.len) * (1 - t)).toFixed(1);
+    });
+    a.bandas.forEach(function (b, i) {
+      b.style.transform = 'scaleX(' + easeOut(span(p, 0.7 + i * 0.03, 0.84 + i * 0.03)).toFixed(3) + ')';
+    });
+    a.pontos.forEach(function (d, i) {
+      d.style.opacity = (easeOut(span(p, 0.72 + i * 0.02, 0.82 + i * 0.02)) * (1 - saiTecnica)).toFixed(3);
+    });
+
+    a.hud.style.opacity = tec.toFixed(3);
+    a.hud.style.transform = (a.w < 860 ? '' : 'translateY(-50%) ') +
+      'translate3d(' + ((1 - tecnica) * 26 * mm).toFixed(1) + 'px,0,0)';
+    const leitura = easeOut(span(p, 0.66, 0.86));
+    a.hudFlow.textContent = (3.2 * leitura).toFixed(1).replace('.', ',');
+    a.hudDelta.textContent = Math.round(11 * leitura);
+    a.hudCirc.textContent = Math.round(96 * leitura);
+    a.hudEff.textContent = '-' + Math.round(28 * leitura);
+
+    /* --- textos: entram e saem com a composição --- */
+    const janelas = [[0.03, 0.2], [0.44, 0.62], [0.68, 0.84], [0.9, 1.01]];
+    a.atos.forEach(function (n, i) {
+      const j = janelas[i];
+      const dentro = easeOut(span(p, j[0], j[0] + 0.06));
+      const fora = i === 3 ? 0 : easeIO(span(p, j[1] - 0.05, j[1]));
+      const v = dentro * (1 - fora);
+      n.style.opacity = v.toFixed(3);
+      n.style.transform = 'translate3d(0,' + ((1 - dentro) * 30 + fora * -24).toFixed(1) + 'px,0)';
+      n.style.filter = 'blur(' + ((1 - dentro) * 7).toFixed(2) + 'px)';
+      n.style.pointerEvents = v > 0.6 ? 'auto' : 'none';
+    });
+
+    const saiEyebrow = easeIO(span(p, 0.88, 1));
+    a.eyebrow.style.opacity = (easeOut(span(p, 0, 0.06)) * (1 - saiEyebrow)).toFixed(3);
+    a.prog.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+  }
+
   function quadro() {
     const vh = window.innerHeight;
     const sy = window.pageYOffset || document.documentElement.scrollTop;
@@ -403,6 +626,7 @@ const CONFIG = {
     }
 
     rodarCiclo(vh);
+    rodarAr(vh);
     if (varrer) varrer();
 
     if (el.fill) {
@@ -424,5 +648,6 @@ const CONFIG = {
   duvidas();
   formulario();
   ciclo = montarCiclo();
+  ar = montarAr();
   requestAnimationFrame(quadro);
 })();

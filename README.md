@@ -46,6 +46,40 @@ O endereço aparece direto no HTML (topo, seção *Contato* e rodapé).
 
 As cores estão em variáveis CSS no início de `assets/css/style.css` (`:root`).
 
+## A seção "O ar que transforma o ambiente"
+
+É uma cena única dirigida pela rolagem, não uma sequência de blocos. Um só
+progresso (`0` a `1`, medido pela posição da trilha de 480vh) alimenta câmera,
+luz, calor, partículas e leitura técnica ao mesmo tempo.
+
+O ambiente é montado em camadas com profundidade real. Cada camada fica em
+`translateZ(-D)` dentro de um elemento com `perspective: 1100px`, e recebe
+`scale(1 + D/1100)` — a compensação exata para o plano voltar ao tamanho da
+tela. Com isso as posições em porcentagem dentro de cada camada continuam
+valendo, e a câmera pode girar e aproximar sem deformar a composição.
+
+| Trecho da rolagem | O que acontece |
+| --- | --- |
+| 0 – 16% | câmera aproxima, profundidade de campo resolve, título entra |
+| 16 – 66% | câmera orbita, sol perde força, calor sai e o frio entra |
+| 26 – 50% | corrente de ar começa: partículas saem do aparelho com direção e profundidade |
+| 44 – 62% | aparelho ganha destaque e o segundo título entra |
+| 66 – 86% | linhas técnicas desenhadas e leitura de demonstração aparece |
+| 86 – 100% | câmera recua e o fecho entra com o botão |
+
+A corrente de ar é um `<canvas>`: cada partícula tem profundidade própria, que
+define tamanho, velocidade e opacidade. A emissão sai da posição real do
+aparelho na tela, medida a cada quadro, então continua colada nele enquanto a
+câmera gira. O canvas para de desenhar quando a seção sai da tela.
+
+Os números do painel (`3,2 m/s`, `11 °C`, `96%`, `-28%`) são **exemplos de
+demonstração**, identificados como tal no próprio painel. Troque por medições
+reais antes de usá-los como argumento comercial.
+
+Tudo isso roda no mesmo `requestAnimationFrame` do resto do site, com o
+progresso suavizado por interpolação. Não há biblioteca de animação: a mecânica
+que o GSAP ScrollTrigger daria com `scrub` já existe no projeto.
+
 ## Fotografias
 
 O site funciona sem nenhuma foto: onde ela falta, entra uma cena desenhada em
@@ -54,8 +88,7 @@ dentro de `assets/img/` — não é preciso mexer no código.
 
 | Arquivo | Onde aparece | Tamanho sugerido | O que fotografar |
 | --- | --- | --- | --- |
-| `hero.jpg` | fundo do topo (computador) | 1920 × 1080, horizontal | técnico instalando ou consertando um split |
-| `hero-vertical.jpg` | fundo do topo (celular) | 900 × 1200, vertical | a mesma cena, enquadrada em pé |
+| `tecnico-split.png` | fundo do topo | hoje 915 × 514 — o ideal é 1920 × 1080 | técnico instalando ou consertando um split (**já está no site**) |
 | `ambiente.jpg` | seção "Do calor ao conforto" | 1200 × 900 | ambiente já climatizado, com o ar-condicionado visível na parede |
 
 Dicas de enquadramento:

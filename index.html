@@ -66,14 +66,16 @@
 
 <!-- ============ ABERTURA ============ -->
 <div class="intro" data-el="intro">
+  <span class="intro__vig" aria-hidden="true"></span>
   <div class="intro__in" data-el="introIn">
     <div class="intro__mark">
-      <span class="intro__halo"></span>
-      <img src="assets/img/logo-mark.svg" alt="" width="150" height="150">
+      <span class="intro__halo" aria-hidden="true"></span>
+      <img src="assets/img/logo-mark.svg" alt="Tá No Clima" width="160" height="160">
+      <span class="intro__sheen" aria-hidden="true"></span>
     </div>
     <div class="mask"><span class="intro__name">TÁ NO CLIMA</span></div>
-    <span class="intro__rule"></span>
-    <span class="intro__sub">Refrigeração e Serviço</span>
+    <span class="intro__rule" aria-hidden="true"></span>
+    <div class="mask"><span class="intro__sub">Serviços de refrigeração</span></div>
   </div>
   <button class="intro__skip" data-el="skip" type="button">Pular</button>
 </div>
@@ -108,8 +110,7 @@
 
     <div class="scene" data-el="scene" aria-hidden="true">
       <picture class="scene__photo" data-foto>
-        <source media="(max-width:759px)" srcset="assets/img/hero-vertical.jpg">
-        <img src="assets/img/hero.jpg" alt="Técnico da Tá No Clima instalando um ar-condicionado split" decoding="async" fetchpriority="high">
+        <img src="assets/img/tecnico-split.png" alt="Técnico fazendo a manutenção de um ar-condicionado split" decoding="async" fetchpriority="high">
       </picture>
       <div class="scene__glow"></div>
       <div class="scene__grid"></div>
@@ -149,6 +150,133 @@
 
 <!-- ============ CORTINA ============ -->
 <div class="curtain">
+
+<!-- ============================================================
+     O AR QUE TRANSFORMA O AMBIENTE
+     Cena contínua dirigida pela rolagem: câmera, luz, calor,
+     corrente de ar e leitura técnica são um único progresso.
+     ============================================================ -->
+<section id="ar" class="ar" data-el="arTrack" aria-label="O ar que transforma o ambiente">
+  <div class="ar__stage">
+
+    <!-- ---- cena ---- -->
+    <div class="ar__camera" data-el="arCam" aria-hidden="true">
+      <div class="ar__room">
+
+        <div class="ar__depth ar__depth--wall">
+          <span class="ar__wall"></span>
+          <span class="ar__baseboard"></span>
+        </div>
+
+        <div class="ar__depth ar__depth--win">
+          <div class="ar__window">
+            <span class="ar__pane"></span>
+            <span class="ar__mullion"></span>
+            <span class="ar__sun" data-el="arSun"></span>
+            <span class="ar__shimmer" data-el="arShim"></span>
+          </div>
+          <span class="ar__beam" data-el="arBeam"></span>
+        </div>
+
+        <div class="ar__depth ar__depth--curt">
+          <span class="ar__curtain ar__curtain--l" data-el="arCurtL"></span>
+          <span class="ar__curtain ar__curtain--r" data-el="arCurtR"></span>
+        </div>
+
+        <div class="ar__depth ar__depth--unit">
+          <div class="ar__unit" data-el="arUnit">
+            <span class="ar__unitbody"></span>
+            <span class="ar__unitvent"></span>
+            <span class="ar__unitled"></span>
+            <span class="ar__unitglow" data-el="arUnitGlow"></span>
+          </div>
+        </div>
+
+        <div class="ar__depth ar__depth--plant">
+          <svg class="ar__plant" data-el="arPlant" viewBox="0 0 200 260">
+            <g fill="none" stroke="#2C6E55" stroke-width="5" stroke-linecap="round">
+              <path d="M100 258V120"/>
+              <path class="ar__leaf" d="M100 150C70 140 52 112 54 84c28 2 46 24 46 52"/>
+              <path class="ar__leaf" d="M100 132c30-10 48-38 46-66-28 2-46 24-46 52"/>
+              <path class="ar__leaf" d="M100 186c-26-8-42-32-40-56 24 2 40 20 40 44"/>
+              <path class="ar__leaf" d="M100 170c26-8 42-32 40-56-24 2-40 20-40 44"/>
+            </g>
+            <path d="M74 250h52l-8 34H82Z" fill="#7B6A57"/>
+          </svg>
+        </div>
+
+        <div class="ar__depth ar__depth--floor"><span class="ar__floor"></span></div>
+        <div class="ar__depth ar__depth--fg"><span class="ar__fg"></span></div>
+
+      </div>
+    </div>
+
+    <!-- ---- corrente de ar ---- -->
+    <canvas class="ar__flow" data-el="arFlow" aria-hidden="true"></canvas>
+
+    <!-- ---- leitura técnica ---- -->
+    <svg class="ar__tech" data-el="arTech" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <g data-el="arTechLines" fill="none" stroke="#7FD4F5" stroke-width="1" vector-effect="non-scaling-stroke">
+        <path d="M735 205 C 640 250 520 300 360 330"/>
+        <path d="M735 218 C 650 286 540 366 372 404"/>
+        <path d="M735 232 C 660 320 566 430 402 470"/>
+        <path d="M735 196 C 628 214 500 236 318 250"/>
+      </g>
+      <g data-el="arTechBands">
+        <rect x="120" y="188" width="640" height="2" fill="#E02B28" opacity=".5"/>
+        <rect x="120" y="318" width="640" height="2" fill="#9AA7B4" opacity=".4"/>
+        <rect x="120" y="448" width="640" height="2" fill="#1E9BE0" opacity=".55"/>
+      </g>
+      <g data-el="arTechDots" fill="#7FD4F5">
+        <circle cx="735" cy="212" r="4"/><circle cx="360" cy="330" r="3"/>
+        <circle cx="402" cy="470" r="3"/><circle cx="318" cy="250" r="3"/>
+      </g>
+    </svg>
+
+    <div class="ar__hud" data-el="arHud" aria-hidden="true">
+      <span class="ar__hudtag">Leitura de demonstração</span>
+      <div class="ar__hudrows">
+        <div><i>Fluxo de ar</i><b data-el="arHudFlow">0,0</b><u>m/s</u></div>
+        <div><i>Diferença de temperatura</i><b data-el="arHudDelta">0</b><u>°C</u></div>
+        <div><i>Circulação no ambiente</i><b data-el="arHudCirc">0</b><u>%</u></div>
+        <div><i>Consumo com manutenção</i><b data-el="arHudEff">0</b><u>%</u></div>
+      </div>
+    </div>
+
+    <!-- ---- atmosfera ---- -->
+    <span class="ar__warm" data-el="arWarm" aria-hidden="true"></span>
+    <span class="ar__cool" data-el="arCool" aria-hidden="true"></span>
+    <span class="ar__vig" aria-hidden="true"></span>
+
+    <!-- ---- textos ---- -->
+    <header class="ar__eyebrow" data-el="arEyebrow">
+      <span class="eyebrow">O ar que transforma o ambiente</span>
+    </header>
+
+    <div class="ar__act ar__act--a" data-aract>
+      <h2>Quando o calor aperta,<br>o conforto começa.</h2>
+    </div>
+
+    <div class="ar__act ar__act--b" data-aract>
+      <h2>Conforto não é só sentir frio.<br>É sentir o ambiente mudar.</h2>
+    </div>
+
+    <div class="ar__act ar__act--c" data-aract>
+      <p class="ar__techlabel">Distribuição, circulação e eficiência lidas no ambiente</p>
+    </div>
+
+    <div class="ar__act ar__act--d" data-aract>
+      <h2>Um ambiente bem climatizado<br>muda tudo.</h2>
+      <a class="btn btn--solid btn--lg js-wa" href="#" data-wa-msg="Olá! Quero conhecer a solução de climatização de vocês." data-spot data-magnet>
+        <span data-glow></span><span>Conheça nossa solução</span>
+        <svg viewBox="0 0 24 24" class="arw" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <span class="ar__progress" aria-hidden="true"><i data-el="arProg"></i></span>
+  </div>
+</section>
+
 
 <!-- ---------- SERVIÇOS ---------- -->
 <section id="servicos" class="sec">
