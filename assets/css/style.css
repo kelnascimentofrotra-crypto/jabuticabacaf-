@@ -385,7 +385,15 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 /* ---------- rodapé ---------- */
 .ft{background:#03101F;border-top:1px solid var(--line);padding-top:clamp(48px,7vh,76px)}
 .ft__grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:36px;padding-bottom:44px}
-.ft__brand img{background:#fff;border-radius:50%;padding:5px;margin-bottom:14px}
+/* a versão com texto da logo fica ilegível em 104px: aqui vale a marca
+   limpa com o nome em texto, como no cabeçalho */
+.ft__mark{display:inline-flex;align-items:center;gap:12px;margin-bottom:16px}
+.ft__mark img{width:52px;height:52px;background:#fff;border-radius:50%;padding:4px;flex:none}
+.ft__mark b{display:block;font-family:var(--head);font-weight:700;font-size:1rem;
+  letter-spacing:.14em;color:#fff;line-height:1}
+.ft__mark i{display:block;font-style:normal;font-size:.58rem;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--faint);margin-top:6px}
+.ft__mark:hover b{color:var(--ice)}
 .ft__brand p{font-size:.88rem;color:var(--dim);max-width:38ch}
 .ft h4{font-family:var(--head);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
   color:var(--ice);margin-bottom:16px}
@@ -428,7 +436,8 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 @media (max-width:760px){
   .track{height:190vh}
   .stage{height:100svh}
-    .heroui{flex-direction:column;align-items:flex-start;bottom:clamp(34px,7vh,72px)}
+    .heroui{flex-direction:column;align-items:flex-start;justify-content:flex-end;
+    bottom:clamp(34px,7vh,72px)}
   .heroui__btns{flex-direction:column;align-items:stretch;width:100%}
   .heroui__btns .btn{width:100%}
   .band__grid{grid-template-columns:1fr}
@@ -670,4 +679,18 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 }
 @media (prefers-reduced-motion:reduce){
   .ar__shimmer,.ar__leaf,.intro__in{animation:none!important}
+}
+
+/* ---------- alvos de toque no celular ----------
+   Links de 16px de altura são difíceis de acertar com o dedo. O espaço
+   vertical vira área tocável em vez de margem morta. */
+@media (max-width:760px){
+  .ft__col ul,.ft ul{gap:0}
+  .ft ul a{display:block;padding-block:14px}
+  .ft__ct li{padding-block:7px}
+  .ft__ct li a{display:flex;align-items:center;min-height:44px;padding-block:0}
+  .ft__social a{width:44px;height:44px}
+  .info a{display:inline-block;padding-block:13px}
+  .lnk{padding-block:8px}
+  .hd__brand{padding-block:4px}
 }
