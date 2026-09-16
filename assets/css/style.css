@@ -388,7 +388,7 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
 /* a versão com texto da logo fica ilegível em 104px: aqui vale a marca
    limpa com o nome em texto, como no cabeçalho */
 .ft__mark{display:inline-flex;align-items:center;gap:12px;margin-bottom:16px}
-.ft__mark img{width:52px;height:52px;background:#fff;border-radius:50%;padding:4px;flex:none}
+.ft__mark img{width:52px;height:52px;flex:none}
 .ft__mark b{display:block;font-family:var(--head);font-weight:700;font-size:1rem;
   letter-spacing:.14em;color:#fff;line-height:1}
 .ft__mark i{display:block;font-style:normal;font-size:.58rem;letter-spacing:.24em;

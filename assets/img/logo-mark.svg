@@ -1,41 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Tá No Clima - Refrigeração e Serviço">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Tá No Clima">
   <defs>
-    <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#1E9BE0"/>
-      <stop offset="1" stop-color="#0B2E59"/>
+    <linearGradient id="fl" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8FD9FF"/>
+      <stop offset=".45" stop-color="#2E9AD8"/>
+      <stop offset="1" stop-color="#14598C"/>
     </linearGradient>
-    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="sw" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8E1C18"/>
+      <stop offset=".4" stop-color="#D62B24"/>
+      <stop offset="1" stop-color="#7E1714"/>
+    </linearGradient>
+    <linearGradient id="vn" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#FFFFFF"/>
-      <stop offset="1" stop-color="#DCEEF9"/>
+      <stop offset="1" stop-color="#B9C8D4"/>
     </linearGradient>
   </defs>
 
-  <circle cx="100" cy="100" r="96" fill="#FFFFFF"/>
-  <circle cx="100" cy="100" r="93" fill="none" stroke="url(#ring)" stroke-width="7"/>
-  <circle cx="100" cy="100" r="82" fill="none" stroke="#E02B28" stroke-width="2.5" stroke-dasharray="4 7" stroke-linecap="round" opacity=".7"/>
-
-  <!-- split / condicionador -->
-  <g>
-    <rect x="42" y="52" width="116" height="40" rx="14" fill="url(#body)" stroke="#0B2E59" stroke-width="5"/>
-    <rect x="52" y="78" width="96" height="7" rx="3.5" fill="#1E9BE0"/>
-    <circle cx="140" cy="65" r="4" fill="#E02B28"/>
-    <path d="M56 64h44" stroke="#0B2E59" stroke-width="4" stroke-linecap="round" opacity=".35"/>
-  </g>
-
-  <!-- fluxo de ar gelado -->
-  <g fill="none" stroke="#1E9BE0" stroke-width="5" stroke-linecap="round" opacity=".85">
-    <path d="M62 102c0 10 12 10 12 20"/>
-    <path d="M94 104c0 12 14 12 14 24"/>
-    <path d="M128 102c0 10 12 10 12 20"/>
-  </g>
 
   <!-- floco de neve -->
-  <g stroke="#0B2E59" stroke-width="5.5" stroke-linecap="round" transform="translate(100 146)">
-    <path d="M0-19V19M-16.5-9.5L16.5 9.5M-16.5 9.5L16.5-9.5"/>
-    <g stroke-width="4.5">
-      <path d="M-5-14L0-19l5 5M-5 14L0 19l5-5"/>
-      <path d="M-17-2.5l-1.5-6.9 6.9 1.9M17 2.5l1.5 6.9-6.9-1.9"/>
-      <path d="M-11.6 7.4l-6.9 1.9 1.5-6.9M11.6-7.4l6.9-1.9-1.5 6.9"/>
+  <g transform="translate(100 78)" fill="url(#fl)" stroke="#0E4A78" stroke-width="2.4" stroke-linejoin="round">
+    <g>
+      <path d="M-6-52h12v104h-12z"/>
+      <path d="M-6-52h12v104h-12z" transform="rotate(60)"/>
+      <path d="M-6-52h12v104h-12z" transform="rotate(120)"/>
     </g>
+    <g stroke-width="2">
+      <path d="M-18-34 0-22l18-12-18-9z"/>
+      <path d="M-18 34 0 22l18 12-18 9z"/>
+      <path d="M-18-34 0-22l18-12-18-9z" transform="rotate(60)"/>
+      <path d="M-18 34 0 22l18 12-18 9z" transform="rotate(60)"/>
+      <path d="M-18-34 0-22l18-12-18-9z" transform="rotate(120)"/>
+      <path d="M-18 34 0 22l18 12-18 9z" transform="rotate(120)"/>
+    </g>
+    <circle cx="0" cy="0" r="13" fill="#8FD9FF" stroke="#0E4A78" stroke-width="2.4"/>
   </g>
+
+  <!-- onda vermelha -->
+  <path d="M8 150c26-16 52-16 78-6s52 12 78-8c-6 20-30 30-56 26s-46-12-66-6-28 8-34-6Z" fill="url(#sw)"/>
 </svg>
