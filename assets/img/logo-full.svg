@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 260" role="img" aria-label="Tá No Clima - Refrigeração e Serviço">
+  <defs>
+    <linearGradient id="r2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1E9BE0"/>
+      <stop offset="1" stop-color="#0B2E59"/>
+    </linearGradient>
+    <linearGradient id="b2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DCEEF9"/>
+    </linearGradient>
+    <path id="arc" d="M42 148a88 88 0 0 0 176 0" fill="none"/>
+  </defs>
+
+  <circle cx="130" cy="130" r="126" fill="#FFFFFF"/>
+  <circle cx="130" cy="130" r="122" fill="none" stroke="url(#r2)" stroke-width="8"/>
+
+  <g>
+    <rect x="72" y="42" width="116" height="38" rx="13" fill="url(#b2)" stroke="#0B2E59" stroke-width="5"/>
+    <rect x="82" y="66" width="96" height="6.5" rx="3.2" fill="#1E9BE0"/>
+    <circle cx="170" cy="54" r="3.6" fill="#E02B28"/>
+    <g fill="none" stroke="#1E9BE0" stroke-width="4.5" stroke-linecap="round" opacity=".85">
+      <path d="M92 90c0 8 10 8 10 17"/>
+      <path d="M125 92c0 9 11 9 11 19"/>
+      <path d="M158 90c0 8 10 8 10 17"/>
+    </g>
+    <g stroke="#0B2E59" stroke-width="4.5" stroke-linecap="round" transform="translate(130 122) scale(.78)">
+      <path d="M0-19V19M-16.5-9.5L16.5 9.5M-16.5 9.5L16.5-9.5"/>
+    </g>
+  </g>
+
+  <g font-family="'Barlow','Arial Black',Impact,sans-serif" font-weight="800" text-anchor="middle">
+    <text x="130" y="172" font-size="42" fill="#0B2E59" letter-spacing="1">
+      <tspan fill="#E02B28">TÁ</tspan><tspan dx="6">NO CLIMA</tspan>
+    </text>
+  </g>
+
+  <path d="M40 196h180" stroke="#1E9BE0" stroke-width="3" stroke-linecap="round" opacity=".5"/>
+  <text font-family="'Barlow',Arial,sans-serif" font-size="15.5" font-weight="700" fill="#0B2E59" letter-spacing="2.4">
+    <textPath href="#arc" startOffset="50%" text-anchor="middle">REFRIGERAÇÃO E SERVIÇO</textPath>
+  </text>
+</svg>
