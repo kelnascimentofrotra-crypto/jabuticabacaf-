@@ -113,28 +113,6 @@
       </picture>
       <div class="scene__glow"></div>
       <div class="scene__grid"></div>
-      <div class="scene__unit">
-        <svg viewBox="0 0 520 300" width="520" height="300">
-          <defs>
-            <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFDFF3"/>
-            </linearGradient>
-            <linearGradient id="g-air" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#7FD4F5" stop-opacity=".95"/>
-              <stop offset="1" stop-color="#7FD4F5" stop-opacity="0"/>
-            </linearGradient>
-          </defs>
-          <rect x="60" y="40" width="400" height="92" rx="30" fill="url(#g-body)"/>
-          <rect x="88" y="104" width="344" height="14" rx="7" fill="#1E9BE0"/>
-          <circle cx="424" cy="66" r="6" fill="#E02B28"/>
-          <g class="scene__air">
-            <rect x="140" y="140" width="10" height="70" rx="5" fill="url(#g-air)"/>
-            <rect x="215" y="140" width="10" height="104" rx="5" fill="url(#g-air)"/>
-            <rect x="292" y="140" width="10" height="82" rx="5" fill="url(#g-air)"/>
-            <rect x="366" y="140" width="10" height="60" rx="5" fill="url(#g-air)"/>
-          </g>
-        </svg>
-      </div>
       <div class="scene__flakes"></div>
     </div>
     <div class="scene__veil" aria-hidden="true"></div>
@@ -339,6 +317,15 @@
           <span class="cf__wall"></span>
           <span class="cf__floor"></span>
           <svg class="cf__split" viewBox="0 0 420 200">
+            <defs>
+              <linearGradient id="g-body" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#BFDFF3"/>
+              </linearGradient>
+              <linearGradient id="g-air" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#7FD4F5" stop-opacity=".95"/>
+                <stop offset="1" stop-color="#7FD4F5" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
             <rect x="40" y="26" width="340" height="74" rx="24" fill="url(#g-body)"/>
             <rect x="66" y="82" width="288" height="12" rx="6" fill="#1E9BE0"/>
             <circle cx="352" cy="50" r="6" fill="#E02B28"/>

@@ -54,7 +54,7 @@ dentro de `assets/img/` — não é preciso mexer no código.
 
 | Arquivo | Onde aparece | Tamanho sugerido | O que fotografar |
 | --- | --- | --- | --- |
-| `hero.jpg` | fundo do topo (computador) | 1920 × 1080, horizontal | técnico instalando ou consertando um split, de preferência com espaço vazio à esquerda para o texto |
+| `hero.jpg` | fundo do topo (computador) | 1920 × 1080, horizontal | técnico instalando ou consertando um split |
 | `hero-vertical.jpg` | fundo do topo (celular) | 900 × 1200, vertical | a mesma cena, enquadrada em pé |
 | `ambiente.jpg` | seção "Do calor ao conforto" | 1200 × 900 | ambiente já climatizado, com o ar-condicionado visível na parede |
 
@@ -63,6 +63,12 @@ Dicas de enquadramento:
 - O topo escurece a foto e aplica um degradê da esquerda para a direita — o
   assunto deve ficar **à direita** do quadro, e a esquerda pode ser parede,
   céu ou fundo liso.
+- O recorte do topo está em `object-position: 68% 46%`, calibrado para uma foto
+  clara de parede branca com o técnico à esquerda e o aparelho à direita: puxa o
+  quadro para o lado do aparelho e deixa a área do texto sobre o fundo liso.
+  Com outro enquadramento, ajuste esse valor.
+- Fotos de parede branca entram com `brightness(.5)` para o azul da marca
+  sobreviver por cima. Foto já escura pode subir esse valor.
 - A foto da seção "Do calor ao conforto" recebe uma camada laranja que vai
   virando azul conforme a rolagem. Fotos claras e com boa luz funcionam muito
   melhor nesse efeito do que fotos escuras.
