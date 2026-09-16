@@ -46,6 +46,33 @@ O endereço aparece direto no HTML (topo, seção *Contato* e rodapé).
 
 As cores estão em variáveis CSS no início de `assets/css/style.css` (`:root`).
 
+## Fotografias
+
+O site funciona sem nenhuma foto: onde ela falta, entra uma cena desenhada em
+CSS/SVG. Para colocar as fotos reais, basta salvar os arquivos com estes nomes
+dentro de `assets/img/` — não é preciso mexer no código.
+
+| Arquivo | Onde aparece | Tamanho sugerido | O que fotografar |
+| --- | --- | --- | --- |
+| `hero.jpg` | fundo do topo (computador) | 1920 × 1080, horizontal | técnico instalando ou consertando um split, de preferência com espaço vazio à esquerda para o texto |
+| `hero-vertical.jpg` | fundo do topo (celular) | 900 × 1200, vertical | a mesma cena, enquadrada em pé |
+| `ambiente.jpg` | seção "Do calor ao conforto" | 1200 × 900 | ambiente já climatizado, com o ar-condicionado visível na parede |
+
+Dicas de enquadramento:
+
+- O topo escurece a foto e aplica um degradê da esquerda para a direita — o
+  assunto deve ficar **à direita** do quadro, e a esquerda pode ser parede,
+  céu ou fundo liso.
+- A foto da seção "Do calor ao conforto" recebe uma camada laranja que vai
+  virando azul conforme a rolagem. Fotos claras e com boa luz funcionam muito
+  melhor nesse efeito do que fotos escuras.
+- Se quiser ajustar o recorte, mude `object-position` em `.scene__photo img`
+  e `.cf__photo img`, no fim de `assets/css/style.css`.
+
+> Use fotos do próprio trabalho de vocês, ou imagens de banco com licença de uso
+> comercial. Não use fotos de outra empresa: além do problema de direitos, dá a
+> entender que o serviço mostrado é seu.
+
 ## Formulário
 
 Não há servidor: o formulário monta a mensagem e abre o WhatsApp já preenchido.

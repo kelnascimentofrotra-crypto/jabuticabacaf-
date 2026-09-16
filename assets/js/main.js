@@ -27,6 +27,28 @@ const CONFIG = {
 
   const reduzido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---------- 10. fotografias opcionais ----------
+     Cada [data-foto] só aparece se o arquivo existir. Enquanto não existir,
+     a cena desenhada em CSS/SVG continua no lugar e nada quebra. */
+  function fotos() {
+    $$('[data-foto]').forEach(function (bloco) {
+      const img = $('img', bloco);
+      if (!img) return;
+      const aceitar = function () {
+        if (!img.naturalWidth) return;
+        bloco.classList.add('ok');
+        const pai = bloco.parentElement;
+        if (pai) pai.classList.add('tem-foto');
+      };
+      const recusar = function () { bloco.remove(); };
+      if (img.complete) { img.naturalWidth ? aceitar() : recusar(); }
+      else {
+        img.addEventListener('load', aceitar, { once: true });
+        img.addEventListener('error', recusar, { once: true });
+      }
+    });
+  }
+
   /* ---------- 1. contatos a partir do CONFIG ---------- */
   const digitos = String(CONFIG.whatsapp).replace(/\D/g, '');
   const waBase = 'https://wa.me/' + digitos;
@@ -393,6 +415,7 @@ const CONFIG = {
   }
 
   /* ---------- partida ---------- */
+  fotos();
   abertura();
   revelacoes();
   brilhos();

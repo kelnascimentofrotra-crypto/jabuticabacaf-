@@ -478,3 +478,38 @@ svg[viewBox="0 0 24 24"]{fill:none;stroke:currentColor;stroke-width:1.6;stroke-l
   .hd__brand i{display:none}
   .burger{width:40px;height:40px}
 }
+
+/* =========================================================
+   FOTOGRAFIAS
+   Os dois espaços abaixo esperam arquivos em assets/img/.
+   Sem arquivo, a cena desenhada continua no lugar — nada quebra.
+   ========================================================= */
+/* opacidade em vez de display:none — um elemento escondido com display:none
+   nunca dispara o carregamento preguiçoso do <img> que está dentro dele. */
+[data-foto]{opacity:0;transition:opacity .8s var(--ease)}
+[data-foto].ok{opacity:1}
+[data-foto] img{width:100%;height:100%;object-fit:cover}
+
+/* herói */
+.scene__photo{position:absolute;inset:0;z-index:0}
+.scene__photo img{object-position:50% 42%;filter:saturate(.95) contrast(1.04) brightness(.78)}
+.scene.tem-foto .scene__glow{
+  background:radial-gradient(760px 520px at 76% 30%,rgba(30,155,224,.26),transparent 64%),
+             linear-gradient(158deg,rgba(10,37,69,.5) 0%,rgba(6,21,41,.45) 58%,rgba(3,13,26,.7) 100%)}
+.scene.tem-foto .scene__grid{opacity:.35}
+/* com foto o véu abre no meio, para a imagem aparecer, e fecha nas bordas
+   onde o texto precisa de contraste */
+.scene.tem-foto + .scene__veil{
+  background:linear-gradient(180deg,rgba(6,21,41,.78) 0%,rgba(6,21,41,.12) 28%,rgba(6,21,41,.1) 48%,rgba(6,21,41,.8) 88%,var(--ink) 100%),
+             linear-gradient(96deg,rgba(6,21,41,.9) 0%,rgba(6,21,41,.4) 42%,transparent 68%)}
+.scene.tem-foto .scene__unit{display:none}   /* a foto substitui o desenho */
+.scene.tem-foto .scene__flakes{opacity:.55}
+
+/* capítulo */
+.cf__photo{position:absolute;inset:0;z-index:0}
+.cf__photo img{object-position:50% 42%}
+.cf__media.tem-foto .cf__room{display:none}
+@media (max-width:759px){
+  .scene__photo img{object-position:52% 46%}
+  .cf__photo img{object-position:48% 44%}
+}
