@@ -520,10 +520,25 @@
     const names = frames.map((f) => $("h3", f).textContent);
     const stepEl = $("[data-fab-step]"), nameEl = $("[data-fab-name]");
     let dist = 0, enabled = false;
+    // phones/tablets: the track is a swipe carousel; keep the step counter in sync with it
+    const syncCarousel = () => {
+      if (enabled) return;
+      const tr = track.getBoundingClientRect();
+      const c = tr.left + Math.min(tr.width, innerWidth) / 2;
+      let best = 0, bd = 1e9;
+      frames.forEach((f, i) => { const r = f.getBoundingClientRect(); const d = Math.abs(r.left + r.width / 2 - c); if (d < bd) { bd = d; best = i; } });
+      stepEl.textContent = String(best + 1).padStart(2, "0");
+      nameEl.textContent = names[best];
+      sec.style.setProperty("--fp", (best / Math.max(1, frames.length - 1)).toFixed(3));
+    };
+    track.addEventListener("scroll", () => requestAnimationFrame(syncCarousel), { passive: true });
     const layout = () => {
       enabled = mqDesk.matches && !reduced();
       sec.classList.toggle("h-scroll", enabled);
-      if (!enabled) { sec.style.height = ""; track.style.removeProperty("--tx"); return; }
+      if (!enabled) { sec.style.height = ""; track.style.removeProperty("--tx"); syncCarousel(); return; }
+      const cs = getComputedStyle(track);
+      const fh = track.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      sec.style.setProperty("--fw", Math.round(Math.max(220, fh) * 1.7) + "px");
       dist = Math.max(0, track.scrollWidth - innerWidth);
       sec.style.height = innerHeight + dist + "px";
       update();
