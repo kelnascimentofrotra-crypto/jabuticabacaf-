@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vidraçaria Cristal | Box, Espelhos, Janelas e Vidro Temperado</title>
+<meta name="description" content="Vidraçaria com orçamento grátis: box para banheiro, espelhos sob medida, janelas, portas de vidro temperado, guarda-corpo, fachadas e envidraçamento de sacadas. Instalação rápida e garantia.">
+<meta name="keywords" content="vidraçaria, vidraçaria perto de mim, box para banheiro, espelho sob medida, vidro temperado, envidraçamento de sacada, guarda-corpo de vidro, porta de vidro, janela de vidro">
+<meta property="og:title" content="Vidraçaria Cristal | Vidros sob medida com instalação">
+<meta property="og:description" content="Box, espelhos, janelas, portas, sacadas e fachadas em vidro. Orçamento grátis pelo WhatsApp.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#0b3a53">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='6' y='6' width='52' height='52' rx='10' fill='%230e7490'/%3E%3Cpath d='M18 46 46 18M28 48 48 28' stroke='%23e0f7fa' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Dados da empresa para o Google (SEO local). Troque pelos dados reais. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HomeAndConstructionBusiness",
+  "name": "Vidraçaria Cristal",
+  "description": "Vidraçaria especializada em box para banheiro, espelhos, janelas, portas de vidro temperado, guarda-corpo, fachadas e envidraçamento de sacadas.",
+  "telephone": "+55-00-00000-0000",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Rua Exemplo, 123",
+    "addressLocality": "Sua Cidade",
+    "addressRegion": "UF",
+    "postalCode": "00000-000",
+    "addressCountry": "BR"
+  },
+  "openingHoursSpecification": [
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "08:00", "closes": "18:00"},
+    {"@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "08:00", "closes": "12:00"}
+  ],
+  "areaServed": "Sua Cidade e região"
+}
+</script>
+
+<style>
+  :root {
+    --bg: #f5f9fb;
+    --surface: #ffffff;
+    --surface-2: #eaf3f7;
+    --text: #0f2230;
+    --muted: #4d6473;
+    --line: #d5e4ec;
+    --brand: #0e7490;
+    --brand-strong: #0b3a53;
+    --accent: #22c1d6;
+    --wa: #1faa55;
+    --glass: rgba(255,255,255,.55);
+    --shadow: 0 10px 30px rgba(11,58,83,.10);
+    --radius: 18px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #081820; --surface: #0e2530; --surface-2: #12303d; --text: #e6f2f7;
+      --muted: #9db6c3; --line: #1f4251; --brand: #38bdd8; --brand-strong: #7dd8ea;
+      --accent: #5fe0ef; --glass: rgba(20,50,64,.55); --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #081820; --surface: #0e2530; --surface-2: #12303d; --text: #e6f2f7;
+    --muted: #9db6c3; --line: #1f4251; --brand: #38bdd8; --brand-strong: #7dd8ea;
+    --accent: #5fe0ef; --glass: rgba(20,50,64,.55); --shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; }
+  a { color: inherit; }
+  .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+  h1, h2, h3 { line-height: 1.15; margin: 0 0 .5em; letter-spacing: -.02em; }
+  h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); }
+  p { margin: 0 0 1em; }
+  .eyebrow {
+    display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--brand); margin-bottom: .6rem;
+  }
+  .section { padding: clamp(56px, 8vw, 96px) 0; }
+  .section-head { max-width: 680px; margin-bottom: 40px; }
+  .section-head p { color: var(--muted); font-size: 1.05rem; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: .55rem; justify-content: center;
+    padding: .9rem 1.4rem; border-radius: 999px; font-weight: 700; text-decoration: none;
+    border: 2px solid transparent; transition: transform .15s, box-shadow .15s, background .15s;
+    font-size: 1rem;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-wa { background: var(--wa); color: #fff; box-shadow: 0 8px 22px rgba(31,170,85,.35); }
+  .btn-ghost { border-color: var(--line); background: var(--surface); color: var(--text); }
+  .btn svg { width: 20px; height: 20px; }
+
+  /* Header */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+  }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 70px; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: .6rem; font-weight: 800; font-size: 1.15rem; text-decoration: none; }
+  .logo-mark { width: 36px; height: 36px; }
+  .nav-links { display: flex; gap: 1.6rem; list-style: none; margin: 0; padding: 0; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: .95rem; }
+  .nav-links a:hover { color: var(--brand); }
+  .nav .btn { padding: .6rem 1.1rem; font-size: .92rem; }
+  .menu-btn { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; padding: 8px; color: var(--text); cursor: pointer; }
+  @media (max-width: 880px) {
+    .nav-links {
+      display: none; position: absolute; top: 70px; left: 0; right: 0; flex-direction: column;
+      background: var(--surface); padding: 16px; gap: 0; border-bottom: 1px solid var(--line);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { display: block; padding: 12px 8px; }
+    .menu-btn { display: block; }
+    .nav .btn-wa span { display: none; }
+  }
+
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding: clamp(48px, 8vw, 100px) 0; }
+  .hero::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background:
+      radial-gradient(900px 500px at 85% 10%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 60%),
+      radial-gradient(700px 400px at 0% 100%, color-mix(in srgb, var(--brand) 18%, transparent), transparent 60%);
+  }
+  .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .hero h1 { font-size: clamp(2.2rem, 5.4vw, 3.8rem); font-weight: 800; }
+  .hero h1 em { font-style: normal; color: var(--brand); }
+  .hero .lead { font-size: 1.15rem; color: var(--muted); max-width: 560px; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 28px 0; }
+  .trust { display: flex; flex-wrap: wrap; gap: 20px; color: var(--muted); font-size: .92rem; font-weight: 600; }
+  .trust span { display: flex; align-items: center; gap: .4rem; }
+  .trust svg { width: 18px; height: 18px; color: var(--brand); }
+
+  .glass-art { position: relative; aspect-ratio: 1 / 1.05; }
+  .pane {
+    position: absolute; border-radius: 22px; border: 1px solid rgba(255,255,255,.6);
+    background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(180,230,240,.25));
+    backdrop-filter: blur(6px); box-shadow: var(--shadow); overflow: hidden;
+  }
+  .pane::after {
+    content: ""; position: absolute; inset: -40%;
+    background: linear-gradient(115deg, transparent 42%, rgba(255,255,255,.85) 48%, transparent 54%);
+    animation: shine 6s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 60% { transform: translateX(-60%); } 100% { transform: translateX(60%); } }
+  .pane.p1 { inset: 4% 22% 18% 0; background: linear-gradient(160deg, #0e7490, #22c1d6 70%, #a5f3fc); }
+  .pane.p2 { inset: 30% 0 0 34%; }
+  .pane.p3 { width: 34%; height: 30%; top: 0; right: 4%; background: linear-gradient(160deg, rgba(255,255,255,.8), rgba(34,193,214,.3)); }
+  .badge {
+    position: absolute; left: 4%; bottom: 4%; z-index: 2;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    padding: 14px 18px; box-shadow: var(--shadow); display: flex; gap: 12px; align-items: center;
+  }
+  .badge strong { font-size: 1.6rem; color: var(--brand); display: block; line-height: 1; }
+  .badge small { color: var(--muted); font-weight: 600; }
+  .pane-label {
+    position: absolute; right: 8%; bottom: 12%; z-index: 2; color: var(--brand-strong);
+    font-weight: 800; font-size: .95rem; background: var(--glass); padding: 8px 12px; border-radius: 10px;
+  }
+  @media (prefers-reduced-motion: reduce) { .pane::after { animation: none; } html { scroll-behavior: auto; } }
+  @media (max-width: 880px) {
+    .hero-grid { grid-template-columns: 1fr; }
+    .glass-art { max-width: 420px; width: 100%; margin-inline: auto; }
+  }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; text-align: center; }
+  .stat strong { display: block; font-size: 2rem; color: var(--brand); font-weight: 800; }
+  .stat span { color: var(--muted); font-weight: 600; font-size: .92rem; }
+  @media (max-width: 720px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* Services */
+  .services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card {
+    background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 28px; transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: color-mix(in srgb, var(--brand) 40%, var(--line)); }
+  .icon {
+    width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center;
+    background: var(--surface-2); color: var(--brand); margin-bottom: 18px;
+  }
+  .icon svg { width: 26px; height: 26px; }
+  .card h3 { font-size: 1.2rem; }
+  .card p { color: var(--muted); margin: 0; }
+  .card ul { margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+  .card li { font-size: .78rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--surface-2); color: var(--brand-strong); }
+  @media (max-width: 960px) { .services { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .services { grid-template-columns: 1fr; } }
+
+  /* Why */
+  .why { background: var(--brand-strong); color: #e6f6fb; }
+  :root[data-theme="dark"] .why { background: #0a2e3d; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .why { background: #0a2e3d; } }
+  .why .eyebrow { color: #7dd8ea; }
+  .why .section-head p { color: #b8d9e4; }
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .why-item { display: flex; gap: 16px; padding: 22px; border-radius: var(--radius); background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12); }
+  .why-item .icon { background: rgba(125,216,234,.15); color: #7dd8ea; margin: 0; flex: none; }
+  .why-item h3 { font-size: 1.1rem; margin-bottom: .3em; color: #fff; }
+  .why-item p { margin: 0; color: #b8d9e4; }
+  @media (max-width: 720px) { .why-grid { grid-template-columns: 1fr; } }
+
+  /* Steps */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: step; }
+  .step { position: relative; padding: 26px 22px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+  .step::before {
+    counter-increment: step; content: counter(step, decimal-leading-zero);
+    font-size: 2.4rem; font-weight: 800; color: color-mix(in srgb, var(--brand) 30%, transparent); display: block; line-height: 1; margin-bottom: 12px;
+  }
+  .step h3 { font-size: 1.1rem; }
+  .step p { color: var(--muted); margin: 0; font-size: .95rem; }
+  @media (max-width: 900px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+  /* Gallery */
+  .gallery { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 200px; gap: 14px; }
+  .shot {
+    position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line);
+    display: flex; align-items: flex-end; padding: 16px; color: #fff; font-weight: 700;
+  }
+  .shot span { position: relative; z-index: 1; background: rgba(8,24,32,.55); padding: 6px 12px; border-radius: 10px; font-size: .9rem; }
+  .shot::before { content: ""; position: absolute; inset: 0; background: var(--g); }
+  .shot::after {
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(115deg, transparent 0 60px, rgba(255,255,255,.18) 60px 64px, transparent 64px 140px);
+  }
+  .shot.big { grid-column: span 2; grid-row: span 2; }
+  .shot.wide { grid-column: span 2; }
+  @media (max-width: 820px) {
+    .gallery { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 160px; }
+  }
+  .gallery-note { color: var(--muted); font-size: .9rem; margin-top: 14px; }
+
+  /* Testimonials */
+  .testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .quote { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; }
+  .stars { color: #f5b301; letter-spacing: 2px; margin-bottom: 10px; }
+  .quote p { flex: 1; }
+  .who { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); color: var(--brand); font-weight: 800; }
+  .who small { display: block; color: var(--muted); }
+  @media (max-width: 900px) { .testimonials { grid-template-columns: 1fr; } }
+
+  /* Area */
+  .area { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chips span { padding: 8px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-weight: 600; font-size: .92rem; }
+  .map {
+    aspect-ratio: 4 / 3; border-radius: var(--radius); border: 1px solid var(--line); overflow: hidden;
+    background:
+      linear-gradient(var(--line) 1px, transparent 1px) 0 0 / 40px 40px,
+      linear-gradient(90deg, var(--line) 1px, transparent 1px) 0 0 / 40px 40px,
+      var(--surface-2);
+    display: grid; place-items: center; position: relative;
+  }
+  .map .pin { width: 64px; height: 64px; color: var(--brand); filter: drop-shadow(0 8px 12px rgba(14,116,144,.35)); }
+  .map::before {
+    content: ""; position: absolute; width: 60%; aspect-ratio: 1; border-radius: 50%;
+    border: 2px dashed color-mix(in srgb, var(--brand) 50%, transparent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+  @media (max-width: 820px) { .area { grid-template-columns: 1fr; } }
+
+  /* FAQ */
+  .faq { max-width: 820px; }
+  details { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; margin-bottom: 12px; }
+  summary { cursor: pointer; list-style: none; padding: 18px 22px; font-weight: 700; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; color: var(--brand); font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "–"; }
+  details p { padding: 0 22px 18px; margin: 0; color: var(--muted); }
+
+  /* CTA */
+  .cta {
+    border-radius: 28px; padding: clamp(32px, 6vw, 64px);
+    background: linear-gradient(135deg, #0b3a53, #0e7490 60%, #22c1d6);
+    color: #fff; display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: center;
+  }
+  .cta h2 { color: #fff; }
+  .cta p { color: #d4f1f7; margin: 0; }
+  .cta form { display: grid; gap: 10px; }
+  .cta input, .cta select, .cta textarea {
+    width: 100%; padding: 13px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,.35);
+    background: rgba(255,255,255,.12); color: #fff; font: inherit;
+  }
+  .cta input::placeholder, .cta textarea::placeholder { color: #cdeaf2; }
+  .cta select option { color: #0f2230; }
+  .cta button { cursor: pointer; font: inherit; }
+  @media (max-width: 820px) { .cta { grid-template-columns: 1fr; } }
+
+  /* Footer */
+  footer { border-top: 1px solid var(--line); padding: 48px 0 100px; color: var(--muted); font-size: .95rem; }
+  .foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 32px; }
+  footer h4 { color: var(--text); margin: 0 0 12px; }
+  footer ul { list-style: none; margin: 0; padding: 0; }
+  footer li { margin-bottom: 6px; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--brand); }
+  .copy { margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); font-size: .85rem; }
+  @media (max-width: 760px) { .foot { grid-template-columns: 1fr; } }
+
+  /* Floating WhatsApp */
+  .wa-float {
+    position: fixed; right: 18px; bottom: 18px; z-index: 60; width: 60px; height: 60px; border-radius: 50%;
+    background: var(--wa); color: #fff; display: grid; place-items: center; box-shadow: 0 10px 26px rgba(31,170,85,.45);
+  }
+  .wa-float svg { width: 32px; height: 32px; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm5.8 14.03c-.24.68-1.41 1.3-1.95 1.35-.5.05-.97.23-3.27-.68-2.77-1.09-4.53-3.93-4.67-4.11-.13-.18-1.11-1.48-1.11-2.82s.7-2 .95-2.27c.25-.27.54-.34.72-.34h.52c.17 0 .39-.06.61.47.23.54.77 1.87.84 2 .07.14.11.3.02.48-.09.18-.14.3-.27.45-.14.16-.29.36-.41.48-.14.14-.28.28-.12.56.16.27.71 1.17 1.52 1.9 1.05.93 1.93 1.22 2.2 1.36.27.14.43.11.59-.07.16-.18.68-.79.86-1.07.18-.27.36-.23.61-.14.25.09 1.59.75 1.86.89.27.14.45.2.52.32.07.11.07.66-.17 1.34Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+</svg>
+
+<header>
+  <div class="wrap nav">
+    <a href="#inicio" class="logo" aria-label="Vidraçaria Cristal - início">
+      <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="14" fill="#0e7490"/><rect x="14" y="14" width="36" height="36" rx="4" fill="none" stroke="#a5f3fc" stroke-width="3"/><path d="M22 42 42 22M30 44 44 30" stroke="#e0f7fa" stroke-width="4" stroke-linecap="round"/></svg>
+      Vidraçaria Cristal
+    </a>
+    <ul class="nav-links" id="menu">
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#diferenciais">Diferenciais</a></li>
+      <li><a href="#trabalhos">Trabalhos</a></li>
+      <li><a href="#depoimentos">Depoimentos</a></li>
+      <li><a href="#faq">Dúvidas</a></li>
+      <li><a href="#orcamento">Orçamento</a></li>
+    </ul>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn btn-wa js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+      <button class="menu-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero" id="inicio">
+    <div class="wrap hero-grid">
+      <div class="reveal">
+        <span class="eyebrow">Vidraçaria em Sua Cidade e região</span>
+        <h1>Vidros sob medida que <em>transformam</em> o seu ambiente</h1>
+        <p class="lead">Box para banheiro, espelhos, janelas, portas, sacadas e fachadas em vidro temperado e laminado. Medição no local, instalação caprichada e garantia por escrito.</p>
+        <div class="hero-cta">
+          <a class="btn btn-wa js-wa" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg>Orçamento grátis no WhatsApp</a>
+          <a class="btn btn-ghost" href="#servicos">Ver serviços</a>
+        </div>
+        <div class="trust">
+          <span><svg><use href="#i-check"/></svg>Visita técnica sem custo</span>
+          <span><svg><use href="#i-check"/></svg>Vidros certificados (NBR)</span>
+          <span><svg><use href="#i-check"/></svg>Garantia na instalação</span>
+        </div>
+      </div>
+      <div class="glass-art reveal" aria-hidden="true">
+        <div class="pane p1"></div>
+        <div class="pane p3"></div>
+        <div class="pane p2"></div>
+        <div class="pane-label">Vidro temperado 8mm</div>
+        <div class="badge">
+          <div><strong>+2.500</strong><small>obras entregues</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" aria-label="Números">
+    <div class="stats reveal">
+      <div class="stat"><strong>15+</strong><span>anos de experiência</span></div>
+      <div class="stat"><strong>2.500+</strong><span>clientes atendidos</span></div>
+      <div class="stat"><strong>48h</strong><span>para orçamento detalhado</span></div>
+      <div class="stat"><strong>4,9★</strong><span>avaliação no Google</span></div>
+    </div>
+  </section>
+
+  <section class="section" id="servicos">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Nossos serviços</span>
+        <h2>Tudo em vidro para sua casa, empresa ou condomínio</h2>
+        <p>Trabalhamos com vidro temperado, laminado, espelhos e acessórios de primeira linha, sempre cortados e instalados na medida exata do seu projeto.</p>
+      </div>
+      <div class="services">
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M9 11v2M15 11v2"/></svg></div>
+          <h3>Box para banheiro</h3>
+          <p>Box de correr, abrir, canto e até o teto, com kits em alumínio, inox ou preto fosco.</p>
+          <ul><li>Temperado 8mm</li><li>Box até o teto</li><li>Película jateada</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="11" rx="6.5" ry="8"/><path d="M9 7.5l3-2M9 11l5.5-4M12 21v-2"/></svg></div>
+          <h3>Espelhos sob medida</h3>
+          <p>Espelhos lapidados, bisotados, com LED ou moldura para banheiros, salas, academias e lojas.</p>
+          <ul><li>Bisotê</li><li>Com LED</li><li>Orgânicos</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="1.5"/><path d="M12 4v16M3 12h18"/></svg></div>
+          <h3>Janelas e basculantes</h3>
+          <p>Janelas de correr, maxim-ar e basculantes com vedação que reduz ruído, vento e poeira.</p>
+          <ul><li>Maxim-ar</li><li>Correr</li><li>Acústica</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2.5" width="14" height="19" rx="1"/><path d="M15.5 11v2"/></svg></div>
+          <h3>Portas de vidro</h3>
+          <p>Portas pivotantes, de correr e de abrir para residências, lojas e escritórios.</p>
+          <ul><li>Pivotante</li><li>Molas de piso</li><li>Puxadores</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20h18M4 20V9h16v11M4 9l2-4h12l2 4M8 9v11M12 9v11M16 9v11"/></svg></div>
+          <h3>Envidraçamento de sacadas</h3>
+          <p>Sistema retrátil que fecha a varanda sem perder a vista e amplia a área útil do apartamento.</p>
+          <ul><li>Sistema europeu</li><li>Laminado</li><li>Cortina de vidro</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 20h18M5 20V9M19 20V9M5 9h14M9 9v11M14 9v11"/></svg></div>
+          <h3>Guarda-corpo e escadas</h3>
+          <p>Guarda-corpos em vidro laminado para escadas, mezaninos, piscinas e varandas, com total segurança.</p>
+          <ul><li>Laminado</li><li>Perfil U</li><li>Botões inox</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <h3>Fachadas e vitrines</h3>
+          <p>Fachadas em pele de vidro e vitrines comerciais que valorizam o seu ponto e atraem clientes.</p>
+          <ul><li>Pele de vidro</li><li>Vitrines</li><li>ACM + vidro</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 10l8-6 8 6M6 10v10h12V10"/><path d="M9 14h6"/></svg></div>
+          <h3>Coberturas de vidro</h3>
+          <p>Coberturas para áreas de lazer, garagens e pergolados, com vidro laminado e proteção UV.</p>
+          <ul><li>Pergolado</li><li>Controle solar</li><li>Laminado</li></ul>
+        </article>
+        <article class="card reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4 2.5-2.5Z"/></svg></div>
+          <h3>Manutenção e reparos</h3>
+          <p>Troca de vidros quebrados, roldanas, borrachas, fechaduras e regulagem de box e portas.</p>
+          <ul><li>Troca de vidro</li><li>Roldanas</li><li>Emergência</li></ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section why" id="diferenciais">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Por que escolher a gente</span>
+        <h2>Uma vidraçaria que cumpre o que promete</h2>
+        <p>Do orçamento à limpeza final, você sabe exatamente o que vai receber, quanto vai pagar e quando fica pronto.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-item reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></div>
+          <div><h3>Segurança em primeiro lugar</h3><p>Vidros temperados e laminados dentro das normas ABNT, com selo de procedência.</p></div>
+        </div>
+        <div class="why-item reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 21 21 3M7 3H3v4M17 21h4v-4"/></svg></div>
+          <div><h3>Medição precisa no local</h3><p>Nosso técnico vai até você, tira as medidas e indica a melhor solução para o espaço.</p></div>
+        </div>
+        <div class="why-item reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><h3>Prazo combinado é prazo cumprido</h3><p>Data de instalação definida no orçamento e equipe pontual no dia marcado.</p></div>
+        </div>
+        <div class="why-item reveal">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg></div>
+          <div><h3>Pagamento facilitado</h3><p>Parcelamos no cartão e aceitamos Pix, com condições especiais para pagamento à vista.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Como funciona</span>
+        <h2>Do primeiro contato à instalação em 4 passos</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><h3>Chame no WhatsApp</h3><p>Conte o que precisa e mande fotos do local, se puder.</p></div>
+        <div class="step reveal"><h3>Visita técnica</h3><p>Medimos o espaço e apresentamos opções de vidro e acabamento.</p></div>
+        <div class="step reveal"><h3>Orçamento claro</h3><p>Valor fechado, prazo definido e garantia por escrito.</p></div>
+        <div class="step reveal"><h3>Instalação limpa</h3><p>Equipe própria instala, testa e deixa tudo limpo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="trabalhos" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Trabalhos realizados</span>
+        <h2>Projetos que entregamos</h2>
+        <p>Alguns dos tipos de projeto que fazemos todos os dias.</p>
+      </div>
+      <div class="gallery reveal">
+        <div class="shot big" style="--g:linear-gradient(160deg,#0b3a53,#0e7490 55%,#67e8f9)"><span>Box até o teto, preto fosco</span></div>
+        <div class="shot" style="--g:linear-gradient(160deg,#155e75,#a5f3fc)"><span>Espelho com LED</span></div>
+        <div class="shot" style="--g:linear-gradient(160deg,#0f766e,#99f6e4)"><span>Guarda-corpo</span></div>
+        <div class="shot wide" style="--g:linear-gradient(160deg,#1e3a8a,#60a5fa 70%,#dbeafe)"><span>Envidraçamento de sacada</span></div>
+        <div class="shot wide" style="--g:linear-gradient(160deg,#334155,#94a3b8 70%,#e2e8f0)"><span>Fachada comercial</span></div>
+        <div class="shot" style="--g:linear-gradient(160deg,#0e7490,#22d3ee)"><span>Porta pivotante</span></div>
+        <div class="shot" style="--g:linear-gradient(160deg,#075985,#7dd3fc)"><span>Janela maxim-ar</span></div>
+      </div>
+      <!-- Para usar fotos reais: troque o style de cada .shot por style="--g:url('fotos/nome.jpg') center/cover" -->
+    </div>
+  </section>
+
+  <section class="section" id="depoimentos" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Depoimentos</span>
+        <h2>Quem contratou, recomenda</h2>
+      </div>
+      <div class="testimonials">
+        <figure class="quote reveal" style="margin:0">
+          <div class="stars" aria-label="5 estrelas">★★★★★</div>
+          <p>"Fizeram o box e o espelho do meu banheiro. Chegaram no horário, trabalho impecável e deixaram tudo limpo. Recomendo demais!"</p>
+          <figcaption class="who"><div class="avatar">M</div><div><strong>Mariana S.</strong><small>Box + espelho</small></div></figcaption>
+        </figure>
+        <figure class="quote reveal" style="margin:0">
+          <div class="stars" aria-label="5 estrelas">★★★★★</div>
+          <p>"Fechamos a sacada do apartamento e virou um cômodo a mais. Orçamento justo e o prazo foi exatamente o combinado."</p>
+          <figcaption class="who"><div class="avatar">R</div><div><strong>Ricardo A.</strong><small>Envidraçamento de sacada</small></div></figcaption>
+        </figure>
+        <figure class="quote reveal" style="margin:0">
+          <div class="stars" aria-label="5 estrelas">★★★★★</div>
+          <p>"Trocaram toda a fachada da minha loja. A vitrine ficou linda e o movimento aumentou. Equipe muito profissional."</p>
+          <figcaption class="who"><div class="avatar">C</div><div><strong>Carla F.</strong><small>Fachada comercial</small></div></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top:0">
+    <div class="wrap area">
+      <div class="reveal">
+        <span class="eyebrow">Área de atendimento</span>
+        <h2>Atendemos Sua Cidade e toda a região</h2>
+        <p style="color:var(--muted)">Nossa equipe vai até você para medir, orçar e instalar. Confira alguns dos bairros e cidades que atendemos:</p>
+        <div class="chips">
+          <span>Centro</span><span>Bairro Norte</span><span>Bairro Sul</span><span>Jardim Europa</span>
+          <span>Vila Nova</span><span>Zona Leste</span><span>Cidade Vizinha 1</span><span>Cidade Vizinha 2</span>
+        </div>
+      </div>
+      <div class="map reveal" role="img" aria-label="Mapa da área de atendimento">
+        <svg class="pin" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5Z"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Dúvidas frequentes</span>
+        <h2>Perguntas que sempre recebemos</h2>
+      </div>
+      <div class="faq">
+        <details class="reveal"><summary>O orçamento é gratuito?</summary><p>Sim. A visita técnica e o orçamento são gratuitos e sem compromisso dentro da nossa área de atendimento.</p></details>
+        <details class="reveal"><summary>Qual a diferença entre vidro temperado e laminado?</summary><p>O temperado é até 5 vezes mais resistente e, se quebrar, se desfaz em pequenos pedaços sem corte. O laminado tem uma película entre duas lâminas que segura os cacos no lugar, ideal para guarda-corpos, coberturas e sacadas.</p></details>
+        <details class="reveal"><summary>Quanto tempo leva para instalar?</summary><p>Depois da medição, o vidro temperado leva em média de 5 a 10 dias úteis para ser produzido. A instalação de um box, por exemplo, é feita em poucas horas.</p></details>
+        <details class="reveal"><summary>Vocês dão garantia?</summary><p>Sim. Oferecemos garantia por escrito na instalação e nos acessórios, além da garantia de fábrica do vidro.</p></details>
+        <details class="reveal"><summary>Quais as formas de pagamento?</summary><p>Pix, dinheiro, cartão de débito e crédito com parcelamento. Consulte condições especiais para pagamento à vista.</p></details>
+        <details class="reveal"><summary>Atendem empresas e condomínios?</summary><p>Sim. Fazemos fachadas, vitrines, portas de acesso, divisórias e manutenção periódica para empresas e condomínios.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="orcamento" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta reveal">
+        <div>
+          <span class="eyebrow" style="color:#a5f3fc">Orçamento grátis</span>
+          <h2>Peça seu orçamento agora mesmo</h2>
+          <p>Preencha os dados e sua mensagem já vai pronta para o nosso WhatsApp. Respondemos rápido, em horário comercial.</p>
+        </div>
+        <form id="form-orcamento">
+          <input name="nome" placeholder="Seu nome" required autocomplete="name">
+          <select name="servico" aria-label="Serviço" required>
+            <option value="">Qual serviço você precisa?</option>
+            <option>Box para banheiro</option>
+            <option>Espelho sob medida</option>
+            <option>Janela / basculante</option>
+            <option>Porta de vidro</option>
+            <option>Envidraçamento de sacada</option>
+            <option>Guarda-corpo</option>
+            <option>Fachada / vitrine</option>
+            <option>Cobertura de vidro</option>
+            <option>Manutenção / reparo</option>
+          </select>
+          <input name="bairro" placeholder="Bairro / cidade">
+          <textarea name="detalhes" rows="3" placeholder="Medidas aproximadas ou detalhes (opcional)"></textarea>
+          <button class="btn btn-wa" type="submit"><svg><use href="#i-wa"/></svg>Enviar pelo WhatsApp</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a href="#inicio" class="logo" style="margin-bottom:12px">
+          <svg class="logo-mark" viewBox="0 0 64 64" aria-hidden="true"><rect x="4" y="4" width="56" height="56" rx="14" fill="#0e7490"/><rect x="14" y="14" width="36" height="36" rx="4" fill="none" stroke="#a5f3fc" stroke-width="3"/><path d="M22 42 42 22M30 44 44 30" stroke="#e0f7fa" stroke-width="4" stroke-linecap="round"/></svg>
+          Vidraçaria Cristal
+        </a>
+        <p>Box, espelhos, janelas, portas, sacadas, guarda-corpos e fachadas em vidro, com medição, instalação e garantia.</p>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <ul>
+          <li><a class="js-wa" href="#" target="_blank" rel="noopener">WhatsApp: <span class="js-phone">(00) 00000-0000</span></a></li>
+          <li>Rua Exemplo, 123 – Centro</li>
+          <li>Sua Cidade – UF</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Horário</h4>
+        <ul>
+          <li>Seg a Sex: 8h às 18h</li>
+          <li>Sábado: 8h às 12h</li>
+          <li>Emergências: consulte</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy">© <span id="ano"></span> Vidraçaria Cristal. Todos os direitos reservados.</div>
+  </div>
+</footer>
+
+<a class="wa-float js-wa" href="#" target="_blank" rel="noopener" aria-label="Falar no WhatsApp"><svg><use href="#i-wa"/></svg></a>
+
+<script>
+  // ===== CONFIGURAÇÃO: coloque aqui o WhatsApp real (DDI + DDD + número, só dígitos) =====
+  const WHATSAPP = "5500000000000";
+  const MSG_PADRAO = "Olá! Vim pelo site e gostaria de um orçamento com a Vidraçaria Cristal.";
+
+  const waLink = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  document.querySelectorAll(".js-wa").forEach(a => a.href = waLink(MSG_PADRAO));
+  document.getElementById("ano").textContent = new Date().getFullYear();
+
+  const menuBtn = document.querySelector(".menu-btn");
+  const menu = document.getElementById("menu");
+  menuBtn.addEventListener("click", () => {
+    const open = menu.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", open);
+  });
+  menu.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+    menu.classList.remove("open");
+    menuBtn.setAttribute("aria-expanded", "false");
+  }));
+
+  document.getElementById("form-orcamento").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const f = new FormData(e.target);
+    let msg = `Olá! Meu nome é ${f.get("nome")}. Gostaria de um orçamento de: ${f.get("servico")}.`;
+    if (f.get("bairro")) msg += `\nLocal: ${f.get("bairro")}`;
+    if (f.get("detalhes")) msg += `\nDetalhes: ${f.get("detalhes")}`;
+    window.open(waLink(msg), "_blank", "noopener");
+  });
+
+  const io = "IntersectionObserver" in window ? new IntersectionObserver((entries) => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
+  }, { threshold: .12 }) : null;
+  document.querySelectorAll(".reveal").forEach(el => io ? io.observe(el) : el.classList.add("in"));
+</script>
+</body>
+</html>
