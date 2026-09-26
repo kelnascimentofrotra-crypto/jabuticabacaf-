@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://renove-local-seo.lovable.app/sitemap.xml
