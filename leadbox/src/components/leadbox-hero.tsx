@@ -1,5 +1,5 @@
-import { useSyncExternalStore } from "react";
-import { ArrowRight } from "lucide-react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { ArrowRight, Menu, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import Velaris from "@/components/ui/velaris";
@@ -8,6 +8,19 @@ import Velaris from "@/components/ui/velaris";
 // por isso a paleta fica fora do componente.
 const GRADIENT_BG = "#0b0d0c";
 const GRADIENT_COLORS = ["#3cc29c", "#ff5a1f", "#23a17f", "#050606"];
+
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+const DEFAULT_NAV_LINKS: NavLink[] = [
+  { label: "Início", href: "#inicio" },
+  { label: "Serviços", href: "#servicos" },
+  { label: "Diferenciais", href: "#diferenciais" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Blog", href: "#blog" },
+];
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -28,14 +41,26 @@ function usePrefersReducedMotion() {
 interface LeadBoxHeroProps {
   loginHref?: string;
   signupHref?: string;
+  navLinks?: NavLink[];
 }
 
 export default function LeadBoxHero({
   loginHref = "/entrar",
   signupHref = "/criar-conta",
+  navLinks = DEFAULT_NAV_LINKS,
 }: LeadBoxHeroProps) {
   // speed 0 congela o tempo do shader: o gradiente continua lá, só que parado.
   const reducedMotion = usePrefersReducedMotion();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
 
   return (
     <Velaris
@@ -47,12 +72,12 @@ export default function LeadBoxHero({
       height="auto"
       className="bg-background"
     >
-      <div className="relative flex min-h-svh flex-col">
-        <header className="relative border-b border-white/15">
-          <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-5 sm:h-20 sm:px-8">
+      <div id="inicio" className="relative flex min-h-svh flex-col">
+        <header className="relative z-20 border-b border-white/15">
+          <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between gap-4 px-5 sm:h-20 sm:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr]">
             <a
               href="/"
-              className="flex items-center gap-2.5 rounded-lg outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
+              className="flex items-center gap-2.5 justify-self-start rounded-lg outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50"
             >
               <span className="grid size-9 place-items-center rounded-lg bg-primary text-base font-bold text-primary-foreground sm:size-10 sm:rounded-xl sm:text-lg">
                 L
@@ -62,19 +87,72 @@ export default function LeadBoxHero({
               </span>
             </a>
 
-            <nav aria-label="Conta" className="flex items-center gap-1.5 sm:gap-3">
+            <nav
+              aria-label="Principal"
+              className="hidden items-center gap-1 rounded-full border border-white/15 bg-black/25 p-1 backdrop-blur-md lg:flex"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="rounded-full px-4 py-2 text-sm font-medium text-white/85 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-[3px] focus-visible:ring-white/40"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-1.5 justify-self-end sm:gap-3">
               <Button
                 asChild
                 variant="ghost"
-                className="hidden px-3 text-white hover:bg-black/20 hover:text-white dark:hover:bg-black/20 min-[360px]:inline-flex sm:h-10 sm:px-4 sm:text-base"
+                className="hidden text-white hover:bg-black/20 hover:text-white dark:hover:bg-black/20 sm:inline-flex sm:h-10 sm:px-4 sm:text-base"
               >
                 <a href={loginHref}>Entrar</a>
               </Button>
               <Button asChild className="rounded-lg sm:h-10 sm:px-5 sm:text-base">
                 <a href={signupHref}>Criar conta</a>
               </Button>
-            </nav>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-expanded={menuOpen}
+                aria-controls="menu-principal"
+                aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+                onClick={() => setMenuOpen((open) => !open)}
+                className="text-white hover:bg-black/20 hover:text-white dark:hover:bg-black/20 lg:hidden [&_svg:not([class*='size-'])]:size-5"
+              >
+                {menuOpen ? <X /> : <Menu />}
+              </Button>
+            </div>
           </div>
+
+          {menuOpen && (
+            <nav
+              id="menu-principal"
+              aria-label="Principal"
+              className="absolute inset-x-5 top-full mt-2 rounded-2xl border border-white/15 bg-background/85 p-2 shadow-2xl backdrop-blur-xl sm:inset-x-8 lg:hidden"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-xl px-4 py-3 text-base font-medium text-white outline-none hover:bg-white/10 focus-visible:ring-[3px] focus-visible:ring-white/40"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <div aria-hidden className="mx-4 my-1 h-px bg-white/10 sm:hidden" />
+              <a
+                href={loginHref}
+                onClick={() => setMenuOpen(false)}
+                className="block rounded-xl px-4 py-3 text-base font-medium text-white/85 outline-none hover:bg-white/10 focus-visible:ring-[3px] focus-visible:ring-white/40 sm:hidden"
+              >
+                Entrar
+              </a>
+            </nav>
+          )}
         </header>
 
         <section
