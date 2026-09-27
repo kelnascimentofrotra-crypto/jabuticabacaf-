@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WEBVEE Leads</title>
+  <meta name="description" content="Encontre empresas sem site, no Brasil e em Portugal.">
+  <meta name="theme-color" content="#04060b">
+  <link rel="icon" type="image/svg+xml" href="logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="glow" aria-hidden="true"></div>
+
+  <!-- Splash -->
+  <section id="splash" class="screen screen--center" aria-label="Abertura">
+    <div class="splash">
+      <img class="splash__logo" src="logo.svg" alt="" width="84" height="52">
+      <h1 class="splash__title">WEBVEE Leads</h1>
+      <p class="splash__sub">Encontre empresas sem site, no Brasil e em&nbsp;Portugal.</p>
+    </div>
+  </section>
+
+  <!-- Onboarding -->
+  <section id="onboarding" class="screen screen--center" hidden aria-label="Boas-vindas">
+    <form class="onboard" id="onboard-form" autocomplete="off">
+      <img class="onboard__logo" src="logo.svg" alt="WEBVEE" width="56" height="35">
+      <h1 class="onboard__title">Como podemos te chamar?</h1>
+      <p class="onboard__sub">Só pra deixar o painel com a sua cara. Nada sai daqui.</p>
+      <label class="sr-only" for="onboard-name">Seu nome</label>
+      <input class="onboard__input" id="onboard-name" name="name" type="text" placeholder="Seu nome" maxlength="40" required>
+      <button class="btn btn--ghost-blue onboard__btn" type="submit" disabled>
+        Continuar
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <!-- Painel -->
+  <section id="app" class="screen" hidden>
+    <header class="topbar">
+      <div class="topbar__inner">
+        <a class="brand" href="#" data-tab-link="buscar">
+          <img src="logo.svg" alt="" width="34" height="21">
+          <span>WEBVEE <b>Leads</b></span>
+        </a>
+        <nav class="tabs" role="tablist" aria-label="Seções">
+          <button class="tab is-active" role="tab" data-tab="buscar" aria-selected="true">Buscar</button>
+          <button class="tab" role="tab" data-tab="leads" aria-selected="false">Meus leads <span class="tab__count" id="leads-count">0</span></button>
+          <button class="tab" role="tab" data-tab="mensagem" aria-selected="false">Mensagem</button>
+        </nav>
+        <div class="user">
+          <button class="user__btn" id="user-btn" aria-haspopup="menu" aria-expanded="false">
+            <span class="user__avatar" id="user-avatar">?</span>
+          </button>
+          <div class="menu" id="user-menu" role="menu" hidden>
+            <p class="menu__name" id="menu-name"></p>
+            <button role="menuitem" id="menu-rename">Trocar nome</button>
+            <button role="menuitem" id="menu-reset" class="danger">Apagar meus dados</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+      <!-- BUSCAR -->
+      <div class="panel" id="panel-buscar" role="tabpanel">
+        <div class="hello">
+          <p class="hello__eyebrow" id="hello-eyebrow">Boa noite</p>
+          <h2 class="hello__title"><span id="hello-name">você</span>, vamos achar clientes?</h2>
+          <p class="hello__sub">Escolha o país, a cidade e o nicho. A gente lista quem ainda não tem site.</p>
+        </div>
+
+        <form class="search card" id="search-form" autocomplete="off">
+          <div class="field field--country">
+            <span class="field__label">País</span>
+            <div class="seg" role="radiogroup" aria-label="País">
+              <label class="seg__opt"><input type="radio" name="country" value="br" checked><span>🇧🇷 Brasil</span></label>
+              <label class="seg__opt"><input type="radio" name="country" value="pt"><span>🇵🇹 Portugal</span></label>
+            </div>
+          </div>
+          <label class="field field--city">
+            <span class="field__label">Cidade</span>
+            <input class="input" id="city" name="city" type="text" placeholder="Ex.: Teresina" required>
+          </label>
+          <label class="field field--niche">
+            <span class="field__label">Nicho</span>
+            <select class="input" id="niche" name="niche"></select>
+          </label>
+          <button class="btn btn--primary search__btn" type="submit" id="search-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <span>Buscar empresas</span>
+          </button>
+        </form>
+
+        <div class="recent" id="recent" hidden></div>
+
+        <div class="stats" id="stats" hidden>
+          <div class="stat"><span class="stat__num" id="st-total">0</span><span class="stat__label">empresas encontradas</span></div>
+          <div class="stat stat--accent"><span class="stat__num" id="st-nosite">0</span><span class="stat__label">sem site</span></div>
+          <div class="stat"><span class="stat__num" id="st-phone">0</span><span class="stat__label">com telefone</span></div>
+          <div class="stat"><span class="stat__num" id="st-social">0</span><span class="stat__label">só redes sociais</span></div>
+        </div>
+
+        <div class="toolbar" id="toolbar" hidden>
+          <p class="toolbar__title" id="results-title"></p>
+          <div class="toolbar__controls">
+            <input class="input input--sm" id="filter-text" type="search" placeholder="Filtrar por nome ou bairro" aria-label="Filtrar resultados">
+            <label class="switch"><input type="checkbox" id="filter-phone"><span class="switch__track"></span><span>Só com telefone</span></label>
+          </div>
+        </div>
+
+        <div class="status" id="status" hidden></div>
+        <div class="results" id="results"></div>
+
+        <div class="empty" id="empty">
+          <div class="empty__icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          </div>
+          <h3>Comece por uma cidade</h3>
+          <p>Experimente uma destas buscas:</p>
+          <div class="chips" id="suggestions"></div>
+        </div>
+      </div>
+
+      <!-- LEADS -->
+      <div class="panel" id="panel-leads" role="tabpanel" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Meus leads</h2>
+            <p class="muted">Empresas que você salvou. Tudo fica salvo só neste navegador.</p>
+          </div>
+          <button class="btn btn--outline" id="export-csv">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>
+            Exportar CSV
+          </button>
+        </div>
+        <div class="pills" id="status-pills"></div>
+        <div class="leads" id="leads-list"></div>
+        <div class="empty" id="leads-empty">
+          <div class="empty__icon" aria-hidden="true">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg>
+          </div>
+          <h3>Nenhum lead salvo ainda</h3>
+          <p>Na aba Buscar, toque em <b>Salvar lead</b> nas empresas que te interessarem.</p>
+        </div>
+      </div>
+
+      <!-- MENSAGEM -->
+      <div class="panel" id="panel-mensagem" role="tabpanel" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Mensagem de abordagem</h2>
+            <p class="muted">Usada no botão de WhatsApp. Variáveis: <code>{empresa}</code> <code>{meu_nome}</code> <code>{cidade}</code></p>
+          </div>
+        </div>
+        <div class="msg-grid">
+          <div class="card">
+            <label class="field">
+              <span class="field__label">Texto</span>
+              <textarea class="input textarea" id="msg-template" rows="9"></textarea>
+            </label>
+            <div class="msg-actions">
+              <button class="btn btn--primary" id="msg-save">Salvar mensagem</button>
+              <button class="btn btn--outline" id="msg-reset">Restaurar padrão</button>
+            </div>
+          </div>
+          <div class="card preview">
+            <span class="field__label">Pré-visualização</span>
+            <div class="bubble" id="msg-preview"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>WEBVEE Leads · dados de empresas via <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a></p>
+    </footer>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
