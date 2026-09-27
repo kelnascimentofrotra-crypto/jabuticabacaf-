@@ -585,13 +585,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .rev-card .rev-stars i { width: 16px; height: 16px; opacity: 1; }
 .rev-card .rev-stars i.off { opacity: .2; }
 
-/* ---------- LOBO ---------- */
-.wolf { padding: clamp(96px, 12vw, 170px) 0; background: radial-gradient(900px 500px at 80% 20%, rgba(224, 102, 42, .16), transparent 60%), #070707; border-block: 1px solid var(--line); overflow: hidden; }
-.wolf-title { font-family: var(--display); font-stretch: 72%; font-weight: 900; text-transform: uppercase; font-size: clamp(2.8rem, 8vw, 8rem); line-height: .9; max-width: 14ch; text-wrap: balance; }
-.wolf-title em { font-style: normal; color: var(--accent); }
-.wolf-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 28px; margin-top: 40px; }
-.wolf-stamp { display: inline-block; padding: 14px 18px; border: 2px solid var(--accent); color: var(--accent-text); font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; line-height: 1.6; transform: rotate(-6deg); }
-
 /* ==========================================================================
    FAQ
    ========================================================================== */
