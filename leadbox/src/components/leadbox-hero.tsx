@@ -6,8 +6,8 @@ import Velaris from "@/components/ui/velaris";
 
 // O Velaris reinicia o WebGL sempre que `colors` muda de referência,
 // por isso a paleta fica fora do componente.
-const GRADIENT_BG = "#0e100f";
-const GRADIENT_COLORS = ["#1f0a04", "#f2602a", "#3a1206", "#0e100f"];
+const GRADIENT_BG = "#0b0d0c";
+const GRADIENT_COLORS = ["#3cc29c", "#ff5a1f", "#23a17f", "#050606"];
 
 const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 
@@ -41,24 +41,14 @@ export default function LeadBoxHero({
     <Velaris
       bg={GRADIENT_BG}
       colors={GRADIENT_COLORS}
-      speed={reducedMotion ? 0 : 1.5}
-      grain={0.35}
+      speed={reducedMotion ? 0 : 2}
+      grain={0.3}
+      vignette={0}
       height="auto"
       className="bg-background"
     >
       <div className="relative flex min-h-svh flex-col">
-        {/* Escurece atrás do texto: o brilho anda pela tela e às vezes passa por trás das letras. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-background/40 lg:bg-transparent lg:bg-gradient-to-r lg:from-background/80 lg:via-background/45 lg:to-transparent"
-        />
-        {/* Esfumaça a base do hero na cor da página, sem emenda com a seção seguinte. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-background"
-        />
-
-        <header className="relative border-b border-white/10">
+        <header className="relative border-b border-white/15">
           <div className="mx-auto flex h-16 w-full max-w-[1400px] items-center justify-between px-5 sm:h-20 sm:px-8">
             <a
               href="/"
@@ -67,7 +57,7 @@ export default function LeadBoxHero({
               <span className="grid size-9 place-items-center rounded-lg bg-primary text-base font-bold text-primary-foreground sm:size-10 sm:rounded-xl sm:text-lg">
                 L
               </span>
-              <span className="text-lg font-semibold tracking-tight sm:text-xl">
+              <span className="text-lg font-semibold tracking-tight text-white sm:text-xl">
                 LeadBox
               </span>
             </a>
@@ -76,7 +66,7 @@ export default function LeadBoxHero({
               <Button
                 asChild
                 variant="ghost"
-                className="hidden px-3 text-foreground/80 hover:text-foreground min-[360px]:inline-flex sm:h-10 sm:px-4 sm:text-base"
+                className="hidden px-3 text-white hover:bg-black/20 hover:text-white dark:hover:bg-black/20 min-[360px]:inline-flex sm:h-10 sm:px-4 sm:text-base"
               >
                 <a href={loginHref}>Entrar</a>
               </Button>
@@ -91,8 +81,8 @@ export default function LeadBoxHero({
           aria-labelledby="hero-title"
           className="relative flex flex-1 items-center"
         >
-          <div className="mx-auto w-full max-w-[1400px] px-5 py-16 sm:px-8 sm:py-24">
-            <p className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.07] px-3.5 py-1.5 text-sm font-medium text-foreground/90 backdrop-blur-md">
+          <div className="mx-auto w-full max-w-[1400px] px-5 py-16 text-white [text-shadow:0_2px_24px_rgb(0_0_0/0.35)] sm:px-8 sm:py-24">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-3.5 py-1.5 text-sm font-medium backdrop-blur-md [text-shadow:none]">
               <span
                 aria-hidden
                 className="size-1.5 rounded-full bg-primary shadow-[0_0_10px_2px_rgba(255,107,53,0.7)]"
@@ -109,7 +99,7 @@ export default function LeadBoxHero({
               <span className="block">Venda mais.</span>
             </h1>
 
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-foreground/85 sm:mt-8 sm:text-xl">
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/95 sm:mt-8 sm:text-xl">
               O LeadBox reúne busca de empresas, qualificação de leads e
               organização do funil comercial em uma única plataforma feita para
               o mercado brasileiro.
@@ -119,7 +109,7 @@ export default function LeadBoxHero({
               <Button
                 asChild
                 size="lg"
-                className="group h-12 rounded-xl px-6 text-base shadow-lg shadow-primary/25 has-[>svg]:px-6"
+                className="group h-12 rounded-xl px-6 text-base shadow-lg shadow-black/25 [text-shadow:none] has-[>svg]:px-6"
               >
                 <a href={signupHref}>
                   Começar agora
@@ -130,7 +120,7 @@ export default function LeadBoxHero({
                 asChild
                 size="lg"
                 variant="ghost"
-                className="h-12 rounded-xl border border-white/15 bg-white/[0.06] px-6 text-base backdrop-blur-md hover:bg-white/10 hover:text-foreground dark:hover:bg-white/10"
+                className="h-12 rounded-xl bg-background px-6 text-base text-foreground shadow-lg shadow-black/25 [text-shadow:none] hover:bg-background/85 hover:text-foreground dark:hover:bg-background/85"
               >
                 <a href={loginHref}>Já tenho conta</a>
               </Button>

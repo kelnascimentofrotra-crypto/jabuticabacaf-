@@ -1,8 +1,8 @@
 # LeadBox — hero com Velaris
 
 A hero da landing do LeadBox refeita sobre o **Velaris**, um gradiente animado em
-WebGL (simplex noise, vinheta, brilho central e granulação). A paleta usa as cores
-da landing atual: fundo `#0e100f`, laranja `#ff6b35`, texto `#f2efe7`.
+WebGL (simplex noise, brilho central e granulação) em verde-água, laranja e preto,
+ocupando a tela inteira, cabeçalho incluído.
 
 Stack igual à de um projeto Lovable: Vite + React + TypeScript + Tailwind CSS v4 +
 estrutura shadcn/ui (`components.json`, alias `@/`, `src/components/ui`).
@@ -18,7 +18,7 @@ npm run build   # checa tipos e gera dist/
 
 | Arquivo | O que é |
 | --- | --- |
-| `src/components/ui/velaris.tsx` | O componente Velaris, sem alterações |
+| `src/components/ui/velaris.tsx` | O componente Velaris, com a prop opcional `vignette` |
 | `src/components/leadbox-hero.tsx` | A hero: cabeçalho, título, texto e botões sobre o Velaris |
 | `src/components/velaris-demo.tsx` | O demo original do Velaris (referência, não é usado na página) |
 | `src/components/ui/button.tsx` | Botão padrão do shadcn |
@@ -39,10 +39,12 @@ então herda as cores e a fonte que o projeto já tiver.
 
 ## Detalhes
 
-- **Contraste:** o brilho se move, então há um véu escuro atrás do texto (à esquerda
-  no desktop, uniforme no celular). Medido em vários momentos da animação e tamanhos
-  de tela: título acima de 3:1 e textos pequenos acima de 4,5:1 (WCAG AA).
+- **`vignette`:** prop nova do Velaris (padrão `1`, igual ao original). A hero usa
+  `0` para a cor ir até as bordas em vez de escurecer nos cantos.
+- **Paleta:** `#3cc29c`, `#ff5a1f`, `#23a17f` e `#050606` sobre `#0b0d0c`, definida
+  fora do componente. O Velaris reinicia o WebGL quando o array `colors` muda de
+  referência, então um array criado a cada render recriaria o shader.
+- **Legibilidade:** texto branco com sombra suave, selo e botão secundário em fundo
+  escuro, para continuarem legíveis sobre o verde e o laranja.
 - **Movimento reduzido:** com `prefers-reduced-motion`, o gradiente fica parado.
-- **Paleta fixa fora do componente:** o Velaris reinicia o WebGL quando o array
-  `colors` muda de referência; um array criado a cada render recriaria o shader.
 - **Sem WebGL:** a seção continua com o fundo `bg-background` e todo o conteúdo.

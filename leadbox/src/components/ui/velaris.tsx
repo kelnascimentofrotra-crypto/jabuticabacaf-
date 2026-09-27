@@ -21,6 +21,7 @@ uniform float u_time;
 uniform float u_grain;
 uniform vec3  u_colors[4];
 uniform vec3  u_bg;
+uniform float u_vignette;
 
 vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
 
@@ -75,7 +76,7 @@ void main() {
   float glow = smoothstep(0.8, 0.0, dist) * 0.3;
   col += u_colors[1] * glow;
 
-  col = mix(col * 0.2, col, vignette);
+  col = mix(col * 0.2, col, mix(1.0, vignette, u_vignette));
 
   float grain = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453 + u_time);
   col += (grain - 0.5) * u_grain * 0.1;
@@ -89,6 +90,8 @@ export interface VelarisProps {
   colors?: string[];
   speed?: number;
   grain?: number;
+  /** Força da vinheta nas bordas: 1 = original, 0 = cor até a borda. */
+  vignette?: number;
   height?: string;
   className?: string;
   children?: React.ReactNode;
@@ -101,6 +104,7 @@ const Velaris = ({
   colors = DEFAULT_COLORS,
   speed = 2.0,
   grain = 0.3,
+  vignette = 1,
   height = "100vh",
   className,
   children,
@@ -159,6 +163,7 @@ const Velaris = ({
       grain: gl.getUniformLocation(program, "u_grain"),
       colors: gl.getUniformLocation(program, "u_colors"),
       bg: gl.getUniformLocation(program, "u_bg"),
+      vignette: gl.getUniformLocation(program, "u_vignette"),
     };
 
     const resize = () => {
@@ -176,6 +181,7 @@ const Velaris = ({
       gl.uniform2f(locs.res, canvas.width, canvas.height);
       gl.uniform1f(locs.time, t * 0.001 * speed);
       gl.uniform1f(locs.grain, grain);
+      gl.uniform1f(locs.vignette, vignette);
       gl.uniform3f(locs.bg, ...hexToRgb(bg));
 
       const flat = new Float32Array(colors.slice(0, 4).flatMap(hexToRgb));
@@ -190,7 +196,7 @@ const Velaris = ({
       ro.disconnect();
       cancelAnimationFrame(raf);
     };
-  }, [bg, colors, speed, grain]);
+  }, [bg, colors, speed, grain, vignette]);
 
   return (
     <div
