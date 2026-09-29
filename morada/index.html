@@ -104,6 +104,10 @@
       <button class="menu-btn" type="button" aria-label="Abrir menu" data-open="menu">
         <span></span><span></span><span></span>
       </button>
+      <button class="dots-btn" type="button" aria-label="Abrir opções" data-open="menu">
+        <span></span><span></span><span></span>
+        <span class="dots-count" hidden>0</span>
+      </button>
     </div>
   </header>
 
@@ -338,6 +342,11 @@
       <span class="menu-preview-img" data-preview-img="inicio"></span>
       <figcaption id="menuCaption">Casas selecionadas para um jeito único de viver</figcaption>
     </figure>
+    <div class="menu-actions">
+      <button type="button" data-menu-action="search"><svg aria-hidden="true"><use href="#i-search" /></svg>Buscar</button>
+      <button type="button" data-menu-action="favs"><svg aria-hidden="true"><use href="#i-user" /></svg>Minha conta</button>
+      <button type="button" data-menu-action="carrinho"><svg aria-hidden="true"><use href="#i-cart" /></svg>Carrinho <span class="menu-cart-count">0</span></button>
+    </div>
     <div class="menu-foot">
       <a href="mailto:contato@morada.com.br">contato@morada.com.br</a>
       <span>© 2026 Morada</span>

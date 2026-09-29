@@ -447,6 +447,9 @@
     badge.textContent = n;
     badge.hidden = n === 0;
     $('#cartTabCount').textContent = n;
+    $('.menu-cart-count').textContent = n;
+    $('.dots-count').textContent = n;
+    $('.dots-count').hidden = n === 0;
     if (dtHouse) {
       const inCart = cart.includes(dtHouse.id);
       $('#dtCart span').textContent = inCart ? 'Remover do carrinho' : 'Adicionar ao carrinho';
@@ -976,10 +979,21 @@
   });
 
   // conta: abas e favoritos
-  $$('.tab').forEach((t) => t.addEventListener('click', () => {
-    $$('.tab').forEach((x) => { x.classList.toggle('is-on', x === t); x.setAttribute('aria-selected', String(x === t)); });
-    $$('.tab-panel').forEach((p) => { p.hidden = p.dataset.panel !== t.dataset.tab; });
-  }));
+  function showTab(name) {
+    $$('.tab').forEach((x) => { const on = x.dataset.tab === name; x.classList.toggle('is-on', on); x.setAttribute('aria-selected', String(on)); });
+    $$('.tab-panel').forEach((p) => { p.hidden = p.dataset.panel !== name; });
+  }
+  $$('.tab').forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
+
+  // atalhos do menu (celular): buscar, conta, carrinho
+  $('.menu-actions').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-menu-action]');
+    if (!b) return;
+    const trigger = $('.dots-btn');
+    if (b.dataset.menuAction === 'search') { openOverlay('search', trigger); return; }
+    openOverlay('account', trigger);
+    showTab(b.dataset.menuAction);
+  });
 
   function renderFavs() {
     const list = $('#favList');
