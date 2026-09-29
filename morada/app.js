@@ -585,6 +585,31 @@
   let leaveTimer;
   const currentId = () => ids[current];
 
+  // Hero do celular: escura por padrão; o botão de sol deixa clara (fica salvo)
+  const mobileMQ = matchMedia('(max-width: 900px), (max-aspect-ratio: 1/1)');
+  const HERO_KEY = 'morada:hero-claro';
+  let heroLight = false;
+  try { heroLight = localStorage.getItem(HERO_KEY) === '1'; } catch (_) { /* sem armazenamento */ }
+  function updateTone() {
+    const scene = scenes[current];
+    let tone = scene.dataset.tone || 'light';
+    if (scene.id === 'inicio' && mobileMQ.matches) tone = heroLight ? 'light' : 'dark';
+    document.body.dataset.tone = tone;
+  }
+  function applyHeroMode() {
+    document.body.classList.toggle('hero-light', heroLight);
+    const btn = $('.sun-btn');
+    btn.setAttribute('aria-pressed', String(heroLight));
+    btn.setAttribute('aria-label', heroLight ? 'Voltar ao modo escuro' : 'Ativar modo claro');
+    updateTone();
+  }
+  $('.sun-btn').addEventListener('click', () => {
+    heroLight = !heroLight;
+    try { localStorage.setItem(HERO_KEY, heroLight ? '1' : '0'); } catch (_) { /* ignora */ }
+    applyHeroMode();
+  });
+  mobileMQ.addEventListener?.('change', updateTone);
+
   function markEntering(scene, dir) {
     clearTimeout(enterTimers.get(scene));
     scene.dataset.dir = dir;
@@ -632,7 +657,7 @@
     const scene = scenes[current];
     const id = scene.id;
     scenes.forEach((s, k) => { s.inert = k !== current; s.setAttribute('aria-hidden', String(k !== current)); });
-    document.body.dataset.tone = scene.dataset.tone || 'light';
+    updateTone();
     document.body.dataset.scene = id;
     document.title = id === 'inicio' ? 'Morada — Casas selecionadas' : `${scene.dataset.title} — Morada`;
     try { history.replaceState(null, '', `#${id}`); } catch (_) { /* file:// em alguns navegadores */ }
@@ -675,6 +700,7 @@
 
   // primeira cena (a animação de entrada só roda depois do login)
   scenes[current].classList.add('is-active');
+  applyHeroMode();
   sceneChanged();
 
   function playIntro() {
