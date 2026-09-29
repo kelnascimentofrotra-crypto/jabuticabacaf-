@@ -19,6 +19,8 @@
     <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.2 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="currentColor"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3.5 4h2.2l2.1 10.2a1.6 1.6 0 0 0 1.6 1.3h7.7a1.6 1.6 0 0 0 1.6-1.2L20.5 8H7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="19.5" r="1.4" fill="currentColor"/><circle cx="17" cy="19.5" r="1.4" fill="currentColor"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M12 3.2a8.6 8.6 0 0 0-7.4 13l-1.2 4.4 4.5-1.2A8.6 8.6 0 1 0 12 3.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9.2 8.2c-.4 0-.9.4-.9 1.2 0 2.4 3.3 5.9 6.1 6.3.9.1 1.4-.4 1.5-.9l.1-.6-1.9-.9-.8.9c-1.1-.4-2.3-1.6-2.8-2.7l.8-.9-.8-1.9z" fill="currentColor"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
 
@@ -86,7 +88,7 @@
       <span class="nav-glider" aria-hidden="true"></span>
       <a href="#inicio" data-go="inicio">Início</a>
       <a href="#moveis" data-go="moveis">Móveis</a>
-      <a href="#curadoria" data-go="curadoria">Curadoria</a>
+      <a href="#curadoria" data-go="curadoria">Imóveis</a>
       <a href="#avaliacoes" data-go="avaliacoes">Avaliações</a>
       <a href="#contato" data-go="contato">Contato</a>
     </nav>
@@ -111,7 +113,7 @@
     <ol class="ind-ticks">
       <li><button type="button" data-go="inicio" aria-label="Início"></button></li>
       <li><button type="button" data-go="moveis" aria-label="Móveis"></button></li>
-      <li><button type="button" data-go="curadoria" aria-label="Curadoria"></button></li>
+      <li><button type="button" data-go="curadoria" aria-label="Imóveis"></button></li>
       <li><button type="button" data-go="avaliacoes" aria-label="Avaliações"></button></li>
       <li><button type="button" data-go="contato" aria-label="Contato"></button></li>
     </ol>
@@ -126,7 +128,7 @@
       <div class="intro rv" style="--d: .55s">
         <h2 class="intro-title">Vamos encontrar <br />a sua <em>morada</em></h2>
         <div class="intro-actions">
-          <a class="btn btn-dark" href="#curadoria" data-go="curadoria">Ver as casas <svg><use href="#i-arrow" /></svg></a>
+          <a class="btn btn-dark" href="#curadoria" data-go="curadoria">Ver imóveis <svg><use href="#i-arrow" /></svg></a>
           <span class="scroll-hint" aria-hidden="true"><i></i>Role para explorar</span>
         </div>
       </div>
@@ -204,33 +206,40 @@
       <ul class="mv-grid" id="productGrid" aria-label="Peças da coleção"></ul>
     </section>
 
-    <!-- ================= 03 · Curadoria ================= -->
-    <section class="scene curadoria" id="curadoria" data-title="Curadoria" aria-label="Curadoria">
-      <div class="cu-info">
-        <p class="eyebrow rv" style="--d: .35s">Curadoria</p>
-        <div class="cu-text rv" style="--d: .45s" aria-live="polite">
-          <h2 class="scene-title cu-name" id="cuName">Casa Pátio</h2>
-          <p class="cu-place" id="cuPlace">São Paulo · SP</p>
-        </div>
-        <dl class="cu-specs rv" style="--d: .6s" id="cuSpecs"></dl>
-        <div class="cu-bottom rv" style="--d: .7s">
-          <p class="cu-price"><span>Valor</span><strong id="cuPrice">R$ 6,8 mi</strong></p>
-          <div class="cu-actions">
-            <button class="btn btn-dark" type="button" id="cuVisit">Agendar visita <svg><use href="#i-arrow" /></svg></button>
-            <button class="btn-round fav-btn" type="button" id="cuFav" aria-pressed="false" aria-label="Salvar casa nos favoritos"><svg><use href="#i-heart" /></svg></button>
+    <!-- ================= 03 · Imóveis ================= -->
+    <section class="scene imoveis" id="curadoria" data-title="Imóveis" aria-label="Imóveis">
+      <div class="im-side">
+        <p class="eyebrow rv" style="--d: .35s">Imóveis</p>
+        <h2 class="scene-title rv" style="--d: .45s">Imóveis <br />selecionados</h2>
+        <p class="im-count rv" style="--d: .5s"><b id="imCount">9</b> <span id="imWord">imóveis</span></p>
+        <div class="im-filters rv" style="--d: .6s">
+          <div class="im-filter">
+            <span class="im-filter-label">Tipo</span>
+            <div class="chips" id="fTipo" role="group" aria-label="Tipo de imóvel">
+              <button class="chip is-on" type="button" data-tipo="todos" aria-pressed="true">Todos</button>
+              <button class="chip" type="button" data-tipo="casa" aria-pressed="false">Casas</button>
+              <button class="chip" type="button" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
+              <button class="chip" type="button" data-tipo="terreno" aria-pressed="false">Terrenos</button>
+            </div>
           </div>
+          <div class="im-filter">
+            <span class="im-filter-label">Negócio</span>
+            <div class="chips" id="fNegocio" role="group" aria-label="Comprar ou alugar">
+              <button class="chip is-on" type="button" data-negocio="todos" aria-pressed="true">Todos</button>
+              <button class="chip" type="button" data-negocio="venda" aria-pressed="false">Comprar</button>
+              <button class="chip" type="button" data-negocio="aluguel" aria-pressed="false">Alugar</button>
+            </div>
+          </div>
+        </div>
+        <div class="im-nav rv" style="--d: .7s">
+          <button class="btn-round" type="button" id="imPrev" aria-label="Imóveis anteriores"><svg class="flip"><use href="#i-arrow" /></svg></button>
+          <button class="btn-round" type="button" id="imNext" aria-label="Mais imóveis"><svg><use href="#i-arrow" /></svg></button>
         </div>
       </div>
 
-      <div class="cu-stage rv" style="--d: .25s">
-        <div class="cu-frames" id="cuFrames"></div>
-        <div class="cu-controls glass">
-          <button class="btn-round" type="button" id="cuPrev" aria-label="Casa anterior"><svg class="flip"><use href="#i-arrow" /></svg></button>
-          <span class="cu-counter"><b id="cuIndex">01</b> / <span id="cuCount">06</span></span>
-          <button class="btn-round" type="button" id="cuNext" aria-label="Próxima casa"><svg><use href="#i-arrow" /></svg></button>
-          <span class="cu-progress" aria-hidden="true"><i id="cuProgress"></i></span>
-        </div>
-        <ul class="cu-thumbs glass" id="cuThumbs" aria-label="Escolher casa"></ul>
+      <div class="im-track rv" style="--d: .3s">
+        <ul class="im-grid" id="imGrid" aria-label="Imóveis"></ul>
+        <p class="im-empty" id="imEmpty" hidden>Nenhum imóvel com esses filtros. <button type="button" id="imReset">Limpar filtros</button></p>
       </div>
     </section>
 
@@ -321,7 +330,7 @@
     <nav class="menu-links" aria-label="Seções">
       <a href="#inicio" data-go="inicio" data-preview="inicio"><span class="n">01</span><span class="t">Início</span></a>
       <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">02</span><span class="t">Móveis</span></a>
-      <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Curadoria</span></a>
+      <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Imóveis</span></a>
       <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">04</span><span class="t">Avaliações</span></a>
       <a href="#contato" data-go="contato" data-preview="contato"><span class="n">05</span><span class="t">Contato</span></a>
     </nav>
@@ -355,7 +364,7 @@
       </div>
       <div class="search-results">
         <section>
-          <h3>Casas <span id="houseHits"></span></h3>
+          <h3>Imóveis <span id="houseHits"></span></h3>
           <ul id="houseResults"></ul>
         </section>
         <section>
@@ -377,15 +386,28 @@
       </div>
       <div class="tabs" role="tablist">
         <button class="tab is-on" type="button" role="tab" aria-selected="true" data-tab="favs">Favoritos <span class="tab-count" id="favTabCount">0</span></button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="carrinho">Carrinho <span class="tab-count" id="cartTabCount">0</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-tab="conta">Conta</button>
       </div>
       <div class="tab-panel" data-panel="favs">
         <div class="fav-empty" id="favEmpty">
           <svg aria-hidden="true"><use href="#i-heart" /></svg>
           <p>Toque no coração de uma casa ou no + de uma peça para guardar aqui.</p>
-          <button class="btn btn-dark" type="button" data-go="curadoria">Ver a curadoria</button>
+          <button class="btn btn-dark" type="button" data-go="curadoria">Ver imóveis</button>
         </div>
         <ul class="fav-list" id="favList"></ul>
+      </div>
+      <div class="tab-panel cart-panel" data-panel="carrinho" hidden>
+        <div class="fav-empty" id="cartEmpty">
+          <svg aria-hidden="true"><use href="#i-cart" /></svg>
+          <p>Seu carrinho está vazio. Abra um imóvel e toque em "Adicionar ao carrinho".</p>
+          <button class="btn btn-dark" type="button" data-go="curadoria">Ver imóveis</button>
+        </div>
+        <ul class="cart-list" id="cartList"></ul>
+        <div class="cart-foot" id="cartFoot" hidden>
+          <p class="cart-sum"><b id="cartCount">0</b> <span id="cartWord">imóveis</span> no carrinho</p>
+          <a class="btn btn-zap btn-block" id="cartZap" href="#" target="_blank" rel="noopener"><svg><use href="#i-zap" /></svg>Finalizar no WhatsApp</a>
+        </div>
       </div>
       <div class="tab-panel" data-panel="conta" hidden>
         <div class="account-info">
@@ -395,6 +417,30 @@
         </div>
       </div>
     </aside>
+  </div>
+
+  <!-- ================= Página do imóvel ================= -->
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="dtName" hidden>
+    <div class="dt-gallery">
+      <div class="dt-main" id="dtMain"></div>
+      <div class="dt-badges" id="dtBadges"></div>
+      <ul class="dt-thumbs" id="dtThumbs" aria-label="Fotos"></ul>
+    </div>
+    <div class="dt-info">
+      <button class="overlay-close dt-back" type="button" data-close><svg class="flip"><use href="#i-arrow" /></svg> Voltar</button>
+      <p class="dt-loc" id="dtLoc"></p>
+      <h2 class="dt-name" id="dtName"></h2>
+      <p class="dt-type" id="dtType"></p>
+      <p class="dt-price" id="dtPrice"></p>
+      <dl class="dt-specs" id="dtSpecs"></dl>
+      <p class="dt-desc" id="dtDesc"></p>
+      <ul class="dt-tags" id="dtTags"></ul>
+      <div class="dt-actions">
+        <button class="btn btn-dark" type="button" id="dtCart"><svg><use href="#i-cart" /></svg><span>Adicionar ao carrinho</span></button>
+        <a class="btn btn-zap" id="dtZap" href="#" target="_blank" rel="noopener"><svg><use href="#i-zap" /></svg>WhatsApp</a>
+        <button class="btn-round fav-btn" type="button" id="dtFav" aria-pressed="false" aria-label="Salvar nos favoritos"><svg><use href="#i-heart" /></svg></button>
+      </div>
+    </div>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
