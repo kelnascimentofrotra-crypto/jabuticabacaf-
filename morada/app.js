@@ -154,9 +154,10 @@
   let favs = { houses: [], products: [] };
   try { favs = { ...favs, ...JSON.parse(localStorage.getItem(FAV_KEY) || '{}') }; } catch (_) { /* sem armazenamento */ }
   const saveFavs = () => { try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (_) { /* ignora */ } };
-  const isFav = (kind, id) => favs[kind].includes(id);
+  const isFav = (kind, id) => !isGuest() && favs[kind].includes(id);
 
   function toggleFav(kind, id) {
+    if (requireLogin('fav', () => toggleFav(kind, id))) return;
     const list = favs[kind];
     const on = !list.includes(id);
     favs[kind] = on ? [...list, id] : list.filter((x) => x !== id);
@@ -545,6 +546,7 @@
   const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) { /* ignora */ } };
 
   function toggleCart(id) {
+    if (requireLogin('cart', () => { if (!cart.includes(id)) toggleCart(id); })) return;
     const on = !cart.includes(id);
     cart = on ? [...cart, id] : cart.filter((x) => x !== id);
     saveCart();
@@ -554,25 +556,26 @@
   }
 
   function syncCartUI() {
-    const n = cart.length;
+    const inCartNow = (id) => !isGuest() && cart.includes(id);
+    const n = isGuest() ? 0 : cart.length;
     const badge = $('.fav-count');
     badge.textContent = n;
     badge.hidden = n === 0;
     $('#cartTabCount').textContent = n;
     if (dtHouse) {
-      const inCart = cart.includes(dtHouse.id);
+      const inCart = inCartNow(dtHouse.id);
       $('#dtCart span').textContent = inCart ? 'Remover do carrinho' : 'Adicionar ao carrinho';
       $('#dtCart').classList.toggle('is-in-cart', inCart);
     }
     $$('.pcard-add').forEach((b) => {
-      const inCart = cart.includes(b.dataset.id);
+      const inCart = inCartNow(b.dataset.id);
       const nome = HOUSES.find((x) => x.id === b.dataset.id).nome;
       b.setAttribute('aria-pressed', String(inCart));
       b.setAttribute('aria-label', inCart ? `Tirar ${nome} do carrinho` : `Adicionar ${nome} ao carrinho`);
       b.innerHTML = `<svg><use href="#${inCart ? 'i-check' : 'i-plus'}" /></svg>`;
     });
     $$('.pc-add').forEach((b) => {
-      const inCart = cart.includes(`p:${b.dataset.id}`);
+      const inCart = inCartNow(`p:${b.dataset.id}`);
       const nome = PRODUCTS.find((x) => x.id === b.dataset.id).nome;
       b.setAttribute('aria-pressed', String(inCart));
       b.setAttribute('aria-label', inCart ? `Tirar ${nome} do carrinho` : `Adicionar ${nome} ao carrinho`);
@@ -1344,14 +1347,96 @@
     }, 0);
   });
 
-  function enterSite(email) {
-    session = { email };
-    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
-    loadProfile(email);
+  /* ---------- Visitante: navega por tudo; carrinho, favoritos e conta pedem login ---------- */
+
+  const isGuest = () => !!session?.guest;
+  let askOpen = false;
+  let askReturn = null;
+  let pendingAction = null; // o que a pessoa tentou fazer; roda sozinho depois do login
+  const ASK_TEXT = {
+    cart: ['Entre para usar o carrinho', 'Para colocar imóveis no carrinho e finalizar com um curador, entre na sua conta. É rápido e gratuito.'],
+    fav: ['Entre para salvar favoritos', 'Para guardar os imóveis de que você gostou, entre na sua conta. Eles ficam salvos para a próxima visita.'],
+    account: ['Você está como visitante', 'Entre na sua conta para ver seus favoritos, seu carrinho e seus pedidos, e para editar seu perfil.'],
+  };
+  function requireLogin(kind, action) {
+    if (!isGuest()) return false;
+    askLogin(kind, action);
+    return true;
+  }
+  function askLogin(kind, action) {
+    pendingAction = action || null;
+    const [title, text] = ASK_TEXT[kind];
+    $('#askTitle').textContent = title;
+    $('#askText').textContent = text;
+    askReturn = document.activeElement;
+    const el = $('#askLogin');
+    el.hidden = false;
+    requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('is-open')));
+    askOpen = true;
+    setTimeout(() => $('[data-ask="login"]').focus({ preventScroll: true }), reduceMotion ? 0 : 80);
+  }
+  function closeAsk(keepPending) {
+    if (!askOpen) return;
+    const el = $('#askLogin');
+    el.classList.remove('is-open');
+    askOpen = false;
+    if (!keepPending) pendingAction = null;
+    setTimeout(() => { if (!askOpen) el.hidden = true; }, reduceMotion ? 0 : 400);
+    if (!keepPending && askReturn && document.contains(askReturn)) askReturn.focus({ preventScroll: true });
+  }
+  $('#askLogin').addEventListener('click', (e) => {
+    if (e.target.closest('[data-ask-close]')) { closeAsk(); return; }
+    const b = e.target.closest('[data-ask]');
+    if (!b) return;
+    closeAsk(true);
+    showGate('auth');
+    setAuth(b.dataset.ask);
+  });
+  $('#askLogin').addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { e.stopPropagation(); closeAsk(); return; }
+    if (e.key !== 'Tab') return;
+    const items = $$('button:not([tabindex="-1"])', $('#askLogin'));
+    const first = items[0];
+    const last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  function leaveGate() {
     lockSite(false);
     gate.classList.add('is-leaving');
     playIntro();
     setTimeout(() => { gate.hidden = true; gate.classList.remove('is-leaving', 'is-in'); }, reduceMotion ? 0 : 1300);
+  }
+
+  function enterGuest() {
+    session = { guest: true };
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
+    profile = null;
+    pendingAction = null;
+    document.body.classList.add('is-guest');
+    syncCartUI();
+    syncFavUI();
+    leaveGate();
+    setTimeout(() => toast('Você está como visitante. Para usar o carrinho, entre na sua conta.'), reduceMotion ? 0 : 1500);
+  }
+  gate.addEventListener('click', (e) => {
+    if (e.target.closest('[data-guest]')) { e.stopImmediatePropagation(); enterGuest(); }
+  }, true);
+
+  function enterSite(email) {
+    session = { email };
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
+    loadProfile(email);
+    document.body.classList.remove('is-guest');
+    syncCartUI();
+    syncFavUI();
+    leaveGate();
+    if (pendingAction) {
+      const action = pendingAction;
+      pendingAction = null;
+      setTimeout(action, reduceMotion ? 0 : 1500);
+    }
   }
 
   $('#logoutBtn').addEventListener('click', () => {
@@ -1388,7 +1473,7 @@
   let wheelSum = 0;
   const recent = [];
   addEventListener('wheel', (e) => {
-    if (openName || gated) return;
+    if (openName || gated || askOpen) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     e.preventDefault();
     const now = performance.now();
@@ -1419,7 +1504,7 @@
   let touchY = null;
   let touchX = 0;
   addEventListener('touchstart', (e) => {
-    if (openName || gated) { touchY = null; return; }
+    if (openName || gated || askOpen) { touchY = null; return; }
     touchY = e.touches[0].clientY;
     touchX = e.touches[0].clientX;
   }, { passive: true });
@@ -1436,7 +1521,7 @@
 
   // teclado
   addEventListener('keydown', (e) => {
-    if (gated) return;
+    if (gated || askOpen) return;
     if (e.key === 'Escape') { closeOverlays(); return; }
     if (openName) { if (e.key === 'Tab') trapFocus(e); return; }
     if (e.target.closest('input, textarea, select')) return;
@@ -1463,6 +1548,7 @@
   let closeTimer;
 
   function openOverlay(name, trigger) {
+    if (name === 'account' && requireLogin('account')) return;
     if (openName === name) { closeOverlays(); return; }
     if (openName) closeOverlays(true);
     const el = overlays[name];
@@ -1643,7 +1729,8 @@
     session = null;
     try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ }
   }
-  if (session?.email) gate.hidden = true;
+  if (session?.guest) document.body.classList.add('is-guest');
+  if (session?.email || session?.guest) gate.hidden = true;
   const pageLoaded = new Promise((resolve) => {
     if (document.readyState === 'complete') resolve();
     else addEventListener('load', resolve, { once: true });
@@ -1653,7 +1740,7 @@
     const pre = $('#preloader');
     pre.classList.add('is-done');
     setTimeout(() => { pre.hidden = true; }, 800);
-    if (session?.email) {
+    if (session?.email || session?.guest) {
       lockSite(false);
       playIntro();
     } else {

@@ -2499,6 +2499,50 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 }
 .pass-toggle:hover { background: #f0efeb; color: #111; }
 
+/* Visitante */
+.gl-guest {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-top: calc(-0.4 * var(--u));
+  font-size: max(13px, calc(1 * var(--u)));
+  color: rgba(243, 237, 228, 0.8);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(243, 237, 228, 0.35);
+}
+.gl-guest:hover { color: #fff; text-decoration-color: #d6ab72; }
+.gl-guest svg { width: 1em; height: 1em; }
+.ga-guest { align-self: center; margin-top: -4px; font-size: 13px; color: #6c6b67; text-decoration: underline; text-underline-offset: 3px; flex: none; }
+.ga-guest:hover { color: #111; }
+
+.ask { position: fixed; inset: 0; z-index: 75; display: grid; place-items: center; padding: 16px; }
+.ask-scrim { position: absolute; inset: 0; background: rgba(12, 10, 8, 0.55); opacity: 0; transition: opacity 0.35s; }
+.ask.is-open .ask-scrim { opacity: 1; }
+.ask-card {
+  position: relative;
+  width: min(420px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 30px 28px 22px;
+  border-radius: 24px;
+  background: #f8f6f2;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  transition: opacity 0.35s var(--ease-out), transform 0.45s var(--ease-out);
+}
+.ask.is-open .ask-card { opacity: 1; transform: none; }
+.ask-ico { display: grid; place-items: center; width: 56px; height: 56px; padding: 15px; border-radius: 50%; background: linear-gradient(180deg, #d6a068, #a8703e); color: #fff; }
+.ask-card h2 { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; }
+.ask-card p { max-width: 32ch; font-size: 14.5px; line-height: 1.5; color: #5f5e5a; }
+.ask-actions { display: grid; gap: 8px; width: 100%; margin-top: 6px; }
+.ask-actions .btn { height: 46px; font-size: 15px; }
+.ask-later { margin-top: 2px; padding: 6px; font-size: 13.5px; color: #6c6b67; text-decoration: underline; text-underline-offset: 3px; }
+.ask-later:hover { color: #111; }
+
 /* Histórico de pedidos (gaveta da conta) */
 .order-list { display: grid; gap: 10px; }
 .order { display: grid; gap: 8px; padding: 14px 16px; border-radius: 14px; background: #fff; }
@@ -3001,6 +3045,7 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .gl-mock { height: 34px; padding: 0 5px 0 12px; border-radius: 10px; font-size: 12px; }
   .gl-mock b { padding: 0 10px; border-radius: 7px; }
   .gl-ctas { order: 5; margin-top: 14px; flex-wrap: nowrap; }
+  .gl-guest { order: 5; align-self: center; margin-top: 12px; font-size: 14px; }
   .gl-ctas .btn { flex: 1 1 auto; height: 46px; padding: 0 14px; }
   .gate-stats { order: 6; margin-top: 14px; grid-template-columns: repeat(4, 1fr); gap: 8px; padding-top: 12px; }
   .gate-stats div { gap: 4px; }

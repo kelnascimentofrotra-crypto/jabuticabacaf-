@@ -69,6 +69,7 @@
           <button class="btn btn-gold" type="button" data-auth="signup">Criar conta grátis <svg><use href="#i-arrow" /></svg></button>
           <button class="btn btn-ghost" type="button" data-auth="login">Já tenho conta</button>
         </div>
+        <button class="gl-guest g-rv" style="--d: .58s" type="button" data-guest>Entrar como visitante <svg aria-hidden="true"><use href="#i-arrow" /></svg></button>
         <dl class="gate-stats g-rv" style="--d: .62s">
           <div><dt>Casas selecionadas</dt><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
           <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="1000">12</span></dd></div>
@@ -230,6 +231,7 @@
         </div>
 
         <p class="ga-secure"><svg aria-hidden="true"><use href="#i-shield" /></svg>Depois de 8 tentativas erradas, o acesso pausa por 15 minutos.</p>
+        <button class="ga-guest" type="button" data-guest>Só quero olhar: entrar como visitante</button>
       </div>
     </section>
   </div>
@@ -751,6 +753,21 @@
         <a class="btn btn-zap" id="dtZap" href="#" target="_blank" rel="noopener"><svg><use href="#i-zap" /></svg>WhatsApp</a>
         <button class="btn-round fav-btn" type="button" id="dtFav" aria-pressed="false" aria-label="Salvar nos favoritos"><svg><use href="#i-heart" /></svg></button>
       </div>
+    </div>
+  </div>
+
+  <!-- ================= Aviso para visitante (ação que pede login) ================= -->
+  <div class="ask" id="askLogin" role="dialog" aria-modal="true" aria-labelledby="askTitle" aria-describedby="askText" hidden>
+    <button class="ask-scrim" type="button" data-ask-close aria-label="Fechar" tabindex="-1"></button>
+    <div class="ask-card">
+      <span class="ask-ico" aria-hidden="true"><svg><use href="#i-user" /></svg></span>
+      <h2 id="askTitle">Entre para continuar</h2>
+      <p id="askText"></p>
+      <div class="ask-actions">
+        <button class="btn btn-dark btn-block" type="button" data-ask="login">Entrar na minha conta</button>
+        <button class="btn btn-light btn-block" type="button" data-ask="signup">Criar conta grátis</button>
+      </div>
+      <button class="ask-later" type="button" data-ask-close>Continuar como visitante</button>
     </div>
   </div>
 
