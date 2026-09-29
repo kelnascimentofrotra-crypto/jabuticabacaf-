@@ -72,8 +72,9 @@
 
     <!-- ================= 01 · Início ================= -->
     <section class="scene hero" id="inicio" data-title="Início" aria-label="Início">
-      <div class="intro rv" style="--d: 1.25s">
-        <p class="intro-title">Vamos encontrar <br /><span>a sua morada</span></p>
+      <div class="intro rv" style="--d: .55s">
+        <h2 class="intro-title">Vamos encontrar <br />a sua <em>morada</em></h2>
+        <a class="btn btn-dark intro-cta" href="#curadoria" data-go="curadoria">Ver as casas <svg><use href="#i-arrow" /></svg></a>
       </div>
 
       <h1 class="title" aria-label="Morada">
@@ -116,16 +117,14 @@
     <section class="scene moveis" id="moveis" data-title="Móveis" aria-label="Móveis">
       <div class="mv-side">
       <div class="mv-intro">
-        <p class="eyebrow rv" style="--d: .35s">Móveis · Coleção 2026</p>
-        <h2 class="scene-title rv" style="--d: .45s">Peças que <br />completam <br />a casa</h2>
-        <p class="scene-text rv" style="--d: .55s">Feitas com marcenarias brasileiras, em freijó, linho, pedra e latão.</p>
+        <p class="eyebrow rv" style="--d: .35s">Móveis</p>
+        <h2 class="scene-title rv" style="--d: .45s">Peças para <br />a sua casa</h2>
       </div>
 
       <figure class="mv-room rv" style="--d: .7s">
         <span class="mv-room-img" aria-hidden="true"></span>
         <figcaption>
           <strong>Sala da Casa Pátio</strong>
-          <span>Mobiliada com a coleção</span>
         </figcaption>
       </figure>
       </div>
@@ -147,12 +146,10 @@
     <!-- ================= 03 · Curadoria ================= -->
     <section class="scene curadoria" id="curadoria" data-title="Curadoria" aria-label="Curadoria">
       <div class="cu-info">
-        <p class="eyebrow rv" style="--d: .35s">Curadoria · <span id="cuTotal">06</span> casas em destaque</p>
+        <p class="eyebrow rv" style="--d: .35s">Curadoria</p>
         <div class="cu-text rv" style="--d: .45s" aria-live="polite">
           <h2 class="scene-title cu-name" id="cuName">Casa Pátio</h2>
           <p class="cu-place" id="cuPlace">São Paulo · SP</p>
-          <p class="scene-text cu-desc" id="cuDesc"></p>
-          <ul class="cu-tags" id="cuTags"></ul>
         </div>
         <dl class="cu-specs rv" style="--d: .6s" id="cuSpecs"></dl>
         <div class="cu-bottom rv" style="--d: .7s">
@@ -186,12 +183,7 @@
         <p class="stars rv" style="--d: .55s" aria-label="Nota 4,9 de 5">
           <svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg>
         </p>
-        <p class="av-note rv" style="--d: .6s">Média de 312 avaliações de quem comprou, vendeu ou mobiliou a casa com a Morada.</p>
-        <dl class="av-stats rv" style="--d: .7s">
-          <div><dt>Famílias atendidas</dt><dd>1.200+</dd></div>
-          <div><dt>Anos de curadoria</dt><dd>12</dd></div>
-          <div><dt>Recomendariam</dt><dd>98%</dd></div>
-        </dl>
+        <p class="av-count rv" style="--d: .6s">312 avaliações</p>
       </div>
 
       <figure class="av-quote rv" style="--d: .5s">
@@ -217,19 +209,16 @@
 
         <div class="ct-copy">
           <p class="eyebrow rv" style="--d: .45s">Contato</p>
-          <h2 class="scene-title rv" style="--d: .55s">Vamos encontrar <br />a sua morada.</h2>
-          <p class="scene-text rv" style="--d: .65s">Conte o que você procura. Um curador responde em até um dia útil e marca a visita no horário de melhor luz da casa.</p>
+          <h2 class="scene-title rv" style="--d: .55s">Fale com <br />um curador.</h2>
+          <p class="scene-text rv" style="--d: .65s">Resposta em até um dia útil.</p>
           <ul class="ct-info rv" style="--d: .75s">
             <li><span>Telefone</span><a href="tel:+551140000000">+55 11 4000-0000</a></li>
             <li><span>E-mail</span><a href="mailto:contato@morada.com.br">contato@morada.com.br</a></li>
-            <li><span>Atendimento</span>Seg. a sáb., 9h às 19h</li>
-            <li><span>Escritório</span>Rua Oscar Freire, 1200 · São Paulo</li>
           </ul>
         </div>
 
         <form class="ct-form rv" style="--d: .6s" id="contactForm" novalidate>
           <div class="ct-form-body">
-            <h3>Agende uma conversa</h3>
             <div class="field">
               <label for="f-nome">Nome</label>
               <input id="f-nome" name="nome" type="text" autocomplete="name" required placeholder="Seu nome" />
@@ -244,32 +233,17 @@
                 <input id="f-tel" name="telefone" type="tel" autocomplete="tel" placeholder="(11) 90000-0000" />
               </div>
             </div>
-            <div class="field-row">
-              <div class="field">
-                <label for="f-interesse">Interesse</label>
-                <select id="f-interesse" name="interesse">
-                  <option>Comprar uma casa</option>
-                  <option>Vender minha casa</option>
-                  <option>Móveis da coleção</option>
-                  <option>Outro assunto</option>
-                </select>
-              </div>
-              <div class="field">
-                <label for="f-casa">Casa</label>
-                <select id="f-casa" name="casa"><option value="">Nenhuma específica</option></select>
-              </div>
-            </div>
             <div class="field field-msg">
               <label for="f-msg">Mensagem</label>
-              <textarea id="f-msg" name="mensagem" rows="2" placeholder="Bairros, número de suítes, prazo…"></textarea>
+              <textarea id="f-msg" name="mensagem" rows="2" placeholder="O que você procura?"></textarea>
             </div>
-            <button class="btn btn-dark btn-block" type="submit">Enviar mensagem <svg><use href="#i-arrow" /></svg></button>
+            <button class="btn btn-dark btn-block" type="submit">Enviar <svg><use href="#i-arrow" /></svg></button>
             <p class="form-error" id="formError" role="alert"></p>
           </div>
           <div class="ct-done" id="formDone" hidden>
             <span class="done-icon"><svg><use href="#i-check" /></svg></span>
             <h3 id="doneTitle">Obrigado!</h3>
-            <p>Sua mensagem chegou à nossa equipe. Um curador responde em até um dia útil.</p>
+            <p>Respondemos em até um dia útil.</p>
             <button class="btn btn-light" type="button" id="formAgain">Enviar outra mensagem</button>
           </div>
         </form>

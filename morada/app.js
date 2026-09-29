@@ -61,22 +61,17 @@
   ];
 
   const REVIEWS = [
-    { nome: 'Marina Duarte', ini: 'MD', casa: 'Comprou a Casa Mirante · Ilhabela',
-      texto: 'A Morada entendeu o que a gente queria antes de nós mesmos. Visitamos três casas, e a terceira já era a nossa.' },
-    { nome: 'Rafael Nogueira', ini: 'RN', casa: 'Comprou a Casa Seixo · Nova Lima',
-      texto: 'Cada casa vinha com projeto, história e documentação em dia. Nenhuma surpresa na hora da escritura.' },
-    { nome: 'Helena e Caio Prado', ini: 'HC', casa: 'Mobiliaram a Casa Brisa · Florianópolis',
-      texto: 'Chegamos só com as malas. A casa já estava mobiliada com a coleção, e o primeiro jantar foi na Mesa Laje.' },
-    { nome: 'Tomás Almeida', ini: 'TA', casa: 'Vendeu a casa com a Morada · São Paulo',
-      texto: 'As visitas eram marcadas no fim da tarde, para mostrar a luz real da casa. Vendemos em seis semanas.' },
+    { nome: 'Marina Duarte', ini: 'MD', casa: 'Casa Mirante · Ilhabela', texto: 'Visitamos três casas. A\u00a0terceira já era a nossa.' },
+    { nome: 'Rafael Nogueira', ini: 'RN', casa: 'Casa Seixo · Nova Lima', texto: 'Documentação em dia e nenhuma surpresa na escritura.' },
+    { nome: 'Helena e Caio Prado', ini: 'HC', casa: 'Casa Brisa · Florianópolis', texto: 'Chegamos só com as malas. A casa já estava mobiliada.' },
   ];
 
   const PREVIEW = {
-    inicio: 'Casas selecionadas para um jeito único de viver',
-    moveis: 'Coleção 2026 em freijó, linho, pedra e latão',
-    curadoria: `${pad(HOUSES.length)} casas visitadas pessoalmente pela equipe`,
-    avaliacoes: '4,9 de média em 312 avaliações',
-    contato: 'Um curador responde em até um dia útil',
+    inicio: 'Vamos encontrar a sua morada',
+    moveis: 'Peças para a sua casa',
+    curadoria: `${HOUSES.length} casas selecionadas`,
+    avaliacoes: 'Nota 4,9 de 5',
+    contato: 'Resposta em até um dia útil',
   };
 
   /* =========================================================
@@ -160,11 +155,9 @@
   const grid = $('#productGrid');
   grid.innerHTML = PRODUCTS.map((p, k) => `
     <li class="pc" data-id="${p.id}" data-cat="${p.cat}" style="--bg-a:${p.bg};--k:${k}">
-      <span class="pc-tag">${CATS[p.cat]}</span>
       <div class="pc-art">${productArt(p)}</div>
       <div class="pc-info">
         <h3>${p.nome}</h3>
-        <p>${p.mat}</p>
         <span class="pc-price">${brl.format(p.preco)}</span>
         <button class="pc-add" type="button" data-id="${p.id}" aria-pressed="false" aria-label="Salvar ${p.nome} nos favoritos"></button>
       </div>
@@ -234,18 +227,15 @@
     li.append(b);
     thumbs.append(li);
   });
-  $('#cuTotal').textContent = pad(HOUSES.length);
   $('#cuCount').textContent = pad(HOUSES.length);
 
   function fillHouse(h) {
     $('#cuName').innerHTML = h.nome.replace(/^Casa /, 'Casa <br />');
     $('#cuPlace').textContent = `${h.cidade} · ${h.uf}`;
-    $('#cuDesc').textContent = h.desc;
     $('#cuSpecs').innerHTML = `
       <div><dt>Área</dt><dd>${h.area} m²</dd></div>
       <div><dt>Suítes</dt><dd>${h.suites}</dd></div>
-      <div><dt>Vagas</dt><dd>${h.vagas}</dd></div>
-      <div><dt>Terreno</dt><dd>${h.terreno.toLocaleString('pt-BR')} m²</dd></div>`;
+      <div><dt>Vagas</dt><dd>${h.vagas}</dd></div>`;
     $('#cuPrice').textContent = h.preco;
   }
 
@@ -343,14 +333,11 @@
      ========================================================= */
 
   const form = $('#contactForm');
-  const casaSelect = $('#f-casa');
-  HOUSES.forEach((h) => casaSelect.add(new Option(`${h.nome} · ${h.cidade}`, h.id)));
-
   function scheduleVisit(houseId) {
-    casaSelect.value = houseId;
-    $('#f-interesse').value = 'Comprar uma casa';
+    const h = HOUSES.find((x) => x.id === houseId);
+    $('#f-msg').value = `Quero agendar uma visita à ${h.nome}, em ${h.cidade}.`;
     go('contato');
-    setTimeout(() => $('#f-nome').focus({ preventScroll: true }), reduceMotion ? 0 : 1200);
+    setTimeout(() => $('#f-nome').focus({ preventScroll: true }), reduceMotion ? 0 : 900);
   }
 
   form.addEventListener('submit', (e) => {

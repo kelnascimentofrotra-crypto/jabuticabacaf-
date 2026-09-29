@@ -447,17 +447,18 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .intro {
   position: absolute;
   left: 8.6vw;
-  top: calc(9.9 * var(--u));
-  width: calc(36 * var(--u));
+  top: calc(9.8 * var(--u));
+  width: calc(42 * var(--u));
 }
 .intro-title {
-  font-size: calc(3.2 * var(--u));
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  font-size: calc(4.6 * var(--u));
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
   color: var(--ink);
 }
-.intro-title span { color: #8c8c8c; }
+.intro-title em { font-style: normal; color: var(--terracotta); }
+.intro-cta { margin-top: calc(2.2 * var(--u)); }
 
 .title {
   position: absolute;
@@ -773,11 +774,10 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   padding: var(--u) calc(1.3 * var(--u)) calc(1.3 * var(--u));
 }
 .pc-info h3 { font-size: max(12px, calc(1.1 * var(--u))); font-weight: 500; letter-spacing: -0.01em; }
-.pc-info p { grid-column: 1; font-size: max(10px, calc(0.82 * var(--u))); color: #6c6b67; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pc-price { grid-column: 1; font-size: max(11px, calc(0.98 * var(--u))); font-variant-numeric: tabular-nums; }
 .pc-add {
   grid-column: 2;
-  grid-row: 1 / span 3;
+  grid-row: 1 / span 2;
   align-self: end;
   width: max(30px, calc(2.8 * var(--u)));
   height: max(30px, calc(2.8 * var(--u)));
@@ -790,16 +790,6 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .pc-add:hover { transform: rotate(90deg); }
 .pc-add[aria-pressed="true"] { background: #111; color: #fff; }
 .pc-add[aria-pressed="true"]:hover { transform: none; }
-.pc-tag {
-  position: absolute;
-  top: calc(1 * var(--u));
-  left: calc(1.1 * var(--u));
-  font-size: max(9px, calc(0.72 * var(--u)));
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(40, 30, 20, 0.55);
-}
-
 /* =========================================================
    03 · Curadoria
    ========================================================= */
@@ -813,7 +803,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   display: flex;
   flex-direction: column;
 }
-.cu-text { margin-top: calc(2 * var(--u)); transition: opacity 0.35s, transform 0.35s; }
+.cu-text { margin-top: auto; transition: opacity 0.35s, transform 0.35s; }
 .cu-text.is-swapping, .cu-specs.is-swapping, .cu-price.is-swapping { opacity: 0; transform: translateY(calc(0.8 * var(--u))); }
 .cu-name { font-size: calc(4.8 * var(--u)); }
 .cu-place {
@@ -821,17 +811,10 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   font-size: max(12px, calc(1.2 * var(--u)));
   color: var(--ink);
 }
-.cu-desc {
-  margin-top: calc(1.2 * var(--u));
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
 .cu-specs {
-  margin-top: auto;
+  margin-top: calc(2.6 * var(--u));
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: calc(1.4 * var(--u)) calc(2 * var(--u));
   padding-top: calc(1.6 * var(--u));
   border-top: 1px solid var(--line);
@@ -1026,17 +1009,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 }
 .av-big span { font-size: calc(12 * var(--u)); font-weight: 300; letter-spacing: -0.06em; }
 .av-big small { font-size: calc(2.6 * var(--u)); color: rgba(243, 237, 228, 0.45); }
-.av-note { max-width: 24em; font-size: max(12px, calc(1.15 * var(--u))); line-height: 1.55; color: rgba(243, 237, 228, 0.62); }
-.av-stats {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  gap: calc(3 * var(--u));
-  margin-top: calc(1.2 * var(--u));
-  padding-top: calc(1.8 * var(--u));
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-.av-stats dt { white-space: nowrap; font-size: max(9px, calc(0.75 * var(--u))); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(243, 237, 228, 0.5); }
-.av-stats dd { margin-top: calc(0.4 * var(--u)); font-size: calc(2.4 * var(--u)); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.av-count { font-size: max(12px, calc(1.15 * var(--u))); color: rgba(243, 237, 228, 0.62); }
 
 .av-quote {
   position: absolute;
@@ -1055,12 +1028,12 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 }
 .quote-mark { width: calc(3.4 * var(--u)); height: auto; color: var(--terracotta); }
 .av-quote blockquote {
-  min-height: calc(2.3 * 1.3 * 4 * var(--u));
-  font-size: calc(2.3 * var(--u));
+  min-height: calc(3.2 * 1.2 * 2 * var(--u));
+  font-size: calc(3.2 * var(--u));
   font-weight: 300;
-  line-height: 1.3;
+  line-height: 1.2;
   letter-spacing: -0.02em;
-  text-wrap: pretty;
+  text-wrap: balance;
   transition: opacity 0.4s, transform 0.4s, filter 0.4s;
 }
 .av-quote figcaption { display: flex; align-items: center; gap: calc(1.2 * var(--u)); transition: opacity 0.4s; }
@@ -1165,6 +1138,8 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   right: calc(2 * var(--u));
   top: calc(2 * var(--u));
   bottom: calc(2 * var(--u));
+  height: fit-content;
+  margin-block: auto;
   width: calc(32 * var(--u));
   min-width: 330px;
   border-radius: calc(1.8 * var(--u));
@@ -1184,7 +1159,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .ct-form h3 { font-size: calc(1.7 * var(--u)); font-weight: 500; letter-spacing: -0.02em; margin-bottom: calc(0.4 * var(--u)); }
 .field-msg { flex: 1 1 auto; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
 .field-msg label { grid-row: 1; }
-.field-msg textarea { grid-row: 2; }
+.field-msg textarea { grid-row: 2; min-height: calc(7 * var(--u)); }
 .ct-done {
   position: absolute;
   inset: 0;
@@ -1527,7 +1502,8 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   .title { order: 3; }
   .media { order: 4; }
   .intro { width: auto; }
-  .intro-title { font-size: min(28px, 7.5vw, 3.8svh); }
+  .intro-title { font-size: min(36px, 9.4vw, 4.8svh); }
+  .intro-cta { margin-top: min(14px, 1.6svh); height: 40px; }
   .title {
     position: relative;
     right: auto;
@@ -1597,10 +1573,8 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   .pc-art svg { max-height: 100%; }
   .pc-info { padding: 12px 14px 14px; gap: 2px 10px; }
   .pc-info h3 { font-size: 15px; }
-  .pc-info p { font-size: 12px; }
   .pc-price { font-size: 13px; }
   .pc-add { width: 36px; height: 36px; padding: 9px; }
-  .pc-tag { top: 12px; left: 14px; font-size: 10px; }
 
   /* ---- Curadoria ---- */
   .cu-stage { order: 1; flex: 1 1 auto; min-height: 0; position: relative; inset: auto; border-radius: var(--radius); }
@@ -1611,8 +1585,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   .cu-name { font-size: 30px; }
   .cu-name br { display: none; }
   .cu-place { margin-top: 4px; font-size: 13px; color: var(--muted); }
-  .cu-desc { display: none; }
-  .cu-specs { margin-top: 12px; padding-top: 12px; grid-template-columns: repeat(4, auto); gap: 8px 16px; justify-content: space-between; }
+  .cu-specs { margin-top: 12px; padding-top: 12px; grid-template-columns: repeat(3, auto); gap: 8px 32px; justify-content: start; }
   .cu-specs dt { font-size: 9.5px; }
   .cu-specs dd { font-size: 17px; margin-top: 2px; }
   .cu-bottom { margin-top: 14px; grid-template-columns: 1fr auto; align-items: center; gap: 10px; }
@@ -1631,13 +1604,10 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   .av-big span { font-size: min(76px, 10svh); }
   .av-big small { font-size: 20px; }
   .stars svg { width: 18px; height: 18px; }
-  .av-note { font-size: 13px; }
-  .av-stats { gap: 18px; margin-top: 4px; padding-top: 12px; grid-template-columns: repeat(3, 1fr); }
-  .av-stats dt { font-size: 9.5px; }
-  .av-stats dd { font-size: 22px; margin-top: 2px; }
+  .av-count { font-size: 13px; }
   .av-quote { margin-top: auto; padding: 20px; gap: 14px; border-radius: 22px; }
   .quote-mark { width: 30px; }
-  .av-quote blockquote { min-height: calc(18px * 1.35 * 5); font-size: 18px; line-height: 1.35; }
+  .av-quote blockquote { min-height: calc(23px * 1.25 * 3); font-size: 23px; line-height: 1.25; }
   .av-avatar { width: 42px; height: 42px; font-size: 13px; }
   .av-who strong { font-size: 14px; }
   .av-who small { font-size: 11.5px; }
@@ -1653,7 +1623,8 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   .ct-info { margin-top: 2px; padding-top: 0; border: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; }
   .ct-info li:nth-child(n + 3) { display: none; }
   .ct-info span { display: none; }
-  .ct-form { position: relative; inset: auto; width: auto; min-width: 0; flex: 1 1 auto; min-height: 0; border-radius: 18px; }
+  .ct-form { position: relative; inset: auto; height: auto; margin: 0; width: auto; min-width: 0; flex: 1 1 auto; min-height: 0; border-radius: 18px; }
+  .field-msg textarea { min-height: 44px; }
   .ct-form-body { padding: 16px; gap: 10px; }
   .ct-form h3 { font-size: 18px; margin: 0; }
   .ct-done h3 { font-size: 22px; }
@@ -1697,8 +1668,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 @media (max-width: 900px) and (max-height: 700px), (max-aspect-ratio: 1/1) and (max-height: 700px) {
   .mv-intro .scene-text { display: none; }
   .mv-bar { margin-top: 12px; }
-  .av-note { display: none; }
-  .av-quote blockquote { min-height: calc(17px * 1.35 * 4); font-size: 17px; }
+  .av-quote blockquote { min-height: calc(20px * 1.25 * 3); font-size: 20px; }
   .ct-info { display: none; }
   .ct-form h3 { display: none; }
   .field-msg label { display: none; }
@@ -1706,7 +1676,6 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 @media (max-width: 900px) and (max-height: 600px), (max-aspect-ratio: 1/1) and (max-height: 600px) {
   .nav-pill { display: none; }
   .scene { padding-top: 72px; }
-  .av-stats { display: none; }
   .cu-specs { display: none; }
   .ct-copy .eyebrow { display: none; }
 }
