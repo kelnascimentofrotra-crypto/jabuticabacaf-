@@ -200,6 +200,15 @@ drop policy if exists "config: admin edita" on public.configuracoes;
 create policy "config: admin edita" on public.configuracoes
   for update to authenticated using (public.is_admin()) with check (public.is_admin());
 
+-- Permissões da API: dadas aqui de forma explícita, então funciona mesmo com
+-- "Expor automaticamente novas tabelas" desligado no projeto. As políticas RLS
+-- acima continuam decidindo quais linhas cada um pode ler ou alterar.
+grant usage on schema public to anon, authenticated;
+grant select on public.imoveis, public.imovel_fotos, public.avaliacoes, public.configuracoes to anon, authenticated;
+grant insert, update, delete on public.imoveis, public.imovel_fotos, public.avaliacoes to authenticated;
+grant update on public.configuracoes to authenticated;
+grant select on public.admins to authenticated;
+
 -- Defesa extra: o papel anônimo não tem permissão de escrita nenhuma.
 revoke insert, update, delete, truncate on public.imoveis, public.imovel_fotos, public.avaliacoes,
   public.configuracoes, public.admins from anon;
