@@ -9,7 +9,7 @@
   <link rel="preload" href="assets/casa.webp" as="image" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="is-intro" data-tone="light">
+<body class="is-gated" data-tone="light">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z" fill="var(--heart-fill, none)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
@@ -21,6 +21,49 @@
     <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4.8 20c.9-3.6 3.7-5.6 7.2-5.6s6.3 2 7.2 5.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
+
+  <!-- ================= Entrada (apresentação + login de teste) ================= -->
+  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+    <div class="gate-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
+
+    <div class="gate-logo g-rv" style="--d: .1s">
+      <span class="logo-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </span>
+      <span class="logo-word">morada</span>
+    </div>
+
+    <div class="gate-copy">
+      <p class="eyebrow g-rv" style="--d: .25s">Curadoria de casas</p>
+      <h2 class="gate-title g-rv" id="gateTitle" style="--d: .35s">Bem-vindo <br />à <em>Morada</em>.</h2>
+      <p class="gate-text g-rv" style="--d: .5s">Casas selecionadas, móveis da coleção e visitas com curador. Entre para conhecer.</p>
+    </div>
+
+    <dl class="gate-stats g-rv" style="--d: .65s">
+      <div><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd><dt>Casas selecionadas</dt></div>
+      <div><dd><span class="count" data-count="12" data-delay="1000">12</span></dd><dt>Cidades</dt></div>
+      <div><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd><dt>Famílias atendidas</dt></div>
+      <div><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd><dt>Nota média</dt></div>
+    </dl>
+
+    <form class="gate-form g-rv" id="gateForm" style="--d: .45s" novalidate>
+      <h3>Entrar</h3>
+      <div class="field">
+        <label for="g-email">E-mail</label>
+        <input id="g-email" name="email" type="text" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
+      </div>
+      <div class="field">
+        <label for="g-senha">Senha</label>
+        <div class="pass">
+          <input id="g-senha" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" />
+          <button class="pass-toggle" type="button" id="gatePass" aria-pressed="false">Mostrar</button>
+        </div>
+      </div>
+      <button class="btn btn-dark btn-block" type="submit" id="gateBtn"><span>Entrar na Morada</span><svg><use href="#i-arrow" /></svg></button>
+      <p class="form-error" id="gateError" role="alert"></p>
+      <p class="gate-note">Versão de teste: qualquer e-mail e senha entram.</p>
+    </form>
+  </div>
 
   <!-- ================= Topo (fixo em todas as cenas) ================= -->
   <header class="topbar">
@@ -94,7 +137,7 @@
 
         <div class="cards">
           <a class="card card--stats rv" style="--d: 1.75s" href="#curadoria" data-go="curadoria">
-            <strong>+180</strong>
+            <strong class="count" data-count="180" data-prefix="+" data-delay="1900">+180</strong>
             <span>imóveis<br />selecionados</span>
             <span class="thumbs" aria-hidden="true">
               <i style="--pos: 76% 52%"></i>
@@ -179,11 +222,11 @@
 
       <div class="av-score">
         <p class="eyebrow rv" style="--d: .35s">Avaliações</p>
-        <p class="av-big rv" style="--d: .45s"><span>4,9</span><small>/5</small></p>
+        <p class="av-big rv" style="--d: .45s"><span class="count" data-count="4.9" data-decimals="1" data-delay="450">4,9</span><small>/5</small></p>
         <p class="stars rv" style="--d: .55s" aria-label="Nota 4,9 de 5">
           <svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg>
         </p>
-        <p class="av-count rv" style="--d: .6s">312 avaliações</p>
+        <p class="av-count rv" style="--d: .6s"><span class="count" data-count="312" data-delay="600">312</span> avaliações</p>
       </div>
 
       <figure class="av-quote rv" style="--d: .5s">
@@ -316,7 +359,7 @@
       </div>
       <div class="tabs" role="tablist">
         <button class="tab is-on" type="button" role="tab" aria-selected="true" data-tab="favs">Favoritos <span class="tab-count" id="favTabCount">0</span></button>
-        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="login">Entrar</button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="conta">Conta</button>
       </div>
       <div class="tab-panel" data-panel="favs">
         <div class="fav-empty" id="favEmpty">
@@ -326,20 +369,12 @@
         </div>
         <ul class="fav-list" id="favList"></ul>
       </div>
-      <div class="tab-panel" data-panel="login" hidden>
-        <form class="login-form" id="loginForm" novalidate>
-          <p class="login-lead">Entre para ver suas visitas agendadas e continuar de onde parou.</p>
-          <div class="field">
-            <label for="l-email">E-mail</label>
-            <input id="l-email" type="email" autocomplete="email" placeholder="voce@email.com" required />
-          </div>
-          <div class="field">
-            <label for="l-senha">Senha</label>
-            <input id="l-senha" type="password" autocomplete="current-password" placeholder="••••••••" required />
-          </div>
-          <button class="btn btn-dark btn-block" type="submit">Entrar</button>
-          <p class="form-error" id="loginNote" role="status"></p>
-        </form>
+      <div class="tab-panel" data-panel="conta" hidden>
+        <div class="account-info">
+          <p>Você entrou como</p>
+          <strong id="accEmail">—</strong>
+          <button class="btn btn-light" type="button" id="logoutBtn">Sair</button>
+        </div>
       </div>
     </aside>
   </div>

@@ -136,6 +136,49 @@
   }
 
   /* =========================================================
+     Contadores: os números sobem de 0 até o valor
+     ========================================================= */
+
+  const formatCount = (el, v) => {
+    const dec = Number(el.dataset.decimals || 0);
+    return (el.dataset.prefix || '') + v.toLocaleString('pt-BR', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + (el.dataset.suffix || '');
+  };
+  $$('.count').forEach((el) => {
+    const final = formatCount(el, Number(el.dataset.count));
+    el.textContent = final;
+    el.setAttribute('aria-label', final);
+  });
+  // largura fixa no valor final, para o número não "pular" enquanto conta
+  const lockCountWidths = () => $$('.count').forEach((el) => {
+    el.style.minWidth = '';
+    el.textContent = formatCount(el, Number(el.dataset.count));
+    el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+  });
+  document.fonts?.ready.then(lockCountWidths);
+
+  function countUp(el, speed = 1) {
+    const target = Number(el.dataset.count);
+    const dec = Number(el.dataset.decimals || 0);
+    cancelAnimationFrame(el._raf);
+    clearTimeout(el._wait);
+    if (reduceMotion) { el.textContent = formatCount(el, target); return; }
+    el.textContent = formatCount(el, 0);
+    const duration = 1900;
+    el._wait = setTimeout(() => {
+      const t0 = performance.now();
+      const step = (now) => {
+        const p = Math.min(1, (now - t0) / duration);
+        const eased = 1 - Math.pow(1 - p, 4);
+        const f = 10 ** dec;
+        el.textContent = formatCount(el, Math.round(target * eased * f) / f);
+        if (p < 1) el._raf = requestAnimationFrame(step);
+      };
+      el._raf = requestAnimationFrame(step);
+    }, Number(el.dataset.delay || 0) * speed);
+  }
+  const runCounts = (scope, speed) => $$('.count', scope).forEach((el) => countUp(el, speed));
+
+  /* =========================================================
      Toast
      ========================================================= */
 
@@ -389,6 +432,7 @@
     scene.classList.remove('is-entering');
     void scene.offsetWidth;
     scene.classList.add('is-entering');
+    runCounts(scene, dir === 0 ? 1 : 0.55);
     enterTimers.set(scene, setTimeout(() => scene.classList.remove('is-entering'), dir === 0 ? 3200 : 2400));
   }
 
@@ -470,11 +514,87 @@
   addEventListener('resize', moveGlider);
   document.fonts?.ready.then(moveGlider);
 
-  // primeira cena
+  // primeira cena (a animação de entrada só roda depois do login)
   scenes[current].classList.add('is-active');
-  markEntering(scenes[current], 0);
   sceneChanged();
-  setTimeout(() => document.body.classList.remove('is-intro'), 3200);
+
+  function playIntro() {
+    document.body.classList.add('is-intro');
+    markEntering(scenes[current], 0);
+    setTimeout(() => document.body.classList.remove('is-intro'), 3200);
+  }
+
+  /* =========================================================
+     Entrada: apresentação + login de teste (qualquer e-mail e senha entram)
+     ========================================================= */
+
+  const SESSION_KEY = 'morada:sessao';
+  const gate = $('#gate');
+  const gateForm = $('#gateForm');
+  let gated = true;
+  let session = null;
+  try { session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (_) { /* sem armazenamento */ }
+
+  function lockSite(on) {
+    gated = on;
+    document.body.classList.toggle('is-gated', on);
+    ['.scenes', '.topbar', '.indicator'].forEach((sel) => { $(sel).inert = on; });
+  }
+
+  function showGate() {
+    closeOverlays(true);
+    lockSite(true);
+    gateForm.reset();
+    $('#gateError').textContent = '';
+    $('#gateBtn span').textContent = 'Entrar na Morada';
+    $('#gateBtn').disabled = false;
+    gate.hidden = false;
+    gate.classList.remove('is-leaving', 'is-in');
+    void gate.offsetWidth;
+    gate.classList.add('is-in');
+    runCounts(gate);
+    setTimeout(() => $('#g-email').focus({ preventScroll: true }), reduceMotion ? 0 : 700);
+  }
+
+  function enterSite(email) {
+    session = { email };
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
+    $('#accEmail').textContent = email;
+    lockSite(false);
+    gate.classList.add('is-leaving');
+    playIntro();
+    setTimeout(() => { gate.hidden = true; gate.classList.remove('is-leaving', 'is-in'); }, reduceMotion ? 0 : 1300);
+  }
+
+  gateForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = $('#g-email').value.trim();
+    const senha = $('#g-senha').value;
+    if (!email || !senha) {
+      $('#gateError').textContent = 'Digite um e-mail e uma senha (qualquer um serve).';
+      (!email ? $('#g-email') : $('#g-senha')).focus();
+      return;
+    }
+    $('#gateError').textContent = '';
+    $('#gateBtn').disabled = true;
+    $('#gateBtn span').textContent = 'Entrando…';
+    setTimeout(() => enterSite(email), reduceMotion ? 0 : 550);
+  });
+
+  $('#gatePass').addEventListener('click', (e) => {
+    const input = $('#g-senha');
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    e.currentTarget.textContent = show ? 'Ocultar' : 'Mostrar';
+    e.currentTarget.setAttribute('aria-pressed', String(show));
+  });
+
+  $('#logoutBtn').addEventListener('click', () => {
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ }
+    session = null;
+    showGate();
+  });
+
 
   addEventListener('hashchange', () => {
     const id = location.hash.slice(1);
@@ -503,7 +623,7 @@
   let wheelSum = 0;
   const recent = [];
   addEventListener('wheel', (e) => {
-    if (openName) return;
+    if (openName || gated) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     e.preventDefault();
     const now = performance.now();
@@ -534,12 +654,12 @@
   let touchY = null;
   let touchX = 0;
   addEventListener('touchstart', (e) => {
-    if (openName) { touchY = null; return; }
+    if (openName || gated) { touchY = null; return; }
     touchY = e.touches[0].clientY;
     touchX = e.touches[0].clientX;
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!e.target.closest('.nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!gated && !e.target.closest('.nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;
@@ -551,6 +671,7 @@
 
   // teclado
   addEventListener('keydown', (e) => {
+    if (gated) return;
     if (e.key === 'Escape') { closeOverlays(); return; }
     if (openName) { if (e.key === 'Tab') trapFocus(e); return; }
     if (e.target.closest('input, textarea, select')) return;
@@ -734,14 +855,6 @@
     list.hidden = empty;
   }
 
-  $('#loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = $('#l-email').value.trim();
-    const senha = $('#l-senha').value;
-    $('#loginNote').textContent = !/^\S+@\S+\.\S+$/.test(email) || !senha
-      ? 'Preencha e-mail e senha para entrar.'
-      : 'A área de clientes ainda não está no ar. Fale com a gente pelo contato.';
-  });
 
   /* =========================================================
      Parallax leve com o mouse (casa e título em profundidades diferentes)
@@ -767,4 +880,14 @@
 
   syncFavUI();
   runSearch();
+
+  // abre na tela de entrada, a não ser que já tenha entrado nesta aba
+  if (session?.email) {
+    $('#accEmail').textContent = session.email;
+    gate.hidden = true;
+    lockSite(false);
+    playIntro();
+  } else {
+    showGate();
+  }
 })();
