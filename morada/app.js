@@ -768,15 +768,308 @@
   }
 
   /* =========================================================
-     Entrada: apresentação + login de teste (qualquer e-mail e senha entram)
+     Entrada: apresentação + contas
+     Versão sem servidor: contas, tentativas e pedidos ficam guardados neste navegador.
      ========================================================= */
 
+  // Client ID do Google (console.cloud.google.com → APIs e serviços → Credenciais →
+  // "ID do cliente OAuth", tipo "Aplicativo da Web", com o endereço do site em "Origens JavaScript autorizadas").
+  // Vazio = o botão avisa que o login com Google ainda não foi ativado.
+  const GOOGLE_CLIENT_ID = '';
+
   const SESSION_KEY = 'morada:sessao';
+  const ACCOUNTS_KEY = 'morada:contas';
+  const GUARD_KEY = 'morada:seguranca';
+  const MAX_TRIES = 8;          // tentativas erradas seguidas (qualquer e-mail) antes da pausa
+  const LOCK_MINUTES = [15, 20]; // 1ª pausa 15 min; as seguintes 20 min
+
   const gate = $('#gate');
-  const gateForm = $('#gateForm');
   let gated = true;
   let session = null;
   try { session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (_) { /* sem armazenamento */ }
+
+  const readJSON = (key, fallback) => {
+    try { return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback; } catch (_) { return fallback; }
+  };
+  const writeJSON = (key, value) => {
+    try { localStorage.setItem(key, JSON.stringify(value)); return true; } catch (_) { return false; }
+  };
+  const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  let accounts = readJSON(ACCOUNTS_KEY, {});
+  const keyOf = (email) => email.trim().toLowerCase();
+  const findAccount = (email) => accounts[keyOf(email)] || null;
+  const saveAccounts = () => writeJSON(ACCOUNTS_KEY, accounts);
+  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+  const strongEnough = (v) => v.length >= 8 && /\p{L}/u.test(v) && /\d/.test(v);
+  const cryptoOk = !!(window.crypto && crypto.subtle);
+
+  // Senha: PBKDF2 (SHA-256, 150 mil voltas) com sal aleatório. Só o resultado fica guardado, nunca a senha.
+  const toB64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  const fromB64 = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+  async function hashPassword(pass, saltB64) {
+    const salt = saltB64 ? fromB64(saltB64) : crypto.getRandomValues(new Uint8Array(16));
+    const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(pass), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt, iterations: 150000 }, key, 256);
+    return { salt: toB64(salt), hash: toB64(bits) };
+  }
+  async function checkPassword(acc, pass) {
+    if (!acc?.hash) { await hashPassword(pass); return false; } // mesmo tempo de resposta com ou sem conta
+    const { hash } = await hashPassword(pass, acc.salt);
+    let diff = hash.length ^ acc.hash.length;
+    for (let i = 0; i < Math.min(hash.length, acc.hash.length); i++) diff |= hash.charCodeAt(i) ^ acc.hash.charCodeAt(i);
+    return diff === 0;
+  }
+
+  /* ---------- Proteção contra tentativas repetidas ---------- */
+
+  let guard = readJSON(GUARD_KEY, { fails: 0, lockUntil: 0, locks: 0 });
+  const saveGuard = () => writeJSON(GUARD_KEY, guard);
+  const lockedFor = () => Math.max(0, guard.lockUntil - Date.now());
+  function registerFail() {
+    guard.fails += 1;
+    if (guard.fails >= MAX_TRIES) {
+      guard.lockUntil = Date.now() + LOCK_MINUTES[Math.min(guard.locks, LOCK_MINUTES.length - 1)] * 60000;
+      guard.locks += 1;
+      guard.fails = 0;
+    }
+    saveGuard();
+    syncLock();
+    return MAX_TRIES - guard.fails;
+  }
+  function registerSuccess() {
+    guard = { fails: 0, lockUntil: 0, locks: 0 };
+    saveGuard();
+  }
+  const triesText = (left) => (left <= 5 ? ` ${left === 1 ? 'Resta 1 tentativa' : `Restam ${left} tentativas`} antes da pausa de segurança.` : '');
+  const clock = (ms) => {
+    const s = Math.ceil(ms / 1000);
+    return `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+  };
+
+  /* ---------- Telas da entrada ---------- */
+
+  let authView = 'login';
+  let lockTimer = 0;
+  const setGateView = (view) => { gate.dataset.view = view; };
+
+  function syncLock() {
+    const ms = lockedFor();
+    const blocked = ms > 0 && authView !== 'signup';
+    $('#authLock').hidden = !blocked;
+    $$('.ga-form', gate).forEach((f) => { f.hidden = blocked || f.dataset.form !== authView; });
+    $('.ga-google').hidden = blocked || authView === 'forgot';
+    $('.ga-or').hidden = blocked || authView === 'forgot';
+    clearTimeout(lockTimer);
+    if (ms > 0) {
+      $('#lockTime').textContent = clock(ms);
+      lockTimer = setTimeout(syncLock, 1000);
+    }
+  }
+
+  function setAuth(view) {
+    authView = view;
+    setGateView('auth');
+    $$('.ga-tab').forEach((t) => {
+      const on = t.dataset.auth === view;
+      t.classList.toggle('is-on', on);
+      t.setAttribute('aria-selected', String(on));
+    });
+    $('.ga-tabs').hidden = view === 'forgot';
+    $$('.ga-msg', gate).forEach((m) => { m.textContent = ''; m.classList.remove('is-ok'); });
+    if (view === 'forgot') forgotStep(1);
+    syncLock();
+    const first = { login: '#l-email', signup: '#s-nome', forgot: '#f2-email' }[view];
+    if (!lockedFor() || view === 'signup') setTimeout(() => $(first)?.focus({ preventScroll: true }), reduceMotion ? 0 : 350);
+  }
+
+  gate.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-auth]');
+    if (!b) return;
+    if (b.dataset.fill) $('#l-email').value = $('#s-email').value.trim();
+    setAuth(b.dataset.auth);
+  });
+  $('#gateBack').addEventListener('click', () => setGateView('landing'));
+
+  $$('.pass-toggle[data-for]', gate).forEach((btn) => btn.addEventListener('click', () => {
+    const input = $(`#${btn.dataset.for}`);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.textContent = show ? 'Ocultar' : 'Mostrar';
+    btn.setAttribute('aria-pressed', String(show));
+  }));
+
+  function busyButton(form, on, label) {
+    const btn = $('button[type="submit"]:not([hidden])', form.querySelector('.forgot-step:not([hidden])') || form);
+    btn.disabled = on;
+    if (label) { btn.dataset.label ??= btn.querySelector('span').textContent; }
+    btn.querySelector('span').textContent = on && label ? label : btn.dataset.label || btn.querySelector('span').textContent;
+  }
+  const say = (el, text, ok) => { el.textContent = text; el.classList.toggle('is-ok', !!ok); };
+  const needCrypto = (msgEl) => {
+    if (cryptoOk) return false;
+    say(msgEl, 'Abra o site por https (ou localhost) para usar as contas com segurança.');
+    return true;
+  };
+
+  /* Entrar */
+  $('#loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const msg = $('#loginMsg');
+    if (lockedFor()) { syncLock(); return; }
+    const email = $('#l-email').value.trim();
+    const pass = $('#l-senha').value;
+    if (!isEmail(email) || !pass) { say(msg, 'Digite seu e-mail e sua senha.'); return; }
+    if (needCrypto(msg)) return;
+    busyButton(form, true, 'Conferindo…');
+    const acc = findAccount(email);
+    const ok = await checkPassword(acc, pass);
+    busyButton(form, false);
+    if (ok) {
+      registerSuccess();
+      enterSite(acc.email);
+      return;
+    }
+    const left = registerFail();
+    if (lockedFor()) return;
+    // mensagem igual para e-mail inexistente ou senha errada: não revela quem tem conta
+    say(msg, `E-mail ou senha incorretos.${triesText(left)}`);
+    $('#l-senha').value = '';
+    $('#l-senha').focus();
+  });
+
+  /* Criar conta */
+  const emailHint = $('#s-emailHint');
+  function checkEmailInUse() {
+    const v = $('#s-email').value.trim();
+    emailHint.className = 'field-hint';
+    if (!v) { emailHint.textContent = ''; return false; }
+    if (!isEmail(v)) { emailHint.textContent = 'Confira o e-mail: falta algo como @ ou .com.'; emailHint.classList.add('is-warn'); return false; }
+    if (findAccount(v)) {
+      emailHint.innerHTML = 'Este e-mail já está em uso. <button type="button" class="ga-link" data-auth="login" data-fill="1">Entrar com ele</button>';
+      emailHint.classList.add('is-warn');
+      return false;
+    }
+    emailHint.textContent = 'E-mail disponível.';
+    emailHint.classList.add('is-ok');
+    return true;
+  }
+  let emailTimer = 0;
+  $('#s-email').addEventListener('input', () => { clearTimeout(emailTimer); emailTimer = setTimeout(checkEmailInUse, 300); });
+  $('#s-email').addEventListener('blur', checkEmailInUse);
+
+  function paintStrength(input, meter) {
+    const v = input.value;
+    const score = !v ? 0 : [v.length >= 8, /\p{L}/u.test(v) && /\d/.test(v), v.length >= 12 || (/[^\p{L}\d]/u.test(v) && /\p{Lu}/u.test(v))].filter(Boolean).length;
+    meter.dataset.score = score;
+    meter.querySelector('span').textContent = v ? ['Muito fraca', 'Fraca', 'Boa', 'Forte'][score] : '';
+  }
+  $('#s-senha').addEventListener('input', (e) => paintStrength(e.currentTarget, $('#strength')));
+
+  $('#signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const msg = $('#signupMsg');
+    const nome = $('#s-nome').value.trim();
+    const email = $('#s-email').value.trim();
+    const pass = $('#s-senha').value;
+    if (!nome) { say(msg, 'Digite seu nome.'); $('#s-nome').focus(); return; }
+    if (!checkEmailInUse()) { say(msg, findAccount(email) ? 'Este e-mail já está em uso. Entre com ele ou use outro.' : 'Digite um e-mail válido.'); $('#s-email').focus(); return; }
+    if (!strongEnough(pass)) { say(msg, 'A senha precisa ter pelo menos 8 caracteres, com letras e números.'); $('#s-senha').focus(); return; }
+    if (pass !== $('#s-senha2').value) { say(msg, 'As duas senhas não são iguais.'); $('#s-senha2').focus(); return; }
+    if (needCrypto(msg)) return;
+    busyButton(form, true, 'Criando conta…');
+    const { salt, hash } = await hashPassword(pass);
+    busyButton(form, false);
+    accounts[keyOf(email)] = { email, nome, foto: '', salt, hash, provider: 'senha', criado: Date.now(), pedidos: [] };
+    if (!saveAccounts()) { say(msg, 'Este navegador não deixou guardar a conta. Saia da janela anônima e tente de novo.'); return; }
+    enterSite(email);
+    toast('Conta criada. Bem-vindo à Morada!');
+  });
+
+  /* Esqueceu a senha */
+  let resetReq = null; // { key, code, exp }
+  function forgotStep(n) {
+    $$('.forgot-step', gate).forEach((st) => { st.hidden = Number(st.dataset.step) !== n; });
+    if (n === 1) resetReq = null;
+  }
+  $('#forgotForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const msg = $('#forgotMsg');
+    if (lockedFor()) { syncLock(); return; }
+    if (!resetReq) {
+      const email = $('#f2-email').value.trim();
+      if (!isEmail(email)) { say(msg, 'Digite o e-mail da sua conta.'); return; }
+      const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1000000).padStart(6, '0');
+      resetReq = { key: keyOf(email), code, exp: Date.now() + 10 * 60000 };
+      // Sem servidor não há envio de e-mail: nesta versão de teste o código aparece na tela.
+      $('#codeBox').innerHTML = `Versão de teste: o site ainda não envia e-mail, então o código aparece aqui. Seu código é <b>${code}</b> e vale 10 minutos.`;
+      say(msg, '');
+      forgotStep(2);
+      $('#f2-code').focus();
+      return;
+    }
+    const code = $('#f2-code').value.trim();
+    const pass = $('#f2-senha').value;
+    const acc = accounts[resetReq.key];
+    if (!acc || code !== resetReq.code || Date.now() > resetReq.exp) {
+      const left = registerFail();
+      if (lockedFor()) return;
+      say(msg, `Código inválido ou vencido.${triesText(left)}`);
+      return;
+    }
+    if (!strongEnough(pass)) { say(msg, 'A nova senha precisa ter pelo menos 8 caracteres, com letras e números.'); return; }
+    if (pass !== $('#f2-senha2').value) { say(msg, 'As duas senhas não são iguais.'); return; }
+    if (needCrypto(msg)) return;
+    busyButton(form, true, 'Salvando…');
+    Object.assign(acc, await hashPassword(pass));
+    busyButton(form, false);
+    saveAccounts();
+    registerSuccess();
+    const email = acc.email;
+    form.reset();
+    setAuth('login');
+    $('#l-email').value = email;
+    say($('#loginMsg'), 'Senha redefinida. Entre com a nova senha.', true);
+    $('#l-senha').focus();
+  });
+
+  /* Entrar com o Google (Google Identity Services) */
+  function onGoogleCredential(resp) {
+    try {
+      const part = resp.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      const data = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(part), (c) => c.charCodeAt(0))));
+      // Sem servidor não dá para conferir a assinatura do token; em produção, valide o token no servidor.
+      if (!data.email || data.email_verified === false) throw new Error('sem e-mail');
+      let acc = findAccount(data.email);
+      if (!acc) {
+        acc = { email: data.email, nome: data.name || nameFromEmail(data.email), foto: data.picture || '', provider: 'google', criado: Date.now(), pedidos: [] };
+        accounts[keyOf(data.email)] = acc;
+        saveAccounts();
+      }
+      registerSuccess();
+      enterSite(acc.email);
+    } catch (_) {
+      say($(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`), 'Não deu para entrar com o Google. Tente de novo.');
+    }
+  }
+  if (GOOGLE_CLIENT_ID) {
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.async = true;
+    s.onload = () => {
+      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, ux_mode: 'popup' });
+      google.accounts.id.renderButton($('#googleSlot'), { theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with', locale: 'pt-BR', width: Math.min(400, $('.ga-google').clientWidth || 320) });
+      $('#googleBtn').hidden = true;
+    };
+    document.head.append(s);
+  }
+  $('#googleBtn').addEventListener('click', () => {
+    say($(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`),
+      'O login com Google ainda não foi ativado neste site: falta cadastrar o site no Google e colocar o Client ID. Por enquanto, use e-mail e senha.');
+  });
 
   function lockSite(on) {
     gated = on;
@@ -784,40 +1077,38 @@
     ['.scenes', '.topbar', '.indicator'].forEach((sel) => { $(sel).inert = on; });
   }
 
-  function showGate() {
+  function showGate(view = 'landing') {
     closeOverlays(true);
     lockSite(true);
-    gateForm.reset();
-    $('#gateError').textContent = '';
-    $('#gateBtn span').textContent = 'Entrar na Morada';
-    $('#gateBtn').disabled = false;
+    $$('form', gate).forEach((f) => f.reset());
+    $('#strength').dataset.score = 0;
+    $('#strength span').textContent = '';
+    emailHint.textContent = '';
+    setAuth('login');
+    setGateView(view);
     gate.hidden = false;
     gate.classList.remove('is-leaving', 'is-in');
     void gate.offsetWidth;
     gate.classList.add('is-in');
     runCounts(gate);
-    setTimeout(() => $('#g-email').focus({ preventScroll: true }), reduceMotion ? 0 : 700);
   }
 
-  /* ---------- Perfil (nome, e-mail e foto ficam no navegador de quem entrou) ---------- */
+  /* ---------- Perfil (nome, e-mail, foto e pedidos ficam na conta, neste navegador) ---------- */
 
-  const PROFILE_KEY = 'morada:perfil';
   const nameFromEmail = (email) => {
     const base = email.split('@')[0].replace(/[._-]+/g, ' ').trim() || email;
     return base.replace(/\b\p{L}/gu, (c) => c.toUpperCase());
   };
   const initials = (nome) => nome.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?';
   function loadProfile(email) {
-    let saved = null;
-    try { saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); } catch (_) { /* sem armazenamento */ }
-    profile = saved && saved.email === email ? saved : { email, nome: nameFromEmail(email), foto: '' };
-    saveProfile();
+    profile = findAccount(email);
+    if (!profile) return false;
+    profile.pedidos ??= [];
     renderProfile();
+    return true;
   }
   function saveProfile() {
-    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (_) {
-      toast('Não deu para guardar a foto neste navegador. Tente uma imagem menor.');
-    }
+    if (!saveAccounts()) toast('Não deu para guardar neste navegador. Se for a foto, tente uma imagem menor.');
   }
   function paintAvatar(el) {
     el.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
@@ -833,11 +1124,16 @@
     $('#accNome').value = profile.nome;
     $('#accMail').value = profile.email;
     $('#accFotoRemove').hidden = !profile.foto;
+    const hasPass = !!profile.hash;
+    $('#passState').textContent = hasPass ? '••••••••' : 'Você entra com o Google';
+    $('#passCurrentField').hidden = !hasPass;
+    if ($('#passForm').hidden) $('#passToggle').textContent = hasPass ? 'Alterar senha' : 'Criar senha';
     // a bonequinha do topo vira a foto de perfil
     const icon = $('.icon-btn[data-open="account"]');
     icon.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
     icon.classList.toggle('has-photo', !!profile.foto);
-    if (typeof renderCart === 'function') renderCart();
+    renderOrders();
+    renderCart();
   }
 
   $('#profileCard').addEventListener('click', () => { showTab('conta'); $('#accNome').focus({ preventScroll: true }); });
@@ -846,8 +1142,16 @@
     e.preventDefault();
     const nome = $('#accNome').value.trim();
     const email = $('#accMail').value.trim();
-    if (!nome || !email) { $('#accNote').textContent = 'Preencha nome e e-mail.'; return; }
+    if (!nome) { $('#accNote').textContent = 'Digite seu nome.'; return; }
+    if (!isEmail(email)) { $('#accNote').textContent = 'Digite um e-mail válido.'; return; }
+    const oldKey = keyOf(profile.email);
+    const newKey = keyOf(email);
+    if (newKey !== oldKey && accounts[newKey]) { $('#accNote').textContent = 'Este e-mail já está em uso por outra conta.'; return; }
     profile.nome = nome;
+    if (newKey !== oldKey) {
+      delete accounts[oldKey];
+      accounts[newKey] = profile;
+    }
     profile.email = email;
     session = { email };
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
@@ -892,22 +1196,61 @@
     const form = $('#passForm');
     form.hidden = !form.hidden;
     e.currentTarget.setAttribute('aria-expanded', String(!form.hidden));
-    e.currentTarget.textContent = form.hidden ? 'Alterar senha' : 'Cancelar';
+    e.currentTarget.textContent = form.hidden ? (profile.hash ? 'Alterar senha' : 'Criar senha') : 'Cancelar';
     $('#passNote').textContent = '';
-    if (!form.hidden) $('#passNew').focus({ preventScroll: true });
+    if (!form.hidden) (profile.hash ? $('#passCurrent') : $('#passNew')).focus({ preventScroll: true });
   });
-  $('#passForm').addEventListener('submit', (e) => {
+  $('#passForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
+    const note = $('#passNote');
+    if (lockedFor()) { note.textContent = `Muitas tentativas erradas. Tente de novo em ${clock(lockedFor())}.`; return; }
     const nova = $('#passNew').value;
-    const conf = $('#passConfirm').value;
-    if (nova.length < 6) { $('#passNote').textContent = 'A nova senha precisa ter pelo menos 6 caracteres.'; return; }
-    if (nova !== conf) { $('#passNote').textContent = 'As duas senhas não são iguais.'; return; }
-    // Versão de teste: a senha não é guardada em lugar nenhum.
-    e.currentTarget.reset();
-    e.currentTarget.hidden = true;
-    $('#passToggle').textContent = 'Alterar senha';
+    if (needCrypto(note)) return;
+    if (profile.hash && !(await checkPassword(profile, $('#passCurrent').value))) {
+      const left = registerFail();
+      note.textContent = lockedFor() ? `Muitas tentativas erradas. Tente de novo em ${clock(lockedFor())}.` : `A senha atual está errada.${triesText(left)}`;
+      return;
+    }
+    if (!strongEnough(nova)) { note.textContent = 'A nova senha precisa ter pelo menos 8 caracteres, com letras e números.'; return; }
+    if (nova !== $('#passConfirm').value) { note.textContent = 'As duas senhas não são iguais.'; return; }
+    Object.assign(profile, await hashPassword(nova));
+    saveProfile();
+    registerSuccess();
+    form.reset();
+    form.hidden = true;
     $('#passToggle').setAttribute('aria-expanded', 'false');
+    renderProfile();
     toast('Senha alterada');
+  });
+
+  /* ---------- Histórico de pedidos ---------- */
+
+  function renderOrders() {
+    const orders = profile?.pedidos || [];
+    $('#orderList').innerHTML = orders.slice().reverse().map((o) => `
+      <li class="order">
+        <div class="order-head"><strong>Pedido #${o.num}</strong><small>${new Date(o.data).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' })}</small></div>
+        <ul>${o.itens.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+        <span class="order-status"><svg aria-hidden="true"><use href="#i-zap" /></svg>Enviado pelo WhatsApp</span>
+      </li>`).join('');
+    $('#ordersEmpty').hidden = orders.length > 0;
+    $('#orderList').hidden = orders.length === 0;
+  }
+  // Ao finalizar no WhatsApp, o pedido vai para o histórico e o carrinho esvazia.
+  $('#cartZap').addEventListener('click', () => {
+    if (!profile || !cart.length) return;
+    const num = 1000 + Object.values(accounts).reduce((n, a) => n + (a.pedidos?.length || 0), 0) + 1;
+    profile.pedidos.push({ num, data: Date.now(), itens: cart.map((id) => cartEntry(id).line) });
+    saveProfile();
+    setTimeout(() => {
+      cart = [];
+      saveCart();
+      syncCartUI();
+      renderOrders();
+      showTab('pedidos');
+      toast(`Pedido #${num} guardado no histórico`);
+    }, 0);
   });
 
   function enterSite(email) {
@@ -920,35 +1263,12 @@
     setTimeout(() => { gate.hidden = true; gate.classList.remove('is-leaving', 'is-in'); }, reduceMotion ? 0 : 1300);
   }
 
-  gateForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = $('#g-email').value.trim();
-    const senha = $('#g-senha').value;
-    if (!email || !senha) {
-      $('#gateError').textContent = 'Digite um e-mail e uma senha (qualquer um serve).';
-      (!email ? $('#g-email') : $('#g-senha')).focus();
-      return;
-    }
-    $('#gateError').textContent = '';
-    $('#gateBtn').disabled = true;
-    $('#gateBtn span').textContent = 'Entrando…';
-    setTimeout(() => enterSite(email), reduceMotion ? 0 : 550);
-  });
-
-  $('#gatePass').addEventListener('click', (e) => {
-    const input = $('#g-senha');
-    const show = input.type === 'password';
-    input.type = show ? 'text' : 'password';
-    e.currentTarget.textContent = show ? 'Ocultar' : 'Mostrar';
-    e.currentTarget.setAttribute('aria-pressed', String(show));
-  });
-
   $('#logoutBtn').addEventListener('click', () => {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ }
     session = null;
-    showGate();
+    profile = null;
+    showGate('auth');
   });
-
 
   addEventListener('hashchange', () => {
     const id = location.hash.slice(1);
@@ -1239,10 +1559,12 @@
 
   // Carregamento: logo + barra até a página ficar pronta (mínimo 1,2 s, máximo 2,5 s).
   // Depois abre a entrada, ou direto a hero se já entrou nesta aba.
-  if (session?.email) {
-    loadProfile(session.email);
-    gate.hidden = true;
+  if (session?.email && !loadProfile(session.email)) {
+    // sessão de uma conta que não existe mais neste navegador: volta para a entrada
+    session = null;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ }
   }
+  if (session?.email) gate.hidden = true;
   const pageLoaded = new Promise((resolve) => {
     if (document.readyState === 'complete') resolve();
     else addEventListener('load', resolve, { once: true });

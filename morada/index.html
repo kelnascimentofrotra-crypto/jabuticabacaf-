@@ -28,6 +28,7 @@
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.8 19.5 6v5.6c0 4.6-3.1 8-7.5 9.6-4.4-1.6-7.5-5-7.5-9.6V6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m8.6 12 2.4 2.4 4.6-4.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-hands" viewBox="0 0 24 24"><path d="M2 9.5 5.5 6l3 1.2L12 6l3.5 1.2L18.5 6 22 9.5l-3 3M5 12.5l-3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="m12 6-3.2 3.3a1.3 1.3 0 0 0 1.8 1.9L13 9l5.4 5.1a1.2 1.2 0 0 1-1.7 1.8M16.7 15.9a1.2 1.2 0 0 1-1.7 1.7l-1.3-1.2M15 17.6a1.2 1.2 0 0 1-1.7 1.7l-1-1M12.3 18.3a1.2 1.2 0 0 1-1.7 1.6L5 14.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
     <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7M5.5 9.5V20h13V9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M10 20v-5.5h4V20M10 10.5h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
 
@@ -39,47 +40,196 @@
     <span class="preloader-bar"><i></i></span>
   </div>
 
-  <!-- ================= Entrada (apresentação + login de teste) ================= -->
-  <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <!-- ================= Entrada: apresentação + acesso à conta ================= -->
+  <div class="gate" id="gate" data-view="landing" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="gate-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
-    <div class="gate-logo g-rv" style="--d: .1s">
-      <span class="logo-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    <header class="gate-top g-rv" style="--d: .1s">
+      <span class="gate-logo">
+        <span class="logo-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="logo-word">morada</span>
       </span>
-      <span class="logo-word">morada</span>
-    </div>
+      <nav class="gate-top-actions" aria-label="Acesso">
+        <button class="gate-link" type="button" data-auth="login">Entrar</button>
+        <button class="btn btn-gold gate-top-cta" type="button" data-auth="signup">Criar conta</button>
+      </nav>
+    </header>
 
-    <div class="gate-copy">
-      <p class="eyebrow g-rv" style="--d: .25s">Curadoria de casas</p>
-      <h2 class="gate-title g-rv" id="gateTitle" style="--d: .35s">Bem-vindo <br />à <em>Morada</em>.</h2>
-      <p class="gate-text g-rv" style="--d: .5s">Casas selecionadas, móveis da coleção e visitas com curador. Entre para conhecer.</p>
-    </div>
-
-    <dl class="gate-stats g-rv" style="--d: .65s">
-      <div><dt>Casas selecionadas</dt><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
-      <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="1000">12</span></dd></div>
-      <div><dt>Famílias atendidas</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
-      <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
-    </dl>
-
-    <form class="gate-form g-rv" id="gateForm" style="--d: .45s" novalidate>
-      <h3>Entrar</h3>
-      <div class="field">
-        <label for="g-email">E-mail</label>
-        <input id="g-email" name="email" type="text" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
-      </div>
-      <div class="field">
-        <label for="g-senha">Senha</label>
-        <div class="pass">
-          <input id="g-senha" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha" />
-          <button class="pass-toggle" type="button" id="gatePass" aria-pressed="false">Mostrar</button>
+    <!-- Vista 1: apresentação do que a pessoa vai encontrar -->
+    <section class="gate-landing" aria-labelledby="gateTitle">
+      <div class="gl-copy">
+        <p class="gl-eyebrow g-rv" style="--d: .2s">Conheça a Morada</p>
+        <h2 class="gl-title g-rv" id="gateTitle" style="--d: .3s">Tudo para encontrar <br />a sua <em>casa</em>, <br />num só lugar.</h2>
+        <p class="gl-text g-rv" style="--d: .42s">Imóveis selecionados, peças para mobiliar e um curador para ajudar. Veja o que você vai ter lá dentro.</p>
+        <div class="gl-ctas g-rv" style="--d: .52s">
+          <button class="btn btn-gold" type="button" data-auth="signup">Criar conta grátis <svg><use href="#i-arrow" /></svg></button>
+          <button class="btn btn-ghost" type="button" data-auth="login">Já tenho conta</button>
         </div>
+        <dl class="gate-stats g-rv" style="--d: .62s">
+          <div><dt>Casas selecionadas</dt><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
+          <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="1000">12</span></dd></div>
+          <div><dt>Famílias atendidas</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
+          <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
+        </dl>
       </div>
-      <button class="btn btn-dark btn-block" type="submit" id="gateBtn"><span>Entrar na Morada</span><svg><use href="#i-arrow" /></svg></button>
-      <p class="form-error" id="gateError" role="alert"></p>
-      <p class="gate-note">Versão de teste: qualquer e-mail e senha entram.</p>
-    </form>
+
+      <ul class="gl-features" aria-label="O que você vai encontrar">
+        <li class="gl-card g-rv" style="--d: .35s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-search" /></svg></span>
+          <h3>Busca na lupa</h3>
+          <p>Pesquise casas, apartamentos e peças por cidade, tipo e suítes.</p>
+          <span class="gl-mock gl-mock--search"><svg aria-hidden="true"><use href="#i-search" /></svg>Casa em São Paulo, 4 suítes</span>
+        </li>
+        <li class="gl-card g-rv" style="--d: .42s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-user" /></svg></span>
+          <h3>Sua conta</h3>
+          <p>Foto, nome, e-mail e senha: ajuste tudo nas configurações.</p>
+          <span class="gl-mock gl-mock--acc"><i aria-hidden="true">AS</i>Ana Souza <b>Editar perfil</b></span>
+        </li>
+        <li class="gl-card g-rv" style="--d: .49s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-heart" /></svg></span>
+          <h3>Favoritos</h3>
+          <p>Guarde os imóveis e as peças que chamaram a sua atenção.</p>
+          <span class="gl-mock"><svg class="gl-heart" aria-hidden="true"><use href="#i-heart" /></svg>3 imóveis salvos</span>
+        </li>
+        <li class="gl-card g-rv" style="--d: .56s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-cart" /></svg></span>
+          <h3>Carrinho</h3>
+          <p>Junte imóveis e peças e finalize com um curador no WhatsApp.</p>
+          <span class="gl-mock gl-mock--zap"><svg aria-hidden="true"><use href="#i-zap" /></svg>Finalizar no WhatsApp</span>
+        </li>
+        <li class="gl-card g-rv" style="--d: .63s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-receipt" /></svg></span>
+          <h3>Histórico de compras</h3>
+          <p>Cada pedido finalizado fica guardado, com data e itens.</p>
+          <span class="gl-mock">Pedido #1024 <b>2 itens</b></span>
+        </li>
+        <li class="gl-card g-rv" style="--d: .7s">
+          <span class="gl-ico"><svg aria-hidden="true"><use href="#i-shield" /></svg></span>
+          <h3>Conta protegida</h3>
+          <p>Bloqueio após 8 tentativas erradas, redefinição de senha e login com Google.</p>
+          <span class="gl-mock">8 tentativas <b>15 min de pausa</b></span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Vista 2: entrar, criar conta ou redefinir a senha -->
+    <section class="gate-auth" aria-label="Acesso à conta">
+      <div class="ga-side">
+        <button class="gate-back" type="button" id="gateBack"><svg class="flip" aria-hidden="true"><use href="#i-arrow" /></svg>Ver a apresentação</button>
+        <p class="gl-eyebrow">Área do cliente</p>
+        <h2 class="ga-title">Bem-vindo <br />à <em>Morada</em>.</h2>
+        <p class="gl-text">Entre para ver os imóveis, salvar favoritos e acompanhar seus pedidos.</p>
+      </div>
+
+      <div class="ga-card">
+        <div class="ga-tabs" role="tablist" aria-label="Entrar ou criar conta">
+          <button class="ga-tab" type="button" role="tab" data-auth="login" aria-selected="true">Entrar</button>
+          <button class="ga-tab" type="button" role="tab" data-auth="signup" aria-selected="false">Criar conta</button>
+        </div>
+
+        <div class="ga-google">
+          <div id="googleSlot"></div>
+          <button class="btn-google" type="button" id="googleBtn">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+            Entrar com o Google
+          </button>
+        </div>
+        <p class="ga-or"><span>ou com e-mail</span></p>
+
+        <!-- Entrar -->
+        <form class="ga-form" id="loginForm" data-form="login" novalidate>
+          <div class="field">
+            <label for="l-email">E-mail</label>
+            <input id="l-email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
+          </div>
+          <div class="field">
+            <div class="field-top"><label for="l-senha">Senha</label><button class="ga-link" type="button" data-auth="forgot">Esqueceu a senha?</button></div>
+            <div class="pass">
+              <input id="l-senha" type="password" autocomplete="current-password" placeholder="Sua senha" />
+              <button class="pass-toggle" type="button" data-for="l-senha" aria-pressed="false">Mostrar</button>
+            </div>
+          </div>
+          <button class="btn btn-dark btn-block" type="submit"><span>Entrar</span><svg><use href="#i-arrow" /></svg></button>
+          <p class="ga-msg" id="loginMsg" role="alert"></p>
+        </form>
+
+        <!-- Criar conta -->
+        <form class="ga-form" id="signupForm" data-form="signup" novalidate hidden>
+          <div class="field">
+            <label for="s-nome">Nome</label>
+            <input id="s-nome" type="text" autocomplete="name" placeholder="Seu nome" />
+          </div>
+          <div class="field">
+            <label for="s-email">E-mail</label>
+            <input id="s-email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
+            <p class="field-hint" id="s-emailHint" aria-live="polite"></p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="s-senha">Senha</label>
+              <div class="pass">
+                <input id="s-senha" type="password" autocomplete="new-password" placeholder="8+ letras e números" />
+                <button class="pass-toggle" type="button" data-for="s-senha" aria-pressed="false">Mostrar</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="s-senha2">Repita a senha</label>
+              <input id="s-senha2" type="password" autocomplete="new-password" placeholder="Digite de novo" />
+            </div>
+          </div>
+          <div class="strength" id="strength" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
+          <button class="btn btn-dark btn-block" type="submit"><span>Criar conta</span><svg><use href="#i-arrow" /></svg></button>
+          <p class="ga-msg" id="signupMsg" role="alert"></p>
+        </form>
+
+        <!-- Redefinir senha -->
+        <form class="ga-form" id="forgotForm" data-form="forgot" novalidate hidden>
+          <h3 class="ga-form-title">Redefinir senha</h3>
+          <div class="forgot-step" data-step="1">
+            <p class="ga-help">Digite o e-mail da sua conta. Vamos gerar um código de 6 números para você criar uma senha nova.</p>
+            <div class="field">
+              <label for="f2-email">E-mail</label>
+              <input id="f2-email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
+            </div>
+            <button class="btn btn-dark btn-block" type="submit"><span>Enviar código</span><svg><use href="#i-arrow" /></svg></button>
+          </div>
+          <div class="forgot-step" data-step="2" hidden>
+            <p class="ga-code" id="codeBox"></p>
+            <div class="field">
+              <label for="f2-code">Código</label>
+              <input id="f2-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" />
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="f2-senha">Nova senha</label>
+                <input id="f2-senha" type="password" autocomplete="new-password" placeholder="8+ letras e números" />
+              </div>
+              <div class="field">
+                <label for="f2-senha2">Repita</label>
+                <input id="f2-senha2" type="password" autocomplete="new-password" placeholder="Digite de novo" />
+              </div>
+            </div>
+            <button class="btn btn-dark btn-block" type="submit"><span>Salvar nova senha</span><svg><use href="#i-arrow" /></svg></button>
+          </div>
+          <p class="ga-msg" id="forgotMsg" role="alert"></p>
+          <button class="ga-link ga-link--back" type="button" data-auth="login">Lembrei a senha, voltar para entrar</button>
+        </form>
+
+        <!-- Bloqueio por excesso de tentativas -->
+        <div class="ga-lock" id="authLock" role="alert" hidden>
+          <span class="ga-lock-ico"><svg aria-hidden="true"><use href="#i-shield" /></svg></span>
+          <h3>Acesso pausado por segurança</h3>
+          <p>Foram 8 tentativas erradas seguidas. Para proteger as contas, o acesso volta em:</p>
+          <p class="ga-lock-time" id="lockTime">15:00</p>
+          <button class="ga-link" type="button" data-auth="signup">Criar uma conta nova</button>
+        </div>
+
+        <p class="ga-secure"><svg aria-hidden="true"><use href="#i-shield" /></svg>Depois de 8 tentativas erradas, o acesso pausa por 15 minutos.</p>
+      </div>
+    </section>
   </div>
 
   <!-- ================= Topo (fixo em todas as cenas) ================= -->
@@ -448,6 +598,7 @@
       <div class="tabs" role="tablist">
         <button class="tab is-on" type="button" role="tab" aria-selected="true" data-tab="favs">Favoritos <span class="tab-count" id="favTabCount">0</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-tab="carrinho">Carrinho <span class="tab-count" id="cartTabCount">0</span></button>
+        <button class="tab" type="button" role="tab" aria-selected="false" data-tab="pedidos">Pedidos</button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-tab="conta">Conta</button>
       </div>
       <div class="tab-panel" data-panel="favs">
@@ -469,6 +620,13 @@
           <p class="cart-sum"><b id="cartCount">0</b> <span id="cartWord">itens</span> no carrinho</p>
           <a class="btn btn-zap btn-block" id="cartZap" href="#" target="_blank" rel="noopener"><svg><use href="#i-zap" /></svg>Finalizar no WhatsApp</a>
         </div>
+      </div>
+      <div class="tab-panel" data-panel="pedidos" hidden>
+        <div class="fav-empty" id="ordersEmpty">
+          <svg aria-hidden="true"><use href="#i-receipt" /></svg>
+          <p>Você ainda não finalizou nenhum pedido. Quando finalizar o carrinho no WhatsApp, ele aparece aqui.</p>
+        </div>
+        <ul class="order-list" id="orderList"></ul>
       </div>
       <div class="tab-panel" data-panel="conta" hidden>
         <div class="acc">
@@ -498,13 +656,17 @@
           <section class="acc-block">
             <h3>Senha</h3>
             <div class="acc-pass">
-              <span>••••••••</span>
+              <span id="passState">••••••••</span>
               <button class="btn btn-light" type="button" id="passToggle" aria-expanded="false" aria-controls="passForm">Alterar senha</button>
             </div>
             <form class="acc-pass-form" id="passForm" novalidate hidden>
+              <div class="field" id="passCurrentField">
+                <label for="passCurrent">Senha atual</label>
+                <input id="passCurrent" type="password" autocomplete="current-password" placeholder="Sua senha de hoje" />
+              </div>
               <div class="field">
                 <label for="passNew">Nova senha</label>
-                <input id="passNew" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" />
+                <input id="passNew" type="password" autocomplete="new-password" placeholder="8+ letras e números" />
               </div>
               <div class="field">
                 <label for="passConfirm">Repita a nova senha</label>
