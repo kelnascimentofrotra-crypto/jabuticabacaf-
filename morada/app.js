@@ -109,6 +109,7 @@
   ];
 
   const PREVIEW = {
+    arthur: 'Conheça o Arthur, proprietário e corretor',
     inicio: 'Vamos encontrar a sua morada',
     filtro: 'Encontre o imóvel certo em segundos',
     instagram: 'Casas novas toda semana no Instagram',
@@ -461,6 +462,26 @@
     </a></li>`;
   }).join('');
   withFallback($('#igGrid'));
+
+  /* =========================================================
+     05 · Conheça o Arthur
+     ========================================================= */
+
+  $('#arZap').href = zapLink('Olá, Arthur! Vim pelo site da Morada e gostaria de conversar sobre imóveis.');
+  // leve movimento da foto seguindo o mouse (só no computador)
+  const arPhoto = $('.ar-photo');
+  if (!reduceMotion) {
+    arPhoto.addEventListener('pointermove', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const r = arPhoto.getBoundingClientRect();
+      arPhoto.style.setProperty('--tx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
+      arPhoto.style.setProperty('--ty', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
+    });
+    arPhoto.addEventListener('pointerleave', () => {
+      arPhoto.style.setProperty('--tx', 0);
+      arPhoto.style.setProperty('--ty', 0);
+    });
+  }
 
   /* ---------- Página do imóvel ---------- */
 
