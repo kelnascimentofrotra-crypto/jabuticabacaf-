@@ -66,7 +66,8 @@
   const zapLink = (text) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
   const TERRAIN = '<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.4"><path d="M-10 60C80 40 160 90 250 70s130-30 170-10"/><path d="M-10 100c100-20 180 30 270 10s130-30 160-10"/><path d="M-10 140c110-20 190 30 280 10s120-30 150-10"/><path d="M-10 180c120-20 200 30 290 10s110-30 140-10"/><path d="M-10 220c130-20 210 30 300 10s100-30 130-10"/><path d="M-10 260c140-20 220 30 310 10s90-30 120-10"/></g><path d="M110 70 300 90l20 140-230-15z" fill="rgba(255,255,255,.1)" stroke="#fff" stroke-width="2" stroke-dasharray="8 6"/><g fill="rgba(30,50,25,.5)"><circle cx="60" cy="250" r="16"/><circle cx="86" cy="263" r="11"/><circle cx="340" cy="60" r="18"/><circle cx="366" cy="80" r="12"/><circle cx="352" cy="252" r="14"/></g></svg>';
 
-  const CATS = { sala: 'Sala', jantar: 'Jantar', iluminacao: 'Iluminação', externo: 'Externo' };
+  const CATS = { sala: 'Sala', jantar: 'Jantar', iluminacao: 'Iluminação', quarto: 'Quarto' };
+  const brl2 = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   // Desenhos de linha das peças (viewBox 200×200)
   const ART = {
@@ -80,15 +81,25 @@
     ripado: '<ellipse class="shadow" cx="100" cy="164" rx="86" ry="6"/><path class="wood" d="M36 144v16M164 144v16"/><rect class="fill2" x="20" y="84" width="160" height="62" rx="4"/><path class="line" d="M34 92v46M44 92v46M54 92v46M64 92v46M74 92v46M84 92v46M94 92v46M104 92v46M114 92v46M124 92v46M134 92v46M144 92v46M154 92v46M164 92v46"/><path class="fill" d="M58 84c-3-13 1-24 10-27 9 3 13 14 10 27z"/><path class="line" d="M68 57c0-12 5-21 12-27M68 57c-4-9-10-13-17-15"/><ellipse class="fill" cx="138" cy="79" rx="16" ry="5"/><ellipse class="fill" cx="140" cy="72" rx="9" ry="4"/>',
   };
 
+  Object.assign(ART, {
+    lina: ART.ilha,
+    aurora: ART.oca,
+    nara: '<ellipse class="shadow" cx="100" cy="162" rx="80" ry="8"/><path class="fill" d="M52 116h14v40H52zM134 116h14v40h-14zM80 122h12v36H80zM108 122h12v36h-12z"/><path class="fill2" d="M30 110v9c0 9 31 16 70 16s70-7 70-16v-9"/><ellipse class="fill2" cx="100" cy="110" rx="70" ry="16"/><path class="fill" d="M92 104c-6-4-8-12-2-20h20c6 8 4 16-2 20z"/><rect class="fill" x="118" y="100" width="30" height="7" rx="2"/>',
+    iris: '<ellipse class="shadow" cx="100" cy="166" rx="86" ry="7"/><path class="wood" d="M44 112l-6 50M58 112l2 50M142 112l-2 50M156 112l6 50"/><rect class="fill" x="28" y="66" width="36" height="50" rx="7"/><rect class="fill" x="136" y="66" width="36" height="50" rx="7"/><path class="fill" d="M90 100h20l7 60H83z"/><rect class="fill2" x="46" y="90" width="108" height="11" rx="3"/><path class="fill" d="M94 90c-3-8 0-16 6-18 6 2 9 10 6 18z"/>',
+    caete: '<path class="glow" d="M64 104 34 188h132l-30-84z"/><ellipse class="shadow" cx="100" cy="174" rx="44" ry="6"/><path class="fill" d="M84 170c-10-10-10-34 0-48h32c10 14 10 38 0 48z"/><rect class="fill" x="95" y="104" width="10" height="20"/><path class="fill2" d="M64 108 72 44h56l8 64z"/><ellipse class="bulb" cx="100" cy="110" rx="20" ry="4"/>',
+    sereno: '<ellipse class="shadow" cx="100" cy="168" rx="58" ry="6"/><path class="wood" d="M58 150v16M142 150v16"/><rect class="fill2" x="48" y="92" width="104" height="60" rx="5"/><path class="line" d="M48 122h104"/><rect class="fill" x="89" y="104" width="22" height="4" rx="2"/><rect class="fill" x="89" y="134" width="22" height="4" rx="2"/><rect class="fill" x="112" y="80" width="30" height="7" rx="2"/><rect class="fill" x="116" y="73" width="24" height="7" rx="2"/>',
+  });
+
   const PRODUCTS = [
-    { id: 'oca', nome: 'Poltrona Oca', cat: 'sala', mat: 'Couro natural e freijó', preco: 8900, bg: '#eadfce', a: '#c9976a', b: '#b27f55' },
-    { id: 'ilha', nome: 'Sofá Ilha', cat: 'sala', mat: 'Linho cru, 3 lugares', preco: 18400, bg: '#e3e1da', a: '#f1ebe0', b: '#d8cdbc' },
-    { id: 'laje', nome: 'Mesa Laje', cat: 'jantar', mat: 'Concreto polido e aço', preco: 12600, bg: '#deddd8', a: '#a39e96', b: '#c3beb5' },
-    { id: 'tabua', nome: 'Cadeira Tábua', cat: 'jantar', mat: 'Freijó maciço', preco: 2300, bg: '#ebdfcf', a: '#b98a5e', b: '#a0734a' },
-    { id: 'farol', nome: 'Pendente Farol', cat: 'iluminacao', mat: 'Latão escovado', preco: 3100, bg: '#ede3d1', a: '#9c7a45', b: '#caa25d' },
-    { id: 'vela', nome: 'Luminária Vela', cat: 'iluminacao', mat: 'Aço e cúpula de linho', preco: 4200, bg: '#e6e1d7', a: '#f2e9d8', b: '#3c3833' },
-    { id: 'mare', nome: 'Espreguiçadeira Maré', cat: 'externo', mat: 'Teca e corda náutica', preco: 6700, bg: '#d8e3e3', a: '#f2ece1', b: '#b08158' },
-    { id: 'ripado', nome: 'Aparador Ripado', cat: 'sala', mat: 'Nogueira e pedra', preco: 7800, bg: '#e7ded2', a: '#cfc6b8', b: '#8f6645' },
+    { id: 'lina', nome: 'Sofá Lina', cats: ['sala'], preco: 4890, desc: 'Três lugares em linho cru, com base de madeira maciça.', bg: '#eee8df', a: '#f1ebe0', b: '#d8cdbc' },
+    { id: 'aurora', nome: 'Poltrona Aurora', cats: ['sala'], preco: 2590, desc: 'Estrutura de madeira e assento em couro natural.', bg: '#efe6da', a: '#c9976a', b: '#b27f55' },
+    { id: 'nara', nome: 'Mesa de Centro Nara', cats: ['sala'], preco: 1890, desc: 'Tampo redondo de madeira maciça sobre pés cilíndricos.', bg: '#ece5dc', a: '#b98a5e', b: '#c99a6c' },
+    { id: 'iris', nome: 'Mesa de Jantar Íris', cats: ['jantar'], preco: 3790, desc: 'Mesa de madeira para seis lugares, com base central.', bg: '#ebe3d8', a: '#b98a5e', b: '#a0734a' },
+    { id: 'caete', nome: 'Abajur Caeté', cats: ['iluminacao', 'quarto'], preco: 690, desc: 'Base de cerâmica e cúpula de linho, com luz quente.', bg: '#f0e6d6', a: '#b48a66', b: '#f3e8d4' },
+    { id: 'tabua', nome: 'Cadeira Tábua', cats: ['jantar'], preco: 1190, desc: 'Encosto ripado em freijó maciço.', bg: '#ece3d7', a: '#b98a5e', b: '#a0734a' },
+    { id: 'farol', nome: 'Pendente Farol', cats: ['iluminacao'], preco: 1490, desc: 'Cúpula de latão escovado para mesas de jantar.', bg: '#efe6d6', a: '#9c7a45', b: '#caa25d' },
+    { id: 'sereno', nome: 'Criado-mudo Sereno', cats: ['quarto'], preco: 1290, desc: 'Duas gavetas, em nogueira com puxadores de couro.', bg: '#ece4da', a: '#cfc6b8', b: '#8f6645' },
+    { id: 'ripado', nome: 'Aparador Ripado', cats: ['sala'], preco: 3290, desc: 'Frente ripada em nogueira, com tampo de pedra.', bg: '#ebe3d9', a: '#cfc6b8', b: '#8f6645' },
   ];
 
   const REVIEWS = [
@@ -156,11 +167,6 @@
     $('#favTabCount').textContent = total;
     $$('.pcard-fav').forEach((b) => b.setAttribute('aria-pressed', String(isFav('houses', b.dataset.id))));
     if (dtHouse) $('#dtFav').setAttribute('aria-pressed', String(isFav('houses', dtHouse.id)));
-    $$('.pc-add').forEach((b) => {
-      const on = isFav('products', b.dataset.id);
-      b.setAttribute('aria-pressed', String(on));
-      b.innerHTML = `<svg><use href="#${on ? 'i-check' : 'i-plus'}" /></svg>`;
-    });
     renderFavs();
   }
 
@@ -226,18 +232,18 @@
 
   const grid = $('#productGrid');
   grid.innerHTML = PRODUCTS.map((p, k) => `
-    <li class="pc" data-id="${p.id}" data-cat="${p.cat}" style="--bg-a:${p.bg};--k:${k}">
+    <li class="pc" data-id="${p.id}" data-cat="${p.cats.join(' ')}" style="--bg-a:${p.bg};--k:${k}">
       <div class="pc-art">${productArt(p)}</div>
       <div class="pc-info">
         <h3>${p.nome}</h3>
-        <span class="pc-price">${brl.format(p.preco)}</span>
-        <button class="pc-add" type="button" data-id="${p.id}" aria-pressed="false" aria-label="Salvar ${p.nome} nos favoritos"></button>
+        <span class="pc-price">${brl2.format(p.preco)}</span>
+        <button class="pc-add" type="button" data-id="${p.id}" aria-pressed="false" aria-label="Adicionar ${p.nome} ao carrinho"><svg><use href="#i-plus" /></svg></button>
       </div>
     </li>`).join('');
 
   grid.addEventListener('click', (e) => {
     const b = e.target.closest('.pc-add');
-    if (b) toggleFav('products', b.dataset.id);
+    if (b) toggleCart(`p:${b.dataset.id}`);
   });
 
   function setCategory(cat) {
@@ -246,19 +252,33 @@
       c.classList.toggle('is-on', on);
       c.setAttribute('aria-pressed', String(on));
     });
-    let n = 0;
-    $$('.pc', grid).forEach((el) => {
-      const show = cat === 'todos' || el.dataset.cat === cat;
-      el.classList.toggle('is-dim', !show);
-      if (show) n++;
-    });
-    $('#productCount').textContent = n;
+    $$('.pc', grid).forEach((el) => { el.hidden = !(cat === 'todos' || el.dataset.cat.split(' ').includes(cat)); });
     grid.scrollTo?.({ left: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   }
   $('.mv-bar .chips').addEventListener('click', (e) => {
     const c = e.target.closest('.chip');
     if (c) setCategory(c.dataset.cat);
   });
+
+  // "Explorar coleção": mostra todas as peças numa onda
+  $('#mvExplore').addEventListener('click', () => {
+    setCategory('todos');
+    $$('.pc', grid).forEach((el) => { el.classList.remove('is-pop'); void el.offsetWidth; el.classList.add('is-pop'); });
+  });
+
+  // foto do ambiente com pontinhos (troca sozinha a cada 6 s quando a cena está aberta)
+  const slides = $$('.mv-slide');
+  const slideDots = $$('.mv-dots button');
+  let slideIndex = 0;
+  function showSlide(k) {
+    slideIndex = (k + slides.length) % slides.length;
+    slides.forEach((el, i) => el.classList.toggle('is-current', i === slideIndex));
+    slideDots.forEach((d, i) => { d.classList.toggle('is-on', i === slideIndex); d.setAttribute('aria-pressed', String(i === slideIndex)); });
+  }
+  slideDots.forEach((d, i) => d.addEventListener('click', () => showSlide(i)));
+  setInterval(() => {
+    if (!reduceMotion && currentId() === 'moveis' && !openName && !document.hidden) showSlide(slideIndex + 1);
+  }, 6000);
 
   function flashProduct(id) {
     setCategory('todos');
@@ -429,15 +449,25 @@
 
   const CART_KEY = 'morada:carrinho';
   let cart = [];
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]').filter((id) => HOUSES.some((h) => h.id === id)); } catch (_) { /* sem armazenamento */ }
+  function cartEntry(id) {
+    if (id.startsWith('p:')) {
+      const p = PRODUCTS.find((x) => x.id === id.slice(2));
+      return p && { kind: 'peca', id, nome: p.nome, sub: `Móveis · ${p.cats.map((c) => CATS[c]).join(', ')}`, desc: p.desc, price: brl2.format(p.preco),
+        thumb: `<span class="art-thumb" style="background:${p.bg}">${productArt(p)}</span>`, line: `${p.nome} (móvel) — ${brl2.format(p.preco)}` };
+    }
+    const h = HOUSES.find((x) => x.id === id);
+    return h && { kind: 'imovel', id, nome: h.nome, sub: `${h.bairro} · ${h.cidade}/${h.uf} · ${typeLine(h)}`, desc: h.desc, price: priceLabel(h),
+      thumb: propMedia(h, 320), line: `${h.nome} — ${h.bairro}, ${h.cidade}/${h.uf} — ${priceLabel(h)}` };
+  }
+  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]').filter((id) => cartEntry(id)); } catch (_) { /* sem armazenamento */ }
   const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) { /* ignora */ } };
 
   function toggleCart(id) {
     const on = !cart.includes(id);
     cart = on ? [...cart, id] : cart.filter((x) => x !== id);
     saveCart();
-    const h = HOUSES.find((x) => x.id === id);
-    toast(on ? `${h.nome} foi para o carrinho` : `${h.nome} saiu do carrinho`);
+    const item = cartEntry(id);
+    toast(on ? `${item.nome} foi para o carrinho` : `${item.nome} saiu do carrinho`);
     syncCartUI();
   }
 
@@ -455,22 +485,29 @@
       $('#dtCart span').textContent = inCart ? 'Remover do carrinho' : 'Adicionar ao carrinho';
       $('#dtCart').classList.toggle('is-in-cart', inCart);
     }
+    $$('.pc-add').forEach((b) => {
+      const inCart = cart.includes(`p:${b.dataset.id}`);
+      const nome = PRODUCTS.find((x) => x.id === b.dataset.id).nome;
+      b.setAttribute('aria-pressed', String(inCart));
+      b.setAttribute('aria-label', inCart ? `Tirar ${nome} do carrinho` : `Adicionar ${nome} ao carrinho`);
+      b.innerHTML = `<svg><use href="#${inCart ? 'i-check' : 'i-plus'}" /></svg>`;
+    });
     renderCart();
   }
 
   function renderCart() {
     const list = $('#cartList');
     list.innerHTML = cart.map((id) => {
-      const h = HOUSES.find((x) => x.id === id);
-      return `<li class="cart-item" data-id="${h.id}">
-        <button class="cart-thumb" type="button" aria-label="Ver ${h.nome}">${propMedia(h, 320)}</button>
+      const it = cartEntry(id);
+      return `<li class="cart-item" data-id="${it.id}" data-kind="${it.kind}">
+        <button class="cart-thumb" type="button" aria-label="Ver ${it.nome}">${it.thumb}</button>
         <div class="cart-body">
-          <strong>${h.nome}</strong>
-          <small>${h.bairro} · ${h.cidade}/${h.uf} · ${typeLine(h)}</small>
-          <p>${h.desc}</p>
-          <span class="cart-price">${priceLabel(h)}</span>
+          <strong>${it.nome}</strong>
+          <small>${it.sub}</small>
+          <p>${it.desc}</p>
+          <span class="cart-price">${it.price}</span>
         </div>
-        <button class="fav-remove" type="button" aria-label="Tirar ${h.nome} do carrinho"><svg><use href="#i-close" /></svg></button>
+        <button class="fav-remove" type="button" aria-label="Tirar ${it.nome} do carrinho"><svg><use href="#i-close" /></svg></button>
       </li>`;
     }).join('');
     withFallback(list);
@@ -479,18 +516,18 @@
     list.hidden = empty;
     $('#cartFoot').hidden = empty;
     $('#cartCount').textContent = cart.length;
-    $('#cartWord').textContent = cart.length === 1 ? 'imóvel' : 'imóveis';
+    $('#cartWord').textContent = cart.length === 1 ? 'item' : 'itens';
     const who = typeof session !== 'undefined' && session?.email ? `\n\nMeu contato: ${session.email}` : '';
-    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes imóveis da Morada:\n\n${cart.map((id, k) => {
-      const h = HOUSES.find((x) => x.id === id);
-      return `${k + 1}. ${h.nome} — ${h.bairro}, ${h.cidade}/${h.uf} — ${priceLabel(h)}`;
-    }).join('\n')}${who}`);
+    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens da Morada:\n\n${cart.map((id, k) => `${k + 1}. ${cartEntry(id).line}`).join('\n')}${who}`);
   }
   $('#cartList').addEventListener('click', (e) => {
     const item = e.target.closest('.cart-item');
     if (!item) return;
     if (e.target.closest('.fav-remove')) toggleCart(item.dataset.id);
-    else if (e.target.closest('.cart-thumb')) openProperty(item.dataset.id);
+    else if (e.target.closest('.cart-thumb')) {
+      if (item.dataset.kind === 'peca') { go('moveis'); setTimeout(() => flashProduct(item.dataset.id.slice(2)), reduceMotion ? 0 : 900); }
+      else openProperty(item.dataset.id);
+    }
   });
 
   /* =========================================================
@@ -585,29 +622,14 @@
   let leaveTimer;
   const currentId = () => ids[current];
 
-  // Hero do celular: escura por padrão; o botão de sol deixa clara (fica salvo)
+  // A hero do celular é escura (foto de fim de tarde): o topo usa cores claras nela
   const mobileMQ = matchMedia('(max-width: 900px), (max-aspect-ratio: 1/1)');
-  const HERO_KEY = 'morada:hero-claro';
-  let heroLight = false;
-  try { heroLight = localStorage.getItem(HERO_KEY) === '1'; } catch (_) { /* sem armazenamento */ }
   function updateTone() {
     const scene = scenes[current];
     let tone = scene.dataset.tone || 'light';
-    if (scene.id === 'inicio' && mobileMQ.matches) tone = heroLight ? 'light' : 'dark';
+    if (scene.id === 'inicio' && mobileMQ.matches) tone = 'dark';
     document.body.dataset.tone = tone;
   }
-  function applyHeroMode() {
-    document.body.classList.toggle('hero-light', heroLight);
-    const btn = $('.sun-btn');
-    btn.setAttribute('aria-pressed', String(heroLight));
-    btn.setAttribute('aria-label', heroLight ? 'Voltar ao modo escuro' : 'Ativar modo claro');
-    updateTone();
-  }
-  $('.sun-btn').addEventListener('click', () => {
-    heroLight = !heroLight;
-    try { localStorage.setItem(HERO_KEY, heroLight ? '1' : '0'); } catch (_) { /* ignora */ }
-    applyHeroMode();
-  });
   mobileMQ.addEventListener?.('change', updateTone);
 
   function markEntering(scene, dir) {
@@ -700,7 +722,6 @@
 
   // primeira cena (a animação de entrada só roda depois do login)
   scenes[current].classList.add('is-active');
-  applyHeroMode();
   sceneChanged();
 
   function playIntro() {
@@ -973,7 +994,7 @@
       (!q || norm(`${h.nome} ${TIPOS[h.tipo]} ${h.bairro} ${h.cidade} ${h.uf} ${h.tags.join(' ')} ${h.desc}`).includes(q)) &&
       (!search.city || h.cidade === search.city) &&
       h.suites >= search.suites);
-    const products = PRODUCTS.filter((p) => !q || norm(`${p.nome} ${p.mat} ${CATS[p.cat]}`).includes(q));
+    const products = PRODUCTS.filter((p) => !q || norm(`${p.nome} ${p.desc} ${p.cats.map((c) => CATS[c]).join(' ')}`).includes(q));
 
     const hl = $('#houseResults');
     hl.replaceChildren();
@@ -991,7 +1012,7 @@
     if (!houses.length) hl.innerHTML = '<li class="no-hits">Nenhuma casa com esses filtros. Tente outra cidade ou menos suítes.</li>';
 
     $('#productResults').innerHTML = products.length
-      ? products.map((p) => `<li><button class="hit" type="button" data-product="${p.id}"><span class="hit-img" style="background:${p.bg}">${productArt(p)}</span><span><strong>${p.nome}</strong><small>${p.mat}</small></span><span class="hit-price">${brl.format(p.preco)}</span></button></li>`).join('')
+      ? products.map((p) => `<li><button class="hit" type="button" data-product="${p.id}"><span class="hit-img" style="background:${p.bg}">${productArt(p)}</span><span><strong>${p.nome}</strong><small>${p.cats.map((c) => CATS[c]).join(' · ')}</small></span><span class="hit-price">${brl2.format(p.preco)}</span></button></li>`).join('')
       : '<li class="no-hits">Nenhuma peça encontrada.</li>';
     $('#houseHits').textContent = `· ${houses.length}`;
     $('#productHits').textContent = `· ${products.length}`;
@@ -1040,7 +1061,7 @@
       if (!p) return;
       const li = document.createElement('li');
       li.className = 'fav-item';
-      li.innerHTML = `<span class="hit-img" style="background:${p.bg}">${productArt(p)}</span><span><strong>${p.nome}</strong><small>${brl.format(p.preco)}</small></span><button class="fav-remove" type="button" aria-label="Remover ${p.nome}"><svg><use href="#i-close" /></svg></button>`;
+      li.innerHTML = `<span class="hit-img" style="background:${p.bg}">${productArt(p)}</span><span><strong>${p.nome}</strong><small>${brl2.format(p.preco)}</small></span><button class="fav-remove" type="button" aria-label="Remover ${p.nome}"><svg><use href="#i-close" /></svg></button>`;
       li.querySelector('.hit-img').addEventListener('click', () => { go('moveis'); setTimeout(() => flashProduct(id), 900); });
       li.querySelector('.fav-remove').addEventListener('click', () => toggleFav('products', id));
       list.append(li);
