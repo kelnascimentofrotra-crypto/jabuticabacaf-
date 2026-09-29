@@ -387,9 +387,13 @@
   const scenes = $$('.scene');
   const ids = scenes.map((s) => s.id);
   let current = Math.max(0, ids.indexOf(location.hash.slice(1)));
-  let busy = false;
   const enterTimers = new Map();
-  const CUT_MS = reduceMotion ? 40 : 1150;
+  // Corte: a cortina leva CUT_MS; a próxima troca já é aceita depois de LOCK_MS.
+  const CUT_MS = reduceMotion ? 40 : 850;
+  const LOCK_MS = reduceMotion ? 80 : 520;
+  let lockUntil = 0;
+  let leaving = null;
+  let leaveTimer;
   const currentId = () => ids[current];
 
   function markEntering(scene, dir) {
@@ -398,14 +402,20 @@
     scene.classList.remove('is-entering');
     void scene.offsetWidth;
     scene.classList.add('is-entering');
-    enterTimers.set(scene, setTimeout(() => scene.classList.remove('is-entering'), dir === 0 ? 3200 : 2700));
+    enterTimers.set(scene, setTimeout(() => scene.classList.remove('is-entering'), dir === 0 ? 3200 : 2400));
   }
 
   function go(target) {
     const i = typeof target === 'number' ? target : ids.indexOf(target);
     closeOverlays();
-    if (i < 0 || i >= scenes.length || i === current || busy) return;
-    busy = true;
+    if (i < 0 || i >= scenes.length || i === current) return false;
+    const now = performance.now();
+    if (now < lockUntil) return false;
+    lockUntil = now + LOCK_MS;
+
+    // se ainda havia um corte terminando, encerra na hora
+    if (leaving) { clearTimeout(leaveTimer); leaving.classList.remove('is-leaving'); }
+
     const dir = i > current ? 1 : -1;
     const from = scenes[current];
     const to = scenes[i];
@@ -419,11 +429,13 @@
     if (!reduceMotion) document.body.classList.add('is-cutting');
     current = i;
     sceneChanged();
-    setTimeout(() => {
+    leaving = from;
+    leaveTimer = setTimeout(() => {
       from.classList.remove('is-leaving');
       document.body.classList.remove('is-cutting');
-      busy = false;
+      leaving = null;
     }, CUT_MS);
+    return true;
   }
 
   function sceneChanged() {
@@ -442,7 +454,6 @@
     $$('.nav-pill a').forEach((a) => (a === link ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current')));
     pill.classList.toggle('has-active', !!link);
     moveGlider();
-    $('.contact').classList.toggle('is-active', id === 'contato');
 
     // indicador
     $('.ind-num').textContent = pad(current + 1);
@@ -463,6 +474,11 @@
     if (!link) return;
     glider.style.setProperty('--gx', `${link.offsetLeft}px`);
     glider.style.width = `${link.offsetWidth}px`;
+    // no celular a barra pode rolar para o lado: centraliza a seção ativa
+    const pill = link.parentElement;
+    if (pill.scrollWidth > pill.clientWidth) {
+      pill.scrollTo({ left: link.offsetLeft - (pill.clientWidth - link.offsetWidth) / 2, behavior: reduceMotion ? 'auto' : 'smooth' });
+    }
   }
   addEventListener('resize', moveGlider);
   document.fonts?.ready.then(moveGlider);
@@ -493,22 +509,37 @@
     if (e.target.closest('[data-close]')) closeOverlays();
   });
 
-  // roda do mouse / trackpad: um gesto = um corte
+  // roda do mouse / trackpad: um gesto = um corte.
+  // A inércia do trackpad (valores que só diminuem) é ignorada; um gesto novo
+  // (valor que volta a subir, pausa, ou roda de mouse com passos iguais) corta na hora.
   let lastWheel = 0;
-  let wheelArmed = true;
   let wheelSum = 0;
+  const recent = [];
   addEventListener('wheel', (e) => {
     if (openName) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     e.preventDefault();
     const now = performance.now();
-    if (now - lastWheel > 220) { wheelArmed = true; wheelSum = 0; }
+    const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? innerHeight : 1);
+    const abs = Math.abs(d);
+    const gap = now - lastWheel;
     lastWheel = now;
-    if (!wheelArmed || busy) return;
-    wheelSum += e.deltaY;
-    if (Math.abs(wheelSum) > 40) {
-      wheelArmed = false;
-      go(current + Math.sign(wheelSum));
+    if (gap > 150) recent.length = 0;
+    const prev = recent[recent.length - 1] ?? 0;
+    recent.push(abs);
+    if (recent.length > 6) recent.shift();
+
+    const decaying = recent.length >= 4 &&
+      recent.every((v, k) => k === 0 || v <= recent[k - 1] + 0.5) &&
+      recent[recent.length - 1] < recent[0] * 0.85;
+    const fresh = gap > 150 || abs > prev * 1.25 + 2 || (!decaying && abs > 6);
+
+    if (now < lockUntil || !fresh) { wheelSum = 0; return; }
+    if (wheelSum && Math.sign(wheelSum) !== Math.sign(d)) wheelSum = 0;
+    wheelSum += d;
+    if (Math.abs(wheelSum) > 28) {
+      wheelSum = 0;
+      go(current + Math.sign(d));
     }
   }, { passive: false });
 
@@ -521,7 +552,7 @@
     touchX = e.touches[0].clientX;
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!e.target.closest('.mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!e.target.closest('.nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;
