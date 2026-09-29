@@ -967,6 +967,114 @@
   });
   $('#gateBack').addEventListener('click', () => setGateView('landing'));
 
+  /* ---------- Apresentação em 3 telas (rolar, deslizar, setas ou pontinhos) ---------- */
+
+  const glSlides = $$('.gl-slide', gate);
+  const GL_NEXT = ['Por que criar sua conta', 'Como começar', ''];
+  let glIndex = 0;
+  let glLockUntil = 0;
+  let glLeaving = null;
+  let glLeaveTimer = 0;
+  function glShow(i, instant) {
+    i = Math.max(0, Math.min(glSlides.length - 1, i));
+    const now = performance.now();
+    if (i === glIndex || (!instant && now < glLockUntil)) return;
+    glLockUntil = now + (reduceMotion ? 80 : 560);
+    const dir = i > glIndex ? 1 : -1;
+    const from = glSlides[glIndex];
+    const to = glSlides[i];
+    if (glLeaving) { clearTimeout(glLeaveTimer); glLeaving.classList.remove('is-leaving'); }
+    from.classList.remove('is-current', 'is-entering');
+    to.classList.remove('is-entering');
+    if (!instant && !reduceMotion) {
+      from.classList.add('is-leaving');
+      glLeaving = from;
+      glLeaveTimer = setTimeout(() => { from.classList.remove('is-leaving'); glLeaving = null; }, 850);
+      to.dataset.dir = dir;
+      void to.offsetWidth;
+      to.classList.add('is-entering');
+    }
+    to.classList.add('is-current');
+    glIndex = i;
+    glSlides.forEach((sl, k) => { sl.inert = k !== i; sl.setAttribute('aria-hidden', String(k !== i)); });
+    $$('.gl-dots button', gate).forEach((d, k) => {
+      d.classList.toggle('is-on', k === i);
+      if (k === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+    });
+    $('#glNextText').textContent = GL_NEXT[i];
+    $('#glNext').hidden = !GL_NEXT[i];
+    gate.dataset.slide = i;
+  }
+  $$('.gl-dots button', gate).forEach((d) => d.addEventListener('click', () => glShow(Number(d.dataset.slideTo))));
+  $('#glNext').addEventListener('click', () => glShow(glIndex + 1));
+  const onLanding = () => !gate.hidden && gate.dataset.view === 'landing';
+
+  // roda do mouse / trackpad: um gesto = uma tela (ignora a inércia do trackpad)
+  let glLastWheel = 0;
+  let glWheelSum = 0;
+  const glRecent = [];
+  gate.addEventListener('wheel', (e) => {
+    if (!onLanding() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    e.preventDefault();
+    const now = performance.now();
+    const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? innerHeight : 1);
+    const abs = Math.abs(d);
+    const gap = now - glLastWheel;
+    glLastWheel = now;
+    if (gap > 150) glRecent.length = 0;
+    const prev = glRecent[glRecent.length - 1] ?? 0;
+    glRecent.push(abs);
+    if (glRecent.length > 6) glRecent.shift();
+    const decaying = glRecent.length >= 4 && glRecent.every((v, k) => k === 0 || v <= glRecent[k - 1] + 0.5) && glRecent[glRecent.length - 1] < glRecent[0] * 0.85;
+    const fresh = gap > 150 || abs > prev * 1.25 + 2 || (!decaying && abs > 6);
+    if (now < glLockUntil || !fresh) { glWheelSum = 0; return; }
+    if (glWheelSum && Math.sign(glWheelSum) !== Math.sign(d)) glWheelSum = 0;
+    glWheelSum += d;
+    if (Math.abs(glWheelSum) > 28) { glWheelSum = 0; glShow(glIndex + Math.sign(d)); }
+  }, { passive: false });
+
+  // toque: deslizar para cima/baixo troca de tela
+  let glTouchY = null;
+  let glTouchX = 0;
+  gate.addEventListener('touchstart', (e) => {
+    if (!onLanding() || e.target.closest('input')) { glTouchY = null; return; }
+    glTouchY = e.touches[0].clientY;
+    glTouchX = e.touches[0].clientX;
+  }, { passive: true });
+  gate.addEventListener('touchmove', (e) => {
+    if (onLanding() && !e.target.closest('.gl-features')) e.preventDefault();
+  }, { passive: false });
+  gate.addEventListener('touchend', (e) => {
+    if (glTouchY === null) return;
+    const dy = glTouchY - e.changedTouches[0].clientY;
+    const dx = glTouchX - e.changedTouches[0].clientX;
+    glTouchY = null;
+    if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx) * 1.3) glShow(glIndex + (dy > 0 ? 1 : -1));
+  }, { passive: true });
+
+  // teclado
+  addEventListener('keydown', (e) => {
+    if (!onLanding() || e.target.closest('input, textarea, select')) return;
+    const k = e.key;
+    if (k === 'ArrowDown' || k === 'PageDown') { e.preventDefault(); glShow(glIndex + 1); }
+    else if (k === 'ArrowUp' || k === 'PageUp') { e.preventDefault(); glShow(glIndex - 1); }
+  });
+
+  // tela 3: e-mail já vai preenchido para o cadastro
+  $('#glStart').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = $('#glEmail').value.trim();
+    setAuth('signup');
+    if (email) {
+      $('#s-email').value = email;
+      checkEmailInUse();
+    }
+  });
+  $('#glGoogle').addEventListener('click', () => {
+    setAuth('login');
+    if (!GOOGLE_CLIENT_ID) $('#googleBtn').click();
+  });
+
   $$('.pass-toggle[data-for]', gate).forEach((btn) => btn.addEventListener('click', () => {
     const input = $(`#${btn.dataset.for}`);
     const show = input.type === 'password';
@@ -1201,6 +1309,7 @@
     emailHint.textContent = '';
     setAuth('login');
     setGateView(view);
+    glShow(0, true);
     gate.hidden = false;
     gate.classList.remove('is-leaving', 'is-in');
     void gate.offsetWidth;

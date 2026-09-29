@@ -32,6 +32,7 @@
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.1" cy="6.9" r="1.2" fill="currentColor"/></symbol>
     <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5z" fill="currentColor"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 12 20 3M16.5 6.5l2.5 2.5M14 9l2 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
 
@@ -62,6 +63,8 @@
 
     <!-- Vista 1: apresentação do que a pessoa vai encontrar -->
     <section class="gate-landing" aria-labelledby="gateTitle">
+      <!-- Tela 1: apresentação -->
+      <div class="gl-slide is-current" data-slide="0" aria-label="Apresentação">
       <div class="gl-copy">
         <p class="gl-eyebrow g-rv" style="--d: .2s">Conheça a Morada</p>
         <h2 class="gl-title g-rv" id="gateTitle" style="--d: .3s">Tudo para encontrar <br />a sua <em>casa</em>, <br />num só lugar.</h2>
@@ -117,6 +120,81 @@
           <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-shield" /></svg>8 tentativas</span><b>pausa de 15 min</b></span>
         </li>
       </ul>
+      </div>
+
+      <!-- Tela 2: por que criar a conta -->
+      <div class="gl-slide" data-slide="1" aria-label="Por que criar sua conta">
+        <div class="gl-copy">
+          <p class="gl-eyebrow g-rv" style="--d: .15s">Por que criar sua conta</p>
+          <h2 class="gl-title g-rv" style="--d: .25s">Crie sua conta <br />e leve a busca <br /><em>até o fim</em>.</h2>
+          <p class="gl-text g-rv" style="--d: .35s">Como visitante, você já vê todos os imóveis. Com uma conta grátis, dá para salvar, juntar no carrinho e fechar com um curador.</p>
+          <div class="gl-ctas g-rv" style="--d: .45s">
+            <button class="btn btn-gold" type="button" data-auth="signup">Criar conta grátis <svg><use href="#i-arrow" /></svg></button>
+            <button class="btn btn-ghost" type="button" data-auth="login">Entrar</button>
+          </div>
+          <p class="gl-fine g-rv" style="--d: .52s">Leva menos de 1 minuto. Sem cartão.</p>
+        </div>
+
+        <div class="gl-compare g-rv" style="--d: .3s" role="table" aria-label="O que você pode fazer como visitante e com conta">
+          <div class="cmp-row cmp-head" role="row">
+            <span role="columnheader">O que você pode fazer</span>
+            <span role="columnheader">Visitante</span>
+            <span role="columnheader" class="cmp-pro">Com conta <b>Grátis</b></span>
+          </div>
+          <div class="cmp-row" role="row"><span role="cell">Ver todos os imóveis</span><span role="cell" class="yes" aria-label="Sim"><svg><use href="#i-check" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row" role="row"><span role="cell">Filtro e busca na lupa</span><span role="cell" class="yes" aria-label="Sim"><svg><use href="#i-check" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row" role="row"><span role="cell">Salvar favoritos</span><span role="cell" class="no" aria-label="Não"><svg><use href="#i-dash" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row" role="row"><span role="cell">Juntar imóveis no carrinho</span><span role="cell" class="no" aria-label="Não"><svg><use href="#i-dash" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row" role="row"><span role="cell">Finalizar com um curador no WhatsApp</span><span role="cell" class="no" aria-label="Não"><svg><use href="#i-dash" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row" role="row"><span role="cell">Histórico de pedidos</span><span role="cell" class="no" aria-label="Não"><svg><use href="#i-dash" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+          <div class="cmp-row cmp-last" role="row"><span role="cell">Perfil com foto e seus dados</span><span role="cell" class="no" aria-label="Não"><svg><use href="#i-dash" /></svg></span><span role="cell" class="yes cmp-pro" aria-label="Sim"><svg><use href="#i-check" /></svg></span></div>
+        </div>
+      </div>
+
+      <!-- Tela 3: como começar -->
+      <div class="gl-slide" data-slide="2" aria-label="Como começar">
+        <div class="gl-copy">
+          <p class="gl-eyebrow g-rv" style="--d: .15s">Comece agora</p>
+          <h2 class="gl-title g-rv" style="--d: .25s">Em 3 passos, <br />da busca à <em>visita</em>.</h2>
+          <ol class="gl-steps">
+            <li class="g-rv" style="--d: .35s"><span class="gl-step-n">1</span><div><h3>Crie sua conta</h3><p>Com e-mail ou Google, em menos de 1 minuto.</p></div></li>
+            <li class="g-rv" style="--d: .42s"><span class="gl-step-n">2</span><div><h3>Salve o que gostar</h3><p>Favoritos e carrinho guardam os imóveis que você quer ver.</p></div></li>
+            <li class="g-rv" style="--d: .49s"><span class="gl-step-n">3</span><div><h3>Fale com um curador</h3><p>Finalize no WhatsApp e marque a visita no melhor horário.</p></div></li>
+          </ol>
+          <figure class="gl-quote g-rv" style="--d: .58s">
+            <blockquote>“Visitamos três casas. A&nbsp;terceira já era a nossa.”</blockquote>
+            <figcaption>Marina Duarte · Casa Mirante</figcaption>
+          </figure>
+        </div>
+
+        <div class="gl-start g-rv" style="--d: .35s">
+          <h3>Sua próxima casa está a um login de distância.</h3>
+          <form class="gl-start-form" id="glStart" novalidate>
+            <label class="sr-only" for="glEmail">Seu e-mail</label>
+            <input id="glEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="Seu melhor e-mail" />
+            <button class="btn btn-dark btn-block" type="submit">Criar minha conta <svg><use href="#i-arrow" /></svg></button>
+          </form>
+          <p class="gl-or"><span>ou</span></p>
+          <button class="btn-google" type="button" id="glGoogle">
+            <svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>
+            Continuar com o Google
+          </button>
+          <p class="gl-start-login">Já tem conta? <button class="ga-link" type="button" data-auth="login">Entrar</button></p>
+          <ul class="gl-trust">
+            <li><svg aria-hidden="true"><use href="#i-check" /></svg>Grátis</li>
+            <li><svg aria-hidden="true"><use href="#i-check" /></svg>Sem cartão</li>
+            <li><svg aria-hidden="true"><use href="#i-shield" /></svg>Dados protegidos</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- navegação entre as telas da apresentação -->
+      <nav class="gl-dots" aria-label="Telas da apresentação">
+        <button type="button" class="is-on" data-slide-to="0" aria-label="Apresentação" aria-current="true"></button>
+        <button type="button" data-slide-to="1" aria-label="Por que criar sua conta"></button>
+        <button type="button" data-slide-to="2" aria-label="Como começar"></button>
+      </nav>
+      <button class="gl-next" type="button" id="glNext"><span id="glNextText">Por que criar sua conta</span><svg aria-hidden="true"><use href="#i-arrow" /></svg></button>
     </section>
 
     <!-- Vista 2: entrar, criar conta ou redefinir a senha -->
