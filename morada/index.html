@@ -64,7 +64,7 @@
       <div class="gl-copy">
         <p class="gl-eyebrow g-rv" style="--d: .2s">Conheça a Morada</p>
         <h2 class="gl-title g-rv" id="gateTitle" style="--d: .3s">Tudo para encontrar <br />a sua <em>casa</em>, <br />num só lugar.</h2>
-        <p class="gl-text g-rv" style="--d: .42s">Imóveis selecionados, peças para mobiliar e um curador para ajudar. Veja o que você vai ter lá dentro.</p>
+        <p class="gl-text g-rv" style="--d: .42s">Imóveis selecionados, filtros certeiros e um curador para ajudar. Veja o que você vai ter lá dentro.</p>
         <div class="gl-ctas g-rv" style="--d: .52s">
           <button class="btn btn-gold" type="button" data-auth="signup">Criar conta grátis <svg><use href="#i-arrow" /></svg></button>
           <button class="btn btn-ghost" type="button" data-auth="login">Já tenho conta</button>
@@ -81,7 +81,7 @@
         <li class="gl-card g-rv" style="--d: .35s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-search" /></svg></span>
           <h3>Busca na lupa</h3>
-          <p>Pesquise casas, apartamentos e peças por cidade, tipo e suítes.</p>
+          <p>Pesquise casas e apartamentos por cidade, tipo, suítes e valor.</p>
           <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-search" /></svg>Casa em São Paulo</span><b>4 suítes</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .42s">
@@ -93,13 +93,13 @@
         <li class="gl-card g-rv" style="--d: .49s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-heart" /></svg></span>
           <h3>Favoritos</h3>
-          <p>Guarde os imóveis e as peças que chamaram a sua atenção.</p>
+          <p>Guarde os imóveis que chamaram a sua atenção.</p>
           <span class="gl-mock"><span class="gl-mock-l"><svg class="gl-heart" aria-hidden="true"><use href="#i-heart" /></svg>Casa Pátio</span><b>Salvo</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .56s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-cart" /></svg></span>
           <h3>Carrinho</h3>
-          <p>Junte imóveis e peças e finalize com um curador no WhatsApp.</p>
+          <p>Junte os imóveis que quer visitar e finalize com um curador no WhatsApp.</p>
           <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-cart" /></svg>2 itens</span><b class="gl-zap"><svg aria-hidden="true"><use href="#i-zap" /></svg>WhatsApp</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .63s">
@@ -249,9 +249,6 @@
       <a href="#filtro" data-go="filtro">Filtro</a>
       <a href="#curadoria" data-go="curadoria">Destaques</a>
       <a href="#instagram" data-go="instagram">Instagram</a>
-      <a href="#moveis" data-go="moveis">Peças</a>
-      <a href="#regioes" data-go="regioes">Regiões</a>
-      <a href="#servicos" data-go="servicos">Serviços</a>
       <a href="#avaliacoes" data-go="avaliacoes">Avaliações</a>
       <a href="#contato" data-go="contato">Contato</a>
     </nav>
@@ -281,13 +278,10 @@
       <li><button type="button" data-go="filtro" aria-label="Filtro"></button></li>
       <li><button type="button" data-go="curadoria" aria-label="Destaques"></button></li>
       <li><button type="button" data-go="instagram" aria-label="Instagram"></button></li>
-      <li><button type="button" data-go="moveis" aria-label="Peças"></button></li>
-      <li><button type="button" data-go="regioes" aria-label="Regiões"></button></li>
-      <li><button type="button" data-go="servicos" aria-label="Serviços"></button></li>
       <li><button type="button" data-go="avaliacoes" aria-label="Avaliações"></button></li>
       <li><button type="button" data-go="contato" aria-label="Contato"></button></li>
     </ol>
-    <span class="ind-total">09</span>
+    <span class="ind-total">06</span>
     <span class="ind-label">Início</span>
   </nav>
 
@@ -428,6 +422,14 @@
             <button class="chip" type="button" data-v="5" aria-pressed="false">5</button>
           </div>
         </div>
+        <div class="fl-group">
+          <div class="fl-label-row">
+            <label class="fl-label" for="flPrice">Valor</label>
+            <output class="fl-price" id="flPriceOut" for="flPrice">Qualquer valor</output>
+          </div>
+          <input class="fl-range" id="flPrice" type="range" min="0" max="18" step="1" value="18" disabled />
+          <p class="fl-hint" id="flPriceHint">Escolha Comprar ou Alugar para definir o valor máximo.</p>
+        </div>
         <div class="fl-foot">
           <div class="fl-result">
             <ul class="fl-thumbs" id="flThumbs" aria-hidden="true"></ul>
@@ -485,118 +487,19 @@
     </section>
 
     <!-- ================= 04 · Instagram ================= -->
-    <section class="scene instagram" id="instagram" data-title="Instagram" aria-label="Posts do Instagram">
-      <div class="ig-side">
-        <p class="eyebrow rv" style="--d: .3s">Instagram</p>
-        <h2 class="sv-title rv" style="--d: .4s">Acompanhe <br />a Morada</h2>
-        <div class="ig-profile rv" style="--d: .5s">
-          <span class="ig-avatar" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span></span>
-          <div class="ig-who">
-            <strong id="igHandle">@morada.casas</strong>
-            <small>Casas selecionadas · Curadoria</small>
-          </div>
-        </div>
-        <dl class="ig-stats rv" style="--d: .55s">
-          <div><dt>Posts</dt><dd>248</dd></div>
-          <div><dt>Seguidores</dt><dd>18,4 mil</dd></div>
-          <div><dt>Seguindo</dt><dd>312</dd></div>
-        </dl>
-        <p class="sv-sub rv" style="--d: .6s">Bastidores das visitas, casas novas toda semana e dicas para mobiliar.</p>
-        <a class="btn ig-follow rv" style="--d: .7s" id="igFollow" href="https://www.instagram.com/" target="_blank" rel="noopener"><svg><use href="#i-instagram" /></svg>Seguir no Instagram</a>
+    <section class="scene instagram" id="instagram" data-title="Instagram" data-tone="dark" aria-label="Posts do Instagram">
+      <div class="ig-head">
+        <p class="ig-eyebrow rv" style="--d: .3s">Acompanhe o dia a dia</p>
+        <h2 class="ig-title rv" style="--d: .4s">Veja nossos posts</h2>
+        <p class="ig-text rv" style="--d: .5s">Tours guiados, bastidores das visitas e lançamentos exclusivos no formato Reels.</p>
+        <a class="ig-handle rv" style="--d: .6s" id="igFollow" href="https://www.instagram.com/" target="_blank" rel="noopener">
+          <svg aria-hidden="true"><use href="#i-instagram" /></svg><span id="igHandle">@morada.casas</span><svg class="ig-ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16 16 8M9 8h7v7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
-      <ul class="ig-grid" id="igGrid" aria-label="Posts recentes"></ul>
+      <ul class="ig-reels" id="igGrid" aria-label="Reels recentes"></ul>
     </section>
 
-    <!-- ================= 05 · Peças ================= -->
-    <section class="scene moveis" id="moveis" data-title="Peças" aria-label="Peças">
-      <div class="mv-intro">
-        <h2 class="mv-title rv" style="--d: .35s">Peças que <br />transformam a <br />sua casa</h2>
-        <p class="mv-sub rv" style="--d: .45s">Design atemporal para ambientes acolhedores</p>
-        <button class="btn btn-dark mv-cta rv" style="--d: .55s" type="button" id="mvExplore">Explorar coleção</button>
-      </div>
-
-      <div class="mv-banner rv" style="--d: .25s">
-        <span class="mv-slide is-current" style="--pos: 58% 78%; --zoom: 1" aria-hidden="true"></span>
-        <span class="mv-slide" style="--pos: 55% 60%; --zoom: 1.6" aria-hidden="true"></span>
-        <span class="mv-slide" style="--pos: 30% 92%; --zoom: 1.35" aria-hidden="true"></span>
-        <div class="mv-dots" role="group" aria-label="Fotos do ambiente">
-          <button type="button" class="is-on" aria-pressed="true" aria-label="Foto 1"></button>
-          <button type="button" aria-pressed="false" aria-label="Foto 2"></button>
-          <button type="button" aria-pressed="false" aria-label="Foto 3"></button>
-        </div>
-      </div>
-
-      <div class="mv-bar rv" style="--d: .45s">
-        <div class="chips" role="group" aria-label="Filtrar por ambiente">
-          <button class="chip is-on" type="button" data-cat="todos" aria-pressed="true">Todos</button>
-          <button class="chip" type="button" data-cat="sala" aria-pressed="false">Sala</button>
-          <button class="chip" type="button" data-cat="jantar" aria-pressed="false">Jantar</button>
-          <button class="chip" type="button" data-cat="iluminacao" aria-pressed="false">Iluminação</button>
-          <button class="chip" type="button" data-cat="quarto" aria-pressed="false">Quarto</button>
-        </div>
-      </div>
-
-      <ul class="mv-grid" id="productGrid" aria-label="Peças da coleção"></ul>
-    </section>
-
-    <!-- ================= 06 · Regiões ================= -->
-    <section class="scene regioes" id="regioes" data-title="Regiões" aria-label="Regiões">
-      <div class="rg-head">
-        <p class="eyebrow rv" style="--d: .3s">Regiões</p>
-        <h2 class="rg-title rv" style="--d: .4s">Onde a Morada está</h2>
-        <p class="rg-sub rv" style="--d: .5s">Imóveis selecionados em <b id="rgCount">7</b> cidades, do litoral à serra. Toque numa cidade para ver o que tem lá.</p>
-      </div>
-      <div class="rg-arrows rv" style="--d: .5s">
-        <button class="btn-round" type="button" id="rgPrev" aria-label="Cidades anteriores"><svg class="flip"><use href="#i-arrow" /></svg></button>
-        <button class="btn-round" type="button" id="rgNext" aria-label="Mais cidades"><svg><use href="#i-arrow" /></svg></button>
-      </div>
-      <ul class="rg-grid rv" style="--d: .3s" id="rgGrid" aria-label="Cidades"></ul>
-    </section>
-
-    <!-- ================= 07 · Serviços ================= -->
-    <section class="scene servicos" id="servicos" data-title="Serviços" aria-label="Serviços">
-      <div class="sv-side">
-        <div class="sv-intro">
-          <p class="eyebrow rv" style="--d: .3s">Serviços</p>
-          <h2 class="sv-title rv" style="--d: .4s">Da busca à <br />chave na mão</h2>
-          <p class="sv-sub rv" style="--d: .5s">Um curador acompanha cada etapa, da busca à mudança.</p>
-          <a class="btn btn-dark sv-cta rv" style="--d: .6s" href="#contato" data-go="contato">Falar com um curador <svg><use href="#i-arrow" /></svg></a>
-        </div>
-        <figure class="sv-photo rv" style="--d: .7s">
-          <span class="sv-photo-img" aria-hidden="true"></span>
-          <figcaption>Visitas marcadas no horário de melhor luz da casa</figcaption>
-        </figure>
-      </div>
-
-      <ul class="sv-grid" aria-label="Como podemos ajudar">
-        <li class="sv-card rv" style="--d: .35s">
-          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-search" /></svg></span>
-          <h3>Comprar um imóvel</h3>
-          <p>Selecionamos casas que combinam com a sua rotina e marcamos as visitas com você.</p>
-          <div class="sv-foot"><span class="sv-chip">Visitas guiadas</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero ajuda para comprar um imóvel." aria-label="Falar sobre comprar um imóvel"><svg><use href="#i-arrow" /></svg></a></div>
-        </li>
-        <li class="sv-card rv" style="--d: .42s">
-          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-hands" /></svg></span>
-          <h3>Vender ou alugar o seu</h3>
-          <p>Fotos, preço justo e anúncio para quem procura exatamente o que você tem.</p>
-          <div class="sv-foot"><span class="sv-chip">Fotos profissionais</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero vender ou alugar o meu imóvel." aria-label="Falar sobre vender ou alugar"><svg><use href="#i-arrow" /></svg></a></div>
-        </li>
-        <li class="sv-card rv" style="--d: .49s">
-          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-home" /></svg></span>
-          <h3>Mobiliar com a coleção</h3>
-          <p>Um projeto com as peças da coleção Morada, entregue e montado na sua casa.</p>
-          <div class="sv-foot"><span class="sv-chip">Projeto em 10 dias</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero um projeto para mobiliar a minha casa." aria-label="Falar sobre mobiliar"><svg><use href="#i-arrow" /></svg></a></div>
-        </li>
-        <li class="sv-card rv" style="--d: .56s">
-          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-receipt" /></svg></span>
-          <h3>Avaliar o seu imóvel</h3>
-          <p>Relatório com o valor de mercado e o que mais valoriza a sua casa.</p>
-          <div class="sv-foot"><span class="sv-chip">Resposta em 48 h</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero uma avaliação do meu imóvel." aria-label="Falar sobre avaliação"><svg><use href="#i-arrow" /></svg></a></div>
-        </li>
-      </ul>
-    </section>
-
-    <!-- ================= 08 · Avaliações ================= -->
+    <!-- ================= 05 · Avaliações ================= -->
     <section class="scene avaliacoes" id="avaliacoes" data-title="Avaliações" data-tone="dark" aria-label="Avaliações">
       <div class="av-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -625,7 +528,7 @@
       </figure>
     </section>
 
-    <!-- ================= 09 · Contato ================= -->
+    <!-- ================= 06 · Contato ================= -->
     <section class="scene contato" id="contato" data-title="Contato" data-tone="dark" aria-label="Contato">
       <div class="ct-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -685,11 +588,8 @@
       <a href="#filtro" data-go="filtro" data-preview="filtro"><span class="n">02</span><span class="t">Filtro</span></a>
       <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Destaques</span></a>
       <a href="#instagram" data-go="instagram" data-preview="instagram"><span class="n">04</span><span class="t">Instagram</span></a>
-      <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">05</span><span class="t">Peças</span></a>
-      <a href="#regioes" data-go="regioes" data-preview="regioes"><span class="n">06</span><span class="t">Regiões</span></a>
-      <a href="#servicos" data-go="servicos" data-preview="servicos"><span class="n">07</span><span class="t">Serviços</span></a>
-      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">08</span><span class="t">Avaliações</span></a>
-      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">09</span><span class="t">Contato</span></a>
+      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">05</span><span class="t">Avaliações</span></a>
+      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">06</span><span class="t">Contato</span></a>
     </nav>
     <figure class="menu-preview" aria-hidden="true">
       <span class="menu-preview-img" data-preview-img="inicio"></span>
@@ -707,7 +607,7 @@
       <div class="search-bar">
         <svg aria-hidden="true"><use href="#i-search" /></svg>
         <label class="sr-only" for="q">Buscar</label>
-        <input id="q" type="search" placeholder="Busque por cidade, casa ou peça" autocomplete="off" />
+        <input id="q" type="search" placeholder="Busque por cidade, bairro ou casa" autocomplete="off" />
         <button class="overlay-close" type="button" data-close>Fechar <svg><use href="#i-close" /></svg></button>
       </div>
       <div class="search-filters">
@@ -723,10 +623,6 @@
         <section>
           <h3>Imóveis <span id="houseHits"></span></h3>
           <ul id="houseResults"></ul>
-        </section>
-        <section>
-          <h3>Peças <span id="productHits"></span></h3>
-          <ul id="productResults"></ul>
         </section>
       </div>
     </div>
@@ -758,7 +654,7 @@
       <div class="tab-panel" data-panel="favs">
         <div class="fav-empty" id="favEmpty">
           <svg aria-hidden="true"><use href="#i-heart" /></svg>
-          <p>Toque no coração de uma casa ou no + de uma peça para guardar aqui.</p>
+          <p>Toque no coração de um imóvel para guardar aqui.</p>
           <button class="btn btn-dark" type="button" data-go="curadoria">Ver imóveis</button>
         </div>
         <ul class="fav-list" id="favList"></ul>
@@ -766,7 +662,7 @@
       <div class="tab-panel cart-panel" data-panel="carrinho" hidden>
         <div class="fav-empty" id="cartEmpty">
           <svg aria-hidden="true"><use href="#i-cart" /></svg>
-          <p>Seu carrinho está vazio. Adicione um imóvel pela página dele ou uma peça pelo botão +.</p>
+          <p>Seu carrinho está vazio. Adicione um imóvel pelo botão + ou pela página dele.</p>
           <button class="btn btn-dark" type="button" data-go="curadoria">Ver imóveis</button>
         </div>
         <ul class="cart-list" id="cartList"></ul>
