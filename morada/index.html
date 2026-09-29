@@ -103,7 +103,7 @@
   </main>
 
   <script>
-    // Parallax leve: a casa e o título se movem em profundidades diferentes (mouse e scroll).
+    // Parallax leve: a casa e o título se movem em profundidades diferentes com o mouse.
     (() => {
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       const hero = document.querySelector('.hero');
@@ -113,7 +113,6 @@
         my += (ty - my) * 0.07;
         hero.style.setProperty('--mx', mx.toFixed(4));
         hero.style.setProperty('--my', my.toFixed(4));
-        hero.style.setProperty('--sy', Math.min(scrollY, innerHeight).toFixed(1));
         raf = Math.abs(tx - mx) + Math.abs(ty - my) > 0.0005 ? requestAnimationFrame(tick) : 0;
       };
       const kick = () => { if (!raf) raf = requestAnimationFrame(tick); };
@@ -123,7 +122,6 @@
         ty = e.clientY / innerHeight - 0.5;
         kick();
       }, { passive: true });
-      addEventListener('scroll', kick, { passive: true });
     })();
   </script>
 </body>
