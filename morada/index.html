@@ -22,6 +22,14 @@
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
 
+  <!-- ================= Carregamento ================= -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <span class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </span>
+    <span class="preloader-bar"><i></i></span>
+  </div>
+
   <!-- ================= Entrada (apresentação + login de teste) ================= -->
   <div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
     <div class="gate-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
@@ -40,10 +48,10 @@
     </div>
 
     <dl class="gate-stats g-rv" style="--d: .65s">
-      <div><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd><dt>Casas selecionadas</dt></div>
-      <div><dd><span class="count" data-count="12" data-delay="1000">12</span></dd><dt>Cidades</dt></div>
-      <div><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd><dt>Famílias atendidas</dt></div>
-      <div><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd><dt>Nota média</dt></div>
+      <div><dt>Casas selecionadas</dt><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
+      <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="1000">12</span></dd></div>
+      <div><dt>Famílias atendidas</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
+      <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
     </dl>
 
     <form class="gate-form g-rv" id="gateForm" style="--d: .45s" novalidate>
@@ -117,7 +125,10 @@
     <section class="scene hero" id="inicio" data-title="Início" aria-label="Início">
       <div class="intro rv" style="--d: .55s">
         <h2 class="intro-title">Vamos encontrar <br />a sua <em>morada</em></h2>
-        <a class="btn btn-dark intro-cta" href="#curadoria" data-go="curadoria">Ver as casas <svg><use href="#i-arrow" /></svg></a>
+        <div class="intro-actions">
+          <a class="btn btn-dark" href="#curadoria" data-go="curadoria">Ver as casas <svg><use href="#i-arrow" /></svg></a>
+          <span class="scroll-hint" aria-hidden="true"><i></i>Role para explorar</span>
+        </div>
       </div>
 
       <h1 class="title" aria-label="Morada">
@@ -134,6 +145,13 @@
           <svg class="sparkle" aria-hidden="true"><use href="#i-sparkle" /></svg>
           <p>Casas selecionadas para<br />um jeito único de viver</p>
         </div>
+
+        <dl class="hero-stats rv" style="--d: 2s">
+          <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="2100">12</span></dd></div>
+          <div><dt>Famílias</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="2200">+1.200</span></dd></div>
+          <div><dt>Anos</dt><dd><span class="count" data-count="15" data-delay="2300">15</span></dd></div>
+          <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="2400">4,9</span></dd></div>
+        </dl>
 
         <div class="cards">
           <a class="card card--stats rv" style="--d: 1.75s" href="#curadoria" data-go="curadoria">

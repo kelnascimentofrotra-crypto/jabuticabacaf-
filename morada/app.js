@@ -881,13 +881,26 @@
   syncFavUI();
   runSearch();
 
-  // abre na tela de entrada, a não ser que já tenha entrado nesta aba
+  // Carregamento: logo + barra até a página ficar pronta (mínimo 1,2 s, máximo 2,5 s).
+  // Depois abre a entrada, ou direto a hero se já entrou nesta aba.
   if (session?.email) {
     $('#accEmail').textContent = session.email;
     gate.hidden = true;
-    lockSite(false);
-    playIntro();
-  } else {
-    showGate();
   }
+  const pageLoaded = new Promise((resolve) => {
+    if (document.readyState === 'complete') resolve();
+    else addEventListener('load', resolve, { once: true });
+  });
+  const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
+  Promise.race([Promise.all([pageLoaded, wait(1200)]), wait(2500)]).then(() => {
+    const pre = $('#preloader');
+    pre.classList.add('is-done');
+    setTimeout(() => { pre.hidden = true; }, 800);
+    if (session?.email) {
+      lockSite(false);
+      playIntro();
+    } else {
+      showGate();
+    }
+  });
 })();
