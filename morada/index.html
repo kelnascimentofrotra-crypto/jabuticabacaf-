@@ -113,7 +113,6 @@
       </button>
       <button class="dots-btn" type="button" aria-label="Abrir opções" data-open="menu">
         <span></span><span></span><span></span>
-        <span class="dots-count" hidden>0</span>
       </button>
     </div>
   </header>
@@ -381,11 +380,6 @@
   <!-- ================= Menu (abre como íris) ================= -->
   <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
     <button class="overlay-close menu-close" type="button" data-close>Fechar <svg><use href="#i-close" /></svg></button>
-    <div class="menu-actions">
-      <button type="button" data-menu-action="search"><svg aria-hidden="true"><use href="#i-search" /></svg>Buscar</button>
-      <button type="button" data-menu-action="favs"><svg aria-hidden="true"><use href="#i-user" /></svg>Minha conta</button>
-      <button type="button" data-menu-action="carrinho"><svg aria-hidden="true"><use href="#i-cart" /></svg>Carrinho <span class="menu-cart-count">0</span></button>
-    </div>
     <nav class="menu-links" aria-label="Seções">
       <a href="#inicio" data-go="inicio" data-preview="inicio"><span class="n">01</span><span class="t">Início</span></a>
       <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">02</span><span class="t">Peças</span></a>
@@ -443,6 +437,14 @@
         <h2>Minha conta</h2>
         <button class="overlay-close" type="button" data-close>Fechar <svg><use href="#i-close" /></svg></button>
       </div>
+      <button class="profile-card" type="button" id="profileCard" aria-label="Editar perfil">
+        <span class="avatar" id="profAvatar" aria-hidden="true"></span>
+        <span class="profile-who">
+          <strong id="profName">—</strong>
+          <small id="profEmail">—</small>
+        </span>
+        <span class="profile-edit">Editar perfil</span>
+      </button>
       <div class="tabs" role="tablist">
         <button class="tab is-on" type="button" role="tab" aria-selected="true" data-tab="favs">Favoritos <span class="tab-count" id="favTabCount">0</span></button>
         <button class="tab" type="button" role="tab" aria-selected="false" data-tab="carrinho">Carrinho <span class="tab-count" id="cartTabCount">0</span></button>
@@ -469,10 +471,51 @@
         </div>
       </div>
       <div class="tab-panel" data-panel="conta" hidden>
-        <div class="account-info">
-          <p>Você entrou como</p>
-          <strong id="accEmail">—</strong>
-          <button class="btn btn-light" type="button" id="logoutBtn">Sair</button>
+        <div class="acc">
+          <section class="acc-block acc-photo">
+            <span class="avatar avatar--lg" id="accAvatar" aria-hidden="true"></span>
+            <div class="acc-photo-actions">
+              <label class="btn btn-dark" for="accFoto">Trocar foto</label>
+              <input class="sr-only" id="accFoto" type="file" accept="image/*" />
+              <button class="btn btn-light" type="button" id="accFotoRemove">Remover</button>
+            </div>
+          </section>
+
+          <form class="acc-block" id="accForm" novalidate>
+            <h3>Dados da conta</h3>
+            <div class="field">
+              <label for="accNome">Nome</label>
+              <input id="accNome" type="text" autocomplete="name" placeholder="Seu nome" />
+            </div>
+            <div class="field">
+              <label for="accMail">E-mail de acesso</label>
+              <input id="accMail" type="text" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" />
+            </div>
+            <button class="btn btn-dark btn-block" type="submit">Salvar alterações</button>
+            <p class="form-error" id="accNote" role="status"></p>
+          </form>
+
+          <section class="acc-block">
+            <h3>Senha</h3>
+            <div class="acc-pass">
+              <span>••••••••</span>
+              <button class="btn btn-light" type="button" id="passToggle" aria-expanded="false" aria-controls="passForm">Alterar senha</button>
+            </div>
+            <form class="acc-pass-form" id="passForm" novalidate hidden>
+              <div class="field">
+                <label for="passNew">Nova senha</label>
+                <input id="passNew" type="password" autocomplete="new-password" placeholder="Mínimo de 6 caracteres" />
+              </div>
+              <div class="field">
+                <label for="passConfirm">Repita a nova senha</label>
+                <input id="passConfirm" type="password" autocomplete="new-password" placeholder="Digite de novo" />
+              </div>
+              <button class="btn btn-dark btn-block" type="submit">Salvar nova senha</button>
+              <p class="form-error" id="passNote" role="status"></p>
+            </form>
+          </section>
+
+          <button class="btn btn-light btn-block acc-logout" type="button" id="logoutBtn">Sair da conta</button>
         </div>
       </div>
     </aside>

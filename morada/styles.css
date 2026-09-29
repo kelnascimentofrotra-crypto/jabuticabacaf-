@@ -309,6 +309,8 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
   transition: transform 0.2s, background 0.6s, color 0.6s;
 }
 .icon-btn + .icon-btn { margin-left: calc(0.9 * var(--u)); }
+.icon-btn.has-photo { background-size: cover; background-position: center; box-shadow: 0 0 0 2px #fff, 0 0 0 3px rgba(0, 0, 0, 0.15); }
+.icon-btn.has-photo svg { visibility: hidden; }
 .icon-btn:hover { transform: scale(1.06); }
 .fav-count {
   position: absolute;
@@ -332,7 +334,7 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
   display: grid;
   gap: calc(0.4 * var(--u));
 }
-.dots-btn, .menu-actions, .m-hero { display: none; }
+.dots-btn, .m-hero { display: none; }
 .menu-btn span { height: 1.5px; background: #333; border-radius: 2px; transition: background 0.6s, transform 0.3s; }
 .menu-btn:hover span:nth-child(2) { transform: translateX(20%); }
 
@@ -1685,10 +1687,51 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 .fav-item .hit-img { cursor: pointer; }
 .fav-remove { width: 32px; height: 32px; padding: 8px; border-radius: 50%; color: #777; }
 .fav-remove:hover { background: #f0efeb; color: #111; }
-.account-info { display: grid; justify-items: start; gap: var(--u); padding: calc(2 * var(--u)) 0; }
-.account-info p { font-size: max(12px, calc(0.9 * var(--u))); color: var(--muted); }
-.account-info strong { font-size: max(16px, calc(1.4 * var(--u))); font-weight: 500; word-break: break-all; }
-.account-info .btn { margin-top: calc(1.2 * var(--u)); }
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d99466, #9c5b36) center / cover no-repeat;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.avatar.has-photo { background-color: #ddd; }
+.avatar--lg { width: 88px; height: 88px; font-size: 28px; }
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-top: calc(1.8 * var(--u));
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: #fff;
+  text-align: left;
+  transition: box-shadow 0.2s;
+}
+.profile-card:hover { box-shadow: 0 0 0 1px var(--line); }
+.profile-who { display: grid; gap: 2px; min-width: 0; }
+.profile-who strong { font-size: 16px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-who small { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.profile-edit { margin-left: auto; flex: none; font-size: 12.5px; color: var(--terracotta); }
+.acc { display: grid; gap: 12px; padding-bottom: 8px; }
+.acc-block { display: grid; gap: 12px; padding: 16px; border-radius: 16px; background: #fff; }
+.acc-block h3 { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #5f5e5a; }
+.acc-photo { grid-template-columns: auto 1fr; align-items: center; gap: 16px; }
+.acc-photo-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.acc-photo-actions .btn { height: 38px; padding: 0 16px; font-size: 13px; cursor: pointer; }
+.acc-photo-actions label.btn:focus-within { outline: 2px solid var(--terracotta); outline-offset: 3px; }
+.acc-pass { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.acc-pass > span { font-size: 18px; letter-spacing: 0.12em; color: #5f5e5a; }
+.acc-pass .btn { height: 38px; padding: 0 16px; font-size: 13px; }
+.acc-pass-form { display: grid; gap: 12px; padding-top: 4px; }
+.acc .form-error:empty { display: none; }
+.acc-logout { color: #b3452c; }
 
 /* =========================================================
    Carregamento
@@ -1873,7 +1916,7 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .indicator { display: none; }
 
   /* No celular o topo mostra só o logo e os três pontinhos; as opções ficam no menu */
-  .nav-pill, .icon-btn, .menu-btn { display: none !important; }
+  .nav-pill, .menu-btn { display: none !important; }
   .dots-btn {
     position: relative;
     display: flex;
@@ -1885,24 +1928,9 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
     border-radius: 50%;
     background: #0d0d0d;
   }
-  .dots-btn > span:not(.dots-count) { width: 4.5px; height: 4.5px; border-radius: 50%; background: #fff; }
-  .dots-count {
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 999px;
-    background: var(--terracotta);
-    color: #fff;
-    font-size: 10px;
-    font-weight: 600;
-    line-height: 18px;
-    text-align: center;
-  }
+  .dots-btn > span { width: 4.5px; height: 4.5px; border-radius: 50%; background: #fff; }
   body[data-tone="dark"] .dots-btn { background: var(--cream); }
-  body[data-tone="dark"] .dots-btn > span:not(.dots-count) { background: #111; }
+  body[data-tone="dark"] .dots-btn > span { background: #111; }
 
   /* ---- Hero do celular (tela cheia, modo escuro de fim de tarde; o sol deixa claro) ---- */
   .hero > .intro, .hero > .title, .hero > .media { display: none; }
@@ -1992,35 +2020,12 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 
   /* Três pontinhos sem fundo, como ícone */
   .dots-btn { background: none !important; margin-left: 4px; }
-  .dots-btn > span:not(.dots-count) { background: var(--ink) !important; width: 5px; height: 5px; }
-  body[data-tone="dark"] .dots-btn > span:not(.dots-count) { background: #fff !important; }
+  .dots-btn > span { background: var(--ink) !important; width: 5px; height: 5px; }
+  body[data-tone="dark"] .dots-btn > span { background: #fff !important; }
   body[data-tone="dark"][data-scene="inicio"] .logo-word { color: #fff; }
 
   /* Menu aberto: só toque, nada rola por trás */
   .menu { touch-action: none; overscroll-behavior: none; }
-  .menu-actions {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    top: 70px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  .menu-actions button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 6px;
-    border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.06);
-    font-size: 13px;
-    color: var(--cream);
-  }
-  .menu-actions svg { width: 20px; height: 20px; }
-  .menu-cart-count { padding: 0 6px; border-radius: 999px; background: var(--terracotta); color: #fff; font-size: 10px; line-height: 16px; }
 
   .nav-pill {
     left: 16px;
@@ -2036,8 +2041,10 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .nav-pill a { flex: 1 0 auto; height: 32px; padding: 0 8px; font-size: 10.5px; letter-spacing: 0.01em; }
   .nav-glider { height: 32px; }
   .actions { right: 16px; }
-  .icon-btn { width: 36px; height: 36px; padding: 9px; margin-top: 0; }
-  .icon-btn + .icon-btn { margin-left: 8px; }
+  .icon-btn { width: 40px; height: 40px; padding: 9px; margin-top: 0; background: none; color: var(--ink); }
+  .icon-btn + .icon-btn { margin-left: 2px; }
+  body[data-tone="dark"] .icon-btn { background: none; color: #fff; }
+  .icon-btn.has-photo { width: 32px; height: 32px; margin: 0 4px 0 6px; }
   .fav-count { font-size: 10px; }
   .menu-btn { margin-left: 18px; width: 26px; gap: 5px; margin-top: 0; }
 
@@ -2251,7 +2258,7 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 
   /* ---- Menu / busca / conta ---- */
   .menu-close { top: 22px; right: 16px; font-size: 14px; }
-  .menu-links { left: 16px; right: 16px; top: 174px; gap: 6px; }
+  .menu-links { left: 16px; right: 16px; top: 96px; gap: 6px; }
   .menu-links .n { font-size: 11px; }
   .menu-links .t { font-size: min(48px, 12vw, 7svh); }
   .menu-preview { display: none; }
@@ -2278,7 +2285,6 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .tab { font-size: 15px; padding-bottom: 10px; }
   .fav-item { gap: 12px; padding: 8px; border-radius: 12px; }
   .fav-empty { padding: 40px 8px; gap: 14px; }
-  .account-info { gap: 10px; padding: 16px 0; }
 }
 
 /* Celulares baixos: tira o que é secundário para tudo continuar numa tela */

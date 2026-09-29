@@ -479,6 +479,7 @@
 
   /* ---------- Carrinho (fica no navegador de quem visita) ---------- */
 
+  let profile = null; // perfil de quem entrou (preenchido no login)
   const CART_KEY = 'morada:carrinho';
   let cart = [];
   function cartEntry(id) {
@@ -509,9 +510,6 @@
     badge.textContent = n;
     badge.hidden = n === 0;
     $('#cartTabCount').textContent = n;
-    $('.menu-cart-count').textContent = n;
-    $('.dots-count').textContent = n;
-    $('.dots-count').hidden = n === 0;
     if (dtHouse) {
       const inCart = cart.includes(dtHouse.id);
       $('#dtCart span').textContent = inCart ? 'Remover do carrinho' : 'Adicionar ao carrinho';
@@ -556,7 +554,7 @@
     $('#cartFoot').hidden = empty;
     $('#cartCount').textContent = cart.length;
     $('#cartWord').textContent = cart.length === 1 ? 'item' : 'itens';
-    const who = typeof session !== 'undefined' && session?.email ? `\n\nMeu contato: ${session.email}` : '';
+    const who = profile ? `\n\nMeu contato: ${profile.nome} (${profile.email})` : '';
     $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens da Morada:\n\n${cart.map((id, k) => `${k + 1}. ${cartEntry(id).line}`).join('\n')}${who}`);
   }
   $('#cartList').addEventListener('click', (e) => {
@@ -801,10 +799,121 @@
     setTimeout(() => $('#g-email').focus({ preventScroll: true }), reduceMotion ? 0 : 700);
   }
 
+  /* ---------- Perfil (nome, e-mail e foto ficam no navegador de quem entrou) ---------- */
+
+  const PROFILE_KEY = 'morada:perfil';
+  const nameFromEmail = (email) => {
+    const base = email.split('@')[0].replace(/[._-]+/g, ' ').trim() || email;
+    return base.replace(/\b\p{L}/gu, (c) => c.toUpperCase());
+  };
+  const initials = (nome) => nome.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || '?';
+  function loadProfile(email) {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null'); } catch (_) { /* sem armazenamento */ }
+    profile = saved && saved.email === email ? saved : { email, nome: nameFromEmail(email), foto: '' };
+    saveProfile();
+    renderProfile();
+  }
+  function saveProfile() {
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); } catch (_) {
+      toast('Não deu para guardar a foto neste navegador. Tente uma imagem menor.');
+    }
+  }
+  function paintAvatar(el) {
+    el.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
+    el.textContent = profile.foto ? '' : initials(profile.nome);
+    el.classList.toggle('has-photo', !!profile.foto);
+  }
+  function renderProfile() {
+    if (!profile) return;
+    paintAvatar($('#profAvatar'));
+    paintAvatar($('#accAvatar'));
+    $('#profName').textContent = profile.nome;
+    $('#profEmail').textContent = profile.email;
+    $('#accNome').value = profile.nome;
+    $('#accMail').value = profile.email;
+    $('#accFotoRemove').hidden = !profile.foto;
+    // a bonequinha do topo vira a foto de perfil
+    const icon = $('.icon-btn[data-open="account"]');
+    icon.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
+    icon.classList.toggle('has-photo', !!profile.foto);
+    if (typeof renderCart === 'function') renderCart();
+  }
+
+  $('#profileCard').addEventListener('click', () => { showTab('conta'); $('#accNome').focus({ preventScroll: true }); });
+
+  $('#accForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nome = $('#accNome').value.trim();
+    const email = $('#accMail').value.trim();
+    if (!nome || !email) { $('#accNote').textContent = 'Preencha nome e e-mail.'; return; }
+    profile.nome = nome;
+    profile.email = email;
+    session = { email };
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
+    saveProfile();
+    renderProfile();
+    $('#accNote').textContent = '';
+    toast('Dados da conta salvos');
+  });
+
+  $('#accFoto').addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { toast('Escolha um arquivo de imagem (JPG ou PNG).'); return; }
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        // recorta no centro e reduz para 256 px, para caber no navegador
+        const side = Math.min(img.naturalWidth, img.naturalHeight);
+        const c = document.createElement('canvas');
+        c.width = c.height = 256;
+        c.getContext('2d').drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, 256, 256);
+        profile.foto = c.toDataURL('image/jpeg', 0.85);
+        saveProfile();
+        renderProfile();
+        toast('Foto de perfil atualizada');
+      };
+      img.onerror = () => toast('Não deu para abrir essa imagem. Tente outra.');
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+  $('#accFotoRemove').addEventListener('click', () => {
+    profile.foto = '';
+    saveProfile();
+    renderProfile();
+    toast('Foto removida');
+  });
+
+  $('#passToggle').addEventListener('click', (e) => {
+    const form = $('#passForm');
+    form.hidden = !form.hidden;
+    e.currentTarget.setAttribute('aria-expanded', String(!form.hidden));
+    e.currentTarget.textContent = form.hidden ? 'Alterar senha' : 'Cancelar';
+    $('#passNote').textContent = '';
+    if (!form.hidden) $('#passNew').focus({ preventScroll: true });
+  });
+  $('#passForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nova = $('#passNew').value;
+    const conf = $('#passConfirm').value;
+    if (nova.length < 6) { $('#passNote').textContent = 'A nova senha precisa ter pelo menos 6 caracteres.'; return; }
+    if (nova !== conf) { $('#passNote').textContent = 'As duas senhas não são iguais.'; return; }
+    // Versão de teste: a senha não é guardada em lugar nenhum.
+    e.currentTarget.reset();
+    e.currentTarget.hidden = true;
+    $('#passToggle').textContent = 'Alterar senha';
+    $('#passToggle').setAttribute('aria-expanded', 'false');
+    toast('Senha alterada');
+  });
+
   function enterSite(email) {
     session = { email };
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
-    $('#accEmail').textContent = email;
+    loadProfile(email);
     lockSite(false);
     gate.classList.add('is-leaving');
     playIntro();
@@ -1071,15 +1180,6 @@
   }
   $$('.tab').forEach((t) => t.addEventListener('click', () => showTab(t.dataset.tab)));
 
-  // atalhos do menu (celular): buscar, conta, carrinho
-  $('.menu-actions').addEventListener('click', (e) => {
-    const b = e.target.closest('[data-menu-action]');
-    if (!b) return;
-    const trigger = $('.dots-btn');
-    if (b.dataset.menuAction === 'search') { openOverlay('search', trigger); return; }
-    openOverlay('account', trigger);
-    showTab(b.dataset.menuAction);
-  });
 
   function renderFavs() {
     const list = $('#favList');
@@ -1140,7 +1240,7 @@
   // Carregamento: logo + barra até a página ficar pronta (mínimo 1,2 s, máximo 2,5 s).
   // Depois abre a entrada, ou direto a hero se já entrou nesta aba.
   if (session?.email) {
-    $('#accEmail').textContent = session.email;
+    loadProfile(session.email);
     gate.hidden = true;
   }
   const pageLoaded = new Promise((resolve) => {
