@@ -80,37 +80,37 @@
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-search" /></svg></span>
           <h3>Busca na lupa</h3>
           <p>Pesquise casas, apartamentos e peças por cidade, tipo e suítes.</p>
-          <span class="gl-mock gl-mock--search"><svg aria-hidden="true"><use href="#i-search" /></svg>Casa em São Paulo, 4 suítes</span>
+          <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-search" /></svg>Casa em São Paulo</span><b>4 suítes</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .42s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-user" /></svg></span>
           <h3>Sua conta</h3>
           <p>Foto, nome, e-mail e senha: ajuste tudo nas configurações.</p>
-          <span class="gl-mock gl-mock--acc"><i aria-hidden="true">AS</i>Ana Souza <b>Editar perfil</b></span>
+          <span class="gl-mock"><span class="gl-mock-l"><i aria-hidden="true">AS</i>Ana Souza</span><b>Editar perfil</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .49s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-heart" /></svg></span>
           <h3>Favoritos</h3>
           <p>Guarde os imóveis e as peças que chamaram a sua atenção.</p>
-          <span class="gl-mock"><svg class="gl-heart" aria-hidden="true"><use href="#i-heart" /></svg>3 imóveis salvos</span>
+          <span class="gl-mock"><span class="gl-mock-l"><svg class="gl-heart" aria-hidden="true"><use href="#i-heart" /></svg>Casa Pátio</span><b>Salvo</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .56s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-cart" /></svg></span>
           <h3>Carrinho</h3>
           <p>Junte imóveis e peças e finalize com um curador no WhatsApp.</p>
-          <span class="gl-mock gl-mock--zap"><svg aria-hidden="true"><use href="#i-zap" /></svg>Finalizar no WhatsApp</span>
+          <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-cart" /></svg>2 itens</span><b class="gl-zap"><svg aria-hidden="true"><use href="#i-zap" /></svg>WhatsApp</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .63s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-receipt" /></svg></span>
           <h3>Histórico de compras</h3>
           <p>Cada pedido finalizado fica guardado, com data e itens.</p>
-          <span class="gl-mock">Pedido #1024 <b>2 itens</b></span>
+          <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-receipt" /></svg>Pedido #1024</span><b>Enviado</b></span>
         </li>
         <li class="gl-card g-rv" style="--d: .7s">
           <span class="gl-ico"><svg aria-hidden="true"><use href="#i-shield" /></svg></span>
           <h3>Conta protegida</h3>
           <p>Bloqueio após 8 tentativas erradas, redefinição de senha e login com Google.</p>
-          <span class="gl-mock">8 tentativas <b>15 min de pausa</b></span>
+          <span class="gl-mock"><span class="gl-mock-l"><svg aria-hidden="true"><use href="#i-shield" /></svg>8 tentativas</span><b>pausa de 15 min</b></span>
         </li>
       </ul>
     </section>
@@ -246,6 +246,8 @@
       <a href="#inicio" data-go="inicio">Início</a>
       <a href="#moveis" data-go="moveis">Peças</a>
       <a href="#curadoria" data-go="curadoria">Imóveis</a>
+      <a href="#regioes" data-go="regioes">Regiões</a>
+      <a href="#servicos" data-go="servicos">Serviços</a>
       <a href="#avaliacoes" data-go="avaliacoes">Avaliações</a>
       <a href="#contato" data-go="contato">Contato</a>
     </nav>
@@ -274,10 +276,12 @@
       <li><button type="button" data-go="inicio" aria-label="Início"></button></li>
       <li><button type="button" data-go="moveis" aria-label="Peças"></button></li>
       <li><button type="button" data-go="curadoria" aria-label="Imóveis"></button></li>
+      <li><button type="button" data-go="regioes" aria-label="Regiões"></button></li>
+      <li><button type="button" data-go="servicos" aria-label="Serviços"></button></li>
       <li><button type="button" data-go="avaliacoes" aria-label="Avaliações"></button></li>
       <li><button type="button" data-go="contato" aria-label="Contato"></button></li>
     </ol>
-    <span class="ind-total">05</span>
+    <span class="ind-total">07</span>
     <span class="ind-label">Início</span>
   </nav>
 
@@ -446,7 +450,64 @@
       </div>
     </section>
 
-    <!-- ================= 04 · Avaliações ================= -->
+    <!-- ================= 04 · Regiões ================= -->
+    <section class="scene regioes" id="regioes" data-title="Regiões" aria-label="Regiões">
+      <div class="rg-head">
+        <p class="eyebrow rv" style="--d: .3s">Regiões</p>
+        <h2 class="rg-title rv" style="--d: .4s">Onde a Morada está</h2>
+        <p class="rg-sub rv" style="--d: .5s">Imóveis selecionados em <b id="rgCount">7</b> cidades, do litoral à serra. Toque numa cidade para ver o que tem lá.</p>
+      </div>
+      <div class="rg-arrows rv" style="--d: .5s">
+        <button class="btn-round" type="button" id="rgPrev" aria-label="Cidades anteriores"><svg class="flip"><use href="#i-arrow" /></svg></button>
+        <button class="btn-round" type="button" id="rgNext" aria-label="Mais cidades"><svg><use href="#i-arrow" /></svg></button>
+      </div>
+      <ul class="rg-grid rv" style="--d: .3s" id="rgGrid" aria-label="Cidades"></ul>
+    </section>
+
+    <!-- ================= 05 · Serviços ================= -->
+    <section class="scene servicos" id="servicos" data-title="Serviços" aria-label="Serviços">
+      <div class="sv-side">
+        <div class="sv-intro">
+          <p class="eyebrow rv" style="--d: .3s">Serviços</p>
+          <h2 class="sv-title rv" style="--d: .4s">Da busca à <br />chave na mão</h2>
+          <p class="sv-sub rv" style="--d: .5s">Um curador acompanha cada etapa, da busca à mudança.</p>
+          <a class="btn btn-dark sv-cta rv" style="--d: .6s" href="#contato" data-go="contato">Falar com um curador <svg><use href="#i-arrow" /></svg></a>
+        </div>
+        <figure class="sv-photo rv" style="--d: .7s">
+          <span class="sv-photo-img" aria-hidden="true"></span>
+          <figcaption>Visitas marcadas no horário de melhor luz da casa</figcaption>
+        </figure>
+      </div>
+
+      <ul class="sv-grid" aria-label="Como podemos ajudar">
+        <li class="sv-card rv" style="--d: .35s">
+          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-search" /></svg></span>
+          <h3>Comprar um imóvel</h3>
+          <p>Selecionamos casas que combinam com a sua rotina e marcamos as visitas com você.</p>
+          <div class="sv-foot"><span class="sv-chip">Visitas guiadas</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero ajuda para comprar um imóvel." aria-label="Falar sobre comprar um imóvel"><svg><use href="#i-arrow" /></svg></a></div>
+        </li>
+        <li class="sv-card rv" style="--d: .42s">
+          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-hands" /></svg></span>
+          <h3>Vender ou alugar o seu</h3>
+          <p>Fotos, preço justo e anúncio para quem procura exatamente o que você tem.</p>
+          <div class="sv-foot"><span class="sv-chip">Fotos profissionais</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero vender ou alugar o meu imóvel." aria-label="Falar sobre vender ou alugar"><svg><use href="#i-arrow" /></svg></a></div>
+        </li>
+        <li class="sv-card rv" style="--d: .49s">
+          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-home" /></svg></span>
+          <h3>Mobiliar com a coleção</h3>
+          <p>Um projeto com as peças da coleção Morada, entregue e montado na sua casa.</p>
+          <div class="sv-foot"><span class="sv-chip">Projeto em 10 dias</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero um projeto para mobiliar a minha casa." aria-label="Falar sobre mobiliar"><svg><use href="#i-arrow" /></svg></a></div>
+        </li>
+        <li class="sv-card rv" style="--d: .56s">
+          <span class="sv-ico"><svg aria-hidden="true"><use href="#i-receipt" /></svg></span>
+          <h3>Avaliar o seu imóvel</h3>
+          <p>Relatório com o valor de mercado e o que mais valoriza a sua casa.</p>
+          <div class="sv-foot"><span class="sv-chip">Resposta em 48 h</span><a class="sv-go" href="#contato" data-go="contato" data-msg="Quero uma avaliação do meu imóvel." aria-label="Falar sobre avaliação"><svg><use href="#i-arrow" /></svg></a></div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- ================= 06 · Avaliações ================= -->
     <section class="scene avaliacoes" id="avaliacoes" data-title="Avaliações" data-tone="dark" aria-label="Avaliações">
       <div class="av-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -475,7 +536,7 @@
       </figure>
     </section>
 
-    <!-- ================= 05 · Contato ================= -->
+    <!-- ================= 07 · Contato ================= -->
     <section class="scene contato" id="contato" data-title="Contato" data-tone="dark" aria-label="Contato">
       <div class="ct-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -534,8 +595,10 @@
       <a href="#inicio" data-go="inicio" data-preview="inicio"><span class="n">01</span><span class="t">Início</span></a>
       <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">02</span><span class="t">Peças</span></a>
       <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Imóveis</span></a>
-      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">04</span><span class="t">Avaliações</span></a>
-      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">05</span><span class="t">Contato</span></a>
+      <a href="#regioes" data-go="regioes" data-preview="regioes"><span class="n">04</span><span class="t">Regiões</span></a>
+      <a href="#servicos" data-go="servicos" data-preview="servicos"><span class="n">05</span><span class="t">Serviços</span></a>
+      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">06</span><span class="t">Avaliações</span></a>
+      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">07</span><span class="t">Contato</span></a>
     </nav>
     <figure class="menu-preview" aria-hidden="true">
       <span class="menu-preview-img" data-preview-img="inicio"></span>

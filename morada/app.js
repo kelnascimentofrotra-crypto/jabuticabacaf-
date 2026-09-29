@@ -112,6 +112,8 @@
     inicio: 'Vamos encontrar a sua morada',
     moveis: 'Peças que transformam a sua casa',
     curadoria: `${HOUSES.length} imóveis selecionados`,
+    regioes: `Imóveis em ${[...new Set(HOUSES.map((h) => h.cidade))].length} cidades`,
+    servicos: 'Da busca à chave na mão',
     avaliacoes: 'Nota 4,9 de 5',
     contato: 'Resposta em até um dia útil',
   };
@@ -411,6 +413,48 @@
   setInterval(() => {
     if (!reduceMotion && currentId() === 'curadoria' && !openName && !document.hidden) showFeatured(featIndex + 1);
   }, 7000);
+
+  /* =========================================================
+     04 · Regiões (cada cidade abre a busca já filtrada)
+     ========================================================= */
+
+  const rgGrid = $('#rgGrid');
+  const REGIONS = [...new Set(HOUSES.map((h) => h.cidade))].map((cidade) => {
+    const list = HOUSES.filter((h) => h.cidade === cidade);
+    return { cidade, uf: list[0].uf, count: list.length, cover: list.find((h) => h.tipo !== 'terreno') || list[0] };
+  });
+  $('#rgCount').textContent = REGIONS.length;
+  rgGrid.innerHTML = REGIONS.map((r, k) => `
+    <li style="--k:${k}">
+      <button class="rg-card" type="button" data-city="${r.cidade}" aria-label="Ver imóveis em ${r.cidade}">
+        <span class="rg-img">${propMedia(r.cover, 800)}</span>
+        <span class="rg-uf">${r.uf}</span>
+        <span class="rg-info">
+          <strong>${r.cidade}</strong>
+          <small>${r.count} ${r.count === 1 ? 'imóvel' : 'imóveis'}</small>
+        </span>
+        <span class="rg-go" aria-hidden="true"><svg><use href="#i-arrow" /></svg></span>
+      </button>
+    </li>`).join('');
+  withFallback(rgGrid);
+  rgGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.rg-card');
+    if (!card) return;
+    const chip = $(`#cityChips .chip[data-city="${card.dataset.city}"]`);
+    if (chip) { pickChip($('#cityChips'), chip); search.city = card.dataset.city; }
+    search.q = '';
+    $('#q').value = '';
+    openOverlay('search', card);
+  });
+  const scrollRg = (dir) => rgGrid.scrollBy({ left: dir * rgGrid.clientWidth * 0.9, behavior: reduceMotion ? 'auto' : 'smooth' });
+  function updateRgNav() {
+    $('#rgPrev').disabled = rgGrid.scrollLeft <= 2;
+    $('#rgNext').disabled = rgGrid.scrollLeft >= rgGrid.scrollWidth - rgGrid.clientWidth - 2;
+  }
+  $('#rgPrev').addEventListener('click', () => scrollRg(-1));
+  $('#rgNext').addEventListener('click', () => scrollRg(1));
+  rgGrid.addEventListener('scroll', updateRgNav, { passive: true });
+  addEventListener('resize', updateRgNav);
 
   /* ---------- Página do imóvel ---------- */
 
@@ -740,6 +784,7 @@
 
     restartReviewTimer();
     updateImNav();
+    updateRgNav();
   }
 
   function moveGlider() {
@@ -776,6 +821,10 @@
   // "ID do cliente OAuth", tipo "Aplicativo da Web", com o endereço do site em "Origens JavaScript autorizadas").
   // Vazio = o botão avisa que o login com Google ainda não foi ativado.
   const GOOGLE_CLIENT_ID = '';
+
+  // Versão de teste: qualquer e-mail e senha entram (a conta é criada na hora).
+  // Troque para false para valer a checagem de senha e o bloqueio de 8 tentativas.
+  const MODO_TESTE = true;
 
   const SESSION_KEY = 'morada:sessao';
   const ACCOUNTS_KEY = 'morada:contas';
@@ -920,6 +969,11 @@
     if (lockedFor()) { syncLock(); return; }
     const email = $('#l-email').value.trim();
     const pass = $('#l-senha').value;
+    if (MODO_TESTE) {
+      if (!email || !pass) { say(msg, 'Digite qualquer e-mail e qualquer senha para entrar.'); return; }
+      await enterTest(email, pass);
+      return;
+    }
     if (!isEmail(email) || !pass) { say(msg, 'Digite seu e-mail e sua senha.'); return; }
     if (needCrypto(msg)) return;
     busyButton(form, true, 'Conferindo…');
@@ -939,6 +993,22 @@
     $('#l-senha').focus();
   });
 
+  // Modo teste: entra com qualquer coisa; cria a conta se ainda não existir
+  async function enterTest(email, pass, nome) {
+    let acc = findAccount(email);
+    if (!acc) {
+      const secret = cryptoOk ? await hashPassword(pass) : {};
+      acc = { email, nome: nome || nameFromEmail(email), foto: '', ...secret, provider: 'senha', criado: Date.now(), pedidos: [] };
+      accounts[keyOf(email)] = acc;
+      saveAccounts();
+    } else if (nome && !acc.nome) {
+      acc.nome = nome;
+      saveAccounts();
+    }
+    registerSuccess();
+    enterSite(acc.email);
+  }
+
   /* Criar conta */
   const emailHint = $('#s-emailHint');
   function checkEmailInUse() {
@@ -947,7 +1017,9 @@
     if (!v) { emailHint.textContent = ''; return false; }
     if (!isEmail(v)) { emailHint.textContent = 'Confira o e-mail: falta algo como @ ou .com.'; emailHint.classList.add('is-warn'); return false; }
     if (findAccount(v)) {
-      emailHint.innerHTML = 'Este e-mail já está em uso. <button type="button" class="ga-link" data-auth="login" data-fill="1">Entrar com ele</button>';
+      emailHint.innerHTML = MODO_TESTE
+        ? 'Este e-mail já tem conta: ao continuar, você entra nela.'
+        : 'Este e-mail já está em uso. <button type="button" class="ga-link" data-auth="login" data-fill="1">Entrar com ele</button>';
       emailHint.classList.add('is-warn');
       return false;
     }
@@ -974,6 +1046,11 @@
     const nome = $('#s-nome').value.trim();
     const email = $('#s-email').value.trim();
     const pass = $('#s-senha').value;
+    if (MODO_TESTE) {
+      if (!email || !pass) { say(msg, 'Digite qualquer e-mail e qualquer senha para entrar.'); return; }
+      await enterTest(email, pass, nome);
+      return;
+    }
     if (!nome) { say(msg, 'Digite seu nome.'); $('#s-nome').focus(); return; }
     if (!checkEmailInUse()) { say(msg, findAccount(email) ? 'Este e-mail já está em uso. Entre com ele ou use outro.' : 'Digite um e-mail válido.'); $('#s-email').focus(); return; }
     if (!strongEnough(pass)) { say(msg, 'A senha precisa ter pelo menos 8 caracteres, com letras e números.'); $('#s-senha').focus(); return; }
@@ -1067,6 +1144,12 @@
     document.head.append(s);
   }
   $('#googleBtn').addEventListener('click', () => {
+    if (MODO_TESTE) {
+      // sem Client ID do Google: no modo teste entra com uma conta de exemplo
+      enterTest('exemplo.google@morada.teste', 'google', 'Conta Google de exemplo');
+      toast('Modo teste: entrou com uma conta Google de exemplo');
+      return;
+    }
     say($(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`),
       'O login com Google ainda não foi ativado neste site: falta cadastrar o site no Google e colocar o Client ID. Por enquanto, use e-mail e senha.');
   });
@@ -1075,6 +1158,11 @@
     gated = on;
     document.body.classList.toggle('is-gated', on);
     ['.scenes', '.topbar', '.indicator'].forEach((sel) => { $(sel).inert = on; });
+  }
+
+  if (MODO_TESTE) {
+    $('.ga-secure').lastChild.textContent = 'Versão de teste: qualquer e-mail e qualquer senha entram.';
+    ['#l-email', '#s-email'].forEach((sel) => { $(sel).type = 'text'; });
   }
 
   function showGate(view = 'landing') {
@@ -1280,6 +1368,7 @@
     const goEl = e.target.closest('[data-go]');
     if (goEl) {
       e.preventDefault();
+      if (goEl.dataset.msg) $('#f-msg').value = goEl.dataset.msg;
       if (goEl.dataset.house) openProperty(goEl.dataset.house, goEl);
       else go(goEl.dataset.go);
       return;
@@ -1332,7 +1421,7 @@
     touchX = e.touches[0].clientX;
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!gated && !e.target.closest('.detail, .im-grid, .im-bar, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!gated && !e.target.closest('.detail, .im-grid, .im-bar, .rg-grid, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;
@@ -1357,6 +1446,7 @@
     else if (k === 'ArrowRight' || k === 'ArrowLeft') {
       const step = k === 'ArrowRight' ? 1 : -1;
       if (currentId() === 'curadoria') scrollIm(step);
+      if (currentId() === 'regioes') scrollRg(step);
       if (currentId() === 'avaliacoes') setReview(reviewIndex + step);
     }
   });
