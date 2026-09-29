@@ -3560,3 +3560,64 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
   .title, .house img, .av-bg, .ct-bg img { translate: none; }
 }
+
+/* =========================================================
+   Dados do banco: carregando, sem foto, vendido/alugado, contatos
+   ========================================================= */
+
+.no-photo {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(160deg, #ece5db, #d9cebf);
+  color: rgba(74, 50, 40, 0.35);
+}
+.no-photo svg { width: 26%; max-width: 72px; height: auto; aspect-ratio: 1; }
+.dt-shot > .no-photo { position: absolute; inset: 0; }
+
+.pcard--skel { pointer-events: none; display: flex; flex-direction: column; }
+.pcard--skel .pcard-img,
+.pcard--skel .pcard-info i {
+  background: linear-gradient(90deg, #ede6dc 0%, #f7f2eb 50%, #ede6dc 100%) 0 0 / 200% 100%;
+  animation: skel 1.3s linear infinite;
+}
+.pcard--skel .pcard-info i { display: block; height: max(9px, calc(0.8 * var(--u))); border-radius: 99px; }
+.pcard--skel .pcard-info i:nth-child(1) { width: 70%; }
+.pcard--skel .pcard-info i:nth-child(2) { width: 50%; }
+.pcard--skel .pcard-info i:nth-child(3) { width: 35%; }
+@keyframes skel { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .pcard--skel .pcard-img, .pcard--skel .pcard-info i { animation: none; } }
+
+.pcard.is-off .pcard-img img { filter: grayscale(0.55) brightness(0.92); }
+.pcard.is-off .pcard-badges span:first-child { background: var(--terracotta); }
+.pcard.is-off .pcard-price { color: var(--muted); text-decoration: line-through; }
+#dtCart:disabled { opacity: 0.55; cursor: not-allowed; }
+
+.stars svg.is-off { opacity: 0.28; }
+.av-avatar.has-photo { background-size: cover; background-position: center; }
+
+.dt-thumbs { overflow-x: auto; max-width: 100%; padding: 4px; margin: -4px; scrollbar-width: none; }
+.dt-thumbs::-webkit-scrollbar { display: none; }
+.dt-thumbs li { flex: none; }
+
+.logo-mark.has-img { padding: 0; background: none; overflow: hidden; }
+.logo-mark.has-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.ct-info { display: grid; gap: calc(0.6 * var(--u)); }
+.ct-info[hidden] { display: none; }
+.ct-info li { display: flex; align-items: center; gap: calc(0.8 * var(--u)); font-size: max(12px, calc(1.05 * var(--u))); color: rgba(243, 237, 228, 0.9); }
+.ct-info svg { width: max(16px, calc(1.4 * var(--u))); height: max(16px, calc(1.4 * var(--u))); color: #d19a62; flex: none; }
+.ct-info a { color: inherit; text-decoration: none; border-bottom: 1px solid rgba(243, 237, 228, 0.3); }
+.ct-info a:hover { border-color: currentColor; }
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  .ct-info { gap: 6px; }
+  .ct-info li { font-size: 13px; gap: 8px; }
+}
+
+/* Destaques × todos: no computador quem troca é o botão "Explorar imóveis"; no celular, os chips */
+#fEscopo, #fEscopo + .im-sep { display: none; }
+@media (max-width: 900px), (max-aspect-ratio: 1/1) {
+  #fEscopo { display: flex; }
+  #fEscopo + .im-sep { display: block; }
+}

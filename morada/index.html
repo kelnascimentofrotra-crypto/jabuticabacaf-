@@ -75,10 +75,10 @@
         </div>
         <button class="gl-guest g-rv" style="--d: .58s" type="button" data-guest>Entrar como visitante <svg aria-hidden="true"><use href="#i-arrow" /></svg></button>
         <dl class="gate-stats g-rv" style="--d: .62s">
-          <div><dt>Casas selecionadas</dt><dd><span class="count" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
-          <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="1000">12</span></dd></div>
+          <div><dt>Casas selecionadas</dt><dd><span class="count" data-stat="imoveis" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
+          <div><dt>Cidades</dt><dd><span class="count" data-stat="cidades" data-count="12" data-delay="1000">12</span></dd></div>
           <div><dt>Famílias atendidas</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
-          <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
+          <div><dt>Nota média</dt><dd><span class="count" data-stat="nota" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
         </dl>
       </div>
 
@@ -392,7 +392,7 @@
           <div class="m-cards">
             <a class="m-card m-card--stats" href="#curadoria" data-go="curadoria">
               <span class="m-card-bg" aria-hidden="true"></span>
-              <strong class="count" data-count="180" data-prefix="+" data-delay="1300">+180</strong>
+              <strong class="count" data-stat="imoveis" data-count="180" data-prefix="+" data-delay="1300">+180</strong>
               <span class="m-card-label">imóveis<br />selecionados</span>
               <span class="m-thumbs" aria-hidden="true"><i style="--pos: 76% 52%"></i><i style="--pos: 55% 62%"></i><i style="--pos: 88% 92%"></i></span>
             </a>
@@ -430,15 +430,15 @@
         </div>
 
         <dl class="hero-stats rv" style="--d: 2s">
-          <div><dt>Cidades</dt><dd><span class="count" data-count="12" data-delay="2100">12</span></dd></div>
+          <div><dt>Cidades</dt><dd><span class="count" data-stat="cidades" data-count="12" data-delay="2100">12</span></dd></div>
           <div><dt>Famílias</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="2200">+1.200</span></dd></div>
           <div><dt>Anos</dt><dd><span class="count" data-count="15" data-delay="2300">15</span></dd></div>
-          <div><dt>Nota média</dt><dd><span class="count" data-count="4.9" data-decimals="1" data-delay="2400">4,9</span></dd></div>
+          <div><dt>Nota média</dt><dd><span class="count" data-stat="nota" data-count="4.9" data-decimals="1" data-delay="2400">4,9</span></dd></div>
         </dl>
 
         <div class="cards">
           <a class="card card--stats rv" style="--d: 1.75s" href="#curadoria" data-go="curadoria">
-            <strong class="count" data-count="180" data-prefix="+" data-delay="1900">+180</strong>
+            <strong class="count" data-stat="imoveis" data-count="180" data-prefix="+" data-delay="1900">+180</strong>
             <span>imóveis<br />selecionados</span>
             <span class="thumbs" aria-hidden="true">
               <i style="--pos: 76% 52%"></i>
@@ -467,7 +467,7 @@
         </div>
         <figure class="sv-photo fl-photo rv" style="--d: .6s">
           <span class="sv-photo-img" aria-hidden="true"></span>
-          <figcaption id="flCaption">9 imóveis em 7 cidades</figcaption>
+          <figcaption id="flCaption">Carregando imóveis…</figcaption>
         </figure>
       </div>
 
@@ -487,6 +487,8 @@
             <button class="chip" type="button" data-v="casa" aria-pressed="false">Casas</button>
             <button class="chip" type="button" data-v="apartamento" aria-pressed="false">Apartamentos</button>
             <button class="chip" type="button" data-v="terreno" aria-pressed="false">Terrenos</button>
+            <button class="chip" type="button" data-v="comercial" aria-pressed="false" hidden>Comerciais</button>
+            <button class="chip" type="button" data-v="outros" aria-pressed="false" hidden>Outros</button>
           </div>
         </div>
         <div class="fl-group">
@@ -494,12 +496,12 @@
           <div class="chips fl-chips" id="flCidade" role="group" aria-label="Cidade"></div>
         </div>
         <div class="fl-group">
-          <span class="fl-label">Suítes</span>
-          <div class="chips fl-chips" id="flSuites" role="group" aria-label="Suítes">
+          <span class="fl-label">Quartos</span>
+          <div class="chips fl-chips" id="flQuartos" role="group" aria-label="Quartos">
             <button class="chip is-on" type="button" data-v="0" aria-pressed="true">Qualquer</button>
+            <button class="chip" type="button" data-v="2" aria-pressed="false">2+</button>
             <button class="chip" type="button" data-v="3" aria-pressed="false">3+</button>
             <button class="chip" type="button" data-v="4" aria-pressed="false">4+</button>
-            <button class="chip" type="button" data-v="5" aria-pressed="false">5</button>
           </div>
         </div>
         <div class="fl-group">
@@ -513,7 +515,7 @@
         <div class="fl-foot">
           <div class="fl-result">
             <ul class="fl-thumbs" id="flThumbs" aria-hidden="true"></ul>
-            <p><b id="flCount">9</b> <span id="flWord">imóveis combinam</span></p>
+            <p><b id="flCount">…</b> <span id="flWord">imóveis combinam</span></p>
           </div>
           <div class="fl-actions">
             <button class="btn btn-light" type="button" id="flClear">Limpar</button>
@@ -541,12 +543,19 @@
       </div>
 
       <div class="im-bar rv" style="--d: .45s">
-        <p class="im-count"><b id="imCount">9</b> <span id="imWord">imóveis</span></p>
+        <p class="im-count"><b id="imCount">…</b> <span id="imWord">em destaque</span></p>
+        <div class="chips" id="fEscopo" role="group" aria-label="Quais imóveis mostrar">
+          <button class="chip is-on" type="button" data-escopo="destaques" aria-pressed="true">Em destaque</button>
+          <button class="chip" type="button" data-escopo="todos" aria-pressed="false">Todos os imóveis</button>
+        </div>
+        <span class="im-sep" aria-hidden="true"></span>
         <div class="chips" id="fTipo" role="group" aria-label="Tipo de imóvel">
           <button class="chip is-on" type="button" data-tipo="todos" aria-pressed="true">Todos</button>
           <button class="chip" type="button" data-tipo="casa" aria-pressed="false">Casas</button>
           <button class="chip" type="button" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
           <button class="chip" type="button" data-tipo="terreno" aria-pressed="false">Terrenos</button>
+          <button class="chip" type="button" data-tipo="comercial" aria-pressed="false" hidden>Comerciais</button>
+          <button class="chip" type="button" data-tipo="outros" aria-pressed="false" hidden>Outros</button>
         </div>
         <span class="im-sep" aria-hidden="true"></span>
         <div class="chips" id="fNegocio" role="group" aria-label="Comprar ou alugar">
@@ -562,7 +571,7 @@
 
       <div class="im-track rv" style="--d: .3s">
         <ul class="im-grid" id="imGrid" aria-label="Imóveis"></ul>
-        <p class="im-empty" id="imEmpty" hidden>Nenhum imóvel com esses filtros. <button type="button" id="imReset">Limpar filtros</button></p>
+        <p class="im-empty" id="imEmpty" hidden><span id="imEmptyText">Nenhum imóvel com esses filtros.</span> <button type="button" id="imReset">Limpar filtros</button></p>
       </div>
     </section>
 
@@ -619,11 +628,11 @@
 
       <div class="av-score">
         <p class="eyebrow rv" style="--d: .35s">Avaliações</p>
-        <p class="av-big rv" style="--d: .45s"><span class="count" data-count="4.9" data-decimals="1" data-delay="450">4,9</span><small>/5</small></p>
+        <p class="av-big rv" style="--d: .45s"><span class="count" data-stat="nota" data-count="4.9" data-decimals="1" data-delay="450">4,9</span><small>/5</small></p>
         <p class="stars rv" style="--d: .55s" aria-label="Nota 4,9 de 5">
           <svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg><svg><use href="#i-star" /></svg>
         </p>
-        <p class="av-count rv" style="--d: .6s"><span class="count" data-count="312" data-delay="600">312</span> avaliações</p>
+        <p class="av-count rv" style="--d: .6s"><span class="count" data-stat="avaliacoes" data-count="312" data-delay="600">312</span> avaliações</p>
       </div>
 
       <figure class="av-quote rv" style="--d: .5s">
@@ -650,6 +659,7 @@
         <p class="ct-eyebrow rv" style="--d: .35s">Fale com a gente</p>
         <h2 class="ct-title rv" style="--d: .45s">Fale com <br />um <em>curador.</em></h2>
         <p class="ct-text rv" style="--d: .55s">Tire suas dúvidas, receba recomendações personalizadas e encontre o imóvel ideal para o seu momento.</p>
+        <ul class="ct-info rv" style="--d: .65s" id="ctInfo" hidden></ul>
       </div>
 
       <form class="ct-form rv" style="--d: .5s" id="contactForm" novalidate>
@@ -889,6 +899,7 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="supabase-config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
