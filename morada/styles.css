@@ -469,6 +469,17 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   width: calc(42 * var(--u));
   z-index: 3;
 }
+.intro-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: calc(1.2 * var(--u));
+  margin-bottom: calc(1.2 * var(--u));
+  font-size: max(10px, calc(0.9 * var(--u)));
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #6c6560;
+}
+.intro-eyebrow::before { content: ""; width: calc(2.6 * var(--u)); height: 2px; background: var(--terracotta); }
 .intro-title {
   font-size: calc(4.6 * var(--u));
   font-weight: 500;
@@ -535,18 +546,16 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   --ext: #d9d5cd;
   --ext-dark: #c9c4ba;
   position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(10.6 * var(--u));
+  right: 2.5vw;
+  top: calc(10.2 * var(--u));
   margin: 0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   font-family: "Montserrat", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
-  font-size: calc(18.4 * var(--u));
+  font-size: calc(11.4 * var(--u));
   font-weight: 200;
   line-height: 0.8;
-  letter-spacing: 0.09em;
-  text-indent: 0.09em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #fbfaf7;
   text-shadow:
@@ -1369,6 +1378,148 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 .sv-go:hover { transform: translateX(3px); }
 
 /* =========================================================
+   02 · Filtro
+   ========================================================= */
+
+.filtro { background: #f3eee6; }
+.fl-photo .sv-photo-img { background-position: 64% 88%; background-size: 170% auto; }
+.fl-panel {
+  position: absolute;
+  left: var(--frame-l);
+  right: var(--frame-r);
+  top: var(--top);
+  bottom: var(--u);
+  display: flex;
+  flex-direction: column;
+  gap: calc(1.8 * var(--u));
+  padding: calc(2.6 * var(--u)) calc(2.8 * var(--u));
+  border-radius: calc(1.6 * var(--u));
+  background: #fff;
+  box-shadow: 0 calc(0.6 * var(--u)) calc(2.4 * var(--u)) rgba(60, 40, 20, 0.07);
+}
+.fl-group { display: grid; gap: calc(0.8 * var(--u)); }
+.fl-label { font-size: max(10px, calc(0.8 * var(--u))); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7a6f66; }
+.fl-chips { gap: calc(0.6 * var(--u)); }
+.fl-chips .chip { height: max(34px, calc(3.2 * var(--u))); padding: 0 calc(1.5 * var(--u)); background: #f6f2ec; border-color: #e6ddd1; color: #3a302b; font-size: max(12px, calc(0.98 * var(--u))); }
+.fl-chips .chip.is-on { background: #4a3228; border-color: #4a3228; color: #fff; }
+.fl-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: calc(2 * var(--u));
+  margin-top: auto;
+  padding-top: calc(1.8 * var(--u));
+  border-top: 1px solid #eee6db;
+}
+.fl-result { display: flex; align-items: center; gap: calc(1.2 * var(--u)); min-width: 0; }
+.fl-result p { font-size: max(13px, calc(1.1 * var(--u))); color: #6c6560; white-space: nowrap; }
+.fl-result b { font-family: "Newsreader", Georgia, serif; font-size: calc(3 * var(--u)); font-weight: 400; color: #2b2320; vertical-align: -0.1em; margin-right: 0.15em; font-variant-numeric: tabular-nums; }
+.fl-thumbs { display: flex; }
+.fl-thumbs li { width: max(34px, calc(3.4 * var(--u))); height: max(34px, calc(3.4 * var(--u))); border-radius: 50%; overflow: hidden; border: 3px solid #fff; background: #e9e2d7; }
+.fl-thumbs li + li { margin-left: calc(-1 * var(--u)); }
+.fl-thumbs img, .fl-thumbs .terrain { width: 100%; height: 100%; object-fit: cover; display: block; }
+.fl-actions { display: flex; gap: var(--u); flex: none; }
+.fl-actions .btn-dark { background: #1c1714; }
+.fl-actions .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* filtro extra ativo em Destaques (cidade / suítes) */
+.im-extra {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  height: max(30px, calc(2.8 * var(--u)));
+  padding: 0 calc(1.1 * var(--u));
+  border-radius: 999px;
+  background: #fbe9dc;
+  border: 1px solid #efc9ad;
+  font-size: max(11px, calc(0.9 * var(--u)));
+  color: #7c4520;
+  white-space: nowrap;
+}
+.im-extra svg { width: 1em; height: 1em; }
+
+/* =========================================================
+   04 · Instagram
+   ========================================================= */
+
+.instagram { background: var(--bg); }
+.ig-side {
+  position: absolute;
+  left: var(--col-l);
+  top: calc(11.5 * var(--u));
+  bottom: calc(2.2 * var(--u));
+  width: calc(var(--frame-l) - var(--col-l) - 3 * var(--u));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(1.3 * var(--u));
+}
+.ig-profile { display: flex; align-items: center; gap: calc(1.2 * var(--u)); margin-top: calc(0.6 * var(--u)); }
+.ig-avatar {
+  display: grid;
+  place-items: center;
+  width: max(52px, calc(5 * var(--u)));
+  height: max(52px, calc(5 * var(--u)));
+  padding: 3px;
+  border-radius: 50%;
+  background: conic-gradient(from 200deg, #f9ce34, #ee2a7b, #6228d7, #f9ce34);
+  flex: none;
+}
+.ig-avatar .logo-mark { width: 100%; height: 100%; padding: 26%; border-radius: 50%; border: 3px solid var(--bg); }
+.ig-who { display: grid; gap: 2px; }
+.ig-who strong { font-size: max(14px, calc(1.2 * var(--u))); font-weight: 600; }
+.ig-who small { font-size: max(11px, calc(0.85 * var(--u))); color: var(--muted); }
+.ig-stats { display: flex; gap: calc(2.6 * var(--u)); }
+.ig-stats div { display: grid; gap: 2px; }
+.ig-stats dd { order: -1; font-size: max(16px, calc(1.6 * var(--u))); font-weight: 600; letter-spacing: -0.02em; }
+.ig-stats dt { font-size: max(10px, calc(0.78 * var(--u))); color: var(--muted); }
+.ig-follow {
+  margin-top: auto;
+  background: linear-gradient(90deg, #f58529, #dd2a7b 45%, #8134af);
+  color: #fff;
+}
+.ig-follow svg { width: 1.2em; height: 1.2em; }
+.ig-follow:hover { filter: brightness(1.06); }
+.ig-grid {
+  position: absolute;
+  left: var(--frame-l);
+  right: var(--frame-r);
+  top: var(--top);
+  bottom: var(--u);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: calc(0.8 * var(--u));
+}
+.ig-grid > li { min-width: 0; min-height: 0; }
+.scene.is-entering .ig-grid > li { animation: rise 0.9s var(--ease-out) calc((0.35s + var(--k) * 0.06s) * var(--ds, 1)) both; }
+.ig-post { position: relative; display: block; width: 100%; height: 100%; border-radius: calc(0.9 * var(--u)); overflow: hidden; background: #e9e2d7; }
+.ig-post img, .ig-local { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1s var(--ease-out); }
+.ig-local { background: url("assets/casa.webp") no-repeat, linear-gradient(180deg, #7fa7c6, #ecdac3); }
+.ig-post:hover img, .ig-post:hover .ig-local { transform: scale(1.05); }
+.ig-over {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: calc(0.6 * var(--u)) calc(1.8 * var(--u));
+  padding: calc(1.4 * var(--u));
+  background: rgba(10, 8, 6, 0.5);
+  color: #fff;
+  font-size: max(13px, calc(1.1 * var(--u)));
+  font-weight: 600;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.ig-over > span { display: inline-flex; align-items: center; gap: 0.4em; }
+.ig-over svg { width: 1.2em; height: 1.2em; --heart-fill: #fff; }
+.ig-over small { flex-basis: 100%; font-size: max(11px, calc(0.85 * var(--u))); font-weight: 400; opacity: 0.9; }
+.ig-post:hover .ig-over, .ig-post:focus-visible .ig-over { opacity: 1; }
+
+/* =========================================================
    06 · Avaliações (cena noturna)
    ========================================================= */
 
@@ -1688,6 +1839,8 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
 }
 .menu-preview-img[data-preview-img="moveis"] { background-position: 62% 64%; background-size: 330% auto; }
 .menu-preview-img[data-preview-img="curadoria"] { background-position: 30% 90%; background-size: 200% auto; }
+.menu-preview-img[data-preview-img="filtro"] { background-position: 64% 88%; background-size: 170% auto; }
+.menu-preview-img[data-preview-img="instagram"] { background-position: 55% 60%; background-size: 320% auto; }
 .menu-preview-img[data-preview-img="regioes"] { background-position: 80% 60%; background-size: 260% auto; }
 .menu-preview-img[data-preview-img="servicos"] { background-position: 30% 92%; background-size: 230% auto; }
 .menu-preview-img[data-preview-img="avaliacoes"] { background-position: 70% 80%; background-size: 170% auto; filter: brightness(0.5) saturate(1.2); background-color: #0c1119; }
@@ -2315,7 +2468,7 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
     top: calc(30.5svh - 10vw);
     margin: 0;
     font-family: "Montserrat", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
-    font-size: 21vw;
+    font-size: 16vw;
     font-weight: 200;
     line-height: 0.8;
     letter-spacing: 0.06em;
@@ -2584,6 +2737,33 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .cart-foot { gap: 10px; padding: 14px 0 4px; }
   .cart-sum { font-size: 13px; }
 
+  /* ---- Filtro ---- */
+  .fl-photo { display: none; }
+  .fl-panel { position: relative; inset: auto; flex: 1 1 auto; min-height: 0; margin-top: 14px; padding: 16px; gap: 14px; border-radius: 20px; }
+  .fl-group { gap: 8px; }
+  .fl-label { font-size: 10.5px; }
+  .fl-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 -16px; padding: 0 16px; scrollbar-width: none; }
+  .fl-chips::-webkit-scrollbar { display: none; }
+  .fl-chips .chip { height: 36px; padding: 0 14px; font-size: 13.5px; flex: none; }
+  .fl-foot { flex-direction: column; align-items: stretch; gap: 12px; padding-top: 14px; }
+  .fl-result b { font-size: 28px; }
+  .fl-result p { font-size: 14px; }
+  .fl-thumbs li { width: 34px; height: 34px; }
+  .fl-thumbs li + li { margin-left: -10px; }
+  .fl-actions .btn { flex: 1 1 auto; height: 44px; }
+  .im-extra { flex: none; height: 34px; font-size: 12.5px; }
+
+  /* ---- Instagram ---- */
+  .ig-side { position: static; width: auto; gap: 10px; }
+  .ig-side > .eyebrow, .ig-side .sv-sub, .ig-stats { display: none; }
+  .ig-side .sv-title br { display: none; }
+  .ig-profile { margin-top: 0; width: 100%; }
+  .ig-avatar { width: 46px; height: 46px; }
+  .ig-follow { order: 5; width: 100%; height: 42px; margin-top: 2px; font-size: 14px; }
+  .ig-grid { position: static; flex: 1 1 auto; min-height: 0; margin-top: 12px; gap: 4px; grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .ig-post { border-radius: 8px; }
+  .ig-over { display: none; }
+
   /* ---- Regiões ---- */
   .rg-head { width: auto; gap: 6px; }
   .rg-head > .eyebrow { display: none; }
@@ -2750,6 +2930,8 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   .mv-banner, .im-banner { height: 31svh; }
   .sv-card p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .rg-sub { display: none; }
+  .fl-panel { gap: 10px; }
+  .fl-result .fl-thumbs { display: none; }
   .av-quote blockquote { min-height: calc(20px * 1.25 * 3); font-size: 20px; }
   .ct-text { display: none; }
   .gl-features { min-height: 124px; }

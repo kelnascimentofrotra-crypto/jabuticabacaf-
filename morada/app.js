@@ -110,6 +110,8 @@
 
   const PREVIEW = {
     inicio: 'Vamos encontrar a sua morada',
+    filtro: 'Encontre o imóvel certo em segundos',
+    instagram: 'Casas novas toda semana no Instagram',
     moveis: 'Peças que transformam a sua casa',
     curadoria: `${HOUSES.length} imóveis selecionados`,
     regioes: `Imóveis em ${[...new Set(HOUSES.map((h) => h.cidade))].length} cidades`,
@@ -310,7 +312,7 @@
   }
 
   const imGrid = $('#imGrid');
-  const filters = { tipo: 'todos', negocio: 'todos' };
+  const filters = { tipo: 'todos', negocio: 'todos', cidade: '', suites: 0 };
   imGrid.innerHTML = HOUSES.map((h, k) => `
     <li class="pcard" data-id="${h.id}" data-tipo="${h.tipo}" data-negocio="${h.negocio}" style="--k:${k}">
       <button class="pcard-open" type="button" aria-label="Ver ${h.nome}">
@@ -337,14 +339,24 @@
     if (open) openProperty(open.closest('.pcard').dataset.id, open);
   });
 
+  const matches = (h, f) =>
+    (f.tipo === 'todos' || h.tipo === f.tipo) &&
+    (f.negocio === 'todos' || h.negocio === f.negocio) &&
+    (!f.cidade || h.cidade === f.cidade) &&
+    (!f.suites || (h.suites || 0) >= f.suites);
+
   function applyFilters() {
     let n = 0;
     $$('.pcard', imGrid).forEach((el) => {
-      const show = (filters.tipo === 'todos' || el.dataset.tipo === filters.tipo) &&
-        (filters.negocio === 'todos' || el.dataset.negocio === filters.negocio);
+      const h = HOUSES.find((x) => x.id === el.dataset.id);
+      const show = matches(h, filters);
       el.hidden = !show;
       if (show) n++;
     });
+    const extra = [filters.cidade, filters.suites ? `${filters.suites}+ suítes` : ''].filter(Boolean).join(' · ');
+    $('#imExtra').hidden = !extra;
+    $('#imExtra').innerHTML = extra ? `${extra} <svg aria-hidden="true"><use href="#i-close" /></svg>` : '';
+    $('#imExtra').setAttribute('aria-label', `Tirar o filtro ${extra}`);
     $('#imCount').textContent = n;
     $('#imWord').textContent = n === 1 ? 'imóvel' : 'imóveis';
     $('#imEmpty').hidden = n > 0;
@@ -370,10 +382,10 @@
   function resetFilters() {
     pickChip($('#fTipo'), $('#fTipo .chip'));
     $$('.chip', $('#fNegocio')).forEach((x) => { x.classList.remove('is-on'); x.setAttribute('aria-pressed', 'false'); });
-    filters.tipo = 'todos';
-    filters.negocio = 'todos';
+    Object.assign(filters, { tipo: 'todos', negocio: 'todos', cidade: '', suites: 0 });
     applyFilters();
   }
+  $('#imExtra').addEventListener('click', () => { filters.cidade = ''; filters.suites = 0; applyFilters(); });
   $('#imReset').addEventListener('click', resetFilters);
   $('#imExplore').addEventListener('click', () => {
     resetFilters();
@@ -415,7 +427,75 @@
   }, 7000);
 
   /* =========================================================
-     04 · Regiões (cada cidade abre a busca já filtrada)
+     02 · Filtro (conta na hora e aplica em Destaques)
+     ========================================================= */
+
+  const fl = { negocio: 'todos', tipo: 'todos', cidade: '', suites: 0 };
+  const CITIES = [...new Set(HOUSES.map((h) => h.cidade))];
+  $('#flCidade').innerHTML = ['<button class="chip is-on" type="button" data-v="" aria-pressed="true">Todas</button>',
+    ...CITIES.map((c) => `<button class="chip" type="button" data-v="${c}" aria-pressed="false">${c}</button>`)].join('');
+  $('#flCaption').textContent = `${HOUSES.length} imóveis em ${CITIES.length} cidades`;
+  const flGroups = { flNegocio: 'negocio', flTipo: 'tipo', flCidade: 'cidade', flSuites: 'suites' };
+  Object.entries(flGroups).forEach(([id, key]) => {
+    $(`#${id}`).addEventListener('click', (e) => {
+      const c = e.target.closest('.chip');
+      if (!c) return;
+      pickChip($(`#${id}`), c);
+      fl[key] = key === 'suites' ? Number(c.dataset.v) : c.dataset.v;
+      updateFilterCount();
+    });
+  });
+  function updateFilterCount() {
+    const found = HOUSES.filter((h) => matches(h, fl));
+    $('#flCount').textContent = found.length;
+    $('#flWord').textContent = found.length === 1 ? 'imóvel combina' : 'imóveis combinam';
+    $('#flThumbs').innerHTML = found.slice(0, 3).map((h) => `<li>${propMedia(h, 200)}</li>`).join('');
+    withFallback($('#flThumbs'));
+    $('#flGo').disabled = found.length === 0;
+  }
+  $('#flClear').addEventListener('click', () => {
+    Object.assign(fl, { negocio: 'todos', tipo: 'todos', cidade: '', suites: 0 });
+    Object.keys(flGroups).forEach((id) => pickChip($(`#${id}`), $(`#${id} .chip`)));
+    updateFilterCount();
+  });
+  $('#flForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    Object.assign(filters, fl);
+    pickChip($('#fTipo'), $(`#fTipo .chip[data-tipo="${fl.tipo}"]`));
+    $$('.chip', $('#fNegocio')).forEach((x) => { const on = x.dataset.negocio === fl.negocio; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
+    applyFilters();
+    go('curadoria');
+  });
+  updateFilterCount();
+
+  /* =========================================================
+     04 · Instagram (posts de exemplo; troque pelo perfil real)
+     ========================================================= */
+
+  const INSTAGRAM_URL = 'https://www.instagram.com/';
+  const POSTS = [
+    { local: '58% 80%', size: 'cover', likes: 1284, comments: 46, texto: 'Fim de tarde na Casa Pátio.' },
+    { house: 'mirante', likes: 962, comments: 31, texto: 'Varanda com vista para o canal em Ilhabela.' },
+    { local: '55% 60%', size: '320%', likes: 1530, comments: 58, texto: 'A sala mobiliada com a coleção Morada.' },
+    { house: 'jardins', likes: 704, comments: 22, texto: 'Planta ampla nos Jardins.' },
+    { local: '30% 92%', size: '220%', likes: 1117, comments: 39, texto: 'Deck e piscina: o lugar preferido da casa.' },
+    { house: 'lume', likes: 845, comments: 27, texto: 'Lareira acesa em Campos do Jordão.' },
+  ];
+  const fmtK = (n) => (n >= 1000 ? `${(n / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} mil` : String(n));
+  $('#igFollow').href = INSTAGRAM_URL;
+  $('#igGrid').innerHTML = POSTS.map((p, k) => {
+    const media = p.house
+      ? propMedia(HOUSES.find((h) => h.id === p.house), 600)
+      : `<span class="ig-local" style="background-position:${p.local};background-size:${p.size === 'cover' ? 'cover' : `${p.size} auto`}"></span>`;
+    return `<li style="--k:${k}"><a class="ig-post" href="${INSTAGRAM_URL}" target="_blank" rel="noopener" aria-label="Post: ${p.texto}">
+      ${media}
+      <span class="ig-over"><span><svg aria-hidden="true"><use href="#i-heart" /></svg>${fmtK(p.likes)}</span><span><svg aria-hidden="true"><use href="#i-comment" /></svg>${p.comments}</span><small>${p.texto}</small></span>
+    </a></li>`;
+  }).join('');
+  withFallback($('#igGrid'));
+
+  /* =========================================================
+     06 · Regiões (cada cidade abre a busca já filtrada)
      ========================================================= */
 
   const rgGrid = $('#rgGrid');
@@ -1421,7 +1501,7 @@
     touchX = e.touches[0].clientX;
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!gated && !e.target.closest('.detail, .im-grid, .im-bar, .rg-grid, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!gated && !e.target.closest('.detail, .im-grid, .im-bar, .rg-grid, .fl-chips, .ig-grid, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;

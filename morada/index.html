@@ -29,6 +29,8 @@
     <symbol id="i-hands" viewBox="0 0 24 24"><path d="M2 9.5 5.5 6l3 1.2L12 6l3.5 1.2L18.5 6 22 9.5l-3 3M5 12.5l-3-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="m12 6-3.2 3.3a1.3 1.3 0 0 0 1.8 1.9L13 9l5.4 5.1a1.2 1.2 0 0 1-1.7 1.8M16.7 15.9a1.2 1.2 0 0 1-1.7 1.7l-1.3-1.2M15 17.6a1.2 1.2 0 0 1-1.7 1.7l-1-1M12.3 18.3a1.2 1.2 0 0 1-1.7 1.6L5 14.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></symbol>
     <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7M5.5 9.5V20h13V9.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><path d="M10 20v-5.5h4V20M10 10.5h4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
     <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.1" cy="6.9" r="1.2" fill="currentColor"/></symbol>
+    <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5z" fill="currentColor"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
   </svg>
 
@@ -244,8 +246,10 @@
     <nav class="nav-pill" aria-label="Principal">
       <span class="nav-glider" aria-hidden="true"></span>
       <a href="#inicio" data-go="inicio">Início</a>
+      <a href="#filtro" data-go="filtro">Filtro</a>
+      <a href="#curadoria" data-go="curadoria">Destaques</a>
+      <a href="#instagram" data-go="instagram">Instagram</a>
       <a href="#moveis" data-go="moveis">Peças</a>
-      <a href="#curadoria" data-go="curadoria">Imóveis</a>
       <a href="#regioes" data-go="regioes">Regiões</a>
       <a href="#servicos" data-go="servicos">Serviços</a>
       <a href="#avaliacoes" data-go="avaliacoes">Avaliações</a>
@@ -274,14 +278,16 @@
     <span class="ind-num">01</span>
     <ol class="ind-ticks">
       <li><button type="button" data-go="inicio" aria-label="Início"></button></li>
+      <li><button type="button" data-go="filtro" aria-label="Filtro"></button></li>
+      <li><button type="button" data-go="curadoria" aria-label="Destaques"></button></li>
+      <li><button type="button" data-go="instagram" aria-label="Instagram"></button></li>
       <li><button type="button" data-go="moveis" aria-label="Peças"></button></li>
-      <li><button type="button" data-go="curadoria" aria-label="Imóveis"></button></li>
       <li><button type="button" data-go="regioes" aria-label="Regiões"></button></li>
       <li><button type="button" data-go="servicos" aria-label="Serviços"></button></li>
       <li><button type="button" data-go="avaliacoes" aria-label="Avaliações"></button></li>
       <li><button type="button" data-go="contato" aria-label="Contato"></button></li>
     </ol>
-    <span class="ind-total">07</span>
+    <span class="ind-total">09</span>
     <span class="ind-label">Início</span>
   </nav>
 
@@ -327,6 +333,7 @@
       </div>
 
       <div class="intro rv" style="--d: .55s">
+        <p class="intro-eyebrow">Seu novo capítulo começa aqui</p>
         <h1 class="intro-title">Vamos encontrar <br />a sua <em>morada</em></h1>
         <div class="intro-actions">
           <a class="btn btn-dark" href="#curadoria" data-go="curadoria">Ver imóveis <svg><use href="#i-arrow" /></svg></a>
@@ -376,7 +383,131 @@
       </div>
     </section>
 
-    <!-- ================= 02 · Móveis ================= -->
+    <!-- ================= 02 · Filtro ================= -->
+    <section class="scene filtro" id="filtro" data-title="Filtro" aria-label="Filtro">
+      <div class="sv-side">
+        <div class="sv-intro">
+          <p class="eyebrow rv" style="--d: .3s">Filtro</p>
+          <h2 class="sv-title rv" style="--d: .4s">Encontre o <br />imóvel certo</h2>
+          <p class="sv-sub rv" style="--d: .5s">Escolha o que importa e veja na hora quantos imóveis combinam com você.</p>
+        </div>
+        <figure class="sv-photo fl-photo rv" style="--d: .6s">
+          <span class="sv-photo-img" aria-hidden="true"></span>
+          <figcaption id="flCaption">9 imóveis em 7 cidades</figcaption>
+        </figure>
+      </div>
+
+      <form class="fl-panel rv" style="--d: .35s" id="flForm" novalidate>
+        <div class="fl-group">
+          <span class="fl-label">O que você procura</span>
+          <div class="chips fl-chips" id="flNegocio" role="group" aria-label="Comprar ou alugar">
+            <button class="chip is-on" type="button" data-v="todos" aria-pressed="true">Comprar ou alugar</button>
+            <button class="chip" type="button" data-v="venda" aria-pressed="false">Comprar</button>
+            <button class="chip" type="button" data-v="aluguel" aria-pressed="false">Alugar</button>
+          </div>
+        </div>
+        <div class="fl-group">
+          <span class="fl-label">Tipo</span>
+          <div class="chips fl-chips" id="flTipo" role="group" aria-label="Tipo de imóvel">
+            <button class="chip is-on" type="button" data-v="todos" aria-pressed="true">Todos</button>
+            <button class="chip" type="button" data-v="casa" aria-pressed="false">Casas</button>
+            <button class="chip" type="button" data-v="apartamento" aria-pressed="false">Apartamentos</button>
+            <button class="chip" type="button" data-v="terreno" aria-pressed="false">Terrenos</button>
+          </div>
+        </div>
+        <div class="fl-group">
+          <span class="fl-label">Cidade</span>
+          <div class="chips fl-chips" id="flCidade" role="group" aria-label="Cidade"></div>
+        </div>
+        <div class="fl-group">
+          <span class="fl-label">Suítes</span>
+          <div class="chips fl-chips" id="flSuites" role="group" aria-label="Suítes">
+            <button class="chip is-on" type="button" data-v="0" aria-pressed="true">Qualquer</button>
+            <button class="chip" type="button" data-v="3" aria-pressed="false">3+</button>
+            <button class="chip" type="button" data-v="4" aria-pressed="false">4+</button>
+            <button class="chip" type="button" data-v="5" aria-pressed="false">5</button>
+          </div>
+        </div>
+        <div class="fl-foot">
+          <div class="fl-result">
+            <ul class="fl-thumbs" id="flThumbs" aria-hidden="true"></ul>
+            <p><b id="flCount">9</b> <span id="flWord">imóveis combinam</span></p>
+          </div>
+          <div class="fl-actions">
+            <button class="btn btn-light" type="button" id="flClear">Limpar</button>
+            <button class="btn btn-dark" type="submit" id="flGo">Ver os imóveis <svg><use href="#i-arrow" /></svg></button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- ================= 03 · Destaques (imóveis) ================= -->
+    <section class="scene imoveis" id="curadoria" data-title="Destaques" aria-label="Destaques">
+      <div class="im-intro">
+        <h2 class="im-title rv" style="--d: .35s">Imóveis <br />em destaque</h2>
+        <p class="im-sub rv" style="--d: .45s">Imóveis selecionados em endereços que fazem sentido</p>
+        <button class="btn btn-dark im-cta rv" style="--d: .55s" type="button" id="imExplore">Explorar imóveis</button>
+      </div>
+
+      <div class="im-banner rv" style="--d: .25s">
+        <div class="im-slides" id="imSlides"></div>
+        <button class="im-cap" type="button" id="imCap">
+          <span><b id="imCapName"></b><small id="imCapInfo"></small></span>
+          <span class="im-cap-go" aria-hidden="true"><svg><use href="#i-arrow" /></svg></span>
+        </button>
+        <div class="mv-dots im-dots" id="imDots" role="group" aria-label="Imóveis em destaque"></div>
+      </div>
+
+      <div class="im-bar rv" style="--d: .45s">
+        <p class="im-count"><b id="imCount">9</b> <span id="imWord">imóveis</span></p>
+        <div class="chips" id="fTipo" role="group" aria-label="Tipo de imóvel">
+          <button class="chip is-on" type="button" data-tipo="todos" aria-pressed="true">Todos</button>
+          <button class="chip" type="button" data-tipo="casa" aria-pressed="false">Casas</button>
+          <button class="chip" type="button" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
+          <button class="chip" type="button" data-tipo="terreno" aria-pressed="false">Terrenos</button>
+        </div>
+        <span class="im-sep" aria-hidden="true"></span>
+        <div class="chips" id="fNegocio" role="group" aria-label="Comprar ou alugar">
+          <button class="chip" type="button" data-negocio="venda" aria-pressed="false">Comprar</button>
+          <button class="chip" type="button" data-negocio="aluguel" aria-pressed="false">Alugar</button>
+        </div>
+        <button class="im-extra" type="button" id="imExtra" hidden></button>
+        <div class="im-arrows">
+          <button class="btn-round" type="button" id="imPrev" aria-label="Imóveis anteriores"><svg class="flip"><use href="#i-arrow" /></svg></button>
+          <button class="btn-round" type="button" id="imNext" aria-label="Mais imóveis"><svg><use href="#i-arrow" /></svg></button>
+        </div>
+      </div>
+
+      <div class="im-track rv" style="--d: .3s">
+        <ul class="im-grid" id="imGrid" aria-label="Imóveis"></ul>
+        <p class="im-empty" id="imEmpty" hidden>Nenhum imóvel com esses filtros. <button type="button" id="imReset">Limpar filtros</button></p>
+      </div>
+    </section>
+
+    <!-- ================= 04 · Instagram ================= -->
+    <section class="scene instagram" id="instagram" data-title="Instagram" aria-label="Posts do Instagram">
+      <div class="ig-side">
+        <p class="eyebrow rv" style="--d: .3s">Instagram</p>
+        <h2 class="sv-title rv" style="--d: .4s">Acompanhe <br />a Morada</h2>
+        <div class="ig-profile rv" style="--d: .5s">
+          <span class="ig-avatar" aria-hidden="true"><span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span></span>
+          <div class="ig-who">
+            <strong id="igHandle">@morada.casas</strong>
+            <small>Casas selecionadas · Curadoria</small>
+          </div>
+        </div>
+        <dl class="ig-stats rv" style="--d: .55s">
+          <div><dt>Posts</dt><dd>248</dd></div>
+          <div><dt>Seguidores</dt><dd>18,4 mil</dd></div>
+          <div><dt>Seguindo</dt><dd>312</dd></div>
+        </dl>
+        <p class="sv-sub rv" style="--d: .6s">Bastidores das visitas, casas novas toda semana e dicas para mobiliar.</p>
+        <a class="btn ig-follow rv" style="--d: .7s" id="igFollow" href="https://www.instagram.com/" target="_blank" rel="noopener"><svg><use href="#i-instagram" /></svg>Seguir no Instagram</a>
+      </div>
+      <ul class="ig-grid" id="igGrid" aria-label="Posts recentes"></ul>
+    </section>
+
+    <!-- ================= 05 · Peças ================= -->
     <section class="scene moveis" id="moveis" data-title="Peças" aria-label="Peças">
       <div class="mv-intro">
         <h2 class="mv-title rv" style="--d: .35s">Peças que <br />transformam a <br />sua casa</h2>
@@ -408,49 +539,7 @@
       <ul class="mv-grid" id="productGrid" aria-label="Peças da coleção"></ul>
     </section>
 
-    <!-- ================= 03 · Imóveis ================= -->
-    <section class="scene imoveis" id="curadoria" data-title="Imóveis" aria-label="Imóveis">
-      <div class="im-intro">
-        <h2 class="im-title rv" style="--d: .35s">Casas que <br />contam a sua <br />história</h2>
-        <p class="im-sub rv" style="--d: .45s">Imóveis selecionados em endereços que fazem sentido</p>
-        <button class="btn btn-dark im-cta rv" style="--d: .55s" type="button" id="imExplore">Explorar imóveis</button>
-      </div>
-
-      <div class="im-banner rv" style="--d: .25s">
-        <div class="im-slides" id="imSlides"></div>
-        <button class="im-cap" type="button" id="imCap">
-          <span><b id="imCapName"></b><small id="imCapInfo"></small></span>
-          <span class="im-cap-go" aria-hidden="true"><svg><use href="#i-arrow" /></svg></span>
-        </button>
-        <div class="mv-dots im-dots" id="imDots" role="group" aria-label="Imóveis em destaque"></div>
-      </div>
-
-      <div class="im-bar rv" style="--d: .45s">
-        <p class="im-count"><b id="imCount">9</b> <span id="imWord">imóveis</span></p>
-        <div class="chips" id="fTipo" role="group" aria-label="Tipo de imóvel">
-          <button class="chip is-on" type="button" data-tipo="todos" aria-pressed="true">Todos</button>
-          <button class="chip" type="button" data-tipo="casa" aria-pressed="false">Casas</button>
-          <button class="chip" type="button" data-tipo="apartamento" aria-pressed="false">Apartamentos</button>
-          <button class="chip" type="button" data-tipo="terreno" aria-pressed="false">Terrenos</button>
-        </div>
-        <span class="im-sep" aria-hidden="true"></span>
-        <div class="chips" id="fNegocio" role="group" aria-label="Comprar ou alugar">
-          <button class="chip" type="button" data-negocio="venda" aria-pressed="false">Comprar</button>
-          <button class="chip" type="button" data-negocio="aluguel" aria-pressed="false">Alugar</button>
-        </div>
-        <div class="im-arrows">
-          <button class="btn-round" type="button" id="imPrev" aria-label="Imóveis anteriores"><svg class="flip"><use href="#i-arrow" /></svg></button>
-          <button class="btn-round" type="button" id="imNext" aria-label="Mais imóveis"><svg><use href="#i-arrow" /></svg></button>
-        </div>
-      </div>
-
-      <div class="im-track rv" style="--d: .3s">
-        <ul class="im-grid" id="imGrid" aria-label="Imóveis"></ul>
-        <p class="im-empty" id="imEmpty" hidden>Nenhum imóvel com esses filtros. <button type="button" id="imReset">Limpar filtros</button></p>
-      </div>
-    </section>
-
-    <!-- ================= 04 · Regiões ================= -->
+    <!-- ================= 06 · Regiões ================= -->
     <section class="scene regioes" id="regioes" data-title="Regiões" aria-label="Regiões">
       <div class="rg-head">
         <p class="eyebrow rv" style="--d: .3s">Regiões</p>
@@ -464,7 +553,7 @@
       <ul class="rg-grid rv" style="--d: .3s" id="rgGrid" aria-label="Cidades"></ul>
     </section>
 
-    <!-- ================= 05 · Serviços ================= -->
+    <!-- ================= 07 · Serviços ================= -->
     <section class="scene servicos" id="servicos" data-title="Serviços" aria-label="Serviços">
       <div class="sv-side">
         <div class="sv-intro">
@@ -507,7 +596,7 @@
       </ul>
     </section>
 
-    <!-- ================= 06 · Avaliações ================= -->
+    <!-- ================= 08 · Avaliações ================= -->
     <section class="scene avaliacoes" id="avaliacoes" data-title="Avaliações" data-tone="dark" aria-label="Avaliações">
       <div class="av-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -536,7 +625,7 @@
       </figure>
     </section>
 
-    <!-- ================= 07 · Contato ================= -->
+    <!-- ================= 09 · Contato ================= -->
     <section class="scene contato" id="contato" data-title="Contato" data-tone="dark" aria-label="Contato">
       <div class="ct-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -593,12 +682,14 @@
     <button class="overlay-close menu-close" type="button" data-close>Fechar <svg><use href="#i-close" /></svg></button>
     <nav class="menu-links" aria-label="Seções">
       <a href="#inicio" data-go="inicio" data-preview="inicio"><span class="n">01</span><span class="t">Início</span></a>
-      <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">02</span><span class="t">Peças</span></a>
-      <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Imóveis</span></a>
-      <a href="#regioes" data-go="regioes" data-preview="regioes"><span class="n">04</span><span class="t">Regiões</span></a>
-      <a href="#servicos" data-go="servicos" data-preview="servicos"><span class="n">05</span><span class="t">Serviços</span></a>
-      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">06</span><span class="t">Avaliações</span></a>
-      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">07</span><span class="t">Contato</span></a>
+      <a href="#filtro" data-go="filtro" data-preview="filtro"><span class="n">02</span><span class="t">Filtro</span></a>
+      <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Destaques</span></a>
+      <a href="#instagram" data-go="instagram" data-preview="instagram"><span class="n">04</span><span class="t">Instagram</span></a>
+      <a href="#moveis" data-go="moveis" data-preview="moveis"><span class="n">05</span><span class="t">Peças</span></a>
+      <a href="#regioes" data-go="regioes" data-preview="regioes"><span class="n">06</span><span class="t">Regiões</span></a>
+      <a href="#servicos" data-go="servicos" data-preview="servicos"><span class="n">07</span><span class="t">Serviços</span></a>
+      <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">08</span><span class="t">Avaliações</span></a>
+      <a href="#contato" data-go="contato" data-preview="contato"><span class="n">09</span><span class="t">Contato</span></a>
     </nav>
     <figure class="menu-preview" aria-hidden="true">
       <span class="menu-preview-img" data-preview-img="inicio"></span>
