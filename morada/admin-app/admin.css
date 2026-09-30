@@ -725,3 +725,50 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
 .name-row .field { flex: 1 1 240px; }
 .name-row .btn { height: 44px; }
 .field-label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }
+
+/* ---------- Clientes ---------- */
+.notice--soft { background: #fff; border-color: var(--line); }
+.notice--soft .ico { color: var(--ink-2); }
+.notice--soft .notice-go { color: var(--ink-2); }
+#notice { display: grid; gap: 10px; margin-bottom: 6px; }
+#notice .notice { margin-bottom: 0; }
+#notice:empty { display: none; }
+.cl-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-bottom: 18px; }
+.cl-cols .panel + .panel { margin-top: 0; }
+.rank { display: grid; }
+.rank > li { border-top: 1px solid var(--line); }
+.rank > li:first-child { border-top: 0; }
+.rank summary { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto auto; align-items: center; gap: 12px; padding: 10px 0; cursor: pointer; list-style: none; }
+.rank summary::-webkit-details-marker { display: none; }
+.rank-main { display: grid; min-width: 0; }
+.rank-main b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank-main small { color: var(--terracotta-d); font-size: 12.5px; }
+details[open] .rank-main small { visibility: hidden; }
+.rank-n { display: inline-flex; align-items: center; gap: 4px; min-width: 48px; justify-content: flex-end; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rank-n .ico { width: 16px; height: 16px; color: var(--terracotta); }
+.rank-who { display: grid; gap: 6px; padding: 0 0 12px 76px; }
+.rank-who li { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 13.5px; }
+.rank-who .ico { width: 15px; height: 15px; color: var(--muted); }
+.rank-who small { color: var(--muted); font-size: 12px; }
+.feed { display: grid; }
+.feed li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.feed li:first-child { border-top: 0; }
+.feed li small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+.feed-ico { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; }
+.feed-ico .ico { width: 16px; height: 16px; }
+.feed-ico--favorito { background: #fbe9e4; color: #c0463a; }
+.feed-ico--carrinho { background: var(--warn-bg); color: var(--warn); }
+.table--clientes th .ico { width: 16px; height: 16px; vertical-align: -3px; }
+.table--clientes .td-name small a { color: var(--terracotta-d); }
+.mini-zap { margin-left: 6px; font-size: 12px; font-weight: 600; color: #1f9d57; }
+.muted { color: var(--muted); }
+@media (max-width: 1180px) { .cl-cols { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) {
+  .rank-who { padding-left: 0; }
+  .rank summary { grid-template-columns: 56px minmax(0, 1fr) auto; }
+  .rank summary .rank-n:last-child { grid-column: 3; }
+  .table--clientes tr { grid-template-columns: minmax(0, 1fr) auto; }
+  .table--clientes td[data-label="Cliente"] { grid-column: 1 / -1; }
+  .table--clientes td[data-label="Telefone"], .table--clientes td[data-label="Cadastro"], .table--clientes td[data-label="Último acesso"], .table--clientes td[data-label="Favoritos"], .table--clientes td[data-label="Carrinho"], .table--clientes td[data-label="Pedidos"] { display: block !important; font-size: 13px; }
+  .table--clientes td[data-label]:not([data-label="Cliente"])::before { content: attr(data-label) ": "; color: var(--muted); }
+}

@@ -56,6 +56,7 @@
     if (/Payload too large|exceeded the maximum/i.test(msg)) return 'A imagem ficou grande demais para enviar.';
     if (/mime type|invalid_mime/i.test(msg)) return 'Formato de imagem não aceito. Use JPG, PNG ou WebP.';
     if (/Bucket not found/i.test(msg)) return 'O espaço de fotos (Storage) ainda não foi criado. Rode a migração do Supabase.';
+    if (code === 'PGRST202' || /could not find the function/i.test(msg)) return 'Falta rodar no Supabase o SQL da página Clientes (migração 3). Depois recarregue a página.';
     if (code === 'PGRST204' || code === 'PGRST205' || code === '42P01' || code === '42703' || /could not find the .* (column|table)|does not exist/i.test(msg)) return 'Falta rodar no Supabase o arquivo SQL novo (migração 2). Depois recarregue a página.';
     return msg ? `Algo deu errado: ${msg}` : 'Algo deu errado. Tente de novo.';
   }
@@ -223,6 +224,7 @@
     { re: /^\/admin\/destaques$/, view: viewDestaques, nav: 'destaques', title: 'Destaques' },
     { re: /^\/admin\/configuracoes$/, view: viewConfig, nav: 'config', title: 'Configurações' },
     { re: /^\/admin\/contatos$/, view: viewContatos, nav: 'contatos', title: 'Contatos' },
+    { re: /^\/admin\/clientes$/, view: viewClientes, nav: 'clientes', title: 'Clientes' },
     { re: /^\/admin\/minha-conta$/, view: viewMinhaConta, nav: 'conta', title: 'Minha conta' },
     { re: /^\/admin\/nova-senha$/, view: viewNovaSenha, open: true, always: true },
   ];
@@ -301,6 +303,7 @@
               <a href="/admin" data-link data-nav="dash">${icon('dash')}<span>Dashboard</span></a>
               <a href="/admin/imoveis" data-link data-nav="imoveis">${icon('building')}<span>Imóveis</span></a>
               <a href="/admin/contatos" data-link data-nav="contatos">${icon('mail')}<span>Contatos</span><b class="nav-badge" id="navBadge" hidden></b></a>
+              <a href="/admin/clientes" data-link data-nav="clientes">${icon('users')}<span>Clientes</span></a>
               <a href="/admin/avaliacoes" data-link data-nav="avaliacoes">${icon('chat')}<span>Avaliações</span></a>
               <a href="/admin/destaques" data-link data-nav="destaques">${icon('star')}<span>Destaques</span></a>
               <a href="/admin/configuracoes" data-link data-nav="config">${icon('gear')}<span>Configurações</span></a>
@@ -681,19 +684,26 @@
   const EXEMPLOS_IMOVEIS = ['patio', 'mirante', 'jequitiba', 'brisa', 'seixo', 'lume', 'jardins', 'leblon', 'serra'];
   const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
   async function loadExtras(alive) {
-    const [novas, exImoveis, exAval, conf] = await Promise.all([
+    const [novas, exImoveis, exAval, conf, clientes] = await Promise.all([
       sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false),
       sb.from('imoveis').select('id', { count: 'exact', head: true }).in('slug', EXEMPLOS_IMOVEIS),
       sb.from('avaliacoes').select('id', { count: 'exact', head: true }).in('nome', EXEMPLOS_AVALIACOES),
       sb.from('configuracoes').select('*').eq('id', 1).maybeSingle(),
+      sb.rpc('admin_clientes'),
     ]);
     if (!alive()) return;
+    if (!clientes.error) {
+      const semana = Date.now() - 7 * 864e5;
+      const ativos = clientes.data.filter((c) => c.ultimo_acesso && new Date(c.ultimo_acesso) > semana).length;
+      $('#notice').insertAdjacentHTML('beforeend', `<a class="notice notice--soft" href="/admin/clientes" data-link>${icon('users')}<span><b>${plural(clientes.data.length, 'cliente cadastrado', 'clientes cadastrados')}</b> · ${plural(ativos, 'entrou', 'entraram')} nos últimos 7 dias</span><span class="notice-go">Ver clientes ${icon('right')}</span></a>`);
+    }
     const semMigracao = !!novas.error || (conf.data && !('login_google' in conf.data));
     if (!novas.error && novas.count) {
-      $('#notice').innerHTML = `<a class="notice" href="/admin/contatos?filtro=novos" data-link>${icon('mail')}<span><b>${plural(novas.count, 'mensagem nova', 'mensagens novas')}</b> de clientes esperando resposta.</span><span class="notice-go">Ver mensagens ${icon('right')}</span></a>`;
+      $('#notice').insertAdjacentHTML('afterbegin', `<a class="notice" href="/admin/contatos?filtro=novos" data-link>${icon('mail')}<span><b>${plural(novas.count, 'mensagem nova', 'mensagens novas')}</b> de clientes esperando resposta.</span><span class="notice-go">Ver mensagens ${icon('right')}</span></a>`);
     }
     const c = conf.data || {};
     const items = [
+      [!clientes.error || semMigracao, false, 'Rodar o SQL da página Clientes', 'Mostra quem tem conta, favoritos e carrinhos. O arquivo é supabase/migrations/20260930180000_clientes_painel.sql.', ''],
       [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
       [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
       [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
@@ -1585,6 +1595,119 @@
         setTimeout(() => { if (alive()) render(); }, 250);
       }
     });
+    load();
+  }
+
+  /* =========================================================
+     Clientes: quem tem conta, favoritos e carrinhos
+     Por segurança só aparece o e-mail e o que o cliente preencheu; senha nunca.
+     ========================================================= */
+
+  async function viewClientes(page, _m, alive) {
+    page.innerHTML = `${pageHead('Clientes', 'Quem tem conta no site e quais imóveis mais interessam. Por segurança, aparecem só o e-mail e os dados que o cliente preencheu — senha nunca.')}
+      <div class="stats" id="clStats">${Array.from({ length: 5 }, () => '<div class="stat is-skel"><i></i><b></b></div>').join('')}</div>
+      <div class="cl-cols">
+        <section class="panel"><div class="panel-head"><h2>Imóveis mais desejados</h2><small class="hint">favoritos e carrinhos</small></div><div id="clRank">${skelRows(3)}</div></section>
+        <section class="panel"><div class="panel-head"><h2>Atividade recente</h2></div><div id="clFeed">${skelRows(3)}</div></section>
+      </div>
+      <section class="panel">
+        <div class="panel-head"><h2>Todos os clientes</h2><small class="hint" id="clCount"></small></div>
+        <label class="search search--full">${icon('search')}<span class="sr">Buscar cliente</span><input type="search" id="clSearch" placeholder="Buscar por nome ou e-mail" /></label>
+        <div id="clList">${skelRows(4)}</div>
+      </section>`;
+    const load = async () => {
+      const [cl, it, im] = await Promise.all([
+        sb.rpc('admin_clientes'),
+        sb.rpc('admin_interesses'),
+        sb.from('imoveis').select('slug,titulo,imagem_principal,preco,finalidade'),
+      ]);
+      if (!alive()) return;
+      const bad = [cl, it, im].find((r) => r.error);
+      if (bad) { $('#clStats').innerHTML = ''; $('#clRank').innerHTML = ''; $('#clFeed').innerHTML = ''; showError($('#clList'), bad.error, load); return; }
+      const clientes = cl.data;
+      const interesses = it.data;
+      const imoveis = new Map(im.data.map((r) => [r.slug, r]));
+      const nomeImovel = (slug) => imoveis.get(slug)?.titulo || `Imóvel removido (${slug})`;
+      const quem = (r) => r.nome || r.email;
+
+      // números
+      const agora = Date.now();
+      const ativos7 = clientes.filter((c) => c.ultimo_acesso && agora - new Date(c.ultimo_acesso) < 7 * 864e5).length;
+      const novos30 = clientes.filter((c) => agora - new Date(c.criado_em) < 30 * 864e5).length;
+      const favs = interesses.filter((r) => r.tipo === 'favorito').length;
+      const carts = interesses.filter((r) => r.tipo === 'carrinho').length;
+      $('#clStats').innerHTML = [
+        ['Clientes cadastrados', clientes.length, 'users'],
+        ['Entraram nos últimos 7 dias', ativos7, 'check'],
+        ['Novos nos últimos 30 dias', novos30, 'plus'],
+        ['Imóveis favoritados', favs, 'heart'],
+        ['Itens em carrinhos', carts, 'cart'],
+      ].map(([label, n, ic]) => `<div class="stat"><span class="stat-ico">${icon(ic)}</span><span class="stat-label">${label}</span><b class="stat-num">${n.toLocaleString('pt-BR')}</b></div>`).join('');
+
+      // ranking por imóvel
+      const porImovel = new Map();
+      interesses.forEach((r) => {
+        const e = porImovel.get(r.item) || { item: r.item, favorito: [], carrinho: [] };
+        e[r.tipo].push(r);
+        porImovel.set(r.item, e);
+      });
+      const ranking = [...porImovel.values()].sort((a, b) => (b.favorito.length + b.carrinho.length) - (a.favorito.length + a.carrinho.length)).slice(0, 12);
+      $('#clRank').innerHTML = ranking.length ? `<ul class="rank">${ranking.map((e) => `
+        <li>
+          <details>
+            <summary>
+              ${thumbImg(imoveis.get(e.item)?.imagem_principal)}
+              <span class="rank-main"><b>${esc(nomeImovel(e.item))}</b><small>Ver quem</small></span>
+              <span class="rank-n" title="Favoritos">${icon('heart')}${e.favorito.length}</span>
+              <span class="rank-n" title="Carrinhos">${icon('cart')}${e.carrinho.length}</span>
+            </summary>
+            <ul class="rank-who">${[...e.favorito, ...e.carrinho].sort((a, b) => new Date(b.quando) - new Date(a.quando)).map((r) => `
+              <li>${icon(r.tipo === 'favorito' ? 'heart' : 'cart')}<span><b>${esc(quem(r))}</b>${r.nome ? ` <small>${esc(r.email)}</small>` : ''}</span><small>${r.tipo === 'favorito' ? 'favoritou' : 'no carrinho'} · ${dataHora(r.quando)}</small></li>`).join('')}
+            </ul>
+          </details>
+        </li>`).join('')}</ul>`
+        : stateBox('empty', 'Ninguém favoritou ainda', 'Quando um cliente favoritar ou colocar um imóvel no carrinho, aparece aqui.');
+
+      // atividade recente
+      const recentes = interesses.slice(0, 15);
+      $('#clFeed').innerHTML = recentes.length ? `<ul class="feed">${recentes.map((r) => `
+        <li>
+          <span class="feed-ico feed-ico--${r.tipo}">${icon(r.tipo === 'favorito' ? 'heart' : 'cart')}</span>
+          <span><b>${esc(quem(r))}</b> ${r.tipo === 'favorito' ? 'favoritou' : 'colocou no carrinho'} <b>${esc(nomeImovel(r.item))}</b><small>${dataHora(r.quando)}${r.nome ? ` · ${esc(r.email)}` : ''}</small></span>
+        </li>`).join('')}</ul>`
+        : stateBox('empty', 'Sem atividade ainda', '');
+
+      // lista de clientes
+      const paint = () => {
+        const term = $('#clSearch').value.trim().toLowerCase();
+        const achados = clientes.filter((c) => !term || `${c.nome} ${c.email}`.toLowerCase().includes(term));
+        $('#clCount').textContent = term ? `${achados.length} de ${plural(clientes.length, 'cliente', 'clientes')}` : plural(clientes.length, 'cliente', 'clientes');
+        if (!achados.length) {
+          $('#clList').innerHTML = stateBox('empty', clientes.length ? 'Nenhum cliente encontrado' : 'Nenhum cliente com conta ainda', clientes.length ? 'Tente outro nome ou e-mail.' : 'Quando alguém criar conta no site, aparece aqui.');
+          return;
+        }
+        const mostrar = achados.slice(0, 200);
+        $('#clList').innerHTML = `
+          <table class="table table--clientes">
+            <thead><tr><th>Cliente</th><th>Telefone</th><th>Cadastro</th><th>Último acesso</th><th title="Favoritos">${icon('heart')}</th><th title="Carrinho">${icon('cart')}</th><th>Pedidos</th></tr></thead>
+            <tbody>${mostrar.map((c) => {
+              const zap = zapDigits(c.telefone);
+              return `<tr>
+                <td data-label="Cliente" class="td-name"><b>${esc(c.nome || '—')}</b><small><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></small></td>
+                <td data-label="Telefone">${c.telefone ? `${esc(c.telefone)}${zap ? ` <a class="mini-zap" href="https://wa.me/${zap}" target="_blank" rel="noopener" title="Abrir no WhatsApp">WhatsApp</a>` : ''}` : '<span class="muted">—</span>'}</td>
+                <td data-label="Cadastro" class="td-date">${dateBR(c.criado_em)}</td>
+                <td data-label="Último acesso" class="td-date">${c.ultimo_acesso ? dataHora(c.ultimo_acesso) : '—'}</td>
+                <td data-label="Favoritos" class="td-num">${c.favoritos}</td>
+                <td data-label="Carrinho" class="td-num">${c.carrinho}</td>
+                <td data-label="Pedidos" class="td-num">${c.pedidos}</td>
+              </tr>`;
+            }).join('')}</tbody>
+          </table>
+          ${achados.length > mostrar.length ? `<p class="hint" style="padding:12px 0 0">Mostrando ${mostrar.length} de ${achados.length}. Use a busca para achar os outros.</p>` : ''}`;
+      };
+      $('#clSearch').addEventListener('input', paint);
+      paint();
+    };
     load();
   }
 
