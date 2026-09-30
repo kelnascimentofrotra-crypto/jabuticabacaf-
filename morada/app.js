@@ -23,7 +23,22 @@ const moradaApp = () => {
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'Artur Guimarães'; // nome da imobiliária (Configurações do painel)
+  let BRAND = 'Artur Guimarães';
+  // telefone enquanto digita: (11) 98765-4321 / (11) 3000-1234
+  const telMask = (v) => {
+    let d = String(v || '').replace(/\D/g, '');
+    if (d.length > 11 && d.startsWith('55')) d = d.slice(2);
+    d = d.slice(0, 11);
+    if (d.length <= 2) return d ? `(${d}` : '';
+    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  };
+  const bindTelMask = (el) => el && el.addEventListener('input', () => {
+    const end = el.selectionEnd === el.value.length;
+    el.value = telMask(el.value);
+    if (end) el.setSelectionRange(el.value.length, el.value.length);
+  }); // nome da imobiliária (Configurações do painel)
   let SB = null;            // { url, anonKey } quando o Supabase está configurado
   let HOUSES = [];          // imóveis mostrados no site
   let catalogReady = false; // os imóveis já chegaram?
@@ -1028,6 +1043,8 @@ const moradaApp = () => {
   const MAX_TRIES = 8;          // tentativas erradas seguidas (qualquer e-mail) antes da pausa
   const LOCK_MINUTES = [15, 20]; // 1ª pausa 15 min; as seguintes 20 min
 
+  bindTelMask($('#f-tel'));
+  bindTelMask($('#accTel'));
   const gate = $('#gate');
   const warmAuth = () => { if (!MODO_TESTE) ensureAuth(); };
   gate.addEventListener('pointerdown', (e) => { if (e.target.closest('[data-auth], .ga-card, #glStart, #glGoogle')) warmAuth(); });
@@ -1774,10 +1791,10 @@ const moradaApp = () => {
     $('#profEmail').textContent = profile.email;
     $('#accNome').value = profile.nome;
     $('#accMail').value = profile.email;
-    $('#accTel').value = profile.telefone || '';
+    $('#accTel').value = telMask(profile.telefone) || profile.telefone || '';
     if (!$('#f-nome').value) $('#f-nome').value = profile.nome;
     if (!$('#f-email').value) $('#f-email').value = profile.email;
-    if (!$('#f-tel').value) $('#f-tel').value = profile.telefone || '';
+    if (!$('#f-tel').value) $('#f-tel').value = telMask(profile.telefone) || profile.telefone || '';
     $('#accFotoRemove').hidden = !profile.foto;
     const withPass = hasPass();
     $('#passState').textContent = withPass ? '••••••••' : 'Você entra com o Google';

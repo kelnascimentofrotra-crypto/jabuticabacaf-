@@ -1520,6 +1520,14 @@
   const dataHora = (d) => new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
   // telefone brasileiro sem DDI ganha o 55 para abrir no WhatsApp
   const zapDigits = (tel) => { const d = String(tel || '').replace(/\D/g, ''); return d.length === 10 || d.length === 11 ? `55${d}` : d; };
+  // telefone legível: (11) 98765-4321; o que não for número de celular/fixo do Brasil fica como veio
+  const telBonito = (tel) => {
+    let d = String(tel || '').replace(/\D/g, '');
+    if ((d.length === 12 || d.length === 13) && d.startsWith('55')) d = d.slice(2);
+    if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+    if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+    return String(tel || '');
+  };
 
   async function viewContatos(page, _m, alive) {
     const params = new URLSearchParams(location.search);
@@ -1562,7 +1570,7 @@
             <span class="pill ${r.origem === 'carrinho' ? 'pill--alugado' : 'pill--draft'}">${r.origem === 'carrinho' ? 'Pedido do carrinho' : 'Formulário'}</span>
             ${r.lido ? '' : '<span class="pill pill--disponivel">Nova</span>'}
           </div>
-          <p class="msg-contact">${[r.email && `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`, r.telefone && `<a href="tel:${esc(r.telefone.replace(/[^\d+]/g, ''))}">${esc(r.telefone)}</a>`].filter(Boolean).join(' · ')}</p>
+          <p class="msg-contact">${[r.email && `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`, r.telefone && `<a href="tel:${esc(r.telefone.replace(/[^\d+]/g, ''))}">${esc(telBonito(r.telefone))}</a>`].filter(Boolean).join(' · ')}</p>
           ${r.mensagem ? `<p class="msg-text">${esc(r.mensagem)}</p>` : '<p class="msg-text is-empty">Sem mensagem escrita.</p>'}
           <div class="row-tools">
             ${zap ? `<a class="btn btn-sm btn-zap" href="https://wa.me/${zap}?text=${zapText}" target="_blank" rel="noopener" data-reply>${icon('chat')}<span>WhatsApp</span></a>` : ''}
@@ -1719,7 +1727,7 @@
               const zap = zapDigits(c.telefone);
               return `<tr>
                 <td data-label="Cliente" class="td-name"><b>${esc(c.nome || '—')}</b><small><a href="mailto:${esc(c.email)}">${esc(c.email)}</a></small></td>
-                <td data-label="Telefone">${c.telefone ? `${esc(c.telefone)}${zap ? ` <a class="mini-zap" href="https://wa.me/${zap}" target="_blank" rel="noopener" title="Abrir no WhatsApp">WhatsApp</a>` : ''}` : '<span class="muted">—</span>'}</td>
+                <td data-label="Telefone">${c.telefone ? `${esc(telBonito(c.telefone))}${zap ? ` <a class="mini-zap" href="https://wa.me/${zap}" target="_blank" rel="noopener" title="Abrir no WhatsApp">WhatsApp</a>` : ''}` : '<span class="muted">—</span>'}</td>
                 <td data-label="Cadastro" class="td-date">${dateBR(c.criado_em)}</td>
                 <td data-label="Último acesso" class="td-date">${c.ultimo_acesso ? dataHora(c.ultimo_acesso) : '—'}</td>
                 <td data-label="Favoritos" class="td-num">${c.favoritos}</td>
