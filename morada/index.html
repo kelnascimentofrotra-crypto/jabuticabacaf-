@@ -4,7 +4,18 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Morada — Casas selecionadas</title>
-  <meta name="description" content="Morada: curadoria de casas autorais, móveis da coleção e atendimento para encontrar a sua casa." />
+  <meta name="description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor. Vamos encontrar a sua morada." />
+  <meta name="theme-color" content="#efefed" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Morada" />
+  <meta property="og:title" content="Morada — Vamos encontrar a sua morada" />
+  <meta property="og:description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor." />
+  <meta property="og:image" content="/assets/og.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23c7784a'/%3E%3Cpath d='M6 12.5 12 7.5l6 5V18H6z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <link rel="preload" href="fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/casa.webp" as="image" />
   <link rel="stylesheet" href="styles.css" />
@@ -77,7 +88,7 @@
         <dl class="gate-stats g-rv" style="--d: .62s">
           <div><dt>Casas selecionadas</dt><dd><span class="count" data-stat="imoveis" data-count="180" data-prefix="+" data-delay="900">+180</span></dd></div>
           <div><dt>Cidades</dt><dd><span class="count" data-stat="cidades" data-count="12" data-delay="1000">12</span></dd></div>
-          <div><dt>Famílias atendidas</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
+          <div><dt>Famílias atendidas</dt><dd><span class="count" data-stat="familias" data-count="1200" data-prefix="+" data-delay="1100">+1.200</span></dd></div>
           <div><dt>Nota média</dt><dd><span class="count" data-stat="nota" data-count="4.9" data-decimals="1" data-delay="1200">4,9</span></dd></div>
         </dl>
       </div>
@@ -265,22 +276,23 @@
           <div class="strength" id="strength" aria-hidden="true"><i></i><i></i><i></i><span></span></div>
           <button class="btn btn-dark btn-block" type="submit"><span>Criar conta</span><svg><use href="#i-arrow" /></svg></button>
           <p class="ga-msg" id="signupMsg" role="alert"></p>
+          <p class="ga-legal">Ao criar a conta, você concorda com a nossa <a href="privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
         </form>
 
         <!-- Redefinir senha -->
         <form class="ga-form" id="forgotForm" data-form="forgot" novalidate hidden>
           <h3 class="ga-form-title">Redefinir senha</h3>
           <div class="forgot-step" data-step="1">
-            <p class="ga-help">Digite o e-mail da sua conta. Vamos gerar um código de 6 números para você criar uma senha nova.</p>
+            <p class="ga-help" id="forgotHelp">Digite o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.</p>
             <div class="field">
               <label for="f2-email">E-mail</label>
               <input id="f2-email" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="voce@email.com" />
             </div>
-            <button class="btn btn-dark btn-block" type="submit"><span>Enviar código</span><svg><use href="#i-arrow" /></svg></button>
+            <button class="btn btn-dark btn-block" type="submit"><span id="forgotSend">Enviar link</span><svg><use href="#i-arrow" /></svg></button>
           </div>
           <div class="forgot-step" data-step="2" hidden>
             <p class="ga-code" id="codeBox"></p>
-            <div class="field">
+            <div class="field" id="f2-codeField">
               <label for="f2-code">Código</label>
               <input id="f2-code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" />
             </div>
@@ -431,8 +443,8 @@
 
         <dl class="hero-stats rv" style="--d: 2s">
           <div><dt>Cidades</dt><dd><span class="count" data-stat="cidades" data-count="12" data-delay="2100">12</span></dd></div>
-          <div><dt>Famílias</dt><dd><span class="count" data-count="1200" data-prefix="+" data-delay="2200">+1.200</span></dd></div>
-          <div><dt>Anos</dt><dd><span class="count" data-count="15" data-delay="2300">15</span></dd></div>
+          <div><dt>Famílias</dt><dd><span class="count" data-stat="familias" data-count="1200" data-prefix="+" data-delay="2200">+1.200</span></dd></div>
+          <div><dt>Anos</dt><dd><span class="count" data-stat="anos" data-count="15" data-delay="2300">15</span></dd></div>
           <div><dt>Nota média</dt><dd><span class="count" data-stat="nota" data-count="4.9" data-decimals="1" data-delay="2400">4,9</span></dd></div>
         </dl>
 
@@ -682,14 +694,20 @@
             <label for="f-msg"><svg aria-hidden="true"><use href="#i-chat" /></svg>O que você procura?</label>
             <textarea id="f-msg" name="mensagem" rows="2" placeholder="Ex.: Casa, apartamento, investimento…"></textarea>
           </div>
-          <button class="btn btn-gold btn-block" type="submit">Enviar <svg><use href="#i-arrow" /></svg></button>
+          <!-- campo invisível: pessoas não preenchem; robôs de spam sim -->
+          <div class="hp" aria-hidden="true"><label for="f-empresa">Empresa</label><input id="f-empresa" name="empresa" type="text" tabindex="-1" autocomplete="off" /></div>
+          <button class="btn btn-gold btn-block" type="submit"><span>Enviar</span> <svg><use href="#i-arrow" /></svg></button>
           <p class="form-error" id="formError" role="alert"></p>
+          <p class="ct-legal">Ao enviar, você concorda com a nossa <a href="privacidade" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
         </div>
         <div class="ct-done" id="formDone" hidden>
           <span class="done-icon"><svg><use href="#i-check" /></svg></span>
           <h3 id="doneTitle">Obrigado!</h3>
-          <p>Respondemos em até um dia útil.</p>
-          <button class="btn btn-gold" type="button" id="formAgain">Enviar outra mensagem</button>
+          <p id="doneText">Respondemos em até um dia útil.</p>
+          <div class="ct-done-actions">
+            <a class="btn btn-zap" id="doneZap" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-zap" /></svg>Falar agora no WhatsApp</a>
+            <button class="btn btn-gold" type="button" id="formAgain">Enviar outra mensagem</button>
+          </div>
         </div>
       </form>
 
@@ -722,6 +740,7 @@
     </figure>
     <div class="menu-foot">
       <a href="mailto:contato@morada.com.br">contato@morada.com.br</a>
+      <a href="privacidade" target="_blank" rel="noopener">Privacidade</a>
       <span>© 2026 Morada</span>
     </div>
   </div>
@@ -824,6 +843,10 @@
               <label for="accMail">E-mail de acesso</label>
               <input id="accMail" type="text" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" />
             </div>
+            <div class="field">
+              <label for="accTel">Telefone / WhatsApp</label>
+              <input id="accTel" type="tel" autocomplete="tel" placeholder="(11) 90000-0000" />
+            </div>
             <button class="btn btn-dark btn-block" type="submit">Salvar alterações</button>
             <p class="form-error" id="accNote" role="status"></p>
           </form>
@@ -853,6 +876,7 @@
           </section>
 
           <button class="btn btn-light btn-block acc-logout" type="button" id="logoutBtn">Sair da conta</button>
+          <button class="acc-delete" type="button" id="accDelete">Excluir minha conta</button>
         </div>
       </div>
     </aside>

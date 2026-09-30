@@ -56,6 +56,7 @@
     if (/Payload too large|exceeded the maximum/i.test(msg)) return 'A imagem ficou grande demais para enviar.';
     if (/mime type|invalid_mime/i.test(msg)) return 'Formato de imagem não aceito. Use JPG, PNG ou WebP.';
     if (/Bucket not found/i.test(msg)) return 'O espaço de fotos (Storage) ainda não foi criado. Rode a migração do Supabase.';
+    if (code === 'PGRST204' || code === 'PGRST205' || code === '42P01' || code === '42703' || /could not find the .* (column|table)|does not exist/i.test(msg)) return 'Falta rodar no Supabase o arquivo SQL novo (migração 2). Depois recarregue a página.';
     return msg ? `Algo deu errado: ${msg}` : 'Algo deu errado. Tente de novo.';
   }
   const noRows = () => Object.assign(new Error('sem permissão'), { code: '42501' });
@@ -221,6 +222,9 @@
     { re: /^\/admin\/avaliacoes$/, view: viewAvaliacoes, nav: 'avaliacoes', title: 'Avaliações' },
     { re: /^\/admin\/destaques$/, view: viewDestaques, nav: 'destaques', title: 'Destaques' },
     { re: /^\/admin\/configuracoes$/, view: viewConfig, nav: 'config', title: 'Configurações' },
+    { re: /^\/admin\/contatos$/, view: viewContatos, nav: 'contatos', title: 'Contatos' },
+    { re: /^\/admin\/minha-conta$/, view: viewMinhaConta, nav: 'conta', title: 'Minha conta' },
+    { re: /^\/admin\/nova-senha$/, view: viewNovaSenha, open: true, always: true },
   ];
   const LEAVE_MSG = 'Existem alterações que não foram salvas. Sair mesmo assim?';
 
@@ -260,11 +264,11 @@
     if (!route.open && !user) {
       return navigate(`/admin/login${path !== '/admin' ? `?next=${encodeURIComponent(path + location.search)}` : ''}`, true);
     }
-    if (route.open && user) return navigate(safeNext() || '/admin', true);
+    if (route.open && user && !route.always) return navigate(safeNext() || '/admin', true);
     app.dataset.path = location.pathname + location.search;
     const alive = () => token === renderToken;
     if (route.open) {
-      document.title = 'Entrar — Painel administrativo';
+      document.title = route.always ? 'Nova senha — Painel administrativo' : 'Entrar — Painel administrativo';
       route.view(app, null, alive);
       return;
     }
@@ -296,6 +300,7 @@
             <nav class="side-nav">
               <a href="/admin" data-link data-nav="dash">${icon('dash')}<span>Dashboard</span></a>
               <a href="/admin/imoveis" data-link data-nav="imoveis">${icon('building')}<span>Imóveis</span></a>
+              <a href="/admin/contatos" data-link data-nav="contatos">${icon('mail')}<span>Contatos</span><b class="nav-badge" id="navBadge" hidden></b></a>
               <a href="/admin/avaliacoes" data-link data-nav="avaliacoes">${icon('chat')}<span>Avaliações</span></a>
               <a href="/admin/destaques" data-link data-nav="destaques">${icon('star')}<span>Destaques</span></a>
               <a href="/admin/configuracoes" data-link data-nav="config">${icon('gear')}<span>Configurações</span></a>
@@ -307,10 +312,10 @@
             <header class="top">
               <button class="icon-btn top-menu" type="button" aria-label="Abrir menu" aria-controls="side" aria-expanded="false">${icon('menu')}</button>
               <strong class="top-name" data-site-name></strong>
-              <div class="top-user">
+              <a class="top-user" href="/admin/minha-conta" data-link title="Minha conta e senha">
                 <span class="avatar" aria-hidden="true"></span>
                 <span class="top-who"><b>Administrador</b><small class="top-mail"></small></span>
-              </div>
+              </a>
               <button class="btn btn-ghost top-out" type="button" id="logoutBtn">${icon('out')}<span>Sair</span></button>
             </header>
             <main class="page" id="page" tabindex="-1"></main>
@@ -326,7 +331,16 @@
       a.classList.toggle('is-on', on);
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
+    refreshBadge();
     return $('#page');
+  }
+  // contador de mensagens novas no menu
+  async function refreshBadge() {
+    const { count, error } = await sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false);
+    const b = $('#navBadge');
+    if (!b) return;
+    b.hidden = !!error || !count;
+    b.textContent = count > 99 ? '99+' : String(count || '');
   }
   function paintIdentity() {
     $$('[data-site-name]').forEach((el) => { el.textContent = siteName; });
@@ -390,6 +404,17 @@
             </label>
             <p class="form-msg" id="lgMsg" role="alert">${esc(reason || '')}</p>
             <button class="btn btn-primary btn-block btn-lg" type="submit" id="lgBtn">ENTRAR</button>
+            <button class="link-btn" type="button" id="lgForgot">Esqueci minha senha</button>
+          </form>
+          <form id="forgotForm" novalidate hidden>
+            <p class="login-sub">Digite o e-mail de administrador. Vamos enviar um link para você criar uma senha nova.</p>
+            <label class="field">
+              <span>E-mail</span>
+              <input id="fgEmail" type="email" autocomplete="username" inputmode="email" required placeholder="voce@imobiliaria.com.br" />
+            </label>
+            <p class="form-msg" id="fgMsg" role="alert"></p>
+            <button class="btn btn-primary btn-block btn-lg" type="submit" id="fgBtn">ENVIAR LINK</button>
+            <button class="link-btn" type="button" id="fgBack">Voltar para entrar</button>
           </form>
           <p class="login-foot">${icon('lock')}<span>Acesso restrito. O cadastro de administradores é feito no Supabase.</span></p>
           <a class="login-back" href="/">${icon('left')}<span>Voltar para o site</span></a>
@@ -398,6 +423,31 @@
       </main>`;
     const form = $('#loginForm');
     const msg = $('#lgMsg');
+    const fgForm = $('#forgotForm');
+    const showForgot = (on) => {
+      form.hidden = on;
+      fgForm.hidden = !on;
+      $('#fgMsg').textContent = '';
+      if (on) { $('#fgEmail').value = $('#lgEmail').value.trim(); setTimeout(() => $('#fgEmail').focus(), 30); }
+    };
+    $('#lgForgot').addEventListener('click', () => showForgot(true));
+    $('#fgBack').addEventListener('click', () => showForgot(false));
+    fgForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $('#fgBtn');
+      if (btn.disabled) return;
+      const email = $('#fgEmail').value.trim();
+      const fmsg = $('#fgMsg');
+      fmsg.classList.remove('is-ok');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { fmsg.textContent = 'Digite um e-mail válido.'; return; }
+      setBusy(btn, true, 'Enviando…');
+      const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: `${location.origin}/admin/nova-senha` });
+      setBusy(btn, false);
+      if (error) { fmsg.textContent = /rate limit|429/i.test(`${error.message} ${error.status}`) ? 'Muitos pedidos seguidos. Aguarde alguns minutos.' : errText(error); return; }
+      fmsg.classList.add('is-ok');
+      fmsg.textContent = `Se ${email} for de um administrador, enviamos um link para criar a senha nova. Confira também o spam.`;
+    });
+    if (new URLSearchParams(location.search).has('esqueci')) showForgot(true);
     $('.pass-toggle', form).addEventListener('click', (e) => {
       const inp = $('#lgPass');
       const show = inp.type === 'password';
@@ -475,11 +525,14 @@
 
   async function viewDashboard(page, _m, alive) {
     page.innerHTML = `${pageHead('Dashboard', 'Resumo do que está publicado no site agora.', `<a class="btn btn-primary" href="/admin/imoveis/novo" data-link>${icon('plus')}<span>Adicionar imóvel</span></a>`)}
+      <div id="notice"></div>
       <div class="stats" id="stats">${Array.from({ length: 5 }, () => '<div class="stat is-skel"><i></i><b></b></div>').join('')}</div>
+      <section class="panel" id="todo" hidden></section>
       <section class="panel">
         <div class="panel-head"><h2>Últimos imóveis adicionados</h2><a class="link" href="/admin/imoveis" data-link>Ver todos</a></div>
         <div id="recent">${skelRows(5)}</div>
       </section>`;
+    loadExtras(alive);
     const load = async () => {
       const count = (f) => { let q = sb.from('imoveis').select('id', { count: 'exact', head: true }); if (f) q = f(q); return q; };
       try {
@@ -526,6 +579,43 @@
       }
     };
     load();
+  }
+
+  // mensagens novas + lista do que falta para o site ficar completo (tudo conferido no banco)
+  const EXEMPLOS_IMOVEIS = ['patio', 'mirante', 'jequitiba', 'brisa', 'seixo', 'lume', 'jardins', 'leblon', 'serra'];
+  const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
+  async function loadExtras(alive) {
+    const [novas, exImoveis, exAval, conf] = await Promise.all([
+      sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false),
+      sb.from('imoveis').select('id', { count: 'exact', head: true }).in('slug', EXEMPLOS_IMOVEIS),
+      sb.from('avaliacoes').select('id', { count: 'exact', head: true }).in('nome', EXEMPLOS_AVALIACOES),
+      sb.from('configuracoes').select('*').eq('id', 1).maybeSingle(),
+    ]);
+    if (!alive()) return;
+    const semMigracao = !!novas.error || (conf.data && !('login_google' in conf.data));
+    if (!novas.error && novas.count) {
+      $('#notice').innerHTML = `<a class="notice" href="/admin/contatos?filtro=novos" data-link>${icon('mail')}<span><b>${plural(novas.count, 'mensagem nova', 'mensagens novas')}</b> de clientes esperando resposta.</span><span class="notice-go">Ver mensagens ${icon('right')}</span></a>`;
+    }
+    const c = conf.data || {};
+    const items = [
+      [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
+      [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
+      [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
+      [!exImoveis.error && exImoveis.count === 0, true, 'Trocar os imóveis de exemplo pelos reais', exImoveis.count ? `Ainda há ${plural(exImoveis.count, 'imóvel', 'imóveis')} de exemplo no site (Casa Pátio, Casa Mirante…). Cadastre os reais e exclua estes.` : '', '/admin/imoveis'],
+      [!exAval.error && exAval.count === 0, true, 'Trocar as avaliações de exemplo', exAval.count ? `Ainda há ${plural(exAval.count, 'avaliação', 'avaliações')} de exemplo publicada${exAval.count > 1 ? 's' : ''}. Cadastre depoimentos reais e exclua estas.` : '', '/admin/avaliacoes'],
+      [!!(c.familias_atendidas || c.anos_mercado), true, 'Números da apresentação (opcional)', 'Famílias atendidas e anos de mercado aparecem na abertura do site. Vazios, ficam escondidos.', '/admin/configuracoes'],
+    ].filter(([done, show]) => show || !done);
+    const pending = items.filter(([done]) => !done);
+    const todo = $('#todo');
+    if (!pending.length) { todo.hidden = true; return; }
+    todo.hidden = false;
+    todo.innerHTML = `<div class="panel-head"><h2>Para o site ficar completo</h2><small class="hint">${items.length - pending.length} de ${items.length} feitos</small></div>
+      <ul class="todo">${items.map(([done, , title, text, href]) => `
+        <li class="${done ? 'is-done' : ''}">
+          <span class="todo-ico">${icon(done ? 'check' : 'alert')}</span>
+          <span class="todo-main"><b>${esc(title)}</b>${!done && text ? `<small>${esc(text)}</small>` : ''}</span>
+          ${!done && href ? `<a class="btn btn-sm" href="${href}" data-link>Resolver</a>` : ''}
+        </li>`).join('')}</ul>`;
   }
 
   const skelRows = (n) => `<div class="skel-rows">${Array.from({ length: n }, () => '<div class="skel-row"><i class="sq"></i><i></i><i></i><i class="sm"></i></div>').join('')}</div>`;
@@ -1293,6 +1383,213 @@
   }
 
   /* =========================================================
+     Contatos (mensagens do formulário e pedidos do carrinho)
+     ========================================================= */
+
+  const dataHora = (d) => new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  // telefone brasileiro sem DDI ganha o 55 para abrir no WhatsApp
+  const zapDigits = (tel) => { const d = String(tel || '').replace(/\D/g, ''); return d.length === 10 || d.length === 11 ? `55${d}` : d; };
+
+  async function viewContatos(page, _m, alive) {
+    const params = new URLSearchParams(location.search);
+    const novos = params.get('filtro') === 'novos';
+    const pagina = Math.max(1, parseInt(params.get('pagina'), 10) || 1);
+    page.innerHTML = `${pageHead('Contatos', 'Mensagens do formulário do site e pedidos finalizados no carrinho. As novas ficam destacadas.')}
+      <div class="seg" role="tablist" aria-label="Filtrar mensagens">
+        <a href="/admin/contatos" data-link role="tab" aria-selected="${!novos}" class="${novos ? '' : 'is-on'}">Todas</a>
+        <a href="/admin/contatos?filtro=novos" data-link role="tab" aria-selected="${novos}" class="${novos ? 'is-on' : ''}">Não lidas</a>
+      </div>
+      <div id="ctList">${skelRows(4)}</div>
+      <nav class="pager" id="ctPager" aria-label="Páginas"></nav>`;
+    let rows = [];
+    const from = (pagina - 1) * PAGE_SIZE;
+    const load = async () => {
+      let q = sb.from('contatos').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(from, from + PAGE_SIZE - 1);
+      if (novos) q = q.eq('lido', false);
+      const { data, count, error } = await q;
+      if (!alive()) return;
+      if (error) { showError($('#ctList'), error, load); return; }
+      rows = data;
+      paint(count);
+    };
+    function paint(count) {
+      const list = $('#ctList');
+      if (!rows.length) {
+        list.innerHTML = stateBox('empty', novos ? 'Nenhuma mensagem nova' : 'Nenhuma mensagem ainda', novos ? 'Tudo lido por aqui.' : 'Quando alguém enviar o formulário do site ou finalizar o carrinho, a mensagem aparece aqui.');
+        $('#ctPager').innerHTML = '';
+        return;
+      }
+      list.innerHTML = `<ul class="msgs">${rows.map((r) => {
+        const zap = zapDigits(r.telefone);
+        const first = String(r.nome).split(' ')[0];
+        const zapText = encodeURIComponent(`Olá, ${first}! Aqui é da ${siteName}. Recebemos a sua mensagem pelo site.`);
+        return `
+        <li class="msg${r.lido ? '' : ' is-new'}" data-id="${r.id}">
+          <div class="msg-head">
+            <span class="avatar" aria-hidden="true">${esc(String(r.nome).trim()[0] || '?').toUpperCase()}</span>
+            <span class="msg-who"><b>${esc(r.nome)}</b><small>${dataHora(r.created_at)}</small></span>
+            <span class="pill ${r.origem === 'carrinho' ? 'pill--alugado' : 'pill--draft'}">${r.origem === 'carrinho' ? 'Pedido do carrinho' : 'Formulário'}</span>
+            ${r.lido ? '' : '<span class="pill pill--disponivel">Nova</span>'}
+          </div>
+          <p class="msg-contact">${[r.email && `<a href="mailto:${esc(r.email)}">${esc(r.email)}</a>`, r.telefone && `<a href="tel:${esc(r.telefone.replace(/[^\d+]/g, ''))}">${esc(r.telefone)}</a>`].filter(Boolean).join(' · ')}</p>
+          ${r.mensagem ? `<p class="msg-text">${esc(r.mensagem)}</p>` : '<p class="msg-text is-empty">Sem mensagem escrita.</p>'}
+          <div class="row-tools">
+            ${zap ? `<a class="btn btn-sm btn-zap" href="https://wa.me/${zap}?text=${zapText}" target="_blank" rel="noopener" data-reply>${icon('chat')}<span>WhatsApp</span></a>` : ''}
+            ${r.email ? `<a class="btn btn-sm" href="mailto:${esc(r.email)}?subject=${encodeURIComponent(`Seu contato no site ${siteName}`)}" data-reply>${icon('mail')}<span>Responder por e-mail</span></a>` : ''}
+            <button class="btn btn-sm" type="button" data-lido>${r.lido ? 'Marcar como não lida' : 'Marcar como lida'}</button>
+            <button class="btn btn-sm btn-danger-ghost" type="button" data-del>${icon('trash')}<span>Excluir</span></button>
+          </div>
+        </li>`;
+      }).join('')}</ul>`;
+      const pages = Math.max(1, Math.ceil(count / PAGE_SIZE));
+      const link = (n) => { const q = new URLSearchParams(location.search); if (n > 1) q.set('pagina', n); else q.delete('pagina'); return `/admin/contatos${q.toString() ? `?${q}` : ''}`; };
+      $('#ctPager').innerHTML = `<span>${plural(count, novos ? 'mensagem não lida' : 'mensagem', novos ? 'mensagens não lidas' : 'mensagens')}</span>
+        ${pages > 1 ? `<span class="pager-btns">${pagina > 1 ? `<a class="btn btn-sm" href="${link(pagina - 1)}" data-link>${icon('left')}<span>Anterior</span></a>` : ''}<span class="pager-n">Página ${pagina} de ${pages}</span>${pagina < pages ? `<a class="btn btn-sm" href="${link(pagina + 1)}" data-link><span>Próxima</span>${icon('right')}</a>` : ''}</span>` : ''}`;
+    }
+    async function setLido(r, lido, quiet) {
+      const { data, error } = await sb.from('contatos').update({ lido }).eq('id', r.id).select('id');
+      if (error || !data.length) { toast(errText(error || noRows()), 'error'); return false; }
+      r.lido = lido;
+      refreshBadge();
+      if (!quiet) toast(lido ? 'Mensagem marcada como lida.' : 'Mensagem marcada como não lida.');
+      return true;
+    }
+    page.addEventListener('click', async (e) => {
+      const li = e.target.closest('li[data-id]');
+      if (!li) return;
+      const r = rows.find((x) => x.id === li.dataset.id);
+      if (!r) return;
+      if (e.target.closest('[data-reply]')) {
+        // respondeu: marca como lida sem atrapalhar o link
+        if (!r.lido && await setLido(r, true, true)) { li.classList.remove('is-new'); $('.pill--disponivel', li)?.remove(); $('[data-lido]', li).textContent = 'Marcar como não lida'; }
+        return;
+      }
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.matches('[data-lido]')) {
+        b.disabled = true;
+        const ok = await setLido(r, !r.lido);
+        b.disabled = false;
+        if (!ok) return;
+        if (novos && r.lido) { li.classList.add('is-gone'); setTimeout(() => { if (alive()) render(); }, 250); return; }
+        li.classList.toggle('is-new', !r.lido);
+        b.textContent = r.lido ? 'Marcar como não lida' : 'Marcar como lida';
+        const head = $('.msg-head', li);
+        $('.pill--disponivel', head)?.remove();
+        if (!r.lido) head.insertAdjacentHTML('beforeend', '<span class="pill pill--disponivel">Nova</span>');
+      } else if (b.matches('[data-del]')) {
+        const ok = await confirmBox({ title: 'Excluir mensagem?', text: `A mensagem de ${r.nome} será apagada. Essa ação não pode ser desfeita.`, confirm: 'Excluir', danger: true });
+        if (!ok) return;
+        setBusy(b, true, '');
+        const { data, error } = await sb.from('contatos').delete().eq('id', r.id).select('id');
+        if (error || !data.length) { setBusy(b, false); toast(errText(error || noRows()), 'error'); return; }
+        toast('Mensagem excluída.');
+        refreshBadge();
+        li.classList.add('is-gone');
+        setTimeout(() => { if (alive()) render(); }, 250);
+      }
+    });
+    load();
+  }
+
+  /* =========================================================
+     Minha conta (trocar a senha do administrador)
+     ========================================================= */
+
+  function viewMinhaConta(page) {
+    page.innerHTML = `${pageHead('Minha conta', 'Troque a senha que você usa para entrar no painel.')}
+      <form class="form form--single" id="pwForm" novalidate>
+        <section class="panel">
+          <h2 class="panel-title">Senha</h2>
+          <p class="hint" style="margin:-8px 0 16px">Conta: <b>${esc(user.email)}</b></p>
+          <div class="grid">
+            <label class="field col-2"><span>Senha atual</span><input name="atual" type="password" autocomplete="current-password" required /><small class="err"></small></label>
+            <label class="field"><span>Nova senha</span><input name="nova" type="password" autocomplete="new-password" required placeholder="8+ caracteres, letras e números" /><small class="err"></small></label>
+            <label class="field"><span>Repita a nova senha</span><input name="nova2" type="password" autocomplete="new-password" required /><small class="err"></small></label>
+          </div>
+        </section>
+        <div class="form-bar">
+          <p class="form-msg" id="pwMsg" role="alert"></p>
+          <button class="btn btn-primary btn-lg" type="submit" id="pwSave">TROCAR SENHA</button>
+        </div>
+      </form>`;
+    const f = $('#pwForm');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $('#pwSave');
+      if (btn.disabled) return;
+      const msg = $('#pwMsg');
+      msg.textContent = '';
+      $$('.field', f).forEach((x) => { x.classList.remove('has-error'); $('.err', x).textContent = ''; });
+      const bad = (name, text) => { const fl = f[name].closest('.field'); fl.classList.add('has-error'); $('.err', fl).textContent = text; f[name].focus(); };
+      const nova = f.nova.value;
+      if (!f.atual.value) return bad('atual', 'Digite a senha atual.');
+      if (nova.length < 8 || !/\p{L}/u.test(nova) || !/\d/.test(nova)) return bad('nova', 'Use pelo menos 8 caracteres, com letras e números.');
+      if (nova !== f.nova2.value) return bad('nova2', 'As duas senhas não são iguais.');
+      setBusy(btn, true, 'Salvando…');
+      const { error: e1 } = await sb.auth.signInWithPassword({ email: user.email, password: f.atual.value });
+      if (e1) { setBusy(btn, false); return bad('atual', /invalid/i.test(e1.message) ? 'A senha atual está errada.' : errText(e1)); }
+      const { error } = await sb.auth.updateUser({ password: nova });
+      setBusy(btn, false);
+      if (error) { msg.textContent = /different|same_password/i.test(`${error.message} ${error.code}`) ? 'A nova senha precisa ser diferente da atual.' : errText(error); return; }
+      f.reset();
+      toast('Senha alterada.');
+    });
+  }
+
+  /* ---------- Nova senha (link "esqueci minha senha" do e-mail) ---------- */
+
+  let recoveryUser = null;
+  let recoveryError = '';
+  function viewNovaSenha(root) {
+    const card = (inner) => `<main class="login"><section class="login-card" aria-labelledby="nsTitle">
+      <div class="login-brand"><span class="mark">${icon('home')}</span><span>${esc(siteName.toLowerCase() === 'morada' ? 'morada' : siteName)}</span></div>
+      ${inner}
+      <a class="login-back" href="/admin/login" data-link>${icon('left')}<span>Voltar para entrar</span></a>
+    </section><div class="login-art" aria-hidden="true"></div></main>`;
+    if (!recoveryUser) {
+      root.innerHTML = card(`<h1 id="nsTitle">LINK INVÁLIDO</h1><p class="login-sub">${esc(recoveryError || 'Este link de senha nova expirou ou já foi usado.')} Peça um novo na tela de entrada, em “Esqueci minha senha”.</p>
+        <a class="btn btn-primary btn-block btn-lg" href="/admin/login?esqueci=1" data-link>PEDIR NOVO LINK</a>`);
+      return;
+    }
+    root.innerHTML = card(`<h1 id="nsTitle">CRIAR SENHA NOVA</h1>
+      <p class="login-sub">Conta: <b>${esc(recoveryUser.email)}</b></p>
+      <form id="nsForm" novalidate>
+        <label class="field"><span>Nova senha</span><input id="nsPass" type="password" autocomplete="new-password" required placeholder="8+ caracteres, letras e números" /></label>
+        <label class="field"><span>Repita a nova senha</span><input id="nsPass2" type="password" autocomplete="new-password" required /></label>
+        <p class="form-msg" id="nsMsg" role="alert"></p>
+        <button class="btn btn-primary btn-block btn-lg" type="submit" id="nsBtn">SALVAR SENHA</button>
+      </form>`);
+    setTimeout(() => $('#nsPass').focus(), 50);
+    $('#nsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $('#nsBtn');
+      if (btn.disabled) return;
+      const msg = $('#nsMsg');
+      const nova = $('#nsPass').value;
+      if (nova.length < 8 || !/\p{L}/u.test(nova) || !/\d/.test(nova)) { msg.textContent = 'Use pelo menos 8 caracteres, com letras e números.'; return; }
+      if (nova !== $('#nsPass2').value) { msg.textContent = 'As duas senhas não são iguais.'; return; }
+      setBusy(btn, true, 'Salvando…');
+      const { error } = await sb.auth.updateUser({ password: nova });
+      if (error) { setBusy(btn, false); msg.textContent = /different|same_password/i.test(`${error.message} ${error.code}`) ? 'A nova senha precisa ser diferente da atual.' : errText(error); return; }
+      const u = recoveryUser;
+      recoveryUser = null;
+      let admin = false;
+      try { admin = await isAdmin(u); } catch (_) { /* segue como sem acesso */ }
+      if (!admin) {
+        await sb.auth.signOut().catch(() => {});
+        sessionStorage.setItem('morada:admin-aviso', 'Senha alterada, mas esta conta não tem acesso ao painel.');
+        navigate('/admin/login', true);
+        return;
+      }
+      user = u;
+      loadSiteName().catch(() => {});
+      navigate('/admin', true);
+      toast('Senha nova salva. Bem-vindo ao painel.');
+    });
+  }
+
+  /* =========================================================
      Configurações
      ========================================================= */
 
@@ -1301,6 +1598,7 @@
     const { data: c, error } = await sb.from('configuracoes').select('*').eq('id', 1).maybeSingle();
     if (!alive()) return;
     if (error || !c) { showError($('#cfBox'), error || new Error('A linha de configurações não existe. Rode a migração do Supabase.'), () => render()); return; }
+    const novos = 'login_google' in c; // migração 2 já rodada?
     let logo = c.logo || '';
     let logoFile = null;
     let logoPreview = '';
@@ -1330,6 +1628,24 @@
             <label class="field col-2"><span>Endereço</span><input name="endereco" maxlength="160" value="${esc(c.endereco)}" placeholder="Rua, número — bairro, cidade/UF" /></label>
           </div>
         </section>
+        ${novos ? `
+        <section class="panel">
+          <h2 class="panel-title">Números da apresentação</h2>
+          <p class="hint" style="margin:-8px 0 16px">Aparecem na abertura do site. Deixe vazio para esconder o número.</p>
+          <div class="grid">
+            <label class="field"><span>Famílias atendidas</span><input name="familias_atendidas" type="number" min="0" max="1000000" step="1" inputmode="numeric" value="${c.familias_atendidas ?? ''}" placeholder="Ex.: 350" /><small class="err"></small></label>
+            <label class="field"><span>Anos de mercado</span><input name="anos_mercado" type="number" min="0" max="200" step="1" inputmode="numeric" value="${c.anos_mercado ?? ''}" placeholder="Ex.: 12" /><small class="err"></small></label>
+          </div>
+        </section>
+        <section class="panel">
+          <h2 class="panel-title">Login dos clientes</h2>
+          <label class="switch"><input type="checkbox" name="login_google"${c.login_google ? ' checked' : ''} /><span class="switch-ui" aria-hidden="true"></span><span>Mostrar <b>“Entrar com o Google”</b> no site</span></label>
+          <p class="hint" style="margin-top:10px">Só ligue depois de ativar o Google no Supabase (Authentication → Sign In / Providers → Google). O cadastro com e-mail e senha funciona sem isso.</p>
+        </section>` : `
+        <section class="panel">
+          <h2 class="panel-title">Mais opções</h2>
+          <p class="hint">Números da apresentação e login com Google aparecem aqui depois que o SQL novo (migração 2) for rodado no Supabase.</p>
+        </section>`}
         <div class="form-bar">
           <p class="form-msg" id="cfMsg" role="alert"></p>
           <button class="btn btn-primary btn-lg" type="submit" id="cfSave">SALVAR ALTERAÇÕES</button>
@@ -1375,6 +1691,14 @@
       if (d.whatsapp && (d.whatsapp.length < 10 || d.whatsapp.length > 15)) errs.whatsapp = 'Use DDI + DDD + número, ex.: 5511999998888.';
       if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) errs.email = 'Digite um e-mail válido.';
       if (d.instagram && !/^@[A-Za-z0-9._]{1,30}$/.test(d.instagram)) errs.instagram = 'Use só o @ do perfil, ex.: @morada.casas';
+      if (novos) {
+        const n = (v) => (String(v).trim() === '' ? null : Number(v));
+        d.familias_atendidas = n(f.familias_atendidas.value);
+        d.anos_mercado = n(f.anos_mercado.value);
+        d.login_google = f.login_google.checked;
+        if (d.familias_atendidas != null && (!Number.isInteger(d.familias_atendidas) || d.familias_atendidas < 0)) errs.familias_atendidas = 'Digite um número inteiro.';
+        if (d.anos_mercado != null && (!Number.isInteger(d.anos_mercado) || d.anos_mercado < 0 || d.anos_mercado > 200)) errs.anos_mercado = 'Digite um número de 0 a 200.';
+      }
       Object.entries(errs).forEach(([k, t]) => { const fl = f[k].closest('.field'); fl.classList.add('has-error'); $('.err', fl).textContent = t; });
       if (Object.keys(errs).length) { $('#cfMsg').textContent = 'Confira os campos destacados.'; f[Object.keys(errs)[0]].focus(); return; }
       $('#cfMsg').textContent = '';
@@ -1431,13 +1755,22 @@
       fatal('Sem conexão', 'Não deu para falar com o servidor. Verifique sua internet.', true);
       return;
     }
+    // link de "esqueci minha senha": chega com #access_token...&type=recovery (ou #error... se expirou)
+    const hash = new URLSearchParams(location.hash.slice(1));
+    const isRecovery = hash.get('type') === 'recovery';
+    if (hash.get('error_description')) {
+      recoveryError = hash.get('error_code') === 'otp_expired' ? 'Este link expirou ou já foi usado.' : hash.get('error_description');
+    }
     sb = window.supabase.createClient(cfg.url, cfg.anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: false, storageKey: 'morada-admin-auth' },
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'morada-admin-auth' },
     });
     try {
       const { data } = await sb.auth.getSession();
       const u = data.session?.user;
-      if (u) {
+      if (u && isRecovery) {
+        recoveryUser = u; // primeiro cria a senha nova; o acesso ao painel é conferido depois
+        if (location.pathname !== '/admin/nova-senha') history.replaceState(null, '', '/admin/nova-senha');
+      } else if (u) {
         if (await isAdmin(u)) user = u;
         else { await sb.auth.signOut(); sessionStorage.setItem('morada:admin-aviso', 'Esta conta não tem acesso ao painel.'); }
       }

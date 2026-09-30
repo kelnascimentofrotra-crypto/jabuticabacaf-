@@ -9,6 +9,8 @@
   const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
   const LOCAL_IMG = 'assets/casa.webp';
   const unsplash = (id, w) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=80`;
+  // link de e-mail do Supabase (nova senha, confirmação, Google) chega com #access_token ou #error no endereço
+  const AUTH_HASH = /(^|[#&])(access_token|error_description|error_code)=/.test(location.hash) ? location.hash : '';
   const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   /* =========================================================
@@ -21,6 +23,7 @@
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
+  let BRAND = 'Morada'; // nome da imobiliária (Configurações do painel)
   let SB = null;            // { url, anonKey } quando o Supabase está configurado
   let HOUSES = [];          // imóveis mostrados no site
   let catalogReady = false; // os imóveis já chegaram?
@@ -175,10 +178,10 @@
   const FAV_KEY = 'morada:favoritos';
   let favs = { houses: [], products: [] };
   try { favs = { ...favs, ...JSON.parse(localStorage.getItem(FAV_KEY) || '{}') }; } catch (_) { /* sem armazenamento */ }
-  const saveFavs = () => { try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (_) { /* ignora */ } };
+  const saveFavs = () => { if (!MODO_TESTE) return; try { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); } catch (_) { /* ignora */ } };
   const isFav = (kind, id) => !isGuest() && favs[kind].includes(id);
 
-  function toggleFav(kind, id) {
+  async function toggleFav(kind, id) {
     if (requireLogin('fav', () => toggleFav(kind, id))) return;
     const list = favs[kind];
     const on = !list.includes(id);
@@ -187,6 +190,10 @@
     const name = (kind === 'houses' ? HOUSES : PRODUCTS).find((x) => x.id === id)?.nome;
     toast(on ? `${name} salva nos favoritos` : `${name} saiu dos favoritos`);
     syncFavUI();
+    if (!(await syncItem('favoritos', kind === 'houses' ? id : `p:${id}`, on))) {
+      favs[kind] = on ? favs[kind].filter((x) => x !== id) : [...favs[kind], id];
+      syncFavUI();
+    }
   }
 
   function syncFavUI() {
@@ -640,9 +647,9 @@
   // os imóveis chegam do banco depois: o carrinho guarda os ids e só mostra os que existem
   try { cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]').filter((id) => typeof id === 'string'); } catch (_) { /* sem armazenamento */ }
   const cartItems = () => cart.map(cartEntry).filter(Boolean);
-  const saveCart = () => { try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) { /* ignora */ } };
+  const saveCart = () => { if (!MODO_TESTE) return; try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) { /* ignora */ } };
 
-  function toggleCart(id) {
+  async function toggleCart(id) {
     if (requireLogin('cart', () => { if (!cart.includes(id)) toggleCart(id); })) return;
     const on = !cart.includes(id);
     const house = HOUSES.find((x) => x.id === id);
@@ -652,6 +659,10 @@
     const item = cartEntry(id);
     if (item) toast(on ? `${item.nome} foi para o carrinho` : `${item.nome} saiu do carrinho`);
     syncCartUI();
+    if (!(await syncItem('carrinho', id, on))) {
+      cart = on ? cart.filter((x) => x !== id) : [...cart, id];
+      syncCartUI();
+    }
   }
 
   function syncCartUI() {
@@ -794,25 +805,69 @@
 
   const form = $('#contactForm');
 
-  form.addEventListener('submit', (e) => {
+  // mensagem vai para o banco (Supabase) e aparece no painel, em Contatos
+  const contatoErro = (e) => {
+    const m = String(e?.message || '');
+    if (/Muitas mensagens/.test(m)) return m;
+    if (/email/i.test(m) && /check/i.test(m)) return 'Confira o e-mail.';
+    if (e?.code === 'PGRST205' || /does not exist|schema cache/i.test(m)) return 'O envio de mensagens ainda não foi ativado. Fale com a gente pelo WhatsApp.';
+    return 'Não deu para enviar agora. Tente de novo ou fale com a gente pelo WhatsApp.';
+  };
+  async function enviarContato(d) {
+    if (sbAuth && session?.uid) {
+      const { error } = await sbAuth.from('contatos').insert(d);
+      if (error) throw new Error(contatoErro(error));
+      return;
+    }
+    const headers = { apikey: SB.anonKey, 'content-type': 'application/json', prefer: 'return=minimal' };
+    if (/^eyJ/.test(SB.anonKey)) headers.Authorization = `Bearer ${SB.anonKey}`;
+    const res = await fetch(`${SB.url}/rest/v1/contatos`, { method: 'POST', headers, body: JSON.stringify(d) }).catch(() => null);
+    if (!res) throw new Error('Sem conexão. Confira sua internet e tente de novo.');
+    if (!res.ok) throw new Error(contatoErro(await res.json().catch(() => ({}))));
+  }
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = $('button[type="submit"]', form);
+    if (btn.disabled) return;
     const nome = $('#f-nome');
     const email = $('#f-email');
     const errors = [];
     $$('.field', form).forEach((f) => f.classList.remove('has-error'));
-    if (!nome.value.trim()) { errors.push('seu nome'); nome.closest('.field').classList.add('has-error'); }
-    if (!/^\S+@\S+\.\S+$/.test(email.value.trim())) { errors.push('um e-mail válido'); email.closest('.field').classList.add('has-error'); }
+    if (nome.value.trim().length < 2) { errors.push('seu nome'); nome.closest('.field').classList.add('has-error'); }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) { errors.push('um e-mail válido'); email.closest('.field').classList.add('has-error'); }
     if (errors.length) {
       $('#formError').textContent = `Falta preencher ${errors.join(' e ')}.`;
       (errors[0] === 'seu nome' ? nome : email).focus();
       return;
     }
     $('#formError').textContent = '';
-    // Aqui entra o envio de verdade (e-mail, WhatsApp ou CRM). Por enquanto a mensagem não sai do navegador.
-    $('#doneTitle').textContent = `Obrigado, ${nome.value.trim().split(/\s+/)[0]}!`;
+    const d = {
+      nome: nome.value.trim().replace(/\s+/g, ' ').slice(0, 80),
+      email: email.value.trim().slice(0, 120),
+      telefone: $('#f-tel').value.trim().slice(0, 30),
+      mensagem: $('#f-msg').value.trim().slice(0, 2000),
+    };
+    const robo = !!$('#f-empresa').value; // campo invisível preenchido: finge que enviou
+    if (SB && !robo) {
+      btn.disabled = true;
+      $('span', btn).textContent = 'Enviando…';
+      try {
+        await enviarContato(d);
+      } catch (err) {
+        $('#formError').textContent = err.message;
+        return;
+      } finally {
+        btn.disabled = false;
+        $('span', btn).textContent = 'Enviar';
+      }
+    }
+    $('#doneTitle').textContent = `Obrigado, ${d.nome.split(' ')[0]}!`;
+    $('#doneText').textContent = SB ? 'Recebemos sua mensagem e respondemos em até um dia útil. Se preferir, fale agora pelo WhatsApp.' : 'Continue a conversa pelo WhatsApp.';
+    $('#doneZap').href = zapLink(`Olá! Sou ${d.nome}.${d.mensagem ? ` ${d.mensagem}` : ' Gostaria de falar sobre imóveis.'}`);
     $('.ct-form-body').style.visibility = 'hidden';
     $('#formDone').hidden = false;
-    $('#formAgain').focus({ preventScroll: true });
+    $('#doneZap').focus({ preventScroll: true });
   });
   $('#formAgain').addEventListener('click', () => {
     form.reset();
@@ -896,7 +951,7 @@
     scenes.forEach((s, k) => { s.inert = k !== current; s.setAttribute('aria-hidden', String(k !== current)); });
     updateTone();
     document.body.dataset.scene = id;
-    document.title = id === 'inicio' ? 'Morada — Casas selecionadas' : `${scene.dataset.title} — Morada`;
+    document.title = id === 'inicio' ? `${BRAND} — Casas selecionadas` : `${scene.dataset.title} — ${BRAND}`;
     try { history.replaceState(null, '', `#${id}`); } catch (_) { /* file:// em alguns navegadores */ }
 
     // menu superior
@@ -947,17 +1002,16 @@
 
   /* =========================================================
      Entrada: apresentação + contas
-     Versão sem servidor: contas, tentativas e pedidos ficam guardados neste navegador.
+     Com o Supabase configurado, as contas são de verdade (Supabase Auth): cadastro, login,
+     nova senha por e-mail, Google (se ligado no painel) e favoritos/carrinho/pedidos salvos na conta.
+     Sem Supabase (ex.: arquivo aberto direto do computador) vale o modo teste:
+     qualquer e-mail e senha entram e tudo fica só neste navegador.
      ========================================================= */
 
-  // Client ID do Google (console.cloud.google.com → APIs e serviços → Credenciais →
-  // "ID do cliente OAuth", tipo "Aplicativo da Web", com o endereço do site em "Origens JavaScript autorizadas").
-  // Vazio = o botão avisa que o login com Google ainda não foi ativado.
-  const GOOGLE_CLIENT_ID = '';
-
-  // Versão de teste: qualquer e-mail e senha entram (a conta é criada na hora).
-  // Troque para false para valer a checagem de senha e o bloqueio de 8 tentativas.
-  const MODO_TESTE = true;
+  let MODO_TESTE = true;  // vira false quando o Supabase responde
+  let sbAuth = null;      // cliente supabase-js das contas
+  let googleOn = false;   // "Entrar com o Google" ligado em Configurações do painel
+  let recovering = false; // chegou pelo link de "criar senha nova"
 
   const SESSION_KEY = 'morada:sessao';
   const ACCOUNTS_KEY = 'morada:contas';
@@ -1039,8 +1093,8 @@
     const blocked = ms > 0 && authView !== 'signup';
     $('#authLock').hidden = !blocked;
     $$('.ga-form', gate).forEach((f) => { f.hidden = blocked || f.dataset.form !== authView; });
-    $('.ga-google').hidden = blocked || authView === 'forgot';
-    $('.ga-or').hidden = blocked || authView === 'forgot';
+    $('.ga-google').hidden = blocked || authView === 'forgot' || !googleAvail();
+    $('.ga-or').hidden = blocked || authView === 'forgot' || !googleAvail();
     clearTimeout(lockTimer);
     if (ms > 0) {
       $('#lockTime').textContent = clock(ms);
@@ -1177,7 +1231,7 @@
   });
   $('#glGoogle').addEventListener('click', () => {
     setAuth('login');
-    if (!GOOGLE_CLIENT_ID) $('#googleBtn').click();
+    $('#googleBtn').click();
   });
 
   $$('.pass-toggle[data-for]', gate).forEach((btn) => btn.addEventListener('click', () => {
@@ -1215,22 +1269,27 @@
       return;
     }
     if (!isEmail(email) || !pass) { say(msg, 'Digite seu e-mail e sua senha.'); return; }
-    if (needCrypto(msg)) return;
-    busyButton(form, true, 'Conferindo…');
-    const acc = findAccount(email);
-    const ok = await checkPassword(acc, pass);
-    busyButton(form, false);
-    if (ok) {
-      registerSuccess();
-      enterSite(acc.email);
+    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
+    busyButton(form, true, 'Entrando…');
+    const { data, error } = await sbAuth.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+      busyButton(form, false);
+      if (error.code === 'invalid_credentials' || /invalid login/i.test(error.message)) {
+        const left = registerFail();
+        if (lockedFor()) return;
+        say(msg, `E-mail ou senha incorretos.${triesText(left)}`);
+        $('#l-senha').value = '';
+        $('#l-senha').focus();
+      } else if (error.code === 'email_not_confirmed' || /not confirmed/i.test(error.message)) {
+        msg.classList.remove('is-ok');
+        msg.innerHTML = `Confirme seu e-mail primeiro: abra o link que enviamos para ${esc(email)}. <button type="button" class="ga-link" data-resend="${esc(email)}">Reenviar o e-mail</button>`;
+      } else say(msg, authError(error));
       return;
     }
-    const left = registerFail();
-    if (lockedFor()) return;
-    // mensagem igual para e-mail inexistente ou senha errada: não revela quem tem conta
-    say(msg, `E-mail ou senha incorretos.${triesText(left)}`);
-    $('#l-senha').value = '';
-    $('#l-senha').focus();
+    if (!(await openAccount(data.user, msg))) { busyButton(form, false); return; }
+    busyButton(form, false);
+    registerSuccess();
+    enterSite(data.user.email);
   });
 
   // Modo teste: entra com qualquer coisa; cria a conta se ainda não existir
@@ -1256,6 +1315,7 @@
     emailHint.className = 'field-hint';
     if (!v) { emailHint.textContent = ''; return false; }
     if (!isEmail(v)) { emailHint.textContent = 'Confira o e-mail: falta algo como @ ou .com.'; emailHint.classList.add('is-warn'); return false; }
+    if (!MODO_TESTE) { emailHint.textContent = ''; return true; }
     if (findAccount(v)) {
       emailHint.innerHTML = MODO_TESTE
         ? 'Este e-mail já tem conta: ao continuar, você entra nela.'
@@ -1292,15 +1352,35 @@
       return;
     }
     if (!nome) { say(msg, 'Digite seu nome.'); $('#s-nome').focus(); return; }
-    if (!checkEmailInUse()) { say(msg, findAccount(email) ? 'Este e-mail já está em uso. Entre com ele ou use outro.' : 'Digite um e-mail válido.'); $('#s-email').focus(); return; }
+    if (!isEmail(email)) { say(msg, 'Digite um e-mail válido.'); $('#s-email').focus(); return; }
     if (!strongEnough(pass)) { say(msg, 'A senha precisa ter pelo menos 8 caracteres, com letras e números.'); $('#s-senha').focus(); return; }
     if (pass !== $('#s-senha2').value) { say(msg, 'As duas senhas não são iguais.'); $('#s-senha2').focus(); return; }
-    if (needCrypto(msg)) return;
+    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
     busyButton(form, true, 'Criando conta…');
-    const { salt, hash } = await hashPassword(pass);
+    const { data, error } = await sbAuth.auth.signUp({ email, password: pass, options: { data: { nome }, emailRedirectTo: siteUrl() } });
+    const taken = () => {
+      msg.classList.remove('is-ok');
+      msg.innerHTML = 'Este e-mail já tem conta. <button type="button" class="ga-link" data-auth="login" data-fill="1">Entrar com ele</button>';
+    };
+    if (error) {
+      busyButton(form, false);
+      if (error.code === 'user_already_exists' || /already registered/i.test(error.message)) taken();
+      else say(msg, authError(error));
+      return;
+    }
+    if (!data.session) {
+      busyButton(form, false);
+      // com "confirmar e-mail" ligado no Supabase: a conta só vale depois do link
+      if (data.user && (data.user.identities || []).length === 0) { taken(); return; }
+      form.reset();
+      setAuth('login');
+      $('#l-email').value = email;
+      say($('#loginMsg'), `Quase lá! Enviamos um link de confirmação para ${email}. Abra o e-mail, clique no link e depois entre aqui.`, true);
+      return;
+    }
+    if (!(await openAccount(data.user, msg))) { busyButton(form, false); return; }
     busyButton(form, false);
-    accounts[keyOf(email)] = { email, nome, foto: '', salt, hash, provider: 'senha', criado: Date.now(), pedidos: [] };
-    if (!saveAccounts()) { say(msg, 'Este navegador não deixou guardar a conta. Saia da janela anônima e tente de novo.'); return; }
+    registerSuccess();
     enterSite(email);
     toast('Conta criada. Bem-vindo à Morada!');
   });
@@ -1315,7 +1395,8 @@
     e.preventDefault();
     const form = e.currentTarget;
     const msg = $('#forgotMsg');
-    if (lockedFor()) { syncLock(); return; }
+    if (lockedFor() && !recovering) { syncLock(); return; }
+    if (!MODO_TESTE) { await realForgot(form, msg); return; }
     if (!resetReq) {
       const email = $('#f2-email').value.trim();
       if (!isEmail(email)) { say(msg, 'Digite o e-mail da sua conta.'); return; }
@@ -1353,45 +1434,25 @@
     $('#l-senha').focus();
   });
 
-  /* Entrar com o Google (Google Identity Services) */
-  function onGoogleCredential(resp) {
-    try {
-      const part = resp.credential.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-      const data = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(part), (c) => c.charCodeAt(0))));
-      // Sem servidor não dá para conferir a assinatura do token; em produção, valide o token no servidor.
-      if (!data.email || data.email_verified === false) throw new Error('sem e-mail');
-      let acc = findAccount(data.email);
-      if (!acc) {
-        acc = { email: data.email, nome: data.name || nameFromEmail(data.email), foto: data.picture || '', provider: 'google', criado: Date.now(), pedidos: [] };
-        accounts[keyOf(data.email)] = acc;
-        saveAccounts();
-      }
-      registerSuccess();
-      enterSite(acc.email);
-    } catch (_) {
-      say($(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`), 'Não deu para entrar com o Google. Tente de novo.');
-    }
+  /* Entrar com o Google (pelo Supabase; aparece quando está ligado em Configurações do painel) */
+  const googleAvail = () => MODO_TESTE || (googleOn && !!sbAuth);
+  function syncGoogle() {
+    const on = googleAvail();
+    $('#glGoogle').hidden = !on;
+    $('.gl-or', gate).hidden = !on;
+    syncLock();
   }
-  if (GOOGLE_CLIENT_ID) {
-    const s = document.createElement('script');
-    s.src = 'https://accounts.google.com/gsi/client';
-    s.async = true;
-    s.onload = () => {
-      google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: onGoogleCredential, ux_mode: 'popup' });
-      google.accounts.id.renderButton($('#googleSlot'), { theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with', locale: 'pt-BR', width: Math.min(400, $('.ga-google').clientWidth || 320) });
-      $('#googleBtn').hidden = true;
-    };
-    document.head.append(s);
-  }
-  $('#googleBtn').addEventListener('click', () => {
+  $('#googleBtn').addEventListener('click', async () => {
+    const msg = $(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`);
     if (MODO_TESTE) {
-      // sem Client ID do Google: no modo teste entra com uma conta de exemplo
+      // no modo teste entra com uma conta de exemplo
       enterTest('exemplo.google@morada.teste', 'google', 'Conta Google de exemplo');
       toast('Modo teste: entrou com uma conta Google de exemplo');
       return;
     }
-    say($(`#${authView === 'signup' ? 'signupMsg' : 'loginMsg'}`),
-      'O login com Google ainda não foi ativado neste site: falta cadastrar o site no Google e colocar o Client ID. Por enquanto, use e-mail e senha.');
+    if (!googleAvail()) { say(msg, 'O login com Google ainda não foi ativado. Use e-mail e senha.'); return; }
+    const { error } = await sbAuth.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: siteUrl() } });
+    if (error) say(msg, authError(error));
   });
 
   function lockSite(on) {
@@ -1400,10 +1461,219 @@
     ['.scenes', '.topbar', '.indicator'].forEach((sel) => { $(sel).inert = on; });
   }
 
-  if (MODO_TESTE) {
-    $('.ga-secure').lastChild.textContent = 'Versão de teste: qualquer e-mail e qualquer senha entram.';
-    ['#l-email', '#s-email'].forEach((sel) => { $(sel).type = 'text'; });
+  // textos que mudam entre o modo teste e as contas de verdade
+  const SECURE_TEXT = $('.ga-secure').lastChild.textContent;
+  function applyMode() {
+    $('.ga-secure').lastChild.textContent = MODO_TESTE ? 'Versão de teste: qualquer e-mail e qualquer senha entram.' : SECURE_TEXT;
+    ['#l-email', '#s-email', '#accMail'].forEach((sel) => { $(sel).type = MODO_TESTE ? 'text' : 'email'; });
+    $('#forgotHelp').textContent = MODO_TESTE
+      ? 'Digite o e-mail da sua conta. Vamos gerar um código de 6 números para você criar uma senha nova.'
+      : 'Digite o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.';
+    $('#forgotSend').textContent = MODO_TESTE ? 'Enviar código' : 'Enviar link';
+    syncGoogle();
   }
+
+  /* ---------- Contas de verdade (Supabase Auth) ---------- */
+
+  const siteUrl = () => `${location.origin}${location.pathname}`;
+  // mensagens claras para os erros do Supabase
+  function authError(err) {
+    const code = String(err?.code || err?.error_code || '');
+    const msg = String(err?.message || err || '');
+    if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) return 'Sem conexão. Confira sua internet e tente de novo.';
+    if (code === 'invalid_credentials' || /invalid login credentials/i.test(msg)) return 'E-mail ou senha incorretos.';
+    if (code === 'email_not_confirmed' || /not confirmed/i.test(msg)) return 'Confirme seu e-mail primeiro: abra o link que enviamos quando você criou a conta.';
+    if (code === 'user_already_exists' || /already registered/i.test(msg)) return 'Este e-mail já tem conta.';
+    if (code === 'weak_password' || /password should/i.test(msg)) return 'Senha fraca: use pelo menos 8 caracteres, com letras e números.';
+    if (code === 'same_password' || /different from the old/i.test(msg)) return 'A nova senha precisa ser diferente da atual.';
+    if (code === 'signup_disabled' || /signups? not allowed/i.test(msg)) return 'O cadastro de contas novas está fechado no momento. Fale com a gente pelo WhatsApp.';
+    if (code === 'over_email_send_rate_limit' || code === 'over_request_rate_limit' || err?.status === 429 || /rate limit/i.test(msg)) return 'Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.';
+    if (code === 'otp_expired' || /expired/i.test(msg)) return 'O link expirou. Peça um novo em “Esqueceu a senha?”.';
+    if (code === 'email_address_invalid' || /invalid.*email|email.*invalid/i.test(msg)) return 'Confira o e-mail: ele parece inválido.';
+    if (code === '42501' || /row-level security|permission denied/i.test(msg)) return 'Sua sessão terminou. Entre de novo.';
+    return msg ? `Não deu certo: ${msg}` : 'Não deu certo. Tente de novo.';
+  }
+
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = true;
+    s.onload = resolve;
+    s.onerror = () => reject(new Error(`não carregou ${src}`));
+    document.head.append(s);
+  });
+
+  // foto de perfil: caminho no bucket "perfis" do Supabase, URL (foto do Google) ou imagem do modo teste
+  let authUrl = '';
+  const perfilFoto = (p) => (!p ? '' : /^(https?:|data:|blob:)/.test(p) ? p : authUrl ? `${authUrl}/storage/v1/object/public/perfis/${p.split('/').map(encodeURIComponent).join('/')}` : '');
+
+  // carrega perfil, favoritos, carrinho e pedidos da conta
+  async function loadAccount(user) {
+    const [p, f, c, o] = await Promise.all([
+      sbAuth.from('perfis').select('nome,telefone,foto').eq('id', user.id).maybeSingle(),
+      sbAuth.from('favoritos').select('item').order('created_at'),
+      sbAuth.from('carrinho').select('item').order('created_at'),
+      sbAuth.from('pedidos').select('numero,itens,created_at').order('created_at', { ascending: false }).limit(50),
+    ]);
+    const missing = (r) => r.error && (/PGRST20[25]|42P01/.test(r.error.code || '') || /does not exist|could not find the table/i.test(r.error.message || ''));
+    [p, f, c, o].forEach((r) => { if (missing(r)) { console.warn('Morada: rode o SQL da migração 2 no Supabase.'); r.error = null; r.data = r === p ? null : []; } });
+    const bad = [p, f, c, o].find((r) => r.error);
+    if (bad) throw bad.error;
+    const meta = user.user_metadata || {};
+    const metaNome = meta.nome || meta.full_name || meta.name || '';
+    let perfil = p.data;
+    if (!perfil) {
+      // conta criada antes do cadastro automático de perfis
+      perfil = { nome: (metaNome || nameFromEmail(user.email)).slice(0, 80), telefone: '', foto: meta.avatar_url || null };
+      await sbAuth.from('perfis').insert({ id: user.id, ...perfil }).then(() => {}, () => {});
+    }
+    const items = f.data.map((r) => r.item);
+    favs = { houses: items.filter((i) => !i.startsWith('p:')), products: items.filter((i) => i.startsWith('p:')).map((i) => i.slice(2)) };
+    cart = c.data.map((r) => r.item);
+    profile = {
+      uid: user.id,
+      email: user.email,
+      nome: perfil.nome || metaNome || nameFromEmail(user.email),
+      telefone: perfil.telefone || '',
+      foto: perfil.foto || '',
+      temSenha: (user.identities || []).some((i) => i.provider === 'email') || user.app_metadata?.provider === 'email',
+      pedidos: o.data.slice().reverse().map((r) => ({ num: r.numero, data: r.created_at, itens: r.itens })),
+    };
+    session = { uid: user.id, email: user.email };
+  }
+  // abre a conta depois de entrar; se algo falhar, sai de novo e explica
+  async function openAccount(user, msgEl) {
+    try {
+      await loadAccount(user);
+      return true;
+    } catch (err) {
+      session = null;
+      profile = null;
+      await sbAuth.auth.signOut({ scope: 'local' }).catch(() => {});
+      say(msgEl, authError(err));
+      return false;
+    }
+  }
+
+  // favoritos e carrinho vão para a conta (no modo teste ficam no navegador)
+  async function syncItem(table, item, on) {
+    if (MODO_TESTE || !sbAuth || !session?.uid) return true;
+    const { error } = on
+      ? await sbAuth.from(table).insert({ item })
+      : await sbAuth.from(table).delete().eq('item', item);
+    if (error && error.code !== '23505') {
+      toast(`Não deu para salvar agora. ${authError(error)}`);
+      return false;
+    }
+    return true;
+  }
+
+  // "Esqueceu a senha?": envia o link por e-mail; ao voltar pelo link, cria a senha nova
+  async function realForgot(form, msg) {
+    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
+    if (!recovering) {
+      const email = $('#f2-email').value.trim();
+      if (!isEmail(email)) { say(msg, 'Digite o e-mail da sua conta.'); return; }
+      busyButton(form, true, 'Enviando…');
+      const { error } = await sbAuth.auth.resetPasswordForEmail(email, { redirectTo: siteUrl() });
+      busyButton(form, false);
+      if (error) { say(msg, authError(error)); return; }
+      say(msg, `Pronto! Se existir uma conta com ${email}, enviamos um link para criar uma senha nova. Confira também a caixa de spam.`, true);
+      return;
+    }
+    const pass = $('#f2-senha').value;
+    if (!strongEnough(pass)) { say(msg, 'A nova senha precisa ter pelo menos 8 caracteres, com letras e números.'); return; }
+    if (pass !== $('#f2-senha2').value) { say(msg, 'As duas senhas não são iguais.'); return; }
+    busyButton(form, true, 'Salvando…');
+    const { data, error } = await sbAuth.auth.updateUser({ password: pass });
+    if (error) { busyButton(form, false); say(msg, authError(error)); return; }
+    recovering = false;
+    if (!(await openAccount(data.user, msg))) { busyButton(form, false); return; }
+    busyButton(form, false);
+    form.reset();
+    $('#f2-codeField').hidden = false;
+    registerSuccess();
+    enterSite(data.user.email);
+    toast('Senha nova salva. Você já está na sua conta.');
+  }
+  function showRecovery(email) {
+    showGate('auth');
+    setAuth('forgot');
+    forgotStep(2);
+    $('#f2-codeField').hidden = true;
+    $('#codeBox').textContent = `Crie uma senha nova para ${email || 'a sua conta'}.`;
+    setTimeout(() => $('#f2-senha').focus({ preventScroll: true }), reduceMotion ? 0 : 400);
+  }
+
+  // reenviar o e-mail de confirmação da conta
+  gate.addEventListener('click', async (e) => {
+    const b = e.target.closest('[data-resend]');
+    if (!b || !sbAuth) return;
+    const msg = b.closest('.ga-msg');
+    b.disabled = true;
+    const { error } = await sbAuth.auth.resend({ type: 'signup', email: b.dataset.resend, options: { emailRedirectTo: siteUrl() } });
+    say(msg, error ? authError(error) : 'E-mail de confirmação enviado de novo. Confira também a caixa de spam.', !error);
+  });
+
+  // sessão terminou em outra aba (ou expirou): volta para a entrada
+  function signedOutElsewhere() {
+    if (!session?.uid) return;
+    session = null;
+    profile = null;
+    favs = { houses: [], products: [] };
+    cart = [];
+    syncCartUI();
+    syncFavUI();
+    if (!gated) { showGate('auth'); toast('Sua sessão terminou. Entre de novo.'); }
+  }
+
+  // decide o modo (Supabase ou teste) e recupera a sessão de quem já tinha entrado
+  let gateNotice = '';
+  async function initAuth() {
+    const cfg = (await window.moradaConfig?.()) ?? null;
+    if (!cfg) { applyMode(); return; } // sem Supabase: modo teste
+    MODO_TESTE = false;
+    const guest = session?.guest ? session : null;
+    session = guest; // sessões do modo teste não valem aqui
+    profile = null;
+    favs = { houses: [], products: [] };
+    cart = [];
+    applyMode();
+    if (cfg.error) return; // sem conexão: a entrada avisa ao tentar entrar
+    try {
+      if (!window.supabase?.createClient) await loadScript('vendor/supabase.js');
+    } catch (_) {
+      return;
+    }
+    authUrl = cfg.url;
+    const params = new URLSearchParams(AUTH_HASH.slice(1));
+    recovering = params.get('type') === 'recovery';
+    if (params.get('error_description')) {
+      gateNotice = params.get('error_code') === 'otp_expired'
+        ? 'O link expirou ou já foi usado. Peça um novo em “Esqueceu a senha?”.'
+        : `Não deu certo: ${params.get('error_description')}`;
+    }
+    // devolve ao endereço o retorno do link, para o supabase-js ler (a navegação por cenas tinha trocado)
+    if (AUTH_HASH) { try { history.replaceState(null, '', `${location.pathname}${location.search}${AUTH_HASH}`); } catch (_) { /* ignora */ } }
+    sbAuth = window.supabase.createClient(cfg.url, cfg.anonKey, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'morada-auth' },
+    });
+    sbAuth.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') recovering = true;
+      if (event === 'SIGNED_OUT') setTimeout(signedOutElsewhere, 0);
+    });
+    syncGoogle();
+    let user = null;
+    try {
+      const { data } = await sbAuth.auth.getSession();
+      user = data.session?.user || null;
+    } catch (_) { /* sem sessão */ }
+    if (AUTH_HASH) { try { history.replaceState(null, '', `${location.pathname}${location.search}#${currentId()}`); } catch (_) { /* ignora */ } }
+    if (!user) { recovering = false; return; }
+    if (recovering) { recoveryEmail = user.email; return; }
+    try { await loadAccount(user); } catch (err) { console.warn('Morada: não deu para abrir a conta.', err); session = guest; }
+  }
+  let recoveryEmail = '';
 
   function showGate(view = 'landing') {
     closeOverlays(true);
@@ -1420,9 +1690,10 @@
     void gate.offsetWidth;
     gate.classList.add('is-in');
     runCounts(gate);
+    if (gateNotice) { setAuth('login'); setGateView('auth'); say($('#loginMsg'), gateNotice); gateNotice = ''; }
   }
 
-  /* ---------- Perfil (nome, e-mail, foto e pedidos ficam na conta, neste navegador) ---------- */
+  /* ---------- Perfil (nome, e-mail, telefone, foto, senha e pedidos) ---------- */
 
   const nameFromEmail = (email) => {
     const base = email.split('@')[0].replace(/[._-]+/g, ' ').trim() || email;
@@ -1439,10 +1710,12 @@
   function saveProfile() {
     if (!saveAccounts()) toast('Não deu para guardar neste navegador. Se for a foto, tente uma imagem menor.');
   }
+  const hasPass = () => (MODO_TESTE ? !!profile?.hash : !!profile?.temSenha);
   function paintAvatar(el) {
-    el.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
-    el.textContent = profile.foto ? '' : initials(profile.nome);
-    el.classList.toggle('has-photo', !!profile.foto);
+    const foto = perfilFoto(profile.foto);
+    el.style.backgroundImage = foto ? `url("${foto}")` : '';
+    el.textContent = foto ? '' : initials(profile.nome);
+    el.classList.toggle('has-photo', !!foto);
   }
   function renderProfile() {
     if (!profile) return;
@@ -1452,27 +1725,57 @@
     $('#profEmail').textContent = profile.email;
     $('#accNome').value = profile.nome;
     $('#accMail').value = profile.email;
+    $('#accTel').value = profile.telefone || '';
+    if (!$('#f-nome').value) $('#f-nome').value = profile.nome;
+    if (!$('#f-email').value) $('#f-email').value = profile.email;
+    if (!$('#f-tel').value) $('#f-tel').value = profile.telefone || '';
     $('#accFotoRemove').hidden = !profile.foto;
-    const hasPass = !!profile.hash;
-    $('#passState').textContent = hasPass ? '••••••••' : 'Você entra com o Google';
-    $('#passCurrentField').hidden = !hasPass;
-    if ($('#passForm').hidden) $('#passToggle').textContent = hasPass ? 'Alterar senha' : 'Criar senha';
+    const withPass = hasPass();
+    $('#passState').textContent = withPass ? '••••••••' : 'Você entra com o Google';
+    $('#passCurrentField').hidden = !withPass;
+    if ($('#passForm').hidden) $('#passToggle').textContent = withPass ? 'Alterar senha' : 'Criar senha';
     // a bonequinha do topo vira a foto de perfil
+    const foto = perfilFoto(profile.foto);
     const icon = $('.icon-btn[data-open="account"]');
-    icon.style.backgroundImage = profile.foto ? `url("${profile.foto}")` : '';
-    icon.classList.toggle('has-photo', !!profile.foto);
+    icon.style.backgroundImage = foto ? `url("${foto}")` : '';
+    icon.classList.toggle('has-photo', !!foto);
     renderOrders();
     renderCart();
   }
 
   $('#profileCard').addEventListener('click', () => { showTab('conta'); $('#accNome').focus({ preventScroll: true }); });
 
-  $('#accForm').addEventListener('submit', (e) => {
+  $('#accForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const nome = $('#accNome').value.trim();
+    const nome = $('#accNome').value.trim().replace(/\s+/g, ' ').slice(0, 80);
     const email = $('#accMail').value.trim();
-    if (!nome) { $('#accNote').textContent = 'Digite seu nome.'; return; }
-    if (!isEmail(email)) { $('#accNote').textContent = 'Digite um e-mail válido.'; return; }
+    const telefone = $('#accTel').value.trim().slice(0, 30);
+    const note = $('#accNote');
+    if (!nome) { note.textContent = 'Digite seu nome.'; return; }
+    if (!isEmail(email)) { note.textContent = 'Digite um e-mail válido.'; return; }
+    if (!MODO_TESTE) {
+      const btn = $('button[type="submit"]', e.currentTarget);
+      if (btn.disabled) return;
+      btn.disabled = true;
+      note.textContent = 'Salvando…';
+      const { error } = await sbAuth.from('perfis').update({ nome, telefone }).eq('id', profile.uid);
+      if (error) { btn.disabled = false; note.textContent = authError(error); return; }
+      profile.nome = nome;
+      profile.telefone = telefone;
+      let extra = '';
+      if (keyOf(email) !== keyOf(profile.email)) {
+        const { data, error: mailErr } = await sbAuth.auth.updateUser({ email }, { emailRedirectTo: siteUrl() });
+        if (mailErr) extra = ` O e-mail não mudou: ${authError(mailErr)}`;
+        else if (data.user.new_email || keyOf(data.user.email) !== keyOf(email)) extra = ` Para trocar o e-mail, abra o link que enviamos para ${email}.`;
+        else { profile.email = data.user.email; session.email = data.user.email; }
+      }
+      btn.disabled = false;
+      renderProfile();
+      note.textContent = extra.trim();
+      toast('Dados da conta salvos');
+      return;
+    }
+    profile.telefone = telefone;
     const oldKey = keyOf(profile.email);
     const newKey = keyOf(email);
     if (newKey !== oldKey && accounts[newKey]) { $('#accNote').textContent = 'Este e-mail já está em uso por outra conta.'; return; }
@@ -1504,6 +1807,7 @@
         const c = document.createElement('canvas');
         c.width = c.height = 256;
         c.getContext('2d').drawImage(img, (img.naturalWidth - side) / 2, (img.naturalHeight - side) / 2, side, side, 0, 0, 256, 256);
+        if (!MODO_TESTE) { c.toBlob((blob) => uploadAvatar(blob), 'image/webp', 0.85); return; }
         profile.foto = c.toDataURL('image/jpeg', 0.85);
         saveProfile();
         renderProfile();
@@ -1514,7 +1818,29 @@
     };
     reader.readAsDataURL(file);
   });
-  $('#accFotoRemove').addEventListener('click', () => {
+  // contas de verdade: a foto vai para o bucket "perfis", na pasta da própria pessoa
+  const isPerfilPath = (p) => !!p && !/^(https?:|data:|blob:)/.test(p);
+  async function uploadAvatar(blob) {
+    if (!blob) { toast('Não deu para preparar essa imagem. Tente outra.'); return; }
+    const old = profile.foto;
+    const path = `${profile.uid}/${crypto.randomUUID()}.${blob.type === 'image/webp' ? 'webp' : 'jpg'}`;
+    toast('Enviando foto…');
+    const up = await sbAuth.storage.from('perfis').upload(path, blob, { contentType: blob.type, cacheControl: '31536000', upsert: false });
+    if (up.error) { toast(`Não deu para enviar a foto. ${authError(up.error)}`); return; }
+    const { error } = await sbAuth.from('perfis').update({ foto: path }).eq('id', profile.uid);
+    if (error) { await sbAuth.storage.from('perfis').remove([path]); toast(authError(error)); return; }
+    if (isPerfilPath(old)) sbAuth.storage.from('perfis').remove([old]).catch(() => {});
+    profile.foto = path;
+    renderProfile();
+    toast('Foto de perfil atualizada');
+  }
+  $('#accFotoRemove').addEventListener('click', async () => {
+    if (!MODO_TESTE) {
+      const old = profile.foto;
+      const { error } = await sbAuth.from('perfis').update({ foto: null }).eq('id', profile.uid);
+      if (error) { toast(authError(error)); return; }
+      if (isPerfilPath(old)) sbAuth.storage.from('perfis').remove([old]).catch(() => {});
+    }
     profile.foto = '';
     saveProfile();
     renderProfile();
@@ -1525,9 +1851,9 @@
     const form = $('#passForm');
     form.hidden = !form.hidden;
     e.currentTarget.setAttribute('aria-expanded', String(!form.hidden));
-    e.currentTarget.textContent = form.hidden ? (profile.hash ? 'Alterar senha' : 'Criar senha') : 'Cancelar';
+    e.currentTarget.textContent = form.hidden ? (hasPass() ? 'Alterar senha' : 'Criar senha') : 'Cancelar';
     $('#passNote').textContent = '';
-    if (!form.hidden) (profile.hash ? $('#passCurrent') : $('#passNew')).focus({ preventScroll: true });
+    if (!form.hidden) (hasPass() ? $('#passCurrent') : $('#passNew')).focus({ preventScroll: true });
   });
   $('#passForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -1535,6 +1861,36 @@
     const note = $('#passNote');
     if (lockedFor()) { note.textContent = `Muitas tentativas erradas. Tente de novo em ${clock(lockedFor())}.`; return; }
     const nova = $('#passNew').value;
+    if (!MODO_TESTE) {
+      if (!strongEnough(nova)) { note.textContent = 'A nova senha precisa ter pelo menos 8 caracteres, com letras e números.'; return; }
+      if (nova !== $('#passConfirm').value) { note.textContent = 'As duas senhas não são iguais.'; return; }
+      const btn = $('button[type="submit"]', form);
+      if (btn.disabled) return;
+      btn.disabled = true;
+      note.textContent = 'Salvando…';
+      if (hasPass()) {
+        // confirma a senha atual antes de trocar
+        const { error } = await sbAuth.auth.signInWithPassword({ email: profile.email, password: $('#passCurrent').value });
+        if (error) {
+          btn.disabled = false;
+          const left = registerFail();
+          note.textContent = lockedFor() ? `Muitas tentativas erradas. Tente de novo em ${clock(lockedFor())}.` : `A senha atual está errada.${triesText(left)}`;
+          return;
+        }
+      }
+      const { error } = await sbAuth.auth.updateUser({ password: nova });
+      btn.disabled = false;
+      if (error) { note.textContent = authError(error); return; }
+      profile.temSenha = true;
+      registerSuccess();
+      form.reset();
+      form.hidden = true;
+      note.textContent = '';
+      $('#passToggle').setAttribute('aria-expanded', 'false');
+      renderProfile();
+      toast('Senha alterada');
+      return;
+    }
     if (needCrypto(note)) return;
     if (profile.hash && !(await checkPassword(profile, $('#passCurrent').value))) {
       const left = registerFail();
@@ -1570,6 +1926,7 @@
   $('#cartZap').addEventListener('click', () => {
     const items = cartItems();
     if (!profile || !items.length) return;
+    if (!MODO_TESTE) { registrarPedido(items); return; }
     const num = 1000 + Object.values(accounts).reduce((n, a) => n + (a.pedidos?.length || 0), 0) + 1;
     profile.pedidos.push({ num, data: Date.now(), itens: items.map((it) => it.line) });
     saveProfile();
@@ -1582,6 +1939,25 @@
       toast(`Pedido #${num} guardado no histórico`);
     }, 0);
   });
+
+  // contas de verdade: o pedido fica no histórico da conta e chega para a imobiliária em Contatos (painel)
+  async function registrarPedido(items) {
+    const itens = items.map((it) => it.line.slice(0, 300));
+    const { data, error } = await sbAuth.from('pedidos').insert({ itens }).select('numero, created_at').single();
+    if (error) { toast('O WhatsApp abriu, mas não deu para guardar o pedido no histórico.'); return; }
+    const nome = profile.nome.length >= 2 ? profile.nome : nameFromEmail(profile.email).padEnd(2, '.');
+    sbAuth.from('contatos').insert({
+      nome: nome.slice(0, 80), email: profile.email, telefone: profile.telefone || '', origem: 'carrinho',
+      mensagem: `Pedido #${data.numero} (finalizado no WhatsApp):\n${itens.map((l, k) => `${k + 1}. ${l}`).join('\n')}`.slice(0, 2000),
+    }).then(({ error: e2 }) => { if (e2) console.warn('Morada: pedido sem aviso no painel.', e2); });
+    await sbAuth.from('carrinho').delete().eq('user_id', profile.uid);
+    profile.pedidos.push({ num: data.numero, data: data.created_at, itens });
+    cart = [];
+    syncCartUI();
+    renderOrders();
+    showTab('pedidos');
+    toast(`Pedido #${data.numero} guardado no histórico`);
+  }
 
   /* ---------- Visitante: navega por tudo; carrinho, favoritos e conta pedem login ---------- */
 
@@ -1661,9 +2037,14 @@
   }, true);
 
   function enterSite(email) {
-    session = { email };
-    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
-    loadProfile(email);
+    if (MODO_TESTE) {
+      session = { email };
+      try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(session)); } catch (_) { /* ignora */ }
+      loadProfile(email);
+    } else {
+      try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ } // deixa de ser visitante
+      renderProfile();
+    }
     document.body.classList.remove('is-guest');
     syncCartUI();
     syncFavUI();
@@ -1675,11 +2056,43 @@
     }
   }
 
-  $('#logoutBtn').addEventListener('click', () => {
+  function resetAccountState() {
     try { sessionStorage.removeItem(SESSION_KEY); } catch (_) { /* ignora */ }
     session = null;
     profile = null;
+    if (!MODO_TESTE) { favs = { houses: [], products: [] }; cart = []; }
+    const icon = $('.icon-btn[data-open="account"]');
+    icon.style.backgroundImage = '';
+    icon.classList.remove('has-photo');
+    syncCartUI();
+    syncFavUI();
+  }
+  $('#logoutBtn').addEventListener('click', async () => {
+    const real = !MODO_TESTE && sbAuth;
+    resetAccountState();
+    if (real) await sbAuth.auth.signOut().catch(() => {});
     showGate('auth');
+  });
+  // LGPD: a própria pessoa apaga a conta e os dados dela
+  $('#accDelete').addEventListener('click', async (e) => {
+    if (!profile) return;
+    if (!confirm('Excluir a sua conta? Seus favoritos, carrinho e histórico de pedidos serão apagados. Essa ação não pode ser desfeita.')) return;
+    const btn = e.currentTarget;
+    if (!MODO_TESTE) {
+      btn.disabled = true;
+      if (isPerfilPath(profile.foto)) await sbAuth.storage.from('perfis').remove([profile.foto]).catch(() => {});
+      const { error } = await sbAuth.rpc('excluir_minha_conta');
+      btn.disabled = false;
+      if (error) { toast(authError(error)); return; }
+      resetAccountState();
+      await sbAuth.auth.signOut({ scope: 'local' }).catch(() => {});
+    } else {
+      delete accounts[keyOf(profile.email)];
+      saveAccounts();
+      resetAccountState();
+    }
+    showGate('auth');
+    say($('#loginMsg'), 'Sua conta foi excluída.', true);
   });
 
   addEventListener('hashchange', () => {
@@ -2008,6 +2421,21 @@
     });
   }
 
+  function setStatOrHide(name, v, prefix) {
+    $$(`.count[data-stat="${name}"]`).forEach((el) => {
+      const item = el.closest('dl > div');
+      const has = v != null && v !== '' && Number(v) > 0;
+      if (item) item.hidden = !has;
+      if (!has) return;
+      el.dataset.count = Number(v);
+      el.dataset.prefix = prefix;
+      delete el.dataset.empty;
+      el.style.minWidth = '';
+      el.textContent = formatCount(el, Number(v));
+      el.setAttribute('aria-label', el.textContent);
+    });
+  }
+
   function applyConfig(c) {
     if (!c) return;
     WHATSAPP = String(c.whatsapp || '').replace(/\D/g, '');
@@ -2029,10 +2457,32 @@
     $('#ctInfo').hidden = !info.length;
     const nome = String(c.nome_imobiliaria || '').trim();
     if (nome) {
+      BRAND = nome;
+      document.title = document.title.replace(/Morada/g, nome);
       $('.logo-word').textContent = nome.toLowerCase() === 'morada' ? 'morada' : nome;
       $('.logo').setAttribute('aria-label', `${nome} — início`);
       $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${nome}`;
     }
+    // dados da imobiliária para o Google (aparecem nos resultados de busca)
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: nome || 'Morada', url: `${location.origin}/`, image: `${location.origin}/assets/og.jpg` };
+    if (tel) ld.telephone = tel;
+    if (c.email) ld.email = c.email;
+    if (c.endereco) ld.address = c.endereco;
+    if (handle) ld.sameAs = [INSTAGRAM_URL];
+    let ldTag = $('#ldImobiliaria');
+    if (!ldTag) {
+      ldTag = document.createElement('script');
+      ldTag.type = 'application/ld+json';
+      ldTag.id = 'ldImobiliaria';
+      document.head.append(ldTag);
+    }
+    ldTag.textContent = JSON.stringify(ld);
+
+    // números da apresentação (vazios = o item some) e login com Google
+    setStatOrHide('familias', c.familias_atendidas, '+');
+    setStatOrHide('anos', c.anos_mercado, '');
+    googleOn = !!c.login_google;
+    syncGoogle();
     const logo = siteFile(c.logo);
     const mark = $('.logo-mark');
     if (logo) {
@@ -2113,7 +2563,7 @@
       const [imoveis, avaliacoes, conf] = await Promise.all([
         restGet(`imoveis?select=${IMOVEL_COLS}&order=ordem.asc,created_at.desc&imovel_fotos.order=ordem.asc&limit=500`),
         restGet('avaliacoes?select=nome,texto,nota,subtitulo,foto&publicado=eq.true&order=ordem.asc,created_at.desc&limit=50'),
-        restGet('configuracoes?select=nome_imobiliaria,whatsapp,instagram,telefone,email,endereco,logo&id=eq.1').catch(() => []),
+        restGet('configuracoes?select=*&id=eq.1').catch(() => []),
       ]);
       applyConfig(conf[0]);
       HOUSES = imoveis.map(fromRow).sort(byOrder);
@@ -2156,15 +2606,35 @@
     else addEventListener('load', resolve, { once: true });
   });
   const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
-  Promise.race([Promise.all([pageLoaded, wait(1200), catalogFirst]), wait(2500)]).then(() => {
-    const pre = $('#preloader');
-    pre.classList.add('is-done');
-    setTimeout(() => { pre.hidden = true; }, 800);
-    if (session?.email || session?.guest) {
+  const authFirst = initAuth().catch((err) => console.warn('Morada: contas indisponíveis.', err));
+  const signedIn = () => !!(session?.uid || session?.email);
+  let booted = false;
+  function startEntry() {
+    if (recovering) { showRecovery(recoveryEmail); return; }
+    if (signedIn() || session?.guest) {
+      document.body.classList.toggle('is-guest', !!session?.guest);
+      gate.hidden = true;
+      if (profile) renderProfile();
+      syncCartUI();
+      syncFavUI();
       lockSite(false);
       playIntro();
     } else {
       showGate();
     }
+  }
+  Promise.race([Promise.all([pageLoaded, wait(1200), catalogFirst, authFirst]), wait(2500)]).then(() => {
+    booted = true;
+    const pre = $('#preloader');
+    pre.classList.add('is-done');
+    setTimeout(() => { pre.hidden = true; }, 800);
+    startEntry();
+  });
+  // internet lenta: se a conta chegou depois da abertura, ajusta sem recarregar
+  authFirst.then(() => {
+    if (!booted) return;
+    if (recovering && gated) { showRecovery(recoveryEmail); return; }
+    if (session?.uid && gated) { enterSite(session.email); return; }
+    if (!MODO_TESTE && !gated && !signedIn() && !session?.guest) showGate();
   });
 })();

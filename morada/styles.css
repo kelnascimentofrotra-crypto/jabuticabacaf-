@@ -3621,3 +3621,28 @@ img.is-local { object-position: 64% 88%; background: linear-gradient(180deg, #7f
   #fEscopo { display: flex; }
   #fEscopo + .im-sep { display: block; }
 }
+
+/* Conta: excluir (LGPD) */
+.acc-delete {
+  display: block;
+  margin: 14px auto 4px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: #b3412e;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.85;
+}
+.acc-delete:hover { opacity: 1; }
+.acc-delete:disabled { opacity: 0.4; cursor: progress; }
+/* números da apresentação sem valor definido no painel ficam escondidos */
+dl > div[hidden] { display: none !important; }
+
+/* Formulário de contato: campo anti-robô, aviso de privacidade e ações da confirmação */
+.hp { position: absolute !important; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+.ct-legal { margin-top: calc(0.2 * var(--u)); font-size: max(10.5px, calc(0.72 * var(--u))); line-height: 1.4; color: rgba(243, 237, 228, 0.55); text-align: center; }
+.ct-legal a, .ga-legal a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.ga-legal { font-size: 11.5px; line-height: 1.4; color: #8a817a; text-align: center; }
+.ct-done-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.ct-done-actions .btn { display: inline-flex; align-items: center; gap: 8px; }
+.ct-done-actions .btn-zap svg { width: 18px; height: 18px; }

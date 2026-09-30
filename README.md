@@ -1,5 +1,7 @@
 # Morada — site + painel administrativo
 
+> **A versão publicada do site do Arthur agora fica no repositório [`arturcorretor`](https://github.com/kelnascimentofrotra-crypto/arturcorretor)** (site na raiz, publicado pela Vercel). Esta pasta `morada/` é uma cópia espelhada; o passo a passo completo e atualizado está no README de lá.
+
 Site estático em `morada/` (HTML, CSS e JavaScript, sem build) com painel em `/admin`.
 Os dados (imóveis, fotos, avaliações e contatos) ficam no **Supabase**; o site é publicado na **Vercel**.
 
