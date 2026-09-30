@@ -418,8 +418,6 @@
         </div>
       </div>
 
-      <!-- Foto noturna da casa com o monograma AG (tela inteira no computador) -->
-      <picture><source media="(max-width: 900px), (max-aspect-ratio: 1/1)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><img class="hero-bg" src="assets/hero-noite.webp" srcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="100vw" width="1863" height="844" alt="Casa térrea à noite com luzes quentes, jardim tropical, piscina e o monograma AG dourado" /></picture>
 
       <div class="intro rv" style="--d: .55s">
         <p class="intro-eyebrow">Seu novo capítulo começa aqui</p>
@@ -431,9 +429,14 @@
       </div>
 
       <!-- Palavra gigante ao fundo; a casa passa na frente dela -->
-      <p class="title title--ag" aria-hidden="true"><span style="--i: 0">A</span><span style="--i: 1">G</span></p>
+      <p class="title title--ag" aria-hidden="true"><span style="--i: 0" data-l="A">A</span><span style="--i: 1" data-l="G">G</span></p>
 
       <div class="media">
+        <div class="sky" aria-hidden="true"></div>
+        <!-- A mesma foto em duas camadas: a de dentro fica presa ao cartão; a de fora é só o telhado
+             (céu transparente), que passa por cima da borda do cartão e na frente do "AG". -->
+        <div class="house house--in"><picture><source media="(max-width: 900px), (max-aspect-ratio: 1/1)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><img src="assets/hero-noite.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="125vw" width="1863" height="844" alt="Casa térrea à noite com luzes quentes, jardim tropical e piscina" fetchpriority="high" /></picture></div>
+        <div class="house house--out" aria-hidden="true"><picture><source media="(max-width: 900px), (max-aspect-ratio: 1/1)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><img src="assets/hero-noite-telhado.webp" width="1863" height="620" alt="" /></picture></div>
 
         <div class="badge rv" style="--d: 1.6s">
           <svg class="sparkle" aria-hidden="true"><use href="#i-sparkle" /></svg>

@@ -512,27 +512,15 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
    ========================================================= */
 
 .hero { background: #050505; }
-.hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  max-width: none;
-  object-fit: cover;
-  object-position: 100% 100%;
-  pointer-events: none;
-}
-.scene.is-entering .hero-bg { animation: kenburns 9s var(--ease-out) both; }
+/* céu da noite atrás do AG: brilho quente do entardecer */
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(5, 5, 5, 0.72) 0%, rgba(5, 5, 5, 0.34) 30%, transparent 52%),
-    linear-gradient(180deg, rgba(5, 5, 5, 0.5) 0%, transparent 20%),
-    linear-gradient(0deg, rgba(5, 5, 5, 0.35) 0%, transparent 18%);
+    radial-gradient(calc(36 * var(--u)) calc(15 * var(--u)) at 84% 34%, rgba(232, 146, 60, 0.34), transparent 70%),
+    radial-gradient(calc(70 * var(--u)) calc(28 * var(--u)) at 76% 40%, rgba(170, 96, 32, 0.18), transparent 72%);
 }
 
 .intro {
@@ -603,7 +591,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .hero-stats {
   position: absolute;
   left: calc(2.8 * var(--u));
-  bottom: calc(3.8 * var(--u));
+  bottom: calc(3 * var(--u));
   display: flex;
   padding: calc(1.2 * var(--u)) calc(0.6 * var(--u));
   border-radius: calc(1.5 * var(--u));
@@ -652,10 +640,35 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   translate: calc(var(--mx) * -0.6 * var(--u)) 0;
 }
 .title span { display: block; }
-/* o AG dourado já faz parte da foto noturna */
-.hero > .title--ag, .hero .sky, .hero .house { display: none; }
-/* monograma da marca no lugar da palavra gigante */
-.title--ag { font-family: "Playfair Display", Georgia, serif; font-size: calc(17 * var(--u)); font-weight: 400; letter-spacing: -0.12em; padding-right: 0.12em; right: 7vw; top: calc(6.4 * var(--u)); }
+/* monograma AG dourado, com volume (a ponta do telhado passa na frente dele) */
+.title--ag {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: calc(17 * var(--u));
+  font-weight: 500;
+  letter-spacing: -0.11em;
+  padding-right: 0.12em;
+  right: 7vw;
+  top: calc(6 * var(--u));
+  color: #e9c98f;
+  text-shadow:
+    0.004em 0.004em 0 #c09252, 0.008em 0.008em 0 #b0844a, 0.012em 0.012em 0 #9e7440,
+    0.016em 0.016em 0 #8c6536, 0.02em 0.02em 0 #7a572e, 0.024em 0.024em 0 #684a27,
+    0.03em 0.05em 0.08em rgba(0, 0, 0, 0.7), 0 0 0.4em rgba(240, 160, 70, 0.35);
+}
+.title--ag span { position: relative; }
+/* a face da letra (dourado com brilho) fica por cima do volume feito com a sombra */
+.title--ag span::after {
+  content: attr(data-l);
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: linear-gradient(170deg, #fff6dd 0%, #ffe3a6 22%, #e8bd72 45%, #c9954f 62%, #f6dca8 80%, #d3a45f 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
 .scene.is-entering .title span { animation: letter 1.3s var(--ease-out) calc((0.35s + var(--i) * 0.07s) * var(--ds, 1)) both; }
 
 .media {
@@ -669,20 +682,19 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 
   /* Foto da casa (proporção 2.152): a ponta do telhado fica a 17u do topo da página,
      a 70.6% da largura do card, e a foto sempre cobre o card até embaixo. */
+  /* Foto noturna (1863 x 844): a ponta do telhado está a 71,7% da largura e 29,3% da altura. */
   --peak-above: calc(12.2 * var(--u));
   --peak-x: 70.6cqw;
-  --img-w: max(109.5cqw, calc((100cqh + var(--peak-above) + 1.5 * var(--u)) * 2.538));
-  --out-l: 13.1%;      /* à esquerda disso só o que está dentro do card aparece */
+  --img-w: max(109.5cqw, calc((100cqh + var(--peak-above) + 1.5 * var(--u)) * 3.136));
+  --out-l: 0%;         /* o recorte do telhado já tem o céu transparente */
 }
-.media > * { --img-h: calc(var(--img-w) / 2.152); --ov: calc(var(--peak-above) + 0.152 * var(--img-h)); }
+.media > * { --img-h: calc(var(--img-w) / 2.2073); --ov: calc(var(--peak-above) + 0.2927 * var(--img-h)); }
 
 .sky {
   position: absolute;
   inset: 0;
   border-radius: var(--radius);
-  background:
-    radial-gradient(38% 60% at 12% 34%, rgba(255, 219, 170, 0.75), transparent 70%),
-    linear-gradient(180deg, #7fa7c6 0%, #b5cddd 38%, #e9dccb 72%, #f3d6b0 100%);
+  background: #0c0a08;
 }
 .scene.is-entering .sky { animation: sky 1.3s var(--ease-cut) calc(0s * var(--ds, 1)) both; }
 
@@ -696,7 +708,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 }
 .house img {
   position: absolute;
-  left: calc(var(--peak-x) - 0.701 * var(--img-w));
+  left: calc(var(--peak-x) - 0.7169 * var(--img-w));
   top: 0;
   width: var(--img-w);
   max-width: none;
@@ -713,12 +725,25 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
     100% calc(var(--ov) + var(--radius)), var(--out-l) calc(var(--ov) + var(--radius))
   );
 }
+.house--in::before {
+  /* fio dourado na borda do cartão: o telhado passa por cima dele (efeito 3D) */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--ov);
+  bottom: 0;
+  z-index: 1;
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 1px rgba(214, 171, 114, 0.5), inset 0 calc(2 * var(--u)) calc(4 * var(--u)) rgba(214, 150, 80, 0.08);
+  pointer-events: none;
+}
 .house--in::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
   height: 40%;
-  background: linear-gradient(180deg, transparent, rgba(10, 30, 40, 0.28));
+  background: linear-gradient(180deg, transparent, rgba(5, 5, 5, 0.45));
 }
 
 .badge {
@@ -747,8 +772,8 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 
 .cards {
   position: absolute;
-  right: 0;
-  bottom: calc(3.8 * var(--u));
+  right: calc(1.85 * var(--u));
+  bottom: calc(3 * var(--u));
   display: flex;
   gap: calc(1.2 * var(--u));
 }
@@ -805,7 +830,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   height: calc(5 * var(--u));
   border-radius: calc(0.9 * var(--u));
   background:
-    url("assets/hero-noite-m.webp") 58% 72% / 330% auto no-repeat,
+    url("assets/hero-noite-m-900.webp") 58% 72% / 330% auto no-repeat,
     #1b1814;
 }
 .card--feature strong {
@@ -3181,9 +3206,9 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .m-cards { display: grid; grid-template-columns: 1.55fr 1fr; gap: 8px; height: min(132px, 18svh); }
   .m-card { position: relative; display: flex; flex-direction: column; min-width: 0; padding: 12px 14px; border-radius: 18px; overflow: hidden; color: #fff; border: 1px solid rgba(214, 171, 114, 0.35); }
   .m-card > *:not(.m-card-bg) { position: relative; }
-  .m-card-bg { position: absolute; inset: 0; background: url("assets/hero-noite-m.webp") 60% 64% / 330% auto no-repeat, #2a241d; }
+  .m-card-bg { position: absolute; inset: 0; background: url("assets/hero-noite-m-900.webp") 60% 64% / 330% auto no-repeat, #2a241d; }
   .m-card-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 10, 12, 0.75), rgba(10, 10, 12, 0.15)); }
-  .m-card--feature .m-card-bg { background: url("assets/hero-noite-m.webp") 55% 72% / 260% auto no-repeat, #1b1814; }
+  .m-card--feature .m-card-bg { background: url("assets/hero-noite-m-900.webp") 55% 72% / 260% auto no-repeat, #1b1814; }
   .m-card--feature .m-card-bg::after { background: linear-gradient(180deg, rgba(10, 10, 12, 0.05) 20%, rgba(10, 10, 12, 0.8)); }
   .m-card--stats strong { font-size: min(34px, 5svh); font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--gold-hi); }
   .m-card-label { margin-top: 4px; font-size: 13px; line-height: 1.2; }
