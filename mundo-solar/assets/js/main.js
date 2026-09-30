@@ -139,12 +139,15 @@ const SITE_CONFIG = {
   const toggle = $('[data-menu-toggle]');
   const menu = $('[data-mobile-menu]');
   const toggleLabel = toggle && $('.sr-only', toggle);
+  // Conteúdo atrás do menu aberto fica inativo para teclado e leitores de tela.
+  const behindMenu = $$('main, .site-footer, .wa-float, .skip-link');
 
   const setMenu = (open, { focusToggle = false } = {}) => {
     if (!toggle || !menu) return;
     body.classList.toggle('nav-open', open);
     toggle.setAttribute('aria-expanded', String(open));
     if (toggleLabel) toggleLabel.textContent = open ? 'Fechar menu' : 'Abrir menu';
+    behindMenu.forEach((el) => el.toggleAttribute('inert', open));
     if (open) {
       menu.removeAttribute('inert');
       const first = $('a', menu);

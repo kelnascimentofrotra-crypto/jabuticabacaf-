@@ -716,11 +716,11 @@ body.nav-open { overflow: hidden; }
 .step__num {
   font-family: var(--font-display); font-size: clamp(2.6rem, 1.8rem + 2vw, 3.6rem); font-weight: 600;
   line-height: 1; letter-spacing: -0.04em;
-  color: transparent; -webkit-text-stroke: 1px var(--line-3);
+  color: rgba(244, 243, 239, 0.4); /* contraste ≥ 3:1 (texto grande) mesmo inativo */
   margin-bottom: 18px;
-  transition: color .6s var(--ease), -webkit-text-stroke-color .6s var(--ease);
+  transition: color .6s var(--ease);
 }
-.step.is-active .step__num { color: var(--text); -webkit-text-stroke-color: transparent; }
+.step.is-active .step__num { color: var(--text); }
 .step__icon {
   width: 44px; height: 44px; border-radius: 50%;
   display: grid; place-items: center; margin-bottom: 18px;
