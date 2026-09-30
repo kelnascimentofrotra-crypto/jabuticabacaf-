@@ -9,6 +9,7 @@
 //
 // moradaConfig() devolve { url, anonKey }; null quando o Supabase não está configurado;
 // ou { error } quando não deu para falar com o servidor.
+// moradaGoogleAtivo() diz se o login com Google está ativado no Supabase.
 (function () {
   'use strict';
 
@@ -43,5 +44,28 @@
       }
     })();
     return pending;
+  };
+
+  // O Google está ativado no Supabase (Authentication → Sign In / Providers → Google)?
+  // true ou false; null quando não deu para perguntar (sem Supabase ou sem conexão).
+  let googlePending = null;
+  window.moradaGoogleAtivo = function moradaGoogleAtivo() {
+    if (googlePending) return googlePending;
+    googlePending = (async () => {
+      const c = await window.moradaConfig();
+      if (!c || c.error) { googlePending = null; return null; }
+      try {
+        const headers = { apikey: c.anonKey };
+        if (/^eyJ/.test(c.anonKey)) headers.Authorization = `Bearer ${c.anonKey}`;
+        const res = await fetch(`${c.url}/auth/v1/settings`, { headers });
+        if (!res.ok) throw new Error(String(res.status));
+        const s = await res.json();
+        return s?.external?.google === true;
+      } catch (_) {
+        googlePending = null;
+        return null;
+      }
+    })();
+    return googlePending;
   };
 })();

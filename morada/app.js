@@ -1011,6 +1011,7 @@
   let MODO_TESTE = true;  // vira false quando o Supabase responde
   let sbAuth = null;      // cliente supabase-js das contas
   let googleOn = false;   // "Entrar com o Google" ligado em Configurações do painel
+  let googleSb = false;   // e ativado no Supabase (o botão só aparece com os dois)
   let recovering = false; // chegou pelo link de "criar senha nova"
 
   const SESSION_KEY = 'morada:sessao';
@@ -1435,7 +1436,7 @@
   });
 
   /* Entrar com o Google (pelo Supabase; aparece quando está ligado em Configurações do painel) */
-  const googleAvail = () => MODO_TESTE || (googleOn && !!sbAuth);
+  const googleAvail = () => MODO_TESTE || (googleOn && googleSb && !!sbAuth);
   function syncGoogle() {
     const on = googleAvail();
     $('#glGoogle').hidden = !on;
@@ -1663,6 +1664,8 @@
       if (event === 'SIGNED_OUT') setTimeout(signedOutElsewhere, 0);
     });
     syncGoogle();
+    // Google desativado no Supabase: esconde o botão (se não deu para perguntar, vale o painel)
+    window.moradaGoogleAtivo?.().then((on) => { googleSb = on !== false; syncGoogle(); });
     let user = null;
     try {
       const { data } = await sbAuth.auth.getSession();

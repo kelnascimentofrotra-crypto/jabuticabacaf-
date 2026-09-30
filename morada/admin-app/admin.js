@@ -1948,7 +1948,8 @@
         <section class="panel">
           <h2 class="panel-title">Login dos clientes</h2>
           <label class="switch"><input type="checkbox" name="login_google"${c.login_google ? ' checked' : ''} /><span class="switch-ui" aria-hidden="true"></span><span>Mostrar <b>“Entrar com o Google”</b> no site</span></label>
-          <p class="hint" style="margin-top:10px">Só ligue depois de ativar o Google no Supabase (Authentication → Sign In / Providers → Google). O cadastro com e-mail e senha funciona sem isso.</p>
+          <p class="hint" style="margin-top:10px">O botão só aparece no site quando o Google também está ativado no Supabase (Authentication → Sign In / Providers → Google). O cadastro com e-mail e senha funciona sem isso.</p>
+          <p class="google-status" id="cfGoogle" hidden></p>
         </section>` : `
         <section class="panel">
           <h2 class="panel-title">Mais opções</h2>
@@ -1967,6 +1968,18 @@
       $('#cfLogoDel').hidden = !url;
     };
     paintLogo();
+    // diz se o Google já está ativado no Supabase (sem isso o botão não aparece no site)
+    if (novos) {
+      window.moradaGoogleAtivo?.().then((on) => {
+        const el = $('#cfGoogle');
+        if (!alive() || !el || on === null) return;
+        el.hidden = false;
+        el.classList.toggle('is-on', on);
+        el.innerHTML = on
+          ? `${icon('check')}<span>O Google está ativado no Supabase.</span>`
+          : `${icon('alert')}<span>O Google ainda não está ativado no Supabase, então o botão fica escondido no site, mesmo com esta opção ligada.</span>`;
+      });
+    }
     f.addEventListener('input', () => { dirty = true; });
     $('#cfLogoFile').addEventListener('change', (e) => {
       const file = e.target.files[0];

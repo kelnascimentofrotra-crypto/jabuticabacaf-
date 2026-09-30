@@ -772,3 +772,9 @@ details[open] .rank-main small { visibility: hidden; }
   .table--clientes td[data-label="Telefone"], .table--clientes td[data-label="Cadastro"], .table--clientes td[data-label="Último acesso"], .table--clientes td[data-label="Favoritos"], .table--clientes td[data-label="Carrinho"], .table--clientes td[data-label="Pedidos"] { display: block !important; font-size: 13px; }
   .table--clientes td[data-label]:not([data-label="Cliente"])::before { content: attr(data-label) ": "; color: var(--muted); }
 }
+
+/* Configurações: situação do Google no Supabase */
+.google-status { display: flex; align-items: flex-start; gap: 8px; margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; font-size: 13px; line-height: 1.45; background: #fbf1e8; color: var(--terracotta-d); }
+.google-status .ico { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.google-status.is-on { background: var(--ok-bg); color: var(--ok); }
+.google-status[hidden] { display: none; }
