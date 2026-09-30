@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# EDITAR: após publicar no domínio definitivo, descomente a linha abaixo
+# substituindo "seudominio.com.br" pelo domínio real.
+# Sitemap: https://www.seudominio.com.br/sitemap.xml
