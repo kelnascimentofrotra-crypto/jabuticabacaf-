@@ -715,3 +715,13 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
   .todo li > .btn { grid-column: 2; justify-self: start; }
   .msg .row-tools .btn { flex: 1 1 auto; }
 }
+
+/* Minha conta: foto de perfil */
+.acc-photo-panel { margin-bottom: 18px; max-width: 860px; }
+.avatar--xl { width: 88px; height: 88px; font-size: 30px; }
+.top-user .avatar.has-photo { background-size: cover; background-position: center; }
+.mini-photo label.is-busy { opacity: 0.6; pointer-events: none; }
+.name-row { display: flex; align-items: flex-end; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.name-row .field { flex: 1 1 240px; }
+.name-row .btn { height: 44px; }
+.field-label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: var(--ink-2); }

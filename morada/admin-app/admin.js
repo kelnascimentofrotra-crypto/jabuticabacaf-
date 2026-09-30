@@ -346,7 +346,97 @@
     $$('[data-site-name]').forEach((el) => { el.textContent = siteName; });
     if (!user || !$('.top-mail')) return;
     $('.top-mail').textContent = user.email || '';
-    $('.top-user .avatar').textContent = (user.email || 'A')[0].toUpperCase();
+    $('.top-who b').textContent = myName ? `Olá, ${firstName()}` : 'Administrador';
+    paintAvatar($('.top-user .avatar'));
+  }
+  // foto de perfil do administrador (bucket "perfis", pasta do próprio usuário)
+  let myPhoto = '';
+  let myName = '';
+  let nameAsked = false;
+  const firstName = () => myName.trim().split(/\s+/)[0] || '';
+  const hello = () => (myName ? `Olá, ${firstName()}!` : 'Dashboard');
+  const perfilUrl = (p) => (!p ? '' : /^(https?:|blob:|data:)/.test(p) ? p : publicUrl('perfis', p));
+  function paintAvatar(el) {
+    if (!el) return;
+    const url = perfilUrl(myPhoto);
+    el.style.backgroundImage = url ? `url("${url}")` : '';
+    el.classList.toggle('has-photo', !!url);
+    el.textContent = url ? '' : (myName || user?.email || 'A').trim()[0].toUpperCase();
+  }
+  let profileLoad = null;
+  function loadMyProfile(force) {
+    if (profileLoad && !force) return profileLoad;
+    profileLoad = (async () => {
+      const { data, error } = await sb.from('perfis').select('nome,foto').eq('id', user.id).maybeSingle();
+      if (error) throw error;
+      myPhoto = data?.foto || '';
+      myName = data?.nome || '';
+      paintIdentity();
+      $$('[data-hello]').forEach((el) => { el.textContent = hello(); });
+      if (!myName) askName();
+    })();
+    profileLoad.catch(() => { profileLoad = null; });
+    return profileLoad;
+  }
+  async function saveMyName(nome) {
+    const { data, error } = await sb.from('perfis').upsert({ id: user.id, nome }, { onConflict: 'id' }).select('id');
+    if (error || !data?.length) throw error || noRows();
+    myName = nome;
+    paintIdentity();
+    $$('[data-hello]').forEach((el) => { el.textContent = hello(); });
+  }
+  // primeiro acesso: pergunta como a pessoa quer ser chamada
+  function askName() {
+    if (nameAsked || sessionStorage.getItem('morada:admin-sem-nome') || location.pathname === '/admin/minha-conta') return;
+    nameAsked = true;
+    const m = openModal(`
+      <form id="nameForm" novalidate>
+        <div class="modal-head"><h2>Como você quer ser chamado?</h2><button class="icon-btn" type="button" data-skip aria-label="Agora não">${icon('close')}</button></div>
+        <p class="hint" style="margin:-6px 0 14px">O painel vai te receber pelo nome. Dá para mudar depois em Minha conta.</p>
+        <label class="field"><span>Seu nome</span><input name="nome" maxlength="60" autocomplete="given-name" required placeholder="Ex.: Kelmaria" /><small class="err"></small></label>
+        <div class="modal-actions">
+          <button class="btn" type="button" data-skip>Agora não</button>
+          <button class="btn btn-primary" type="submit" id="nameSave">Salvar</button>
+        </div>
+      </form>`);
+    const f = $('#nameForm', m.el);
+    setTimeout(() => f.nome.focus(), 60);
+    $$('[data-skip]', m.el).forEach((b) => b.addEventListener('click', () => { sessionStorage.setItem('morada:admin-sem-nome', '1'); m.close(); }));
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = $('#nameSave', m.el);
+      if (btn.disabled) return;
+      const nome = f.nome.value.trim().replace(/\s+/g, ' ');
+      if (nome.length < 2) { const fl = f.nome.closest('.field'); fl.classList.add('has-error'); $('.err', fl).textContent = 'Digite seu nome.'; f.nome.focus(); return; }
+      setBusy(btn, true, 'Salvando…');
+      try {
+        await saveMyName(nome);
+        setBusy(btn, false);
+        m.close();
+        toast(`Prazer, ${firstName()}!`);
+      } catch (err) {
+        setBusy(btn, false);
+        const fl = f.nome.closest('.field');
+        fl.classList.add('has-error');
+        $('.err', fl).textContent = errText(err);
+      }
+    });
+  }
+  async function squareAvatar(file) {
+    const src = await decode(file);
+    const w = src.width || src.naturalWidth;
+    const h = src.height || src.naturalHeight;
+    const side = Math.min(w, h);
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(src, (w - side) / 2, (h - side) / 2, side, side, 0, 0, 256, 256);
+    src.close?.();
+    let blob = await toBlob(canvas, 'image/webp', 0.86);
+    if (!blob || blob.type !== 'image/webp') blob = await toBlob(canvas, 'image/jpeg', 0.86);
+    if (!blob) throw new Error('Não deu para preparar esta imagem.');
+    return blob;
   }
   function toggleDrawer(force) {
     const open = force ?? !document.body.classList.contains('drawer-open');
@@ -356,6 +446,7 @@
   const closeDrawer = () => toggleDrawer(false);
 
   async function loadSiteName() {
+    if (user) loadMyProfile().catch(() => {});
     const { data } = await sb.from('configuracoes').select('nome_imobiliaria').eq('id', 1).maybeSingle();
     if (data?.nome_imobiliaria) { siteName = data.nome_imobiliaria; paintIdentity(); }
   }
@@ -366,6 +457,10 @@
     setBusy($('#logoutBtn'), true, 'Saindo…');
     await sb.auth.signOut().catch(() => {});
     user = null;
+    myName = '';
+    myPhoto = '';
+    profileLoad = null;
+    nameAsked = false;
     navigate('/admin/login', true);
   }
 
@@ -524,7 +619,7 @@
      ========================================================= */
 
   async function viewDashboard(page, _m, alive) {
-    page.innerHTML = `${pageHead('Dashboard', 'Resumo do que está publicado no site agora.', `<a class="btn btn-primary" href="/admin/imoveis/novo" data-link>${icon('plus')}<span>Adicionar imóvel</span></a>`)}
+    page.innerHTML = `${pageHead(hello(), 'Resumo do que está publicado no site agora.', `<a class="btn btn-primary" href="/admin/imoveis/novo" data-link>${icon('plus')}<span>Adicionar imóvel</span></a>`)}
       <div id="notice"></div>
       <div class="stats" id="stats">${Array.from({ length: 5 }, () => '<div class="stat is-skel"><i></i><b></b></div>').join('')}</div>
       <section class="panel" id="todo" hidden></section>
@@ -532,6 +627,7 @@
         <div class="panel-head"><h2>Últimos imóveis adicionados</h2><a class="link" href="/admin/imoveis" data-link>Ver todos</a></div>
         <div id="recent">${skelRows(5)}</div>
       </section>`;
+    $('.page-head h1', page).setAttribute('data-hello', '');
     loadExtras(alive);
     const load = async () => {
       const count = (f) => { let q = sb.from('imoveis').select('id', { count: 'exact', head: true }); if (f) q = f(q); return q; };
@@ -1497,7 +1593,21 @@
      ========================================================= */
 
   function viewMinhaConta(page) {
-    page.innerHTML = `${pageHead('Minha conta', 'Troque a senha que você usa para entrar no painel.')}
+    page.innerHTML = `${pageHead('Minha conta', 'Seu nome, sua foto de perfil e a senha que você usa para entrar no painel.')}
+      <section class="panel form--single acc-photo-panel">
+        <h2 class="panel-title">Perfil</h2>
+        <form class="name-row" id="meNameForm" novalidate>
+          <label class="field"><span>Seu nome</span><input name="nome" maxlength="60" autocomplete="given-name" placeholder="Ex.: Kelmaria" value="${esc(myName)}" /><small class="err"></small></label>
+          <button class="btn" type="submit" id="meNameSave">Salvar nome</button>
+        </form>
+        <span class="field-label">Foto de perfil</span>
+        <div class="mini-photo">
+          <span class="avatar avatar--xl" id="meAva" aria-hidden="true"></span>
+          <label class="btn btn-sm">${icon('upload')}<span>Escolher foto</span><input type="file" accept="image/jpeg,image/png,image/webp" id="meFile" hidden /></label>
+          <button class="btn btn-sm btn-danger-ghost" type="button" id="meDel">Remover</button>
+        </div>
+        <p class="hint" style="margin-top:10px">Aparece no topo do painel. A foto é cortada em quadrado e reduzida antes de enviar.</p>
+      </section>
       <form class="form form--single" id="pwForm" novalidate>
         <section class="panel">
           <h2 class="panel-title">Senha</h2>
@@ -1513,6 +1623,81 @@
           <button class="btn btn-primary btn-lg" type="submit" id="pwSave">TROCAR SENHA</button>
         </div>
       </form>`;
+    const paintMe = () => {
+      paintAvatar($('#meAva'));
+      $('#meDel').hidden = !myPhoto;
+      const inp = $('#meNameForm [name=nome]');
+      if (inp && !inp.value && myName) inp.value = myName;
+    };
+    paintMe();
+    loadMyProfile().then(paintMe, () => {});
+    $('#meNameForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f2 = e.currentTarget;
+      const btn = $('#meNameSave');
+      if (btn.disabled) return;
+      const nome = f2.nome.value.trim().replace(/\s+/g, ' ');
+      const fl = f2.nome.closest('.field');
+      fl.classList.remove('has-error');
+      $('.err', fl).textContent = '';
+      if (nome.length < 2) { fl.classList.add('has-error'); $('.err', fl).textContent = 'Digite seu nome.'; f2.nome.focus(); return; }
+      setBusy(btn, true, 'Salvando…');
+      try {
+        await saveMyName(nome);
+        toast(`Pronto, ${firstName()}! Nome salvo.`);
+      } catch (err) {
+        fl.classList.add('has-error');
+        $('.err', fl).textContent = errText(err);
+      } finally {
+        setBusy(btn, false);
+      }
+    });
+    const trocarFoto = async (path) => {
+      const old = myPhoto;
+      const { data, error } = await sb.from('perfis').upsert({ id: user.id, foto: path }, { onConflict: 'id' }).select('id');
+      if (error || !data?.length) throw error || noRows();
+      if (old && !/^(https?:|blob:|data:)/.test(old) && old !== path) removeFiles('perfis', [old]);
+      myPhoto = path || '';
+      paintIdentity();
+      paintMe();
+    };
+    $('#meFile').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      const bad = checkFile(file);
+      if (bad) { toast(bad, 'error'); return; }
+      const label = e.target.closest('label');
+      label.classList.add('is-busy');
+      let path = '';
+      try {
+        const blob = await squareAvatar(file);
+        path = `${user.id}/${crypto.randomUUID()}.${extOf(blob.type)}`;
+        const { error } = await sb.storage.from('perfis').upload(path, blob, { contentType: blob.type, cacheControl: '31536000', upsert: false });
+        if (error) throw error;
+        await trocarFoto(path);
+        toast('Foto de perfil atualizada.');
+      } catch (err) {
+        if (path) removeFiles('perfis', [path]);
+        toast(errText(err), 'error');
+      } finally {
+        label.classList.remove('is-busy');
+      }
+    });
+    $('#meDel').addEventListener('click', async (e) => {
+      const btn = e.currentTarget;
+      setBusy(btn, true, 'Removendo…');
+      try {
+        await trocarFoto(null);
+        toast('Foto removida.');
+      } catch (err) {
+        toast(errText(err), 'error');
+      } finally {
+        setBusy(btn, false);
+        $('#meDel').hidden = !myPhoto;
+      }
+    });
+
     const f = $('#pwForm');
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1785,6 +1970,10 @@
       if (event === 'SIGNED_OUT' && user) {
         user = null;
         dirty = false;
+        myName = '';
+        myPhoto = '';
+        profileLoad = null;
+        nameAsked = false;
         sessionStorage.setItem('morada:admin-aviso', 'Sua sessão terminou. Entre de novo.');
         setTimeout(() => navigate('/admin/login', true), 0);
       }
