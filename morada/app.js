@@ -284,7 +284,7 @@ const moradaApp = () => {
   }
 
   const imGrid = $('#imGrid');
-  // escopo: 'destaques' mostra só os imóveis marcados como destaque no painel; 'todos' mostra o catálogo inteiro
+  // escopo: 'destaques' mostra só os imóveis marcados como alto padrão no painel; 'todos' mostra o catálogo inteiro
   const filters = { escopo: 'destaques', tipo: 'todos', negocio: 'todos', cidade: '', quartos: 0, maxPreco: 0, disponivel: false };
   const SKELETON = Array.from({ length: 4 }, () => '<li class="pcard pcard--skel" aria-hidden="true"><span class="pcard-img"></span><span class="pcard-info"><i></i><i></i><i></i></span></li>').join('');
   imGrid.innerHTML = SKELETON;
@@ -352,9 +352,9 @@ const moradaApp = () => {
     $('#imExtra').innerHTML = extra ? `${esc(extra)} <svg aria-hidden="true"><use href="#i-close" /></svg>` : '';
     $('#imExtra').setAttribute('aria-label', `Tirar o filtro ${extra}`);
     $('#imCount').textContent = n;
-    $('#imWord').textContent = filters.escopo === 'destaques' ? (n === 1 ? 'em destaque' : 'em destaque') : (n === 1 ? 'imóvel' : 'imóveis');
+    $('#imWord').textContent = filters.escopo === 'destaques' ? 'de alto padrão' : (n === 1 ? 'imóvel' : 'imóveis');
     const noneFlagged = filters.escopo === 'destaques' && !HOUSES.some((h) => h.destaque);
-    $('#imEmptyText').textContent = loadError ? 'Não deu para carregar os imóveis agora.' : !HOUSES.length ? 'Ainda não há imóveis publicados.' : noneFlagged ? 'Nenhum imóvel em destaque no momento.' : 'Nenhum imóvel com esses filtros.';
+    $('#imEmptyText').textContent = loadError ? 'Não deu para carregar os imóveis agora.' : !HOUSES.length ? 'Ainda não há imóveis publicados.' : noneFlagged ? 'Nenhum imóvel de alto padrão no momento.' : 'Nenhum imóvel com esses filtros.';
     $('#imReset').textContent = loadError ? 'Tentar de novo' : noneFlagged ? 'Ver todos os imóveis' : 'Limpar filtros';
     $('#imReset').hidden = !loadError && !HOUSES.length;
     $('#imEmpty').hidden = n > 0;
@@ -363,7 +363,7 @@ const moradaApp = () => {
   }
   function setEscopo(escopo) {
     filters.escopo = escopo;
-    $('#imExplore').textContent = escopo === 'destaques' ? 'Explorar imóveis' : 'Ver só os destaques';
+    $('#imExplore').textContent = escopo === 'destaques' ? 'Explorar imóveis' : 'Ver só alto padrão';
     $$('.chip', $('#fEscopo')).forEach((x) => { const on = x.dataset.escopo === escopo; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
   }
   $('#fEscopo').addEventListener('click', (e) => {
@@ -397,7 +397,7 @@ const moradaApp = () => {
   }
   $('#imExtra').addEventListener('click', () => { Object.assign(filters, { cidade: '', quartos: 0, maxPreco: 0, disponivel: false }); applyFilters(); });
   $('#imReset').addEventListener('click', () => loadError ? loadCatalog() : resetFilters(filters.escopo === 'destaques' && !HOUSES.some((h) => h.destaque) ? 'todos' : filters.escopo));
-  // "Explorar imóveis" abre o catálogo inteiro; de novo, volta para os destaques (no celular, os chips fazem isso)
+  // "Explorar imóveis" abre o catálogo inteiro; de novo, volta para o alto padrão (no celular, os chips fazem isso)
   $('#imExplore').addEventListener('click', () => {
     resetFilters(filters.escopo === 'destaques' ? 'todos' : 'destaques');
     $$('.pcard', imGrid).forEach((el) => { el.classList.remove('is-pop'); void el.offsetWidth; el.classList.add('is-pop'); });
@@ -414,7 +414,7 @@ const moradaApp = () => {
   imGrid.addEventListener('scroll', updateImNav, { passive: true });
   addEventListener('resize', updateImNav);
 
-  // foto grande: só os imóveis marcados como destaque (troca sozinha a cada 7 s; a legenda abre o imóvel)
+  // foto grande: só os imóveis de alto padrão (troca sozinha a cada 7 s; a legenda abre o imóvel)
   let FEATURED = [];
   let featIndex = 0;
   function renderFeatured() {
@@ -443,7 +443,7 @@ const moradaApp = () => {
   }, 7000);
 
   /* =========================================================
-     02 · Filtro (conta na hora e aplica em Destaques)
+     02 · Filtro (conta na hora e aplica em Alto padrão)
      ========================================================= */
 
   const fl = { escopo: 'todos', negocio: 'todos', tipo: 'todos', cidade: '', quartos: 0, maxPreco: 0, disponivel: true };
@@ -2571,7 +2571,7 @@ const moradaApp = () => {
       const bg = $('.feature-img, .m-card-bg', card);
       if (!h) {
         delete card.dataset.house;
-        $('strong', card).textContent = 'Imóveis em destaque';
+        $('strong', card).textContent = 'Imóveis de alto padrão';
         city.textContent = '';
         bg.style.background = '';
         return;
@@ -2655,7 +2655,7 @@ const moradaApp = () => {
     }).finally(() => { loading = null; });
     return loading;
   }
-  // preço, fotos ou destaques mudaram no painel? ao voltar para a aba, busca de novo (no máximo 1x por minuto)
+  // preço, fotos ou alto padrão mudaram no painel? ao voltar para a aba, busca de novo (no máximo 1x por minuto)
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && SB && performance.now() - lastLoad > 60000) loadCatalog();
   });

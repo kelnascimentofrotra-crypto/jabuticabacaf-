@@ -62,9 +62,9 @@ Nunca use a **service_role / secret key** no site. A chave anon é pública por 
 
 Abra `https://seu-dominio/admin`, entre com o e-mail e a senha do administrador.
 
-- **Dashboard**: totais reais (imóveis, disponíveis, vendidos, alugados, em destaque) e os últimos cadastrados.
-- **Imóveis**: lista com busca, filtro por status e páginas; cadastrar, editar, excluir, mudar status e destaque. Fotos: várias de uma vez, a primeira é a principal, reordenar (arrastar ou setas), trocar e remover. As fotos são reduzidas para 1600 px (+ miniatura de 640 px) antes de ir para o Storage; o banco guarda só o caminho.
-- **Destaques**: o que aparece em “Imóveis em destaque” no site, e em que ordem.
+- **Dashboard**: totais reais (imóveis, disponíveis, vendidos, alugados, alto padrão) e os últimos cadastrados.
+- **Imóveis**: lista com busca, filtro por status e páginas; cadastrar, editar, excluir, mudar status e marcar como alto padrão. Fotos: várias de uma vez, a primeira é a principal, reordenar (arrastar ou setas), trocar e remover. As fotos são reduzidas para 1600 px (+ miniatura de 640 px) antes de ir para o Storage; o banco guarda só o caminho.
+- **Alto padrão**: o que aparece em “Imóveis de alto padrão” no site, e em que ordem.
 - **Avaliações**: criar, editar, publicar/despublicar e excluir. A nota média do site vem daqui.
 - **Contatos**: mensagens do formulário do site e pedidos finalizados no carrinho, com WhatsApp e e-mail para responder, lidas/não lidas e contador no menu.
 - **Configurações**: nome, WhatsApp, Instagram, telefone, e-mail, endereço, logo, números da apresentação (famílias atendidas, anos de mercado) e o botão “Entrar com o Google”.

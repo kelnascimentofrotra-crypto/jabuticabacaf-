@@ -241,7 +241,7 @@
     { re: /^\/admin\/imoveis\/novo$/, view: (p, _m, alive) => viewForm(p, null, alive), nav: 'imoveis', title: 'Novo imóvel' },
     { re: /^\/admin\/imoveis\/([0-9a-f-]{36})\/editar$/, view: (p, m, alive) => viewForm(p, m[1], alive), nav: 'imoveis', title: 'Editar imóvel' },
     { re: /^\/admin\/avaliacoes$/, view: viewAvaliacoes, nav: 'avaliacoes', title: 'Avaliações' },
-    { re: /^\/admin\/destaques$/, view: viewDestaques, nav: 'destaques', title: 'Destaques' },
+    { re: /^\/admin\/(alto-padrao|destaques)$/, view: viewDestaques, nav: 'destaques', title: 'Alto padrão' },
     { re: /^\/admin\/configuracoes$/, view: viewConfig, nav: 'config', title: 'Configurações' },
     { re: /^\/admin\/contatos$/, view: viewContatos, nav: 'contatos', title: 'Contatos' },
     { re: /^\/admin\/clientes$/, view: viewClientes, nav: 'clientes', title: 'Clientes' },
@@ -325,7 +325,7 @@
               <a href="/admin/contatos" data-link data-nav="contatos">${icon('mail')}<span>Contatos</span><b class="nav-badge" id="navBadge" hidden></b></a>
               <a href="/admin/clientes" data-link data-nav="clientes">${icon('users')}<span>Clientes</span></a>
               <a href="/admin/avaliacoes" data-link data-nav="avaliacoes">${icon('chat')}<span>Avaliações</span></a>
-              <a href="/admin/destaques" data-link data-nav="destaques">${icon('star')}<span>Destaques</span></a>
+              <a href="/admin/alto-padrao" data-link data-nav="destaques">${icon('star')}<span>Alto padrão</span></a>
               <a href="/admin/configuracoes" data-link data-nav="config">${icon('gear')}<span>Configurações</span></a>
             </nav>
             <a class="side-site" href="/" target="_blank" rel="noopener">${icon('ext')}<span>Ver o site</span></a>
@@ -677,7 +677,7 @@
           ['Disponíveis', disp.count, 'check', '/admin/imoveis?status=disponivel'],
           ['Vendidos', vend.count, 'home', '/admin/imoveis?status=vendido'],
           ['Alugados', alug.count, 'home', '/admin/imoveis?status=alugado'],
-          ['Em destaque', dest.count, 'star', '/admin/destaques'],
+          ['Alto padrão', dest.count, 'star', '/admin/alto-padrao'],
         ];
         $('#stats').innerHTML = cards.map(([label, n, ic, href]) => `
           <a class="stat" href="${href}" data-link>
@@ -807,7 +807,7 @@
       }
       list.innerHTML = `
         <table class="table">
-          <thead><tr><th>Foto</th><th>Nome</th><th>Preço</th><th>Tipo</th><th>Finalidade</th><th>Status</th><th>Destaque</th><th>Data</th><th class="ta-r">Ações</th></tr></thead>
+          <thead><tr><th>Foto</th><th>Nome</th><th>Preço</th><th>Tipo</th><th>Finalidade</th><th>Status</th><th>Alto padrão</th><th>Data</th><th class="ta-r">Ações</th></tr></thead>
           <tbody>${data.map((r) => `
             <tr data-id="${r.id}">
               <td data-label="Foto">${thumbImg(r.imagem_principal)}</td>
@@ -820,7 +820,7 @@
                   ${Object.entries(STATUS).map(([v, t]) => `<option value="${v}"${v === r.status ? ' selected' : ''}>${t}</option>`).join('')}
                 </select>
               </td>
-              <td data-label="Destaque"><button class="star-btn${r.destaque ? ' is-on' : ''}" type="button" data-star aria-pressed="${r.destaque}" aria-label="${r.destaque ? 'Tirar dos destaques' : 'Colocar em destaque'}" title="${r.destaque ? 'Em destaque — clique para tirar' : 'Colocar em destaque'}">${icon(r.destaque ? 'star-fill' : 'star')}</button></td>
+              <td data-label="Alto padrão"><button class="star-btn${r.destaque ? ' is-on' : ''}" type="button" data-star aria-pressed="${r.destaque}" aria-label="${r.destaque ? 'Tirar do alto padrão' : 'Colocar em destaque'}" title="${r.destaque ? 'Em destaque — clique para tirar' : 'Colocar em destaque'}">${icon(r.destaque ? 'star-fill' : 'star')}</button></td>
               <td data-label="Data" class="td-date">${dateBR(r.created_at)}</td>
               <td class="td-actions">
                 <a class="btn btn-sm" href="/admin/imoveis/${r.id}/editar" data-link>${icon('edit')}<span>Editar</span></a>
@@ -865,10 +865,10 @@
           r.destaque = !r.destaque;
           star.classList.toggle('is-on', r.destaque);
           star.setAttribute('aria-pressed', String(r.destaque));
-          star.setAttribute('aria-label', r.destaque ? 'Tirar dos destaques' : 'Colocar em destaque');
-          star.title = r.destaque ? 'Em destaque — clique para tirar' : 'Colocar em destaque';
+          star.setAttribute('aria-label', r.destaque ? 'Tirar do alto padrão' : 'Marcar como alto padrão');
+          star.title = r.destaque ? 'Alto padrão — clique para tirar' : 'Marcar como alto padrão';
           star.innerHTML = icon(r.destaque ? 'star-fill' : 'star');
-          toast(r.destaque ? `“${r.titulo}” agora está em destaque.` : `“${r.titulo}” saiu dos destaques.`);
+          toast(r.destaque ? `“${r.titulo}” agora está em Alto padrão.` : `“${r.titulo}” saiu de Alto padrão.`);
           return;
         }
         const del = e.target.closest('[data-del]');
@@ -1012,7 +1012,7 @@
         <aside class="form-side">
           <section class="panel sticky">
             <h2 class="panel-title">Publicação</h2>
-            <label class="switch"><input type="checkbox" name="destaque"${v.destaque ? ' checked' : ''} /><span class="switch-ui" aria-hidden="true"></span><span>Mostrar em <b>Destaques</b> no site</span></label>
+            <label class="switch"><input type="checkbox" name="destaque"${v.destaque ? ' checked' : ''} /><span class="switch-ui" aria-hidden="true"></span><span>Mostrar em <b>Alto padrão</b> no site</span></label>
             ${isNew ? '' : `<p class="meta">Criado em ${dateBR(row.created_at)}<br />Atualizado em ${dateBR(row.updated_at)}</p>
             <a class="link" href="/#curadoria" target="_blank" rel="noopener">${icon('ext')}<span>Ver no site</span></a>`}
             <p class="form-msg" id="formMsg" role="alert"></p>
@@ -1262,14 +1262,14 @@
   }
 
   /* =========================================================
-     Destaques
+     Alto padrão
      ========================================================= */
 
   async function viewDestaques(page, _m, alive) {
-    page.innerHTML = `${pageHead('Destaques', 'Estes imóveis aparecem na seção “Imóveis em destaque” do site, nesta ordem.')}
-      <section class="panel"><div class="panel-head"><h2>Em destaque no site</h2><small class="hint" id="dCount"></small></div><div id="dList">${skelRows(3)}</div></section>
+    page.innerHTML = `${pageHead('Alto padrão', 'Estes imóveis aparecem na seção “Imóveis de alto padrão” do site, nesta ordem.')}
+      <section class="panel"><div class="panel-head"><h2>Alto padrão no site</h2><small class="hint" id="dCount"></small></div><div id="dList">${skelRows(3)}</div></section>
       <section class="panel">
-        <div class="panel-head"><h2>Adicionar aos destaques</h2></div>
+        <div class="panel-head"><h2>Adicionar ao alto padrão</h2></div>
         <label class="search search--full">${icon('search')}<span class="sr">Buscar imóvel</span><input type="search" id="dSearch" placeholder="Buscar pelo nome do imóvel" /></label>
         <div id="dOthers">${skelRows(3)}</div>
       </section>`;
@@ -1302,10 +1302,10 @@
           <button class="icon-btn" type="button" data-up aria-label="Subir ${esc(r.titulo)}"${k === 0 ? ' disabled' : ''}>${icon('up')}</button>
           <button class="icon-btn" type="button" data-down aria-label="Descer ${esc(r.titulo)}"${k === feat.length - 1 ? ' disabled' : ''}>${icon('down')}</button>
           <button class="btn btn-sm" type="button" data-unfeat>Remover</button>`)).join('')}</ol>`
-        : stateBox('empty', 'Nenhum imóvel em destaque', 'A seção de destaques do site fica vazia. Adicione imóveis abaixo.');
+        : stateBox('empty', 'Nenhum imóvel de alto padrão', 'A seção “Imóveis de alto padrão” do site fica vazia. Adicione imóveis abaixo.');
       const shown = others.filter((r) => !term || r.titulo.toLowerCase().includes(term)).slice(0, 30);
-      $('#dOthers').innerHTML = shown.length ? `<ul class="recent">${shown.map((r) => item(r, `<button class="btn btn-sm btn-primary" type="button" data-feat>${icon('star')}<span>Destacar</span></button>`)).join('')}</ul>`
-        : stateBox('empty', others.length ? 'Nada encontrado' : 'Todos os imóveis já estão em destaque', others.length ? 'Tente outro nome.' : '');
+      $('#dOthers').innerHTML = shown.length ? `<ul class="recent">${shown.map((r) => item(r, `<button class="btn btn-sm btn-primary" type="button" data-feat>${icon('plus')}<span>Adicionar</span></button>`)).join('')}</ul>`
+        : stateBox('empty', others.length ? 'Nada encontrado' : 'Todos os imóveis já estão em Alto padrão', others.length ? 'Tente outro nome.' : '');
     }
     $('#dSearch').addEventListener('input', (e) => { term = e.target.value.trim().toLowerCase(); paint(); });
     async function saveOrder(msg) {
@@ -1326,7 +1326,7 @@
           [feat[idx], feat[to]] = [feat[to], feat[idx]];
           paint();
           $$('#dList button').forEach((x) => { x.disabled = true; });
-          await saveOrder('Ordem dos destaques salva.');
+          await saveOrder('Ordem do alto padrão salva.');
           paint();
         } else if (b.matches('[data-unfeat]')) {
           setBusy(b, true, '');
@@ -1336,7 +1336,7 @@
           feat.splice(idx, 1);
           others.unshift(r);
           paint();
-          toast(`“${r.titulo}” saiu dos destaques.`);
+          toast(`“${r.titulo}” saiu de Alto padrão.`);
         } else if (b.matches('[data-feat]')) {
           setBusy(b, true, '');
           const oi = others.findIndex((r) => r.id === li.dataset.id);
@@ -1346,7 +1346,7 @@
           others.splice(oi, 1);
           feat.push(r);
           paint();
-          toast(`“${r.titulo}” agora está em destaque.`);
+          toast(`“${r.titulo}” agora está em Alto padrão.`);
         }
       } catch (err) {
         toast(errText(err), 'error');
