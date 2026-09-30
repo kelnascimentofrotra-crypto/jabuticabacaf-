@@ -3,19 +3,18 @@
    ========================================================================= */
 
 /**
- * EDITAR: dados de contato da empresa.
- * Enquanto um campo estiver vazio, o site exibe o placeholder correspondente e
- * os botões de WhatsApp abrem o formulário de orçamento.
+ * Dados de contato da empresa (usados nos botões, no rodapé e no formulário).
+ * Se um campo ficar vazio, os botões de WhatsApp passam a abrir o formulário de orçamento.
  */
 const SITE_CONFIG = {
-  // Número com DDI + DDD, somente dígitos. Ex.: '5500000000000'
-  whatsapp: '',
-  // Como o número aparece no rodapé. Ex.: '(00) 00000-0000'
-  whatsappDisplay: '',
-  // Usuário do Instagram, sem @. Ex.: 'mundosolar'
-  instagram: '',
-  // E-mail de atendimento. Ex.: 'contato@seudominio.com.br'
-  email: '',
+  // Número com DDI + DDD, somente dígitos
+  whatsapp: '559491243878',
+  // Como o número aparece no rodapé
+  whatsappDisplay: '(94) 9124-3878',
+  // Usuário do Instagram, sem @
+  instagram: 'mundosolar.redencao',
+  // E-mail de atendimento
+  email: 'atendimentomundosolar@gmail.com',
   // Mensagem inicial das conversas pelo WhatsApp
   whatsappMessage: 'Olá, Mundo Solar! Gostaria de saber mais sobre energia solar.',
 };
@@ -185,6 +184,60 @@ const SITE_CONFIG = {
     }
   });
 
+  /* ---------- Tabela de kits ---------- */
+  const kits = $$('[data-kit]');
+  const kitFeature = $('[data-kit-feature]');
+  const featureCta = $('[data-kf-cta]');
+
+  // Os dados de cada kit são lidos do próprio HTML (fonte única da tabela).
+  const kitData = (li) => {
+    const field = (name) => { const el = $(`[data-f="${name}"]`, li); return el ? el.textContent.trim() : ''; };
+    return { kwh: field('kwh'), tag: field('tag'), placas: field('placas'), inversor: field('inversor'), preco: field('preco') };
+  };
+  const kitMessage = (k) =>
+    `Olá, Mundo Solar! Tenho interesse no kit de ${k.kwh} kWh/mês${k.tag ? ` (${k.tag})` : ''}: ${k.placas} + ${k.inversor} — ${k.preco}. Gostaria de mais informações.`;
+  const setKitLink = (a, k) => {
+    if (!hasWhatsApp) return;
+    a.href = waLink(kitMessage(k));
+    a.target = '_blank';
+    a.rel = 'noopener';
+  };
+  const quoteFallback = (el) =>
+    el.addEventListener('click', (e) => { if (!hasWhatsApp && openQuote()) e.preventDefault(); });
+
+  const selectKit = (li, { animate = true } = {}) => {
+    const k = kitData(li);
+    kits.forEach((item) => {
+      const on = item === li;
+      item.classList.toggle('is-selected', on);
+      const btn = $('.kit__select', item);
+      if (btn) btn.setAttribute('aria-pressed', String(on));
+    });
+    if (!kitFeature) return;
+    ['kwh', 'placas', 'inversor', 'preco'].forEach((name) => {
+      const el = $(`[data-kf="${name}"]`, kitFeature);
+      if (el) el.textContent = k[name];
+    });
+    const tag = $('[data-kf="tag"]', kitFeature);
+    if (tag) { tag.textContent = k.tag; tag.hidden = !k.tag; }
+    if (featureCta) setKitLink(featureCta, k);
+    if (animate && !reduceMotion) {
+      kitFeature.classList.remove('is-swapping');
+      void kitFeature.offsetWidth; // reinicia a animação de troca
+      kitFeature.classList.add('is-swapping');
+    }
+  };
+
+  kits.forEach((li) => {
+    const cta = $('[data-kit-cta]', li);
+    if (cta) { setKitLink(cta, kitData(li)); quoteFallback(cta); }
+    const btn = $('.kit__select', li);
+    if (btn) btn.addEventListener('click', () => selectKit(li));
+  });
+  if (featureCta) quoteFallback(featureCta);
+  const initialKit = kits.find((li) => li.classList.contains('is-selected')) || kits[0];
+  if (initialKit) selectKit(initialKit, { animate: false });
+
   /* ---------- Revelação no scroll ---------- */
   const revealEls = $$('[data-reveal]');
   const finishReveal = (el) => {
@@ -228,6 +281,8 @@ const SITE_CONFIG = {
     };
     el.textContent = '0';
     requestAnimationFrame(tick);
+    // Garante o valor final mesmo se a aba estiver em segundo plano (rAF pausado).
+    setTimeout(() => { el.textContent = final; }, duration + 250);
   };
   if ('IntersectionObserver' in window && counters.length) {
     const cio = new IntersectionObserver((entries) => {

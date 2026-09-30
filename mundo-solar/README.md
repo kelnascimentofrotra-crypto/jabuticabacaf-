@@ -22,32 +22,44 @@ mundo-solar/
 
 Para testar localmente: `python3 -m http.server` dentro desta pasta e abra `http://localhost:8000`.
 
-## O que editar antes de publicar
+## Dados da empresa
 
-Todos os pontos pendentes estão marcados com `EDITAR` nos arquivos.
+- WhatsApp: (94) 9124-3878 · Instagram: @mundosolar.redencao · E-mail: atendimentomundosolar@gmail.com
+- Localização: Redenção — PA
+- No mercado de energia solar desde 2020; Mundo Solar fundada em 2022
+- +500 usinas entregues · +500 famílias e empresas atendidas (seção Sobre)
 
-1. **Contatos** — `assets/js/main.js`, objeto `SITE_CONFIG` no topo do arquivo:
-   - `whatsapp`: número com DDI + DDD, só dígitos (ex.: `55DDNNNNNNNNN`);
-   - `whatsappDisplay`: como o número aparece no rodapé;
-   - `instagram`: usuário sem `@`;
-   - `email`: e-mail de atendimento.
+## Logo
 
-   Assim que o WhatsApp é preenchido, todos os botões "Fale conosco" / "Falar pelo WhatsApp", o botão
-   flutuante e o formulário de orçamento passam a abrir a conversa com a mensagem pronta. Enquanto
-   estiver vazio, esses botões abrem o formulário de orçamento, que informa que os canais estão em
-   configuração.
+O monograma "MS" é uma **recriação vetorial** da logo enviada (símbolo `#logo-ms` no início do
+`<body>` do `index.html`), usada no cabeçalho, no rodapé, no favicon (`favicon.svg` e PNGs) e na
+imagem de compartilhamento (`assets/img/og-image.jpg`). Quando o arquivo original da logo estiver
+disponível (de preferência SVG ou PNG com fundo transparente), substitua o conteúdo do símbolo — ou
+troque os `<svg class="brand__mark">` por `<img>` — e gere o favicon a partir dele.
 
-2. **Depoimentos** — `index.html`, seção `#depoimentos`. Os três cards são modelos marcados como
-   "Espaço reservado". Substitua pelo texto, nome e cidade de clientes reais (com autorização) e remova
-   o `<span class="testimonial__flag">` e o atributo `data-placeholder` de cada card.
+Os contatos ficam em `SITE_CONFIG`, no topo de `assets/js/main.js` (botões de WhatsApp, formulário de
+orçamento e rodapé), e também escritos no rodapé do `index.html` e nos dados estruturados (JSON-LD).
+Se algum contato mudar, atualize os três lugares.
 
-3. **Domínio** — quando o domínio definitivo existir:
-   - em `index.html`, adicione `<link rel="canonical" href="https://SEU-DOMINIO/">` e troque
-     `og:image`/`twitter:image` por URLs absolutas;
-   - em `sitemap.xml`, substitua `https://www.seudominio.com.br/`;
-   - em `robots.txt`, descomente a linha `Sitemap:`;
-   - no JSON-LD (`<script type="application/ld+json">`), acrescente `url`, `telephone`, `email` e
-     `address` somente com dados reais.
+## Tabela de kits (seção `#kits`)
+
+Os 9 kits da TABELA MUNDO SOLAR estão em `index.html`, cada um em um `<li class="kit">`. O painel
+"Kit selecionado" e a mensagem enviada pelo WhatsApp são montados a partir desses textos, então basta
+editar o `<li>` para mudar um kit. Os preços também aparecem no JSON-LD (`hasOfferCatalog`) e na
+pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
+
+## Clientes (seção `#depoimentos`)
+
+A seção lista os clientes dos projetos, sem frases inventadas. Para publicar depoimentos em texto, use
+somente falas reais, autorizadas pelos clientes.
+
+## Pendente: domínio
+
+Quando o domínio definitivo estiver no ar:
+- em `index.html`, adicione `<link rel="canonical" href="https://SEU-DOMINIO/">` e troque
+  `og:image`/`twitter:image` por URLs absolutas; no JSON-LD, acrescente `"url"`;
+- em `sitemap.xml`, substitua `https://www.seudominio.com.br/`;
+- em `robots.txt`, descomente a linha `Sitemap:`.
 
 ## Projetos
 
