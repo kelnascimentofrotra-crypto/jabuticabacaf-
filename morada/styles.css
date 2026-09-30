@@ -298,7 +298,7 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
 .brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-size: 1em; font-weight: 400; letter-spacing: 0; }
 .brand-ag { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; }
 .brand-img { display: block; height: 100%; width: auto; max-width: 100%; object-fit: contain; }
-.logo .brand { font-size: max(19px, calc(2.2 * var(--u))); color: #f3ede4; transition: color 0.6s; }
+.logo .brand { font-size: max(19px, calc(2.2 * var(--u))); color: #f3ede4; }
 .brand .brand-ag { background: var(--gold-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .logo.has-img { height: calc(2.6 * var(--u)); }
 
@@ -471,6 +471,8 @@ body[data-tone="dark"] .ind-ticks button.is-active::before { background: var(--g
   --my: 0;
 }
 .scene.is-active { visibility: visible; z-index: 2; }
+/* cenas fora da tela não são desenhadas (a página abre mais rápido); voltam na hora em que entram */
+.scene:not(.is-active):not(.is-leaving) { content-visibility: hidden; }
 .scene.is-leaving { visibility: visible; z-index: 1; animation: recede 0.85s var(--ease-cut) both; }
 .scene.is-entering[data-dir="1"] { animation: wipe-up 0.85s var(--ease-cut) both; }
 .scene.is-entering[data-dir="-1"] { animation: wipe-down 0.85s var(--ease-cut) both; }
@@ -788,7 +790,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   height: calc(1.75 * var(--u));
   border-radius: 50%;
   border: 2px solid #f1e6d2;
-  background: url("assets/casa.webp") var(--pos) / 900% auto no-repeat, #d9c3a5;
+  background: url("assets/casa-thumb.webp") var(--pos) / 900% auto no-repeat, #d9c3a5;
 }
 .thumbs i + i { margin-left: calc(-0.25 * var(--u)); }
 
@@ -2827,10 +2829,10 @@ input::-ms-reveal, input::-ms-clear { display: none; }
 .gate[data-slide="2"] .gate-bg { transform: translateX(-12vw) scale(1.08); opacity: 0.6; }
 .gl-slide[data-slide="1"] .gl-copy, .gl-slide[data-slide="2"] .gl-copy { justify-content: center; }
 
-.gl-dots { position: absolute; right: 2.2vw; top: 50%; z-index: 3; display: grid; gap: 10px; transform: translateY(-50%); }
-.gl-dots button { width: 8px; height: 8px; border-radius: 999px; background: rgba(243, 237, 228, 0.3); transition: height 0.4s var(--ease-out), background 0.3s; }
-.gl-dots button:hover { background: rgba(243, 237, 228, 0.7); }
-.gl-dots button.is-on { height: 26px; background: #d6ab72; }
+.gl-dots { position: absolute; right: 2.2vw; top: 50%; z-index: 3; display: grid; gap: 0; transform: translateY(-50%); }
+.gl-dots button { width: 8px; height: 8px; border-radius: 999px; background: rgba(243, 237, 228, 0.3); background-clip: content-box; box-sizing: content-box; padding: 8px; transition: height 0.4s var(--ease-out), background 0.3s; }
+.gl-dots button:hover { background-color: rgba(243, 237, 228, 0.7); }
+.gl-dots button.is-on { height: 26px; background-color: #d6ab72; }
 .gl-next {
   position: absolute;
   left: 50%;
@@ -3186,7 +3188,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .m-card--stats strong { font-size: min(34px, 5svh); font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--gold-hi); }
   .m-card-label { margin-top: 4px; font-size: 13px; line-height: 1.2; }
   .m-thumbs { display: flex; margin-top: auto; }
-  .m-thumbs i { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #f1e6d2; background: url("assets/casa.webp") var(--pos) / 900% auto no-repeat, #d9c3a5; }
+  .m-thumbs i { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #f1e6d2; background: url("assets/casa-thumb.webp") var(--pos) / 900% auto no-repeat, #d9c3a5; }
   .m-thumbs i + i { margin-left: -6px; }
   .m-card--feature { justify-content: flex-end; align-items: flex-start; gap: 2px; }
   .m-card--feature strong { font-size: 15px; font-weight: 500; }
@@ -3505,7 +3507,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
 
   /* ---- Entrada ---- */
   .gate { display: flex; flex-direction: column; padding: 16px; }
-  .gate .gate-bg { width: 260vw; right: -110vw; bottom: 0; opacity: 0.6; }
+  .gate .gate-bg { width: 187vw; right: -110vw; bottom: 0; opacity: 0.6; }
   .gate-top { position: relative; inset: auto; height: 40px; flex: none; }
   .gate-logo { gap: 8px; }
   .gate-logo .brand { font-size: 21px; }
@@ -3520,7 +3522,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .gl-slide { inset: 0 0 24px; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; }
   .gl-slide::-webkit-scrollbar { display: none; }
   .gl-slide > * { flex-shrink: 0; }
-  .gl-dots { right: auto; left: 50%; top: auto; bottom: 4px; display: flex; gap: 8px; transform: translateX(-50%); }
+  .gl-dots { right: auto; left: 50%; top: auto; bottom: -4px; display: flex; gap: 0; transform: translateX(-50%); }
   .gl-dots button.is-on { width: 24px; height: 8px; }
   .gl-next { display: none; }
   .gl-slide .gl-title br { display: none; }

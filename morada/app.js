@@ -1,4 +1,4 @@
-(() => {
+const moradaApp = () => {
   'use strict';
 
   const $ = (s, el = document) => el.querySelector(s);
@@ -929,8 +929,8 @@
     clearTimeout(enterTimers.get(from));
     from.classList.remove('is-active', 'is-entering');
     from.classList.add('is-leaving');
-    to.scrollTop = 0;
     to.classList.add('is-active');
+    to.scrollTop = 0; // depois de ativa (antes disso a cena não tem medidas)
     markEntering(to, dir);
     document.body.classList.remove('is-cutting');
     void document.body.offsetWidth;
@@ -952,6 +952,11 @@
     scenes.forEach((s, k) => { s.inert = k !== current; s.setAttribute('aria-hidden', String(k !== current)); });
     updateTone();
     document.body.dataset.scene = id;
+    // cenas fora da tela não têm medidas (content-visibility): ao entrar, refaz o que depende do tamanho
+    requestAnimationFrame(() => {
+      if (id === 'curadoria') updateImNav();
+      $$('.count', scene).forEach((el) => { if (!el.style.minWidth || el.style.minWidth === '0px') { el.style.minWidth = `${el.getBoundingClientRect().width}px`; } });
+    });
     document.title = id === 'inicio' ? `${BRAND} — Corretor de imóveis` : `${scene.dataset.title} — ${BRAND}`;
     try { history.replaceState(null, '', `#${id}`); } catch (_) { /* file:// em alguns navegadores */ }
 
@@ -991,8 +996,9 @@
   addEventListener('resize', moveGlider);
   document.fonts?.ready.then(moveGlider);
 
-  // primeira cena (a animação de entrada só roda depois do login)
-  scenes[current].classList.add('is-active');
+  // primeira cena (a animação de entrada só roda depois do login).
+  // O HTML já chega com o Início ativo, para a foto aparecer antes do script; aqui vale a cena do endereço.
+  scenes.forEach((s, k) => s.classList.toggle('is-active', k === current));
   sceneChanged();
 
   function playIntro() {
@@ -1011,6 +1017,7 @@
 
   let MODO_TESTE = true;  // vira false quando o Supabase responde
   let sbAuth = null;      // cliente supabase-js das contas
+  let authCfg = null;     // { url, anonKey }: o Supabase está configurado (o cliente pode ainda não ter carregado)
   let googleOn = false;   // "Entrar com o Google" ligado em Configurações do painel
   let googleSb = false;   // e ativado no Supabase (o botão só aparece com os dois)
   let recovering = false; // chegou pelo link de "criar senha nova"
@@ -1022,6 +1029,9 @@
   const LOCK_MINUTES = [15, 20]; // 1ª pausa 15 min; as seguintes 20 min
 
   const gate = $('#gate');
+  const warmAuth = () => { if (!MODO_TESTE) ensureAuth(); };
+  gate.addEventListener('pointerdown', (e) => { if (e.target.closest('[data-auth], .ga-card, #glStart, #glGoogle')) warmAuth(); });
+  gate.addEventListener('focusin', (e) => { if (e.target.closest('.ga-card, #glStart')) warmAuth(); });
   let gated = true;
   let session = null;
   try { session = JSON.parse(sessionStorage.getItem(SESSION_KEY) || 'null'); } catch (_) { /* sem armazenamento */ }
@@ -1288,7 +1298,7 @@
       return;
     }
     if (!isEmail(email) || !pass) { say(msg, 'Digite seu e-mail e sua senha.'); return; }
-    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
+    if (!(await ensureAuth())) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
     busyButton(form, true, 'Entrando…');
     const { data, error } = await sbAuth.auth.signInWithPassword({ email, password: pass });
     if (error) {
@@ -1374,7 +1384,7 @@
     if (!isEmail(email)) { say(msg, 'Digite um e-mail válido.'); $('#s-email').focus(); return; }
     if (!strongEnough(pass)) { say(msg, 'A senha precisa ter pelo menos 8 caracteres, com letras e números.'); $('#s-senha').focus(); return; }
     if (pass !== $('#s-senha2').value) { say(msg, 'As duas senhas não são iguais.'); $('#s-senha2').focus(); return; }
-    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
+    if (!(await ensureAuth())) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
     busyButton(form, true, 'Criando conta…');
     const { data, error } = await sbAuth.auth.signUp({ email, password: pass, options: { data: { nome }, emailRedirectTo: siteUrl() } });
     const taken = () => {
@@ -1454,7 +1464,7 @@
   });
 
   /* Entrar com o Google (pelo Supabase; aparece quando está ligado em Configurações do painel) */
-  const googleAvail = () => MODO_TESTE || (googleOn && googleSb && !!sbAuth);
+  const googleAvail = () => MODO_TESTE || (googleOn && googleSb && !!authCfg);
   function syncGoogle() {
     const on = googleAvail();
     $('#glGoogle').hidden = !on;
@@ -1470,6 +1480,7 @@
       return;
     }
     if (!googleAvail()) { say(msg, 'O login com Google ainda não foi ativado. Use e-mail e senha.'); return; }
+    if (!(await ensureAuth())) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
     const { error } = await sbAuth.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: siteUrl() } });
     if (error) say(msg, authError(error));
   });
@@ -1589,7 +1600,7 @@
 
   // "Esqueceu a senha?": envia o link por e-mail; ao voltar pelo link, cria a senha nova
   async function realForgot(form, msg) {
-    if (!sbAuth) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
+    if (!(await ensureAuth())) { say(msg, 'Sem conexão com o servidor. Confira sua internet e recarregue a página.'); return; }
     if (!recovering) {
       const email = $('#f2-email').value.trim();
       if (!isEmail(email)) { say(msg, 'Digite o e-mail da sua conta.'); return; }
@@ -1627,7 +1638,7 @@
   // reenviar o e-mail de confirmação da conta
   gate.addEventListener('click', async (e) => {
     const b = e.target.closest('[data-resend]');
-    if (!b || !sbAuth) return;
+    if (!b || !(await ensureAuth())) return;
     const msg = b.closest('.ga-msg');
     b.disabled = true;
     const { error } = await sbAuth.auth.resend({ type: 'signup', email: b.dataset.resend, options: { emailRedirectTo: siteUrl() } });
@@ -1648,6 +1659,29 @@
 
   // decide o modo (Supabase ou teste) e recupera a sessão de quem já tinha entrado
   let gateNotice = '';
+  // carrega o supabase-js e cria o cliente das contas (uma vez só); null se não deu
+  let authLoading = null;
+  function ensureAuth() {
+    if (sbAuth) return Promise.resolve(sbAuth);
+    if (!authCfg) return Promise.resolve(null);
+    if (!authLoading) {
+      authLoading = (async () => {
+        if (!window.supabase?.createClient) await loadScript('vendor/supabase.js');
+        // devolve ao endereço o retorno do link, para o supabase-js ler (a navegação por cenas tinha trocado)
+        if (AUTH_HASH) { try { history.replaceState(null, '', `${location.pathname}${location.search}${AUTH_HASH}`); } catch (_) { /* ignora */ } }
+        sbAuth = window.supabase.createClient(authCfg.url, authCfg.anonKey, {
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'morada-auth' },
+        });
+        sbAuth.auth.onAuthStateChange((event) => {
+          if (event === 'PASSWORD_RECOVERY') recovering = true;
+          if (event === 'SIGNED_OUT') setTimeout(signedOutElsewhere, 0);
+        });
+        return sbAuth;
+      })().catch(() => { authLoading = null; return null; });
+    }
+    return authLoading;
+  }
+
   async function initAuth() {
     const cfg = (await window.moradaConfig?.()) ?? null;
     if (!cfg) { applyMode(); return; } // sem Supabase: modo teste
@@ -1659,12 +1693,17 @@
     cart = [];
     applyMode();
     if (cfg.error) return; // sem conexão: a entrada avisa ao tentar entrar
-    try {
-      if (!window.supabase?.createClient) await loadScript('vendor/supabase.js');
-    } catch (_) {
-      return;
-    }
+    authCfg = cfg;
     authUrl = cfg.url;
+    syncGoogle();
+    // Google desativado no Supabase: esconde o botão (se não deu para perguntar, vale o painel)
+    window.moradaGoogleAtivo?.().then((on) => { googleSb = on !== false; syncGoogle(); });
+    // Sem conta salva neste aparelho e sem link de e-mail: a biblioteca das contas (supabase-js)
+    // só carrega quando a pessoa for entrar ou criar conta. A primeira visita fica mais leve.
+    let saved = false;
+    try { saved = !!localStorage.getItem('morada-auth'); } catch (_) { /* sem armazenamento */ }
+    if (!AUTH_HASH && !saved) return;
+    if (!(await ensureAuth())) return;
     const params = new URLSearchParams(AUTH_HASH.slice(1));
     recovering = params.get('type') === 'recovery';
     if (params.get('error_description')) {
@@ -1673,17 +1712,6 @@
         : `Não deu certo: ${params.get('error_description')}`;
     }
     // devolve ao endereço o retorno do link, para o supabase-js ler (a navegação por cenas tinha trocado)
-    if (AUTH_HASH) { try { history.replaceState(null, '', `${location.pathname}${location.search}${AUTH_HASH}`); } catch (_) { /* ignora */ } }
-    sbAuth = window.supabase.createClient(cfg.url, cfg.anonKey, {
-      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true, storageKey: 'morada-auth' },
-    });
-    sbAuth.auth.onAuthStateChange((event) => {
-      if (event === 'PASSWORD_RECOVERY') recovering = true;
-      if (event === 'SIGNED_OUT') setTimeout(signedOutElsewhere, 0);
-    });
-    syncGoogle();
-    // Google desativado no Supabase: esconde o botão (se não deu para perguntar, vale o painel)
-    window.moradaGoogleAtivo?.().then((on) => { googleSb = on !== false; syncGoogle(); });
     let user = null;
     try {
       const { data } = await sbAuth.auth.getSession();
@@ -2022,6 +2050,7 @@
     const b = e.target.closest('[data-ask]');
     if (!b) return;
     closeAsk(true);
+    warmAuth();
     showGate('auth');
     setAuth(b.dataset.ask);
   });
@@ -2639,10 +2668,7 @@
   }
   if (session?.guest) document.body.classList.add('is-guest');
   if (session?.email || session?.guest) gate.hidden = true;
-  const pageLoaded = new Promise((resolve) => {
-    if (document.readyState === 'complete') resolve();
-    else addEventListener('load', resolve, { once: true });
-  });
+  const fontsReady = document.fonts?.ready?.catch(() => {}) || Promise.resolve();
   const wait = (ms) => new Promise((r) => setTimeout(r, reduceMotion ? 0 : ms));
   const authFirst = initAuth().catch((err) => console.warn('Morada: contas indisponíveis.', err));
   const signedIn = () => !!(session?.uid || session?.email);
@@ -2661,7 +2687,8 @@
       showGate();
     }
   }
-  Promise.race([Promise.all([pageLoaded, wait(1200), catalogFirst, authFirst]), wait(2500)]).then(() => {
+  // a abertura espera só o essencial (fontes, imóveis e conta), no máximo 1,3 s; as fotos continuam chegando depois
+  Promise.race([Promise.all([fontsReady, wait(400), catalogFirst, authFirst]), wait(1300)]).then(() => {
     booted = true;
     const pre = $('#preloader');
     pre.classList.add('is-done');
@@ -2675,4 +2702,8 @@
     if (session?.uid && gated) { enterSite(session.email); return; }
     if (!MODO_TESTE && !gated && !signedIn() && !session?.guest) showGate();
   });
-})();
+};
+
+// Deixa o navegador desenhar a primeira tela (carregamento, entrada e foto) antes de montar o resto.
+if (document.visibilityState === 'visible') requestAnimationFrame(() => setTimeout(moradaApp, 0));
+else setTimeout(moradaApp, 0);

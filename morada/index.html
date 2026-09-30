@@ -22,7 +22,8 @@
   <link rel="preload" href="fonts/sacramento-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="assets/casa.webp" as="image" />
+  <link rel="preload" as="image" href="assets/hero-noite-m.webp" imagesrcset="assets/hero-noite-m-900.webp 900w, assets/hero-noite-m.webp 1343w" imagesizes="62vh" media="(max-width: 900px), (max-aspect-ratio: 1/1)" fetchpriority="high" />
+  <link rel="preload" as="image" href="assets/hero-noite-960.webp" imagesrcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" imagesizes="84vw" media="(min-width: 901px) and (min-aspect-ratio: 1001/1000)" fetchpriority="high" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body class="is-gated" data-tone="dark">
@@ -62,7 +63,7 @@
 
   <!-- ================= Entrada: apresentação + acesso à conta ================= -->
   <div class="gate" id="gate" data-view="landing" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
-    <div class="gate-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="84vw" width="1863" height="844" alt="" /></div>
+    <div class="gate-bg" aria-hidden="true"><picture><source media="(max-width: 900px), (max-aspect-ratio: 1/1)" srcset="assets/hero-noite-m-900.webp 900w, assets/hero-noite-m.webp 1343w" sizes="62vh" width="1343" height="754" /><img src="assets/hero-noite-960.webp" srcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="84vw" width="1863" height="844" alt="" fetchpriority="high" /></picture></div>
 
     <header class="gate-top g-rv" style="--d: .1s">
       <span class="gate-logo" role="img" aria-label="Artur Guimarães">
@@ -379,12 +380,12 @@
   <main class="scenes">
 
     <!-- ================= 01 · Início ================= -->
-    <section class="scene hero" id="inicio" data-title="Início" aria-label="Início">
+    <section class="scene hero is-active" id="inicio" data-title="Início" aria-label="Início">
       <!-- Hero do celular: foto em tela cheia, texto em cima e painel de vidro embaixo -->
       <div class="m-hero">
         <div class="m-sky" aria-hidden="true"></div>
         <p class="m-word" aria-hidden="true">AG</p>
-        <img class="m-house" src="assets/hero-noite-m.webp" width="1343" height="754" alt="" aria-hidden="true" fetchpriority="high" />
+        <picture><source media="(min-width: 901px) and (min-aspect-ratio: 1001/1000)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><img class="m-house" src="assets/hero-noite-m.webp" srcset="assets/hero-noite-m-900.webp 900w, assets/hero-noite-m.webp 1343w" sizes="62vh" width="1343" height="754" alt="" aria-hidden="true" fetchpriority="high" /></picture>
         <div class="m-shade" aria-hidden="true"></div>
 
         <div class="m-copy">
@@ -418,7 +419,7 @@
       </div>
 
       <!-- Foto noturna da casa com o monograma AG (tela inteira no computador) -->
-      <img class="hero-bg" src="assets/hero-noite.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="100vw" width="1863" height="844" alt="Casa térrea à noite com luzes quentes, jardim tropical, piscina e o monograma AG dourado" fetchpriority="high" />
+      <picture><source media="(max-width: 900px), (max-aspect-ratio: 1/1)" srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" /><img class="hero-bg" src="assets/hero-noite.webp" srcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="100vw" width="1863" height="844" alt="Casa térrea à noite com luzes quentes, jardim tropical, piscina e o monograma AG dourado" /></picture>
 
       <div class="intro rv" style="--d: .55s">
         <p class="intro-eyebrow">Seu novo capítulo começa aqui</p>
@@ -603,9 +604,9 @@
       <svg class="ar-deco" viewBox="0 0 400 260" aria-hidden="true"><path d="M20 250V120L200 18l180 102v130M20 250h360M92 250V150h72v100M250 250v-76h70v76M200 18v36" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
 
       <figure class="ar-photo-wrap">
-        <!-- Foto do Arthur: salve como assets/arthur.jpg (retrato, de preferência 4:5). Sem o arquivo, aparece a moldura com o monograma. -->
+        <!-- Foto do Arthur: salve como assets/arthur.webp (retrato, de preferência 4:5). Sem o arquivo, aparece a moldura com o monograma. -->
         <div class="ar-photo">
-          <img class="ar-img" src="assets/arthur.jpg" alt="Artur Guimarães, proprietário e corretor" onerror="this.closest('.ar-photo').classList.add('is-empty'); this.remove();" />
+          <img class="ar-img" src="assets/arthur.webp" width="763" height="762" loading="lazy" fetchpriority="low" alt="Artur Guimarães, proprietário e corretor" onerror="this.closest('.ar-photo').classList.add('is-empty'); this.remove();" />
           <div class="ar-empty" aria-hidden="true">
             <span class="ar-mono">AG</span>
             <span class="ar-empty-line"></span>
@@ -634,7 +635,7 @@
 
     <!-- ================= 06 · Avaliações ================= -->
     <section class="scene avaliacoes" id="avaliacoes" data-title="Avaliações" data-tone="dark" aria-label="Avaliações">
-      <div class="av-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="82vw" width="1863" height="844" loading="lazy" alt="" /></div>
+      <div class="av-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="(max-width: 900px) 100vw, 82vw" width="1863" height="844" loading="lazy" fetchpriority="low" alt="" /></div>
 
       <div class="av-score">
         <p class="eyebrow rv" style="--d: .35s">Avaliações</p>
@@ -663,7 +664,7 @@
 
     <!-- ================= 07 · Contato ================= -->
     <section class="scene contato" id="contato" data-title="Contato" data-tone="dark" aria-label="Contato">
-      <div class="ct-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="118vw" width="1863" height="844" loading="lazy" alt="" /></div>
+      <div class="ct-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-960.webp 960w, assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="(max-width: 900px) 100vw, 118vw" width="1863" height="844" loading="lazy" fetchpriority="low" alt="" /></div>
 
       <div class="ct-copy">
         <p class="ct-eyebrow rv" style="--d: .35s">Fale com a gente</p>
