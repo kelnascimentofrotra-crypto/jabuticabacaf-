@@ -709,8 +709,9 @@ const SITE_CONFIG = {
   const placeIndicator = (link) => {
     if (!indicator) return;
     if (!link || !desktopNavMQ.matches) { indicator.classList.remove('is-visible'); return; }
-    indicator.style.setProperty('--x', `${link.offsetLeft}px`);
-    indicator.style.setProperty('--w', `${link.offsetWidth}px`);
+    // A linha ultrapassa um pouco o texto do item, para ler claramente como linha.
+    indicator.style.setProperty('--x', `${link.offsetLeft - 6}px`);
+    indicator.style.setProperty('--w', `${link.offsetWidth + 12}px`);
     indicator.classList.add('is-visible');
   };
 

@@ -90,6 +90,12 @@ precisar trocar, altere apenas o `src`/`srcset` da imagem no card.
 | 03 — Gilvan Barbearia Fashion Man | `instalacao-aerea-residencial.webp` |
 | 04 — Telma Freitas | `instalacao-aerea-telhado-metalico.webp` |
 
+## Cache (versão dos arquivos)
+
+O `index.html` carrega `styles.css?v=...` e `main.js?v=...`. Ao alterar o CSS ou o JS, troque o valor de
+`v` (qualquer texto novo serve) para que os navegadores baixem a versão atualizada em vez da guardada
+em cache.
+
 ## Imagens
 
 Cada foto tem duas versões: original (até ~1120 px) e `-640` para telas pequenas, servidas via `srcset`.
