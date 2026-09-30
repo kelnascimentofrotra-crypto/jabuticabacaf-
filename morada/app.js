@@ -896,7 +896,7 @@
   const mobileMQ = matchMedia('(max-width: 900px), (max-aspect-ratio: 1/1)');
   function updateTone() {
     const scene = scenes[current];
-    let tone = scene.dataset.tone || 'light';
+    let tone = scene.dataset.tone || 'dark'; // paleta preto e dourado: tudo escuro
     if (scene.id === 'inicio' && mobileMQ.matches) tone = 'dark';
     document.body.dataset.tone = tone;
   }

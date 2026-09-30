@@ -30,6 +30,23 @@
   let siteName = 'Artur Guimarães';
   // "Morada" era o nome de exemplo: com ele, vale o nome da marca
   const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !/^morada$/i.test(v) ? v : ''; };
+  // Tema: escuro (preto e dourado) ou claro. O botão de sol troca e a escolha fica salva neste aparelho.
+  const THEME_KEY = 'morada:admin-tema';
+  const isLight = () => document.documentElement.dataset.theme === 'light';
+  const themeLabel = () => (isLight() ? 'Mudar para o modo escuro' : 'Mudar para o modo claro');
+  const themeBtn = (cls = '') => `<button class="icon-btn theme-btn ${cls}" type="button" data-theme-toggle aria-label="${themeLabel()}" title="${themeLabel()}">${icon(isLight() ? 'moon' : 'sun')}</button>`;
+  function toggleTheme() {
+    const light = !isLight();
+    if (light) document.documentElement.dataset.theme = 'light';
+    else delete document.documentElement.dataset.theme;
+    try { localStorage.setItem(THEME_KEY, light ? 'claro' : 'escuro'); } catch (_) { /* sem armazenamento: vale só agora */ }
+    $$('[data-theme-toggle]').forEach((b) => {
+      b.innerHTML = icon(light ? 'moon' : 'sun');
+      b.setAttribute('aria-label', themeLabel());
+      b.title = themeLabel();
+    });
+  }
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
   const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
@@ -318,6 +335,7 @@
             <header class="top">
               <button class="icon-btn top-menu" type="button" aria-label="Abrir menu" aria-controls="side" aria-expanded="false">${icon('menu')}</button>
               <a class="top-name" href="/admin" data-link aria-label="Início do painel">${BRAND_HTML}</a>
+              ${themeBtn()}
               <a class="top-user" href="/admin/minha-conta" data-link title="Minha conta e senha">
                 <span class="avatar" aria-hidden="true"></span>
                 <span class="top-who"><b>Administrador</b><small class="top-mail"></small></span>
@@ -487,6 +505,7 @@
     sessionStorage.removeItem('morada:admin-aviso');
     root.innerHTML = `
       <main class="login">
+        ${themeBtn('theme-float')}
         <section class="login-card" aria-labelledby="lgTitle">
           <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
           <h1 id="lgTitle">PAINEL ADMINISTRATIVO</h1>
@@ -1856,7 +1875,7 @@
   let recoveryUser = null;
   let recoveryError = '';
   function viewNovaSenha(root) {
-    const card = (inner) => `<main class="login"><section class="login-card" aria-labelledby="nsTitle">
+    const card = (inner) => `<main class="login">${themeBtn('theme-float')}<section class="login-card" aria-labelledby="nsTitle">
       <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
       ${inner}
       <a class="login-back" href="/admin/login" data-link>${icon('left')}<span>Voltar para entrar</span></a>
@@ -2064,7 +2083,7 @@
      ========================================================= */
 
   function fatal(title, text, retry) {
-    app.innerHTML = `<main class="login"><section class="login-card">${stateBox('error', title, text, retry ? '<button class="btn btn-primary" type="button" data-retry>Tentar de novo</button>' : '')}<a class="login-back" href="/">${icon('left')}<span>Voltar para o site</span></a></section><div class="login-art" aria-hidden="true"></div></main>`;
+    app.innerHTML = `<main class="login">${themeBtn('theme-float')}<section class="login-card">${stateBox('error', title, text, retry ? '<button class="btn btn-primary" type="button" data-retry>Tentar de novo</button>' : '')}<a class="login-back" href="/">${icon('left')}<span>Voltar para o site</span></a></section><div class="login-art" aria-hidden="true"></div></main>`;
     if (retry) $('[data-retry]', app).addEventListener('click', () => location.reload());
   }
 

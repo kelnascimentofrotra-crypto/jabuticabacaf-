@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Artur Guimarães — Corretor de imóveis</title>
   <meta name="description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor Artur Guimarães. Vamos encontrar a sua morada." />
-  <meta name="theme-color" content="#efefed" />
+  <meta name="theme-color" content="#0a0908" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
   <meta property="og:site_name" content="Artur Guimarães" />
@@ -25,7 +25,7 @@
   <link rel="preload" href="assets/casa.webp" as="image" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="is-gated" data-tone="light">
+<body class="is-gated" data-tone="dark">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-5 5 5-5 5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z" fill="var(--heart-fill, none)" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
@@ -62,7 +62,7 @@
 
   <!-- ================= Entrada: apresentação + acesso à conta ================= -->
   <div class="gate" id="gate" data-view="landing" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
-    <div class="gate-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
+    <div class="gate-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="84vw" width="1863" height="844" alt="" /></div>
 
     <header class="gate-top g-rv" style="--d: .1s">
       <span class="gate-logo" role="img" aria-label="Artur Guimarães">
@@ -384,7 +384,7 @@
       <div class="m-hero">
         <div class="m-sky" aria-hidden="true"></div>
         <p class="m-word" aria-hidden="true">AG</p>
-        <img class="m-house" src="assets/casa.webp" alt="" aria-hidden="true" />
+        <img class="m-house" src="assets/hero-noite-m.webp" width="1343" height="754" alt="" aria-hidden="true" fetchpriority="high" />
         <div class="m-shade" aria-hidden="true"></div>
 
         <div class="m-copy">
@@ -417,11 +417,14 @@
         </div>
       </div>
 
+      <!-- Foto noturna da casa com o monograma AG (tela inteira no computador) -->
+      <img class="hero-bg" src="assets/hero-noite.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="100vw" width="1863" height="844" alt="Casa térrea à noite com luzes quentes, jardim tropical, piscina e o monograma AG dourado" fetchpriority="high" />
+
       <div class="intro rv" style="--d: .55s">
         <p class="intro-eyebrow">Seu novo capítulo começa aqui</p>
         <h1 class="intro-title">Vamos encontrar <br />a sua <em>morada</em></h1>
         <div class="intro-actions">
-          <a class="btn btn-dark" href="#curadoria" data-go="curadoria">Ver imóveis <svg><use href="#i-arrow" /></svg></a>
+          <a class="btn btn-gold-line" href="#curadoria" data-go="curadoria">Ver imóveis <svg><use href="#i-arrow" /></svg></a>
           <span class="scroll-hint" aria-hidden="true"><i></i>Role para explorar</span>
         </div>
       </div>
@@ -430,10 +433,6 @@
       <p class="title title--ag" aria-hidden="true"><span style="--i: 0">A</span><span style="--i: 1">G</span></p>
 
       <div class="media">
-        <div class="sky" aria-hidden="true"></div>
-        <!-- A mesma foto em duas camadas: uma presa ao card, outra só com o que passa do topo (telhado sobre o "AG"). -->
-        <div class="house house--in"><img src="assets/casa.webp" alt="Casa térrea com laje de concreto, pilar de pedra, jardim tropical e piscina" /></div>
-        <div class="house house--out" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
         <div class="badge rv" style="--d: 1.6s">
           <svg class="sparkle" aria-hidden="true"><use href="#i-sparkle" /></svg>
@@ -635,7 +634,7 @@
 
     <!-- ================= 06 · Avaliações ================= -->
     <section class="scene avaliacoes" id="avaliacoes" data-title="Avaliações" data-tone="dark" aria-label="Avaliações">
-      <div class="av-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
+      <div class="av-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="82vw" width="1863" height="844" loading="lazy" alt="" /></div>
 
       <div class="av-score">
         <p class="eyebrow rv" style="--d: .35s">Avaliações</p>
@@ -664,7 +663,7 @@
 
     <!-- ================= 07 · Contato ================= -->
     <section class="scene contato" id="contato" data-title="Contato" data-tone="dark" aria-label="Contato">
-      <div class="ct-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
+      <div class="ct-bg" aria-hidden="true"><img src="assets/hero-noite-1280.webp" srcset="assets/hero-noite-1280.webp 1280w, assets/hero-noite.webp 1863w" sizes="118vw" width="1863" height="844" loading="lazy" alt="" /></div>
 
       <div class="ct-copy">
         <p class="ct-eyebrow rv" style="--d: .35s">Fale com a gente</p>
