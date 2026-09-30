@@ -63,28 +63,68 @@ const SITE_CONFIG = {
     if (value) value.textContent = c.label;
   });
 
+  /* ---------- Janelas modais ----------
+   * Usa <dialog> nativo; em navegadores sem suporte (ex.: iOS antigo) abre a janela
+   * manualmente, com fundo escurecido, Esc e clique fora para fechar.
+   */
+  const root = document.documentElement;
+  const nativeDialog = typeof document.createElement('dialog').showModal === 'function';
+  if (!nativeDialog) root.classList.add('no-dialog');
+  let lastFocus = null;
+
+  const isOpen = (el) => !!el && el.hasAttribute('open');
+  const openModal = (el) => {
+    if (!el) return false;
+    lastFocus = document.activeElement;
+    if (nativeDialog) {
+      el.showModal();
+    } else {
+      el.setAttribute('open', '');
+      root.classList.add('modal-open');
+      const first = $('[autofocus]', el) || $('input, button, a[href]', el);
+      if (first) first.focus();
+    }
+    root.style.overflow = 'hidden';
+    return true;
+  };
+  const closeModal = (el) => {
+    if (!isOpen(el)) return;
+    if (nativeDialog) {
+      el.close();
+    } else {
+      el.removeAttribute('open');
+      root.classList.remove('modal-open');
+      el.dispatchEvent(new Event('close'));
+      if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+  };
+  const allDialogs = $$('dialog');
+  allDialogs.forEach((el) => {
+    el.addEventListener('close', () => { if (!allDialogs.some(isOpen)) root.style.overflow = ''; });
+    el.addEventListener('click', (e) => { if (e.target === el) closeModal(el); });
+  });
+  if (!nativeDialog) {
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') allDialogs.filter(isOpen).forEach(closeModal); });
+    document.addEventListener('click', (e) => { if (e.target === document.body) allDialogs.filter(isOpen).forEach(closeModal); });
+  }
+
   /* ---------- Modal de orçamento ---------- */
   const dialog = $('[data-quote]');
   const form = $('[data-quote-form]');
   const status = $('[data-quote-status]');
-  const canDialog = !!(dialog && typeof dialog.showModal === 'function');
 
   const openQuote = (tipo) => {
-    if (!canDialog) return false;
+    if (!dialog) return false;
     if (tipo && form) {
       const radio = $$('input[name="tipo"]', form).find((r) => r.value === tipo);
       if (radio) radio.checked = true;
     }
     if (status) status.textContent = '';
-    dialog.showModal();
-    document.documentElement.style.overflow = 'hidden';
-    return true;
+    return openModal(dialog);
   };
 
-  if (canDialog) {
-    dialog.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
-    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
-    $$('[data-quote-close]', dialog).forEach((b) => b.addEventListener('click', () => dialog.close()));
+  if (dialog) {
+    $$('[data-quote-close]', dialog).forEach((b) => b.addEventListener('click', () => closeModal(dialog)));
   }
 
   if (form) {
@@ -253,8 +293,12 @@ const SITE_CONFIG = {
   const searchAction = $('[data-search-action]');
   const searchActionText = $('[data-search-action-text]');
   const searchWa = $('[data-search-wa]');
+  const searchNotice = $('[data-search-notice]');
+  const searchNoticeTitle = $('[data-search-notice-title]');
+  const searchNoticeText = $('[data-search-notice-text]');
+  const searchNoticeWa = $('[data-search-notice-wa]');
 
-  if (searchDialog && searchInput && searchResults && typeof searchDialog.showModal === 'function') {
+  if (searchDialog && searchInput && searchResults) {
     const norm = (str) => String(str || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
     const words = (str) => norm(str).split(/[^a-z0-9]+/).filter(Boolean);
     const esc = (str) => String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -329,7 +373,14 @@ const SITE_CONFIG = {
       ['Contato e orçamento', 'WhatsApp (94) 9124-3878', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
     ].map(([title, desc, href, kw]) => ({ type: 'section', title, desc, href, words: words(`${title} ${kw}`) }));
 
-    const STOP = new Set('a o e as os de da do das dos um uma uns umas para pra pro com sem no na nos nas em por que qual quais meu minha seu sua eu quero preciso tem ter ser mes mensal mensais por kwh kw w reais r'.split(' '));
+    const STOP = new Set(('a o e as os de da do das dos um uma uns umas para pra pro com sem no na nos nas em por que qual quais ' +
+      'meu minha seu sua eu quero queria preciso gostaria tem tenho ter ser mes mensal mensais kwh kw w reais r ' +
+      'comprar compra saber ver mostrar melhor melhores bom boa tipo modelo modelos marca marcas algum alguma ' +
+      'voces vcs voce site aqui favor ola oi bom dia tarde noite').split(' '));
+    // Palavras de intenção (preço, ordem, orientação…) já interpretadas — não contam como "não encontrado".
+    const INTENT = new Set(('preco precos valor valores custa custo quanto investimento barato barata baratos baratas ' +
+      'economico economica maior maiores menor potente grande conta fatura boleto luz ate acima abaixo partir ' +
+      'minimo maximo menos mais leste oeste').split(' '));
     const KIT_WORD = /^(placas?|paineis|painel|modulos?|kits?|ronma|auxsol|inversor(es)?|fotovoltaic\w*|solar(es)?|energia|sistemas?|usina)$/;
 
     // ----- Interpretação da busca -----
@@ -337,7 +388,7 @@ const SITE_CONFIG = {
     const parse = (raw) => {
       const s = norm(raw).replace(/\s+/g, ' ').trim();
       const p = {
-        raw: raw.trim(), kwh: null, placas: null, kw: null, price: null, priceMax: null, priceMin: null,
+        raw: raw.trim(), kwh: null, placas: null, kw: null, watts: null, price: null, priceMax: null, priceMin: null,
         bill: /\b(conta|fatura|boleto)\b/.test(s),
         tag: /leste|oeste/.test(s),
         cheap: /barat|mais em conta|menor (preco|valor)|economic/.test(s),
@@ -359,7 +410,7 @@ const SITE_CONFIG = {
         else if (unit === 'mil' || unit === 'k') setPrice(n * 1000);
         else if (unit === 'reais' || rs) setPrice(n);
         else if (unit && /^(placas?|paineis|painel|modulos?)$/.test(unit)) p.placas = n;
-        else if (unit && /^(w|watts?)$/.test(unit)) p.kitIntent = true;
+        else if (unit && /^(w|watts?)$/.test(unit)) { if (n === 620) p.kitIntent = true; else p.watts = n; }
         else if (n === 620 && /ronma|placa|painel|modulo/.test(s)) p.kitIntent = true;
         else if (cmp && n < 100) setPrice(n * 1000);
         else if (n >= 3000) setPrice(n);
@@ -429,22 +480,49 @@ const SITE_CONFIG = {
         return { item: sct, sc };
       }).filter((r) => r.sc >= 35).sort((a, b) => b.sc - a.sc).slice(0, 3);
 
-      return { rec, kitsOut, projectsOut, faqOut, sectionsOut };
+      // ----- O que a tabela não tem -----
+      const kwSet = [...new Set(kitIndex.map((k) => k.kw))].sort((a, b) => a - b);
+      const kwMissing = p.kw != null && !kwSet.includes(p.kw);
+      const exactPlacas = p.placas != null && kitIndex.some((k) => k.placas === p.placas);
+      const unmatched = empty ? [] : p.tokens.filter((t) => t.length >= 3 && !INTENT.has(t) &&
+        !kitIndex.some((k) => hits(t, k.words)) && !projectIndex.some((pr) => hits(t, pr.words)) &&
+        !faqIndex.some((f) => hits(t, f.words) || hits(t, f.answer)) && !sectionIndex.some((sc) => hits(t, sc.words)));
+      const strong = p.kwh || exactPlacas || (p.kw && !kwMissing) || p.price || p.priceMax || p.priceMin || p.tag ||
+        projectsOut.length || faqOut.length || sectionsOut.length;
+      const cheapest = kitIndex.reduce((a, b) => (b.price < a.price ? b : a));
+      const last = kitIndex[kitIndex.length - 1];
+      const fmtKw = (n) => `${String(n).replace('.', ',')}kW`;
+      const kwText = kwSet.length > 1 ? `${kwSet.slice(0, -1).map(fmtKw).join(', ')} e ${fmtKw(kwSet[kwSet.length - 1])}` : fmtKw(kwSet[0]);
+
+      let notice = null;
+      if (p.watts) notice = { missing: true, title: 'Não temos esse modelo', text: `Não trabalhamos com placas de ${fmtInt(p.watts)}W — os kits da Mundo Solar usam placas RONMA 620W.` };
+      else if (kwMissing) notice = { missing: true, title: 'Não temos esse modelo', text: `Não temos kit com inversor de ${fmtKw(p.kw)} — os kits usam inversores AUXSOL de ${kwText}.` };
+      else if (unmatched.length && !strong) notice = { missing: true, title: 'Não temos esse modelo', text: `Não encontramos “${unmatched.join(' ')}” na tabela Mundo Solar.` };
+      else if (p.priceMax && p.priceMax < cheapest.price) notice = { missing: true, title: 'Não temos kit nessa faixa de valor', text: `O kit de menor valor da tabela é o de ${cheapest.k.kwh} kWh/mês, por ${cheapest.k.preco}.` };
+      else if (p.kwh && p.kwh > last.kwh) notice = { missing: false, title: 'Precisa de um sistema maior?', text: `Para consumos acima de ${last.k.kwh} kWh/mês, a Mundo Solar faz projetos personalizados.` };
+      else if (p.placas != null && !exactPlacas && !p.kwh && !p.kw) notice = { missing: false, title: `Não temos kit com exatamente ${fmtInt(p.placas)} placas`, text: 'Veja abaixo os kits mais próximos.' };
+
+      const total = kitsOut.length + projectsOut.length + faqOut.length + sectionsOut.length;
+      if (!empty && !total && !notice) notice = { missing: true, title: 'Não temos esse modelo', text: `Não encontramos resultados para “${p.raw}”.` };
+      // Quando não temos o que foi pedido, mostra os kits disponíveis como alternativa.
+      if (notice && notice.missing && !kitsOut.length) kitsOut = kitIndex.map((k) => ({ item: k, sc: 1, rec: false }));
+
+      return { rec, kitsOut, projectsOut, faqOut, sectionsOut, notice };
     };
 
     const hintFor = (p, res) => {
       if (!p.raw) return 'Todos os kits da <strong>tabela Mundo Solar</strong>. Digite o seu consumo em kWh para ver o kit mais indicado.';
       const parts = [];
-      if (p.kwh && res.rec) {
-        const last = kitIndex[kitIndex.length - 1];
-        if (p.kwh > last.kwh) parts.push(`Para consumos acima de ${last.k.kwh} kWh/mês, a Mundo Solar faz <strong>projetos personalizados</strong> — fale conosco. O maior kit da tabela é o de ${last.k.kwh} kWh/mês.`);
-        else parts.push(`Consumo de ${fmtInt(p.kwh)} kWh/mês → kit mais indicado: <strong>${res.rec.k.kwh} kWh/mês</strong> por ${res.rec.k.preco}.`);
+      const last = kitIndex[kitIndex.length - 1];
+      if (p.kwh && res.rec && p.kwh <= last.kwh) {
+        parts.push(`Consumo de ${fmtInt(p.kwh)} kWh/mês → kit mais indicado: <strong>${res.rec.k.kwh} kWh/mês</strong> por ${res.rec.k.preco}.`);
       }
+      if (p.kwh > last.kwh) parts.push(`O maior kit da tabela é o de <strong>${last.k.kwh} kWh/mês</strong>.`);
       if (p.placas) {
         const exact = kitIndex.find((k) => k.placas === p.placas);
-        parts.push(exact ? `Kit com <strong>${exact.k.placas}</strong>.` : `Nenhum kit com exatamente ${p.placas} placas — mostrando os mais próximos.`);
+        if (exact) parts.push(`Kit com <strong>${exact.k.placas}</strong>.`);
       }
-      if (p.kw) parts.push(`Inversor AUXSOL de <strong>${String(p.kw).replace('.', ',')}kW</strong>.`);
+      if (p.kw && kitIndex.some((k) => k.kw === p.kw)) parts.push(`Inversor AUXSOL de <strong>${String(p.kw).replace('.', ',')}kW</strong>.`);
       if (p.priceMax) parts.push(`Kits até <strong>${fmtBRL(p.priceMax)}</strong>.`);
       if (p.priceMin) parts.push(`Kits a partir de <strong>${fmtBRL(p.priceMin)}</strong>.`);
       if (p.price) parts.push(`Kits com valor próximo de <strong>${fmtBRL(p.price)}</strong>.`);
@@ -527,7 +605,7 @@ const SITE_CONFIG = {
       const p = parse(searchInput.value);
       const res = search(p);
       const groups = [
-        ['Kits de placas solares', res.kitsOut],
+        [res.notice && res.notice.missing ? 'Kits disponíveis' : 'Kits de placas solares', res.kitsOut],
         ['Projetos realizados', res.projectsOut],
         ['Perguntas frequentes', res.faqOut],
         ['Seções do site', res.sectionsOut],
@@ -545,13 +623,23 @@ const SITE_CONFIG = {
       }).join('');
 
       const total = flat.length;
-      if (!total) {
-        searchHint.innerHTML = `Nenhum resultado para “${esc(p.raw)}”. Tente pelo consumo (ex.: <strong>700 kWh</strong>), pelo número de placas ou pelo valor — ou fale com a Mundo Solar.`;
-        if (searchChips) searchChips.hidden = false;
-      } else {
-        searchHint.innerHTML = hintFor(p, res);
+      const notice = res.notice;
+      searchHint.innerHTML = notice && notice.missing ? '' : hintFor(p, res);
+      if (searchNotice) {
+        searchNotice.hidden = !notice;
+        if (notice) {
+          searchNoticeTitle.textContent = notice.title;
+          searchNoticeText.textContent = notice.text;
+          if (hasWhatsApp) {
+            searchNoticeWa.href = waLink(`Olá, Mundo Solar! Pesquisei por “${p.raw}” no site e gostaria de uma pesquisa mais a fundo. Podem me ajudar?`);
+            searchNoticeWa.target = '_blank';
+            searchNoticeWa.rel = 'noopener';
+          }
+        }
       }
-      if (searchStatus) searchStatus.textContent = total ? `${total} ${total === 1 ? 'resultado' : 'resultados'}` : 'Nenhum resultado';
+      if (searchStatus) {
+        searchStatus.textContent = `${notice ? `${notice.title}. ` : ''}${total} ${total === 1 ? 'resultado' : 'resultados'}`;
+      }
 
       entries = $$('[role="option"]', searchResults).map((el, i) => ({ el, item: flat[i].item }));
       entries.forEach((e, i) => {
@@ -572,8 +660,8 @@ const SITE_CONFIG = {
 
     const go = (entry) => {
       const it = entry.item;
-      searchDialog.close();
-      document.documentElement.style.overflow = '';
+      closeModal(searchDialog);
+      root.style.overflow = '';
       if (it.type === 'kit') {
         selectKit(it.li);
         (desktopMQ.matches ? $('#kits') : it.li).scrollIntoView(scrollOpts(desktopMQ.matches ? 'start' : 'center'));
@@ -593,19 +681,17 @@ const SITE_CONFIG = {
 
     const openSearch = (q = '') => {
       if (body.classList.contains('nav-open')) setMenu(false);
-      if (dialog && dialog.open) dialog.close();
+      closeModal(dialog);
       searchInput.value = q;
       render();
-      searchDialog.showModal();
-      document.documentElement.style.overflow = 'hidden';
+      openModal(searchDialog);
       searchInput.focus();
     };
 
     $$('[data-search-open]').forEach((b) => b.addEventListener('click', () => openSearch()));
-    $$('[data-search-close]', searchDialog).forEach((b) => b.addEventListener('click', () => searchDialog.close()));
-    searchDialog.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
-    searchDialog.addEventListener('click', (e) => { if (e.target === searchDialog) searchDialog.close(); });
+    $$('[data-search-close]', searchDialog).forEach((b) => b.addEventListener('click', () => closeModal(searchDialog)));
     if (searchWa) quoteFallback(searchWa);
+    if (searchNoticeWa) quoteFallback(searchNoticeWa);
     if (searchChips) {
       $$('[data-q]', searchChips).forEach((chip) => chip.addEventListener('click', () => {
         searchInput.value = chip.dataset.q;
@@ -626,7 +712,7 @@ const SITE_CONFIG = {
       const t = e.target;
       const typing = t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName));
       const combo = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k';
-      if ((combo || (e.key === '/' && !typing)) && !searchDialog.open) {
+      if ((combo || (e.key === '/' && !typing)) && !isOpen(searchDialog)) {
         e.preventDefault();
         openSearch();
       }

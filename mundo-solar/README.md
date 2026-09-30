@@ -51,7 +51,9 @@ pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
 ## Pesquisa (lupa)
 
 A lupa do cabeçalho, o campo acima da tabela de kits e os atalhos `/` ou `Ctrl/⌘ + K` abrem a
-pesquisa. Ela lê os dados da própria página (kits, projetos, FAQ) — ao editar a tabela, a busca se
+pesquisa. Quando a pessoa procura algo que não está na tabela (outra marca, outra potência de placa,
+inversor ou faixa de preço inexistente), aparece "Não temos esse modelo" com um botão do WhatsApp que já
+leva o termo pesquisado na mensagem, e os kits disponíveis logo abaixo. Ela lê os dados da própria página (kits, projetos, FAQ) — ao editar a tabela, a busca se
 atualiza sozinha. Entende consumo ("650 kWh" ou só "650" → indica o menor kit que atende), número de
 placas ("10 placas"), inversor ("6kW"), preço ("até 12 mil", "R$ 15.000", "mais barato"),
 "leste oeste", marcas (RONMA, AUXSOL) e palavras-chave, sem diferenciar acentos e tolerando pequenos
@@ -68,13 +70,23 @@ anterior destacado.
 A seção lista os clientes dos projetos, sem frases inventadas. Para publicar depoimentos em texto, use
 somente falas reais, autorizadas pelos clientes.
 
-## Pendente: domínio
+## Hospedagem na Vercel (mundosolar.vercel.app)
 
-Quando o domínio definitivo estiver no ar:
-- em `index.html`, adicione `<link rel="canonical" href="https://SEU-DOMINIO/">` e troque
-  `og:image`/`twitter:image` por URLs absolutas; no JSON-LD, acrescente `"url"`;
-- em `sitemap.xml`, substitua `https://www.seudominio.com.br/`;
-- em `robots.txt`, descomente a linha `Sitemap:`.
+O site já está configurado para `https://mundosolar.vercel.app` (URL canônica, Open Graph, sitemap,
+robots e JSON-LD). O `vercel.json` desta pasta define cabeçalhos de segurança e de cache.
+
+Pelo painel da Vercel (sem linha de comando):
+1. vercel.com → **Add New… → Project** → importe o repositório `jabuticabacaf-` do GitHub.
+2. **Project Name:** `mundosolar` (gera `mundosolar.vercel.app`, se o nome estiver livre).
+3. **Root Directory:** `mundo-solar` · **Framework Preset:** Other · sem Build Command.
+4. A Vercel publica a branch de produção (por padrão `main`). Para publicar esta versão, faça o merge da
+   branch do site na `main` ou, em *Settings → Git → Production Branch*, escolha a branch do site.
+
+Pela linha de comando (com um token da Vercel): dentro desta pasta,
+`npx vercel deploy --prod --name mundosolar --token SEU_TOKEN`.
+
+Se o nome `mundosolar` já estiver em uso na Vercel, o domínio será outro: nesse caso, troque
+`https://mundosolar.vercel.app` pelo domínio real em `index.html`, `sitemap.xml` e `robots.txt`.
 
 ## Projetos
 

@@ -429,6 +429,38 @@ kbd {
 .search__foot span { display: inline-flex; align-items: center; gap: 4px; }
 .search__foot kbd { min-width: 20px; height: 20px; font-size: 10px; padding: 0 5px; }
 
+/* Aviso "Não temos esse modelo" */
+.search__notice {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px;
+  margin: 2px 2px 16px; padding: 18px;
+  border-radius: 16px; border: 1px solid var(--sun-a40);
+  background: linear-gradient(135deg, var(--sun-a14), rgba(245, 181, 31, 0.02) 65%), var(--surface-2);
+}
+.search__notice-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center;
+  background: var(--sun); color: var(--sun-ink);
+}
+.search__notice-icon .icon { width: 22px; height: 22px; stroke-width: 2; }
+.search__notice-title { font-family: var(--font-display); font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+.search__notice-text { font-size: 14px; line-height: 1.55; color: var(--text-2); margin-bottom: 14px; }
+
+/* Botão verde do WhatsApp (texto escuro para manter contraste) */
+.btn--whatsapp {
+  background: #25d366; color: #052e14;
+  box-shadow: 0 10px 28px -14px rgba(37, 211, 102, 0.8);
+}
+.btn--whatsapp:hover { background: #3ae077; box-shadow: 0 0 0 6px rgba(37, 211, 102, 0.16), 0 16px 34px -14px rgba(37, 211, 102, 0.9); }
+
+/* Janelas em navegadores sem <dialog> nativo */
+dialog:not([open]) { display: none; }
+.no-dialog dialog[open] { position: fixed; inset: 0; z-index: 300; height: fit-content; }
+.no-dialog .search[open] { height: auto; bottom: auto; }
+.no-dialog.modal-open body::after {
+  content: ""; position: fixed; inset: 0; z-index: 250;
+  background: rgba(3, 3, 4, 0.72);
+}
+
 .is-found { animation: foundPulse 2s var(--ease); }
 @keyframes foundPulse {
   0% { box-shadow: 0 0 0 0 rgba(245, 181, 31, 0); }
