@@ -177,7 +177,7 @@ svg.flip { transform: scaleX(-1); }
 .btn-light:hover { border-color: var(--gold-hi); color: var(--gold-hi); }
 /* contorno dourado (como o "Ver imóveis" da abertura) */
 .btn-gold-line {
-  height: max(42px, calc(4 * var(--u)));
+  height: max(42px, calc(3.6 * var(--u)));
   padding: 0 calc(2.4 * var(--u)) 0 calc(2.6 * var(--u));
   gap: calc(1.5 * var(--u));
   border: 1.5px solid rgba(214, 171, 114, 0.85);
@@ -526,7 +526,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .intro {
   position: absolute;
   left: 8.6vw;
-  top: calc(8.9 * var(--u));
+  top: calc(8.6 * var(--u));
   width: calc(42 * var(--u));
   z-index: 3;
 }
@@ -542,7 +542,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 }
 .intro-eyebrow::before { content: ""; width: calc(2.8 * var(--u)); height: 2px; background: var(--gold-grad); }
 .intro-title {
-  font-size: calc(4.6 * var(--u));
+  font-size: calc(4.35 * var(--u));
   font-weight: 450;
   line-height: 1.02;
   letter-spacing: -0.045em;
@@ -558,7 +558,7 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
   text-shadow: none;
   filter: drop-shadow(0 2px 14px rgba(214, 171, 114, 0.18));
 }
-.intro-actions { display: flex; align-items: center; gap: calc(2.4 * var(--u)); margin-top: calc(2.2 * var(--u)); }
+.intro-actions { display: flex; align-items: center; gap: calc(2.4 * var(--u)); margin-top: calc(1.6 * var(--u)); }
 .scroll-hint {
   display: flex;
   align-items: center;
@@ -1521,14 +1521,29 @@ img.is-local { object-position: 64% 88%; background: #1b1814; }
   bottom: var(--u);
   display: flex;
   flex-direction: column;
-  gap: calc(1.4 * var(--u));
-  padding: calc(2.6 * var(--u)) calc(2.8 * var(--u));
+  gap: calc(1.15 * var(--u));
+  padding: calc(2.2 * var(--u)) calc(2.8 * var(--u)) calc(2 * var(--u));
   border-radius: calc(1.6 * var(--u));
   background: var(--panel);
   border: 1px solid rgba(214, 171, 114, 0.26);
   box-shadow: 0 calc(0.6 * var(--u)) calc(2.4 * var(--u)) rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 230, 190, 0.05);
 }
-.fl-group { display: grid; gap: calc(0.8 * var(--u)); }
+.fl-group { display: grid; gap: calc(0.65 * var(--u)); }
+/* as opções rolam por dentro se não couberem; o rodapé (resultado e botões) fica sempre inteiro */
+.fl-body {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(214, 171, 114, 0.35) transparent;
+  margin-right: calc(-1 * var(--u));
+  padding-right: var(--u);
+}
+.fl-foot { flex: none; }
 .fl-label { font-size: max(10px, calc(0.8 * var(--u))); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); }
 .fl-chips { gap: calc(0.6 * var(--u)); }
 .fl-label-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--u); }
@@ -1558,7 +1573,7 @@ img.is-local { object-position: 64% 88%; background: #1b1814; }
   justify-content: space-between;
   gap: calc(2 * var(--u));
   margin-top: auto;
-  padding-top: calc(1.8 * var(--u));
+  padding-top: calc(1.4 * var(--u));
   border-top: 1px solid rgba(214, 171, 114, 0.2);
 }
 .fl-result { display: flex; align-items: center; gap: calc(1.2 * var(--u)); min-width: 0; }
@@ -3829,6 +3844,20 @@ dl > div[hidden] { display: none !important; }
 .ct-done-actions .btn { display: inline-flex; align-items: center; gap: 8px; }
 .ct-done-actions .btn-zap svg { width: 18px; height: 18px; }
 
+/* Computador com tela baixa: o Filtro fica mais compacto para caber sem rolar */
+@media (min-width: 901px) and (min-aspect-ratio: 1001/1000) and (max-height: 780px) {
+  .fl-panel { gap: calc(1 * var(--u)); padding-top: calc(2 * var(--u)); padding-bottom: calc(2 * var(--u)); }
+  .fl-group { gap: calc(0.55 * var(--u)); }
+  .fl-chips .chip { height: max(30px, calc(2.8 * var(--u))); }
+  .fl-foot { padding-top: calc(1.2 * var(--u)); }
+}
+
+/* Computador com tela bem baixa: botão da abertura um pouco menor, para não encostar no cartão */
+@media (min-width: 901px) and (min-aspect-ratio: 1001/1000) and (max-height: 640px) {
+  .btn-gold-line { height: 36px; }
+  .intro-actions { margin-top: calc(1.2 * var(--u)); }
+}
+
 /* Celular: Filtro, Arthur e Contato terminam em botão ou formulário.
    Se não couberem (celular pequeno ou letra grande), a cena rola em vez de cortar o fim. */
 @media (max-width: 900px), (max-aspect-ratio: 1/1) {
@@ -3836,6 +3865,7 @@ dl > div[hidden] { display: none !important; }
   .scene.filtro::-webkit-scrollbar, .scene.arthur::-webkit-scrollbar, .scene.contato::-webkit-scrollbar { display: none; }
   .scene.filtro > *, .scene.arthur > *, .scene.contato > * { flex-shrink: 0; }
   .scene.filtro > .fl-panel { min-height: auto; overflow: visible; }
+  .fl-body { overflow: visible; flex: none; margin-right: 0; padding-right: 0; }
 }
 
 /* Celulares mais baixos: sem o parágrafo da abertura, assim o AG da foto fica livre */

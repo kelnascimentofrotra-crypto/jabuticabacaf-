@@ -2182,6 +2182,12 @@ const moradaApp = () => {
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
     const sc = sceneScroller();
     if (sc && !(e.deltaY > 0 ? sc.bottom : sc.top)) return;
+    // área que rola por dentro (opções do Filtro em telas baixas): rola ela primeiro
+    const inner = e.target.closest('.fl-body');
+    if (inner && inner.scrollHeight > inner.clientHeight + 1) {
+      const atEnd = e.deltaY > 0 ? inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 1 : inner.scrollTop <= 1;
+      if (!atEnd) return;
+    }
     e.preventDefault();
     const now = performance.now();
     const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? innerHeight : 1);
@@ -2218,7 +2224,7 @@ const moradaApp = () => {
     touchSc = sceneScroller();
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!gated && !(touchSc && !openName) && !e.target.closest('.detail, .im-grid, .im-bar, .fl-chips, .fl-range, .ig-reels, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!gated && !(touchSc && !openName) && !e.target.closest('.detail, .im-grid, .im-bar, .fl-body, .fl-chips, .fl-range, .ig-reels, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;
