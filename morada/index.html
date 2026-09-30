@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Morada — Casas selecionadas</title>
-  <meta name="description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor. Vamos encontrar a sua morada." />
+  <title>Artur Guimarães — Corretor de imóveis</title>
+  <meta name="description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor Artur Guimarães. Vamos encontrar a sua morada." />
   <meta name="theme-color" content="#efefed" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="pt_BR" />
-  <meta property="og:site_name" content="Morada" />
-  <meta property="og:title" content="Morada — Vamos encontrar a sua morada" />
+  <meta property="og:site_name" content="Artur Guimarães" />
+  <meta property="og:title" content="Artur Guimarães — Vamos encontrar a sua morada" />
   <meta property="og:description" content="Casas, apartamentos e imóveis selecionados para comprar ou alugar, com atendimento direto do corretor." />
   <meta property="og:image" content="https://arturcorretor1.vercel.app/assets/og.jpg" />
   <meta property="og:url" content="https://arturcorretor1.vercel.app/" />
@@ -17,7 +17,10 @@
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23c7784a'/%3E%3Cpath d='M6 12.5 12 7.5l6 5V18H6z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="preload" href="fonts/sacramento-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="assets/casa.webp" as="image" />
   <link rel="stylesheet" href="styles.css" />
@@ -44,6 +47,8 @@
     <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 8h6M9 12h6M9 16h3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.9" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.1" cy="6.9" r="1.2" fill="currentColor"/></symbol>
     <symbol id="i-comment" viewBox="0 0 24 24"><path d="M20 11.5a8 8 0 0 1-11.6 7.1L4 20l1.4-4.2A8 8 0 1 1 20 11.5z" fill="currentColor"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M9.9 5.8A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.9 3.7M6.6 7.2C4 8.9 2.5 12 2.5 12S6 18.5 12 18.5c1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2M4 4l16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M11 12 20 3M16.5 6.5l2.5 2.5M14 9l2 2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     <symbol id="i-dash" viewBox="0 0 24 24"><path d="M7 12h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
     <symbol id="i-sparkle" viewBox="0 0 32 32"><g stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M16 2v28M2 16h28M6.1 6.1l19.8 19.8M25.9 6.1 6.1 25.9M10.6 3.1l10.8 25.8M3.1 21.4l25.8-10.8M3.1 10.6l25.8 10.8M21.4 3.1 10.6 28.9"/></g></symbol>
@@ -51,9 +56,7 @@
 
   <!-- ================= Carregamento ================= -->
   <div class="preloader" id="preloader" aria-hidden="true">
-    <span class="logo-mark">
-      <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-    </span>
+    <span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>
     <span class="preloader-bar"><i></i></span>
   </div>
 
@@ -62,11 +65,8 @@
     <div class="gate-bg" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
     <header class="gate-top g-rv" style="--d: .1s">
-      <span class="gate-logo">
-        <span class="logo-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="logo-word">morada</span>
+      <span class="gate-logo" role="img" aria-label="Artur Guimarães">
+        <span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>
       </span>
       <nav class="gate-top-actions" aria-label="Acesso">
         <button class="gate-link" type="button" data-auth="login">Entrar</button>
@@ -79,7 +79,7 @@
       <!-- Tela 1: apresentação -->
       <div class="gl-slide is-current" data-slide="0" aria-label="Apresentação">
       <div class="gl-copy">
-        <p class="gl-eyebrow g-rv" style="--d: .2s">Conheça a Morada</p>
+        <p class="gl-eyebrow g-rv" style="--d: .2s">Corretor Artur Guimarães</p>
         <h2 class="gl-title g-rv" id="gateTitle" style="--d: .3s">Tudo para encontrar <br />a sua <em>casa</em>, <br />num só lugar.</h2>
         <p class="gl-text g-rv" style="--d: .42s">Imóveis selecionados, filtros certeiros e um curador para ajudar. Veja o que você vai ter lá dentro.</p>
         <div class="gl-ctas g-rv" style="--d: .52s">
@@ -215,7 +215,7 @@
       <div class="ga-side">
         <button class="gate-back" type="button" id="gateBack"><svg class="flip" aria-hidden="true"><use href="#i-arrow" /></svg>Ver a apresentação</button>
         <p class="gl-eyebrow">Área do cliente</p>
-        <h2 class="ga-title">Bem-vindo <br />à <em>Morada</em>.</h2>
+        <h2 class="ga-title">Bem-vindo <br />à sua <em>próxima casa</em>.</h2>
         <p class="gl-text">Entre para ver os imóveis, salvar favoritos e acompanhar seus pedidos.</p>
       </div>
 
@@ -244,7 +244,7 @@
             <div class="field-top"><label for="l-senha">Senha</label><button class="ga-link" type="button" data-auth="forgot">Esqueceu a senha?</button></div>
             <div class="pass">
               <input id="l-senha" type="password" autocomplete="current-password" placeholder="Sua senha" />
-              <button class="pass-toggle" type="button" data-for="l-senha" aria-pressed="false">Mostrar</button>
+              <button class="pass-toggle" type="button" data-for="l-senha" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha"><svg aria-hidden="true"><use href="#i-eye" /></svg></button>
             </div>
           </div>
           <button class="btn btn-dark btn-block" type="submit"><span>Entrar</span><svg><use href="#i-arrow" /></svg></button>
@@ -267,7 +267,7 @@
               <label for="s-senha">Senha</label>
               <div class="pass">
                 <input id="s-senha" type="password" autocomplete="new-password" placeholder="8+ letras e números" />
-                <button class="pass-toggle" type="button" data-for="s-senha" aria-pressed="false">Mostrar</button>
+                <button class="pass-toggle" type="button" data-for="s-senha" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha"><svg aria-hidden="true"><use href="#i-eye" /></svg></button>
               </div>
             </div>
             <div class="field">
@@ -331,11 +331,8 @@
 
   <!-- ================= Topo (fixo em todas as cenas) ================= -->
   <header class="topbar">
-    <a class="logo" href="#inicio" data-go="inicio" aria-label="Morada — início">
-      <span class="logo-mark" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-      </span>
-      <span class="logo-word">morada</span>
+    <a class="logo" href="#inicio" data-go="inicio" aria-label="Artur Guimarães — início">
+      <span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>
     </a>
 
     <nav class="nav-pill" aria-label="Principal">
@@ -344,7 +341,7 @@
       <a href="#filtro" data-go="filtro">Filtro</a>
       <a href="#curadoria" data-go="curadoria">Destaques</a>
       <a href="#instagram" data-go="instagram">Instagram</a>
-      <a href="#arthur" data-go="arthur">Arthur</a>
+      <a href="#arthur" data-go="arthur">Artur</a>
       <a href="#avaliacoes" data-go="avaliacoes">Avaliações</a>
       <a href="#contato" data-go="contato">Contato</a>
     </nav>
@@ -371,7 +368,7 @@
       <li><button type="button" data-go="filtro" aria-label="Filtro"></button></li>
       <li><button type="button" data-go="curadoria" aria-label="Destaques"></button></li>
       <li><button type="button" data-go="instagram" aria-label="Instagram"></button></li>
-      <li><button type="button" data-go="arthur" aria-label="Conheça o Arthur"></button></li>
+      <li><button type="button" data-go="arthur" aria-label="Conheça o Artur"></button></li>
       <li><button type="button" data-go="avaliacoes" aria-label="Avaliações"></button></li>
       <li><button type="button" data-go="contato" aria-label="Contato"></button></li>
     </ol>
@@ -386,7 +383,7 @@
       <!-- Hero do celular: foto em tela cheia, texto em cima e painel de vidro embaixo -->
       <div class="m-hero">
         <div class="m-sky" aria-hidden="true"></div>
-        <p class="m-word" aria-hidden="true">Habita</p>
+        <p class="m-word" aria-hidden="true">AG</p>
         <img class="m-house" src="assets/casa.webp" alt="" aria-hidden="true" />
         <div class="m-shade" aria-hidden="true"></div>
 
@@ -430,11 +427,11 @@
       </div>
 
       <!-- Palavra gigante ao fundo; a casa passa na frente dela -->
-      <p class="title" aria-hidden="true"><span style="--i: 0">H</span><span style="--i: 1">A</span><span style="--i: 2">B</span><span style="--i: 3">I</span><span style="--i: 4">T</span><span style="--i: 5">A</span></p>
+      <p class="title title--ag" aria-hidden="true"><span style="--i: 0">A</span><span style="--i: 1">G</span></p>
 
       <div class="media">
         <div class="sky" aria-hidden="true"></div>
-        <!-- A mesma foto em duas camadas: uma presa ao card, outra só com o que passa do topo (telhado sobre o "HABITA"). -->
+        <!-- A mesma foto em duas camadas: uma presa ao card, outra só com o que passa do topo (telhado sobre o "AG"). -->
         <div class="house house--in"><img src="assets/casa.webp" alt="Casa térrea com laje de concreto, pilar de pedra, jardim tropical e piscina" /></div>
         <div class="house house--out" aria-hidden="true"><img src="assets/casa.webp" alt="" /></div>
 
@@ -603,34 +600,34 @@
     </section>
 
     <!-- ================= 05 · Conheça o Arthur ================= -->
-    <section class="scene arthur" id="arthur" data-title="Arthur" aria-labelledby="arTitle">
+    <section class="scene arthur" id="arthur" data-title="Artur" aria-labelledby="arTitle">
       <svg class="ar-deco" viewBox="0 0 400 260" aria-hidden="true"><path d="M20 250V120L200 18l180 102v130M20 250h360M92 250V150h72v100M250 250v-76h70v76M200 18v36" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
 
       <figure class="ar-photo-wrap">
         <!-- Foto do Arthur: salve como assets/arthur.jpg (retrato, de preferência 4:5). Sem o arquivo, aparece a moldura com o monograma. -->
         <div class="ar-photo">
-          <img class="ar-img" src="assets/arthur.jpg" alt="Arthur, proprietário e corretor da Morada" onerror="this.closest('.ar-photo').classList.add('is-empty'); this.remove();" />
+          <img class="ar-img" src="assets/arthur.jpg" alt="Artur Guimarães, proprietário e corretor" onerror="this.closest('.ar-photo').classList.add('is-empty'); this.remove();" />
           <div class="ar-empty" aria-hidden="true">
-            <span class="ar-mono">A</span>
+            <span class="ar-mono">AG</span>
             <span class="ar-empty-line"></span>
-            <small>Foto do Arthur</small>
+            <small>Foto do Artur</small>
           </div>
         </div>
         <figcaption class="ar-tag">
           <span class="ar-tag-ico" aria-hidden="true"><svg><use href="#i-key" /></svg></span>
-          <span><b>Arthur</b><small>Proprietário e corretor</small></span>
+          <span><b>Artur Guimarães</b><small>Proprietário e corretor</small></span>
         </figcaption>
       </figure>
 
       <div class="ar-copy">
-        <p class="ar-eyebrow rv" style="--d: .45s">Quem está por trás da Morada</p>
-        <h2 class="ar-title rv" id="arTitle" style="--d: .55s">Conheça o <em>Arthur</em></h2>
+        <p class="ar-eyebrow rv" style="--d: .45s">Quem está por trás do atendimento</p>
+        <h2 class="ar-title rv" id="arTitle" style="--d: .55s">Conheça o <em>Artur</em></h2>
         <p class="ar-sub rv" style="--d: .65s">Por trás de cada imóvel, existe alguém que entende que essa escolha é muito mais do que uma compra.</p>
-        <p class="ar-text rv" style="--d: .75s">Arthur é proprietário da imobiliária e atua diretamente como corretor de imóveis. Seu trabalho é entender o que cada cliente procura, apresentar oportunidades que realmente façam sentido e acompanhar cada etapa da negociação com transparência e atenção aos detalhes.</p>
+        <p class="ar-text rv" style="--d: .75s">Artur Guimarães é proprietário da imobiliária e atua diretamente como corretor de imóveis. Seu trabalho é entender o que cada cliente procura, apresentar oportunidades que realmente façam sentido e acompanhar cada etapa da negociação com transparência e atenção aos detalhes.</p>
         <p class="ar-quote rv" style="--d: .85s">Seu próximo imóvel começa com uma boa escolha.</p>
         <a class="ar-btn rv" style="--d: .95s" id="arZap" href="#" target="_blank" rel="noopener">
           <svg class="ar-btn-zap" aria-hidden="true"><use href="#i-zap" /></svg>
-          <span>Falar com Arthur</span>
+          <span>Falar com Artur</span>
           <svg class="ar-btn-arrow" aria-hidden="true"><use href="#i-arrow" /></svg>
         </a>
       </div>
@@ -732,7 +729,7 @@
       <a href="#filtro" data-go="filtro" data-preview="filtro"><span class="n">02</span><span class="t">Filtro</span></a>
       <a href="#curadoria" data-go="curadoria" data-preview="curadoria"><span class="n">03</span><span class="t">Destaques</span></a>
       <a href="#instagram" data-go="instagram" data-preview="instagram"><span class="n">04</span><span class="t">Instagram</span></a>
-      <a href="#arthur" data-go="arthur" data-preview="arthur"><span class="n">05</span><span class="t">Arthur</span></a>
+      <a href="#arthur" data-go="arthur" data-preview="arthur"><span class="n">05</span><span class="t">Artur</span></a>
       <a href="#avaliacoes" data-go="avaliacoes" data-preview="avaliacoes"><span class="n">06</span><span class="t">Avaliações</span></a>
       <a href="#contato" data-go="contato" data-preview="contato"><span class="n">07</span><span class="t">Contato</span></a>
     </nav>
@@ -743,7 +740,7 @@
     <div class="menu-foot">
       <a href="mailto:contato@morada.com.br">contato@morada.com.br</a>
       <a href="privacidade" target="_blank" rel="noopener">Privacidade</a>
-      <span>© 2026 Morada</span>
+      <span>© 2026 Artur Guimarães</span>
     </div>
   </div>
 

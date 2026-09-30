@@ -23,7 +23,7 @@
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'Morada'; // nome da imobiliária (Configurações do painel)
+  let BRAND = 'Artur Guimarães'; // nome da imobiliária (Configurações do painel)
   let SB = null;            // { url, anonKey } quando o Supabase está configurado
   let HOUSES = [];          // imóveis mostrados no site
   let catalogReady = false; // os imóveis já chegaram?
@@ -128,7 +128,7 @@
   let REVIEWS = [];
 
   const PREVIEW = {
-    arthur: 'Conheça o Arthur, proprietário e corretor',
+    arthur: 'Conheça o Artur, proprietário e corretor',
     inicio: 'Vamos encontrar a sua morada',
     filtro: 'Encontre o imóvel certo em segundos',
     instagram: 'Casas novas toda semana no Instagram',
@@ -538,7 +538,7 @@
      05 · Conheça o Arthur
      ========================================================= */
 
-  $('#arZap').href = zapLink('Olá, Arthur! Vim pelo site da Morada e gostaria de conversar sobre imóveis.');
+  $('#arZap').href = zapLink('Olá, Artur! Vim pelo seu site e gostaria de conversar sobre imóveis.');
   // leve movimento da foto seguindo o mouse (só no computador)
   const arPhoto = $('.ar-photo');
   if (!reduceMotion) {
@@ -717,7 +717,7 @@
     $('#cartCount').textContent = items.length;
     $('#cartWord').textContent = items.length === 1 ? 'item' : 'itens';
     const who = profile ? `\n\nMeu contato: ${profile.nome} (${profile.email})` : '';
-    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens da Morada:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
+    $('#cartZap').href = zapLink(`Olá, Artur! Quero seguir com estes itens do seu site:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
   }
   $('#cartList').addEventListener('click', (e) => {
     const item = e.target.closest('.cart-item');
@@ -929,6 +929,7 @@
     clearTimeout(enterTimers.get(from));
     from.classList.remove('is-active', 'is-entering');
     from.classList.add('is-leaving');
+    to.scrollTop = 0;
     to.classList.add('is-active');
     markEntering(to, dir);
     document.body.classList.remove('is-cutting');
@@ -951,7 +952,7 @@
     scenes.forEach((s, k) => { s.inert = k !== current; s.setAttribute('aria-hidden', String(k !== current)); });
     updateTone();
     document.body.dataset.scene = id;
-    document.title = id === 'inicio' ? `${BRAND} — Casas selecionadas` : `${scene.dataset.title} — ${BRAND}`;
+    document.title = id === 'inicio' ? `${BRAND} — Corretor de imóveis` : `${scene.dataset.title} — ${BRAND}`;
     try { history.replaceState(null, '', `#${id}`); } catch (_) { /* file:// em alguns navegadores */ }
 
     // menu superior
@@ -1154,6 +1155,7 @@
       void to.offsetWidth;
       to.classList.add('is-entering');
     }
+    to.scrollTop = 0;
     to.classList.add('is-current');
     glIndex = i;
     glSlides.forEach((sl, k) => { sl.inert = k !== i; sl.setAttribute('aria-hidden', String(k !== i)); });
@@ -1173,8 +1175,16 @@
   let glLastWheel = 0;
   let glWheelSum = 0;
   const glRecent = [];
+  // tela maior que o celular (aparelho pequeno ou letra grande): rola a tela antes de trocar
+  const glScroller = () => {
+    const el = $('.gl-slide.is-current', gate);
+    if (!el || getComputedStyle(el).overflowY === 'visible' || el.scrollHeight <= el.clientHeight + 1) return null;
+    return { top: el.scrollTop <= 1, bottom: el.scrollTop + el.clientHeight >= el.scrollHeight - 1 };
+  };
   gate.addEventListener('wheel', (e) => {
     if (!onLanding() || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    const sc = glScroller();
+    if (sc && !(e.deltaY > 0 ? sc.bottom : sc.top)) return;
     e.preventDefault();
     const now = performance.now();
     const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? innerHeight : 1);
@@ -1196,20 +1206,25 @@
   // toque: deslizar para cima/baixo troca de tela
   let glTouchY = null;
   let glTouchX = 0;
+  let glTouchSc = null;
   gate.addEventListener('touchstart', (e) => {
     if (!onLanding() || e.target.closest('input')) { glTouchY = null; return; }
     glTouchY = e.touches[0].clientY;
     glTouchX = e.touches[0].clientX;
+    glTouchSc = glScroller();
   }, { passive: true });
   gate.addEventListener('touchmove', (e) => {
-    if (onLanding() && !e.target.closest('.gl-features')) e.preventDefault();
+    if (onLanding() && !glTouchSc && !e.target.closest('.gl-features')) e.preventDefault();
   }, { passive: false });
   gate.addEventListener('touchend', (e) => {
     if (glTouchY === null) return;
     const dy = glTouchY - e.changedTouches[0].clientY;
     const dx = glTouchX - e.changedTouches[0].clientX;
     glTouchY = null;
-    if (Math.abs(dy) > 50 && Math.abs(dy) > Math.abs(dx) * 1.3) glShow(glIndex + (dy > 0 ? 1 : -1));
+    if (Math.abs(dy) <= 50 || Math.abs(dy) <= Math.abs(dx) * 1.3) return;
+    // tela que rola: só troca quando já estava no fim (ou no começo) antes de deslizar
+    if (glTouchSc && !(dy > 0 ? glTouchSc.bottom : glTouchSc.top)) return;
+    glShow(glIndex + (dy > 0 ? 1 : -1));
   }, { passive: true });
 
   // teclado
@@ -1239,7 +1254,10 @@
     const input = $(`#${btn.dataset.for}`);
     const show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    btn.textContent = show ? 'Ocultar' : 'Mostrar';
+    const label = show ? 'Esconder senha' : 'Mostrar senha';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    $('use', btn).setAttribute('href', show ? '#i-eye-off' : '#i-eye');
     btn.setAttribute('aria-pressed', String(show));
   }));
 
@@ -1383,7 +1401,7 @@
     busyButton(form, false);
     registerSuccess();
     enterSite(email);
-    toast('Conta criada. Bem-vindo à Morada!');
+    toast('Conta criada. Seja bem-vindo!');
   });
 
   /* Esqueceu a senha */
@@ -2124,9 +2142,17 @@
   let lastWheel = 0;
   let wheelSum = 0;
   const recent = [];
+  // cena maior que a tela (celular pequeno ou letra grande): rola a cena antes de trocar
+  const sceneScroller = () => {
+    const el = scenes[current];
+    if (!el || getComputedStyle(el).overflowY === 'visible' || getComputedStyle(el).overflowY === 'clip' || el.scrollHeight <= el.clientHeight + 1) return null;
+    return { top: el.scrollTop <= 1, bottom: el.scrollTop + el.clientHeight >= el.scrollHeight - 1 };
+  };
   addEventListener('wheel', (e) => {
     if (openName || gated || askOpen) return;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+    const sc = sceneScroller();
+    if (sc && !(e.deltaY > 0 ? sc.bottom : sc.top)) return;
     e.preventDefault();
     const now = performance.now();
     const d = e.deltaY * (e.deltaMode === 1 ? 33 : e.deltaMode === 2 ? innerHeight : 1);
@@ -2155,20 +2181,25 @@
   // toque: deslizar para cima/baixo troca de cena
   let touchY = null;
   let touchX = 0;
+  let touchSc = null;
   addEventListener('touchstart', (e) => {
     if (openName || gated || askOpen) { touchY = null; return; }
     touchY = e.touches[0].clientY;
     touchX = e.touches[0].clientX;
+    touchSc = sceneScroller();
   }, { passive: true });
   addEventListener('touchmove', (e) => {
-    if (!gated && !e.target.closest('.detail, .im-grid, .im-bar, .fl-chips, .fl-range, .ig-reels, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
+    if (!gated && !(touchSc && !openName) && !e.target.closest('.detail, .im-grid, .im-bar, .fl-chips, .fl-range, .ig-reels, .nav-pill, .mv-grid, .mv-bar, .search-results, .search-filters, .tab-panel, textarea')) e.preventDefault();
   }, { passive: false });
   addEventListener('touchend', (e) => {
     if (touchY === null) return;
     const dy = touchY - e.changedTouches[0].clientY;
     const dx = touchX - e.changedTouches[0].clientX;
     touchY = null;
-    if (Math.abs(dy) > 60 && Math.abs(dy) > Math.abs(dx) * 1.3) go(current + (dy > 0 ? 1 : -1));
+    if (Math.abs(dy) <= 60 || Math.abs(dy) <= Math.abs(dx) * 1.3) return;
+    // cena que rola: só troca quando já estava no fim (ou no começo) antes de deslizar
+    if (touchSc && !(dy > 0 ? touchSc.bottom : touchSc.top)) return;
+    go(current + (dy > 0 ? 1 : -1));
   }, { passive: true });
 
   // teclado
@@ -2449,7 +2480,7 @@
     const mail = $('.menu-foot a');
     mail.hidden = !c.email;
     if (c.email) { mail.href = `mailto:${c.email}`; mail.textContent = c.email; }
-    $('#arZap').href = zapLink('Olá, Arthur! Vim pelo site da Morada e gostaria de conversar sobre imóveis.');
+    $('#arZap').href = zapLink('Olá, Artur! Vim pelo seu site e gostaria de conversar sobre imóveis.');
     const tel = String(c.telefone || '').trim();
     const info = [
       tel && `<li><svg aria-hidden="true"><use href="#i-phone" /></svg><a href="tel:${esc(tel.replace(/[^\d+]/g, ''))}">${esc(tel)}</a></li>`,
@@ -2458,16 +2489,18 @@
     ].filter(Boolean);
     $('#ctInfo').innerHTML = info.join('');
     $('#ctInfo').hidden = !info.length;
-    const nome = String(c.nome_imobiliaria || '').trim();
+    // "Morada" era o nome de exemplo: com ele, vale o nome da marca (Artur Guimarães)
+    const nomeCfg = String(c.nome_imobiliaria || '').trim();
+    const nome = /^morada$/i.test(nomeCfg) ? '' : nomeCfg;
     if (nome) {
+      document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;
-      document.title = document.title.replace(/Morada/g, nome);
-      $('.logo-word').textContent = nome.toLowerCase() === 'morada' ? 'morada' : nome;
       $('.logo').setAttribute('aria-label', `${nome} — início`);
-      $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${nome}`;
+      $('.gate-logo').setAttribute('aria-label', nome);
     }
+    $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
-    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: nome || 'Morada', url: `${location.origin}/`, image: `${location.origin}/assets/og.jpg` };
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og.jpg` };
     if (tel) ld.telephone = tel;
     if (c.email) ld.email = c.email;
     if (c.endereco) ld.address = c.endereco;
@@ -2486,11 +2519,13 @@
     setStatOrHide('anos', c.anos_mercado, '');
     googleOn = !!c.login_google;
     syncGoogle();
+    // logo enviada no painel: aparece no lugar da assinatura
     const logo = siteFile(c.logo);
-    const mark = $('.logo-mark');
     if (logo) {
-      mark.innerHTML = `<img src="${esc(logo)}" alt="" />`;
-      mark.classList.add('has-img');
+      $$('.logo, .gate-logo').forEach((el) => {
+        el.innerHTML = `<img class="brand-img" src="${esc(logo)}" alt="" />`;
+        el.classList.add('has-img');
+      });
     }
   }
 

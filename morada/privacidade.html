@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Política de Privacidade — Morada</title>
+  <title>Política de Privacidade — Artur Guimarães</title>
   <meta name="description" content="Como a imobiliária trata os seus dados pessoais no site, de acordo com a LGPD." />
   <meta name="theme-color" content="#efefed" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%23c7784a'/%3E%3Cpath d='M6 12.5 12 7.5l6 5V18H6z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <!--
     Modelo de política de privacidade para o site. Revise com o responsável pela imobiliária
     (e, se possível, com um advogado) e ajuste o que for preciso antes de divulgar.
@@ -15,13 +16,17 @@
   <style>
     @font-face { font-family: "Inter Tight"; font-style: normal; font-display: swap; font-weight: 100 900; src: url("/fonts/inter-tight-latin-wght-normal.woff2") format("woff2"); }
     @font-face { font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 200 800; src: url("/fonts/newsreader-latin-wght-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Sacramento"; font-style: normal; font-display: block; font-weight: 400; src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Playfair Display"; font-style: normal; font-display: block; font-weight: 400 900; src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2"); }
+    .brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; }
+    .brand-s { font-family: "Sacramento", cursive; font-weight: 400; }
+    .brand-ag { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; }
     :root { --bg: #efefed; --ink: #1c1714; --muted: #6f6660; --line: #dcd4ca; --terracotta: #c7784a; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
     header { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px clamp(16px, 5vw, 48px); background: rgba(239, 239, 237, 0.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-    .logo { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; font-weight: 600; letter-spacing: -0.02em; font-size: 18px; }
-    .logo span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--terracotta); color: #fff; }
-    .logo svg { width: 18px; height: 18px; }
+    .logo { display: flex; align-items: center; color: inherit; text-decoration: none; font-size: 22px; }
+    .logo img { display: block; height: 32px; width: auto; }
     .back { color: var(--ink); font-size: 14px; text-decoration: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; background: #fff; }
     main { max-width: 760px; margin: 0 auto; padding: 48px clamp(16px, 5vw, 32px) 80px; }
     h1 { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.1; margin: 0 0 10px; }
@@ -35,14 +40,14 @@
 </head>
 <body>
   <header>
-    <a class="logo" href="/"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V19H4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><b data-nome>Morada</b></a>
+    <a class="logo" href="/" aria-label="Artur Guimarães — voltar ao site"><span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span></a>
     <a class="back" href="/">Voltar ao site</a>
   </header>
   <main>
     <h1>Política de Privacidade</h1>
     <p class="updated">Atualizada em 30 de setembro de 2026</p>
 
-    <p>Esta política explica como <b data-nome>a imobiliária</b> trata os seus dados pessoais quando você usa este site, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
+    <p>Esta política explica como <b data-nome>Artur Guimarães</b> trata os seus dados pessoais quando você usa este site, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
 
     <h2>1. Quais dados coletamos</h2>
     <ul>
@@ -78,7 +83,7 @@
 
     <h2>8. Fale com a gente</h2>
     <div class="box">
-      <p style="margin:0"><b data-nome>A imobiliária</b><span data-extra></span></p>
+      <p style="margin:0"><b data-nome>Artur Guimarães</b><span data-extra></span></p>
     </div>
   </main>
   <script src="/supabase-config.js"></script>
@@ -93,7 +98,7 @@
       const c = res && res.ok ? (await res.json())[0] : null;
       if (!c) return;
       const nome = (c.nome_imobiliaria || '').trim();
-      if (nome) {
+      if (nome && !/^morada$/i.test(nome)) {
         document.querySelectorAll('[data-nome]').forEach((el) => { el.textContent = nome; });
         document.title = `Política de Privacidade — ${nome}`;
       }

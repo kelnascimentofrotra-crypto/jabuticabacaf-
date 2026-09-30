@@ -27,7 +27,10 @@
   let sb = null;          // cliente do Supabase
   let cfg = null;         // { url, anonKey }
   let user = null;        // usuário admin logado
-  let siteName = 'Morada';
+  let siteName = 'Artur Guimarães';
+  // "Morada" era o nome de exemplo: com ele, vale o nome da marca
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !/^morada$/i.test(v) ? v : ''; };
+  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -298,7 +301,7 @@
       app.innerHTML = `
         <div class="shell">
           <aside class="side" id="side" aria-label="Menu do painel">
-            <a class="side-brand" href="/admin" data-link><span class="mark">${icon('home')}</span><span class="side-name" data-site-name></span></a>
+            <a class="side-brand" href="/admin" data-link aria-label="Início do painel">${BRAND_HTML}</a>
             <nav class="side-nav">
               <a href="/admin" data-link data-nav="dash">${icon('dash')}<span>Dashboard</span></a>
               <a href="/admin/imoveis" data-link data-nav="imoveis">${icon('building')}<span>Imóveis</span></a>
@@ -314,7 +317,7 @@
           <div class="main">
             <header class="top">
               <button class="icon-btn top-menu" type="button" aria-label="Abrir menu" aria-controls="side" aria-expanded="false">${icon('menu')}</button>
-              <strong class="top-name" data-site-name></strong>
+              <a class="top-name" href="/admin" data-link aria-label="Início do painel">${BRAND_HTML}</a>
               <a class="top-user" href="/admin/minha-conta" data-link title="Minha conta e senha">
                 <span class="avatar" aria-hidden="true"></span>
                 <span class="top-who"><b>Administrador</b><small class="top-mail"></small></span>
@@ -451,7 +454,7 @@
   async function loadSiteName() {
     if (user) loadMyProfile().catch(() => {});
     const { data } = await sb.from('configuracoes').select('nome_imobiliaria').eq('id', 1).maybeSingle();
-    if (data?.nome_imobiliaria) { siteName = data.nome_imobiliaria; paintIdentity(); }
+    if (nomeDoSite(data?.nome_imobiliaria)) { siteName = nomeDoSite(data.nome_imobiliaria); paintIdentity(); }
   }
 
   async function logout() {
@@ -485,7 +488,7 @@
     root.innerHTML = `
       <main class="login">
         <section class="login-card" aria-labelledby="lgTitle">
-          <div class="login-brand"><span class="mark">${icon('home')}</span><span>${esc(siteName.toLowerCase() === 'morada' ? 'morada' : siteName)}</span></div>
+          <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
           <h1 id="lgTitle">PAINEL ADMINISTRATIVO</h1>
           <p class="login-sub">Entre com a sua conta de administrador para gerenciar imóveis, fotos e avaliações do site.</p>
           <form id="loginForm" novalidate>
@@ -497,7 +500,7 @@
               <span>Senha</span>
               <span class="pass">
                 <input id="lgPass" type="password" autocomplete="current-password" required placeholder="Sua senha" />
-                <button class="pass-toggle" type="button" aria-pressed="false">Mostrar</button>
+                <button class="pass-toggle" type="button" aria-pressed="false" aria-label="Mostrar senha" title="Mostrar senha">${icon('eye')}</button>
               </span>
             </label>
             <p class="form-msg" id="lgMsg" role="alert">${esc(reason || '')}</p>
@@ -550,7 +553,10 @@
       const inp = $('#lgPass');
       const show = inp.type === 'password';
       inp.type = show ? 'text' : 'password';
-      e.currentTarget.textContent = show ? 'Ocultar' : 'Mostrar';
+      const label = show ? 'Esconder senha' : 'Mostrar senha';
+      e.currentTarget.setAttribute('aria-label', label);
+      e.currentTarget.title = label;
+      e.currentTarget.innerHTML = icon(show ? 'eye-off' : 'eye');
       e.currentTarget.setAttribute('aria-pressed', String(show));
     });
     setTimeout(() => $('#lgEmail').focus(), 50);
@@ -1528,7 +1534,7 @@
       list.innerHTML = `<ul class="msgs">${rows.map((r) => {
         const zap = zapDigits(r.telefone);
         const first = String(r.nome).split(' ')[0];
-        const zapText = encodeURIComponent(`Olá, ${first}! Aqui é da ${siteName}. Recebemos a sua mensagem pelo site.`);
+        const zapText = encodeURIComponent(`Olá, ${first}! Aqui é ${siteName}. Recebemos a sua mensagem pelo site.`);
         return `
         <li class="msg${r.lido ? '' : ' is-new'}" data-id="${r.id}">
           <div class="msg-head">
@@ -1851,7 +1857,7 @@
   let recoveryError = '';
   function viewNovaSenha(root) {
     const card = (inner) => `<main class="login"><section class="login-card" aria-labelledby="nsTitle">
-      <div class="login-brand"><span class="mark">${icon('home')}</span><span>${esc(siteName.toLowerCase() === 'morada' ? 'morada' : siteName)}</span></div>
+      <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
       ${inner}
       <a class="login-back" href="/admin/login" data-link>${icon('left')}<span>Voltar para entrar</span></a>
     </section><div class="login-art" aria-hidden="true"></div></main>`;
@@ -1922,7 +1928,7 @@
                 <label class="btn btn-sm">${icon('upload')}<span>Escolher imagem</span><input type="file" accept="image/png,image/webp,image/jpeg" id="cfLogoFile" hidden /></label>
                 <button class="btn btn-sm btn-danger-ghost" type="button" id="cfLogoDel">Remover</button>
               </div>
-              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa o ícone da casinha.</small>
+              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “Artur AG Guimarães”.</small>
             </div>
           </div>
         </section>
@@ -1963,7 +1969,7 @@
     const f = $('#cfForm');
     const paintLogo = () => {
       const url = logoPreview || siteUrl(logo);
-      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : icon('home');
+      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<span class="brand-ag">AG</span>';
       $('#cfLogo').classList.toggle('is-empty', !url);
       $('#cfLogoDel').hidden = !url;
     };
@@ -2037,7 +2043,7 @@
         logoFile = null;
         if (logoPreview) { URL.revokeObjectURL(logoPreview); logoPreview = ''; }
         paintLogo();
-        siteName = c.nome_imobiliaria;
+        siteName = nomeDoSite(c.nome_imobiliaria) || 'Artur Guimarães';
         paintIdentity();
         f.instagram.value = c.instagram;
         f.whatsapp.value = c.whatsapp;
@@ -2096,7 +2102,7 @@
         else { await sb.auth.signOut(); sessionStorage.setItem('morada:admin-aviso', 'Esta conta não tem acesso ao painel.'); }
       }
       if (user) loadSiteName().catch(() => {});
-      else sb.from('configuracoes').select('nome_imobiliaria').eq('id', 1).maybeSingle().then(({ data: c }) => { if (c?.nome_imobiliaria) siteName = c.nome_imobiliaria; }).catch(() => {});
+      else sb.from('configuracoes').select('nome_imobiliaria').eq('id', 1).maybeSingle().then(({ data: c }) => { if (nomeDoSite(c?.nome_imobiliaria)) siteName = nomeDoSite(c.nome_imobiliaria); }).catch(() => {});
     } catch (err) {
       fatal('Não foi possível abrir o painel', errText(err), true);
       return;
