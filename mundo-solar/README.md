@@ -48,6 +48,21 @@ Os 9 kits da TABELA MUNDO SOLAR estão em `index.html`, cada um em um `<li class
 editar o `<li>` para mudar um kit. Os preços também aparecem no JSON-LD (`hasOfferCatalog`) e na
 pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
 
+## Pesquisa (lupa)
+
+A lupa do cabeçalho, o campo acima da tabela de kits e os atalhos `/` ou `Ctrl/⌘ + K` abrem a
+pesquisa. Ela lê os dados da própria página (kits, projetos, FAQ) — ao editar a tabela, a busca se
+atualiza sozinha. Entende consumo ("650 kWh" ou só "650" → indica o menor kit que atende), número de
+placas ("10 placas"), inversor ("6kW"), preço ("até 12 mil", "R$ 15.000", "mais barato"),
+"leste oeste", marcas (RONMA, AUXSOL) e palavras-chave, sem diferenciar acentos e tolerando pequenos
+erros de digitação. O código fica em `assets/js/main.js`, bloco "Pesquisa (lupa)".
+
+## Menu com linha dourada
+
+No desktop, uma linha dourada desliza até o item do menu da seção visível enquanto a página rola, e
+antecipa o destino ao passar o mouse. Seções que não estão no menu (Benefícios, FAQ) mantêm o item
+anterior destacado.
+
 ## Clientes (seção `#depoimentos`)
 
 A seção lista os clientes dos projetos, sem frases inventadas. Para publicar depoimentos em texto, use

@@ -238,6 +238,401 @@ const SITE_CONFIG = {
   const initialKit = kits.find((li) => li.classList.contains('is-selected')) || kits[0];
   if (initialKit) selectKit(initialKit, { animate: false });
 
+  /* ---------- Pesquisa (lupa) ----------
+   * Entende consumo (kWh), nº de placas, potência do inversor (kW), preço
+   * ("até 12 mil", "R$ 10.000"), orientação Leste/Oeste e palavras-chave,
+   * sem diferenciar acentos e tolerando pequenos erros de digitação.
+   */
+  const searchDialog = $('[data-search]');
+  const searchInput = $('[data-search-input]');
+  const searchResults = $('[data-search-results]');
+  const searchHint = $('[data-search-hint]');
+  const searchStatus = $('[data-search-status]');
+  const searchChips = $('[data-search-chips]');
+  const searchBody = $('[data-search-body]');
+  const searchAction = $('[data-search-action]');
+  const searchActionText = $('[data-search-action-text]');
+  const searchWa = $('[data-search-wa]');
+
+  if (searchDialog && searchInput && searchResults && typeof searchDialog.showModal === 'function') {
+    const norm = (str) => String(str || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    const words = (str) => norm(str).split(/[^a-z0-9]+/).filter(Boolean);
+    const esc = (str) => String(str).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const toNumber = (str) => {
+      let v = String(str).trim();
+      if (/^\d{1,3}(\.\d{3})+(,\d+)?$/.test(v)) v = v.replace(/\./g, '').replace(',', '.');
+      else v = v.replace(',', '.');
+      const n = parseFloat(v);
+      return Number.isFinite(n) ? n : null;
+    };
+    const fmtInt = (n) => n.toLocaleString('pt-BR');
+    const fmtBRL = (n) => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const lev = (a, b) => {
+      const row = Array.from({ length: b.length + 1 }, (_, i) => i);
+      for (let i = 1; i <= a.length; i++) {
+        let prev = row[0];
+        row[0] = i;
+        for (let j = 1; j <= b.length; j++) {
+          const tmp = row[j];
+          row[j] = Math.min(row[j] + 1, row[j - 1] + 1, prev + (a[i - 1] === b[j - 1] ? 0 : 1));
+          prev = tmp;
+        }
+      }
+      return row[b.length];
+    };
+    const hits = (token, list) => list.some((w) =>
+      w === token ||
+      (token.length >= 3 && w.startsWith(token)) ||
+      (token.length >= 4 && Math.abs(w.length - token.length) <= 2 && lev(token, w) <= (token.length >= 7 ? 2 : 1)) ||
+      (token.length >= 6 && w.length > token.length && lev(token, w.slice(0, token.length)) <= 1));
+
+    // ----- Índice (lido do próprio HTML) -----
+    const kitIndex = kits.map((li) => {
+      const k = kitData(li);
+      const inv = k.inversor.match(/(\d+(?:[.,]\d+)?)\s*kw/i);
+      return {
+        type: 'kit', li, k,
+        kwh: toNumber(k.kwh),
+        placas: parseInt(k.placas, 10),
+        kw: inv ? toNumber(inv[1]) : null,
+        price: toNumber(k.preco.replace(/[^\d.,]/g, '')),
+        words: words(`${k.kwh} kwh ${k.tag} ${k.placas} ${k.inversor} ${k.preco} kit kits placa placas painel paineis modulo modulos solar fotovoltaico energia`),
+      };
+    }).sort((a, b) => a.kwh - b.kwh);
+
+    const projectIndex = $$('.project').map((el) => {
+      const count = $('[data-count]', el);
+      const specs = $$('.project__specs li', el).map((li) => li.textContent.trim());
+      const loc = ($('.project__loc', el) || {}).textContent || '';
+      const title = ($('.project__tag', el) || {}).textContent || 'Projeto';
+      return {
+        type: 'project', el, title: title.trim(), loc: loc.trim(), specs,
+        kwh: count ? toNumber(count.dataset.count) : null,
+        placas: parseInt(specs[0], 10),
+        words: words(`${title} ${count ? count.dataset.count : ''} kwh ${specs.join(' ')} ${loc} projeto projetos`),
+      };
+    });
+
+    const faqIndex = $$('.faq-item').map((el) => {
+      const q = ($('summary span', el) || {}).textContent || '';
+      const a = ($('.faq-item__content', el) || {}).textContent || '';
+      return { type: 'faq', el, title: q.trim(), words: words(q), answer: words(a) };
+    });
+
+    const sectionIndex = [
+      ['Energia solar residencial', 'Soluções para casas', '#solucoes', 'residencial residencia casa casas familia moradia'],
+      ['Energia solar comercial', 'Soluções para empresas', '#solucoes', 'comercial comercio empresa empresas loja negocio'],
+      ['Projetos personalizados', 'Dimensionados para cada instalação', '#solucoes', 'personalizado projeto medida dimensionamento'],
+      ['Como funciona', 'Do primeiro contato à geração de energia', '#como-funciona', 'como funciona etapas processo instalacao instalar prazo'],
+      ['Benefícios da energia solar', 'Economia, valorização e autonomia', '#beneficios', 'beneficios vantagens economia economizar valorizacao sustentavel'],
+      ['Sobre a Mundo Solar', 'Desde 2022 · +500 usinas entregues', '#sobre', 'sobre empresa historia quem somos redencao usinas'],
+      ['Contato e orçamento', 'WhatsApp (94) 9124-3878', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
+    ].map(([title, desc, href, kw]) => ({ type: 'section', title, desc, href, words: words(`${title} ${kw}`) }));
+
+    const STOP = new Set('a o e as os de da do das dos um uma uns umas para pra pro com sem no na nos nas em por que qual quais meu minha seu sua eu quero preciso tem ter ser mes mensal mensais por kwh kw w reais r'.split(' '));
+    const KIT_WORD = /^(placas?|paineis|painel|modulos?|kits?|ronma|auxsol|inversor(es)?|fotovoltaic\w*|solar(es)?|energia|sistemas?|usina)$/;
+
+    // ----- Interpretação da busca -----
+    const NUM_RE = /(?:\b(ate|menos de|abaixo de|no maximo|acima de|mais de|a partir de|minimo)\s+)?(r\$\s*)?(\d+(?:[.,]\d+)*)\s*(kwh|kw\/h|kw|mil|k|watts?|w|placas?|paineis|painel|modulos?|reais)?\b/g;
+    const parse = (raw) => {
+      const s = norm(raw).replace(/\s+/g, ' ').trim();
+      const p = {
+        raw: raw.trim(), kwh: null, placas: null, kw: null, price: null, priceMax: null, priceMin: null,
+        bill: /\b(conta|fatura|boleto)\b/.test(s),
+        tag: /leste|oeste/.test(s),
+        cheap: /barat|mais em conta|menor (preco|valor)|economic/.test(s),
+        big: /\b(maior|maiores|potente|grande)\b/.test(s),
+        priceIntent: /\b(preco|precos|valor|valores|custa|custo|quanto|investimento)\b/.test(s),
+        kitIntent: false, tokens: [],
+      };
+      const rest = s.replace(NUM_RE, (m, cmp, rs, numStr, unit) => {
+        const n = toNumber(numStr);
+        if (n == null) return ' ';
+        const max = cmp && /ate|menos|abaixo|maximo/.test(cmp);
+        const min = cmp && /acima|mais de|partir|minimo/.test(cmp);
+        const setPrice = (v) => {
+          if (p.bill) return;
+          if (max) p.priceMax = v; else if (min) p.priceMin = v; else p.price = v;
+        };
+        if (unit === 'kwh' || unit === 'kw/h') p.kwh = n;
+        else if (unit === 'kw') p.kw = n;
+        else if (unit === 'mil' || unit === 'k') setPrice(n * 1000);
+        else if (unit === 'reais' || rs) setPrice(n);
+        else if (unit && /^(placas?|paineis|painel|modulos?)$/.test(unit)) p.placas = n;
+        else if (unit && /^(w|watts?)$/.test(unit)) p.kitIntent = true;
+        else if (n === 620 && /ronma|placa|painel|modulo/.test(s)) p.kitIntent = true;
+        else if (cmp && n < 100) setPrice(n * 1000);
+        else if (n >= 3000) setPrice(n);
+        else if (n >= 50) p.kwh = n;
+        else { p.placas = n; if ([5, 6, 7.5].includes(n)) p.kw = n; }
+        return ' ';
+      });
+      words(rest).forEach((t) => {
+        if (KIT_WORD.test(t)) p.kitIntent = true;
+        else if (!STOP.has(t) && t.length > 1) p.tokens.push(t);
+      });
+      return p;
+    };
+
+    // ----- Busca -----
+    const search = (p) => {
+      const empty = !p.raw;
+      const numeric = p.kwh || p.placas || p.kw || p.price || p.priceMax || p.priceMin || p.tag;
+      const listIntent = p.kitIntent || p.priceIntent || p.cheap || p.big || p.bill;
+      const rec = p.kwh ? (kitIndex.find((k) => k.kwh >= p.kwh) || kitIndex[kitIndex.length - 1]) : null;
+
+      let kitsOut = kitIndex.map((k) => {
+        let sc = empty || (listIntent && !numeric) ? 10 : 0;
+        if (p.kwh) {
+          if (k === rec) sc += 120;
+          sc += 60 * Math.max(0, 1 - Math.abs(k.kwh - p.kwh) / 500);
+        }
+        if (p.placas) {
+          const d = Math.abs(k.placas - p.placas);
+          if (d === 0) sc += 110; else if (d <= 2) sc += 30 - d * 8;
+        }
+        if (p.kw && k.kw === p.kw) sc += 80;
+        if (p.price) sc += 70 * Math.max(0, 1 - Math.abs(k.price - p.price) / 5000);
+        if (p.priceMax || p.priceMin) sc += 40;
+        if (p.tag && k.k.tag) sc += 120;
+        p.tokens.forEach((t) => { if (hits(t, k.words)) sc += 25; });
+        if ((p.priceMax && k.price > p.priceMax) || (p.priceMin && k.price < p.priceMin)) sc = 0;
+        return { item: k, sc, rec: k === rec };
+      }).filter((r) => r.sc > 0);
+
+      if (p.cheap) kitsOut.sort((a, b) => a.item.price - b.item.price);
+      else if (p.big) kitsOut.sort((a, b) => b.item.kwh - a.item.kwh);
+      else if (numeric) kitsOut.sort((a, b) => b.sc - a.sc || a.item.kwh - b.item.kwh);
+      if (p.tag && !p.kwh && !p.placas) kitsOut = kitsOut.filter((r) => r.item.k.tag || r.sc > 120);
+
+      const projectsOut = empty ? [] : projectIndex.map((pr) => {
+        let sc = 0;
+        if (p.kwh && pr.kwh === p.kwh) sc += 50;
+        if (p.placas && pr.placas === p.placas) sc += 40;
+        p.tokens.forEach((t) => { if (hits(t, pr.words)) sc += 40; });
+        return { item: pr, sc };
+      }).filter((r) => r.sc >= 40).sort((a, b) => b.sc - a.sc).slice(0, 4);
+
+      const faqOut = empty ? [] : faqIndex.map((f) => {
+        let sc = 0;
+        p.tokens.forEach((t) => {
+          if (t.length < 3) return;
+          if (hits(t, f.words)) sc += 30; else if (hits(t, f.answer)) sc += 8;
+        });
+        if (p.priceIntent && /custa/.test(norm(f.title))) sc += 60;
+        return { item: f, sc };
+      }).filter((r) => r.sc >= 30).sort((a, b) => b.sc - a.sc).slice(0, 3);
+
+      const sectionsOut = empty ? [] : sectionIndex.map((sct) => {
+        let sc = 0;
+        p.tokens.forEach((t) => { if (t.length >= 3 && hits(t, sct.words)) sc += 35; });
+        return { item: sct, sc };
+      }).filter((r) => r.sc >= 35).sort((a, b) => b.sc - a.sc).slice(0, 3);
+
+      return { rec, kitsOut, projectsOut, faqOut, sectionsOut };
+    };
+
+    const hintFor = (p, res) => {
+      if (!p.raw) return 'Todos os kits da <strong>tabela Mundo Solar</strong>. Digite o seu consumo em kWh para ver o kit mais indicado.';
+      const parts = [];
+      if (p.kwh && res.rec) {
+        const last = kitIndex[kitIndex.length - 1];
+        if (p.kwh > last.kwh) parts.push(`Para consumos acima de ${last.k.kwh} kWh/mês, a Mundo Solar faz <strong>projetos personalizados</strong> — fale conosco. O maior kit da tabela é o de ${last.k.kwh} kWh/mês.`);
+        else parts.push(`Consumo de ${fmtInt(p.kwh)} kWh/mês → kit mais indicado: <strong>${res.rec.k.kwh} kWh/mês</strong> por ${res.rec.k.preco}.`);
+      }
+      if (p.placas) {
+        const exact = kitIndex.find((k) => k.placas === p.placas);
+        parts.push(exact ? `Kit com <strong>${exact.k.placas}</strong>.` : `Nenhum kit com exatamente ${p.placas} placas — mostrando os mais próximos.`);
+      }
+      if (p.kw) parts.push(`Inversor AUXSOL de <strong>${String(p.kw).replace('.', ',')}kW</strong>.`);
+      if (p.priceMax) parts.push(`Kits até <strong>${fmtBRL(p.priceMax)}</strong>.`);
+      if (p.priceMin) parts.push(`Kits a partir de <strong>${fmtBRL(p.priceMin)}</strong>.`);
+      if (p.price) parts.push(`Kits com valor próximo de <strong>${fmtBRL(p.price)}</strong>.`);
+      if (p.tag) parts.push('Configuração <strong>Leste/Oeste</strong>.');
+      if (p.cheap) parts.push('Ordenado do <strong>menor para o maior valor</strong>.');
+      if (p.big) parts.push('Ordenado do <strong>maior para o menor consumo</strong>.');
+      if (p.bill) parts.push('Pelo valor da conta não dá para indicar o kit com precisão: veja o consumo em <strong>kWh</strong> na sua conta de luz ou peça uma análise gratuita.');
+      if (!parts.length && res.kitsOut.length) {
+        const first = kitIndex[0].k.preco;
+        const last = kitIndex[kitIndex.length - 1].k.preco;
+        if (p.priceIntent) parts.push(`Valores da tabela Mundo Solar: de <strong>${first}</strong> a <strong>${last}</strong>. Digite o seu consumo para ver o kit indicado.`);
+        else if (p.kitIntent) parts.push('Todos os kits usam <strong>placas RONMA 620W</strong> e <strong>inversores AUXSOL</strong>. Digite o seu consumo em kWh para ver o kit indicado.');
+      }
+      return parts.join(' ');
+    };
+
+    let entries = [];
+    let active = -1;
+
+    const kitLabel = (k) => `Kit ${k.kwh} kWh/mês${k.tag ? ` (${k.tag})` : ''}`;
+    const setActive = (i, { scroll = true } = {}) => {
+      if (!entries.length) {
+        active = -1;
+        searchInput.removeAttribute('aria-activedescendant');
+        if (searchAction) searchAction.hidden = true;
+        return;
+      }
+      active = (i + entries.length) % entries.length;
+      entries.forEach((e, idx) => {
+        e.el.classList.toggle('is-active', idx === active);
+        e.el.setAttribute('aria-selected', String(idx === active));
+      });
+      const cur = entries[active];
+      searchInput.setAttribute('aria-activedescendant', cur.el.id);
+      if (scroll) cur.el.scrollIntoView({ block: 'nearest' });
+      if (searchAction) {
+        const isKit = cur.item.type === 'kit';
+        searchAction.hidden = !isKit;
+        if (isKit) {
+          const k = cur.item.k;
+          searchActionText.innerHTML = `<strong>${esc(kitLabel(k))}</strong> · ${esc(k.preco)}`;
+          if (hasWhatsApp) { searchWa.href = waLink(kitMessage(k)); searchWa.target = '_blank'; searchWa.rel = 'noopener'; }
+        }
+      }
+    };
+
+    const optionHTML = (r, id) => {
+      const it = r.item;
+      if (it.type === 'kit') {
+        const k = it.k;
+        return `<div class="sr sr--kit" role="option" id="${id}" aria-selected="false">
+          <span class="sr__icon"><svg class="icon" aria-hidden="true"><use href="#i-solar-panel"/></svg></span>
+          <span class="sr__title"><strong>${esc(k.kwh)}</strong> kWh/mês${r.rec ? '<span class="sr__badge">Mais indicado</span>' : ''}${k.tag ? `<span class="sr__badge sr__badge--tag">${esc(k.tag)}</span>` : ''}</span>
+          <span class="sr__meta">${esc(k.placas)} · ${esc(k.inversor)}</span>
+          <span class="sr__aside">${esc(k.preco)}</span>
+        </div>`;
+      }
+      if (it.type === 'project') {
+        return `<div class="sr" role="option" id="${id}" aria-selected="false">
+          <span class="sr__icon"><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg></span>
+          <span class="sr__title">${esc(it.title)} · ${esc(it.loc)}</span>
+          <span class="sr__meta">${it.kwh != null ? `${esc(it.kwh)} kWh/mês · ` : ''}${esc(it.specs.join(' · '))}</span>
+        </div>`;
+      }
+      if (it.type === 'faq') {
+        return `<div class="sr" role="option" id="${id}" aria-selected="false">
+          <span class="sr__icon"><svg class="icon" aria-hidden="true"><use href="#i-circle-help"/></svg></span>
+          <span class="sr__title">${esc(it.title)}</span>
+          <span class="sr__meta">Perguntas frequentes</span>
+        </div>`;
+      }
+      return `<div class="sr" role="option" id="${id}" aria-selected="false">
+        <span class="sr__icon"><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+        <span class="sr__title">${esc(it.title)}</span>
+        <span class="sr__meta">${esc(it.desc)}</span>
+      </div>`;
+    };
+
+    const render = () => {
+      const p = parse(searchInput.value);
+      const res = search(p);
+      const groups = [
+        ['Kits de placas solares', res.kitsOut],
+        ['Projetos realizados', res.projectsOut],
+        ['Perguntas frequentes', res.faqOut],
+        ['Seções do site', res.sectionsOut],
+      ].filter(([, list]) => list.length);
+
+      if (searchChips) searchChips.hidden = !!p.raw;
+      let n = 0;
+      const flat = [];
+      searchResults.innerHTML = groups.map(([label, list], gi) => {
+        const gid = `search-group-${gi}`;
+        return `<div class="search__group" role="group" aria-labelledby="${gid}">
+          <p class="search__label" id="${gid}" role="presentation">${label}</p>
+          ${list.map((r) => { flat.push(r); return optionHTML(r, `search-opt-${n++}`); }).join('')}
+        </div>`;
+      }).join('');
+
+      const total = flat.length;
+      if (!total) {
+        searchHint.innerHTML = `Nenhum resultado para “${esc(p.raw)}”. Tente pelo consumo (ex.: <strong>700 kWh</strong>), pelo número de placas ou pelo valor — ou fale com a Mundo Solar.`;
+        if (searchChips) searchChips.hidden = false;
+      } else {
+        searchHint.innerHTML = hintFor(p, res);
+      }
+      if (searchStatus) searchStatus.textContent = total ? `${total} ${total === 1 ? 'resultado' : 'resultados'}` : 'Nenhum resultado';
+
+      entries = $$('[role="option"]', searchResults).map((el, i) => ({ el, item: flat[i].item }));
+      entries.forEach((e, i) => {
+        e.el.addEventListener('click', () => go(e));
+        e.el.addEventListener('mousemove', () => { if (active !== i) setActive(i, { scroll: false }); });
+      });
+      setActive(0, { scroll: false });
+      if (searchBody) searchBody.scrollTop = 0;
+    };
+
+    const flash = (el) => {
+      el.classList.remove('is-found');
+      void el.offsetWidth;
+      el.classList.add('is-found');
+      setTimeout(() => el.classList.remove('is-found'), 2200);
+    };
+    const scrollOpts = (block) => ({ behavior: reduceMotion ? 'auto' : 'smooth', block });
+
+    const go = (entry) => {
+      const it = entry.item;
+      searchDialog.close();
+      document.documentElement.style.overflow = '';
+      if (it.type === 'kit') {
+        selectKit(it.li);
+        (desktopMQ.matches ? $('#kits') : it.li).scrollIntoView(scrollOpts(desktopMQ.matches ? 'start' : 'center'));
+        flash(it.li);
+      } else if (it.type === 'project') {
+        it.el.scrollIntoView(scrollOpts('center'));
+        flash(it.el);
+      } else if (it.type === 'faq') {
+        it.el.open = true;
+        it.el.scrollIntoView(scrollOpts('center'));
+        flash(it.el);
+      } else {
+        const target = $(it.href);
+        if (target) target.scrollIntoView(scrollOpts('start'));
+      }
+    };
+
+    const openSearch = (q = '') => {
+      if (body.classList.contains('nav-open')) setMenu(false);
+      if (dialog && dialog.open) dialog.close();
+      searchInput.value = q;
+      render();
+      searchDialog.showModal();
+      document.documentElement.style.overflow = 'hidden';
+      searchInput.focus();
+    };
+
+    $$('[data-search-open]').forEach((b) => b.addEventListener('click', () => openSearch()));
+    $$('[data-search-close]', searchDialog).forEach((b) => b.addEventListener('click', () => searchDialog.close()));
+    searchDialog.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+    searchDialog.addEventListener('click', (e) => { if (e.target === searchDialog) searchDialog.close(); });
+    if (searchWa) quoteFallback(searchWa);
+    if (searchChips) {
+      $$('[data-q]', searchChips).forEach((chip) => chip.addEventListener('click', () => {
+        searchInput.value = chip.dataset.q;
+        render();
+        searchInput.focus();
+      }));
+    }
+
+    searchInput.addEventListener('input', render);
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === 'Enter') { e.preventDefault(); if (entries[active]) go(entries[active]); }
+    });
+
+    // Atalhos: "/" ou Ctrl/⌘ + K
+    document.addEventListener('keydown', (e) => {
+      const t = e.target;
+      const typing = t && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName));
+      const combo = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k';
+      if ((combo || (e.key === '/' && !typing)) && !searchDialog.open) {
+        e.preventDefault();
+        openSearch();
+      }
+    });
+  }
+
   /* ---------- Revelação no scroll ---------- */
   const revealEls = $$('[data-reveal]');
   const finishReveal = (el) => {
@@ -295,21 +690,66 @@ const SITE_CONFIG = {
     counters.forEach((el) => cio.observe(el));
   }
 
-  /* ---------- Scrollspy ---------- */
+  /* ---------- Scrollspy + linha dourada do menu ----------
+   * A seção ativa é a última (na ordem do menu) cujo topo já passou de 40% da tela;
+   * seções fora do menu mantêm o item anterior, então a linha nunca "some" no meio da página.
+   */
+  const navList = $('.nav__list');
   const navLinks = $$('.nav__link');
-  const linkFor = new Map(navLinks.map((a) => [a.getAttribute('href').slice(1), a]));
-  const spySections = $$('main section[id]');
-  if ('IntersectionObserver' in window) {
-    const spy = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const active = linkFor.get(entry.target.id);
-        navLinks.forEach((a) => a.removeAttribute('aria-current'));
-        if (active) active.setAttribute('aria-current', 'true');
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    spySections.forEach((s) => spy.observe(s));
-  }
+  const mobileLinks = $$('.mobile-menu__list a');
+  const indicator = $('[data-nav-indicator]');
+  const desktopNavMQ = window.matchMedia('(min-width: 1200px)');
+  const spyTargets = navLinks
+    .map((link) => ({ link, id: link.getAttribute('href').slice(1) }))
+    .map((t) => ({ ...t, section: document.getElementById(t.id) }))
+    .filter((t) => t.section);
+  let currentLink = null;
+  let previewLink = null;
+
+  const placeIndicator = (link) => {
+    if (!indicator) return;
+    if (!link || !desktopNavMQ.matches) { indicator.classList.remove('is-visible'); return; }
+    indicator.style.setProperty('--x', `${link.offsetLeft}px`);
+    indicator.style.setProperty('--w', `${link.offsetWidth}px`);
+    indicator.classList.add('is-visible');
+  };
+
+  const setCurrent = (id) => {
+    const target = spyTargets.find((t) => t.id === id);
+    const link = target ? target.link : null;
+    if (link === currentLink) return;
+    currentLink = link;
+    navLinks.forEach((a) => (a === link ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    mobileLinks.forEach((a) => (a.getAttribute('href') === `#${id}` ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+    if (!previewLink) placeIndicator(currentLink);
+  };
+
+  const updateSpy = (vh) => {
+    if (!spyTargets.length) return;
+    const line = vh * 0.4;
+    let id = spyTargets[0].id;
+    spyTargets.forEach((t) => { if (t.section.getBoundingClientRect().top <= line) id = t.id; });
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+    if (atBottom) id = spyTargets[spyTargets.length - 1].id;
+    setCurrent(id);
+  };
+
+  // Ao passar o mouse (ou focar pelo teclado), a linha antecipa o destino.
+  const preview = (link) => {
+    previewLink = link;
+    if (indicator) indicator.classList.toggle('is-preview', !!link && link !== currentLink);
+    placeIndicator(link || currentLink);
+  };
+  navLinks.forEach((a) => {
+    a.addEventListener('mouseenter', () => preview(a));
+    a.addEventListener('focus', () => preview(a));
+    a.addEventListener('blur', () => preview(null));
+  });
+  if (navList) navList.addEventListener('mouseleave', () => preview(null));
+  const replaceIndicator = () => placeIndicator(previewLink || currentLink);
+  window.addEventListener('resize', replaceIndicator, { passive: true });
+  desktopNavMQ.addEventListener('change', replaceIndicator);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(replaceIndicator);
 
   /* ---------- Scroll: header, timeline, parallax, WhatsApp flutuante ---------- */
   const header = $('[data-header]');
@@ -363,6 +803,7 @@ const SITE_CONFIG = {
         const nearFooter = footer && footer.getBoundingClientRect().top < vh - 40;
         waFloat.classList.toggle('is-visible', y > vh * 0.75 && !nearFooter);
       }
+      updateSpy(vh);
       updateTimeline(vh);
       updateParallax(vh);
       ticking = false;
