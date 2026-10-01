@@ -79,16 +79,17 @@
 body[data-tone="dark"] .topbar, body[data-tone="dark"] .indicator {
   --bg: #12221a;
   --fg-rgb: 243 237 228;
-  --acc-rgb: 214 176 120;
+  --acc-rgb: 150 196 130;
   --surf-rgb: 13 27 19;
   --panel: #172a1f;
   --panel-2: #1d3326;
-  --gold: #d8ae72;
-  --gold-hi: #efd5a4;
-  --gold-lo: #b98c4c;
-  --gold-grad: linear-gradient(180deg, #ecd3a2 0%, #d5aa6a 50%, #b98c4c 100%);
-  --on-gold: #182419;
-  --terracotta: #d8ae72;
+  /* destaques em verde também no escuro: botões verdes com texto branco, detalhes em verde-claro */
+  --gold: #9ccb88;
+  --gold-hi: #c6e4b6;
+  --gold-lo: #5f8f4c;
+  --gold-grad: linear-gradient(180deg, #5f9a4b 0%, #4c7f3d 50%, #416734 100%);
+  --on-gold: #ffffff;
+  --terracotta: #9ccb88;
   --danger: #f0a58a;
   --ok: #8fd3a8;
   --logo-roof: #f3ede4;
@@ -1682,7 +1683,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
   z-index: 1;
   padding: calc(0.3 * var(--u)) calc(0.8 * var(--u));
   border-radius: 3px;
-  background: var(--tan);
+  background: var(--gold-grad);
   font-size: max(9px, calc(0.78 * var(--u)));
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -1717,7 +1718,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
 }
 .reel-cover small { font-size: max(9px, calc(0.72 * var(--u))); letter-spacing: 0.3em; text-transform: uppercase; opacity: 0.9; }
 .reel-cover strong { font-family: "Newsreader", Georgia, serif; font-size: calc(1.75 * var(--u)); font-weight: 500; line-height: 1.05; text-transform: uppercase; }
-.reel-cover em { margin-top: calc(0.3 * var(--u)); padding: calc(0.3 * var(--u)) calc(0.9 * var(--u)); border: 1px solid var(--tan); font-style: normal; font-size: max(11px, calc(1.1 * var(--u))); font-weight: 600; color: #fff; background: rgba(8, 20, 13, 0.35); }
+.reel-cover em { margin-top: calc(0.3 * var(--u)); padding: calc(0.3 * var(--u)) calc(0.9 * var(--u)); border: 1px solid var(--gold); font-style: normal; font-size: max(11px, calc(1.1 * var(--u))); font-weight: 600; color: #fff; background: rgba(8, 20, 13, 0.35); }
 .reel-play {
   position: absolute;
   left: 50%;
@@ -1762,7 +1763,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
 
 .avaliacoes {
   background:
-    radial-gradient(70% 60% at 78% 100%, rgba(226, 184, 102, 0.14), transparent 70%),
+    radial-gradient(70% 60% at 78% 100%, rgba(120, 190, 150, 0.12), transparent 70%),
     linear-gradient(180deg, #0e1c14 0%, var(--night) 55%);
   color: var(--cream);
 }
@@ -1785,7 +1786,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
   width: 34%;
   height: 34%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 190, 110, 0.35), transparent);
+  background: radial-gradient(closest-side, rgba(150, 210, 170, 0.22), transparent);
   mix-blend-mode: screen;
   animation: breathe 6s ease-in-out infinite alternate;
 }
@@ -1883,8 +1884,8 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
 
 .contato {
   background:
-    radial-gradient(45% 40% at 94% 58%, rgba(255, 170, 90, 0.55), transparent 70%),
-    radial-gradient(60% 30% at 80% 16%, rgba(255, 170, 120, 0.22), transparent 70%),
+    radial-gradient(45% 40% at 94% 58%, rgba(120, 190, 150, 0.28), transparent 70%),
+    radial-gradient(60% 30% at 80% 16%, rgba(120, 190, 150, 0.14), transparent 70%),
     linear-gradient(180deg, #050505 0%, #0e1c14 55%, #050505 100%);
   color: var(--cream);
 }
@@ -2335,7 +2336,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
   z-index: 70;
   overflow: clip;
   background:
-    radial-gradient(60% 55% at 78% 92%, rgba(226, 184, 102, 0.16), transparent 70%),
+    radial-gradient(60% 55% at 78% 92%, rgba(120, 190, 150, 0.14), transparent 70%),
     linear-gradient(180deg, #0e1c14 0%, var(--night) 62%);
   color: var(--cream);
 }
@@ -2367,7 +2368,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
   width: 34%;
   height: 34%;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgba(255, 190, 110, 0.35), transparent);
+  background: radial-gradient(closest-side, rgba(150, 210, 170, 0.22), transparent);
   mix-blend-mode: screen;
   animation: breathe 6s ease-in-out infinite alternate;
 }
