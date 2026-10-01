@@ -224,6 +224,16 @@ const SITE_CONFIG = {
     }
   });
 
+  $$('[data-wa-msg]').forEach((el) => {
+    if (hasWhatsApp) {
+      el.href = waLink(el.dataset.waMsg);
+      el.target = '_blank';
+      el.rel = 'noopener';
+    } else {
+      el.addEventListener('click', (e) => { if (openQuote('Comercial')) e.preventDefault(); });
+    }
+  });
+
   /* ---------- Tabela de kits ---------- */
   const kits = $$('[data-kit]');
   const kitFeature = $('[data-kit-feature]');
@@ -355,7 +365,12 @@ const SITE_CONFIG = {
         placas: parseInt(specs[0], 10),
         words: words(`${title} ${count ? count.dataset.count : ''} kwh ${specs.join(' ')} ${loc} projeto projetos`),
       };
-    });
+    }).concat($$('[data-case]').map((el) => ({
+      type: 'project', el,
+      title: el.dataset.case, loc: el.dataset.caseLoc, specs: [], meta: el.dataset.caseMeta,
+      kwh: toNumber(el.dataset.caseKwh), placas: NaN,
+      words: words(`${el.dataset.case} ${el.dataset.caseLoc} ${el.dataset.caseKwh} kwh ${el.dataset.caseMeta} projeto projetos empresa empresas comercial alto padrao`),
+    })));
 
     const faqIndex = $$('.faq-item').map((el) => {
       const q = ($('summary span', el) || {}).textContent || '';
@@ -369,6 +384,7 @@ const SITE_CONFIG = {
       ['Projetos personalizados', 'Dimensionados para cada instalação', '#solucoes', 'personalizado projeto medida dimensionamento'],
       ['Como funciona', 'Do primeiro contato à geração de energia', '#como-funciona', 'como funciona etapas processo instalacao instalar prazo'],
       ['Benefícios da energia solar', 'Economia, valorização e autonomia', '#beneficios', 'beneficios vantagens economia economizar valorizacao sustentavel'],
+      ['Projetos de alto padrão', 'Empresas da região que já geram a própria energia', '#alto-padrao', 'alto padrao empresas empresa grandes comercial negocio usina usinas estrutura elevada solo'],
       ['Sobre a Mundo Solar', 'Desde 2022 · +500 usinas entregues', '#sobre', 'sobre empresa historia quem somos redencao usinas'],
       ['Contato e orçamento', 'WhatsApp (94) 9124-3878', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
     ].map(([title, desc, href, kw]) => ({ type: 'section', title, desc, href, words: words(`${title} ${kw}`) }));
@@ -584,7 +600,7 @@ const SITE_CONFIG = {
         return `<div class="sr" role="option" id="${id}" aria-selected="false">
           <span class="sr__icon"><svg class="icon" aria-hidden="true"><use href="#i-map-pin"/></svg></span>
           <span class="sr__title">${esc(it.title)} · ${esc(it.loc)}</span>
-          <span class="sr__meta">${it.kwh != null ? `${esc(it.kwh)} kWh/mês · ` : ''}${esc(it.specs.join(' · '))}</span>
+          <span class="sr__meta">${it.meta ? esc(it.meta) : `${it.kwh != null ? `${esc(it.kwh)} kWh/mês · ` : ''}${esc(it.specs.join(' · '))}`}</span>
         </div>`;
       }
       if (it.type === 'faq') {
@@ -749,14 +765,15 @@ const SITE_CONFIG = {
   const counters = $$('[data-count]');
   const runCounter = (el) => {
     const target = parseInt(el.dataset.count, 10);
-    const final = el.dataset.count;
+    const fmt = el.dataset.format === 'br' ? (n) => n.toLocaleString('pt-BR') : (n) => String(n);
+    const final = el.dataset.format === 'br' && Number.isFinite(target) ? fmt(target) : el.dataset.count;
     if (!Number.isFinite(target) || reduceMotion) { el.textContent = final; return; }
     const duration = 1300;
     const start = performance.now();
     const tick = (now) => {
       const t = clamp((now - start) / duration, 0, 1);
       const eased = 1 - Math.pow(1 - t, 4);
-      el.textContent = String(Math.round(target * (t === 1 ? 1 : eased)));
+      el.textContent = fmt(Math.round(target * (t === 1 ? 1 : eased)));
       if (t < 1) requestAnimationFrame(tick);
       else el.textContent = final; // garante o valor exato informado
     };

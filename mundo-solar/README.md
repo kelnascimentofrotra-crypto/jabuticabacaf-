@@ -102,6 +102,23 @@ precisar trocar, altere apenas o `src`/`srcset` da imagem no card.
 | 03 — Gilvan Barbearia Fashion Man | `instalacao-aerea-residencial.webp` |
 | 04 — Telma Freitas | `instalacao-aerea-telhado-metalico.webp` |
 
+### Alto padrão (empresas) — bloco `#alto-padrao`
+
+No início da seção de Projetos. Dados exatamente como nos posts da Mundo Solar:
+
+| Empresa | Geração | Economia mensal | Economia anual | Equipamento | Foto |
+| --- | --- | --- | --- | --- | --- |
+| Carajás Motos Yamaha (destaque) | 7.000 kWh | R$ 8.000,00 | R$ 96.000,00 | — | `projeto-carajas-motos-yamaha.webp` |
+| Meneses Gás | 3.600 kWh | R$ 3.200,00 | R$ 38.400,00 | Microinversor Growatt 2000W | `instalacao-comercial-aerea.webp` (mesma foto do topo) |
+| Academia Athletica Person | 2.500 kWh | R$ 2.300,00 | R$ 27.600,00 | — | `projeto-academia-athletica-person.webp` |
+| Disk Bebidas Pingo de Ouro | 2.000 kWh | R$ 2.300,00 | R$ 27.600,00 | 02 Inversores SOFAR | `projeto-disk-bebidas-pingo-de-ouro.webp` |
+| Bolos do Sítio | 1.800 kWh | R$ 2.200,00 | R$ 26.400,00 | Microinversor Deye monofásico 220V | `projeto-bolos-do-sitio.webp` |
+
+A faixa de totais (16.900 kWh · R$ 18.000/mês · R$ 216.000/ano) é a soma desses cinco projetos — se
+mudar algum valor, atualize os totais. As fotos `usina-estrutura-elevada-*.webp` aparecem sem nome nem
+números até que a empresa confirme esses dados. Cada card tem um botão "Quero um projeto assim" que abre o
+WhatsApp citando o projeto (atributo `data-wa-msg`).
+
 ## Cache (versão dos arquivos)
 
 O `index.html` carrega `styles.css?v=...` e `main.js?v=...`. Ao alterar o CSS ou o JS, troque o valor de
