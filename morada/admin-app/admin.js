@@ -2012,16 +2012,10 @@
             <label class="field"><span>Famílias atendidas</span><input name="familias_atendidas" type="number" min="0" max="1000000" step="1" inputmode="numeric" value="${c.familias_atendidas ?? ''}" placeholder="Ex.: 350" /><small class="err"></small></label>
             <label class="field"><span>Anos de mercado</span><input name="anos_mercado" type="number" min="0" max="200" step="1" inputmode="numeric" value="${c.anos_mercado ?? ''}" placeholder="Ex.: 12" /><small class="err"></small></label>
           </div>
-        </section>
-        <section class="panel">
-          <h2 class="panel-title">Login dos clientes</h2>
-          <label class="switch"><input type="checkbox" name="login_google"${c.login_google ? ' checked' : ''} /><span class="switch-ui" aria-hidden="true"></span><span>Mostrar <b>“Entrar com o Google”</b> no site</span></label>
-          <p class="hint" style="margin-top:10px">O botão só aparece no site quando o Google também está ativado no Supabase (Authentication → Sign In / Providers → Google). O cadastro com e-mail e senha funciona sem isso.</p>
-          <p class="google-status" id="cfGoogle" hidden></p>
         </section>` : `
         <section class="panel">
           <h2 class="panel-title">Mais opções</h2>
-          <p class="hint">Números da apresentação e login com Google aparecem aqui depois que o SQL novo (migração 2) for rodado no Supabase.</p>
+          <p class="hint">Os números da apresentação aparecem aqui depois que o SQL novo (migração 2) for rodado no Supabase.</p>
         </section>`}
         <div class="form-bar">
           <p class="form-msg" id="cfMsg" role="alert"></p>
@@ -2037,18 +2031,6 @@
       $('#cfLogoDel').hidden = !url;
     };
     paintLogo();
-    // diz se o Google já está ativado no Supabase (sem isso o botão não aparece no site)
-    if (novos) {
-      window.moradaGoogleAtivo?.().then((on) => {
-        const el = $('#cfGoogle');
-        if (!alive() || !el || on === null) return;
-        el.hidden = false;
-        el.classList.toggle('is-on', on);
-        el.innerHTML = on
-          ? `${icon('check')}<span>O Google está ativado no Supabase.</span>`
-          : `${icon('alert')}<span>O Google ainda não está ativado no Supabase, então o botão fica escondido no site, mesmo com esta opção ligada.</span>`;
-      });
-    }
     f.addEventListener('input', () => { dirty = true; });
     $('#cfLogoFile').addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -2085,7 +2067,7 @@
         const n = (v) => (String(v).trim() === '' ? null : Number(v));
         d.familias_atendidas = n(f.familias_atendidas.value);
         d.anos_mercado = n(f.anos_mercado.value);
-        d.login_google = f.login_google.checked;
+        d.login_google = false; // "Entrar com o Google" desligado (só e-mail e senha)
         if (d.familias_atendidas != null && (!Number.isInteger(d.familias_atendidas) || d.familias_atendidas < 0)) errs.familias_atendidas = 'Digite um número inteiro.';
         if (d.anos_mercado != null && (!Number.isInteger(d.anos_mercado) || d.anos_mercado < 0 || d.anos_mercado > 200)) errs.anos_mercado = 'Digite um número de 0 a 200.';
       }

@@ -67,15 +67,15 @@ Abra `https://seu-dominio/admin`, entre com o e-mail e a senha do administrador.
 - **Alto padrão**: o que aparece em “Imóveis de alto padrão” no site, e em que ordem.
 - **Avaliações**: criar, editar, publicar/despublicar e excluir. A nota média do site vem daqui.
 - **Contatos**: mensagens do formulário do site e pedidos finalizados no carrinho, com WhatsApp e e-mail para responder, lidas/não lidas e contador no menu.
-- **Configurações**: nome, WhatsApp, Instagram, telefone, e-mail, endereço, logo, números da apresentação (famílias atendidas, anos de mercado) e o botão “Entrar com o Google”.
+- **Configurações**: nome, WhatsApp, Instagram, telefone, e-mail, endereço, logo e números da apresentação (famílias atendidas, anos de mercado).
 - **Minha conta** (clique no seu e-mail no topo): trocar a senha. Na tela de entrada há “Esqueci minha senha”.
 - O **Dashboard** mostra as mensagens novas e uma lista do que ainda falta para o site ficar completo.
 
 ## Contas de clientes
 
-No site, os clientes criam conta com e-mail e senha (ou Google, se ligado), recuperam a senha por e-mail e têm favoritos, carrinho e pedidos salvos na conta, em qualquer aparelho. Em **Minha conta → Conta** podem editar nome, telefone, foto e senha, ou excluir a conta (LGPD). O modo visitante continua.
+No site, os clientes criam conta com e-mail e senha, recuperam a senha por e-mail e têm favoritos, carrinho e pedidos salvos na conta, em qualquer aparelho. Em **Minha conta → Conta** podem editar nome, telefone, foto e senha, ou excluir a conta (LGPD). O modo visitante continua.
 
-**Login com Google (opcional):** crie um “ID do cliente OAuth” no Google Cloud (tipo Aplicativo da Web) com a URL de retorno que o Supabase mostra em **Authentication → Sign In / Providers → Google**, cole o Client ID e o Secret lá, ative e depois ligue **“Entrar com o Google”** em Configurações no painel. O botão só aparece no site com as duas coisas ligadas, e o painel mostra se o Google já está ativado no Supabase. O Client Secret fica só no Supabase, nunca no código do site.
+**Login com Google:** desligado. A opção saiu das Configurações do painel e o site só oferece e-mail e senha. Para voltar a ter, é preciso criar um “ID do cliente OAuth” no Google Cloud (a conta precisa da verificação em duas etapas), colar o Client ID e o Secret no Supabase em **Authentication → Sign In / Providers → Google** e devolver a opção ao painel.
 
 Tudo o que é salvo aparece no site na próxima vez que a página abrir (e quando a aba volta a ficar visível, depois de 1 minuto).
 
