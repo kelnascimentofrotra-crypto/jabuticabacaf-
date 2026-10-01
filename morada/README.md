@@ -26,7 +26,7 @@ supabase/                        SQL do banco (não é publicado no site — vej
    Isso não dá acesso ao painel: só quem está na tabela `admins` consegue alterar alguma coisa.
    - **Confirm email** ligado: o cliente precisa clicar no link do e-mail antes de entrar. O envio de e-mails padrão do Supabase é limitado (poucos por hora); para muitos cadastros, configure um SMTP próprio em **Authentication → Emails → SMTP Settings** ou deixe essa opção desligada.
 6. **Authentication → URL Configuration**:
-   - **Site URL**: o endereço do site (ex.: `https://arturcorretor.vercel.app`).
+   - **Site URL**: o endereço do site (ex.: `https://recantodoacreflats.vercel.app`).
    - **Redirect URLs**: adicione `https://SEU-DOMINIO/**` — é para onde voltam os links de “esqueci minha senha” (clientes e painel) e o login com Google.
 
 ### Primeiro administrador
