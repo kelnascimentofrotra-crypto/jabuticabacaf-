@@ -970,6 +970,9 @@ details[open] .rank-main small { visibility: hidden; }
 .rl-bar-track i { display: block; height: 100%; border-radius: 4px; background: var(--c-views); }
 .rl-bar b, .rl-im-table td.rl-num > b { font-weight: 600; min-width: 3ch; }
 
+.rl-note { display: flex; align-items: flex-start; gap: 10px; margin-top: 18px; padding: 12px 14px; border-radius: 12px; background: var(--chip); color: var(--ink-2); font-size: 13px; line-height: 1.45; }
+.rl-note .ico { width: 17px; height: 17px; flex: none; margin-top: 1px; color: var(--muted); }
+.rl-empty span { max-width: 46ch; }
 .rl-setup { display: grid; justify-items: start; gap: 12px; max-width: 640px; }
 .rl-setup-ico { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: var(--c-views-tint); color: var(--c-views); }
 .rl-setup-ico .ico { width: 26px; height: 26px; }

@@ -2179,7 +2179,8 @@
           <div class="panel-head"><h2>Desempenho dos imóveis</h2><small class="hint">mais vistos primeiro</small></div>
           <div id="rlImoveis">${skelRows(4)}</div>
         </section>
-      </div>`;
+      </div>
+      <p class="rl-note">${icon('alert')}<span>Os acessos feitos <b>neste aparelho</b> não entram na contagem, porque ele está logado no painel — assim as suas próprias visitas não inflam os números. Para ver a contagem funcionando, abra o site numa janela anônima ou em outro celular e depois clique em Atualizar.</span></p>`;
     const form = $('#rlCustom');
 
     const pintarFiltros = () => {
@@ -2238,7 +2239,7 @@
       const serie = dados.serie || [];
       const temAlgo = serie.some(([, v, w]) => v || w);
       if (!serie.length || !temAlgo) {
-        box.innerHTML = `<div class="rl-empty">${icon('chart')}<b>Sem visitas neste período</b><span>Os números aparecem aqui assim que alguém abrir o site.</span></div>`;
+        box.innerHTML = `<div class="rl-empty">${icon('chart')}<b>Sem visitas neste período</b><span>Os números aparecem aqui assim que alguém abrir o site. Para testar, use uma janela anônima ou outro celular: este aparelho não conta (veja abaixo).</span></div>`;
         return;
       }
       graficoLinhas(box, serie, dados.passo, alive);
@@ -2251,7 +2252,9 @@
       $('#rlRange').textContent = r.texto.charAt(0).toUpperCase() + r.texto.slice(1);
       $('#rlBody').classList.add('is-loading');
       const chamar = (ini, fim) => sb.rpc('admin_relatorio', { p_inicio: ini ? ini.toISOString() : null, p_fim: fim.toISOString(), p_fuso: FUSO });
-      const [cur, prev] = await Promise.all([chamar(r.ini, r.fim), r.prev ? chamar(r.prev.ini, r.prev.fim) : Promise.resolve(null)]);
+      // "Tempo todo": as avaliações contam desde sempre (a contagem de visitas só começa quando os Relatórios são ligados)
+      const todas = p.id === 'tudo' ? sb.from('avaliacoes').select('id', { count: 'exact', head: true }) : Promise.resolve(null);
+      const [cur, prev, aval] = await Promise.all([chamar(r.ini, r.fim), r.prev ? chamar(r.prev.ini, r.prev.fim) : Promise.resolve(null), todas]);
       if (!alive()) return;
       $('#rlBody').classList.remove('is-loading');
       const err = cur.error || prev?.error;
@@ -2264,6 +2267,13 @@
       }
       dados = cur.data;
       const t = dados.totais;
+      if (aval && !aval.error && aval.count != null) t.avaliacoes = aval.count;
+      if (p.id === 'tudo') {
+        const temVisitas = t.visitas || t.imoveis || t.whatsapp;
+        $('#rlRange').textContent = temVisitas
+          ? `Desde ${new Date(dados.inicio).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}, quando a contagem de visitas começou`
+          : 'A contagem de visitas começa na primeira visita ao site depois que os Relatórios foram ligados';
+      }
       const a = prev?.data?.totais;
       const kpis = [
         ['views', 'eye', 'Visualizações', t.visitas, a?.visitas],
