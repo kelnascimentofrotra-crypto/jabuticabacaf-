@@ -1,4 +1,4 @@
-// Painel administrativo da Morada (/admin)
+// Painel administrativo do site (/admin)
 // Tudo passa pelo Supabase com a sessão de quem entrou: as políticas RLS do banco
 // só deixam gravar quem está na tabela "admins". O painel não guarda senha nem chave secreta.
 (() => {
@@ -29,7 +29,9 @@
   let user = null;        // usuário admin logado
   let siteName = 'Recanto do Acre Flats';
   // nomes antigos (o de exemplo "Morada" e o do dono anterior) não valem: fica o nome da marca
-  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !/^morada$|artur|arthur|guimar/i.test(v) ? v : ''; };
+  const NOME_MARCA = 'Recanto do Acre Flats';
+  const nomeAntigo = (n) => /^morada$|artur|arthur|guimar/i.test(String(n || '').trim());
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) ? v : ''; };
   // Tema: claro (padrão, verde e bege) ou escuro (verde-floresta). O botão de sol troca e a escolha fica salva neste aparelho.
   const THEME_KEY = 'morada:admin-tema';
   const isLight = () => document.documentElement.dataset.theme === 'light';
@@ -706,6 +708,38 @@
   }
 
   // mensagens novas + lista do que falta para o site ficar completo (tudo conferido no banco)
+  // dados que ficaram do dono anterior (nome antigo nas Configurações): um clique apaga tudo de uma vez
+  function avisoDadosAntigos(c, box) {
+    if (!c || !nomeAntigo(c.nome_imobiliaria)) return;
+    const campos = [['Nome', c.nome_imobiliaria], ['WhatsApp', c.whatsapp], ['Telefone', c.telefone], ['E-mail', c.email], ['Instagram', c.instagram], ['Endereço', c.endereco]].filter(([, v]) => v);
+    if (c.logo) campos.push(['Logo', 'imagem enviada']);
+    if (c.familias_atendidas) campos.push(['Famílias atendidas', c.familias_atendidas]);
+    if (c.anos_mercado) campos.push(['Anos de mercado', c.anos_mercado]);
+    box.insertAdjacentHTML('afterbegin', `<div class="notice notice--warn" id="oldData">${icon('alert')}<span><b>Ainda há dados do dono anterior.</b> ${esc(campos.map(([k]) => k).join(', '))}. Apague para o painel e o site usarem só “${NOME_MARCA}”.</span><button class="btn btn-sm btn-danger-ghost" type="button" id="oldDataBtn">Apagar dados antigos</button></div>`);
+    $('#oldDataBtn').addEventListener('click', async (e) => {
+      const lista = campos.map(([k, v]) => `• ${k}: ${v}`).join('\n');
+      if (!confirm(`Apagar estes dados do dono anterior?\n\n${lista}\n\nO nome passa a ser “${NOME_MARCA}”. Depois é só colocar os dados novos em Configurações.`)) return;
+      const btn = e.currentTarget;
+      setBusy(btn, true, 'Apagando…');
+      const d = { nome_imobiliaria: NOME_MARCA, whatsapp: '', telefone: '', email: '', instagram: '', endereco: '', logo: null };
+      if ('familias_atendidas' in c) { d.familias_atendidas = null; d.anos_mercado = null; }
+      try {
+        const { data, error } = await sb.from('configuracoes').update(d).eq('id', 1).select('id');
+        if (error) throw error;
+        if (!data.length) throw noRows();
+        if (isStoragePath(c.logo)) removeFiles(SITE_BUCKET, [c.logo]);
+        siteName = NOME_MARCA;
+        paintIdentity();
+        dirty = false;
+        toast('Dados antigos apagados. Agora é só colocar os novos em Configurações.');
+        render();
+      } catch (err) {
+        setBusy(btn, false);
+        toast(errText(err), 'error');
+      }
+    });
+  }
+
   const EXEMPLOS_IMOVEIS = ['patio', 'mirante', 'jequitiba', 'brisa', 'seixo', 'lume', 'jardins', 'leblon', 'serra'];
   const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
   async function loadExtras(alive) {
@@ -727,6 +761,7 @@
       $('#notice').insertAdjacentHTML('afterbegin', `<a class="notice" href="/admin/contatos?filtro=novos" data-link>${icon('mail')}<span><b>${plural(novas.count, 'mensagem nova', 'mensagens novas')}</b> de clientes esperando resposta.</span><span class="notice-go">Ver mensagens ${icon('right')}</span></a>`);
     }
     const c = conf.data || {};
+    avisoDadosAntigos(conf.data, $('#notice'));
     const items = [
       [!clientes.error || semMigracao, false, 'Rodar o SQL da página Clientes', 'Mostra quem tem conta, favoritos e carrinhos. O arquivo é supabase/migrations/20260930180000_clientes_painel.sql.', ''],
       [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
@@ -1948,7 +1983,7 @@
         <section class="panel">
           <h2 class="panel-title">Imobiliária</h2>
           <div class="grid">
-            <label class="field"><span>Nome da imobiliária *</span><input name="nome_imobiliaria" maxlength="60" required value="${esc(c.nome_imobiliaria)}" /><small class="err"></small></label>
+            <label class="field"><span>Nome da imobiliária *</span><input name="nome_imobiliaria" maxlength="60" required value="${esc(nomeAntigo(c.nome_imobiliaria) ? NOME_MARCA : c.nome_imobiliaria)}" /><small class="err"></small></label>
             <div class="field"><span>Logo</span>
               <div class="mini-photo">
                 <span class="logo-prev" id="cfLogo"></span>
@@ -1993,6 +2028,7 @@
           <button class="btn btn-primary btn-lg" type="submit" id="cfSave">SALVAR ALTERAÇÕES</button>
         </div>
       </form>`;
+    avisoDadosAntigos(c, $('#cfBox'));
     const f = $('#cfForm');
     const paintLogo = () => {
       const url = logoPreview || siteUrl(logo);
@@ -2044,7 +2080,7 @@
       if (d.nome_imobiliaria.length < 2) errs.nome_imobiliaria = 'Digite o nome da imobiliária.';
       if (d.whatsapp && (d.whatsapp.length < 10 || d.whatsapp.length > 15)) errs.whatsapp = 'Use DDI + DDD + número, ex.: 5511999998888.';
       if (d.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(d.email)) errs.email = 'Digite um e-mail válido.';
-      if (d.instagram && !/^@[A-Za-z0-9._]{1,30}$/.test(d.instagram)) errs.instagram = 'Use só o @ do perfil, ex.: @morada.casas';
+      if (d.instagram && !/^@[A-Za-z0-9._]{1,30}$/.test(d.instagram)) errs.instagram = 'Use só o @ do perfil, ex.: @seuperfil';
       if (novos) {
         const n = (v) => (String(v).trim() === '' ? null : Number(v));
         d.familias_atendidas = n(f.familias_atendidas.value);
@@ -2070,7 +2106,7 @@
         logoFile = null;
         if (logoPreview) { URL.revokeObjectURL(logoPreview); logoPreview = ''; }
         paintLogo();
-        siteName = nomeDoSite(c.nome_imobiliaria) || 'Recanto do Acre Flats';
+        siteName = nomeDoSite(c.nome_imobiliaria) || NOME_MARCA;
         paintIdentity();
         f.instagram.value = c.instagram;
         f.whatsapp.value = c.whatsapp;

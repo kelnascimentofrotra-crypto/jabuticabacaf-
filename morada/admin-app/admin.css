@@ -752,6 +752,9 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
 .notice .ico { color: var(--terracotta-d); width: 22px; height: 22px; }
 .notice-go { margin-left: auto; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--terracotta-d); white-space: nowrap; }
 .notice:hover { border-color: var(--terracotta); }
+.notice--warn { background: var(--warn-bg); border-color: var(--line-2); }
+.notice--warn .ico { color: var(--warn); flex: none; }
+.notice--warn .btn { margin-left: auto; flex: none; }
 
 #todo { margin-bottom: 18px; }
 .todo { display: grid; }
