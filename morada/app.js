@@ -576,6 +576,7 @@ const moradaApp = () => {
     const h = HOUSES.find((x) => x.id === id);
     if (!h) return;
     dtHouse = h;
+    registrar('imovel', h.id, `imovel:${h.id}`);
     const place = [h.bairro, [h.cidade, h.uf].filter(Boolean).join(', ')].filter(Boolean).join(' · ');
     $('#dtLoc').textContent = h.endereco ? `${h.endereco} · ${place}` : place;
     $('#dtName').textContent = h.nome;
@@ -807,6 +808,45 @@ const moradaApp = () => {
     if (e?.code === 'PGRST205' || /does not exist|schema cache/i.test(m)) return 'O envio de mensagens ainda não foi ativado. Fale com a gente pelo WhatsApp.';
     return 'Não deu para enviar agora. Tente de novo ou fale com a gente pelo WhatsApp.';
   };
+  /* ---------- Estatísticas para a página Relatórios do painel ----------
+     Só contagens anônimas: visita (1 por sessão do navegador), imóvel aberto (1 por imóvel por sessão)
+     e clique no WhatsApp. Nada de nome, e-mail, IP ou cookie. Robôs, testes automáticos e o aparelho
+     de quem administra o site (logado no painel) não contam. */
+  const CONTADOS_KEY = 'morada:contados';
+  const SEM_EVENTOS_KEY = 'morada:sem-eventos';
+  function naoContar() {
+    if (navigator.webdriver || /bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent)) return true;
+    try { return !!localStorage.getItem('morada-admin-auth') || sessionStorage.getItem(SEM_EVENTOS_KEY) === '1'; } catch (_) { return false; }
+  }
+  function registrar(tipo, imovel = null, chave = '') {
+    if (!SB || naoContar()) return;
+    if (chave) {
+      let feitos = [];
+      try { feitos = JSON.parse(sessionStorage.getItem(CONTADOS_KEY) || '[]'); } catch (_) { /* sem armazenamento */ }
+      if (feitos.includes(chave)) return;
+      try { sessionStorage.setItem(CONTADOS_KEY, JSON.stringify([...feitos, chave].slice(-200))); } catch (_) { /* conta mesmo assim */ }
+    }
+    const slug = typeof imovel === 'string' && imovel.length <= 80 && /^[a-z0-9]+(-[a-z0-9]+)*$/.test(imovel) ? imovel : null;
+    const headers = { apikey: SB.anonKey, 'content-type': 'application/json', prefer: 'return=minimal' };
+    if (/^eyJ/.test(SB.anonKey)) headers.Authorization = `Bearer ${SB.anonKey}`;
+    fetch(`${SB.url}/rest/v1/eventos`, { method: 'POST', headers, body: JSON.stringify({ tipo, imovel: slug }), keepalive: true })
+      .then((res) => {
+        // SQL dos Relatórios ainda não rodado no Supabase: para de tentar nesta sessão
+        if (res.status === 404) { try { sessionStorage.setItem(SEM_EVENTOS_KEY, '1'); } catch (_) { /* ignora */ } }
+      })
+      .catch(() => { /* estatística nunca atrapalha o site */ });
+  }
+  // cliques nos botões do WhatsApp (detalhe do imóvel, carrinho, contato)
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest?.('a[href*="wa.me/"]');
+    if (!a) return;
+    if (a.id === 'dtZap' && dtHouse) registrar('whatsapp', dtHouse.id);
+    else if (a.id === 'cartZap') {
+      const ids = cartItems().filter((it) => it.kind === 'imovel').map((it) => it.id);
+      (ids.length ? ids : [null]).forEach((id) => registrar('whatsapp', id));
+    } else registrar('whatsapp');
+  }, true);
+
   async function enviarContato(d) {
     if (sbAuth && session?.uid) {
       const { error } = await sbAuth.from('contatos').insert(d);
@@ -2628,6 +2668,7 @@ const moradaApp = () => {
         return;
       }
       SB = cfg;
+      registrar('visita', null, 'visita');
       const [imoveis, avaliacoes, conf] = await Promise.all([
         restGet(`imoveis?select=${IMOVEL_COLS}&order=ordem.asc,created_at.desc&imovel_fotos.order=ordem.asc&limit=500`),
         restGet('avaliacoes?select=nome,texto,nota,subtitulo,foto&publicado=eq.true&order=ordem.asc,created_at.desc&limit=50'),

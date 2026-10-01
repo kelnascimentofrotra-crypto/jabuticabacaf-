@@ -239,6 +239,7 @@
   const ROUTES = [
     { re: /^\/admin\/login$/, view: viewLogin, open: true },
     { re: /^\/admin$/, view: viewDashboard, nav: 'dash', title: 'Dashboard' },
+    { re: /^\/admin\/relatorios$/, view: viewRelatorios, nav: 'relatorios', title: 'Relatórios' },
     { re: /^\/admin\/imoveis$/, view: viewImoveis, nav: 'imoveis', title: 'Imóveis' },
     { re: /^\/admin\/imoveis\/novo$/, view: (p, _m, alive) => viewForm(p, null, alive), nav: 'imoveis', title: 'Novo imóvel' },
     { re: /^\/admin\/imoveis\/([0-9a-f-]{36})\/editar$/, view: (p, m, alive) => viewForm(p, m[1], alive), nav: 'imoveis', title: 'Editar imóvel' },
@@ -323,6 +324,7 @@
             <a class="side-brand" href="/admin" data-link aria-label="Início do painel">${BRAND_HTML}</a>
             <nav class="side-nav">
               <a href="/admin" data-link data-nav="dash">${icon('dash')}<span>Dashboard</span></a>
+              <a href="/admin/relatorios" data-link data-nav="relatorios">${icon('chart')}<span>Relatórios</span></a>
               <a href="/admin/imoveis" data-link data-nav="imoveis">${icon('building')}<span>Imóveis</span></a>
               <a href="/admin/contatos" data-link data-nav="contatos">${icon('mail')}<span>Contatos</span><b class="nav-badge" id="navBadge" hidden></b></a>
               <a href="/admin/clientes" data-link data-nav="clientes">${icon('users')}<span>Clientes</span></a>
@@ -743,14 +745,17 @@
   const EXEMPLOS_IMOVEIS = ['patio', 'mirante', 'jequitiba', 'brisa', 'seixo', 'lume', 'jardins', 'leblon', 'serra'];
   const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
   async function loadExtras(alive) {
-    const [novas, exImoveis, exAval, conf, clientes] = await Promise.all([
+    const agora = new Date();
+    const [novas, exImoveis, exAval, conf, clientes, relatorio] = await Promise.all([
       sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false),
       sb.from('imoveis').select('id', { count: 'exact', head: true }).in('slug', EXEMPLOS_IMOVEIS),
       sb.from('avaliacoes').select('id', { count: 'exact', head: true }).in('nome', EXEMPLOS_AVALIACOES),
       sb.from('configuracoes').select('*').eq('id', 1).maybeSingle(),
       sb.rpc('admin_clientes'),
+      sb.rpc('admin_relatorio', { p_inicio: new Date(agora - 36e5).toISOString(), p_fim: agora.toISOString() }),
     ]);
     if (!alive()) return;
+    const semRelatorios = relatorio.error && (relatorio.error.code === 'PGRST202' || relatorio.error.code === '42883' || /could not find the function/i.test(relatorio.error.message || ''));
     if (!clientes.error) {
       const semana = Date.now() - 7 * 864e5;
       const ativos = clientes.data.filter((c) => c.ultimo_acesso && new Date(c.ultimo_acesso) > semana).length;
@@ -764,6 +769,7 @@
     avisoDadosAntigos(conf.data, $('#notice'));
     const items = [
       [!clientes.error || semMigracao, false, 'Rodar o SQL da página Clientes', 'Mostra quem tem conta, favoritos e carrinhos. O arquivo é supabase/migrations/20260930180000_clientes_painel.sql.', ''],
+      [!semRelatorios, false, 'Rodar o SQL dos Relatórios', 'Liga a contagem de visitas, imóveis vistos e cliques no WhatsApp. Na página Relatórios tem o botão para copiar o código.', '/admin/relatorios'],
       [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
       [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
       [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
@@ -1962,6 +1968,386 @@
       loadSiteName().catch(() => {});
       navigate('/admin', true);
       toast('Senha nova salva. Bem-vindo ao painel.');
+    });
+  }
+
+  /* =========================================================
+     Relatórios: visitas, imóveis vistos e cliques no WhatsApp
+     ========================================================= */
+
+  const FUSO = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo'; } catch (_) { return 'America/Sao_Paulo'; } })();
+  const PERIODOS = [['hoje', 'Hoje'], ['7d', '7 dias'], ['30d', '30 dias'], ['tudo', 'Tempo todo']];
+  const numBR = (n) => (Number(n) >= 100000
+    ? new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 1 }).format(n)
+    : Number(n || 0).toLocaleString('pt-BR'));
+  const isoDia = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  const diaLocal = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+  const dataBR = (d) => d.toLocaleDateString('pt-BR');
+  const curto = (d, o = { day: 'numeric', month: 'short' }) => d.toLocaleDateString('pt-BR', o).replace(/\./g, '').replace(' de ', ' ');
+  const maisDias = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+  const SQL_EDITOR = 'https://supabase.com/dashboard/project/_/sql/new';
+
+  // período escolhido fica na URL: ?periodo=hoje|7d|30d|tudo ou ?de=AAAA-MM-DD&ate=AAAA-MM-DD
+  function periodoDaUrl() {
+    const q = new URLSearchParams(location.search);
+    const ok = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !Number.isNaN(diaLocal(s).getTime());
+    const de = q.get('de');
+    const ate = q.get('ate');
+    if (ok(de) && ok(ate) && de <= ate) return { id: 'custom', de, ate };
+    return { id: PERIODOS.some(([k]) => k === q.get('periodo')) ? q.get('periodo') : '7d' };
+  }
+
+  // início e fim (fim exclusivo) do período e do período anterior do mesmo tamanho, para comparar
+  function intervalo(p) {
+    const agora = new Date();
+    const hoje = new Date(agora); hoje.setHours(0, 0, 0, 0);
+    if (p.id === 'tudo') return { ini: null, fim: agora, texto: 'Desde o primeiro acesso registrado' };
+    let ini; let fim = agora; let dias; let vs;
+    if (p.id === 'custom') {
+      ini = diaLocal(p.de);
+      const fimDia = maisDias(diaLocal(p.ate), 1);
+      fim = fimDia < agora ? fimDia : agora;
+      dias = Math.round((fimDia - ini) / 864e5);
+      vs = dias === 1 ? 'o dia anterior' : `os ${dias} dias anteriores`;
+    } else {
+      dias = { hoje: 1, '7d': 7, '30d': 30 }[p.id];
+      ini = maisDias(hoje, 1 - dias);
+      vs = { hoje: 'ontem até esta hora', '7d': 'os 7 dias anteriores', '30d': 'os 30 dias anteriores' }[p.id];
+    }
+    const ultimo = maisDias(fim, fim.getHours() || fim.getMinutes() || fim.getSeconds() ? 0 : -1);
+    const texto = isoDia(ini) === isoDia(ultimo)
+      ? ini.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+      : `${ini.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })} a ${ultimo.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+    return { ini, fim, texto, vs, prev: { ini: maisDias(ini, -dias), fim: maisDias(fim, -dias) } };
+  }
+
+  // escala do eixo: 0 até um número redondo, com passos inteiros de 1, 2 ou 5 × 10ⁿ
+  function escala(max, marcas = 4) {
+    const bruto = Math.max(1, max) / marcas;
+    const mag = 10 ** Math.floor(Math.log10(bruto));
+    const passo = Math.max(1, [1, 2, 5, 10].map((k) => k * mag).find((s) => s >= bruto));
+    return { passo, topo: Math.max(passo, Math.ceil(Math.max(1, max) / passo) * passo) };
+  }
+
+  // rótulos de cada ponto do gráfico (o banco já manda a hora local de quem está vendo)
+  function rotulos(chave, passo) {
+    const [d, h] = chave.split('T');
+    const [y, m, dd] = d.split('-').map(Number);
+    const hh = Number(h.slice(0, 2));
+    const dt = new Date(y, m - 1, dd, hh);
+    if (passo === 'hour') return { eixo: `${hh}h`, dica: `${curto(dt)}, ${hh}h às ${(hh + 1) % 24}h` };
+    if (passo === 'week') return { eixo: curto(dt), dica: `Semana de ${dt.toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })}` };
+    const dia = dt.toLocaleDateString('pt-BR', { weekday: 'short', day: 'numeric', month: 'long' }).replace('.', '');
+    return { eixo: curto(dt), dica: dia.charAt(0).toUpperCase() + dia.slice(1) };
+  }
+
+  function deltaHtml(cur, prev, vs) {
+    if (prev == null) return '';
+    let cls = 'is-flat';
+    let txt = 'igual';
+    if (prev === 0 && cur > 0) { cls = 'is-up'; txt = `+${numBR(cur)}`; }
+    else if (prev > 0) {
+      const pct = Math.round(((cur - prev) / prev) * 100);
+      cls = pct > 0 ? 'is-up' : pct < 0 ? 'is-down' : 'is-flat';
+      txt = pct === 0 ? 'igual' : `${pct > 0 ? '+' : '−'}${Math.abs(pct)}%`;
+    }
+    const seta = cls === 'is-up' ? icon('up') : cls === 'is-down' ? icon('down') : '';
+    const lido = cls === 'is-up' ? 'subiu' : cls === 'is-down' ? 'caiu' : 'ficou';
+    return `<span class="rl-delta ${cls}"><span class="sr">${lido} </span>${seta}${esc(txt)}</span><span class="rl-vs">vs. ${esc(vs)}</span>`;
+  }
+
+  function graficoLinhas(box, serie, passo, alive) {
+    const W = Math.max(280, Math.round(box.clientWidth));
+    const H = W < 560 ? 230 : 300;
+    const padL = 44; const padR = 16; const padT = 12; const eixoB = 30;
+    const pw = W - padL - padR; const ph = H - padT - eixoB;
+    const n = serie.length;
+    const { passo: step, topo } = escala(Math.max(...serie.map(([, v, w]) => Math.max(v, w))));
+    const X = (i) => padL + (n === 1 ? pw / 2 : (i / (n - 1)) * pw);
+    const Y = (v) => padT + ph - (v / topo) * ph;
+    const rot = serie.map(([k]) => rotulos(k, passo));
+    const grade = [];
+    for (let v = 0; v <= topo + 1e-9; v += step) {
+      grade.push(`<line class="rl-grid" x1="${padL}" x2="${W - padR}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}"/><text class="rl-tick" x="${padL - 10}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end">${numBR(v)}</text>`);
+    }
+    const cabem = Math.max(2, Math.floor(pw / (W < 560 ? 62 : 78)));
+    const salto = Math.max(1, Math.ceil(n / cabem));
+    const eixoX = [];
+    for (let i = 0; i < n; i += salto) {
+      const anchor = n === 1 ? 'middle' : i === 0 ? 'start' : 'middle';
+      eixoX.push(`<text class="rl-tick" x="${X(i).toFixed(1)}" y="${H - 8}" text-anchor="${anchor}">${esc(rot[i].eixo)}</text>`);
+    }
+    const linha = (k) => serie.map((d, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)} ${Y(d[k]).toFixed(1)}`).join('');
+    const base = Y(0).toFixed(1);
+    const area = `${linha(1)}L${X(n - 1).toFixed(1)} ${base}L${X(0).toFixed(1)} ${base}Z`;
+    const ult = serie[n - 1];
+    const totV = serie.reduce((s, d) => s + d[1], 0);
+    const totW = serie.reduce((s, d) => s + d[2], 0);
+    box.innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" tabindex="0" role="img"
+        aria-label="Gráfico de linhas: ${numBR(totV)} visualizações e ${numBR(totW)} cliques no WhatsApp no período. Use as setas para ver cada ponto.">
+        ${grade.join('')}
+        <path class="rl-area" d="${area}"/>
+        <path class="rl-line rl-line--views" d="${linha(1)}"/>
+        <path class="rl-line rl-line--zap" d="${linha(2)}"/>
+        <circle class="rl-dot rl-dot--views" r="4" cx="${X(n - 1).toFixed(1)}" cy="${Y(ult[1]).toFixed(1)}"/>
+        <circle class="rl-dot rl-dot--zap" r="4" cx="${X(n - 1).toFixed(1)}" cy="${Y(ult[2]).toFixed(1)}"/>
+        ${eixoX.join('')}
+        <g class="rl-hover" visibility="hidden">
+          <line class="rl-cross" y1="${padT}" y2="${padT + ph}"/>
+          <circle class="rl-dot rl-dot--views" r="5"/>
+          <circle class="rl-dot rl-dot--zap" r="5"/>
+        </g>
+        <rect class="rl-hit" x="${padL - 8}" y="0" width="${pw + 16}" height="${H}" fill="transparent"/>
+      </svg>
+      <div class="rl-tip" role="status" aria-live="polite"></div>`;
+    const svg = $('svg', box);
+    const hov = $('.rl-hover', box);
+    const [cross, dv, dw] = hov.children;
+    const tip = $('.rl-tip', box);
+    let atual = null;
+    const mostrar = (i) => {
+      atual = Math.max(0, Math.min(n - 1, i));
+      const [, v, w] = serie[atual];
+      const x = X(atual);
+      cross.setAttribute('x1', x); cross.setAttribute('x2', x);
+      dv.setAttribute('cx', x); dv.setAttribute('cy', Y(v));
+      dw.setAttribute('cx', x); dw.setAttribute('cy', Y(w));
+      hov.setAttribute('visibility', 'visible');
+      tip.innerHTML = `<p class="rl-tip-date"></p>
+        <p class="rl-tip-row"><i style="background:var(--c-views)"></i><b>${numBR(v)}</b><span>visualizações</span></p>
+        <p class="rl-tip-row"><i style="background:var(--c-zap)"></i><b>${numBR(w)}</b><span>cliques no WhatsApp</span></p>`;
+      $('.rl-tip-date', tip).textContent = rot[atual].dica;
+      const tw = tip.offsetWidth;
+      const esq = x + 14 + tw > W ? x - 14 - tw : x + 14;
+      tip.style.left = `${Math.max(0, esq)}px`;
+      tip.style.top = `${padT}px`;
+      tip.classList.add('is-on');
+    };
+    const esconder = () => { atual = null; hov.setAttribute('visibility', 'hidden'); tip.classList.remove('is-on'); };
+    const indice = (e) => {
+      const r = svg.getBoundingClientRect();
+      const px = ((e.clientX - r.left) / r.width) * W;
+      return n === 1 ? 0 : Math.round(((px - padL) / pw) * (n - 1));
+    };
+    svg.addEventListener('pointermove', (e) => mostrar(indice(e)));
+    svg.addEventListener('pointerdown', (e) => mostrar(indice(e)));
+    svg.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') esconder(); });
+    svg.addEventListener('focus', () => mostrar(atual ?? n - 1));
+    svg.addEventListener('blur', esconder);
+    svg.addEventListener('keydown', (e) => {
+      const mapa = { ArrowLeft: -1, ArrowRight: 1, Home: -Infinity, End: Infinity };
+      if (e.key === 'Escape') { esconder(); return; }
+      if (!(e.key in mapa)) return;
+      e.preventDefault();
+      const d = mapa[e.key];
+      mostrar(Number.isFinite(d) ? (atual ?? n - 1) + d : d < 0 ? 0 : n - 1);
+    });
+  }
+
+  async function viewRelatorios(page, _m, alive) {
+    let p = periodoDaUrl();
+    let dados = null;
+    let ro = null;
+    page.innerHTML = `${pageHead('Relatórios', 'Desempenho do site: quem visitou, o que viu e quem chamou no WhatsApp.', `<button class="btn btn-sm" type="button" id="rlRefresh">${icon('refresh')}<span>Atualizar</span></button>`)}
+      <div class="rl-filters">
+        <div class="rl-seg" role="group" aria-label="Período do relatório" id="rlSeg">
+          ${PERIODOS.map(([k, t]) => `<button type="button" data-p="${k}">${t}</button>`).join('')}
+          <button type="button" data-p="custom" aria-expanded="false" aria-controls="rlCustom">${icon('calendar')}<span id="rlCustomTxt">Personalizado</span>${icon('down', 'rl-caret')}</button>
+        </div>
+      </div>
+      <form class="rl-custom" id="rlCustom" hidden novalidate>
+        <label>De<input type="date" name="de" required /></label>
+        <span class="rl-arrow" aria-hidden="true">→</span>
+        <label>Até<input type="date" name="ate" required /></label>
+        <button class="btn btn-primary btn-sm" type="submit">Aplicar</button>
+        <p class="rl-custom-err" id="rlCustomErr" role="alert"></p>
+      </form>
+      <p class="rl-range" id="rlRange"></p>
+      <div class="rl-body" id="rlBody">
+        <div class="rl-kpis" id="rlKpis">${Array.from({ length: 4 }, () => '<div class="stat is-skel"><i></i><b></b></div>').join('')}</div>
+        <section class="panel">
+          <div class="panel-head rl-chart-head">
+            <div><h2>Visualizações e cliques no WhatsApp</h2><small class="hint" id="rlChartSub"></small></div>
+            <div class="rl-legend" id="rlLegend"></div>
+          </div>
+          <div class="rl-chart" id="rlChart">${skelRows(3)}</div>
+          <div class="rl-chart-foot"><button class="link-btn" type="button" id="rlTableBtn" aria-expanded="false" aria-controls="rlTable">Ver em tabela</button></div>
+          <div class="rl-table-wrap" id="rlTable" hidden></div>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><h2>Desempenho dos imóveis</h2><small class="hint">mais vistos primeiro</small></div>
+          <div id="rlImoveis">${skelRows(4)}</div>
+        </section>
+      </div>`;
+    const form = $('#rlCustom');
+
+    const pintarFiltros = () => {
+      $$('#rlSeg button', page).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.p === p.id)));
+      $('#rlCustomTxt').textContent = p.id === 'custom' ? `${dataBR(diaLocal(p.de))} → ${dataBR(diaLocal(p.ate))}` : 'Personalizado';
+    };
+    const mudar = (novo) => {
+      p = novo;
+      const q = p.id === 'custom' ? `?de=${p.de}&ate=${p.ate}` : p.id === '7d' ? '' : `?periodo=${p.id}`;
+      history.replaceState(null, '', `/admin/relatorios${q}`);
+      app.dataset.path = location.pathname + location.search;
+      carregar();
+    };
+    $('#rlSeg').addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-p]');
+      if (!b) return;
+      if (b.dataset.p === 'custom') {
+        const abrir = form.hidden;
+        form.hidden = !abrir;
+        b.setAttribute('aria-expanded', String(abrir));
+        if (abrir) {
+          const hoje = new Date();
+          form.de.value = p.id === 'custom' ? p.de : isoDia(new Date(hoje.getFullYear(), hoje.getMonth(), 1));
+          form.ate.value = p.id === 'custom' ? p.ate : isoDia(hoje);
+          form.de.max = form.ate.max = isoDia(hoje);
+          form.de.focus();
+        }
+        return;
+      }
+      form.hidden = true;
+      $('[data-p="custom"]', page).setAttribute('aria-expanded', 'false');
+      if (b.dataset.p !== p.id) mudar({ id: b.dataset.p });
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const de = form.de.value;
+      const ate = form.ate.value;
+      if (!de || !ate) { $('#rlCustomErr').textContent = 'Escolha as duas datas.'; return; }
+      if (de > ate) { $('#rlCustomErr').textContent = 'A data inicial precisa ser antes da final.'; return; }
+      $('#rlCustomErr').textContent = '';
+      form.hidden = true;
+      $('[data-p="custom"]', page).setAttribute('aria-expanded', 'false');
+      mudar({ id: 'custom', de, ate });
+    });
+    $('#rlRefresh').addEventListener('click', () => carregar());
+    $('#rlTableBtn').addEventListener('click', (e) => {
+      const t = $('#rlTable');
+      t.hidden = !t.hidden;
+      e.currentTarget.setAttribute('aria-expanded', String(!t.hidden));
+      e.currentTarget.textContent = t.hidden ? 'Ver em tabela' : 'Esconder tabela';
+    });
+
+    const desenhar = () => {
+      if (!dados || !alive()) return;
+      const box = $('#rlChart');
+      const serie = dados.serie || [];
+      const temAlgo = serie.some(([, v, w]) => v || w);
+      if (!serie.length || !temAlgo) {
+        box.innerHTML = `<div class="rl-empty">${icon('chart')}<b>Sem visitas neste período</b><span>Os números aparecem aqui assim que alguém abrir o site.</span></div>`;
+        return;
+      }
+      graficoLinhas(box, serie, dados.passo, alive);
+    };
+
+    const carregar = async () => {
+      if (!$('#rlKpis')) { render(); return; } // a tela de erro substituiu o conteúdo: monta de novo
+      pintarFiltros();
+      const r = intervalo(p);
+      $('#rlRange').textContent = r.texto.charAt(0).toUpperCase() + r.texto.slice(1);
+      $('#rlBody').classList.add('is-loading');
+      const chamar = (ini, fim) => sb.rpc('admin_relatorio', { p_inicio: ini ? ini.toISOString() : null, p_fim: fim.toISOString(), p_fuso: FUSO });
+      const [cur, prev] = await Promise.all([chamar(r.ini, r.fim), r.prev ? chamar(r.prev.ini, r.prev.fim) : Promise.resolve(null)]);
+      if (!alive()) return;
+      $('#rlBody').classList.remove('is-loading');
+      const err = cur.error || prev?.error;
+      if (err) {
+        const semSql = err.code === 'PGRST202' || err.code === '42883' || /could not find the function|admin_relatorio/i.test(err.message || '');
+        $('#rlBody').innerHTML = semSql ? semSqlRelatorios() : '';
+        if (semSql) ligarCopiarSql(page);
+        else showError($('#rlBody'), err, () => render());
+        return;
+      }
+      dados = cur.data;
+      const t = dados.totais;
+      const a = prev?.data?.totais;
+      const kpis = [
+        ['views', 'eye', 'Visualizações', t.visitas, a?.visitas],
+        ['zap', 'zap', 'Cliques no WhatsApp', t.whatsapp, a?.whatsapp],
+        ['home', 'home', 'Imóveis visualizados', t.imoveis, a?.imoveis],
+        ['star', 'star', 'Avaliações recebidas', t.avaliacoes, a?.avaliacoes],
+      ];
+      $('#rlKpis').innerHTML = kpis.map(([cls, ic, label, v, pv]) => `
+        <div class="stat rl-kpi rl-kpi--${cls}">
+          <span class="rl-kpi-top"><span class="rl-kpi-ico">${icon(ic)}</span><span class="stat-label">${label}</span></span>
+          <b class="rl-kpi-num">${numBR(v)}</b>
+          <span class="rl-kpi-foot">${p.id === 'tudo' ? '<span class="rl-vs">desde o começo</span>' : deltaHtml(v, pv, r.vs)}</span>
+        </div>`).join('');
+      const unidade = { hour: 'por hora', day: 'por dia', week: 'por semana' }[dados.passo] || '';
+      $('#rlChartSub').textContent = unidade ? `Total ${unidade}` : '';
+      $('#rlLegend').innerHTML = `
+        <span class="rl-key"><i style="background:var(--c-views)"></i>Visualizações <b>${numBR(t.visitas)}</b></span>
+        <span class="rl-key"><i style="background:var(--c-zap)"></i>Cliques no WhatsApp <b>${numBR(t.whatsapp)}</b></span>`;
+      desenhar();
+      // tabela com os mesmos números do gráfico (acessível e para quem prefere ler)
+      const serie = dados.serie || [];
+      $('#rlTable').innerHTML = `<table class="rl-tbl"><thead><tr><th scope="col">${dados.passo === 'hour' ? 'Hora' : dados.passo === 'week' ? 'Semana' : 'Dia'}</th><th scope="col" class="rl-num">Visualizações</th><th scope="col" class="rl-num">WhatsApp</th></tr></thead>
+        <tbody>${serie.slice().reverse().map(([k, v, w]) => `<tr><td>${esc(rotulos(k, dados.passo).dica)}</td><td class="rl-num">${numBR(v)}</td><td class="rl-num">${numBR(w)}</td></tr>`).join('')}</tbody></table>`;
+      // imóveis: os mais vistos, com foto
+      const lista = dados.imoveis || [];
+      if (!lista.length) {
+        $('#rlImoveis').innerHTML = `<div class="rl-empty rl-empty--sm">${icon('home')}<b>Nenhum imóvel foi aberto neste período</b></div>`;
+      } else {
+        const fotos = new Map();
+        const { data: im } = await sb.from('imoveis').select('slug,imagem_principal').in('slug', lista.map((x) => x.slug));
+        if (!alive()) return;
+        (im || []).forEach((x) => fotos.set(x.slug, x.imagem_principal));
+        const maxV = Math.max(1, ...lista.map((x) => x.visualizacoes));
+        $('#rlImoveis').innerHTML = `<div class="rl-im-wrap"><table class="rl-tbl rl-im-table">
+          <thead><tr><th scope="col" class="rl-rank">#</th><th scope="col">Imóvel</th><th scope="col" class="rl-num">Visualizações</th><th scope="col" class="rl-num">WhatsApp</th></tr></thead>
+          <tbody>${lista.map((x, i) => `<tr>
+            <td class="rl-rank">${i + 1}</td>
+            <td><span class="rl-im">${thumbImg(fotos.get(x.slug))}<span><b>${esc(x.titulo)}</b>${x.existe ? '' : '<span class="rl-gone">saiu do site</span>'}</span></span></td>
+            <td class="rl-num"><span class="rl-bar"><span class="rl-bar-track" aria-hidden="true"><i style="width:${Math.max(2, (x.visualizacoes / maxV) * 100).toFixed(1)}%"></i></span><b>${numBR(x.visualizacoes)}</b></span></td>
+            <td class="rl-num"><b>${numBR(x.whatsapp)}</b></td>
+          </tr>`).join('')}</tbody></table></div>`;
+      }
+    };
+
+    // o gráfico se ajusta à largura (girar o celular, abrir o menu…)
+    let largura = 0;
+    ro = new ResizeObserver(() => {
+      if (!alive()) { ro.disconnect(); return; }
+      const w = Math.round($('#rlChart')?.clientWidth || 0);
+      if (w && Math.abs(w - largura) > 4) { largura = w; requestAnimationFrame(desenhar); }
+    });
+    ro.observe($('#rlChart'));
+    await carregar();
+  }
+
+  // aviso quando o SQL dos Relatórios ainda não foi rodado no Supabase
+  const semSqlRelatorios = () => `
+    <section class="panel rl-setup">
+      <span class="rl-setup-ico">${icon('chart')}</span>
+      <h2>Falta um passo para os Relatórios funcionarem</h2>
+      <p>É só rodar uma vez, no Supabase, o código que cria a contagem de visitas. A partir daí o site começa a contar sozinho.</p>
+      <ol>
+        <li>Clique em <b>Copiar o código</b>.</li>
+        <li>Clique em <b>Abrir o Supabase</b> (escolha o projeto do site, se pedir).</li>
+        <li>Cole o código na tela em branco e clique em <b>Run</b>.</li>
+        <li>Volte aqui e clique em <b>Atualizar</b>.</li>
+      </ol>
+      <div class="state-actions">
+        <button class="btn btn-primary" type="button" id="rlCopySql">${icon('copy')}<span>Copiar o código</span></button>
+        <a class="btn" href="${SQL_EDITOR}" target="_blank" rel="noopener">${icon('ext')}<span>Abrir o Supabase</span></a>
+      </div>
+    </section>`;
+  function ligarCopiarSql(page) {
+    const btn = $('#rlCopySql', page);
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      try {
+        const res = await fetch('/admin-app/relatorios.sql', { cache: 'no-store' });
+        if (!res.ok) throw new Error('arquivo');
+        await navigator.clipboard.writeText(await res.text());
+        toast('Código copiado. Agora cole no Supabase e clique em Run.');
+      } catch (_) {
+        toast('Não deu para copiar automaticamente. Abra o arquivo supabase/migrations/20261001120000_relatorios.sql do projeto.', 'error');
+      }
     });
   }
 
