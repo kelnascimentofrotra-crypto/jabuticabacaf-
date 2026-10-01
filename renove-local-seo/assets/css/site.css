@@ -335,14 +335,6 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .svc-thumb { display: block; aspect-ratio: 16 / 10; overflow: hidden; }
   .svc-thumb img { width: 100%; height: 100%; object-fit: cover; }
 }
-.svc-float {
-  position: fixed; left: 0; top: 0; z-index: 120; width: min(30vw, 440px); aspect-ratio: 4 / 3; pointer-events: none; overflow: hidden;
-  clip-path: inset(50% 50% 50% 50%); transition: clip-path .6s var(--ease); transform: translate3d(var(--fx, -999px), var(--fy, -999px), 0) rotate(var(--fr, 0deg));
-  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .9);
-}
-.svc-float.on { clip-path: inset(0 0 0 0); }
-.svc-float img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.15); transition: transform 1s var(--ease); }
-.svc-float.on img { transform: scale(1); }
 
 /* ==========================================================================
    PORTÕES
@@ -698,7 +690,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
   .js .hero-title .w, .js .hero-sub, .js .hero-actions, .js .hero-fronts, .js .reveal-lines, .js .proj, .js .tile, .js .principles li h3, .js .principles li p { opacity: 1; transform: none; filter: none; clip-path: none; }
   .js .proj .proj-img img { transform: none; }
   .hero-plate { transform: none; }
-  .hero-sparks, .hero-arc, .cta-embers, .cursor-light, .svc-float, .quote::after { display: none; }
+  .hero-sparks, .hero-arc, .cta-embers, .cursor-light, .quote::after { display: none; }
   .marquee-track { animation: none; flex-wrap: wrap; width: auto; justify-content: center; padding-inline: var(--gutter); }
   .about-frame { clip-path: none; }
   .about-img img { transform: none; }

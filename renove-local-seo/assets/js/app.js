@@ -458,31 +458,6 @@
         head.setAttribute("aria-expanded", String(open));
       });
     });
-    // desktop: hover expands and a cursor-following image reveals the service
-    const float = $(".svc-float");
-    if (!float || !mqFine.matches) return;
-    const src = $("source", float), im = $("img", float);
-    let tx = 0, ty = 0, x = 0, y = 0, vx = 0, raf = 0, on = false, cur = "";
-    const loop = () => {
-      const nx = lerp(x, tx, 0.14), ny = lerp(y, ty, 0.14);
-      vx = nx - x; x = nx; y = ny;
-      float.style.setProperty("--fx", (x + 28).toFixed(1) + "px");
-      float.style.setProperty("--fy", (y - float.offsetHeight / 2).toFixed(1) + "px");
-      float.style.setProperty("--fr", clamp(vx * 0.35, -6, 6).toFixed(2) + "deg");
-      raf = on || Math.abs(x - tx) > 0.5 ? requestAnimationFrame(loop) : 0;
-    };
-    items.forEach((li) => {
-      li.addEventListener("pointerenter", (e) => {
-        if (!mqDesk.matches || reduced()) return;
-        const slug = li.dataset.float;
-        if (slug !== cur) { cur = slug; src.srcset = `assets/img/${slug}-960.avif`; im.src = `assets/img/${slug}-960.webp`; }
-        if (!on) { x = tx = e.clientX; y = ty = e.clientY; }
-        on = true; float.classList.add("on");
-        if (!raf) raf = requestAnimationFrame(loop);
-      });
-      li.addEventListener("pointermove", (e) => { tx = e.clientX; ty = e.clientY; });
-      li.addEventListener("pointerleave", () => { on = false; float.classList.remove("on"); });
-    });
   }
 
   /* ------------------------------------------------------------------ gates */
