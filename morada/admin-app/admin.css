@@ -1,4 +1,4 @@
-/* Painel administrativo da Morada — mesma identidade do site (creme, tinta, terracota) */
+/* Painel administrativo — mesma identidade do site (logo Recanto do Acre Flats: verde, bege e água) */
 
 @font-face {
   font-family: "Inter Tight";
@@ -17,20 +17,6 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 @font-face {
-  font-family: "Sacramento";
-  font-style: normal;
-  font-display: block;
-  font-weight: 400;
-  src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-display: block;
-  font-weight: 400 900;
-  src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
-}
-@font-face {
   font-family: "Newsreader";
   font-style: normal;
   font-display: swap;
@@ -39,19 +25,19 @@
 }
 
 :root {
-  /* Tema escuro (padrão): preto e dourado, igual ao site */
+  /* Tema escuro: verde-floresta com bege (o claro, logo abaixo, é o padrão) */
   color-scheme: dark;
-  --bg: #0a0908;
-  --panel: #14120f;
+  --bg: #0f1c15;
+  --panel: #162a1f;
   --ink: #f3ede4;
-  --ink-2: #d6ccbf;
-  --muted: #9a9087;
-  --line: rgba(214, 171, 114, 0.18);
-  --line-2: rgba(214, 171, 114, 0.32);
-  --terracotta: #d6ab72;
-  --terracotta-d: #e6c48f;
-  --cream: #221e19;
-  --night: #070605;
+  --ink-2: #d9d2c4;
+  --muted: #9eab9c;
+  --line: rgba(214, 176, 120, 0.16);
+  --line-2: rgba(214, 176, 120, 0.3);
+  --terracotta: #d8ae72;
+  --terracotta-d: #ecd09c;
+  --cream: #1d3427;
+  --night: #0b1610;
   --ok: #8fd3a8;
   --ok-bg: rgba(143, 211, 168, 0.12);
   --warn: #e8c178;
@@ -59,22 +45,23 @@
   --danger: #f0a58a;
   --danger-bg: rgba(240, 165, 138, 0.12);
   --danger-strong: #b8452f;
-  --gold-grad: linear-gradient(180deg, #f6dfae 0%, #deb676 48%, #b98847 100%);
+  --gold-grad: linear-gradient(180deg, #ecd3a2 0%, #d5aa6a 50%, #b98c4c 100%);
   --primary: var(--gold-grad);
-  --primary-fg: #1a130a;
-  --field: #0f0d0b;
-  --alt: #181512;
-  --chip: #1f1b17;
-  --hover: rgba(214, 171, 114, 0.08);
-  --top-bg: rgba(10, 9, 8, 0.86);
-  --tint: rgba(214, 171, 114, 0.1);
-  --tint-line: rgba(214, 171, 114, 0.45);
-  --toast-bg: #14120f;
-  --ph-a: #1b1814;
-  --ph-b: #100e0c;
-  --sk-a: #17140f;
-  --sk-b: #241f18;
-  --focus: rgba(214, 171, 114, 0.22);
+  --primary-fg: #182419;
+  --field: #12231a;
+  --alt: #14261c;
+  --chip: #1c3125;
+  --hover: rgba(214, 176, 120, 0.08);
+  --top-bg: rgba(15, 28, 21, 0.86);
+  --tint: rgba(214, 176, 120, 0.1);
+  --tint-line: rgba(214, 176, 120, 0.45);
+  --toast-bg: #162a1f;
+  --ph-a: #1a2e22;
+  --ph-b: #12231a;
+  --sk-a: #152a1e;
+  --sk-b: #1f3a2a;
+  --focus: rgba(214, 176, 120, 0.22);
+  --logo-roof: #f3ede4;
   --radius: 14px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -83,38 +70,40 @@
 
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #f3f1ed;
+  --bg: #f6f4ee;
   --panel: #fff;
-  --ink: #1c1714;
-  --ink-2: #4a3f38;
-  --muted: #847a72;
-  --line: #e6dfd6;
-  --line-2: #d8cfc4;
-  --terracotta: #b98847;
-  --terracotta-d: #8a6534;
-  --cream: #f7f2eb;
+  --ink: #1d211b;
+  --ink-2: #3f4a3b;
+  --muted: #6f776b;
+  --line: #e4e0d4;
+  --line-2: #d6d0c0;
+  --terracotta: #416734;
+  --terracotta-d: #34552a;
+  --cream: #f1ede2;
+  --night: #15291d;
   --ok: #2f7a4f;
   --ok-bg: #e5f2ea;
   --warn: #9a6a12;
   --warn-bg: #f8eed8;
   --danger: #b3412e;
   --danger-bg: #f9e6e1;
-  --primary: #1c1714;
-  --primary-fg: #f4dba6;
+  --primary: linear-gradient(180deg, #4f7d41 0%, #416734 55%, #385b2d 100%);
+  --primary-fg: #fff;
   --field: #fff;
-  --alt: #faf8f5;
-  --chip: #eeeae4;
+  --alt: #faf8f3;
+  --chip: #eeeae0;
   --hover: rgba(0, 0, 0, 0.04);
-  --top-bg: rgba(243, 241, 237, 0.88);
-  --tint: #fbefe6;
-  --tint-line: #f0d2bd;
-  --toast-bg: #1c1714;
-  --ph-a: #ece5db;
-  --ph-b: #d9cebf;
-  --sk-a: #eee8e0;
-  --sk-b: #f8f4ee;
-  --focus: rgba(185, 136, 71, 0.22);
-  --shadow: 0 1px 2px rgba(40, 25, 10, 0.04), 0 8px 24px rgba(40, 25, 10, 0.05);
+  --top-bg: rgba(246, 244, 238, 0.88);
+  --tint: #f5eddc;
+  --tint-line: #e2cda5;
+  --toast-bg: #15291d;
+  --ph-a: #ebe5d7;
+  --ph-b: #d8cfbb;
+  --sk-a: #eeeae0;
+  --sk-b: #f8f6f0;
+  --focus: rgba(65, 103, 52, 0.22);
+  --logo-roof: #416734;
+  --shadow: 0 1px 2px rgba(20, 30, 15, 0.04), 0 8px 24px rgba(20, 30, 15, 0.05);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -216,11 +205,12 @@ button { cursor: pointer; }
   padding: 48px clamp(28px, 5vw, 64px);
   background: var(--bg);
 }
-/* marca: Artur AG Guimarães */
-.brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: inherit; }
-.brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-size: 1em; font-weight: 400; letter-spacing: 0; }
-.brand-ag { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: linear-gradient(180deg, #f6dfae 0%, #deb676 48%, #b98847 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.login-brand { display: flex; align-items: center; font-size: 28px; color: var(--ink); }
+/* marca: logo do Recanto do Acre Flats (SVG em /assets/logo.svg); o telhado fica creme no escuro */
+.brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; white-space: nowrap; color: var(--ink); }
+.brand svg { display: block; width: auto; height: 100%; overflow: visible; }
+.brand-ic { aspect-ratio: 2104 / 1496; flex: none; }
+.brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; flex: none; }
+.login-brand { display: flex; align-items: center; font-size: 42px; color: var(--ink); }
 .mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--terracotta); color: #fff; flex: none; }
 .mark .ico { width: 20px; height: 20px; }
 .login h1 { margin-top: 18px; font-size: 13px; font-weight: 600; letter-spacing: 0.24em; color: var(--terracotta-d); }
@@ -233,9 +223,9 @@ button { cursor: pointer; }
 .login-back .ico { width: 16px; height: 16px; }
 .login-art {
   position: relative;
-  background: url("/assets/hero-noite.webp") 100% 100% / cover no-repeat, #050505;
+  background: url("/assets/casa-1280.webp") 72% 100% / cover no-repeat, linear-gradient(180deg, #86c9d1 0%, #b6dedd 40%, #ebe5d3 75%, #f1dbb5 100%);
 }
-.login-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(5, 5, 5, 0.55), transparent 30%); }
+.login-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 24, 16, 0.35), transparent 30%); }
 .login .state { text-align: left; justify-items: start; padding: 0; }
 
 /* ---------- campos ---------- */
@@ -295,8 +285,10 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   padding: 22px 16px;
   background: var(--night);
   color: #efe9e1;
+  --logo-roof: #f3ede4;
 }
-.side-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; font-size: 24px; color: #f3ede4; }
+.side-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; font-size: 34px; color: #f3ede4; }
+.side-brand .brand { color: #f3ede4; }
 .side-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .side-nav { display: grid; gap: 4px; }
 .side-nav a {
@@ -313,8 +305,8 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   transition: background 0.15s, color 0.15s;
 }
 .side-nav a:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
-.side-nav a.is-on { background: rgba(214, 171, 114, 0.14); color: #f4dba6; box-shadow: inset 3px 0 0 #d6ab72; }
-.side-nav a.is-on .ico { color: var(--terracotta); }
+.side-nav a.is-on { background: rgba(214, 176, 120, 0.14); color: #efd5a4; box-shadow: inset 3px 0 0 #d8ae72; }
+.side-nav a.is-on .ico { color: #d8ae72; }
 .side-site { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; color: rgba(239, 233, 225, 0.72); text-decoration: none; font-size: 14px; }
 .side-site:hover { color: #fff; background: rgba(255, 255, 255, 0.06); }
 .side-shade { display: none; }
@@ -336,6 +328,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
 }
 .top-menu { display: none; }
 .top-name { margin-right: auto; overflow: hidden; white-space: nowrap; font-size: 19px; color: var(--ink); text-decoration: none; }
+.top-name .brand { font-size: 30px; }
 @media (min-width: 861px) { .top-name .brand { visibility: hidden; } }
 .top-user { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .avatar {
@@ -345,7 +338,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   height: 36px;
   border-radius: 50%;
   background: var(--gold-grad) center / cover no-repeat;
-  color: #1a130a;
+  color: #182419;
   font-size: 13px;
   font-weight: 600;
   flex: none;
@@ -506,7 +499,7 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
 .photo.is-drag { opacity: 0.4; }
 .photo.is-target { box-shadow: 0 0 0 3px var(--ink); }
 .photo.is-broken::after { content: "Foto indisponível"; position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; }
-.photo-main, .photo-new { position: absolute; top: 8px; left: 8px; height: 24px; padding: 0 9px; border-radius: 99px; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: var(--gold-grad); color: #1a130a; }
+.photo-main, .photo-new { position: absolute; top: 8px; left: 8px; height: 24px; padding: 0 9px; border-radius: 99px; display: grid; place-items: center; font-size: 12px; font-weight: 600; background: var(--gold-grad); color: #182419; }
 .photo-new { left: auto; right: 8px; background: var(--panel); color: var(--ink); }
 .photo-tools { position: absolute; left: 6px; right: 6px; bottom: 6px; display: flex; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
 .photo-tools .icon-btn { width: 28px; height: 28px; border-radius: 8px; background: var(--panel); border-color: var(--line); }
@@ -535,7 +528,8 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
 .mini-photo label { cursor: pointer; }
 .logo-prev { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--line); background: var(--field); overflow: hidden; }
 .logo-prev img { width: 100%; height: 100%; object-fit: contain; }
-.logo-prev.is-empty { background: #0d0d0d; color: #ece8e2; border: 0; font-size: 26px; padding-right: 0.13em; }
+.logo-prev.is-empty { background: #fff; border: 1px solid var(--line); padding: 10px; }
+.logo-prev-ic { width: 100%; height: auto; aspect-ratio: 2104 / 1496; --logo-roof: #416734; }
 .logo-prev.is-empty .ico { width: 30px; height: 30px; }
 
 /* ---------- avaliações ---------- */
@@ -622,7 +616,7 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
   padding: 12px 14px;
   border-radius: 12px;
   background: var(--toast-bg);
-  border: 1px solid rgba(214, 171, 114, 0.5);
+  border: 1px solid rgba(214, 176, 120, 0.5);
   color: #f3ede4;
   font-size: 14px;
   box-shadow: 0 12px 30px rgba(15, 14, 12, 0.25);

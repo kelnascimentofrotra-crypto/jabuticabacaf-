@@ -23,7 +23,7 @@ const moradaApp = () => {
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'Artur Guimarães';
+  let BRAND = 'Recanto do Acre Flats';
   // telefone enquanto digita: (11) 98765-4321 / (11) 3000-1234
   const telMask = (v) => {
     let d = String(v || '').replace(/\D/g, '');
@@ -143,8 +143,7 @@ const moradaApp = () => {
   let REVIEWS = [];
 
   const PREVIEW = {
-    arthur: 'Conheça o Artur, proprietário e corretor',
-    inicio: 'Vamos encontrar a sua morada',
+    inicio: 'Vamos encontrar o seu recanto',
     filtro: 'Encontre o imóvel certo em segundos',
     instagram: 'Casas novas toda semana no Instagram',
     curadoria: 'Imóveis selecionados',
@@ -549,26 +548,6 @@ const moradaApp = () => {
     withFallback($('#igGrid'));
   }
 
-  /* =========================================================
-     05 · Conheça o Arthur
-     ========================================================= */
-
-  $('#arZap').href = zapLink('Olá, Artur! Vim pelo seu site e gostaria de conversar sobre imóveis.');
-  // leve movimento da foto seguindo o mouse (só no computador)
-  const arPhoto = $('.ar-photo');
-  if (!reduceMotion) {
-    arPhoto.addEventListener('pointermove', (e) => {
-      if (e.pointerType !== 'mouse') return;
-      const r = arPhoto.getBoundingClientRect();
-      arPhoto.style.setProperty('--tx', ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-      arPhoto.style.setProperty('--ty', ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
-    });
-    arPhoto.addEventListener('pointerleave', () => {
-      arPhoto.style.setProperty('--tx', 0);
-      arPhoto.style.setProperty('--ty', 0);
-    });
-  }
-
   /* ---------- Página do imóvel ---------- */
 
   let dtHouse = null;
@@ -732,7 +711,7 @@ const moradaApp = () => {
     $('#cartCount').textContent = items.length;
     $('#cartWord').textContent = items.length === 1 ? 'item' : 'itens';
     const who = profile ? `\n\nMeu contato: ${profile.nome} (${profile.email})` : '';
-    $('#cartZap').href = zapLink(`Olá, Artur! Quero seguir com estes itens do seu site:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
+    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens do site do Recanto do Acre Flats:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
   }
   $('#cartList').addEventListener('click', (e) => {
     const item = e.target.closest('.cart-item');
@@ -911,7 +890,7 @@ const moradaApp = () => {
   const mobileMQ = matchMedia('(max-width: 900px), (max-aspect-ratio: 1/1)');
   function updateTone() {
     const scene = scenes[current];
-    let tone = scene.dataset.tone || 'dark'; // paleta preto e dourado: tudo escuro
+    let tone = scene.dataset.tone || 'light';
     if (scene.id === 'inicio' && mobileMQ.matches) tone = 'dark';
     document.body.dataset.tone = tone;
   }
@@ -972,7 +951,7 @@ const moradaApp = () => {
       if (id === 'curadoria') updateImNav();
       $$('.count', scene).forEach((el) => { if (!el.style.minWidth || el.style.minWidth === '0px') { el.style.minWidth = `${el.getBoundingClientRect().width}px`; } });
     });
-    document.title = id === 'inicio' ? `${BRAND} — Corretor de imóveis` : `${scene.dataset.title} — ${BRAND}`;
+    document.title = id === 'inicio' ? `${BRAND} — Flats mobiliados` : `${scene.dataset.title} — ${BRAND}`;
     try { history.replaceState(null, '', `#${id}`); } catch (_) { /* file:// em alguns navegadores */ }
 
     // menu superior
@@ -2532,7 +2511,6 @@ const moradaApp = () => {
     const mail = $('.menu-foot a');
     mail.hidden = !c.email;
     if (c.email) { mail.href = `mailto:${c.email}`; mail.textContent = c.email; }
-    $('#arZap').href = zapLink('Olá, Artur! Vim pelo seu site e gostaria de conversar sobre imóveis.');
     const tel = String(c.telefone || '').trim();
     const info = [
       tel && `<li><svg aria-hidden="true"><use href="#i-phone" /></svg><a href="tel:${esc(tel.replace(/[^\d+]/g, ''))}">${esc(tel)}</a></li>`,
@@ -2541,9 +2519,9 @@ const moradaApp = () => {
     ].filter(Boolean);
     $('#ctInfo').innerHTML = info.join('');
     $('#ctInfo').hidden = !info.length;
-    // "Morada" era o nome de exemplo: com ele, vale o nome da marca (Artur Guimarães)
+    // nomes antigos (o de exemplo "Morada" e o do dono anterior) não valem: fica o nome da marca
     const nomeCfg = String(c.nome_imobiliaria || '').trim();
-    const nome = /^morada$/i.test(nomeCfg) ? '' : nomeCfg;
+    const nome = /^morada$|artur|arthur|guimar/i.test(nomeCfg) ? '' : nomeCfg;
     if (nome) {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;

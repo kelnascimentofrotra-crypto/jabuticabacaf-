@@ -27,10 +27,10 @@
   let sb = null;          // cliente do Supabase
   let cfg = null;         // { url, anonKey }
   let user = null;        // usuário admin logado
-  let siteName = 'Artur Guimarães';
-  // "Morada" era o nome de exemplo: com ele, vale o nome da marca
-  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !/^morada$/i.test(v) ? v : ''; };
-  // Tema: escuro (preto e dourado) ou claro. O botão de sol troca e a escolha fica salva neste aparelho.
+  let siteName = 'Recanto do Acre Flats';
+  // nomes antigos (o de exemplo "Morada" e o do dono anterior) não valem: fica o nome da marca
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !/^morada$|artur|arthur|guimar/i.test(v) ? v : ''; };
+  // Tema: claro (padrão, verde e bege) ou escuro (verde-floresta). O botão de sol troca e a escolha fica salva neste aparelho.
   const THEME_KEY = 'morada:admin-tema';
   const isLight = () => document.documentElement.dataset.theme === 'light';
   const themeLabel = () => (isLight() ? 'Mudar para o modo escuro' : 'Mudar para o modo claro');
@@ -47,7 +47,7 @@
     });
   }
   document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
-  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span>';
+  const BRAND_HTML = '<span class="brand" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><svg class="brand-tx"><use href="/assets/logo.svg#lg-texto" /></svg></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -507,7 +507,7 @@
       <main class="login">
         ${themeBtn('theme-float')}
         <section class="login-card" aria-labelledby="lgTitle">
-          <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
+          <div class="login-brand" role="img" aria-label="Recanto do Acre Flats">${BRAND_HTML}</div>
           <h1 id="lgTitle">PAINEL ADMINISTRATIVO</h1>
           <p class="login-sub">Entre com a sua conta de administrador para gerenciar imóveis, fotos e avaliações do site.</p>
           <form id="loginForm" novalidate>
@@ -1884,7 +1884,7 @@
   let recoveryError = '';
   function viewNovaSenha(root) {
     const card = (inner) => `<main class="login">${themeBtn('theme-float')}<section class="login-card" aria-labelledby="nsTitle">
-      <div class="login-brand" role="img" aria-label="Artur Guimarães">${BRAND_HTML}</div>
+      <div class="login-brand" role="img" aria-label="Recanto do Acre Flats">${BRAND_HTML}</div>
       ${inner}
       <a class="login-back" href="/admin/login" data-link>${icon('left')}<span>Voltar para entrar</span></a>
     </section><div class="login-art" aria-hidden="true"></div></main>`;
@@ -1955,7 +1955,7 @@
                 <label class="btn btn-sm">${icon('upload')}<span>Escolher imagem</span><input type="file" accept="image/png,image/webp,image/jpeg" id="cfLogoFile" hidden /></label>
                 <button class="btn btn-sm btn-danger-ghost" type="button" id="cfLogoDel">Remover</button>
               </div>
-              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “Artur AG Guimarães”.</small>
+              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a logo do Recanto do Acre Flats.</small>
             </div>
           </div>
         </section>
@@ -1996,7 +1996,7 @@
     const f = $('#cfForm');
     const paintLogo = () => {
       const url = logoPreview || siteUrl(logo);
-      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<span class="brand-ag">AG</span>';
+      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<svg class="logo-prev-ic" aria-label="Logo padrão"><use href="/assets/logo.svg#lg-icone" /></svg>';
       $('#cfLogo').classList.toggle('is-empty', !url);
       $('#cfLogoDel').hidden = !url;
     };
@@ -2070,7 +2070,7 @@
         logoFile = null;
         if (logoPreview) { URL.revokeObjectURL(logoPreview); logoPreview = ''; }
         paintLogo();
-        siteName = nomeDoSite(c.nome_imobiliaria) || 'Artur Guimarães';
+        siteName = nomeDoSite(c.nome_imobiliaria) || 'Recanto do Acre Flats';
         paintIdentity();
         f.instagram.value = c.instagram;
         f.whatsapp.value = c.whatsapp;

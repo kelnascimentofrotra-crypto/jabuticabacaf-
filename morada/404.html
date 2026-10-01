@@ -4,31 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
-  <title>Página não encontrada — Artur Guimarães</title>
+  <title>Página não encontrada — Recanto do Acre Flats</title>
   <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <style>
     @font-face { font-family: "Inter Tight"; font-style: normal; font-display: swap; font-weight: 100 900; src: url("/fonts/inter-tight-latin-wght-normal.woff2") format("woff2"); }
     @font-face { font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 200 800; src: url("/fonts/newsreader-latin-wght-normal.woff2") format("woff2"); }
-    @font-face { font-family: "Sacramento"; font-style: normal; font-display: block; font-weight: 400; src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2"); }
-    @font-face { font-family: "Playfair Display"; font-style: normal; font-display: block; font-weight: 400 900; src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2"); }
-    .brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; }
-    .brand-s { font-family: "Sacramento", cursive; font-weight: 400; }
-    .brand-ag { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; }
-    .card .brand { font-size: 26px; margin-bottom: 18px; }
+    :root { --ink: #1d211b; --logo-roof: #416734; }
+    .brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; color: var(--ink); }
+    .brand svg { display: block; width: auto; height: 100%; overflow: visible; }
+    .brand-ic { aspect-ratio: 2104 / 1496; }
+    .brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; }
+    .card .brand { font-size: 40px; margin-bottom: 20px; }
     * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: #050505 url("/assets/hero-noite-1280.webp") 72% 100% / cover no-repeat; color: #f3ede4; font: 16px/1.5 "Inter Tight", system-ui, sans-serif; }
-    .card { max-width: 440px; padding: 32px; border-radius: 22px; background: rgba(10, 9, 8, 0.82); border: 1px solid rgba(214, 171, 114, 0.45); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: center; box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5); }
-    .brand-ag { background: linear-gradient(180deg, #f6dfae 0%, #deb676 48%, #b98847 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    small { letter-spacing: 0.24em; text-transform: uppercase; color: #d6ab72; font-weight: 600; font-size: 12px; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: url("/assets/casa-1280.webp") 72% 100% / cover no-repeat, linear-gradient(180deg, #86c9d1, #ebe3cf); color: var(--ink); font: 16px/1.5 "Inter Tight", system-ui, sans-serif; }
+    .card { max-width: 440px; padding: 32px; border-radius: 22px; background: rgba(250, 248, 243, 0.9); border: 1px solid rgba(255, 255, 255, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: center; box-shadow: 0 30px 80px rgba(20, 34, 24, 0.25); }
+    small { letter-spacing: 0.24em; text-transform: uppercase; color: #8a6227; font-weight: 600; font-size: 12px; }
     h1 { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 38px; line-height: 1.1; margin: 10px 0; }
-    p { color: rgba(243, 237, 228, 0.72); margin: 0 0 22px; }
-    a { display: inline-block; padding: 13px 22px; border-radius: 999px; background: linear-gradient(180deg, #f6dfae 0%, #deb676 48%, #b98847 100%); color: #1a130a; text-decoration: none; font-weight: 600; }
+    p { color: rgba(29, 33, 27, 0.72); margin: 0 0 22px; }
+    a { display: inline-block; padding: 13px 22px; border-radius: 999px; background: linear-gradient(180deg, #4f7d41 0%, #416734 55%, #385b2d 100%); color: #fff; text-decoration: none; font-weight: 600; }
   </style>
 </head>
 <body>
   <main class="card">
-    <div role="img" aria-label="Artur Guimarães"><span class="brand" aria-hidden="true"><span class="brand-s">Artur</span><span class="brand-ag">AG</span><span class="brand-s">Guimarães</span></span></div>
+    <div role="img" aria-label="Recanto do Acre Flats"><span class="brand" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><svg class="brand-tx"><use href="/assets/logo.svg#lg-texto" /></svg></span></div>
     <small>Erro 404</small>
     <h1>Essa página não existe</h1>
     <p>O endereço pode ter mudado ou o imóvel saiu do site. Veja os imóveis disponíveis agora.</p>
