@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://st1.net.br/sitemap.xml
