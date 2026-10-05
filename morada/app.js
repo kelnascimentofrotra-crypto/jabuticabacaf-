@@ -23,7 +23,7 @@ const moradaApp = () => {
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'Recanto do Acre Flats';
+  let BRAND = 'Thiago Liro';
   // telefone enquanto digita: (11) 98765-4321 / (11) 3000-1234
   const telMask = (v) => {
     let d = String(v || '').replace(/\D/g, '');
@@ -714,7 +714,7 @@ const moradaApp = () => {
     $('#cartCount').textContent = items.length;
     $('#cartWord').textContent = items.length === 1 ? 'item' : 'itens';
     const who = profile ? `\n\nMeu contato: ${profile.nome} (${profile.email})` : '';
-    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens do site do Recanto do Acre Flats:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
+    $('#cartZap').href = zapLink(`Olá! Quero seguir com estes itens que separei no site:\n\n${items.map((it, k) => `${k + 1}. ${it.line}`).join('\n')}${who}`);
   }
   $('#cartList').addEventListener('click', (e) => {
     const item = e.target.closest('.cart-item');
@@ -2566,9 +2566,9 @@ const moradaApp = () => {
     ].filter(Boolean);
     $('#ctInfo').innerHTML = info.join('');
     $('#ctInfo').hidden = !info.length;
-    // nomes antigos (o de exemplo "Morada" e o do dono anterior) não valem: fica o nome da marca
+    // nomes antigos (o de exemplo "Morada", o do dono anterior e o "Recanto do Acre Flats") não valem: fica o nome da marca
     const nomeCfg = String(c.nome_imobiliaria || '').trim();
-    const nome = /^morada$|artur|arthur|guimar/i.test(nomeCfg) ? '' : nomeCfg;
+    const nome = /^morada$|artur|arthur|guimar|^recanto do acre flats$/i.test(nomeCfg) ? '' : nomeCfg;
     if (nome) {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;

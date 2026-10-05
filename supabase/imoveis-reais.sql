@@ -1,13 +1,18 @@
 -- =====================================================================
--- Recanto do Acre Flats · imóveis reais
+-- Thiago Liro · imóveis reais e nome do site
 -- Cole no Supabase (SQL Editor) e clique em Run.
 -- 1) tira os 9 imóveis de exemplo (só os que ainda estão com o nome de exemplo)
 -- 2) cadastra as casas reais; as fotos já vão junto com o site (/assets/imoveis)
+-- 3) o nome do site passa de "Recanto do Acre Flats" para "Thiago Liro"
 -- Pode rodar de novo: não duplica nada e não mexe no que você já editou no painel.
 -- A cidade fica "A definir" (escondida no site) até você trocar no painel.
 -- =====================================================================
 
 begin;
+
+update public.configuracoes
+set nome_imobiliaria = 'Thiago Liro'
+where id = 1 and nome_imobiliaria in ('Recanto do Acre Flats', 'Morada');
 
 delete from public.imoveis
 where (slug, titulo) in (

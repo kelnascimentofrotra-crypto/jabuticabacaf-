@@ -41,7 +41,7 @@
   font-weight: 200 800;
   src: url("fonts/newsreader-latin-wght-normal.woff2") format("woff2");
 }
-/* Paleta da marca Recanto do Acre Flats (tirada da logo): verde do telhado, bege das ondas,
+/* Paleta da marca (verde e bege): verde do telhado, bege das ondas,
    água e o preto das letras. As cenas claras usam fundo creme; as escuras, verde-floresta.
    Cada tom tem seus valores em RGB (--fg-rgb, --acc-rgb, --surf-rgb) e o resto deriva deles,
    então qualquer peça fica certa no claro ou no escuro sem regra extra. */

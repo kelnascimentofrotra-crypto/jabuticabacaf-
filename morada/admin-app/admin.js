@@ -27,11 +27,11 @@
   let sb = null;          // cliente do Supabase
   let cfg = null;         // { url, anonKey }
   let user = null;        // usuário admin logado
-  let siteName = 'Recanto do Acre Flats';
-  // nomes antigos (o de exemplo "Morada" e o do dono anterior) não valem: fica o nome da marca
-  const NOME_MARCA = 'Recanto do Acre Flats';
+  let siteName = 'Thiago Liro';
+  // nomes antigos (o de exemplo "Morada", o do dono anterior e o "Recanto do Acre Flats") não valem: fica o nome da marca
+  const NOME_MARCA = 'Thiago Liro';
   const nomeAntigo = (n) => /^morada$|artur|arthur|guimar/i.test(String(n || '').trim());
-  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) ? v : ''; };
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) && !/^recanto do acre flats$/i.test(v) ? v : ''; };
   // Tema: claro (padrão, verde e bege) ou escuro (verde-floresta). O botão de sol troca e a escolha fica salva neste aparelho.
   const THEME_KEY = 'morada:admin-tema';
   const isLight = () => document.documentElement.dataset.theme === 'light';
@@ -2415,7 +2415,7 @@
         <section class="panel">
           <h2 class="panel-title">Imobiliária</h2>
           <div class="grid">
-            <label class="field"><span>Nome da imobiliária *</span><input name="nome_imobiliaria" maxlength="60" required value="${esc(nomeAntigo(c.nome_imobiliaria) ? NOME_MARCA : c.nome_imobiliaria)}" /><small class="err"></small></label>
+            <label class="field"><span>Nome da imobiliária *</span><input name="nome_imobiliaria" maxlength="60" required value="${esc(nomeDoSite(c.nome_imobiliaria) || NOME_MARCA)}" /><small class="err"></small></label>
             <div class="field"><span>Logo</span>
               <div class="mini-photo">
                 <span class="logo-prev" id="cfLogo"></span>
