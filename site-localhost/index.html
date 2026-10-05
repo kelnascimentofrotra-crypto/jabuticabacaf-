@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>site localhost</title>
+  <meta name="description" content="Nathan Ferreira, corretor de imóveis no Ceará. Casas, apartamentos e terrenos com transparência, segurança e atendimento personalizado.">
+  <meta name="theme-color" content="#0b0a09">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M4 6h9v28H4z' fill='%23ff7a2e'/%3E%3Cpath d='M4 6h9l23 28h-9z' fill='%23d63a08'/%3E%3Cpath d='M27 6h9v28h-9z' fill='%23ff5b14'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Herr+Von+Muellerhoff&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <!-- Ícones -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="logo-grad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff8a3d"/>
+        <stop offset="1" stop-color="#ef4a0e"/>
+      </linearGradient>
+    </defs>
+    <symbol id="i-logo" viewBox="0 0 40 40">
+      <path d="M4 6h9v28H4z" fill="url(#logo-grad)"/>
+      <path d="M4 6h9l23 28h-9z" fill="#c9370a"/>
+      <path d="M27 6h9v28h-9z" fill="url(#logo-grad)"/>
+      <path d="M27 6h9l-9 11z" fill="#ffb27a" opacity=".55"/>
+    </symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.34m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></symbol>
+    <symbol id="i-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h4"/><path d="M3 15h4"/><path d="M9 21v-4"/><path d="M15 21v-4"/></symbol>
+    <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2a1 1 0 0 0 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4a1 1 0 0 0 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></symbol>
+    <symbol id="i-gate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><circle cx="12" cy="12" r="2"/><path d="M8.5 21v-2.5a3.5 3.5 0 0 1 7 0V21"/></symbol>
+    <symbol id="i-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  </svg>
+
+  <!-- Cabeçalho -->
+  <header class="header" id="topo">
+    <div class="container header__inner">
+      <a class="logo" href="#inicio" aria-label="Nathan Ferreira, início">
+        <svg class="logo__mark" aria-hidden="true"><use href="#i-logo"/></svg>
+        <span class="logo__text">
+          <span class="logo__name">Nathan</span>
+          <span class="logo__surname">Ferreira</span>
+        </span>
+      </a>
+
+      <nav class="nav" id="menu" aria-label="Principal">
+        <a href="#inicio" class="nav__link is-active">Início</a>
+        <a href="#imoveis" class="nav__link">Imóveis</a>
+        <a href="#sobre" class="nav__link">Sobre</a>
+        <a href="#servicos" class="nav__link">Serviços</a>
+        <a href="#avaliacoes" class="nav__link">Avaliações</a>
+        <a href="#contato" class="nav__link">Contato</a>
+      </nav>
+
+      <a class="btn btn--primary btn--sm header__cta" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20vim%20pelo%20site%20e%20quero%20falar%20sobre%20im%C3%B3veis." target="_blank" rel="noopener">
+        <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+        Fale comigo
+      </a>
+
+      <button class="menu-toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
+        <svg class="icon icon--open" aria-hidden="true"><use href="#i-menu"/></svg>
+        <svg class="icon icon--close" aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+      <div class="hero__bg" aria-hidden="true"></div>
+
+      <div class="hero__progress" aria-hidden="true">
+        <span class="hero__count hero__count--current">01</span>
+        <span class="hero__bar"><span class="hero__bar-fill"></span></span>
+        <span class="hero__count hero__count--total">03</span>
+        <a class="hero__scroll" href="#busca" tabindex="-1">
+          <svg class="icon"><use href="#i-chevron-down"/></svg>
+          <svg class="icon"><use href="#i-chevron-down"/></svg>
+        </a>
+      </div>
+
+      <div class="container hero__content">
+        <p class="eyebrow eyebrow--spaced" data-reveal>Sonhe <i>·</i> Planeje <i>·</i> Conquiste</p>
+        <h1 class="hero__title" data-reveal>
+          O imóvel certo
+          <span class="accent">para o seu próximo capítulo.</span>
+        </h1>
+        <p class="hero__lead" data-reveal>
+          Aqui você encontra mais do que imóveis, você encontra
+          oportunidades, segurança e um atendimento de verdade.
+        </p>
+        <div class="hero__actions" data-reveal>
+          <a class="btn btn--primary" href="#imoveis">
+            Ver imóveis
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+          <span class="hero__divider" aria-hidden="true"></span>
+          <a class="play-link" href="#sobre">
+            <span class="play-link__circle"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+            Conheça meu trabalho
+          </a>
+        </div>
+      </div>
+
+      <a class="featured" href="#imoveis" aria-live="polite">
+        <img class="featured__img" src="img/imovel-casa.jpg" alt="" width="96" height="64">
+        <span class="featured__body">
+          <span class="featured__label">Destaque</span>
+          <span class="featured__title">Casa em Condomínio</span>
+          <span class="featured__meta">Eusébio - CE · 4 suítes · 320 m²</span>
+        </span>
+        <span class="circle-btn" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+      </a>
+    </section>
+
+    <!-- Busca -->
+    <section class="search-band" id="busca" aria-labelledby="busca-title">
+      <div class="container">
+        <p class="eyebrow eyebrow--line" data-reveal>Busque seu imóvel</p>
+        <h2 class="section-title" id="busca-title" data-reveal>
+          Encontre o imóvel<br><span class="accent">ideal</span> para você
+        </h2>
+
+        <form class="search" id="search-form" role="search" data-reveal>
+          <label class="search__field">
+            <span class="sr-only">Buscar imóvel</span>
+            <svg class="icon search__icon" aria-hidden="true"><use href="#i-search"/></svg>
+            <input type="search" name="q" placeholder="Ex: Casa em condomínio, apartamento..." autocomplete="off">
+            <button class="btn btn--primary btn--xs" type="submit">Buscar</button>
+          </label>
+
+          <label class="select">
+            <span class="select__label">Tipo</span>
+            <select name="tipo">
+              <option value="">Todos</option>
+              <option value="casa">Casa</option>
+              <option value="apartamento">Apartamento</option>
+              <option value="terreno">Terreno</option>
+            </select>
+            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </label>
+
+          <label class="select">
+            <span class="select__label">Cidade</span>
+            <select name="cidade">
+              <option value="">Todas</option>
+              <option value="eusebio">Eusébio</option>
+              <option value="fortaleza">Fortaleza</option>
+              <option value="aquiraz">Aquiraz</option>
+            </select>
+            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </label>
+
+          <label class="select">
+            <span class="select__label">Faixa de preço</span>
+            <select name="preco">
+              <option value="">Todas</option>
+              <option value="0-500000">Até R$ 500 mil</option>
+              <option value="500000-1000000">R$ 500 mil a R$ 1 milhão</option>
+              <option value="1000000-">Acima de R$ 1 milhão</option>
+            </select>
+            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
+          </label>
+        </form>
+      </div>
+    </section>
+
+    <!-- Imóveis -->
+    <section class="section listings" id="imoveis" aria-labelledby="imoveis-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow eyebrow--line" data-reveal>Destaques</p>
+            <h2 class="section-title" id="imoveis-title" data-reveal>
+              Imóveis que<br>fazem a <span class="accent">diferença</span>
+            </h2>
+            <p class="section-lead" data-reveal>
+              Selecionamos os melhores imóveis para você encontrar
+              o lugar perfeito para chamar de seu.
+            </p>
+          </div>
+          <a class="btn btn--outline btn--sm" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20quero%20ver%20todos%20os%20im%C3%B3veis%20dispon%C3%ADveis." target="_blank" rel="noopener" data-reveal>
+            Ver todos os imóveis
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </div>
+
+        <p class="results" id="results" hidden>
+          <span id="results-text"></span>
+          <button type="button" class="link-btn" id="results-clear">Limpar filtros</button>
+        </p>
+
+        <div class="cards" id="cards">
+          <article class="card" data-reveal
+                   data-tipo="casa" data-cidade="eusebio" data-preco="1250000"
+                   data-busca="casa em condominio eusebio ce 4 suites 320 m2 3 vagas piscina">
+            <div class="card__media">
+              <img src="img/imovel-casa.jpg" alt="Casa moderna de dois andares com piscina, iluminada ao entardecer" width="796" height="496" loading="lazy">
+              <span class="badge">À venda</span>
+              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Casa em Condomínio" data-id="casa-eusebio">
+                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
+              </button>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Casa em Condomínio</h3>
+              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Eusébio - CE</p>
+              <ul class="card__specs">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>4 suítes</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>320 m²</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg>3 vagas</li>
+              </ul>
+              <div class="card__foot">
+                <p class="card__price">R$ 1.250.000</p>
+                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20na%20Casa%20em%20Condom%C3%ADnio%20em%20Eus%C3%A9bio%20(R%24%201.250.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre a Casa em Condomínio">
+                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-reveal
+                   data-tipo="apartamento" data-cidade="fortaleza" data-preco="780000"
+                   data-busca="apartamento fortaleza ce 3 quartos 120 m2 2 vagas vista mar">
+            <div class="card__media">
+              <img src="img/imovel-apartamento.jpg" alt="Sala de apartamento com janelas amplas e vista para o mar" width="796" height="496" loading="lazy">
+              <span class="badge">À venda</span>
+              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Apartamento" data-id="apto-fortaleza">
+                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
+              </button>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Apartamento</h3>
+              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Fortaleza - CE</p>
+              <ul class="card__specs">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>120 m²</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
+              </ul>
+              <div class="card__foot">
+                <p class="card__price">R$ 780.000</p>
+                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20Apartamento%20em%20Fortaleza%20(R%24%20780.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre o Apartamento">
+                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-reveal
+                   data-tipo="terreno" data-cidade="aquiraz" data-preco="320000"
+                   data-busca="terreno aquiraz ce 450 m2 condominio fechado lote">
+            <div class="card__media">
+              <img src="img/imovel-terreno.jpg" alt="Terreno gramado com alameda de pedra e coqueiros" width="796" height="496" loading="lazy">
+              <span class="badge">À venda</span>
+              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Terreno" data-id="terreno-aquiraz">
+                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
+              </button>
+            </div>
+            <div class="card__body">
+              <h3 class="card__title">Terreno</h3>
+              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Aquiraz - CE</p>
+              <ul class="card__specs">
+                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>450 m²</li>
+                <li><svg class="icon" aria-hidden="true"><use href="#i-gate"/></svg>Condomínio fechado</li>
+              </ul>
+              <div class="card__foot">
+                <p class="card__price">R$ 320.000</p>
+                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20Terreno%20em%20Aquiraz%20(R%24%20320.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre o Terreno">
+                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="empty" id="empty" hidden>
+          <p>Nenhum imóvel encontrado com esses filtros.</p>
+          <p>
+            <button type="button" class="link-btn" id="empty-clear">Limpar filtros</button>
+            ou
+            <a href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20n%C3%A3o%20encontrei%20o%20im%C3%B3vel%20que%20procuro%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" rel="noopener">me conte o que você procura</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre -->
+    <section class="about" id="sobre" aria-labelledby="sobre-title">
+      <div class="container about__inner">
+        <div class="about__text">
+          <p class="eyebrow" data-reveal>Sobre mim</p>
+          <h2 class="section-title" id="sobre-title" data-reveal>
+            Prazer, sou<br><span class="accent">Nathan Ferreira</span>
+          </h2>
+          <p class="about__lead" data-reveal>
+            Sou corretor de imóveis e ajudo pessoas a encontrarem o imóvel ideal
+            para viver grandes momentos. Com transparência, segurança e um
+            atendimento personalizado, estou aqui para tornar esse processo
+            mais simples e tranquilo.
+          </p>
+          <a class="btn btn--outline btn--sm" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener" data-reveal>
+            Saiba mais sobre mim
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </a>
+        </div>
+
+        <div class="about__visual">
+          <p class="script about__script" aria-hidden="true">Sonhe<br>Planeje<br>Conquiste</p>
+          <img class="about__photo" src="img/nathan.jpg" alt="Nathan Ferreira de costas, olhando a paisagem" width="1200" height="1032" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Serviços / Por que me escolher -->
+    <section class="partner" id="servicos" aria-labelledby="servicos-title">
+      <div class="partner__bg" aria-hidden="true"></div>
+      <div class="container partner__inner">
+        <p class="eyebrow eyebrow--line" data-reveal>Por que me escolher?</p>
+        <h2 class="section-title" id="servicos-title" data-reveal>
+          Mais do que uma venda,<br>é uma <span class="accent">parceria.</span>
+        </h2>
+
+        <ul class="perks">
+          <li class="perk" data-reveal>
+            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
+            <span class="perk__text">Atendimento<br>personalizado</span>
+          </li>
+          <li class="perk" data-reveal>
+            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+            <span class="perk__text">Segurança<br>em todo o processo</span>
+          </li>
+          <li class="perk" data-reveal>
+            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span>
+            <span class="perk__text">Experiência<br>no mercado imobiliário</span>
+          </li>
+          <li class="perk" data-reveal>
+            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-headset"/></svg></span>
+            <span class="perk__text">Suporte<br>do início ao fim</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="section reviews" id="avaliacoes" aria-labelledby="avaliacoes-title">
+      <div class="container reviews__inner">
+        <div class="reviews__intro">
+          <p class="eyebrow" data-reveal>Depoimentos</p>
+          <h2 class="section-title" id="avaliacoes-title" data-reveal>
+            O que dizem<br>sobre o <span class="accent">meu trabalho</span>
+          </h2>
+          <p class="section-lead" data-reveal>
+            A confiança dos meus clientes é o que me motiva
+            a continuar fazendo o meu melhor.
+          </p>
+        </div>
+
+        <div class="reviews__slider" data-reveal>
+          <div class="reviews__nav">
+            <button class="circle-btn circle-btn--ghost" type="button" id="rev-prev" aria-label="Depoimento anterior">
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg>
+            </button>
+            <button class="circle-btn circle-btn--ghost circle-btn--accent" type="button" id="rev-next" aria-label="Próximo depoimento">
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
+            </button>
+          </div>
+
+          <div class="reviews__track" aria-live="polite">
+            <figure class="review is-active">
+              <img class="review__avatar" src="img/cliente.jpg" alt="" width="136" height="136">
+              <div>
+                <blockquote class="review__quote">
+                  “Nathan foi incrível do início ao fim! Me ajudou em todo o processo,
+                  sempre muito atencioso e profissional. Recomendo de olhos fechados!”
+                </blockquote>
+                <figcaption class="review__author"><strong>Carla Mendes</strong><span>Cliente</span></figcaption>
+              </div>
+            </figure>
+            <figure class="review" hidden>
+              <span class="review__avatar review__avatar--initials" aria-hidden="true">RS</span>
+              <div>
+                <blockquote class="review__quote">
+                  “Encontramos nosso apartamento em poucas semanas. Nathan entendeu
+                  exatamente o que a família precisava e cuidou de toda a documentação.”
+                </blockquote>
+                <figcaption class="review__author"><strong>Rafael Sousa</strong><span>Cliente</span></figcaption>
+              </div>
+            </figure>
+            <figure class="review" hidden>
+              <span class="review__avatar review__avatar--initials" aria-hidden="true">JL</span>
+              <div>
+                <blockquote class="review__quote">
+                  “Comprei meu primeiro terreno com toda a segurança. Atendimento
+                  rápido, transparente e sempre disponível para tirar dúvidas.”
+                </blockquote>
+                <figcaption class="review__author"><strong>Juliana Lima</strong><span>Cliente</span></figcaption>
+              </div>
+            </figure>
+          </div>
+        </div>
+
+        <div class="stat" data-reveal>
+          <p class="stat__value">98%</p>
+          <p class="stat__label">dos clientes recomendam<br>meu trabalho</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Rodapé -->
+  <footer class="footer" id="contato">
+    <div class="container footer__inner">
+      <div class="footer__brand">
+        <a class="logo" href="#inicio" aria-label="Nathan Ferreira, voltar ao topo">
+          <svg class="logo__mark" aria-hidden="true"><use href="#i-logo"/></svg>
+          <span class="logo__text">
+            <span class="logo__name">Nathan</span>
+            <span class="logo__surname">Ferreira</span>
+          </span>
+        </a>
+        <p class="footer__tag">Seu corretor de confiança</p>
+      </div>
+
+      <a class="contact" href="https://wa.me/5585999999999" target="_blank" rel="noopener">
+        <svg class="icon contact__icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
+        <span><span class="contact__label">Fale comigo</span>(85) 99999-9999</span>
+      </a>
+
+      <a class="contact" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener">
+        <svg class="icon contact__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
+        <span><span class="contact__label">Acompanhe meu trabalho</span>@nathanferreira.corretor</span>
+      </a>
+
+      <a class="footer__cta" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20vamos%20encontrar%20meu%20pr%C3%B3ximo%20im%C3%B3vel%3F" target="_blank" rel="noopener">
+        <span class="script">Vamos encontrar<br>seu próximo imóvel?</span>
+        <span class="circle-btn" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+    <div class="container footer__bottom">
+      <p>© <span id="year">2026</span> Nathan Ferreira · Corretor de Imóveis</p>
+      <a href="#inicio">Voltar ao topo ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
