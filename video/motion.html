@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jabuticaba Café — Motion</title>
+<link rel="stylesheet" href="assets/fonts.css">
+<style>
+:root{
+  --cream:#FBF6EA; --cream2:#F4ECDC; --purple:#703674; --berry:#4A1D50; --berry-deep:#2E1033;
+  --aub:#433146; --teal:#4D8071; --teal-deep:#23443C; --leaf:#6FB29D; --coffee:#544434; --gold:#C9A66B;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#0d0a0e;overflow:hidden;height:100%}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--cream);
+  transform-origin:0 0;font-family:'Jost',sans-serif;color:var(--aub);-webkit-font-smoothing:antialiased}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden;transform-origin:50% 50%}
+.abs{position:absolute}
+.serif{font-family:'Cormorant Garamond',serif;font-variant-numeric:lining-nums}
+.it{font-style:italic}
+.label{font-family:'Jost';font-weight:500;font-size:26px;letter-spacing:.42em;text-transform:uppercase;line-height:1.3}
+.line{position:absolute;left:0;right:0;text-align:center;line-height:1.08;white-space:nowrap}
+.lft{position:absolute;left:80px;line-height:1.08;white-space:nowrap}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding:.02em .08em .16em;margin:-.02em -.08em -.16em}
+.wi{display:inline-block}
+.berry{position:absolute;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#B57DB8 0%,#7A3C80 14%,#4A1D50 42%,#26092B 78%,#1A0620 100%);
+  box-shadow:0 10px 24px rgba(46,16,51,.28)}
+.berry::after{content:"";position:absolute;left:22%;top:16%;width:26%;height:18%;border-radius:50%;
+  background:rgba(255,255,255,.55);filter:blur(1.5px);transform:rotate(-30deg)}
+.leaf{position:absolute}
+.leaf svg{width:100%;height:100%;display:block}
+.ring{position:absolute;border-radius:50%;border:10px solid var(--purple)}
+.photo{position:absolute;overflow:hidden;background:#2a1c22}
+.photo img{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}
+#grain{position:absolute;inset:-240px;pointer-events:none;opacity:.32;mix-blend-mode:multiply;z-index:50;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .2  0 0 0 0 .12  0 0 0 0 .18  0 0 0 .5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size:240px 240px}
+#wring{position:absolute;border-radius:50%;border:22px solid var(--gold);z-index:40;pointer-events:none;visibility:hidden}
+
+/* scene 2 */
+#s2rib{position:absolute;left:-80px;width:1240px;top:1095px;height:230px;background:var(--teal);transform:rotate(-4deg);
+  box-shadow:0 30px 60px rgba(20,4,24,.35)}
+#s2rib::before,#s2rib::after{content:"";position:absolute;left:0;right:0;height:5px;background:rgba(251,246,234,.55)}
+#s2rib::before{top:16px}#s2rib::after{bottom:16px}
+#s2anos{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Jost';font-weight:800;
+  font-size:178px;letter-spacing:.12em;color:var(--cream);padding-left:.12em;line-height:1}
+#s2anos span{display:inline-block}
+
+/* scene 3 */
+.arch{border-radius:300px 300px 26px 26px}
+#s3badge{position:absolute;left:790px;top:578px;width:230px;height:230px}
+
+/* scene 4 */
+.plate{position:absolute;left:210px;top:520px;width:660px;height:660px;border-radius:50%;overflow:hidden;
+  border:16px solid var(--cream);box-shadow:0 40px 80px rgba(8,24,20,.45);background:#2a1c22}
+.plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.iname{position:absolute;left:0;right:0;top:1296px;text-align:center;font-family:'Cormorant Garamond';font-weight:600;
+  font-size:76px;color:var(--cream);line-height:1.08;white-space:nowrap}
+.iprice{position:absolute;left:50%;top:1412px;height:92px;padding:0 44px;border-radius:46px;background:var(--purple);
+  color:var(--cream);font-family:'Jost';font-weight:600;font-size:44px;line-height:92px;white-space:nowrap;
+  box-shadow:0 14px 30px rgba(10,20,18,.35)}
+.icount{position:absolute;left:0;right:0;top:1248px;text-align:center;color:var(--gold)}
+#marq{position:absolute;left:-120px;width:1320px;top:1590px;height:100px;background:var(--purple);transform:rotate(-3deg);overflow:hidden}
+#marqIn{position:absolute;left:0;top:0;height:100px;display:flex;align-items:center;white-space:nowrap;
+  font-family:'Jost';font-weight:500;font-size:32px;letter-spacing:.14em;text-transform:uppercase;color:var(--cream)}
+#marqIn i{display:inline-block;width:18px;height:18px;border-radius:50%;margin:0 34px;
+  background:radial-gradient(circle at 35% 30%,#C996CC,#6FB29D 0%,#6FB29D 100%)}
+
+/* scene 5 */
+.card{position:absolute;left:60px;width:960px;height:290px;border-radius:28px;overflow:hidden;background:#2a1c22;
+  box-shadow:0 24px 50px rgba(67,49,70,.22)}
+.card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.card .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(38,12,42,.9) 0%,rgba(38,12,42,.66) 55%,rgba(38,12,42,0) 88%)}
+.card .ct{position:absolute;left:50px;top:52px;font-family:'Cormorant Garamond';font-style:italic;font-weight:500;font-size:84px;color:var(--cream);line-height:1}
+.card .cd{position:absolute;left:54px;top:156px;width:580px;font-family:'Jost';font-weight:400;font-size:32px;line-height:1.35;color:rgba(251,246,234,.92)}
+
+/* scene 6 */
+.crow{position:absolute;left:100px;width:880px;height:132px;border-radius:66px;background:rgba(251,246,234,.08);
+  border:2px solid rgba(251,246,234,.22);display:flex;align-items:center}
+.crow .ic{width:96px;height:96px;border-radius:50%;background:var(--leaf);margin-left:18px;display:flex;align-items:center;justify-content:center;flex:none}
+.crow .ic svg{width:48px;height:48px;fill:none;stroke:var(--berry-deep);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.crow .tx{margin-left:30px}
+.crow .k{font-family:'Jost';font-weight:500;font-size:22px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+.crow .v{font-family:'Jost';font-weight:500;font-size:46px;color:var(--cream);line-height:1.15}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- 1 · Abertura: logo -->
+  <section class="scene" id="sc1" style="background:radial-gradient(120% 80% at 50% 40%,#FFFCF4 0%,#FBF6EA 55%,#F0E4CC 100%)">
+    <div class="abs" id="p1" style="left:0;top:0"></div>
+    <div class="ring" id="s1r1"></div>
+    <div class="ring" id="s1r2" style="border-color:var(--leaf)"></div>
+    <img class="abs" id="s1logo" src="assets/img/logo-10anos.png" style="left:210px;top:490px;width:660px;height:660px;filter:drop-shadow(0 26px 40px rgba(67,49,70,.2))">
+    <div class="line label" id="s1lab" style="top:1238px;color:var(--teal)">Cafeteria · São Luís – MA</div>
+    <div class="line serif it" id="s1l1" style="top:1290px;font-size:106px;font-weight:500;color:var(--purple)">Momentos especiais</div>
+    <div class="line serif" id="s1l2" style="top:1410px;font-size:82px;font-weight:500">começam com um bom café.</div>
+  </section>
+
+  <!-- 2 · 10 anos -->
+  <section class="scene" id="sc2" style="background:radial-gradient(100% 70% at 50% 42%,#6A2D71 0%,#4A1D50 50%,#2B0E30 100%)">
+    <div class="abs" id="s2bokeh" style="left:0;top:0"></div>
+    <div class="line label" id="s2lab" style="top:300px;color:var(--gold)">Jabuticaba Café</div>
+    <div class="line serif" id="s2num" style="top:270px;font-size:800px;font-weight:500;line-height:1;color:var(--cream)"><span class="w"><span class="wi">1</span></span><span class="w"><span class="wi">0</span></span></div>
+    <div id="s2rib"><div id="s2anos"><span>A</span><span>N</span><span>O</span><span>S</span></div></div>
+    <div class="line serif it" id="s2a" style="top:1390px;font-size:74px;font-weight:500;color:var(--cream)">Café, sabores e momentos</div>
+    <div class="line serif it" id="s2b" style="top:1474px;font-size:74px;font-weight:500;color:var(--cream)">para aproveitar sem pressa.</div>
+  </section>
+
+  <!-- 3 · Sobre -->
+  <section class="scene" id="sc3" style="background:linear-gradient(180deg,#FBF6EA 0%,#F5EBD7 100%)">
+    <div class="lft label" id="s3lab" style="top:250px;color:var(--teal)">Sobre</div>
+    <div class="lft serif" id="s3t1" style="top:296px;font-size:132px;font-weight:500">Uma pausa</div>
+    <div class="lft serif it" id="s3t2" style="top:424px;font-size:132px;font-weight:500;color:var(--purple)">que vale a pena.</div>
+    <div class="photo arch" id="s3A" style="left:70px;top:600px;width:560px;height:720px"><img src="assets/img/real-ambiente.jpg" style="object-position:50% 50%"></div>
+    <div class="abs arch" id="s3Bwrap" style="left:548px;top:800px;width:470px;height:560px;background:#FBF6EA;padding:14px">
+      <div class="photo arch" id="s3B" style="position:relative;width:100%;height:100%"><img src="assets/img/real-ambiente-noite.jpg" style="object-position:60% 50%"></div>
+    </div>
+    <svg id="s3badge" viewBox="0 0 250 250">
+      <defs><path id="bc" d="M125,125 m-92,0 a92,92 0 1,1 184,0 a92,92 0 1,1 -184,0"/></defs>
+      <circle cx="125" cy="125" r="122" fill="#703674"/>
+      <circle cx="125" cy="125" r="66" fill="none" stroke="#FBF6EA" stroke-opacity=".35" stroke-width="2"/>
+      <g id="s3badgeTxt"><text font-family="Jost" font-weight="500" font-size="19" fill="#FBF6EA"><textPath href="#bc" textLength="566" lengthAdjust="spacing">JABUTICABA CAFÉ • 10 ANOS • SÃO LUÍS •</textPath></text></g>
+      <g transform="translate(125 125)">
+        <path d="M0 26 C -22 12 -24 -14 0 -34 C 24 -14 22 12 0 26 Z" fill="#6FB29D"/>
+        <path d="M0 22 L0 -26" stroke="#703674" stroke-width="3" stroke-linecap="round"/>
+      </g>
+    </svg>
+    <div class="abs" id="s3body" style="left:80px;top:1392px;width:900px;font-family:'Jost';font-weight:300;font-size:38px;line-height:1.42;color:var(--aub)">Um espaço para apreciar bons sabores, encontrar pessoas especiais e transformar uma simples pausa em um momento agradável.</div>
+  </section>
+
+  <!-- 4 · Cardápio -->
+  <section class="scene" id="sc4" style="background:radial-gradient(110% 70% at 50% 45%,#2F5C51 0%,#23443C 55%,#152C26 100%)">
+    <div class="line label" id="s4lab" style="top:236px;color:var(--gold)">Cardápio</div>
+    <div class="line serif" id="s4t" style="top:282px;font-size:124px;font-weight:500;color:var(--cream)">Nosso <span class="it">cardápio</span></div>
+    <div class="line" id="s4sub" style="top:426px;font-family:'Jost';font-weight:300;font-size:34px;color:rgba(251,246,234,.82)">Escolha seu sabor e aproveite o momento.</div>
+    <svg class="abs" id="s4ring" viewBox="0 0 800 800" style="left:170px;top:480px;width:740px;height:740px">
+      <circle cx="400" cy="400" r="392" fill="none" stroke="#C9A66B" stroke-width="3" stroke-dasharray="2 16" stroke-linecap="round"/>
+      <circle cx="400" cy="400" r="372" fill="none" stroke="#6FB29D" stroke-opacity=".35" stroke-width="2"/>
+    </svg>
+    <div class="abs" id="s4items" style="left:0;top:0;width:1080px;height:1920px"></div>
+    <div id="marq"><div id="marqIn"></div></div>
+  </section>
+
+  <!-- 5 · Experiência -->
+  <section class="scene" id="sc5" style="background:linear-gradient(180deg,#F6EEDF 0%,#EFE2C8 100%)">
+    <div class="lft label" id="s5lab" style="top:230px;color:var(--teal)">Experiência</div>
+    <div class="lft serif" id="s5t1" style="top:276px;font-size:112px;font-weight:500">Mais do que café.</div>
+    <div class="lft serif it" id="s5t2" style="top:386px;font-size:112px;font-weight:500;color:var(--purple)">Uma experiência.</div>
+    <div class="card" id="s5c0" style="top:560px"><img src="assets/img/real-balcao.jpg" style="object-position:50% 40%"><div class="shade"></div><div class="ct">Café</div><div class="cd">Cafés preparados para acompanhar seus melhores momentos.</div></div>
+    <div class="card" id="s5c1" style="top:880px"><img src="assets/img/real-bolo-orquidea.jpg" style="object-position:50% 70%"><div class="shade"></div><div class="ct">Sabores</div><div class="cd">Bolos, lanches, doces e bebidas para diferentes momentos do dia.</div></div>
+    <div class="card" id="s5c2" style="top:1200px"><img src="assets/img/real-pessoas.jpg" style="object-position:50% 50%"><div class="shade"></div><div class="ct">Ambiente</div><div class="cd">Um espaço agradável para conversar, trabalhar ou relaxar.</div></div>
+    <div class="line" id="s5svc" style="top:1530px;font-family:'Jost';font-weight:500;font-size:26px;letter-spacing:.2em;text-transform:uppercase;color:var(--teal)">Refeição no local · Para viagem · Entrega</div>
+  </section>
+
+  <!-- 6 · Localização e contato -->
+  <section class="scene" id="sc6" style="background:radial-gradient(110% 70% at 50% 35%,#62296A 0%,#4A1D50 50%,#2B0E30 100%)">
+    <div class="line label" id="s6lab" style="top:236px;color:var(--gold)">Localização</div>
+    <div class="line serif" id="s6t" style="top:280px;font-size:124px;font-weight:500;color:var(--cream)">Venha nos <span class="it">visitar.</span></div>
+    <div class="abs" id="s6pinWrap" style="left:490px;top:500px;width:100px;height:150px">
+      <div class="abs" id="s6rip" style="left:-10px;top:72px;width:120px;height:36px;border-radius:50%;border:3px solid var(--leaf)"></div>
+      <svg class="abs" id="s6pin" viewBox="0 0 24 30" style="left:14px;top:0;width:72px;height:90px;overflow:visible">
+        <path d="M12 29s-10-8.6-10-17a10 10 0 0 1 20 0c0 8.4-10 17-10 17z" fill="#6FB29D"/>
+        <circle cx="12" cy="12" r="4.2" fill="#2E1033"/>
+      </svg>
+    </div>
+    <div class="line serif" id="s6a1" style="top:690px;font-size:82px;font-weight:600;color:var(--cream)">Windows Open Mall</div>
+    <div class="line" id="s6a2" style="top:796px;font-family:'Jost';font-weight:400;font-size:42px;color:var(--cream)">Av. dos Holandeses, 13</div>
+    <div class="line" id="s6a3" style="top:856px;font-family:'Jost';font-weight:300;font-size:36px;color:rgba(251,246,234,.8)">Jardim Renascença · São Luís – MA</div>
+    <div class="crow" id="s6r0" style="top:1010px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3.5 20.5l1.3-4A8.5 8.5 0 1 1 8 19.5z"/><path d="M9 9.2c.3 2.6 2.2 4.6 4.9 5.2l1.2-1.3 1.8.9-.4 1.6c-3.6.4-7.6-3.4-7.6-7.2l1.6-.5.9 1.8z" stroke-width="1.4"/></svg></div><div class="tx"><div class="k">WhatsApp</div><div class="v">(98) 99158-0508</div></div></div>
+    <div class="crow" id="s6r1" style="top:1175px"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="#2E1033"/></svg></div><div class="tx"><div class="k">Instagram</div><div class="v">@jabuticabacafe</div></div></div>
+    <div class="crow" id="s6r2" style="top:1340px"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3 3.5 6.5V20a1.5 1.5 0 0 0 1.5 1.5h14a1.5 1.5 0 0 0 1.5-1.5V6.5L18 3z"/><path d="M3.5 6.5h17"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div><div class="tx"><div class="k">Delivery</div><div class="v">Peça pelo iFood</div></div></div>
+  </section>
+
+  <!-- 7 · Encerramento -->
+  <section class="scene" id="sc7" style="background:radial-gradient(120% 80% at 50% 40%,#FFFCF4 0%,#FBF6EA 55%,#F0E4CC 100%)">
+    <div class="abs" id="p7" style="left:0;top:0"></div>
+    <img class="abs" id="s7logo" src="assets/img/logo-10anos.png" style="left:230px;top:420px;width:620px;height:620px;filter:drop-shadow(0 26px 40px rgba(67,49,70,.2))">
+    <div class="line serif it" id="s7l1" style="top:1110px;font-size:96px;font-weight:500;color:var(--purple)">Momentos especiais</div>
+    <div class="line serif" id="s7l2" style="top:1218px;font-size:76px;font-weight:500">começam com um bom café.</div>
+    <div class="line" id="s7h" style="top:1360px;font-family:'Jost';font-weight:500;font-size:44px;color:var(--aub)">@jabuticabacafe</div>
+    <div class="line label" id="s7s" style="top:1430px;color:var(--teal);font-size:24px">jabuticabacafé.com.br</div>
+  </section>
+
+  <div id="wring"></div>
+  <div id="grain"></div>
+</div>
+
+<script>
+// ---------- timing ----------
+const FPS = 30;
+const TR = 0.75;                                   // duração das transições circulares
+const S = [0, 4.6, 8.8, 13.6, 22.0, 26.4, 30.9];   // início de cada cena (quando a anterior some)
+const DURATION = 35.0;
+// origem [x, y] e cor do aro de cada transição (entrada da cena i)
+const WIPES = [null, [540, 820, '#6FB29D'], [540, 2080, '#C9A66B'], [905, 693, '#C9A66B'],
+               [540, 850, '#703674'], [140, 1760, '#6FB29D'], [540, 1000, '#C9A66B']];
+
+// ---------- helpers ----------
+const $ = id => document.getElementById(id);
+const cl = x => Math.max(0, Math.min(1, x));
+const p = (t, a, d) => cl((t - a) / d);
+const lerp = (a, b, x) => a + (b - a) * x;
+const E = {
+  outCubic: x => 1 - Math.pow(1 - x, 3),
+  outQuart: x => 1 - Math.pow(1 - x, 4),
+  outExpo: x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x),
+  inCubic: x => x * x * x,
+  inOutCubic: x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  outBack: x => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); },
+  outBounce: x => { const n = 7.5625, d = 2.75;
+    if (x < 1 / d) return n * x * x;
+    if (x < 2 / d) return n * (x -= 1.5 / d) * x + .75;
+    if (x < 2.5 / d) return n * (x -= 2.25 / d) * x + .9375;
+    return n * (x -= 2.625 / d) * x + .984375; },
+};
+function tf(el, { x = 0, y = 0, s = 1, r = 0, o } = {}) {
+  el.style.transform = `translate(${x}px,${y}px) rotate(${r}deg) scale(${s})`;
+  if (o !== undefined) el.style.opacity = o;
+}
+// quebra o texto em palavras mascaradas (cada palavra sobe de dentro de uma "janela")
+function split(el) {
+  const walk = node => {
+    if (node.nodeType === 3) {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(' ')); return; }
+        const w = document.createElement('span'); w.className = 'w';
+        const i = document.createElement('span'); i.className = 'wi'; i.textContent = part;
+        w.appendChild(i); frag.appendChild(w);
+      });
+      node.replaceWith(frag);
+    } else [...node.childNodes].forEach(walk);
+  };
+  [...el.childNodes].forEach(walk);
+  return [...el.querySelectorAll('.wi')];
+}
+function words(items, u, inAt, outAt = 1e9, { st = .06, dur = .8, outDur = .45 } = {}) {
+  items.forEach((it, i) => {
+    const a = E.outQuart(p(u, inAt + i * st, dur));
+    const b = E.inCubic(p(u, outAt + i * st * .5, outDur));
+    it.style.transform = `translateY(${(1 - a) * 118 - b * 118}%)`;
+  });
+}
+// pseudo-aleatório determinístico
+const rnd = n => { const x = Math.sin(n * 12.9898) * 43758.5453; return x - Math.floor(x); };
+
+// ---------- partículas (jabuticabas e folhas) ----------
+const LEAF = c => `<svg viewBox="0 0 100 100"><path d="M50 96 C 14 72, 8 30, 50 4 C 92 30, 86 72, 50 96 Z" fill="${c}"/><path d="M50 90 Q 47 50 50 14" stroke="#FBF6EA" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+function makeParticles(container, defs) {
+  return defs.map((d, i) => {
+    const el = document.createElement('div');
+    if (d.t === 'b') { el.className = 'berry'; el.style.width = el.style.height = d.s + 'px'; }
+    else { el.className = 'leaf'; el.style.width = el.style.height = d.s + 'px'; el.innerHTML = LEAF(d.c || '#6FB29D'); }
+    el.style.left = -d.s / 2 + 'px'; el.style.top = -d.s / 2 + 'px';
+    container.appendChild(el);
+    return { ...d, el, ph: rnd(i + 1) * 6.28, w: .7 + rnd(i + 7) * .7 };
+  });
+}
+function animParticles(ps, u, ox, oy, inAt) {
+  ps.forEach((q, i) => {
+    const k = E.outExpo(p(u, inAt + i * .03, 1.3));
+    const bob = Math.sin(u * q.w * 1.5 + q.ph) * 12 * k, sway = Math.cos(u * q.w + q.ph) * 7 * k;
+    const x = lerp(ox, q.x, k) + sway, y = lerp(oy, q.y, k) + bob;
+    const r = lerp(-200, q.r || 0, k) + Math.sin(u * q.w * 1.2 + q.ph) * 9;
+    tf(q.el, { x, y, r, s: k, o: Math.min(1, k * 4) });
+  });
+}
+const PDEF1 = [
+  { t: 'b', x: 175, y: 455, s: 58 }, { t: 'b', x: 925, y: 560, s: 42 }, { t: 'b', x: 150, y: 1080, s: 36 },
+  { t: 'b', x: 935, y: 1105, s: 62 }, { t: 'b', x: 300, y: 285, s: 30 }, { t: 'b', x: 790, y: 330, s: 34 },
+  { t: 'b', x: 70, y: 770, s: 24 }, { t: 'b', x: 1010, y: 850, s: 28 },
+  { t: 'l', x: 320, y: 390, s: 96, r: -32 }, { t: 'l', x: 810, y: 460, s: 82, r: 38 },
+  { t: 'l', x: 105, y: 920, s: 74, r: -72, c: '#4D8071' }, { t: 'l', x: 975, y: 975, s: 78, r: 112 },
+  { t: 'l', x: 240, y: 1175, s: 62, r: -128 }, { t: 'b', x: 860, y: 1200, s: 40 },
+  { t: 'l', x: 540, y: 250, s: 58, r: 8, c: '#4D8071' },
+];
+const PDEF7 = [
+  { t: 'b', x: 160, y: 380, s: 54 }, { t: 'b', x: 940, y: 470, s: 40 }, { t: 'b', x: 120, y: 980, s: 34 },
+  { t: 'b', x: 960, y: 1010, s: 58 }, { t: 'b', x: 330, y: 250, s: 30 }, { t: 'b', x: 760, y: 270, s: 32 },
+  { t: 'l', x: 300, y: 330, s: 90, r: -30 }, { t: 'l', x: 840, y: 360, s: 80, r: 40 },
+  { t: 'l', x: 90, y: 760, s: 72, r: -80, c: '#4D8071' }, { t: 'l', x: 990, y: 760, s: 74, r: 100 },
+  { t: 'l', x: 200, y: 1560, s: 64, r: -150 }, { t: 'l', x: 880, y: 1540, s: 60, r: 145, c: '#4D8071' },
+  { t: 'b', x: 120, y: 1640, s: 30 }, { t: 'b', x: 960, y: 1650, s: 36 },
+];
+const P1 = makeParticles($('p1'), PDEF1);
+const P7 = makeParticles($('p7'), PDEF7);
+
+// ---------- montagem dos elementos ----------
+const W = {};
+['s1lab', 's1l1', 's1l2', 's2lab', 's2a', 's2b', 's3lab', 's3t1', 's3t2', 's3body', 's4lab', 's4t', 's4sub',
+ 's5lab', 's5t1', 's5t2', 's5svc', 's6lab', 's6t', 's6a1', 's6a2', 's6a3', 's7l1', 's7l2', 's7h', 's7s']
+  .forEach(id => W[id] = split($(id)));
+W.s2num = [...$('s2num').querySelectorAll('.wi')];
+const ANOS = [...$('s2anos').children];
+
+// bokeh da cena 2
+const BOKEH = [[160, 420, 340, '#9A4FA0'], [930, 300, 260, '#6FB29D'], [880, 1500, 420, '#8E3F94'], [120, 1650, 300, '#6FB29D'], [560, 980, 520, '#7B3581']]
+  .map(([x, y, s, c], i) => {
+    const d = document.createElement('div');
+    d.className = 'abs';
+    Object.assign(d.style, { left: x - s / 2 + 'px', top: y - s / 2 + 'px', width: s + 'px', height: s + 'px', borderRadius: '50%', background: c, opacity: .16, filter: 'blur(50px)' });
+    $('s2bokeh').appendChild(d); return { d, i };
+  });
+
+// itens do cardápio
+const MENU = [
+  { img: 'real-beiju-espresso.jpg', name: 'Espresso gourmet', price: 'R$ 6,00', pos: '50% 50%' },
+  { img: 'real-hero.jpg', name: 'Chocolate quente', price: 'M R$ 8,00 · G R$ 10,00', pos: '62% 50%' },
+  { img: 'real-bolo.jpg', name: 'Bolo de chocolate de verdade', price: 'R$ 10,00', pos: '50% 55%' },
+  { img: 'real-cuscuz.jpg', name: 'Cuscuz quentinho', price: 'a partir de R$ 7,00', pos: '45% 70%' },
+  { img: 'real-omelete.jpg', name: 'Omelete', price: 'a partir de R$ 10,00', pos: '50% 55%' },
+];
+const ITEMS = MENU.map((m, k) => {
+  const host = $('s4items');
+  const plate = document.createElement('div'); plate.className = 'plate';
+  plate.innerHTML = `<img src="assets/img/${m.img}" style="object-position:${m.pos}">`;
+  const count = document.createElement('div'); count.className = 'icount label'; count.textContent = `0${k + 1} — 0${MENU.length}`;
+  const name = document.createElement('div'); name.className = 'iname'; name.textContent = m.name;
+  const price = document.createElement('div'); price.className = 'iprice'; price.textContent = m.price;
+  host.append(plate, count, name, price);
+  return { plate, img: plate.firstChild, count: split(count), name: split(name), price };
+});
+const MARQ = ['Esfiha árabe', 'Coxinha de frango', 'Beiju fofo', 'Pão de queijo mineiro', 'Crepioca do jabu', 'Quiche',
+  'Folhado de queijo', 'Misto quente da padoca', 'Queijo quente da infância', 'Café da manhã completo'];
+$('marqIn').innerHTML = (MARQ.map(m => `<span>${m}</span><i></i>`).join('')).repeat(3);
+let MARQW = 0;
+
+// ---------- cenas ----------
+const SC = [];
+// 1 · logo
+SC[0] = u => {
+  const k = p(u, .2, 1.05);
+  const dip = Math.sin(Math.PI * p(u, S[1] - TR - .45, .45));
+  const s = E.outBack(k) * (1 - .08 * dip);
+  const r = lerp(-160, 0, E.outCubic(k));
+  const y = Math.sin(u * 1.4) * 7 * p(u, 1.2, .8);
+  tf($('s1logo'), { y, s, r, o: p(u, .2, .12) });
+  ['s1r1', 's1r2'].forEach((id, i) => {
+    const el = $(id), kk = p(u, .78 + i * .16, 1.25), e = E.outCubic(kk), R = lerp(320, 560 + i * 90, e);
+    Object.assign(el.style, { width: 2 * R + 'px', height: 2 * R + 'px', left: 540 - R + 'px', top: 820 - R + 'px',
+      borderWidth: lerp(12, 1, e) + 'px', opacity: kk > 0 && kk < 1 ? (1 - e) * .85 : 0 });
+  });
+  animParticles(P1, u, 540, 820, .72);
+  words(W.s1lab, u, 1.2, 1e9, { st: .05 });
+  words(W.s1l1, u, 1.4, 1e9, { st: .1 });
+  words(W.s1l2, u, 1.7, 1e9, { st: .08 });
+};
+// 2 · 10 anos
+SC[1] = u => {
+  BOKEH.forEach(({ d, i }) => d.style.transform = `translate(${Math.sin(u * .6 + i) * 40}px,${Math.cos(u * .5 + i * 2) * 50}px)`);
+  words(W.s2lab, u, -.25, 1e9, { st: .05 });
+  words(W.s2num, u, -.15, 1e9, { st: .13, dur: 1.0 });
+  tf($('s2num'), { s: lerp(1.1, 1, E.outCubic(p(u, -.2, 4))) });
+  const kr = E.inOutCubic(p(u, .5, .75));
+  $('s2rib').style.clipPath = `inset(-40px ${(1 - kr) * 100}% -40px 0)`;
+  ANOS.forEach((el, i) => { const k = p(u, .85 + i * .08, .7); tf(el, { y: (1 - E.outBack(k)) * 90, s: lerp(.6, 1, E.outBack(k)), o: p(u, .85 + i * .08, .15) }); });
+  words(W.s2a, u, 1.35, 1e9, { st: .07 });
+  words(W.s2b, u, 1.6, 1e9, { st: .07 });
+};
+// 3 · sobre
+SC[2] = u => {
+  words(W.s3lab, u, -.3);
+  words(W.s3t1, u, -.15, 1e9, { st: .1 });
+  words(W.s3t2, u, .05, 1e9, { st: .09 });
+  const ka = E.inOutCubic(p(u, .3, 1.0));
+  $('s3A').style.clipPath = `inset(${(1 - ka) * 100}% 0 0 0 round 300px 300px 26px 26px)`;
+  tf($('s3A').firstChild, { s: lerp(1.4, 1.06, E.outCubic(p(u, .3, 4.6))), y: lerp(40, -10, p(u, .3, 4.6)) });
+  const kb = E.inOutCubic(p(u, .6, 1.0));
+  $('s3Bwrap').style.clipPath = `inset(0 0 ${(1 - kb) * 100}% 0 round 300px 300px 26px 26px)`;
+  tf($('s3Bwrap'), { y: lerp(80, 0, E.outCubic(p(u, .6, 1.2))) });
+  tf($('s3B').firstChild, { s: lerp(1.35, 1.08, E.outCubic(p(u, .6, 4.4))) });
+  const kbd = p(u, 1.05, .8);
+  tf($('s3badge'), { s: E.outBack(kbd), r: lerp(-120, 0, E.outCubic(kbd)), o: p(u, 1.05, .1) });
+  $('s3badgeTxt').setAttribute('transform', `rotate(${u * 32} 125 125)`);
+  words(W.s3body, u, 1.2, 1e9, { st: .03, dur: .7 });
+};
+// 4 · cardápio
+const STEP = 1.55;
+SC[3] = u => {
+  words(W.s4lab, u, -.3);
+  words(W.s4t, u, -.15, 1e9, { st: .1 });
+  words(W.s4sub, u, .1, 1e9, { st: .03 });
+  const kring = p(u, .15, .9);
+  tf($('s4ring'), { s: E.outBack(kring), r: u * 10, o: p(u, .15, .2) });
+  ITEMS.forEach((it, k) => {
+    const inAt = .35 + STEP * k, outAt = k < ITEMS.length - 1 ? inAt + STEP : 1e9;
+    const ki = E.inOutCubic(p(u, inAt, .75)), ko = E.inOutCubic(p(u, outAt, .75));
+    it.plate.style.visibility = ki > 0 && ko < 1 ? 'visible' : 'hidden';
+    tf(it.plate, { x: (1 - ki) * 1150 - ko * 1150, r: (1 - ki) * 75 - ko * 75 });
+    tf(it.img, { s: lerp(1.18, 1.02, E.outCubic(p(u, inAt, STEP + .8))) });
+    words(it.count, u, inAt + .3, outAt - .1, { st: .02 });
+    words(it.name, u, inAt + .38, outAt - .12, { st: .05 });
+    const kp = p(u, inAt + .6, .55), kpo = E.inCubic(p(u, outAt - .12, .28));
+    it.price.style.transform = `translateX(-50%) scale(${E.outBack(kp) * (1 - kpo)})`;
+    it.price.style.opacity = kp > 0 && kpo < 1 ? 1 : 0;
+  });
+  if (!MARQW) MARQW = $('marqIn').scrollWidth / 3;
+  $('marqIn').style.transform = `translateX(${-(((u + 2) * 130) % MARQW)}px)`;
+  tf($('marq'), { y: (1 - E.outCubic(p(u, .2, .8))) * 260, r: -3 });
+};
+// 5 · experiência
+SC[4] = u => {
+  words(W.s5lab, u, -.3);
+  words(W.s5t1, u, -.15, 1e9, { st: .08 });
+  words(W.s5t2, u, .1, 1e9, { st: .08 });
+  [0, 1, 2].forEach(i => {
+    const c = $('s5c' + i), at = .35 + i * .28, k = E.inOutCubic(p(u, at, .9));
+    c.style.clipPath = i % 2 ? `inset(0 0 0 ${(1 - k) * 100}% round 28px)` : `inset(0 ${(1 - k) * 100}% 0 0 round 28px)`;
+    tf(c, { x: (1 - E.outCubic(p(u, at, 1.1))) * (i % 2 ? 80 : -80) });
+    tf(c.querySelector('img'), { s: lerp(1.3, 1.05, E.outCubic(p(u, at, 4))) });
+    const ct = c.querySelector('.ct'), cd = c.querySelector('.cd');
+    tf(ct, { y: (1 - E.outQuart(p(u, at + .35, .7))) * 50, o: p(u, at + .35, .4) });
+    tf(cd, { y: (1 - E.outQuart(p(u, at + .5, .7))) * 40, o: p(u, at + .5, .5) });
+  });
+  words(W.s5svc, u, 1.6, 1e9, { st: .04 });
+};
+// 6 · localização
+SC[5] = u => {
+  words(W.s6lab, u, -.3);
+  words(W.s6t, u, -.15, 1e9, { st: .1 });
+  const kp = p(u, .25, .9);
+  tf($('s6pin'), { y: (E.outBounce(kp) - 1) * 420, o: p(u, .25, .1) });
+  const rp = ((u - .9) % 1.3 + 1.3) % 1.3 / 1.3;
+  tf($('s6rip'), { s: u > .9 ? lerp(.3, 1.8, E.outCubic(rp)) : 0, o: u > .9 ? 1 - rp : 0 });
+  words(W.s6a1, u, .55, 1e9, { st: .07 });
+  words(W.s6a2, u, .75, 1e9, { st: .04 });
+  words(W.s6a3, u, .9, 1e9, { st: .03 });
+  [0, 1, 2].forEach(i => {
+    const k = p(u, 1.15 + i * .2, .8);
+    tf($('s6r' + i), { x: (1 - E.outQuart(k)) * 160, o: E.outCubic(p(u, 1.15 + i * .2, .4)) });
+  });
+};
+// 7 · encerramento
+SC[6] = u => {
+  const k = p(u, -.2, 1.05);
+  tf($('s7logo'), { s: E.outBack(k), r: lerp(160, 0, E.outCubic(k)), y: Math.sin(u * 1.4) * 7 * p(u, 1, .8), o: p(u, -.2, .12) });
+  animParticles(P7, u, 540, 730, .25);
+  words(W.s7l1, u, .75, 1e9, { st: .1 });
+  words(W.s7l2, u, 1.0, 1e9, { st: .08 });
+  words(W.s7h, u, 1.45, 1e9, { st: .05 });
+  words(W.s7s, u, 1.6, 1e9, { st: .05 });
+};
+
+const SCENES = [...document.querySelectorAll('.scene')];
+function render(t) {
+  SCENES.forEach((sc, i) => {
+    const st = S[i], next = i + 1 < S.length ? S[i + 1] : 1e9;
+    const vis = t >= (i ? st - TR : -1) && t < next;
+    sc.style.visibility = vis ? 'visible' : 'hidden';
+    if (!vis) return;
+    if (i && t < st) {
+      const k = E.inOutCubic(p(t, st - TR, TR)), [cx, cy] = WIPES[i];
+      sc.style.clipPath = `circle(${k * 2300}px at ${cx}px ${cy}px)`;
+    } else sc.style.clipPath = 'none';
+    const ko = E.inOutCubic(p(t, next - TR, TR));
+    sc.style.transform = ko > 0 ? `scale(${1 - .07 * ko})` : 'none';
+    SC[i](t - st);
+  });
+  // aro colorido acompanhando a borda da transição
+  const ring = $('wring');
+  const wi = S.findIndex((st, i) => i && t >= st - TR && t < st);
+  if (wi > 0) {
+    const k = E.inOutCubic(p(t, S[wi] - TR, TR)), [cx, cy, c] = WIPES[wi], R = k * 2300 + 22;
+    Object.assign(ring.style, { visibility: 'visible', width: 2 * R + 'px', height: 2 * R + 'px', left: cx - R + 'px', top: cy - R + 'px', borderColor: c });
+  } else ring.style.visibility = 'hidden';
+  // granulação de filme
+  const f = Math.round(t * FPS);
+  $('grain').style.transform = `translate(${Math.floor(rnd(f) * 240) - 120}px,${Math.floor(rnd(f + 99) * 240) - 120}px)`;
+}
+window.render = render;
+window.DURATION = DURATION;
+
+// pré-visualização no navegador (o render.cjs desliga isso e controla o tempo quadro a quadro)
+if (!window.__RENDER__) {
+  const stage = $('stage');
+  const fit = () => {
+    const s = Math.min(innerWidth / 1080, innerHeight / 1920);
+    stage.style.transform = `scale(${s})`;
+    stage.style.left = (innerWidth - 1080 * s) / 2 + 'px';
+  };
+  addEventListener('resize', fit); fit();
+  const q = new URLSearchParams(location.search);
+  if (q.has('t')) document.fonts.ready.then(() => render(parseFloat(q.get('t'))));
+  else {
+    let t0 = null, paused = false, pt = 0;
+    stage.addEventListener('click', () => { paused = !paused; if (!paused) t0 = null; });
+    const loop = now => {
+      if (!paused) { if (t0 === null) t0 = now - pt * 1000; pt = ((now - t0) / 1000) % DURATION; render(pt); }
+      requestAnimationFrame(loop);
+    };
+    document.fonts.ready.then(() => requestAnimationFrame(loop));
+  }
+}
+</script>
+</body>
+</html>
