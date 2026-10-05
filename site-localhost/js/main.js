@@ -57,51 +57,92 @@
     revealEls.forEach(function (el) { el.classList.add('is-visible'); });
   }
 
-  /* ---------- Imóveis em destaque no hero ---------- */
+  /* ---------- Imóveis em destaque no hero (01–04) ---------- */
   var cards = $$('#cards .card');
   var featured = $('.featured');
-  var current = $('.hero__count--current');
-  var total = $('.hero__count--total');
-  var fill = $('.hero__bar-fill');
+  var stepsList = $('.hero__steps');
   var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var textOf = function (el) { return el.textContent.trim(); };
 
-  var slides = cards.map(function (card) {
-    var specs = $$('.card__specs li', card).map(function (li) { return li.textContent.trim(); });
+  // 1º destaque: o que já está no HTML; os demais vêm dos cards de imóveis
+  var slides = [{
+    img: $('.featured__img', featured).getAttribute('src'),
+    alt: $('.featured__img', featured).getAttribute('alt'),
+    label: textOf($('.featured__label', featured)),
+    title: textOf($('.featured__title', featured)),
+    meta: $$('.featured__meta span', featured).map(textOf),
+    href: featured.getAttribute('href')
+  }].concat(cards.map(function (card) {
+    var img = $('img', card);
     return {
-      img: $('img', card).getAttribute('src'),
-      title: $('.card__title', card).textContent.trim(),
-      meta: [$('.card__place', card).textContent.trim()].concat(specs.slice(0, 2)).join(' · ')
+      img: img.getAttribute('src'),
+      alt: img.getAttribute('alt'),
+      label: 'Em destaque · ' + textOf($('.card__place', card)),
+      title: textOf($('.card__title', card)),
+      meta: $$('.card__specs li', card).map(textOf),
+      href: $('.card__foot a', card).getAttribute('href')
     };
+  }));
+
+  // recria o indicador com a quantidade real de destaques
+  stepsList.innerHTML = '';
+  var steps = slides.map(function (s, i) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'hero__step';
+    btn.textContent = pad(i + 1);
+    btn.setAttribute('aria-label', 'Destaque ' + (i + 1) + ': ' + s.title);
+    btn.addEventListener('click', function () { showSlide(i); restart(); });
+    li.appendChild(btn);
+    stepsList.appendChild(li);
+    return btn;
   });
 
   var slide = 0;
-  function showSlide(i) {
-    slide = (i + slides.length) % slides.length;
-    var s = slides[slide];
-    featured.classList.add('is-swapping');
-    setTimeout(function () {
-      $('.featured__img', featured).src = s.img;
-      $('.featured__title', featured).textContent = s.title;
-      $('.featured__meta', featured).textContent = s.meta;
-      featured.classList.remove('is-swapping');
-    }, reduceMotion ? 0 : 300);
-    current.textContent = pad(slide + 1);
-    fill.style.height = ((slide + 1) / slides.length * 100) + '%';
+  function renderSteps() {
+    steps.forEach(function (btn, i) {
+      btn.classList.toggle('is-active', i === slide);
+      if (i === slide) btn.setAttribute('aria-current', 'true'); else btn.removeAttribute('aria-current');
+    });
   }
 
-  if (slides.length) {
-    total.textContent = pad(slides.length);
-    fill.style.height = (100 / slides.length) + '%';
-    var timer = null;
-    var start = function () { if (!reduceMotion && !timer) timer = setInterval(function () { showSlide(slide + 1); }, 5000); };
-    var stop = function () { clearInterval(timer); timer = null; };
-    featured.addEventListener('mouseenter', stop);
-    featured.addEventListener('mouseleave', start);
-    featured.addEventListener('focus', stop);
-    featured.addEventListener('blur', start);
-    document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
-    start();
+  function showSlide(i) {
+    if (i === slide) return;
+    slide = (i + slides.length) % slides.length;
+    var s = slides[slide];
+    renderSteps();
+    featured.classList.add('is-swapping');
+    setTimeout(function () {
+      var img = $('.featured__img', featured);
+      img.src = s.img;
+      img.alt = s.alt || '';
+      $('.featured__label', featured).textContent = s.label;
+      $('.featured__title', featured).textContent = s.title;
+      var meta = $('.featured__meta', featured);
+      meta.textContent = '';
+      s.meta.forEach(function (m) {
+        var span = document.createElement('span');
+        span.textContent = m;
+        meta.appendChild(span);
+      });
+      featured.setAttribute('href', s.href);
+      featured.classList.remove('is-swapping');
+    }, reduceMotion ? 0 : 300);
   }
+
+  var timer = null;
+  function start() { if (!reduceMotion && !timer) timer = setInterval(function () { showSlide((slide + 1) % slides.length); }, 6000); }
+  function stop() { clearInterval(timer); timer = null; }
+  function restart() { stop(); start(); }
+
+  renderSteps();
+  featured.addEventListener('mouseenter', stop);
+  featured.addEventListener('mouseleave', start);
+  featured.addEventListener('focus', stop);
+  featured.addEventListener('blur', start);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  start();
 
   /* ---------- Favoritos ---------- */
   var FAV_KEY = 'nf-favoritos';
