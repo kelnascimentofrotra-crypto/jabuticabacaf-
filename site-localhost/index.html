@@ -74,13 +74,13 @@
         <a href="#imoveis" class="nav__link">Imóveis</a>
         <a href="#sobre" class="nav__link">Sobre</a>
         <a href="#servicos" class="nav__link">Serviços</a>
-        <a href="#avaliacoes" class="nav__link">Avaliações</a>
         <a href="#contato" class="nav__link">Contato</a>
       </nav>
 
       <a class="btn header__cta" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20vim%20pelo%20site%20e%20quero%20falar%20sobre%20im%C3%B3veis." target="_blank" rel="noopener">
         <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
         Fale comigo
+        <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
       </a>
 
       <button class="menu-toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
@@ -96,26 +96,24 @@
     <section class="hero" id="inicio">
       <div class="hero__bg" aria-hidden="true"></div>
 
-      <ol class="hero__steps" aria-label="Imóveis em destaque">
-        <li><button type="button" class="hero__step is-active" aria-current="true" aria-label="Destaque 1">01</button></li>
-        <li><button type="button" class="hero__step" aria-label="Destaque 2">02</button></li>
-        <li><button type="button" class="hero__step" aria-label="Destaque 3">03</button></li>
-        <li><button type="button" class="hero__step" aria-label="Destaque 4">04</button></li>
-      </ol>
-
       <div class="container hero__content">
-        <p class="eyebrow eyebrow--line hero__eyebrow" data-reveal>Seu novo capítulo começa aqui</p>
+        <p class="eyebrow eyebrow--line hero__eyebrow" data-reveal>Seu sonho, o nosso objetivo</p>
         <h1 class="hero__title" data-reveal>
-          Mais que imóveis,
-          <span class="accent">realizamos sonhos.</span>
+          Encontre o imóvel
+          <span class="accent">perfeito para a sua<br> nova fase.</span>
         </h1>
         <p class="hero__lead" data-reveal>
-          Encontre o imóvel ideal para viver grandes momentos. Com segurança,
-          transparência e o suporte que você merece.
+          Mais do que vender imóveis, eu te ajudo a encontrar o lugar certo
+          para viver <span class="hl">grandes momentos</span>.
         </p>
+        <ul class="hero__perks" data-reveal>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>Segurança</strong><small>em todo o processo</small></span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><span><strong>Atendimento</strong><small>personalizado</small></span></li>
+          <li><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span><strong>As melhores</strong><small>oportunidades</small></span></li>
+        </ul>
         <div class="hero__actions" data-reveal>
           <a class="btn btn--primary" href="#imoveis">
-            Ver imóveis
+            Ver imóveis disponíveis
             <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
           </a>
           <span class="hero__divider" aria-hidden="true"></span>
@@ -127,18 +125,18 @@
       </div>
 
       <div class="container hero__bottom">
-        <ul class="hero__perks" data-reveal>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span>Imóveis<br>selecionados</span></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span>Negociação<br>segura</span></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><span>Atendimento<br>personalizado</span></li>
-        </ul>
+        <p class="hero__tagline" data-reveal><span>Investimento</span><span>Moradia</span><span>Valorização</span></p>
 
-        <a class="featured" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20destaque%20da%20semana%3A%20Casa%20em%20Condom%C3%ADnio%20(3%20su%C3%ADtes%2C%20210%20m%C2%B2)." target="_blank" rel="noopener" aria-live="polite" data-reveal>
+        <a class="featured" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20destaque%20da%20semana%3A%20Casa%20em%20Condom%C3%ADnio%20em%20Eus%C3%A9bio%20(4%20su%C3%ADtes%2C%20320%20m%C2%B2)." target="_blank" rel="noopener" data-reveal>
           <img class="featured__img" src="img/destaque-semana.jpg" alt="Casa moderna de dois andares em condomínio" width="600" height="464">
           <span class="featured__body">
             <span class="featured__label">Destaque da semana</span>
             <span class="featured__title">Casa em Condomínio</span>
-            <span class="featured__meta"><span>3 suítes</span><span>2 vagas</span><span>210 m²</span></span>
+            <span class="featured__meta">
+              <span><svg class="icon icon--accent" aria-hidden="true"><use href="#i-pin"/></svg>Eusébio - CE</span>
+              <span><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>4 suítes</span>
+              <span><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>320 m²</span>
+            </span>
           </span>
           <span class="circle-btn" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
         </a>
@@ -317,6 +315,11 @@
 
     <!-- Sobre -->
     <section class="about" id="sobre" aria-labelledby="sobre-title">
+      <div class="about__visual">
+        <img class="about__photo" src="img/sobre-nathan.jpg" alt="Nathan Ferreira de costas, olhando a paisagem" width="1168" height="815" loading="lazy">
+        <p class="script about__script" aria-hidden="true"><span>Sonhe</span><span>Planeje</span><span>Conquiste</span></p>
+      </div>
+
       <div class="container about__inner">
         <div class="about__text">
           <p class="eyebrow" data-reveal>Sobre mim</p>
@@ -329,15 +332,10 @@
             atendimento personalizado, estou aqui para tornar esse processo
             mais simples e tranquilo.
           </p>
-          <a class="btn btn--outline btn--sm" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener" data-reveal>
+          <a class="btn btn--outline" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener" data-reveal>
             Saiba mais sobre mim
             <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
           </a>
-        </div>
-
-        <div class="about__visual">
-          <p class="script about__script" aria-hidden="true">Sonhe<br>Planeje<br>Conquiste</p>
-          <img class="about__photo" src="img/nathan.jpg" alt="Nathan Ferreira de costas, olhando a paisagem" width="1200" height="1032" loading="lazy">
         </div>
       </div>
     </section>
