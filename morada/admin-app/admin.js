@@ -590,7 +590,7 @@
       e.preventDefault();
       const btn = $('#lgBtn');
       if (btn.disabled) return;
-      const email = $('#lgEmail').value.trim();
+      const email = $('#lgEmail').value.trim().toLowerCase();
       const password = $('#lgPass').value;
       msg.textContent = '';
       $$('.field', form).forEach((f) => f.classList.remove('has-error'));
@@ -612,7 +612,11 @@
       }
       setBusy(btn, true, 'Entrando…');
       try {
-        const { data, error } = await sb.auth.signInWithPassword({ email, password });
+        let { data, error } = await sb.auth.signInWithPassword({ email, password });
+        // senha colada das anotações costuma vir com um espaço ou quebra de linha sobrando
+        if (error && password.trim() !== password && password.trim() && (error.status === 400 || error.code === 'invalid_credentials')) {
+          ({ data, error } = await sb.auth.signInWithPassword({ email, password: password.trim() }));
+        }
         if (error) throw error;
         const admin = await isAdmin(data.user);
         if (!admin) {
@@ -634,7 +638,7 @@
         else if (err?.status === 400 || /invalid login|invalid_credentials/i.test(text) || err?.code === 'invalid_credentials') {
           fails += 1;
           if (fails >= 5) { waitUntil = Date.now() + 60000; fails = 0; msg.textContent = 'E-mail ou senha incorretos. Por segurança, aguarde 1 minuto para tentar de novo.'; }
-          else msg.textContent = 'E-mail ou senha incorretos.';
+          else msg.textContent = 'E-mail ou senha incorretos. Confira tocando no olhinho da senha; se não lembrar, use “Esqueci minha senha” logo abaixo e crie uma nova pelo e-mail.';
           $('#lgPass').value = '';
           $('#lgPass').focus();
         } else msg.textContent = errText(err);
