@@ -776,7 +776,7 @@
     return !d.error && !u.error;
   }
 
-  const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
+  const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado', 'Nome do cliente 1', 'Nome do cliente 2', 'Nome do cliente 3'];
   async function loadExtras(alive) {
     if (await tirarFotosExemplo().catch(() => false)) {
       if (!alive()) return;
@@ -814,7 +814,7 @@
       [!nomesSemCidade.length, false, 'Colocar a cidade dos imóveis', `${nomesSemCidade.join(', ')}: a cidade está como “A definir” e por isso não aparece no site. Abra o imóvel, troque a cidade e salve.`, '/admin/imoveis'],
       [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
       [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
-      [!exAval.error && exAval.count === 0, true, 'Trocar as avaliações de exemplo', exAval.count ? `Ainda há ${plural(exAval.count, 'avaliação', 'avaliações')} de exemplo publicada${exAval.count > 1 ? 's' : ''}. Cadastre depoimentos reais e exclua estas.` : '', '/admin/avaliacoes'],
+      [!exAval.error && exAval.count === 0, true, 'Escrever as avaliações dos clientes', exAval.count ? `${plural(exAval.count, 'avaliação ainda é modelo', 'avaliações ainda são modelo')} ou exemplo. Em Avaliações, troque o nome e o texto pelo que o cliente real disse (com a permissão dele) e clique em Publicar.` : '', '/admin/avaliacoes'],
       [!!(c.familias_atendidas || c.anos_mercado), true, 'Números da apresentação (opcional)', 'Famílias atendidas e anos de mercado aparecem na abertura do site. Vazios, ficam escondidos.', '/admin/configuracoes'],
     ].filter(([done, show]) => show || !done);
     const pending = items.filter(([done]) => !done);
