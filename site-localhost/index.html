@@ -2,476 +2,404 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>site localhost</title>
-  <meta name="description" content="Nathan Ferreira, corretor de imóveis no Ceará. Casas, apartamentos e terrenos com transparência, segurança e atendimento personalizado.">
-  <meta name="theme-color" content="#0b0a09">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath d='M4 6h9v28H4z' fill='%23ff7a2e'/%3E%3Cpath d='M4 6h9l23 28h-9z' fill='%23d63a08'/%3E%3Cpath d='M27 6h9v28h-9z' fill='%23ff5b14'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Herr+Von+Muellerhoff&display=swap">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nathan Ferreira — Corretor de imóveis</title>
+  <meta name="description" content="Imóveis selecionados em Fortaleza e região: casas, apartamentos e terrenos com atendimento de perto, do primeiro contato às chaves.">
+  <meta name="theme-color" content="#0d0b0a">
+  <link rel="icon" id="favicon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141110'/%3E%3Ctext x='31' y='43' text-anchor='middle' font-family='Playfair Display,Georgia,serif' font-size='30' font-weight='500' letter-spacing='-3' fill='%23ff8a3d'%3ENF%3C/text%3E%3C/svg%3E">
+
+  <link rel="preload" href="fonts/inter-tight.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/newsreader.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/newsreader-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/sacramento.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/playfair-display.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" as="image" href="assets/casa-1280.webp" type="image/webp"
+        imagesrcset="assets/casa-960.webp 960w, assets/casa-1280.webp 1280w, assets/casa-1840.webp 1840w"
+        imagesizes="(max-width: 900px) 200vw, 92vw">
+
+  <link rel="stylesheet" href="styles.css">
   <script>document.documentElement.classList.add('js');</script>
+  <script src="data.js" defer></script>
+  <script src="app.js" defer></script>
 </head>
-<body>
+<body data-tone="light">
 
   <!-- Ícones -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <linearGradient id="logo-grad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#ff8a3a"/>
-        <stop offset="1" stop-color="#e8300c"/>
-      </linearGradient>
-      <linearGradient id="logo-grad-2" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#ff7a2a"/>
-        <stop offset="1" stop-color="#d42a08"/>
-      </linearGradient>
-    </defs>
-    <symbol id="i-logo" viewBox="0 0 44 44">
-      <path d="M3 9.5 11 14v27H3z" fill="url(#logo-grad)"/>
-      <path d="M3 3h2.4l30.6 38h-2.4z" fill="url(#logo-grad-2)"/>
-      <path d="M7 3h2.4l30.6 38h-2.4z" fill="url(#logo-grad-2)" opacity=".85"/>
-      <path d="M11 3h2.4L41 37.3V41h-.4z" fill="url(#logo-grad-2)" opacity=".7"/>
-      <path d="M33 3h8v25l-8-9.9z" fill="url(#logo-grad)"/>
-      <path d="M27 3h6v5.5h-6z" fill="url(#logo-grad)"/>
-    </symbol>
-    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9.5 21v-6.5h5V21"/></symbol>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h16"/><path d="m14 6 6 6-6 6"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9.5 21v-6.5h5V21"/></symbol>
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42-.08-.12-.28-.2-.57-.34m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.82 9.82 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4"/></symbol>
-    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></symbol>
-    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
     <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z"/></symbol>
-    <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
-    <symbol id="i-chevron-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></symbol>
-    <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></symbol>
-    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
-    <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
-    <symbol id="i-bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></symbol>
-    <symbol id="i-area" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h4"/><path d="M3 15h4"/><path d="M9 21v-4"/><path d="M15 21v-4"/></symbol>
-    <symbol id="i-car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2a1 1 0 0 0 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4a1 1 0 0 0 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></symbol>
-    <symbol id="i-gate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></symbol>
-    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7.5"/><path d="m20.5 20.5-4.2-4.2"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4.5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
-    <symbol id="i-award" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V10l7-5 7 5v11"/><circle cx="12" cy="12" r="2"/><path d="M8.5 21v-2.5a3.5 3.5 0 0 1 7 0V21"/></symbol>
-    <symbol id="i-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/><path d="M21 16v2a4 4 0 0 1-4 4h-5"/></symbol>
-    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
-    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3h2.6l2.4 12.2a1.6 1.6 0 0 0 1.6 1.3h8.7a1.6 1.6 0 0 0 1.6-1.2L21.5 7H6"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
   </svg>
 
-  <!-- Cabeçalho -->
-  <header class="header" id="topo">
-    <div class="container header__inner">
-      <a class="logo" href="#inicio" aria-label="Nathan Ferreira, início">
-        <svg class="logo__mark" aria-hidden="true"><use href="#i-logo"/></svg>
-        <span class="logo__text">
-          <span class="logo__name">Nathan</span>
-          <span class="logo__surname">Ferreira</span>
-        </span>
-      </a>
+  <!-- Barras de cinema da troca de cena -->
+  <div class="letterbox" aria-hidden="true"><i></i><i></i></div>
 
-      <nav class="nav" id="menu" aria-label="Principal">
-        <a href="#inicio" class="nav__link is-active">Início</a>
-        <a href="#imoveis" class="nav__link">Imóveis</a>
-        <a href="#sobre" class="nav__link">Sobre</a>
-        <a href="#servicos" class="nav__link">Serviços</a>
-        <a href="#contato" class="nav__link">Contato</a>
-      </nav>
+  <!-- Topo -->
+  <header class="topbar">
+    <a class="brand-link" href="#inicio" data-go="inicio" aria-label="Nathan Ferreira, ir para o início">
+      <span class="brand"><span class="brand-s" data-brand="antes">Nathan</span><span class="brand-tl" data-brand="iniciais">NF</span><span class="brand-s" data-brand="depois">Ferreira</span></span>
+    </a>
 
-      <a class="btn header__cta" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20vim%20pelo%20site%20e%20quero%20falar%20sobre%20im%C3%B3veis." target="_blank" rel="noopener">
-        <svg class="icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
-        Fale comigo
-        <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-      </a>
+    <nav class="navpill" aria-label="Cenas do site">
+      <span class="nav-glider" aria-hidden="true"></span>
+      <button type="button" class="nav-item" data-go="inicio">Início</button>
+      <button type="button" class="nav-item" data-go="filtro">Filtro</button>
+      <button type="button" class="nav-item" data-go="curadoria">Alto padrão</button>
+      <button type="button" class="nav-item" data-go="instagram">Instagram</button>
+      <button type="button" class="nav-item" data-go="avaliacoes">Avaliações</button>
+      <button type="button" class="nav-item" data-go="contato">Contato</button>
+    </nav>
 
-      <button class="menu-toggle" type="button" aria-controls="menu" aria-expanded="false" aria-label="Abrir menu">
-        <svg class="icon icon--open" aria-hidden="true"><use href="#i-menu"/></svg>
-        <svg class="icon icon--close" aria-hidden="true"><use href="#i-close"/></svg>
+    <div class="top-actions">
+      <button type="button" class="round" id="btn-search" aria-label="Buscar imóveis">
+        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+      </button>
+      <button type="button" class="round" id="btn-account" aria-label="Favoritos, carrinho e conta">
+        <svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>
+        <span class="count" id="fav-count" hidden>0</span>
+      </button>
+      <button type="button" class="round round--dots" id="btn-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <i></i><i></i><i></i>
       </button>
     </div>
   </header>
 
-  <main>
+  <!-- Indicador lateral -->
+  <aside class="rail" aria-label="Posição no site">
+    <span class="rail-num" id="rail-num">01</span>
+    <div class="rail-ticks">
+      <button type="button" data-go="inicio" aria-label="Ir para Início"></button>
+      <button type="button" data-go="filtro" aria-label="Ir para Filtro"></button>
+      <button type="button" data-go="curadoria" aria-label="Ir para Alto padrão"></button>
+      <button type="button" data-go="instagram" aria-label="Ir para Instagram"></button>
+      <button type="button" data-go="avaliacoes" aria-label="Ir para Avaliações"></button>
+      <button type="button" data-go="contato" aria-label="Ir para Contato"></button>
+    </div>
+    <span class="rail-total">06</span>
+    <span class="rail-name" id="rail-name">Início</span>
+  </aside>
 
-    <!-- Hero -->
-    <section class="hero" id="inicio">
-      <div class="hero__bg" aria-hidden="true"></div>
+  <main class="scenes">
 
-      <div class="container hero__content">
-        <p class="eyebrow eyebrow--line hero__eyebrow" data-reveal>Seu sonho, o nosso objetivo</p>
-        <h1 class="hero__title" data-reveal>
-          Encontre o imóvel
-          <span class="accent">perfeito para a sua<br> nova fase.</span>
-        </h1>
-        <p class="hero__lead" data-reveal>
-          Mais do que vender imóveis, eu te ajudo a encontrar o lugar certo
-          para viver <span class="hl">grandes momentos</span>.
-        </p>
-        <ul class="hero__perks" data-reveal>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span><strong>Segurança</strong><small>em todo o processo</small></span></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg><span><strong>Atendimento</strong><small>personalizado</small></span></li>
-          <li><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg><span><strong>As melhores</strong><small>oportunidades</small></span></li>
-        </ul>
-        <div class="hero__actions" data-reveal>
-          <a class="btn btn--primary" href="#imoveis">
-            Ver imóveis disponíveis
-            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-          </a>
-          <span class="hero__divider" aria-hidden="true"></span>
-          <a class="play-link" href="#sobre">
-            <span class="play-link__circle"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
-            Conheça meu trabalho
-          </a>
+    <!-- 01 Início -->
+    <section class="scene" id="inicio" data-label="Início" aria-label="Início">
+      <div class="stage m-hero" id="hero-stage">
+        <div class="intro">
+          <p class="tag rv" style="--d: .15s" data-cfg="segmento">Corretor de imóveis</p>
+          <h1 class="intro-title rv" style="--d: .25s">Vamos encontrar o seu <em>recanto</em></h1>
+          <p class="intro-text rv" style="--d: .35s" id="intro-text">Imóveis selecionados, com atendimento de perto do primeiro contato até as chaves.</p>
+          <div class="intro-actions rv" style="--d: .4s">
+            <button type="button" class="btn btn-outline" data-go="curadoria">
+              Ver imóveis <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>
+            </button>
+            <span class="scroll-hint" aria-hidden="true">Role para explorar <i></i></span>
+          </div>
         </div>
-      </div>
 
-      <div class="container hero__bottom">
-        <p class="hero__tagline" data-reveal><span>Investimento</span><span>Moradia</span><span>Valorização</span></p>
+        <div class="media-pop rv" style="--d: .3s" aria-hidden="true">
+          <img class="media-img" src="assets/casa-recorte-1280.webp"
+               srcset="assets/casa-recorte-960.webp 960w, assets/casa-recorte-1280.webp 1280w, assets/casa-recorte-1840.webp 1840w"
+               sizes="92vw" alt="" width="1840" height="851">
+        </div>
 
-        <a class="featured" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20destaque%20da%20semana%3A%20Casa%20em%20Condom%C3%ADnio%20em%20Eus%C3%A9bio%20(4%20su%C3%ADtes%2C%20320%20m%C2%B2)." target="_blank" rel="noopener" data-reveal>
-          <img class="featured__img" src="img/destaque-semana.jpg" alt="Casa moderna de dois andares em condomínio" width="600" height="464">
-          <span class="featured__body">
-            <span class="featured__label">Destaque da semana</span>
-            <span class="featured__title">Casa em Condomínio</span>
-            <span class="featured__meta">
-              <span><svg class="icon icon--accent" aria-hidden="true"><use href="#i-pin"/></svg>Eusébio - CE</span>
-              <span><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>4 suítes</span>
-              <span><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>320 m²</span>
-            </span>
-          </span>
-          <span class="circle-btn" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-        </a>
+        <div class="media rv" style="--d: .3s">
+          <img class="media-img" src="assets/casa-1280.webp"
+               srcset="assets/casa-960.webp 960w, assets/casa-1280.webp 1280w, assets/casa-1840.webp 1840w"
+               sizes="(max-width: 900px) 200vw, 92vw" alt="Casa moderna com piscina ao entardecer" width="1840" height="851">
+          <span class="media-shade" aria-hidden="true"></span>
+
+          <div class="hero-glass">
+            <p class="glass selo rv" style="--d: .55s">Casas selecionadas para<br>um jeito único de viver</p>
+            <ul class="glass stats rv" style="--d: .65s" id="stats"></ul>
+            <div class="media-cards rv" style="--d: .75s">
+              <div class="glass mini" id="mini-count"></div>
+              <div class="glass mini mini--feat" id="mini-feat"></div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Busca -->
-    <section class="search-band" id="busca" aria-labelledby="busca-title">
-      <div class="container">
-        <p class="eyebrow eyebrow--line" data-reveal>Busque seu imóvel</p>
-        <h2 class="section-title" id="busca-title" data-reveal>
-          Encontre o imóvel<br><span class="accent">ideal</span> para você
-        </h2>
+    <!-- 02 Filtro -->
+    <section class="scene" id="filtro" data-label="Filtro" aria-label="Filtro">
+      <div class="stage f-stage">
+        <div class="f-intro">
+          <p class="tag rv" style="--d: .15s">Filtro</p>
+          <h2 class="serif-title rv" style="--d: .25s">Encontre o<br>imóvel certo</h2>
+          <p class="lead rv" style="--d: .35s">Escolha o que importa e veja na hora quantos imóveis combinam com você.</p>
+          <figure class="f-photo rv" style="--d: .45s">
+            <img src="assets/fundo-filtro-960.webp" srcset="assets/fundo-filtro-960.webp 960w, assets/fundo-filtro-1840.webp 1840w" sizes="(max-width: 900px) 100vw, 32vw" alt="Casa térrea com piscina e área de lazer" loading="lazy" width="960" height="444">
+            <figcaption id="f-caption"></figcaption>
+          </figure>
+        </div>
 
-        <form class="search" id="search-form" role="search" data-reveal>
-          <label class="search__field">
-            <span class="sr-only">Buscar imóvel</span>
-            <svg class="icon search__icon" aria-hidden="true"><use href="#i-search"/></svg>
-            <input type="search" name="q" placeholder="Ex: Casa em condomínio, apartamento..." autocomplete="off">
-            <button class="btn btn--primary btn--xs" type="submit">Buscar</button>
-          </label>
-
-          <label class="select">
-            <span class="select__label">Tipo</span>
-            <select name="tipo">
-              <option value="">Todos</option>
-              <option value="casa">Casa</option>
-              <option value="apartamento">Apartamento</option>
-              <option value="terreno">Terreno</option>
-            </select>
-            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
-          </label>
-
-          <label class="select">
-            <span class="select__label">Cidade</span>
-            <select name="cidade">
-              <option value="">Todas</option>
-              <option value="eusebio">Eusébio</option>
-              <option value="fortaleza">Fortaleza</option>
-              <option value="aquiraz">Aquiraz</option>
-            </select>
-            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
-          </label>
-
-          <label class="select">
-            <span class="select__label">Faixa de preço</span>
-            <select name="preco">
-              <option value="">Todas</option>
-              <option value="0-500000">Até R$ 500 mil</option>
-              <option value="500000-1000000">R$ 500 mil a R$ 1 milhão</option>
-              <option value="1000000-">Acima de R$ 1 milhão</option>
-            </select>
-            <svg class="icon select__chevron" aria-hidden="true"><use href="#i-chevron-down"/></svg>
-          </label>
+        <form class="panel f-panel rv" style="--d: .3s" id="filter-form" aria-label="Filtro de imóveis">
+          <fieldset class="f-group">
+            <legend>O que você procura</legend>
+            <div class="chips" data-key="finalidade"></div>
+          </fieldset>
+          <fieldset class="f-group">
+            <legend>Tipo</legend>
+            <div class="chips" data-key="tipo"></div>
+          </fieldset>
+          <fieldset class="f-group">
+            <legend>Cidade</legend>
+            <div class="chips" data-key="cidade"></div>
+          </fieldset>
+          <fieldset class="f-group">
+            <legend>Quartos</legend>
+            <div class="chips" data-key="quartos"></div>
+          </fieldset>
+          <div class="f-group f-range">
+            <div class="f-range-head">
+              <label class="f-legend" for="f-valor">Valor</label>
+              <output class="f-value" id="f-value" for="f-valor">Qualquer valor</output>
+            </div>
+            <input type="range" id="f-valor" min="0" max="10" step="1" value="10" disabled aria-describedby="f-hint">
+            <p class="f-hint" id="f-hint">Escolha Comprar ou Alugar para definir o valor máximo.</p>
+          </div>
+          <div class="f-foot">
+            <div class="thumbs" id="f-thumbs" aria-hidden="true"></div>
+            <p class="f-count" aria-live="polite"><strong id="f-count">0</strong> <span id="f-count-label">imóveis combinam</span></p>
+            <div class="f-actions">
+              <button type="reset" class="btn btn-ghost">Limpar</button>
+              <button type="submit" class="btn btn-gold">Ver os imóveis <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            </div>
+          </div>
         </form>
       </div>
     </section>
 
-    <!-- Imóveis -->
-    <section class="section listings" id="imoveis" aria-labelledby="imoveis-title">
-      <div class="container">
-        <div class="section-head">
+    <!-- 03 Alto padrão -->
+    <section class="scene" id="curadoria" data-label="Alto padrão" aria-label="Alto padrão">
+      <div class="stage c-stage">
+        <div class="c-intro">
+          <p class="tag rv" style="--d: .15s">Curadoria</p>
+          <h2 class="serif-title rv" style="--d: .25s">Imóveis de<br>alto padrão</h2>
+          <p class="lead rv" style="--d: .35s">Os imóveis em destaque agora</p>
+          <button type="button" class="btn btn-outline rv" style="--d: .45s" id="only-premium">
+            Ver só alto padrão <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>
+          </button>
+        </div>
+
+        <div class="banner rv" style="--d: .3s" id="banner" aria-roledescription="carrossel" aria-label="Imóveis em destaque">
+          <div class="banner-slides" id="banner-slides"></div>
+          <div class="banner-pill glass" id="banner-pill"></div>
+          <div class="banner-dots" id="banner-dots"></div>
+        </div>
+
+        <div class="c-bar rv" style="--d: .45s">
+          <p class="c-count"><strong id="c-count">0</strong> <span id="c-count-label">imóveis</span></p>
+          <div class="c-filters hscroll">
+            <div class="chips chips--sm" id="c-mode"></div>
+            <div class="chips chips--sm" id="c-types"></div>
+            <div class="chips chips--sm" id="c-final"></div>
+            <div class="chips chips--sm" id="c-extra"></div>
+          </div>
+          <div class="c-arrows">
+            <button type="button" class="round round--sm" id="c-prev" aria-label="Imóveis anteriores"><svg class="ic flip" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <button type="button" class="round round--sm" id="c-next" aria-label="Próximos imóveis"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          </div>
+        </div>
+
+        <div class="c-list hscroll rv" style="--d: .55s" id="c-list" aria-label="Lista de imóveis"></div>
+      </div>
+    </section>
+
+    <!-- 04 Instagram -->
+    <section class="scene" id="instagram" data-tone="dark" data-label="Instagram" aria-label="Instagram">
+      <div class="stage i-stage">
+        <div class="i-head">
           <div>
-            <p class="eyebrow eyebrow--line" data-reveal>Destaques</p>
-            <h2 class="section-title" id="imoveis-title" data-reveal>
-              Imóveis que<br>fazem a <span class="accent">diferença</span>
-            </h2>
-            <p class="section-lead" data-reveal>
-              Selecionamos os melhores imóveis para você encontrar
-              o lugar perfeito para chamar de seu.
-            </p>
+            <p class="tag rv" style="--d: .15s">Instagram</p>
+            <h2 class="serif-title rv" style="--d: .25s">Veja nossos posts</h2>
+            <p class="lead rv" style="--d: .35s">Fotos e vídeos dos imóveis no nosso perfil.</p>
           </div>
-          <a class="btn btn--outline btn--sm" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20quero%20ver%20todos%20os%20im%C3%B3veis%20dispon%C3%ADveis." target="_blank" rel="noopener" data-reveal>
-            Ver todos os imóveis
-            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-          </a>
+          <a class="btn btn-outline rv" style="--d: .4s" id="ig-link" href="#" target="_blank" rel="noopener" hidden></a>
         </div>
-
-        <p class="results" id="results" hidden>
-          <span id="results-text"></span>
-          <button type="button" class="link-btn" id="results-clear">Limpar filtros</button>
-        </p>
-
-        <div class="cards" id="cards">
-          <article class="card" data-reveal
-                   data-tipo="casa" data-cidade="eusebio" data-preco="1250000"
-                   data-busca="casa em condominio eusebio ce 4 suites 320 m2 3 vagas piscina">
-            <div class="card__media">
-              <img src="img/imovel-casa.jpg" alt="Casa moderna de dois andares com piscina, iluminada ao entardecer" width="796" height="496" loading="lazy">
-              <span class="badge">À venda</span>
-              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Casa em Condomínio" data-id="casa-eusebio">
-                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
-              </button>
-            </div>
-            <div class="card__body">
-              <h3 class="card__title">Casa em Condomínio</h3>
-              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Eusébio - CE</p>
-              <ul class="card__specs">
-                <li><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>4 suítes</li>
-                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>320 m²</li>
-                <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg>3 vagas</li>
-              </ul>
-              <div class="card__foot">
-                <p class="card__price">R$ 1.250.000</p>
-                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20na%20Casa%20em%20Condom%C3%ADnio%20em%20Eus%C3%A9bio%20(R%24%201.250.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre a Casa em Condomínio">
-                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card" data-reveal
-                   data-tipo="apartamento" data-cidade="fortaleza" data-preco="780000"
-                   data-busca="apartamento fortaleza ce 3 quartos 120 m2 2 vagas vista mar">
-            <div class="card__media">
-              <img src="img/imovel-apartamento.jpg" alt="Sala de apartamento com janelas amplas e vista para o mar" width="796" height="496" loading="lazy">
-              <span class="badge">À venda</span>
-              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Apartamento" data-id="apto-fortaleza">
-                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
-              </button>
-            </div>
-            <div class="card__body">
-              <h3 class="card__title">Apartamento</h3>
-              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Fortaleza - CE</p>
-              <ul class="card__specs">
-                <li><svg class="icon" aria-hidden="true"><use href="#i-bed"/></svg>3 quartos</li>
-                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>120 m²</li>
-                <li><svg class="icon" aria-hidden="true"><use href="#i-car"/></svg>2 vagas</li>
-              </ul>
-              <div class="card__foot">
-                <p class="card__price">R$ 780.000</p>
-                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20Apartamento%20em%20Fortaleza%20(R%24%20780.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre o Apartamento">
-                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-                </a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card" data-reveal
-                   data-tipo="terreno" data-cidade="aquiraz" data-preco="320000"
-                   data-busca="terreno aquiraz ce 450 m2 condominio fechado lote">
-            <div class="card__media">
-              <img src="img/imovel-terreno.jpg" alt="Terreno gramado com alameda de pedra e coqueiros" width="796" height="496" loading="lazy">
-              <span class="badge">À venda</span>
-              <button class="fav" type="button" aria-pressed="false" aria-label="Favoritar Terreno" data-id="terreno-aquiraz">
-                <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
-              </button>
-            </div>
-            <div class="card__body">
-              <h3 class="card__title">Terreno</h3>
-              <p class="card__place"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Aquiraz - CE</p>
-              <ul class="card__specs">
-                <li><svg class="icon" aria-hidden="true"><use href="#i-area"/></svg>450 m²</li>
-                <li><svg class="icon" aria-hidden="true"><use href="#i-gate"/></svg>Condomínio fechado</li>
-              </ul>
-              <div class="card__foot">
-                <p class="card__price">R$ 320.000</p>
-                <a class="circle-btn circle-btn--ghost" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20tenho%20interesse%20no%20Terreno%20em%20Aquiraz%20(R%24%20320.000)." target="_blank" rel="noopener" aria-label="Quero saber mais sobre o Terreno">
-                  <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-                </a>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div class="empty" id="empty" hidden>
-          <p>Nenhum imóvel encontrado com esses filtros.</p>
-          <p>
-            <button type="button" class="link-btn" id="empty-clear">Limpar filtros</button>
-            ou
-            <a href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20n%C3%A3o%20encontrei%20o%20im%C3%B3vel%20que%20procuro%20no%20site.%20Pode%20me%20ajudar%3F" target="_blank" rel="noopener">me conte o que você procura</a>.
-          </p>
-        </div>
+        <div class="reels hscroll rv" style="--d: .45s" id="reels"></div>
       </div>
     </section>
 
-    <!-- Sobre -->
-    <section class="about" id="sobre" aria-labelledby="sobre-title">
-      <div class="about__visual">
-        <img class="about__photo" src="img/sobre-nathan.jpg" alt="Nathan Ferreira de costas, olhando a paisagem" width="1168" height="815" loading="lazy">
-        <p class="script about__script" aria-hidden="true"><span>Sonhe</span><span>Planeje</span><span>Conquiste</span></p>
+    <!-- 05 Avaliações -->
+    <section class="scene" id="avaliacoes" data-tone="dark" data-label="Avaliações" aria-label="Avaliações">
+      <div class="scene-bg" aria-hidden="true">
+        <img src="assets/fundo-avaliacoes-960.webp" srcset="assets/fundo-avaliacoes-960.webp 960w, assets/fundo-avaliacoes-1840.webp 1840w" sizes="100vw" alt="" loading="lazy" width="1840" height="852">
       </div>
-
-      <div class="container about__inner">
-        <div class="about__text">
-          <p class="eyebrow" data-reveal>Sobre mim</p>
-          <h2 class="section-title" id="sobre-title" data-reveal>
-            Prazer, sou<br><span class="accent">Nathan Ferreira</span>
-          </h2>
-          <p class="about__lead" data-reveal>
-            Sou corretor de imóveis e ajudo pessoas a encontrarem o imóvel ideal
-            para viver grandes momentos. Com transparência, segurança e um
-            atendimento personalizado, estou aqui para tornar esse processo
-            mais simples e tranquilo.
-          </p>
-          <a class="btn btn--outline" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener" data-reveal>
-            Saiba mais sobre mim
-            <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Serviços / Por que me escolher -->
-    <section class="partner" id="servicos" aria-labelledby="servicos-title">
-      <div class="partner__bg" aria-hidden="true"></div>
-      <div class="container partner__inner">
-        <p class="eyebrow eyebrow--line" data-reveal>Por que me escolher?</p>
-        <h2 class="section-title" id="servicos-title" data-reveal>
-          Mais do que uma venda,<br>é uma <span class="accent">parceria.</span>
-        </h2>
-
-        <ul class="perks">
-          <li class="perk" data-reveal>
-            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
-            <span class="perk__text">Atendimento<br>personalizado</span>
-          </li>
-          <li class="perk" data-reveal>
-            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
-            <span class="perk__text">Segurança<br>em todo o processo</span>
-          </li>
-          <li class="perk" data-reveal>
-            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-award"/></svg></span>
-            <span class="perk__text">Experiência<br>no mercado imobiliário</span>
-          </li>
-          <li class="perk" data-reveal>
-            <span class="perk__icon"><svg class="icon" aria-hidden="true"><use href="#i-headset"/></svg></span>
-            <span class="perk__text">Suporte<br>do início ao fim</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- Depoimentos -->
-    <section class="section reviews" id="avaliacoes" aria-labelledby="avaliacoes-title">
-      <div class="container reviews__inner">
-        <div class="reviews__intro">
-          <p class="eyebrow" data-reveal>Depoimentos</p>
-          <h2 class="section-title" id="avaliacoes-title" data-reveal>
-            O que dizem<br>sobre o <span class="accent">meu trabalho</span>
-          </h2>
-          <p class="section-lead" data-reveal>
-            A confiança dos meus clientes é o que me motiva
-            a continuar fazendo o meu melhor.
-          </p>
+      <div class="stage a-stage">
+        <div class="a-score">
+          <p class="tag rv" style="--d: .15s">Avaliações</p>
+          <p class="a-big rv" style="--d: .25s"><span id="a-avg">0,0</span><small>/5</small></p>
+          <p class="stars a-stars rv" style="--d: .35s" id="a-stars-big" aria-hidden="true"></p>
+          <p class="a-total rv" style="--d: .4s" id="a-total"></p>
         </div>
 
-        <div class="reviews__slider" data-reveal>
-          <div class="reviews__nav">
-            <button class="circle-btn circle-btn--ghost" type="button" id="rev-prev" aria-label="Depoimento anterior">
-              <svg class="icon" aria-hidden="true"><use href="#i-chevron-left"/></svg>
-            </button>
-            <button class="circle-btn circle-btn--ghost circle-btn--accent" type="button" id="rev-next" aria-label="Próximo depoimento">
-              <svg class="icon" aria-hidden="true"><use href="#i-chevron-right"/></svg>
-            </button>
-          </div>
-
-          <div class="reviews__track" aria-live="polite">
-            <figure class="review is-active">
-              <img class="review__avatar" src="img/cliente.jpg" alt="" width="136" height="136">
-              <div>
-                <blockquote class="review__quote">
-                  “Nathan foi incrível do início ao fim! Me ajudou em todo o processo,
-                  sempre muito atencioso e profissional. Recomendo de olhos fechados!”
-                </blockquote>
-                <figcaption class="review__author"><strong>Carla Mendes</strong><span>Cliente</span></figcaption>
-              </div>
-            </figure>
-            <figure class="review" hidden>
-              <span class="review__avatar review__avatar--initials" aria-hidden="true">RS</span>
-              <div>
-                <blockquote class="review__quote">
-                  “Encontramos nosso apartamento em poucas semanas. Nathan entendeu
-                  exatamente o que a família precisava e cuidou de toda a documentação.”
-                </blockquote>
-                <figcaption class="review__author"><strong>Rafael Sousa</strong><span>Cliente</span></figcaption>
-              </div>
-            </figure>
-            <figure class="review" hidden>
-              <span class="review__avatar review__avatar--initials" aria-hidden="true">JL</span>
-              <div>
-                <blockquote class="review__quote">
-                  “Comprei meu primeiro terreno com toda a segurança. Atendimento
-                  rápido, transparente e sempre disponível para tirar dúvidas.”
-                </blockquote>
-                <figcaption class="review__author"><strong>Juliana Lima</strong><span>Cliente</span></figcaption>
-              </div>
-            </figure>
+        <div class="a-card glass-dark rv" style="--d: .35s" id="a-card">
+          <span class="a-quote" aria-hidden="true">“</span>
+          <div class="a-body" id="a-body" aria-live="polite"></div>
+          <div class="a-nav" id="a-nav">
+            <button type="button" class="round round--sm" id="a-prev" aria-label="Avaliação anterior"><svg class="ic flip" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <div class="a-bars" id="a-bars"></div>
+            <button type="button" class="round round--sm" id="a-next" aria-label="Próxima avaliação"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
           </div>
         </div>
-
-        <div class="stat" data-reveal>
-          <p class="stat__value">98%</p>
-          <p class="stat__label">dos clientes recomendam<br>meu trabalho</p>
-        </div>
       </div>
     </section>
 
+    <!-- 06 Contato -->
+    <section class="scene" id="contato" data-tone="dark" data-label="Contato" aria-label="Contato">
+      <div class="scene-bg" aria-hidden="true">
+        <img src="assets/fundo-contato-960.webp" srcset="assets/fundo-contato-960.webp 960w, assets/fundo-contato-1840.webp 1840w" sizes="100vw" alt="" loading="lazy" width="1840" height="1127">
+      </div>
+      <div class="stage k-stage">
+        <div class="k-intro">
+          <p class="tag rv" style="--d: .15s">Contato</p>
+          <h2 class="k-title rv" style="--d: .25s">Fale com a <em>gente.</em></h2>
+          <p class="lead rv" style="--d: .35s">Mande sua mensagem pelo formulário ou chame direto no WhatsApp.</p>
+          <ul class="k-list rv" style="--d: .45s" id="k-list"></ul>
+        </div>
+
+        <div class="k-box glass-dark rv" style="--d: .35s">
+          <form class="k-form" id="contact-form" novalidate>
+            <div class="k-field">
+              <label for="k-nome">Nome</label>
+              <input id="k-nome" name="nome" type="text" autocomplete="name" required>
+            </div>
+            <div class="k-row">
+              <div class="k-field">
+                <label for="k-email">E-mail</label>
+                <input id="k-email" name="email" type="email" autocomplete="email" inputmode="email">
+              </div>
+              <div class="k-field">
+                <label for="k-tel">Telefone</label>
+                <input id="k-tel" name="telefone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" maxlength="15">
+              </div>
+            </div>
+            <div class="k-field">
+              <label for="k-msg">O que você procura?</label>
+              <textarea id="k-msg" name="mensagem" rows="3"></textarea>
+            </div>
+            <div class="k-hp" aria-hidden="true">
+              <label for="k-site">Deixe este campo em branco</label>
+              <input id="k-site" name="site" type="text" tabindex="-1" autocomplete="off">
+            </div>
+            <p class="k-error" id="k-error" role="alert" hidden></p>
+            <button type="submit" class="btn btn-gold k-send">Enviar <svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <p class="k-legal">Ao enviar, você concorda com o uso dos seus dados para responder ao contato, conforme a nossa <button type="button" class="link" id="open-policy">política de privacidade</button>.</p>
+          </form>
+
+          <div class="k-done" id="k-done" hidden tabindex="-1">
+            <p class="k-done-title">Obrigado!</p>
+            <p class="k-done-text">Respondemos em até um dia útil.</p>
+            <div class="k-done-actions">
+              <a class="btn btn-whats" id="k-whats" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-whatsapp"/></svg> Falar agora no WhatsApp</a>
+              <button type="button" class="btn btn-outline" id="k-again">Enviar outra mensagem</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Rodapé -->
-  <footer class="footer" id="contato">
-    <div class="container footer__inner">
-      <div class="footer__brand">
-        <a class="logo" href="#inicio" aria-label="Nathan Ferreira, voltar ao topo">
-          <svg class="logo__mark" aria-hidden="true"><use href="#i-logo"/></svg>
-          <span class="logo__text">
-            <span class="logo__name">Nathan</span>
-            <span class="logo__surname">Ferreira</span>
-          </span>
-        </a>
-        <p class="footer__tag">Seu corretor de confiança</p>
+  <!-- Detalhe do imóvel -->
+  <div class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden>
+    <div class="d-media">
+      <div class="d-photo" id="d-photo"></div>
+      <div class="d-badges" id="d-badges"></div>
+      <div class="d-thumbs" id="d-thumbs" aria-label="Fotos do imóvel"></div>
+    </div>
+    <div class="d-info">
+      <button type="button" class="d-back" id="d-back"><svg class="ic flip" aria-hidden="true"><use href="#i-arrow"/></svg> Voltar</button>
+      <p class="d-place" id="d-place"></p>
+      <h2 class="d-title" id="d-title"></h2>
+      <p class="d-kind" id="d-kind"></p>
+      <p class="d-price" id="d-price"></p>
+      <dl class="d-specs" id="d-specs"></dl>
+      <p class="d-desc" id="d-desc"></p>
+      <ul class="d-feats" id="d-feats"></ul>
+      <div class="d-actions">
+        <button type="button" class="btn btn-gold" id="d-cart"><svg class="ic" aria-hidden="true"><use href="#i-cart"/></svg> <span>Adicionar ao carrinho</span></button>
+        <a class="btn btn-whats" id="d-whats" href="#" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp</a>
+        <button type="button" class="round heart" id="d-fav" aria-pressed="false" aria-label="Favoritar"><svg class="ic" aria-hidden="true"><use href="#i-heart"/></svg></button>
       </div>
-
-      <a class="contact" href="https://wa.me/5585999999999" target="_blank" rel="noopener">
-        <svg class="icon contact__icon" aria-hidden="true"><use href="#i-whatsapp"/></svg>
-        <span><span class="contact__label">Fale comigo</span>(85) 99999-9999</span>
-      </a>
-
-      <a class="contact" href="https://instagram.com/nathanferreira.corretor" target="_blank" rel="noopener">
-        <svg class="icon contact__icon" aria-hidden="true"><use href="#i-instagram"/></svg>
-        <span><span class="contact__label">Acompanhe meu trabalho</span>@nathanferreira.corretor</span>
-      </a>
-
-      <a class="footer__cta" href="https://wa.me/5585999999999?text=Ol%C3%A1%20Nathan%2C%20vamos%20encontrar%20meu%20pr%C3%B3ximo%20im%C3%B3vel%3F" target="_blank" rel="noopener">
-        <span class="script">Vamos encontrar<br>seu próximo imóvel?</span>
-        <span class="circle-btn" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
-      </a>
     </div>
-    <div class="container footer__bottom">
-      <p>© <span id="year">2026</span> Nathan Ferreira · Corretor de Imóveis</p>
-      <a href="#inicio">Voltar ao topo ↑</a>
-    </div>
-  </footer>
+  </div>
 
-  <script src="js/main.js"></script>
+  <!-- Menu (íris) -->
+  <div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" hidden>
+    <div class="menu-top">
+      <span class="brand"><span class="brand-s" data-brand="antes">Nathan</span><span class="brand-tl" data-brand="iniciais">NF</span><span class="brand-s" data-brand="depois">Ferreira</span></span>
+      <button type="button" class="round" id="menu-close" aria-label="Fechar menu"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <nav class="menu-nav" aria-label="Cenas">
+      <ol class="menu-list">
+        <li><button type="button" data-go="inicio" data-preview="A abertura: a casa, os números e o imóvel em destaque."><span class="mn">01</span><span class="ml">Início</span></button></li>
+        <li><button type="button" data-go="filtro" data-preview="Escolha tipo, cidade, quartos e valor, e veja quantos imóveis combinam."><span class="mn">02</span><span class="ml">Filtro</span></button></li>
+        <li><button type="button" data-go="curadoria" data-preview="Os imóveis de alto padrão em destaque e a lista completa."><span class="mn">03</span><span class="ml">Alto padrão</span></button></li>
+        <li><button type="button" data-go="instagram" data-preview="Fotos e vídeos dos imóveis no perfil."><span class="mn">04</span><span class="ml">Instagram</span></button></li>
+        <li><button type="button" data-go="avaliacoes" data-preview="O que dizem os clientes que já fecharam negócio."><span class="mn">05</span><span class="ml">Avaliações</span></button></li>
+        <li><button type="button" data-go="contato" data-preview="Formulário, WhatsApp e os canais de contato."><span class="mn">06</span><span class="ml">Contato</span></button></li>
+      </ol>
+      <p class="menu-preview" id="menu-preview" aria-live="polite"></p>
+    </nav>
+    <footer class="menu-foot" id="menu-foot"></footer>
+  </div>
+
+  <!-- Busca -->
+  <div class="search" id="search" role="dialog" aria-modal="true" aria-label="Buscar imóveis" hidden>
+    <div class="search-box panel">
+      <div class="search-row">
+        <svg class="ic" aria-hidden="true"><use href="#i-search"/></svg>
+        <label class="sr-only" for="search-input">Buscar imóveis</label>
+        <input id="search-input" type="search" placeholder="Nome, bairro, cidade ou característica" autocomplete="off">
+        <button type="button" class="round round--sm" id="search-close" aria-label="Fechar busca"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+      </div>
+      <div class="chips chips--sm" id="search-cities"></div>
+      <ul class="search-results" id="search-results" aria-live="polite"></ul>
+    </div>
+  </div>
+
+  <!-- Conta: favoritos, carrinho e conta -->
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Sua conta" hidden>
+    <div class="drawer-head">
+      <div class="tabs" role="tablist" aria-label="Sua conta">
+        <button type="button" role="tab" id="tab-fav" aria-controls="panel-fav" aria-selected="true">Favoritos</button>
+        <button type="button" role="tab" id="tab-cart" aria-controls="panel-cart" aria-selected="false" tabindex="-1">Carrinho</button>
+        <button type="button" role="tab" id="tab-conta" aria-controls="panel-conta" aria-selected="false" tabindex="-1">Conta</button>
+      </div>
+      <button type="button" class="round round--sm" id="drawer-close" aria-label="Fechar"><svg class="ic" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div role="tabpanel" id="panel-fav" aria-labelledby="tab-fav"></div>
+      <div role="tabpanel" id="panel-cart" aria-labelledby="tab-cart" hidden></div>
+      <div role="tabpanel" id="panel-conta" aria-labelledby="tab-conta" hidden>
+        <div class="empty-note">
+          <svg class="ic" aria-hidden="true"><use href="#i-user"/></svg>
+          <p>Em breve você poderá criar sua conta.</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="scrim" id="scrim" hidden></div>
+
+  <dialog class="policy panel" id="policy" aria-labelledby="policy-title">
+    <h2 id="policy-title">Política de privacidade</h2>
+    <p id="policy-text"></p>
+    <form method="dialog"><button class="btn btn-gold">Entendi</button></form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
