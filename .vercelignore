@@ -10,3 +10,6 @@ edu-frio/assets/img/produtos/originais
 edu-frio/assets/img/produtos/LEIA-ME.txt
 edu-frio/processar-fotos.py
 edu-frio/assets/img/servicos/originais
+# Fotos guardadas no repositorio, mas fora do site no momento
+edu-frio/assets/img/produtos
+edu-frio/assets/img/servicos
