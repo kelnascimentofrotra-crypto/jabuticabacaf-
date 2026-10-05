@@ -210,6 +210,8 @@ button { cursor: pointer; }
 .brand svg { display: block; width: auto; height: 100%; overflow: visible; }
 .brand-ic { aspect-ratio: 2104 / 1496; flex: none; }
 .brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; flex: none; }
+.brand--nome { gap: 0.3em; }
+.brand-nome { font-family: "Newsreader", Georgia, "Times New Roman", serif; font-size: 0.64em; font-weight: 500; letter-spacing: 0.01em; line-height: 1; color: inherit; white-space: nowrap; }
 .login-brand { display: flex; align-items: center; font-size: 42px; color: var(--ink); }
 .mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--terracotta); color: #fff; flex: none; }
 .mark .ico { width: 20px; height: 20px; }

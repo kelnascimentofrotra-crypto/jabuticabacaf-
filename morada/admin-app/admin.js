@@ -49,7 +49,9 @@
     });
   }
   document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
-  const BRAND_HTML = '<span class="brand" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><svg class="brand-tx"><use href="/assets/logo.svg#lg-texto" /></svg></span>';
+  // nome que aparece no painel (logo da casinha + Thiago Liro)
+  const PAINEL_NOME = 'Thiago Liro';
+  const BRAND_HTML = `<span class="brand brand--nome" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><span class="brand-nome">${PAINEL_NOME}</span></span>`;
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -301,7 +303,7 @@
     const old = shell(route.nav);
     const page = old.cloneNode(false);
     old.replaceWith(page);
-    document.title = `${route.title} — Painel ${siteName}`;
+    document.title = `${route.title} — Painel ${PAINEL_NOME}`;
     page.innerHTML = '';
     page.scrollTop = 0;
     scrollTo(0, 0);
@@ -511,7 +513,7 @@
       <main class="login">
         ${themeBtn('theme-float')}
         <section class="login-card" aria-labelledby="lgTitle">
-          <div class="login-brand" role="img" aria-label="Recanto do Acre Flats">${BRAND_HTML}</div>
+          <div class="login-brand" role="img" aria-label="${PAINEL_NOME}">${BRAND_HTML}</div>
           <h1 id="lgTitle">PAINEL ADMINISTRATIVO</h1>
           <p class="login-sub">Entre com a sua conta de administrador para gerenciar imóveis, fotos e avaliações do site.</p>
           <form id="loginForm" novalidate>
@@ -742,13 +744,44 @@
     });
   }
 
-  const EXEMPLOS_IMOVEIS = ['patio', 'mirante', 'jequitiba', 'brisa', 'seixo', 'lume', 'jardins', 'leblon', 'serra'];
+  // fotos que vieram com os imóveis de exemplo (banco de imagens do modelo): saem do banco na primeira vez que o painel abre
+  const FOTOS_EXEMPLO = [
+    '/assets/casa.webp',
+    'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80',
+    'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=1600&q=80',
+  ];
+  let fotosExemploVistas = false; // tenta uma vez por abertura do painel
+  async function tirarFotosExemplo() {
+    if (fotosExemploVistas) return false;
+    fotosExemploVistas = true;
+    const [f, i] = await Promise.all([
+      sb.from('imovel_fotos').select('id', { count: 'exact', head: true }).in('caminho', FOTOS_EXEMPLO),
+      sb.from('imoveis').select('id', { count: 'exact', head: true }).in('imagem_principal', FOTOS_EXEMPLO),
+    ]);
+    if (f.error || i.error || (!f.count && !i.count)) return false;
+    const [d, u] = await Promise.all([
+      sb.from('imovel_fotos').delete().in('caminho', FOTOS_EXEMPLO),
+      sb.from('imoveis').update({ imagem_principal: null }).in('imagem_principal', FOTOS_EXEMPLO),
+    ]);
+    return !d.error && !u.error;
+  }
+
   const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado'];
   async function loadExtras(alive) {
+    if (await tirarFotosExemplo().catch(() => false)) {
+      if (!alive()) return;
+      toast('As fotos de exemplo dos imóveis foram tiradas do site.');
+      render();
+      return;
+    }
     const agora = new Date();
-    const [novas, exImoveis, exAval, conf, clientes, relatorio] = await Promise.all([
+    const [novas, exAval, conf, clientes, relatorio] = await Promise.all([
       sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false),
-      sb.from('imoveis').select('id', { count: 'exact', head: true }).in('slug', EXEMPLOS_IMOVEIS),
       sb.from('avaliacoes').select('id', { count: 'exact', head: true }).in('nome', EXEMPLOS_AVALIACOES),
       sb.from('configuracoes').select('*').eq('id', 1).maybeSingle(),
       sb.rpc('admin_clientes'),
@@ -773,7 +806,6 @@
       [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
       [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
       [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
-      [!exImoveis.error && exImoveis.count === 0, true, 'Trocar os imóveis de exemplo pelos reais', exImoveis.count ? `Ainda há ${plural(exImoveis.count, 'imóvel', 'imóveis')} de exemplo no site (Casa Pátio, Casa Mirante…). Cadastre os reais e exclua estes.` : '', '/admin/imoveis'],
       [!exAval.error && exAval.count === 0, true, 'Trocar as avaliações de exemplo', exAval.count ? `Ainda há ${plural(exAval.count, 'avaliação', 'avaliações')} de exemplo publicada${exAval.count > 1 ? 's' : ''}. Cadastre depoimentos reais e exclua estas.` : '', '/admin/avaliacoes'],
       [!!(c.familias_atendidas || c.anos_mercado), true, 'Números da apresentação (opcional)', 'Famílias atendidas e anos de mercado aparecem na abertura do site. Vazios, ficam escondidos.', '/admin/configuracoes'],
     ].filter(([done, show]) => show || !done);
@@ -1925,7 +1957,7 @@
   let recoveryError = '';
   function viewNovaSenha(root) {
     const card = (inner) => `<main class="login">${themeBtn('theme-float')}<section class="login-card" aria-labelledby="nsTitle">
-      <div class="login-brand" role="img" aria-label="Recanto do Acre Flats">${BRAND_HTML}</div>
+      <div class="login-brand" role="img" aria-label="${PAINEL_NOME}">${BRAND_HTML}</div>
       ${inner}
       <a class="login-back" href="/admin/login" data-link>${icon('left')}<span>Voltar para entrar</span></a>
     </section><div class="login-art" aria-hidden="true"></div></main>`;

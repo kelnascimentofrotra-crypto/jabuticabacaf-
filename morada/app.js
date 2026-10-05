@@ -144,11 +144,11 @@ const moradaApp = () => {
 
   const PREVIEW = {
     inicio: 'Vamos encontrar o seu recanto',
-    filtro: 'Encontre o imóvel certo em segundos',
-    instagram: 'Casas novas toda semana no Instagram',
+    filtro: 'Filtre por tipo, cidade e valor',
+    instagram: 'Nosso perfil no Instagram',
     curadoria: 'Imóveis selecionados',
     avaliacoes: 'O que dizem nossos clientes',
-    contato: 'Resposta em até um dia útil',
+    contato: 'Fale com a gente',
   };
 
   /* =========================================================
@@ -2494,9 +2494,12 @@ const moradaApp = () => {
     });
   }
   const num = (v) => (v == null || v === '' ? 0 : Number(v));
+  // fotos que vieram com os imóveis de exemplo do modelo (banco de imagens): não aparecem no site
+  const FOTO_EXEMPLO = /^https:\/\/images\.unsplash\.com\/|^\/?assets\/casa\.webp$/;
+  const fotoReal = (u) => !!u && !FOTO_EXEMPLO.test(u);
   function fromRow(r) {
-    const fotos = (r.imovel_fotos || []).slice().sort((a, b) => a.ordem - b.ordem).map((f) => f.caminho).filter(Boolean);
-    const foto = r.imagem_principal || fotos[0] || null;
+    const fotos = (r.imovel_fotos || []).slice().sort((a, b) => a.ordem - b.ordem).map((f) => f.caminho).filter(fotoReal);
+    const foto = (fotoReal(r.imagem_principal) && r.imagem_principal) || fotos[0] || null;
     return {
       id: r.slug, nome: r.titulo, tipo: r.tipo, negocio: r.finalidade, status: r.status, destaque: !!r.destaque,
       bairro: r.bairro || '', cidade: r.cidade || '', uf: r.uf || '', endereco: r.endereco || '',
@@ -2566,7 +2569,6 @@ const moradaApp = () => {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;
       $('.logo').setAttribute('aria-label', `${nome} — início`);
-      $('.gate-logo').setAttribute('aria-label', nome);
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
@@ -2589,10 +2591,10 @@ const moradaApp = () => {
     setStatOrHide('anos', c.anos_mercado, '');
     googleOn = !!c.login_google;
     syncGoogle();
-    // logo enviada no painel: aparece no lugar da assinatura
+    // logo enviada no painel: aparece no topo do site (a entrada mostra sempre o nome Thiago Liro)
     const logo = siteFile(c.logo);
     if (logo) {
-      $$('.logo, .gate-logo').forEach((el) => {
+      $$('.logo').forEach((el) => {
         el.innerHTML = `<img class="brand-img" src="${esc(logo)}" alt="" />`;
         el.classList.add('has-img');
       });
@@ -2616,7 +2618,9 @@ const moradaApp = () => {
       $('strong', card).textContent = h.nome;
       city.textContent = h.cidade;
       const url = photoSrc(h.foto, 700);
-      bg.style.background = url && url !== LOCAL_IMG ? `url("${url}") center / cover no-repeat, #d9c3a5` : '';
+      const temFoto = !!url && url !== LOCAL_IMG;
+      bg.style.background = temFoto ? `url("${url}") center / cover no-repeat, #d9c3a5` : '';
+      bg.classList.toggle('is-empty', !temFoto); // sem foto: fundo neutro com a casinha, como nos cards
     });
   }
 
