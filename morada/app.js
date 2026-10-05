@@ -287,6 +287,7 @@ const moradaApp = () => {
       const fail = () => {
         if (img.dataset.full) { const full = img.dataset.full; img.removeAttribute('data-full'); img.src = full; return; }
         img.removeAttribute('data-fallback');
+        if (img.previousElementSibling?.classList.contains('ph-fundo')) img.previousElementSibling.remove();
         img.insertAdjacentHTML('afterend', NO_PHOTO);
         img.remove();
       };
@@ -294,9 +295,13 @@ const moradaApp = () => {
       else img.addEventListener('error', function onErr() { fail(); if (img.isConnected) img.addEventListener('error', onErr, { once: true }); }, { once: true });
     });
   }
-  function propMedia(h, w, eager) {
+  // inteira: a foto aparece toda, do jeito que foi enviada (sem cortar nem aproximar);
+  // a sobra do quadro é preenchida com a própria foto desfocada
+  function propMedia(h, w, eager, inteira) {
     if (!h.foto && h.tipo === 'terreno') return `<span class="terrain">${TERRAIN}</span>`;
-    return photoTag(h.foto, w, eager);
+    const tag = photoTag(h.foto, w, eager);
+    if (!inteira || !tag.startsWith('<img src=')) return tag;
+    return `<img class="ph-fundo" src="${esc(photoSrc(h.foto, 320))}" alt="" aria-hidden="true" loading="lazy" decoding="async" /><img data-inteira${tag.slice(4)}`;
   }
 
   const imGrid = $('#imGrid');
@@ -313,7 +318,7 @@ const moradaApp = () => {
     imGrid.innerHTML = HOUSES.map((h, k) => `
     <li class="pcard${isAvailable(h) ? '' : ' is-off'}" data-id="${esc(h.id)}" data-tipo="${esc(h.tipo)}" data-negocio="${esc(h.negocio)}" style="--k:${k % 8}">
       <button class="pcard-open" type="button" aria-label="Ver ${esc(h.nome)}">
-        <span class="pcard-img">${propMedia(h, 700)}
+        <span class="pcard-img">${propMedia(h, 700, false, true)}
           <span class="pcard-badges">${cardBadges(h)}</span>
         </span>
         <span class="pcard-info">
@@ -436,7 +441,7 @@ const moradaApp = () => {
   function renderFeatured() {
     FEATURED = HOUSES.filter((h) => h.destaque);
     featIndex = 0;
-    $('#imSlides').innerHTML = FEATURED.map((h, k) => `<span class="im-slide${k === 0 ? ' is-current' : ''}">${propMedia(h, 1600, k === 0)}</span>`).join('');
+    $('#imSlides').innerHTML = FEATURED.map((h, k) => `<span class="im-slide${k === 0 ? ' is-current' : ''}">${propMedia(h, 1600, k === 0, true)}</span>`).join('');
     withFallback($('#imSlides'));
     $('#imDots').innerHTML = FEATURED.length > 1 ? FEATURED.map((h, k) => `<button type="button" class="${k === 0 ? 'is-on' : ''}" aria-pressed="${k === 0}" aria-label="${esc(h.nome)}"></button>`).join('') : '';
     $$('#imDots button').forEach((d, i) => d.addEventListener('click', () => showFeatured(i)));
@@ -540,7 +545,7 @@ const moradaApp = () => {
     const picks = [...HOUSES.filter((h) => h.destaque), ...HOUSES.filter((h) => !h.destaque)].filter((h) => h.foto || h.tipo === 'terreno').slice(0, 6);
     $('#igFollow').href = INSTAGRAM_URL;
     $('#igGrid').innerHTML = picks.map((h, k) => `<li style="--k:${k}"><a class="reel" href="${esc(INSTAGRAM_URL)}" target="_blank" rel="noopener" aria-label="Instagram: ${esc(h.nome)}">
-      <span class="reel-media">${propMedia(h, 600)}</span>
+      <span class="reel-media">${propMedia(h, 600, false, true)}</span>
       <span class="reel-tag">${esc((h.selos || [])[0] || h.bairro || TIPOS[h.tipo] || '')}</span>
       <span class="reel-ig" aria-hidden="true"><svg><use href="#i-instagram" /></svg></span>
       <span class="reel-cover"><small>${esc([h.cidade, h.uf].filter(Boolean).join(' · '))}</small><strong>${esc(h.nome)}</strong><em>${isAvailable(h) ? priceLabel(h) : STATUS[h.status]}</em></span>
@@ -601,9 +606,10 @@ const moradaApp = () => {
     if (!photos.length) {
       main.innerHTML = h.tipo === 'terreno' ? `<div class="dt-shot is-current terrain">${TERRAIN}</div>` : `<div class="dt-shot is-current">${NO_PHOTO}</div>`;
       thumbs.innerHTML = '';
-    } else if (photos.length > 1) {
-      main.innerHTML = photos.map((p, k) => `<div class="dt-shot${k === 0 ? ' is-current' : ''}" style="${esc(shotStyle(photoSrc(p, 1600), SHOTS_PHOTO[0]))}"></div>`).join('');
-      thumbs.innerHTML = photos.map((p, k) => `<li><button type="button" class="${k === 0 ? 'is-active' : ''}" aria-label="Foto ${k + 1}" style="${esc(shotStyle(photoSrc(p, 320), SHOTS_PHOTO[0]))}"></button></li>`).join('');
+    } else if (photos.length > 1 || photoSrc(photos[0], 1600) !== LOCAL_IMG) {
+      // fotos reais: cada uma inteira, do jeito que foi enviada (sem cortar nem aproximar)
+      main.innerHTML = photos.map((p, k) => `<div class="dt-shot is-inteira${k === 0 ? ' is-current' : ''}" style="${esc(`--shot:url('${photoSrc(p, 1600)}')`)}"></div>`).join('');
+      thumbs.innerHTML = photos.length < 2 ? '' : photos.map((p, k) => `<li><button type="button" class="${k === 0 ? 'is-active' : ''}" aria-label="Foto ${k + 1}" style="${esc(shotStyle(photoSrc(p, 320), SHOTS_PHOTO[0]))}"></button></li>`).join('');
       bindThumbs();
     } else {
       const url = photoSrc(photos[0], 1600);
