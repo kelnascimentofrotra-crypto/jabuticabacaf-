@@ -16,7 +16,8 @@ supabase/                        SQL do banco (não é publicado no site — vej
 ├── seed.sql                         imóveis e avaliações de exemplo
 ├── imoveis-reais.sql                tira os exemplos e cadastra as casas reais (fotos em assets/imoveis)
 ├── limpar-dados-antigos.sql         apaga contatos, logo e avaliações de exemplo do dono anterior
-└── avaliacoes-modelo.sql            3 modelos de avaliação não publicados, para trocar pelos depoimentos reais
+├── avaliacoes-modelo.sql            3 modelos de avaliação não publicados, para trocar pelos depoimentos reais
+└── avaliacoes-exemplo.sql           3 avaliações de exemplo publicadas (trocar pelas reais antes de divulgar)
 ```
 
 ## 1. Supabase

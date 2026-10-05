@@ -776,7 +776,7 @@
     return !d.error && !u.error;
   }
 
-  const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado', 'Nome do cliente 1', 'Nome do cliente 2', 'Nome do cliente 3'];
+  const EXEMPLOS_AVALIACOES = ['Marina Duarte', 'Rafael Nogueira', 'Helena e Caio Prado', 'Nome do cliente 1', 'Nome do cliente 2', 'Nome do cliente 3', 'Juliana M.', 'Carlos R.', 'Fernanda e Paulo S.'];
   async function loadExtras(alive) {
     if (await tirarFotosExemplo().catch(() => false)) {
       if (!alive()) return;
