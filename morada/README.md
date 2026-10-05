@@ -14,7 +14,8 @@ vercel.json                      rotas do /admin e cabeçalhos
 supabase/                        SQL do banco (não é publicado no site — veja .vercelignore)
 ├── migrations/…_painel_admin.sql    tabelas, RLS, buckets e políticas do Storage
 ├── seed.sql                         imóveis e avaliações de exemplo
-└── imoveis-reais.sql                tira os exemplos e cadastra as casas reais (fotos em assets/imoveis)
+├── imoveis-reais.sql                tira os exemplos e cadastra as casas reais (fotos em assets/imoveis)
+└── limpar-dados-antigos.sql         apaga contatos, logo e avaliações de exemplo do dono anterior
 ```
 
 ## 1. Supabase
