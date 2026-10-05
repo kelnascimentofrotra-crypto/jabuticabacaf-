@@ -6,9 +6,9 @@
   <title>Política de Privacidade — Recanto do Acre Flats</title>
   <meta name="description" content="Como a imobiliária trata os seus dados pessoais no site, de acordo com a LGPD." />
   <meta name="theme-color" content="#faf8f3" />
-  <link rel="icon" href="/favicon.ico" sizes="32x32" />
-  <link rel="icon" href="/icone.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/icone-180.png" />
+  <link rel="icon" href="/tl.ico" sizes="32x32" />
+  <link rel="icon" href="/tl.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/tl-180.png" />
   <!--
     Modelo de política de privacidade para o site. Revise com o responsável pela imobiliária
     (e, se possível, com um advogado) e ajuste o que for preciso antes de divulgar.
@@ -16,16 +16,17 @@
   -->
   <style>
     @font-face { font-family: "Inter Tight"; font-style: normal; font-display: swap; font-weight: 100 900; src: url("/fonts/inter-tight-latin-wght-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Sacramento"; font-style: normal; font-display: block; font-weight: 400; src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Playfair Display"; font-style: normal; font-display: block; font-weight: 400 900; src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2"); }
     @font-face { font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 200 800; src: url("/fonts/newsreader-latin-wght-normal.woff2") format("woff2"); }
-    :root { --bg: #faf8f3; --ink: #1d211b; --muted: rgba(29, 33, 27, 0.62); --line: rgba(196, 146, 76, 0.3); --green: #416734; --logo-roof: #416734; }
-    .brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; color: var(--ink); }
-    .brand svg { display: block; width: auto; height: 100%; overflow: visible; }
-    .brand-ic { aspect-ratio: 2104 / 1496; }
-    .brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; }
+    :root { --bg: #faf8f3; --ink: #1d211b; --muted: rgba(29, 33, 27, 0.62); --line: rgba(196, 146, 76, 0.3); --green: #416734; }
+    .brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: var(--ink); }
+    .brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-weight: 400; }
+    .brand-tl { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: linear-gradient(180deg, #5a8a4a 0%, #416734 55%, #2f4f26 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.65 "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
     header { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px clamp(16px, 5vw, 48px); background: rgba(250, 248, 243, 0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
-    .logo { display: flex; align-items: center; color: inherit; text-decoration: none; font-size: 34px; }
+    .logo { display: flex; align-items: center; color: inherit; text-decoration: none; font-size: 26px; }
     .logo img { display: block; height: 32px; width: auto; }
     .back { color: var(--green); font-size: 14px; text-decoration: none; border: 1px solid rgba(65, 103, 52, 0.45); border-radius: 999px; padding: 8px 14px; background: transparent; white-space: nowrap; }
     main { max-width: 760px; margin: 0 auto; padding: 48px clamp(16px, 5vw, 32px) 80px; }
@@ -37,12 +38,12 @@
     ul { padding-left: 20px; }
     a { color: var(--green); }
     .box { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
-    @media (max-width: 400px) { .logo { font-size: 26px; } .back { padding: 7px 11px; font-size: 13px; } }
+    @media (max-width: 400px) { .logo { font-size: 22px; } .back { padding: 7px 11px; font-size: 13px; } }
   </style>
 </head>
 <body>
   <header>
-    <a class="logo" href="/" aria-label="Recanto do Acre Flats — voltar ao site"><span class="brand" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><svg class="brand-tx"><use href="/assets/logo.svg#lg-texto" /></svg></span></a>
+    <a class="logo" href="/" aria-label="Thiago Liro — voltar ao site"><span class="brand" aria-hidden="true"><span class="brand-s">Thiago</span><span class="brand-tl">TL</span><span class="brand-s">Liro</span></span></a>
     <a class="back" href="/">Voltar ao site</a>
   </header>
   <main>

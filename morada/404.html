@@ -5,18 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex" />
   <title>Página não encontrada — Recanto do Acre Flats</title>
-  <link rel="icon" href="/favicon.ico" sizes="32x32" />
-  <link rel="icon" href="/icone.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/icone-180.png" />
+  <link rel="icon" href="/tl.ico" sizes="32x32" />
+  <link rel="icon" href="/tl.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/tl-180.png" />
   <style>
     @font-face { font-family: "Inter Tight"; font-style: normal; font-display: swap; font-weight: 100 900; src: url("/fonts/inter-tight-latin-wght-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Sacramento"; font-style: normal; font-display: block; font-weight: 400; src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2"); }
+    @font-face { font-family: "Playfair Display"; font-style: normal; font-display: block; font-weight: 400 900; src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2"); }
     @font-face { font-family: "Newsreader"; font-style: normal; font-display: swap; font-weight: 200 800; src: url("/fonts/newsreader-latin-wght-normal.woff2") format("woff2"); }
-    :root { --ink: #1d211b; --logo-roof: #416734; }
-    .brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; color: var(--ink); }
-    .brand svg { display: block; width: auto; height: 100%; overflow: visible; }
-    .brand-ic { aspect-ratio: 2104 / 1496; }
-    .brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; }
-    .card .brand { font-size: 40px; margin-bottom: 20px; }
+    :root { --ink: #1d211b; }
+    .brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: var(--ink); }
+    .brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-weight: 400; }
+    .brand-tl { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: linear-gradient(180deg, #5a8a4a 0%, #416734 55%, #2f4f26 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .card .brand { font-size: 34px; margin-bottom: 18px; }
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: url("/assets/casa-1280.webp") 72% 100% / cover no-repeat, linear-gradient(180deg, #86c9d1, #ebe3cf); color: var(--ink); font: 16px/1.5 "Inter Tight", system-ui, sans-serif; }
     .card { max-width: 440px; padding: 32px; border-radius: 22px; background: rgba(250, 248, 243, 0.9); border: 1px solid rgba(255, 255, 255, 0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); text-align: center; box-shadow: 0 30px 80px rgba(20, 34, 24, 0.25); }
@@ -28,7 +29,7 @@
 </head>
 <body>
   <main class="card">
-    <div role="img" aria-label="Recanto do Acre Flats"><span class="brand" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><svg class="brand-tx"><use href="/assets/logo.svg#lg-texto" /></svg></span></div>
+    <div role="img" aria-label="Thiago Liro"><span class="brand" aria-hidden="true"><span class="brand-s">Thiago</span><span class="brand-tl">TL</span><span class="brand-s">Liro</span></span></div>
     <small>Erro 404</small>
     <h1>Essa página não existe</h1>
     <p>O endereço pode ter mudado ou o imóvel saiu do site. Veja os imóveis disponíveis agora.</p>

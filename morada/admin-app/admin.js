@@ -49,9 +49,9 @@
     });
   }
   document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
-  // nome que aparece no painel (logo da casinha + Thiago Liro)
+  // nome que aparece no painel (assinatura "Thiago TL Liro", como no site)
   const PAINEL_NOME = 'Thiago Liro';
-  const BRAND_HTML = `<span class="brand brand--nome" aria-hidden="true"><svg class="brand-ic"><use href="/assets/logo.svg#lg-icone" /></svg><span class="brand-nome">${PAINEL_NOME}</span></span>`;
+  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">Thiago</span><span class="brand-tl">TL</span><span class="brand-s">Liro</span></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -164,6 +164,7 @@
   function fotoUrl(p, w = 640) {
     if (!p) return '';
     if (/^https:\/\/images\.unsplash\.com\//.test(p)) return p.replace(/([?&])w=\d+/, `$1w=${w}`);
+    if (p.startsWith('/assets/imoveis/')) return w <= 700 ? thumbOf(p) : p; // fotos que vêm junto com o site
     if (!isStoragePath(p)) return p;
     return publicUrl(BUCKET, w <= 700 ? thumbOf(p) : p);
   }
@@ -780,12 +781,13 @@
       return;
     }
     const agora = new Date();
-    const [novas, exAval, conf, clientes, relatorio] = await Promise.all([
+    const [novas, exAval, conf, clientes, relatorio, semCidade] = await Promise.all([
       sb.from('contatos').select('id', { count: 'exact', head: true }).eq('lido', false),
       sb.from('avaliacoes').select('id', { count: 'exact', head: true }).in('nome', EXEMPLOS_AVALIACOES),
       sb.from('configuracoes').select('*').eq('id', 1).maybeSingle(),
       sb.rpc('admin_clientes'),
       sb.rpc('admin_relatorio', { p_inicio: new Date(agora - 36e5).toISOString(), p_fim: agora.toISOString() }),
+      sb.from('imoveis').select('titulo').ilike('cidade', 'a definir').order('ordem').limit(20),
     ]);
     if (!alive()) return;
     const semRelatorios = relatorio.error && (relatorio.error.code === 'PGRST202' || relatorio.error.code === '42883' || /could not find the function/i.test(relatorio.error.message || ''));
@@ -800,10 +802,12 @@
     }
     const c = conf.data || {};
     avisoDadosAntigos(conf.data, $('#notice'));
+    const nomesSemCidade = semCidade.error ? [] : semCidade.data.map((r) => r.titulo);
     const items = [
       [!clientes.error || semMigracao, false, 'Rodar o SQL da página Clientes', 'Mostra quem tem conta, favoritos e carrinhos. O arquivo é supabase/migrations/20260930180000_clientes_painel.sql.', ''],
       [!semRelatorios, false, 'Rodar o SQL dos Relatórios', 'Liga a contagem de visitas, imóveis vistos e cliques no WhatsApp. Na página Relatórios tem o botão para copiar o código.', '/admin/relatorios'],
       [!semMigracao, false, 'Rodar o SQL novo no Supabase', 'Liga as mensagens do site, as contas de clientes e os campos novos das Configurações. O arquivo é supabase/migrations/20260930120000_contas_contatos.sql.', ''],
+      [!nomesSemCidade.length, false, 'Colocar a cidade dos imóveis', `${nomesSemCidade.join(', ')}: a cidade está como “A definir” e por isso não aparece no site. Abra o imóvel, troque a cidade e salve.`, '/admin/imoveis'],
       [!!c.whatsapp, true, 'Colocar o WhatsApp da imobiliária', 'Os botões “Falar no WhatsApp” do site mandam as mensagens para este número.', '/admin/configuracoes'],
       [!!(c.email && c.telefone), true, 'Preencher e-mail e telefone', 'Aparecem na seção Contato do site e na Política de Privacidade.', '/admin/configuracoes'],
       [!exAval.error && exAval.count === 0, true, 'Trocar as avaliações de exemplo', exAval.count ? `Ainda há ${plural(exAval.count, 'avaliação', 'avaliações')} de exemplo publicada${exAval.count > 1 ? 's' : ''}. Cadastre depoimentos reais e exclua estas.` : '', '/admin/avaliacoes'],
@@ -2418,7 +2422,7 @@
                 <label class="btn btn-sm">${icon('upload')}<span>Escolher imagem</span><input type="file" accept="image/png,image/webp,image/jpeg" id="cfLogoFile" hidden /></label>
                 <button class="btn btn-sm btn-danger-ghost" type="button" id="cfLogoDel">Remover</button>
               </div>
-              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a logo do Recanto do Acre Flats.</small>
+              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “Thiago TL Liro”.</small>
             </div>
           </div>
         </section>
@@ -2454,7 +2458,7 @@
     const f = $('#cfForm');
     const paintLogo = () => {
       const url = logoPreview || siteUrl(logo);
-      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<svg class="logo-prev-ic" aria-label="Logo padrão"><use href="/assets/logo.svg#lg-icone" /></svg>';
+      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<span class="logo-prev-tl" role="img" aria-label="Logo padrão">TL</span>';
       $('#cfLogo').classList.toggle('is-empty', !url);
       $('#cfLogoDel').hidden = !url;
     };

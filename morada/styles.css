@@ -19,12 +19,20 @@
    Tokens
    ========================================================= */
 
+/* Assinatura da marca: "Thiago" e "Liro" em Sacramento, o monograma TL em Playfair Display */
 @font-face {
-  font-family: "Montserrat";
+  font-family: "Sacramento";
   font-style: normal;
-  font-display: swap;
-  font-weight: 100 900;
-  src: url("fonts/montserrat-latin-wght-normal.woff2") format("woff2");
+  font-display: block;
+  font-weight: 400;
+  src: url("fonts/sacramento-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400 900;
+  src: url("fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Newsreader";
@@ -57,7 +65,7 @@
   --terracotta: #416734;
   --danger: #b3412a;
   --ok: #2f7a45;
-  --logo-roof: #416734;
+  --brand-grad: linear-gradient(180deg, #5a8a4a 0%, #416734 55%, #2f4f26 100%);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-cut: cubic-bezier(0.77, 0, 0.18, 1);
 
@@ -92,7 +100,7 @@ body[data-tone="dark"] .topbar, body[data-tone="dark"] .indicator {
   --terracotta: #9ccb88;
   --danger: #f0a58a;
   --ok: #8fd3a8;
-  --logo-roof: #f3ede4;
+  --brand-grad: linear-gradient(180deg, #e2f1d8 0%, #b0d89c 50%, #84b46f 100%);
 }
 /* Derivados: recalculados em cada contexto */
 :root, .gate, .menu, .scene[data-tone="dark"], .m-hero, .tone-dark,
@@ -316,20 +324,13 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
   transition: color 0.6s;
 }
 
-/* Marca: logo do Recanto do Acre Flats (casa com as ondas + letreiro), desenhada em SVG.
-   O letreiro usa a cor do texto do contexto; o telhado fica verde no claro e creme no escuro. */
-.brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; white-space: nowrap; color: var(--ink); }
-.brand svg { display: block; width: auto; height: 100%; overflow: visible; }
-.brand-ic { aspect-ratio: 2104 / 1496; flex: none; }
-.brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; flex: none; }
-.brand--stack { flex-direction: column; height: auto; gap: 0.16em; }
-.brand--stack .brand-ic { width: 1.6em; height: auto; }
-.brand--stack .brand-tx { width: 2.8em; height: auto !important; }
-.brand-nome { font-family: "Newsreader", Georgia, "Times New Roman", serif; font-size: 0.66em; font-weight: 500; letter-spacing: 0.01em; line-height: 1; color: var(--ink); white-space: nowrap; }
-.brand--nome { gap: 0.28em; }
+/* Marca: assinatura "Thiago TL Liro" — o nome em Sacramento e o monograma TL em Playfair Display
+   com o degradê verde. O nome segue a cor do texto (escuro no claro, creme no escuro). */
+.brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: var(--ink); }
+.brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-size: 1em; font-weight: 400; letter-spacing: 0; }
+.brand-tl { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .brand-img { display: block; height: 100%; width: auto; max-width: 100%; object-fit: contain; }
-.logo .brand { font-size: max(34px, calc(3.5 * var(--u))); }
-@media (max-width: 1180px) { .logo .brand { font-size: 30px; } }
+.logo .brand { font-size: max(22px, calc(2.4 * var(--u))); }
 .logo.has-img { height: calc(2.6 * var(--u)); }
 
 .nav-pill {
@@ -530,7 +531,6 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 /* Entradas (só enquanto a cena está entrando) */
 @keyframes rise { from { opacity: 0; transform: translateY(calc(1.6 * var(--u))); } }
 @keyframes fade { from { opacity: 0; } }
-@keyframes letter { from { opacity: 0; transform: translateY(45%); } }
 @keyframes sky { from { clip-path: inset(100% 0 0 0 round var(--radius)); } }
 @keyframes house { from { transform: translateY(9%) scale(1.08); filter: brightness(0.7) saturate(0.8); } }
 @keyframes kenburns { from { transform: scale(1.14) translate(1.5%, 1%); } }
@@ -629,37 +629,6 @@ body.is-cutting .letterbox i { animation: bars 0.85s var(--ease-cut) both; }
 .hero-stats div + div { border-left: 1px solid rgb(var(--acc-rgb) / 0.4); }
 .hero-stats dd { order: -1; font-size: calc(2.3 * var(--u)); line-height: 1; letter-spacing: -0.04em; color: var(--ink); }
 .hero-stats dt { font-size: max(9px, calc(0.8 * var(--u))); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
-
-/* RECANTO: fina, gigante, clara, com extrusão 3D sutil (baixo/direita) em bege, e leve perspectiva.
-   O telhado da casa sai do cartão e passa na frente dela. */
-.title {
-  --ext: #e6dccb;
-  --ext-dark: #d6c4a3;
-  position: absolute;
-  right: 2.5vw;
-  top: calc(10.2 * var(--u));
-  margin: 0;
-  display: flex;
-  justify-content: flex-end;
-  font-family: "Montserrat", "Inter Tight", "Helvetica Neue", Arial, sans-serif;
-  font-size: calc(10.4 * var(--u));
-  font-weight: 200;
-  line-height: 0.8;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: #fdfbf6;
-  text-shadow:
-    0.004em 0.004em 0 var(--ext), 0.008em 0.008em 0 var(--ext), 0.012em 0.012em 0 var(--ext),
-    0.016em 0.016em 0 var(--ext-dark), 0.02em 0.02em 0 var(--ext-dark), 0.024em 0.024em 0 var(--ext-dark),
-    0.03em 0.05em 0.06em rgba(70, 60, 30, 0.14), 0.05em 0.1em 0.16em rgba(70, 60, 30, 0.08);
-  transform: perspective(160vw) rotateX(14deg) rotateY(-9deg);
-  transform-origin: 50% 100%;
-  z-index: 1;
-  pointer-events: none;
-  translate: calc(var(--mx) * -0.6 * var(--u)) 0;
-}
-.title span { display: block; }
-.scene.is-entering .title span { animation: letter 1.3s var(--ease-out) calc((0.35s + var(--i) * 0.07s) * var(--ds, 1)) both; }
 
 .media {
   position: absolute;
@@ -1271,7 +1240,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
 }
 .dt-specs dt { font-size: max(9px, calc(0.72 * var(--u))); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .dt-specs dd { margin-top: calc(0.3 * var(--u)); font-size: calc(1.6 * var(--u)); letter-spacing: -0.03em; }
-.dt-desc { font-size: max(13px, calc(1.1 * var(--u))); line-height: 1.55; color: rgb(var(--fg-rgb) / 0.72); }
+.dt-desc { font-size: max(13px, calc(1.1 * var(--u))); line-height: 1.55; color: rgb(var(--fg-rgb) / 0.72); white-space: pre-line; } /* mantém as linhas do texto do painel */
 .dt-tags { display: flex; flex-wrap: wrap; gap: calc(0.5 * var(--u)); }
 .dt-tags li {
   height: max(28px, calc(2.5 * var(--u)));
@@ -2322,7 +2291,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
   transition: opacity 0.7s var(--ease-out), visibility 0.7s;
 }
 .preloader .logo-mark { width: 52px; height: 52px; border-radius: 13px; padding: 10px; animation: fade 0.6s var(--ease-out) both; }
-.preloader .brand { font-size: clamp(100px, 11vw, 150px); animation: fade 0.6s var(--ease-out) both; }
+.preloader .brand { font-size: clamp(34px, 3.8vw, 52px); animation: fade 0.6s var(--ease-out) both; }
 .preloader-bar { width: max(160px, calc(16 * var(--u))); height: 2px; border-radius: 2px; background: rgb(var(--fg-rgb) / 0.1); overflow: hidden; }
 .preloader-bar i { display: block; height: 100%; background: var(--gold-grad); transform: scaleX(0); transform-origin: left; animation: progress 1.1s var(--ease-out) 0.1s both; }
 .preloader.is-done { opacity: 0; visibility: hidden; }
@@ -2387,7 +2356,7 @@ img.is-local { object-position: 64% 88%; background: var(--panel-2); }
 }
 .gate-logo { display: flex; align-items: center; gap: calc(0.7 * var(--u)); }
 .gate-logo .logo-word { color: rgb(var(--fg-rgb) / 0.8); }
-.gate-logo .brand { font-size: max(32px, calc(3.4 * var(--u))); }
+.gate-logo .brand { font-size: max(22px, calc(2.2 * var(--u))); }
 .gate-logo.has-img { height: calc(2.8 * var(--u)); }
 .gate-top-actions { display: flex; align-items: center; gap: calc(1.8 * var(--u)); }
 .gate-link { font-size: max(13px, calc(1 * var(--u))); color: var(--cream); }
@@ -2895,7 +2864,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .logo { left: 16px; gap: 8px; }
   .logo-mark { width: 28px; height: 28px; border-radius: 7px; padding: 5px; }
   .logo-word { font-size: 17px; }
-  .logo .brand { font-size: 32px; }
+  .logo .brand { font-size: 23px; }
   .logo.has-img { height: 32px; }
   .indicator { display: none; }
 
@@ -2915,7 +2884,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .dots-btn > span { width: 4.5px; height: 4.5px; border-radius: 50%; background: var(--cream); }
 
   /* ---- Hero do celular (tela cheia, modo escuro de fim de tarde; o sol deixa claro) ---- */
-  .hero > .intro, .hero > .title, .hero > .media { display: none; }
+  .hero > .intro, .hero > .media { display: none; }
   .scene > .m-hero { position: absolute; inset: 0; display: block; overflow: hidden; color: #fff; }
   .m-sky { position: absolute; inset: 0; }
   /* céu de fim de tarde em verde-floresta, com o brilho da água da logo no horizonte */
@@ -3060,21 +3029,12 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   /* ---- Início ---- */
   .hero::before { display: none; }
   .intro { order: 1; }
-  .title { order: 3; }
   .media { order: 4; }
   .intro { width: auto; }
   .intro-title { font-size: min(36px, 9.4vw, 4.8svh); }
   .intro-actions { margin-top: min(14px, 1.6svh); }
   .intro-actions .btn { height: 40px; }
   .scroll-hint, .hero-stats { display: none; }
-  .title {
-    position: relative;
-    right: auto;
-    top: auto;
-    margin: min(14px, 1.6svh) 0 0 -0.04em;
-    font-size: min(25vw, 13svh);
-    line-height: 0.92;
-  }
   .media {
     position: relative;
     inset: auto;
@@ -3292,7 +3252,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   .gate .gate-bg { width: 187vw; right: -110vw; bottom: 0; opacity: 0.6; }
   .gate-top { position: relative; inset: auto; height: 40px; flex: none; }
   .gate-logo { gap: 8px; }
-  .gate-logo .brand { font-size: 32px; }
+  .gate-logo .brand { font-size: 23px; }
   .gate-logo.has-img { height: 32px; }
   .gate-top-actions { gap: 14px; }
   .gate-link { font-size: 14px; }
@@ -3493,7 +3453,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
-  .title, .house img, .av-bg, .ct-bg img { translate: none; }
+  .house img, .av-bg, .ct-bg img { translate: none; }
 }
 
 /* =========================================================
@@ -3613,7 +3573,7 @@ dl > div[hidden] { display: none !important; }
 /* Celulares estreitos: no topo da entrada fica só "Criar conta" ("Já tenho conta" está logo abaixo) */
 @media (max-width: 380px) {
   .gate-top .gate-link { display: none; }
-  .gate-logo .brand, .logo .brand { font-size: 28px; }
+  .gate-logo .brand, .logo .brand { font-size: 21px; }
 }
 /* Celulares bem estreitos (ou com letra grande) */
 @media (max-width: 359px) {

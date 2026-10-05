@@ -13,7 +13,8 @@ vendor/supabase.js               supabase-js (MIT), usado só pelo painel
 vercel.json                      rotas do /admin e cabeçalhos
 supabase/                        SQL do banco (não é publicado no site — veja .vercelignore)
 ├── migrations/…_painel_admin.sql    tabelas, RLS, buckets e políticas do Storage
-└── seed.sql                         imóveis e avaliações iniciais
+├── seed.sql                         imóveis e avaliações de exemplo
+└── imoveis-reais.sql                tira os exemplos e cadastra as casas reais (fotos em assets/imoveis)
 ```
 
 ## 1. Supabase
@@ -21,6 +22,7 @@ supabase/                        SQL do banco (não é publicado no site — vej
 1. Crie um projeto em [supabase.com](https://supabase.com).
 2. **SQL Editor → New query**: cole `supabase/migrations/20260929120000_painel_admin.sql` e clique em **Run**.
 3. Ainda no SQL Editor, rode `supabase/seed.sql` (leva os 9 imóveis e as 3 avaliações que o site já tinha para o banco; pode rodar de novo sem duplicar).
+   Depois rode `supabase/imoveis-reais.sql`: tira esses exemplos e cadastra as casas reais.
 4. Rode também `supabase/migrations/20260930120000_contas_contatos.sql` (mensagens do formulário, contas de clientes, números da apresentação). Só acrescenta; pode rodar de novo.
 5. **Authentication → Sign In / Providers**: deixe **Allow new users to sign up** ligado — é o cadastro dos clientes no site.
    Isso não dá acesso ao painel: só quem está na tabela `admins` consegue alterar alguma coisa.
@@ -94,7 +96,7 @@ No plano grátis, o Supabase pausa o projeto depois de 7 dias sem nenhum acesso.
 ## Páginas extras
 
 - `/privacidade` — Política de Privacidade (modelo; revise com o responsável pela imobiliária). Nome e contatos vêm das Configurações.
-- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og.jpg`.
+- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og-tl.jpg`.
 
 ## Rodar sem Supabase
 

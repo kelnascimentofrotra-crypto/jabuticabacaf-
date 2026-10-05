@@ -84,7 +84,7 @@ const moradaApp = () => {
   const TIPOS = { casa: 'Casa', apartamento: 'Apartamento', terreno: 'Terreno', comercial: 'Comercial', outros: 'Imóvel' };
   const STATUS = { vendido: 'Vendido', alugado: 'Alugado' };
   const compact = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', notation: 'compact', maximumFractionDigits: 1 });
-  const priceLabel = (h) => (h.negocio === 'aluguel' ? `${brl.format(h.preco)}/mês` : compact.format(h.preco));
+  const priceLabel = (h) => (h.negocio === 'aluguel' ? `${brl.format(h.preco)}/mês` : brl.format(h.preco)); // valor exato, como o anúncio
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   const dorms = (h) => Math.max(h.quartos || 0, h.suites || 0);
   const roomsText = (h) => (h.suites ? plural(h.suites, 'suíte', 'suítes') : h.quartos ? plural(h.quartos, 'quarto', 'quartos') : '');
@@ -162,6 +162,8 @@ const moradaApp = () => {
     if (!p) return '';
     if (/^https:\/\/images\.unsplash\.com\//.test(p)) return p.replace(/([?&])w=\d+/, `$1w=${w}`);
     if (isLocalCasa(p)) return LOCAL_IMG;
+    // fotos que vêm junto com o site (assets/imoveis) também têm miniatura "-thumb"
+    if (p.startsWith('/assets/imoveis/')) return w <= 700 ? p.replace(/(\.[a-z0-9]+)$/i, '-thumb$1') : p;
     if (/^(https?:)?\/\//.test(p) || p.startsWith('/') || p.startsWith('data:')) return p;
     if (!SB) return '';
     const path = w <= 700 ? p.replace(/(\.[a-z0-9]+)$/i, '-thumb$1') : p;
@@ -2497,12 +2499,14 @@ const moradaApp = () => {
   // fotos que vieram com os imóveis de exemplo do modelo (banco de imagens): não aparecem no site
   const FOTO_EXEMPLO = /^https:\/\/images\.unsplash\.com\/|^\/?assets\/casa\.webp$/;
   const fotoReal = (u) => !!u && !FOTO_EXEMPLO.test(u);
+  // cidade ainda não informada no painel: fica escondida no site até ser trocada
+  const SEM_CIDADE = /^\s*a definir\s*$/i;
   function fromRow(r) {
     const fotos = (r.imovel_fotos || []).slice().sort((a, b) => a.ordem - b.ordem).map((f) => f.caminho).filter(fotoReal);
     const foto = (fotoReal(r.imagem_principal) && r.imagem_principal) || fotos[0] || null;
     return {
       id: r.slug, nome: r.titulo, tipo: r.tipo, negocio: r.finalidade, status: r.status, destaque: !!r.destaque,
-      bairro: r.bairro || '', cidade: r.cidade || '', uf: r.uf || '', endereco: r.endereco || '',
+      bairro: r.bairro || '', cidade: SEM_CIDADE.test(r.cidade || '') ? '' : r.cidade || '', uf: r.uf || '', endereco: r.endereco || '',
       preco: num(r.preco), area: num(r.area), quartos: num(r.quartos), suites: num(r.suites), banheiros: num(r.banheiros), vagas: num(r.vagas),
       frente: num(r.frente), topografia: r.topografia || '', selos: r.selos || [], tags: r.caracteristicas || [], desc: r.descricao || '',
       foto, fotos: foto ? [foto, ...fotos.filter((f) => f !== foto)] : fotos, ordem: r.ordem || 0, criado: r.created_at || '',
@@ -2571,7 +2575,7 @@ const moradaApp = () => {
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
-    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og.jpg` };
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-tl.jpg` };
     if (tel) ld.telephone = tel;
     if (c.email) ld.email = c.email;
     if (c.endereco) ld.address = c.endereco;
@@ -2616,6 +2620,8 @@ const moradaApp = () => {
       card.setAttribute('aria-label', `Ver ${h.nome}`);
       $('strong', card).textContent = h.nome;
       city.textContent = h.cidade;
+      const pin = $('.m-pin', card);
+      if (pin) pin.hidden = !h.cidade; // sem cidade: sem o alfinete vazio
       const url = photoSrc(h.foto, 700);
       const temFoto = !!url && url !== LOCAL_IMG;
       bg.style.background = temFoto ? `url("${url}") center / cover no-repeat, #d9c3a5` : '';

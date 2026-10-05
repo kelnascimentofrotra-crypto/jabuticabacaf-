@@ -1,4 +1,4 @@
-/* Painel administrativo — mesma identidade do site (logo Recanto do Acre Flats: verde, bege e água) */
+/* Painel administrativo — mesma identidade do site (assinatura Thiago TL Liro, verde e bege) */
 
 @font-face {
   font-family: "Inter Tight";
@@ -15,6 +15,20 @@
   font-weight: 100 900;
   src: url("/fonts/inter-tight-latin-ext-wght-normal.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Sacramento";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400;
+  src: url("/fonts/sacramento-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Playfair Display";
+  font-style: normal;
+  font-display: block;
+  font-weight: 400 900;
+  src: url("/fonts/playfair-display-latin-wght-normal.woff2") format("woff2");
 }
 @font-face {
   font-family: "Newsreader";
@@ -61,7 +75,7 @@
   --sk-a: #152a1e;
   --sk-b: #1f3a2a;
   --focus: rgba(214, 176, 120, 0.22);
-  --logo-roof: #f3ede4;
+  --brand-grad: linear-gradient(180deg, #e2f1d8 0%, #b0d89c 50%, #84b46f 100%);
   --radius: 14px;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -102,7 +116,7 @@
   --sk-a: #eeeae0;
   --sk-b: #f8f6f0;
   --focus: rgba(65, 103, 52, 0.22);
-  --logo-roof: #416734;
+  --brand-grad: linear-gradient(180deg, #5a8a4a 0%, #416734 55%, #2f4f26 100%);
   --shadow: 0 1px 2px rgba(20, 30, 15, 0.04), 0 8px 24px rgba(20, 30, 15, 0.05);
 }
 
@@ -205,14 +219,11 @@ button { cursor: pointer; }
   padding: 48px clamp(28px, 5vw, 64px);
   background: var(--bg);
 }
-/* marca: logo do Recanto do Acre Flats (SVG em /assets/logo.svg); o telhado fica creme no escuro */
-.brand { display: inline-flex; align-items: center; gap: 0.32em; height: 1em; line-height: 1; white-space: nowrap; color: var(--ink); }
-.brand svg { display: block; width: auto; height: 100%; overflow: visible; }
-.brand-ic { aspect-ratio: 2104 / 1496; flex: none; }
-.brand-tx { height: 0.58em !important; aspect-ratio: 3688 / 584; flex: none; }
-.brand--nome { gap: 0.3em; }
-.brand-nome { font-family: "Newsreader", Georgia, "Times New Roman", serif; font-size: 0.64em; font-weight: 500; letter-spacing: 0.01em; line-height: 1; color: inherit; white-space: nowrap; }
-.login-brand { display: flex; align-items: center; font-size: 42px; color: var(--ink); }
+/* marca: assinatura "Thiago TL Liro" (Sacramento + monograma TL em Playfair Display, degradê verde) */
+.brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: var(--ink); }
+.brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-size: 1em; font-weight: 400; letter-spacing: 0; }
+.brand-tl { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.login-brand { display: flex; align-items: center; font-size: 32px; color: var(--ink); }
 .mark { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--terracotta); color: #fff; flex: none; }
 .mark .ico { width: 20px; height: 20px; }
 .login h1 { margin-top: 18px; font-size: 13px; font-weight: 600; letter-spacing: 0.24em; color: var(--terracotta-d); }
@@ -287,9 +298,9 @@ input::-ms-reveal, input::-ms-clear { display: none; }
   padding: 22px 16px;
   background: var(--night);
   color: #efe9e1;
-  --logo-roof: #f3ede4;
+  --brand-grad: linear-gradient(180deg, #e2f1d8 0%, #b0d89c 50%, #84b46f 100%);
 }
-.side-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; font-size: 34px; color: #f3ede4; }
+.side-brand { display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; font-size: 27px; color: #f3ede4; }
 .side-brand .brand { color: #f3ede4; }
 .side-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .side-nav { display: grid; gap: 4px; }
@@ -330,7 +341,7 @@ input::-ms-reveal, input::-ms-clear { display: none; }
 }
 .top-menu { display: none; }
 .top-name { margin-right: auto; overflow: hidden; white-space: nowrap; font-size: 19px; color: var(--ink); text-decoration: none; }
-.top-name .brand { font-size: 26px; }
+.top-name .brand { font-size: 23px; }
 @media (min-width: 861px) { .top-name .brand { visibility: hidden; } }
 .top-user { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .avatar {
@@ -530,8 +541,8 @@ a.stat:hover { transform: translateY(-2px); border-color: var(--line-2); }
 .mini-photo label { cursor: pointer; }
 .logo-prev { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 14px; border: 1px solid var(--line); background: var(--field); overflow: hidden; }
 .logo-prev img { width: 100%; height: 100%; object-fit: contain; }
-.logo-prev.is-empty { background: #fff; border: 1px solid var(--line); padding: 10px; }
-.logo-prev-ic { width: 100%; height: auto; aspect-ratio: 2104 / 1496; --logo-roof: #416734; }
+.logo-prev.is-empty { background: #12221a; border-color: transparent; }
+.logo-prev-tl { font-family: "Playfair Display", Georgia, serif; font-size: 30px; font-weight: 500; line-height: 1; letter-spacing: -0.13em; padding-right: 0.13em; background: linear-gradient(180deg, #e2f1d8 0%, #b0d89c 50%, #84b46f 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .logo-prev.is-empty .ico { width: 30px; height: 30px; }
 
 /* ---------- avaliações ---------- */
