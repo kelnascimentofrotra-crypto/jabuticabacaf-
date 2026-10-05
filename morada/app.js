@@ -2568,7 +2568,6 @@ const moradaApp = () => {
     if (nome) {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;
-      $('.logo').setAttribute('aria-label', `${nome} — início`);
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
@@ -2591,7 +2590,7 @@ const moradaApp = () => {
     setStatOrHide('anos', c.anos_mercado, '');
     googleOn = !!c.login_google;
     syncGoogle();
-    // logo enviada no painel: aparece no topo do site (a entrada mostra sempre o nome Thiago Liro)
+    // logo enviada no painel: aparece no topo do site no lugar do nome (a entrada mostra sempre o nome Thiago Liro)
     const logo = siteFile(c.logo);
     if (logo) {
       $$('.logo').forEach((el) => {
