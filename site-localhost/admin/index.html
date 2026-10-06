@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel — imóveis e site</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23141110'/%3E%3Cpath d='M18 40V24h28v16z' fill='none' stroke='%23ff8a3d' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="admin.css">
+  <script src="../data.js" defer></script>
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="top-brand"><strong>Painel</strong><span id="site-nome">do site</span></div>
+    <nav class="tabs" role="tablist" aria-label="Seções do painel">
+      <button type="button" role="tab" data-tab="imoveis" aria-selected="true">Imóveis</button>
+      <button type="button" role="tab" data-tab="avaliacoes" aria-selected="false">Avaliações</button>
+      <button type="button" role="tab" data-tab="config" aria-selected="false">Configurações</button>
+      <button type="button" role="tab" data-tab="publicar" aria-selected="false">Publicar <span class="dot" id="dot-mudou" hidden></span></button>
+    </nav>
+    <div class="top-actions">
+      <a class="btn btn-ghost" href="../index.html" target="_blank" rel="noopener">Ver site</a>
+      <button type="button" class="btn btn-ghost" id="btn-previa">Pré-visualizar</button>
+    </div>
+  </header>
+
+  <p class="aviso" id="aviso-rascunho" hidden></p>
+
+  <main>
+    <!-- Imóveis -->
+    <section class="tab-panel" id="tab-imoveis" role="tabpanel">
+      <div class="panel-head">
+        <div>
+          <h1>Imóveis</h1>
+          <p class="muted" id="resumo-imoveis"></p>
+        </div>
+        <button type="button" class="btn btn-gold" id="novo-imovel">+ Novo imóvel</button>
+      </div>
+      <ul class="lista" id="lista-imoveis"></ul>
+    </section>
+
+    <!-- Avaliações -->
+    <section class="tab-panel" id="tab-avaliacoes" role="tabpanel" hidden>
+      <div class="panel-head">
+        <div>
+          <h1>Avaliações</h1>
+          <p class="muted" id="resumo-avaliacoes"></p>
+        </div>
+        <button type="button" class="btn btn-gold" id="nova-avaliacao">+ Nova avaliação</button>
+      </div>
+      <ul class="lista" id="lista-avaliacoes"></ul>
+    </section>
+
+    <!-- Configurações -->
+    <section class="tab-panel" id="tab-config" role="tabpanel" hidden>
+      <div class="panel-head"><div><h1>Configurações</h1><p class="muted">Campos vazios somem do site.</p></div></div>
+      <form class="grid card" id="form-config" autocomplete="off">
+        <label>Nome<input name="nome"></label>
+        <label>Segmento<input name="segmento" placeholder="Corretor de imóveis"></label>
+        <label>Assinatura — antes<input name="assinatura.antes"></label>
+        <label>Assinatura — iniciais<input name="assinatura.iniciais" maxlength="3"></label>
+        <label>Assinatura — depois<input name="assinatura.depois"></label>
+        <label>Região<input name="regiao" placeholder="Fortaleza e região"></label>
+        <label>WhatsApp (só números, com 55 e DDD)<input name="whatsapp" inputmode="numeric" placeholder="5585999999999"></label>
+        <label>Instagram (sem @)<input name="instagram"></label>
+        <label>E-mail<input name="email" type="email"></label>
+        <label>Telefone<input name="telefone"></label>
+        <label class="col-2">Endereço<input name="endereco"></label>
+        <label>Famílias atendidas<input name="familias" type="number" min="0"></label>
+        <label>Anos de experiência<input name="anos" type="number" min="0"></label>
+        <label class="col-2">Política de privacidade<textarea name="privacidade" rows="4"></textarea></label>
+      </form>
+    </section>
+
+    <!-- Publicar -->
+    <section class="tab-panel" id="tab-publicar" role="tabpanel" hidden>
+      <div class="panel-head"><div><h1>Publicar</h1><p class="muted" id="estado-publicacao"></p></div></div>
+
+      <div class="cards-2">
+        <div class="card">
+          <h2>Publicar direto no site</h2>
+          <p class="muted">Envia as fotos novas e o <code>data.js</code> para o GitHub. A Vercel atualiza o site sozinha em cerca de 1 minuto.</p>
+          <form class="grid" id="form-github" autocomplete="off">
+            <label class="col-2">Token do GitHub (permissão de conteúdo no repositório)<input name="token" type="password" placeholder="github_pat_…"></label>
+            <label>Dono do repositório<input name="owner"></label>
+            <label>Repositório<input name="repo"></label>
+            <label>Branch<input name="branch"></label>
+            <label>Pasta do site<input name="pasta"></label>
+          </form>
+          <button type="button" class="btn btn-gold" id="btn-publicar">Publicar agora</button>
+          <ol class="log" id="log-publicar" aria-live="polite"></ol>
+        </div>
+        <div class="card">
+          <h2>Sem GitHub</h2>
+          <p class="muted">Baixe o arquivo e substitua o <code>data.js</code> da pasta do site. Fotos novas precisam ser publicadas pelo botão ao lado.</p>
+          <button type="button" class="btn btn-ghost" id="btn-baixar">Baixar data.js</button>
+          <hr>
+          <h2>Rascunho</h2>
+          <p class="muted">As mudanças ficam salvas neste navegador até você publicar.</p>
+          <button type="button" class="btn btn-danger" id="btn-descartar">Descartar rascunho</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Editor de imóvel -->
+  <dialog class="editor" id="editor-imovel" aria-labelledby="ed-titulo">
+    <form method="dialog" class="editor-form" id="form-imovel" autocomplete="off">
+      <header class="editor-head">
+        <h2 id="ed-titulo">Imóvel</h2>
+        <button type="button" class="x" data-fechar aria-label="Fechar">×</button>
+      </header>
+      <div class="editor-body grid">
+        <label class="col-2">Título<input name="titulo" required></label>
+        <label>Slug (endereço das fotos)<input name="slug" pattern="[a-z0-9\-]+" required></label>
+        <label>Preço (R$)<input name="preco" type="number" min="0" step="1" inputmode="numeric"></label>
+        <label>Tipo<select name="tipo"><option value="casa">Casa</option><option value="apartamento">Apartamento</option><option value="terreno">Terreno</option><option value="comercial">Comercial</option><option value="outros">Outros</option></select></label>
+        <label>Finalidade<select name="finalidade"><option value="venda">Venda</option><option value="aluguel">Aluguel</option></select></label>
+        <label>Status<select name="status"><option value="disponivel">Disponível</option><option value="vendido">Vendido</option><option value="alugado">Alugado</option></select></label>
+        <label class="check"><input type="checkbox" name="destaque"> Alto padrão (destaque)</label>
+        <label>Cidade<input name="cidade"></label>
+        <label>UF<input name="uf" maxlength="2"></label>
+        <label>Bairro<input name="bairro"></label>
+        <label>Área (m²)<input name="area" type="number" min="0" step="0.01"></label>
+        <label>Quartos<input name="quartos" type="number" min="0"></label>
+        <label>Suítes<input name="suites" type="number" min="0"></label>
+        <label>Banheiros<input name="banheiros" type="number" min="0"></label>
+        <label>Vagas<input name="vagas" type="number" min="0"></label>
+        <label>Frente (m)<input name="frente" type="number" min="0" step="0.01"></label>
+        <label>Selos (separe por vírgula)<input name="selos" placeholder="Com planejados, Vista mar"></label>
+        <label class="col-2">Características (separe por vírgula)<input name="caracteristicas" placeholder="Piscina aquecida, Cozinha gourmet"></label>
+        <label class="col-2">Descrição<textarea name="descricao" rows="5"></textarea></label>
+        <div class="col-2 fotos-box">
+          <div class="fotos-head">
+            <strong>Fotos</strong>
+            <span class="muted">A primeira é a capa. Arraste para reordenar.</span>
+            <label class="btn btn-ghost btn-sm upload">+ Enviar fotos<input type="file" id="input-fotos" accept="image/*" multiple hidden></label>
+          </div>
+          <ul class="fotos" id="lista-fotos"></ul>
+        </div>
+      </div>
+      <footer class="editor-foot">
+        <button type="button" class="btn btn-danger" id="excluir-imovel">Excluir</button>
+        <span class="grow"></span>
+        <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-gold" value="salvar">Salvar imóvel</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- Editor de avaliação -->
+  <dialog class="editor editor--sm" id="editor-avaliacao" aria-labelledby="ea-titulo">
+    <form method="dialog" class="editor-form" id="form-avaliacao" autocomplete="off">
+      <header class="editor-head">
+        <h2 id="ea-titulo">Avaliação</h2>
+        <button type="button" class="x" data-fechar aria-label="Fechar">×</button>
+      </header>
+      <div class="editor-body grid">
+        <label>Nome<input name="nome" required></label>
+        <label>Nota<select name="nota"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select></label>
+        <label class="col-2">Subtítulo<input name="subtitulo" placeholder="Comprou casa em Eusébio"></label>
+        <label class="col-2">Texto<textarea name="texto" rows="5" required></textarea></label>
+      </div>
+      <footer class="editor-foot">
+        <button type="button" class="btn btn-danger" id="excluir-avaliacao">Excluir</button>
+        <span class="grow"></span>
+        <button type="button" class="btn btn-ghost" data-fechar>Cancelar</button>
+        <button type="submit" class="btn btn-gold" value="salvar">Salvar avaliação</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

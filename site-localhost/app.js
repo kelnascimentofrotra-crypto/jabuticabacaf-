@@ -10,6 +10,13 @@ document.addEventListener('DOMContentLoaded', function () {
      ========================================================= */
 
   var DATA = window.SITE_DATA || {};
+  // ?previa=1: mostra o rascunho do painel (só neste navegador)
+  if (/[?&]previa=1(&|$)/.test(location.search)) {
+    try {
+      var previa = JSON.parse(localStorage.getItem('admin:previa'));
+      if (previa && previa.imoveis) DATA = previa;
+    } catch (e) { /* sem prévia */ }
+  }
   var cfg = DATA.config || {};
   var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
   var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
