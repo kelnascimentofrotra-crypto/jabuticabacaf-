@@ -38,8 +38,9 @@ async function open(browser, { scale = 1, nograin = false } = {}) {
   await page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].map(i => i.decode().catch(() => {})));
-    if (!document.fonts.check('800 100px "Montserrat"')) throw new Error('fonte caiu no fallback');
-    if (window.__NOGRAIN__) document.getElementById('grain').style.display = 'none';
+    for (const f of window.FONTS_REQUIRED || ['800 100px "Montserrat"']) if (!document.fonts.check(f)) throw new Error('fonte caiu no fallback: ' + f);
+    const grain = document.getElementById('grain');
+    if (window.__NOGRAIN__ && grain) grain.style.display = 'none';
   });
   return page;
 }

@@ -37,4 +37,15 @@ python3 engine/sfx.py projects/jabuticaba-promo --vo audio/vo/pm_alex/vo.json --
 ffmpeg -i out/final.mp4 -i out/mix-pm_alex.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest out/final-voz-masculina.mp4
 ```
 
+## Projeto `site-promo` (por que ter um site)
+
+Anúncio vertical de 42 s no estilo tech-premium: um ponto laranja viaja de nó em nó e, em cada parada, vira linha e abre uma tela (benefícios e, depois, a vitrine com os heroes dos sites). Os prints ficam em `projects/site-promo/assets/`; Aurora e Pulse são sites conceito escritos em `projects/site-promo/concepts/` (abra no navegador ou gere os prints de novo com o Playwright em 1440×900 e 390×844 @2x).
+
+```bash
+python3 projects/site-promo/audio/compose_music.py                 # trilha eletrônica 120 BPM (TR-808, harpa, celesta)
+node tools/render.cjs projects/site-promo timeline
+python3 engine/sfx.py projects/site-promo                            # out/mix.wav
+node tools/render.cjs projects/site-promo full --workers 4 --audio projects/site-promo/out/mix.wav
+```
+
 Requer Playwright (Chromium), ffmpeg e Python com `numpy scipy soundfile pyloudnorm pillow mido`.
