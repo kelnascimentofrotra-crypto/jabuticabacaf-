@@ -1,0 +1,583 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jabuticaba Café — Promo (neon-glow)</title>
+<style>
+@font-face{font-family:'Montserrat';font-weight:100 900;font-display:block;src:url(../../fonts/Montserrat.woff2) format('woff2')}
+/* estilo neon-glow com a cor da marca: o vermelho da referência vira roxo jabuticaba */
+:root{--dark:#07030A;--acc:#C04FD0;--accTx:#DA82E5;--white:#FFF6FD;--g:192,79,208}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden;height:100%}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--dark);transform-origin:0 0;
+  font-family:'Montserrat',sans-serif;-webkit-font-smoothing:antialiased}
+body.sq #stage{height:1080px}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden;background:var(--dark)}
+.cam{position:absolute;inset:0;transform-origin:50% 50%}
+.el{position:absolute;left:0;top:0;will-change:transform}
+.ctr{position:absolute;left:0;top:0;width:1080px;text-align:center;white-space:nowrap;line-height:1.1}
+.ws{font-weight:600;color:var(--white);font-size:44px;text-shadow:0 0 14px rgba(255,255,255,.45),0 0 44px rgba(var(--g),.55)}
+.pb{font-weight:800;color:var(--accTx);font-size:118px;letter-spacing:-.01em;text-shadow:0 0 16px rgba(var(--g),.95),0 0 60px rgba(var(--g),.6)}
+body.sq .ws{font-size:40px} body.sq .pb{font-size:104px}
+.ch{display:inline-block;white-space:pre}
+.grid{position:absolute;inset:-180px;background-image:linear-gradient(rgba(var(--g),.09) 2px,transparent 2px),linear-gradient(90deg,rgba(var(--g),.09) 2px,transparent 2px);
+  background-size:90px 90px;-webkit-mask-image:radial-gradient(closest-side,#000 25%,transparent 100%)}
+.glow{position:absolute;left:50%;top:50%;width:1500px;height:1500px;margin:-750px 0 0 -750px;border-radius:50%;
+  background:radial-gradient(circle,rgba(var(--g),.30) 0%,rgba(var(--g),.10) 30%,rgba(var(--g),0) 62%)}
+.accbg{background:radial-gradient(85% 60% at 50% 45%,#C35AD3 0%,#8C2EA0 45%,#4A1257 80%,#2A0A33 100%)}
+.tile{border-radius:26%;background:linear-gradient(150deg,#D774E3,#9B34AE);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 34px rgba(var(--g),.9),0 0 110px rgba(var(--g),.55),inset 0 3px 0 rgba(255,255,255,.35),inset 0 -6px 14px rgba(60,0,70,.35)}
+.tile svg{width:58%;height:58%;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(255,255,255,.7))}
+.pill{display:flex;align-items:center;gap:26px;border-radius:999px;background:linear-gradient(180deg,#D46BE1,#A63BBA);color:#2A0A30;font-weight:800;
+  box-shadow:0 0 30px rgba(var(--g),.85),0 0 90px rgba(var(--g),.45),inset 0 3px 0 rgba(255,255,255,.35)}
+.pill .pi{border-radius:28%;background:rgba(42,10,48,.85);display:flex;align-items:center;justify-content:center;flex:none}
+.pill .pi svg{width:62%;height:62%;fill:none;stroke:#E9A6F0;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ghost{font-weight:800;color:transparent;-webkit-text-stroke:3px rgba(var(--g),.35);white-space:nowrap;line-height:1}
+.ring svg,.svgfull{position:absolute;overflow:visible}
+#flash{position:absolute;inset:0;z-index:60;pointer-events:none;opacity:0}
+#beam{position:absolute;inset:0;z-index:61;pointer-events:none;opacity:0;background:radial-gradient(14% 70% at 50% 40%,#fff 0%,rgba(255,215,250,.9) 30%,rgba(var(--g),.6) 60%,rgba(var(--g),0) 100%)}
+#vig{position:absolute;inset:0;z-index:58;pointer-events:none;background:radial-gradient(75% 60% at 50% 50%,rgba(0,0,0,0) 45%,rgba(0,0,0,.6) 100%)}
+#grain{position:absolute;inset:-240px;pointer-events:none;opacity:.18;mix-blend-mode:screen;z-index:59;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .25 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");background-size:240px 240px}
+.conf{position:absolute;left:0;top:0;border-radius:2px}
+.ptile{border-radius:26%;overflow:hidden;box-shadow:0 0 0 6px rgba(var(--g),.9),0 0 60px rgba(var(--g),.8)}
+.ptile img{width:100%;height:100%;object-fit:cover;display:block}
+.btn{display:flex;align-items:center;justify-content:center;border-radius:999px;background:linear-gradient(180deg,#D46BE1,#A63BBA);color:#fff;font-weight:700;
+  box-shadow:0 0 36px rgba(var(--g),.95),0 0 120px rgba(var(--g),.55),inset 0 3px 0 rgba(255,255,255,.35);text-shadow:0 0 10px rgba(255,255,255,.5)}
+.fine{font-weight:500;font-size:23px;color:rgba(255,246,253,.55);line-height:1.5;white-space:normal}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+// ======================================================================================
+// motor mínimo (regras da skill motion-video): tempo em frames, easings de cauda longa,
+// molas, câmera contínua, deriva, digitação, motion blur.
+// ======================================================================================
+const QS = new URLSearchParams(location.search);
+const FMT = window.__FMT__ || QS.get('fmt') || 'v';
+const SQ = FMT === 'sq';
+const W = 1080, H = SQ ? 1080 : 1920, FPS = 30, CX = 540, CY = H / 2;
+const V = (a, b) => (SQ ? b : a);
+document.body.classList.add(SQ ? 'sq' : 'v');
+const stage = document.getElementById('stage');
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, x) => a + (b - a) * x;
+const E = {
+  lin: x => x, inC: x => x * x * x, outC: x => 1 - (1 - x) ** 3,
+  out5: x => 1 - (1 - x) ** 5, smooth: x => (x >= 1 ? 1 : 1 - 2 ** (-10 * x)), push: x => 1 - (1 - x) ** 4,
+  inOutC: x => (x < .5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2),
+};
+const prog = (f, a, b, e = E.lin) => e(clamp((f - a) / (b - a)));
+function spring(f, start, { k = 80, c = 14 } = {}) {
+  const t = (f - start) / FPS;
+  if (t <= 0) return 0;
+  const w0 = Math.sqrt(k), z = c / (2 * w0);
+  if (z >= 1) return 1 - Math.exp(-w0 * t) * (1 + w0 * t);
+  const wd = w0 * Math.sqrt(1 - z * z);
+  return 1 - Math.exp(-z * w0 * t) * (Math.cos(wd * t) + (z * w0 / wd) * Math.sin(wd * t));
+}
+const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const h = (tag, cls, html = '', style = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; if (style) e.style.cssText = style; return e; };
+// posiciona pelo centro: x,y = centro; s escala; r rotação; o opacidade; b blur; extra = transform 3D
+function P(el, { x = CX, y = CY, s = 1, r = 0, o = 1, b = 0, sx, sy, t3 = '' } = {}) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) ${t3} rotate(${r}deg) scale(${sx ?? s},${sy ?? s})`;
+  el.style.opacity = o;
+  el.style.filter = b > .3 ? `blur(${b}px)` : 'none';
+}
+// linha de texto centralizada (só y)
+function L(el, { y = CY, x = 0, s = 1, o = 1, b = 0 } = {}) {
+  el.style.transform = `translate(${x}px,${y}px) translateY(-50%) scale(${s})`;
+  el.style.transformOrigin = '50% 50%';
+  el.style.opacity = o;
+  el.style.filter = b > .3 ? `blur(${b}px)` : 'none';
+}
+// câmera contínua (regra 1) + saídas: zoom com blur a partir de um ponto
+function cam(el, lf, d, { s0 = 1, s1 = 1.08, r = 0, ox = CX, oy = CY, exit = null } = {}) {
+  let s = lerp(s0, s1, prog(lf, 0, d, E.lin)), b = 0, o = 1;
+  if (exit) {
+    const k = prog(lf, d - exit.len, d, E.inC);
+    s *= 1 + (exit.zoom ?? .7) * k; b = (exit.blur ?? 22) * k; o = 1 - (exit.fade ?? 0) * k;
+  }
+  el.style.transformOrigin = `${ox}px ${oy}px`;
+  el.style.transform = `rotate(${r * prog(lf, 0, d)}deg) scale(${s})`;
+  el.style.filter = b > .3 ? `blur(${b}px)` : 'none';
+  el.style.opacity = o;
+}
+// digitação letra a letra com blur (cps caracteres/s)
+const TYPED = [];
+function typer(el, cps = 22) { const txt = el.textContent; el.innerHTML = [...txt].map(c => `<span class="ch">${c}</span>`).join(''); const t = { el, n: txt.length, txt, cps, chars: [...el.children] }; return t; }
+function type(t, lf, start) {
+  t.chars.forEach((c, i) => {
+    const k = clamp((lf - start - i * FPS / t.cps) / 4);
+    c.style.opacity = k; c.style.filter = k < 1 ? `blur(${(1 - k) * 8}px)` : 'none';
+    c.style.transform = `translateY(${(1 - k) * 10}px)`;
+  });
+}
+// palavra-chave: escala 1,35 → 1 com blur (cauda longa) + deriva de crescimento
+function pop(el, lf, start, d, { y = CY, grow = .05, line = true, x = CX, from = 1.35, blur = 14 } = {}) {
+  const k = prog(lf, start, start + 16, E.out5);
+  const s = lerp(from, 1, k) * (1 + grow * prog(lf, start, d, E.lin));
+  const o = clamp(k * 3), b = (1 - k) * blur;
+  line ? L(el, { y, s, o, b }) : P(el, { x, y, s, o, b });
+}
+
+// ícones (traço branco)
+const IC = {
+  clock: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path class="hh" d="M12 12V7.5"/><path class="mh" d="M12 12h4"/><path d="M12 2.5v1.5M21.5 12H20M12 21.5V20M2.5 12H4"/></svg>',
+  cup: '<svg viewBox="0 0 24 24"><path d="M4 10h12v4.5A4.5 4.5 0 0 1 11.5 19h-3A4.5 4.5 0 0 1 4 14.5z"/><path d="M16 11h1.4a2.6 2.6 0 0 1 0 5.2H15.6"/><path d="M8 3.5c-.7 1 .7 1.8 0 3M11.5 3.5c-.7 1 .7 1.8 0 3"/><path d="M3 21h14"/></svg>',
+  cake: '<svg viewBox="0 0 24 24"><path d="M3.5 20.5h17"/><path d="M5 20.5v-6.5h14v6.5"/><path d="M5 16.5c1.2 1 2.3 1 3.5 0s2.3-1 3.5 0 2.3 1 3.5 0 2.3-1 3.5 0"/><path d="M12 14v-3"/><path d="M12 8.5c-.9-.6-.9-1.8 0-3 .9 1.2.9 2.4 0 3z"/></svg>',
+  burger: '<svg viewBox="0 0 24 24"><path d="M4 11a8 6.2 0 0 1 16 0z"/><path d="M3 14.2h18"/><path d="M4.5 17h15v.6a2.4 2.4 0 0 1-2.4 2.4H6.9a2.4 2.4 0 0 1-2.4-2.4z"/><path d="M8.5 7.6h.01M12 6.8h.01M15.5 7.6h.01"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.4A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.8c0 5.8-7.5 10.4-7.5 10.4z"/></svg>',
+  sun: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',
+  people: '<svg viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3.2"/><path d="M2.5 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.6"/><path d="M15.2 14.3A5 5 0 0 1 21.5 19"/></svg>',
+  leaf: '<svg viewBox="0 0 24 24"><path d="M12 22c-5-3-7-8-4.5-13S16 2.5 19 2c.5 3 0 8.5-3 12.5S12 22 12 22z"/><path d="M12 22c0-6 2-10 6-16"/></svg>',
+  arrow: '<svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>',
+};
+
+// ======================================================================================
+// cenas — storyboard aprovado (30 fps, cortes num grid de 120 BPM = 15 frames por tempo)
+// ======================================================================================
+const SC = [];
+function scene(a, d, cls, build, fn) {
+  const sec = h('section', 'scene');
+  const camEl = h('div', 'cam'); sec.appendChild(camEl); stage.appendChild(sec);
+  let blob = null;
+  if (cls === 'accbg') {   // cartela cheia: fundo dentro da câmera + reflexo de luz que atravessa (o fundo nunca para)
+    camEl.appendChild(h('div', 'accbg', '', 'position:absolute;inset:-12%'));
+    blob = h('div', '', '', 'position:absolute;left:0;top:0;width:900px;height:900px;margin:-450px 0 0 -450px;border-radius:50%;background:radial-gradient(circle,rgba(255,220,255,.32),rgba(255,220,255,0) 65%)');
+    camEl.appendChild(blob);
+  }
+  const ctx = build(camEl, sec) || {};
+  SC.push({ a, d, sec, cam: camEl, ctx, fn, blob, glows: [...camEl.querySelectorAll('.glow')], grids: [...camEl.querySelectorAll('.grid')] });
+  return SC[SC.length - 1];
+}
+const darkBg = (c, grid = true) => { if (grid) c.appendChild(h('div', 'grid')); c.appendChild(h('div', 'glow')); };
+const add = (c, cls, html, style) => { const e = h('div', cls, html, style); c.appendChild(e); return e; };
+
+// 1 · gancho: "Seu dia vive Corrido?" (0–52)
+scene(0, 52, '', c => {
+  darkBg(c);
+  const arcs = add(c, 'el svgfull', `<svg width="1400" height="1400" viewBox="-700 -700 1400 1400"><circle r="620" fill="none" stroke="#C04FD0" stroke-width="7" stroke-dasharray="520 1430" stroke-linecap="round" style="filter:drop-shadow(0 0 12px #C04FD0)"/><circle r="540" fill="none" stroke="#C04FD0" stroke-width="5" stroke-dasharray="300 1100" stroke-dashoffset="900" stroke-linecap="round" style="filter:drop-shadow(0 0 10px #C04FD0)"/></svg>`, 'width:1400px;height:1400px');
+  const tile = add(c, 'el tile', IC.clock, `width:${V(230, 200)}px;height:${V(230, 200)}px`);
+  return { arcs, tile, l1: typer(add(c, 'ctr ws', 'Seu dia vive')), l2: add(c, 'ctr pb', 'Corrido?') };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1, oy: CY + V(120, 90), exit: { len: 9, zoom: .9, blur: 26, fade: .6 } });
+  P(x.ctx.arcs, { s: lerp(1.15, 1.05, prog(lf, 0, d, E.out5)), r: lf * 2.2, o: prog(lf, 0, 6) });
+  const sp = spring(lf, 3, { k: 200, c: 15 });
+  P(x.ctx.tile, { y: CY - V(170, 150) - prog(lf, 0, d) * 14, s: sp * (1 + .06 * prog(lf, 8, d)), r: Math.sin(lf * .9) * 2.5 * prog(lf, 8, 20) });
+  x.ctx.tile.querySelector('.hh').style.transform = `rotate(${lf * 18}deg)`; x.ctx.tile.querySelector('.hh').style.transformOrigin = '12px 12px';
+  x.ctx.tile.querySelector('.mh').style.transform = `rotate(${lf * 55}deg)`; x.ctx.tile.querySelector('.mh').style.transformOrigin = '12px 12px';
+  L(x.ctx.l1.el, { y: CY + V(10, 0) - prog(lf, 10, d) * 8 }); type(x.ctx.l1, lf, 10);
+  pop(x.ctx.l2, lf, 24, d, { y: CY + V(110, 95) - prog(lf, 24, d) * 6 });
+  x.ctx.l2.style.transform += ` translate(${Math.sin(lf * 2.7) * 2.5}px,0)`;   // ansiedade
+});
+
+// 2 · "✕ Chega de Pressa" (52–82)
+scene(52, 30, '', c => {
+  darkBg(c, false);
+  c.appendChild(h('div', '', '', 'position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 50%,rgba(120,30,140,.45),rgba(0,0,0,0))'));
+  const x = add(c, 'el', `<svg viewBox="0 0 100 100" width="${V(190, 160)}" height="${V(190, 160)}" style="overflow:visible;filter:drop-shadow(0 0 14px #C04FD0) drop-shadow(0 0 40px #C04FD0)"><path d="M18 18L82 82M82 18L18 82" stroke="#D774E3" stroke-width="20" stroke-linecap="round"/></svg>`);
+  return { x, l1: typer(add(c, 'ctr ws', 'Chega de')), l2: add(c, 'ctr pb', 'Pressa') };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s0: 1.5, s1: 1.08, exit: { len: 5, zoom: .15, blur: 10, fade: 1 } });
+  x.cam.style.transform = x.cam.style.transform.replace(/scale\(([\d.]+)\)/, (m, s) => `scale(${lerp(1.45, 1, prog(lf, 0, 12, E.out5)) * (1 + .08 * prog(lf, 0, d))})`);
+  x.cam.style.filter = `blur(${(1 - prog(lf, 0, 10, E.out5)) * 16 + prog(lf, d - 5, d, E.inC) * 10}px)`;
+  const sp = spring(lf, 2, { k: 200, c: 15 });
+  P(x.ctx.x, { y: CY - V(150, 130) - prog(lf, 0, d) * 10, s: sp * (1 + .05 * prog(lf, 6, d)), r: lerp(-60, 0, prog(lf, 2, 14, E.out5)) });
+  L(x.ctx.l1.el, { y: CY - V(10, 10) }); type(x.ctx.l1, lf, 4);
+  pop(x.ctx.l2, lf, 9, d, { y: CY + V(80, 70) - prog(lf, 9, d) * 6 });
+});
+
+// 3 · "Conheça o." (82–112)
+scene(82, 30, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.6'));
+  const dot = add(c, 'el', '', 'width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 20px #fff,0 0 50px #C04FD0');
+  return { dot, l: typer(add(c, 'ctr ws', 'Conheça o.')) };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.12 });
+  P(x.ctx.dot, { s: prog(lf, 0, 6, E.out5) * (1 - prog(lf, 6, 12, E.inC)), o: 1 - prog(lf, 8, 12) });
+  L(x.ctx.l.el, { y: CY - prog(lf, 0, d) * 10, s: 1 + .05 * prog(lf, 4, d) }); type(x.ctx.l, lf, 6);
+});
+
+// 4 · logo com anel (112–142)
+scene(112, 30, '', c => {
+  darkBg(c, false);
+  const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(430, 360)}" fill="none" stroke="#C04FD0" stroke-width="6" style="filter:drop-shadow(0 0 14px #C04FD0)"/><circle r="${V(430, 360)}" fill="none" stroke="#fff" stroke-width="2" stroke-dasharray="40 260" opacity=".7"/></svg>`, 'width:1000px;height:1000px');
+  const logo = add(c, 'el', '<img src="../../../video/assets/img/logo-10anos.png" style="width:100%;height:100%;display:block">', `width:${V(470, 400)}px;height:${V(470, 400)}px;filter:drop-shadow(0 0 40px rgba(192,79,208,.7))`);
+  const cap = add(c, 'ctr fine', 'Há 10 anos no Windows Open Mall, em São Luís: cafés, bolos, lanches<br>e um ambiente para aproveitar sem pressa.', 'font-size:24px;color:rgba(255,246,253,.75)');
+  return { ring, logo, cap };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.07 });
+  P(x.ctx.ring, { s: lerp(1.3, 1, prog(lf, 0, 16, E.out5)) * (1 + .04 * prog(lf, 0, d)), r: lf * 1.5, b: (1 - prog(lf, 0, 10, E.out5)) * 12 });
+  P(x.ctx.logo, { s: lerp(.72, 1, prog(lf, 0, 18, E.out5)) * (1 + .05 * prog(lf, 0, d)), b: (1 - prog(lf, 0, 12, E.out5)) * 16, r: lerp(-14, 0, prog(lf, 0, 18, E.out5)) });
+  L(x.ctx.cap, { y: CY + V(520, 420) - prog(lf, 6, d) * 8, o: prog(lf, 8, 16), b: (1 - prog(lf, 8, 16)) * 6 });
+});
+
+// 5 · "Uma cafeteria Completa" com anel de pontos (142–165)
+scene(142, 23, '', c => {
+  c.appendChild(h('div', '', '', 'position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 50%,#4A1457,#16061A 70%,#07030A)'));
+  const R = V(360, 320);
+  const dots = [...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * R}" cy="${Math.sin(a) * R}" r="16" fill="#D774E3" style="filter:drop-shadow(0 0 10px #D774E3)"/>`; }).join('');
+  const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${R + 90}" fill="none" stroke="#C04FD0" stroke-width="3" opacity=".3"/><circle r="${R}" fill="none" stroke="#C04FD0" stroke-width="5" style="filter:drop-shadow(0 0 10px #C04FD0)"/>${dots}</svg>`, 'width:1000px;height:1000px');
+  const tile = add(c, 'el tile', IC.cup, 'width:84px;height:84px');
+  return { ring, tile, l1: typer(add(c, 'ctr ws', 'Uma cafeteria'), 30), l2: add(c, 'ctr pb', 'Completa') };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s0: 1.12, s1: 1.04 });
+  P(x.ctx.ring, { s: lerp(.85, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)), r: lf * 3 });
+  P(x.ctx.tile, { y: CY - 130 - prog(lf, 0, d) * 8, s: spring(lf, 0, { k: 200, c: 15 }) });
+  L(x.ctx.l1.el, { y: CY - 45 }); type(x.ctx.l1, lf, 1);
+  pop(x.ctx.l2, lf, 5, d, { y: CY + 40 });
+});
+
+// 6 · cartela roxa "Com muito sabor" (165–195)
+scene(165, 30, 'accbg', c => ({ l: typer(add(c, 'ctr ws', 'Com muito sabor'), 24) }), (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1, r: 1.5 });
+  L(x.ctx.l.el, { y: CY - prog(lf, 0, d) * 12, s: 1 + .06 * prog(lf, 0, d) }); type(x.ctx.l, lf, 3);
+});
+
+// 7 · tile da xícara cresce, "Tudo em um só lugar" (195–240)
+scene(195, 45, '', c => {
+  darkBg(c, false);
+  const tile = add(c, 'el tile', IC.cup, `width:${V(250, 220)}px;height:${V(250, 220)}px`);
+  return { tile, path: [...tile.querySelectorAll('path')], l: typer(add(c, 'ctr ws', 'Tudo em um só lugar')) };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 40, exit: { len: 8, zoom: 1.6, blur: 24, fade: .8 } });
+  const sp = spring(lf, 0, { k: 200, c: 15 });
+  P(x.ctx.tile, { y: CY - V(60, 50) - prog(lf, 0, d) * 10, s: lerp(.15, 1, sp) * (1 + .06 * prog(lf, 10, d)), r: lerp(-20, 0, prog(lf, 0, 16, E.out5)) });
+  x.ctx.path.forEach((p, i) => { p.style.strokeDasharray = 60; p.style.strokeDashoffset = 60 * (1 - prog(lf, 6 + i * 2, 20 + i * 2, E.out5)); });
+  L(x.ctx.l.el, { y: CY + V(150, 135) - prog(lf, 12, d) * 8 }); type(x.ctx.l, lf, 13);
+});
+
+// 8 · pílulas em 3D: Cafés / Bolos / Lanches (240–300)
+const PILLS = [['Cafés', IC.cup], ['Bolos', IC.cake], ['Lanches', IC.burger]];
+scene(240, 60, '', c => {
+  darkBg(c);
+  const pills = PILLS.map(([t, ic]) => add(c, 'el pill', `<div class="pi" style="width:${V(116, 100)}px;height:${V(116, 100)}px">${ic}</div><span>${t}</span>`,
+    `height:${V(170, 150)}px;padding:0 70px 0 26px;font-size:${V(76, 66)}px`));
+  const grid = c.querySelector('.grid'); grid.dataset.own = 1;
+  return { pills, grid };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1 });
+  x.ctx.grid.style.transform = `translateY(${-lf * 3}px)`;
+  x.ctx.pills.forEach((p, i) => {
+    const a = i * 19 - 6, ki = prog(lf, a, a + 14, E.out5), ko = prog(lf, a + 18, a + 28, E.inC);   // a 1ª já entra em voo (regra 4)
+    const dir = i % 2 ? -1 : 1;
+    const xx = CX + dir * (lerp(-520, 0, ki) + lerp(0, 760, ko)) - lf * 0;
+    const yy = CY + V(lerp(260, 0, ki) - 40 * prog(lf, a, a + 28) + lerp(0, -200, ko), lerp(160, 0, ki) - 30 * prog(lf, a, a + 28) + lerp(0, -140, ko));
+    const ry = dir * (lerp(48, -6, ki) + lerp(0, -40, ko)), rx = lerp(18, 4, ki);
+    const s = lerp(1.5, 1, ki) * (1 + .06 * prog(lf, a, a + 28)) * lerp(1, .7, ko);
+    const vel = Math.abs(lerp(-520, 0, prog(lf + 1, a, a + 14, E.out5)) - lerp(-520, 0, ki)) + ko * 60;
+    P(p, { x: xx, y: yy, s, o: (ki > 0 ? 1 : 0) * (1 - ko), b: Math.min(18, vel * .25), t3: `perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg)` });
+  });
+});
+
+// 9 · órbita das pílulas em volta do tile (300–345)
+scene(300, 45, '', c => {
+  darkBg(c, false);
+  const ghost = add(c, 'el ghost', 'MUITO<br>SABOR', `font-size:${V(185, 170)}px;text-align:center`);
+  const orbit = add(c, 'el', `<svg width="900" height="900" viewBox="-450 -450 900 900" style="overflow:visible"><ellipse rx="${V(380, 340)}" ry="${V(380, 300)}" fill="none" stroke="#C04FD0" stroke-width="3" opacity=".55" style="filter:drop-shadow(0 0 8px #C04FD0)"/></svg>`, 'width:900px;height:900px');
+  const tile = add(c, 'el tile', IC.cup, `width:${V(210, 190)}px;height:${V(210, 190)}px`);
+  const pills = PILLS.map(([t, ic]) => add(c, 'el pill', `<div class="pi" style="width:62px;height:62px">${ic}</div><span>${t}</span>`, 'height:88px;padding:0 34px 0 14px;font-size:40px;gap:14px'));
+  return { ghost, orbit, tile, pills };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s0: 1.25, s1: 1.04 });
+  P(x.ctx.ghost, { y: CY - prog(lf, 0, d) * 20, s: 1.02 + .04 * prog(lf, 0, d), o: .9 });
+  P(x.ctx.orbit, { s: lerp(.8, 1, prog(lf, 0, 16, E.out5)), r: -lf * .6 });
+  P(x.ctx.tile, { s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)), r: Math.sin(lf / 9) * 3 });
+  const R = V(380, 340), Ry = V(380, 300);
+  x.ctx.pills.forEach((p, i) => {
+    const ang = (-90 + i * 120 + lf * 2.4) * Math.PI / 180, k = prog(lf, i * 3, i * 3 + 14, E.out5);
+    P(p, { x: CX + Math.cos(ang) * R * k, y: CY + Math.sin(ang) * Ry * k, s: lerp(.4, 1, k), o: k });
+  });
+});
+
+// 10 · tela dividida: "Feito na hora" / "Carinho em cada detalhe" (345–405)
+scene(345, 60, '', c => {
+  darkBg(c, false);
+  const ghost = add(c, 'el ghost', 'Capricho', `font-size:${V(300, 240)}px`);
+  const feito = add(c, 'el', 'Feito', `font-weight:800;color:#fff;font-size:${V(170, 140)}px;text-shadow:0 0 18px rgba(255,255,255,.4)`);
+  const hora = add(c, 'el', 'na hora', `font-weight:600;color:#fff;font-size:${V(86, 70)}px;text-shadow:0 0 14px rgba(255,255,255,.35)`);
+  const dots = add(c, 'el', '<svg width="120" height="90" style="overflow:visible;filter:drop-shadow(0 0 10px #C04FD0)"><circle cx="30" cy="50" r="30" fill="#D774E3"/><circle cx="78" cy="22" r="16" fill="#D774E3"/><circle cx="96" cy="58" r="11" fill="#D774E3"/></svg>', 'width:120px;height:90px');
+  const panel = add(c, 'el', '', `width:1300px;height:${V(1300, 760)}px;background:linear-gradient(170deg,#D46BE1 0%,#B342C6 40%,#7E2491 100%);clip-path:polygon(0 120px,100% 0,100% 100%,0 100%);box-shadow:0 0 80px rgba(192,79,208,.6)`);
+  const heart = add(c, 'el', IC.heart.replace('<svg', `<svg width="${V(150, 120)}" height="${V(150, 120)}" style="fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(255,255,255,.7))"`));
+  const pill = add(c, 'el', 'Com muito..', `padding:16px 36px;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font-weight:700;font-size:${V(40, 34)}px;box-shadow:inset 0 2px 0 rgba(255,255,255,.3)`);
+  const car = add(c, 'el', 'Carinho', `font-weight:800;color:#fff;font-size:${V(170, 136)}px;text-shadow:0 6px 30px rgba(60,0,70,.35)`);
+  const det = add(c, 'el', 'em cada detalhe', `font-weight:600;color:#fff;font-size:${V(66, 54)}px`);
+  const arrow = add(c, 'el', IC.arrow.replace('<svg', '<svg width="70" height="70" style="fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round"'),
+    `width:${V(150, 124)}px;height:${V(150, 124)}px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(255,255,255,.25)`);
+  const mark = add(c, 'el', IC.leaf.replace('<svg', `<svg width="${V(360, 260)}" height="${V(360, 260)}" style="fill:none;stroke:rgba(255,255,255,.16);stroke-width:1.2"`));
+  return { ghost, feito, hora, dots, panel, heart, pill, car, det, arrow, mark };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.07 });
+  const c = x.ctx, top = V(CY - 560, 150), base = V(CY - 170, 380);
+  const inn = (a, n = 14) => prog(lf, a, a + n, E.out5), dr = a => prog(lf, a, d, E.lin);
+  P(c.ghost, { x: CX + 260 - lf * 4, y: top - 40, o: .9 });
+  P(c.feito, { x: V(330, 280) + lerp(-500, 0, inn(0)) - dr(0) * 14, y: top + 60, b: (1 - inn(0)) * 18 });
+  P(c.hora, { x: V(270, 230) + lerp(-500, 0, inn(5)) - dr(5) * 10, y: top + V(190, 165), b: (1 - inn(5)) * 14 });
+  P(c.dots, { x: V(640, 560), y: top - V(30, 40), s: spring(lf, 8, { k: 200, c: 15 }) * (1 + .06 * dr(8)), r: lf * .8 });
+  const sp = spring(lf, 10, { k: 80, c: 14 });
+  P(c.panel, { x: CX, y: base + V(650, 380) + lerp(V(900, 600), 0, sp) - dr(10) * 10 });
+  const py = base + lerp(V(900, 600), 0, sp) - dr(10) * 10;
+  P(c.heart, { x: V(210, 170), y: py + V(180, 150), s: spring(lf, 22, { k: 200, c: 15 }) * (1 + .06 * dr(22)), r: Math.sin(lf / 6) * 4 });
+  P(c.pill, { x: V(800, 820) + lerp(260, 0, inn(26)), y: py + V(160, 130), o: inn(26, 6), s: 1 + .05 * dr(26) });
+  P(c.car, { x: V(660, 760) + lerp(420, 0, inn(30)) - dr(30) * 12, y: py + V(380, 300), b: (1 - inn(30)) * 18 });
+  P(c.det, { x: V(700, 790) + lerp(420, 0, inn(35)) - dr(35) * 10, y: py + V(500, 400), b: (1 - inn(35)) * 14 });
+  P(c.arrow, { x: V(860, 920) + Math.sin(lf / 4) * 6, y: py + V(760, 560), s: spring(lf, 40, { k: 200, c: 15 }) });
+  P(c.mark, { x: V(200, 150), y: py + V(760, 560), r: -10 + lf * .2 });
+});
+
+// 11 · cartela roxa "Cardápio completo" (405–450)
+scene(405, 45, 'accbg', c => {
+  const parts = [...Array(26).keys()].map(i => add(c, 'el', '', `width:${6 + hash(i) * 10}px;height:${6 + hash(i) * 10}px;border-radius:50%;background:rgba(255,230,255,${.25 + hash(i + 9) * .4})`));
+  return { parts, l: typer(add(c, 'ctr ws', 'Cardápio completo'), 24) };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1, r: -1.2, exit: { len: 8, zoom: .5, blur: 16 } });
+  x.ctx.parts.forEach((p, i) => P(p, { x: hash(i + 3) * W, y: (hash(i + 7) * H - lf * (2 + hash(i) * 4) + H) % H, o: .8 }));
+  L(x.ctx.l.el, { y: CY - prog(lf, 0, d) * 10, s: 1 + .06 * prog(lf, 0, d) }); type(x.ctx.l, lf, 6);
+});
+
+// 12 · disco "Todo dia.. Fresquinho" (450–487)
+scene(450, 37, '', c => {
+  const ring = add(c, 'el', `<svg width="1300" height="1300" viewBox="-650 -650 1300 1300" style="overflow:visible"><circle r="${V(560, 470)}" fill="none" stroke="#9A34AE" stroke-width="9" style="filter:drop-shadow(0 0 16px #C04FD0)"/><circle r="${V(410, 350)}" fill="url(#dg)"/><defs><radialGradient id="dg"><stop offset="0" stop-color="#2E0D36"/><stop offset="1" stop-color="#12051A"/></radialGradient></defs></svg>`, 'width:1300px;height:1300px');
+  const ic = add(c, 'el', IC.sun.replace('<svg', '<svg width="78" height="78" style="fill:none;stroke:#DA82E5;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 8px #C04FD0)"'));
+  return { ring, ic, l1: typer(add(c, 'ctr ws', 'Todo dia..'), 26), l2: add(c, 'ctr pb', 'Fresquinho') };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.08 });
+  P(x.ctx.ring, { s: lerp(1.35, 1, prog(lf, 0, 16, E.out5)) * (1 + .04 * prog(lf, 0, d)), b: (1 - prog(lf, 0, 10, E.out5)) * 10 });
+  P(x.ctx.ic, { y: CY - 110, s: spring(lf, 4, { k: 200, c: 15 }), r: lf * 3 });
+  L(x.ctx.l1.el, { y: CY - 30 }); type(x.ctx.l1, lf, 6);
+  pop(x.ctx.l2, lf, 12, d, { y: CY + 50 });
+});
+
+// 13 · glitch da folha (487–495)
+scene(487, 8, '', c => {
+  const mk = col => add(c, 'el', IC.leaf.replace('<svg', `<svg width="300" height="300" style="fill:none;stroke:${col};stroke-width:1.6;stroke-linecap:round;filter:drop-shadow(0 0 10px ${col})"`), 'mix-blend-mode:screen');
+  return { a: mk('#ff3df5'), b: mk('#3df5ff'), c: mk('#ffffff'), bars: [...Array(6).keys()].map(i => add(c, 'el', '', `width:1100px;height:${4 + hash(i) * 18}px;background:rgba(255,255,255,.12)`)) };
+}, (x, lf, d) => {
+  const j = n => (hash(lf * 13 + n) - .5) * 40;
+  P(x.ctx.a, { x: CX - 140 + j(1), y: CY + j(2) }); P(x.ctx.b, { x: CX - 140 + j(3), y: CY + j(4) }); P(x.ctx.c, { x: CX - 140, y: CY, s: 1 + lf * .02 });
+  x.ctx.bars.forEach((b, i) => P(b, { y: hash(lf * 7 + i) * H, o: hash(lf + i) > .4 ? 1 : 0 }));
+});
+
+// 14 · órbitas 3D "Aconchego" (495–517)
+scene(495, 22, '', c => {
+  c.appendChild(h('div', '', '', 'position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 50%,#8E2FA2,#4C1259 55%,#22082A)'));
+  const plane = add(c, 'el', '', 'width:1400px;height:1400px;transform-style:preserve-3d');
+  plane.innerHTML = `<svg width="1400" height="1400" viewBox="-700 -700 1400 1400" style="overflow:visible">${[260, 380, 500, 620].map((r, i) => `<ellipse rx="${r}" ry="${r * .62}" fill="none" stroke="#F0B4F6" stroke-opacity="${.55 - i * .08}" stroke-width="3"/>`).join('')}${[0, 1, 2, 3, 4].map(i => `<circle class="od" r="${12 + i * 3}" fill="#F3C4F8" style="filter:drop-shadow(0 0 10px #fff)"/>`).join('')}</svg>`;
+  const word = add(c, 'el', `<span style="display:inline-flex;align-items:center;gap:24px">${IC.heart.replace('<svg', '<svg width="90" height="90" style="fill:none;stroke:#F3C4F8;stroke-width:2.2;filter:drop-shadow(0 0 8px #fff)"')}Aconchego</span>`,
+    `font-weight:800;font-size:${V(104, 96)}px;color:#F3C4F8;text-shadow:0 0 20px rgba(255,200,255,.8)`);
+  return { plane, word, dots: [...plane.querySelectorAll('.od')] };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s0: 1.02, s1: 1.25 });
+  const t3 = `perspective(1300px) rotateX(58deg) rotateZ(${-18 + lf * .8}deg)`;
+  P(x.ctx.plane, { t3 });
+  x.ctx.dots.forEach((dd, i) => { const r = [260, 380, 500, 620, 380][i], a = lf * (.05 + i * .01) + i * 1.3; dd.setAttribute('cx', Math.cos(a) * r); dd.setAttribute('cy', Math.sin(a) * r * .62); });
+  P(x.ctx.word, { y: CY + 20 - lf * 2, s: lerp(.85, 1, prog(lf, 0, 12, E.out5)), b: (1 - prog(lf, 0, 8, E.out5)) * 14, t3: `perspective(1300px) rotateX(${lerp(40, 28, prog(lf, 0, d))}deg) rotateZ(-10deg)` });
+});
+
+// 15 · "Pra curtir cada / Pausa do seu dia" (517–577)
+scene(517, 60, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.7'));
+  const ic = add(c, 'el', IC.people.replace('<svg', '<svg width="84" height="84" style="fill:none;stroke:#DA82E5;stroke-width:2;stroke-linecap:round;filter:drop-shadow(0 0 8px #C04FD0)"'));
+  return { ic, l1: typer(add(c, 'ctr ws', 'Pra curtir cada')), l2: typer(add(c, 'ctr pb', 'Pausa do seu dia', 'font-size:' + V(96, 84) + 'px'), 26) };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1 });
+  const up = prog(lf, 20, 34, E.out5) * 40;
+  P(x.ctx.ic, { y: CY - 100 - up * .5, s: spring(lf, 22, { k: 200, c: 15 }) * (1 + .06 * prog(lf, 22, d)) });
+  L(x.ctx.l1.el, { y: CY - up * .4 }); type(x.ctx.l1, lf, 2);
+  L(x.ctx.l2.el, { y: CY + 70 - up * .2, s: 1 + .05 * prog(lf, 26, d) }); type(x.ctx.l2, lf, 26);
+});
+
+// 16 · "Tudo isso.." (577–600) — break da música
+scene(577, 23, '', c => ({ l: typer(add(c, 'ctr pb', 'Tudo isso..', 'font-size:' + V(84, 76) + 'px'), 26) }), (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.12 });
+  const wk = prog(lf, 12, 18);
+  x.ctx.l.el.style.color = `rgb(${lerp(218, 255, wk)},${lerp(130, 246, wk)},${lerp(229, 253, wk)})`;
+  L(x.ctx.l.el, { y: CY }); type(x.ctx.l, lf, 1);
+});
+
+// 17 · preço com confete e fotos flutuando (600–675) — drop 1
+const PHOTOS = ['real-bolo.jpg', 'real-cuscuz.jpg', 'real-beiju-espresso.jpg', 'real-hero.jpg', 'real-omelete.jpg', 'real-bolo-orquidea.jpg'];
+scene(600, 75, 'accbg', c => {
+  const tiles = PHOTOS.map((p, i) => add(c, 'el ptile', `<img src="../../../video/assets/img/${p}">`));
+  const conf = [...Array(110).keys()].map(i => add(c, 'conf', '', `width:${8 + hash(i) * 16}px;height:${4 + hash(i + 1) * 8}px;background:${['#F3C4F8', '#D774E3', '#9B34AE', '#ffffff', '#6E1F80'][i % 5]}`));
+  const lab = typer(add(c, 'ctr ws', 'A partir de:'), 30);
+  const price = add(c, 'el', `<span style="font-size:${V(64, 56)}px;font-weight:700;color:#F3C4F8;vertical-align:${V(120, 104)}px;margin-right:10px">R$</span><span style="font-size:${V(300, 260)}px;font-weight:800;color:#fff;line-height:1">3</span><span style="font-size:${V(110, 96)}px;font-weight:800;color:#fff;vertical-align:${V(110, 92)}px">,00</span>`,
+    'white-space:nowrap;text-shadow:0 0 20px rgba(255,255,255,.55),0 0 70px rgba(192,79,208,.9)');
+  return { tiles, conf, lab, price };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.1 });
+  const TP = [[-330, -560, 300, 1.6], [360, -470, 220, .9], [-380, 420, 260, 1.2], [350, 560, 380, 2.2], [140, -820, 160, .6], [-200, 820, 180, .7]];
+  x.ctx.tiles.forEach((t, i) => {
+    const [dx, dy, size, z] = TP[i], k = prog(lf, i * 2, i * 2 + 22, E.out5);
+    const s = (size / 300) * lerp(.4, 1, k) * (1 + .18 * z * prog(lf, 0, d));   // dolly: os próximos crescem mais
+    t.style.width = t.style.height = '300px';
+    P(t, { x: CX + dx * V(1, .75) * (1 + .1 * prog(lf, 0, d)), y: CY + dy * V(1, .52) - lf * z * 1.2, s, r: (i % 2 ? 1 : -1) * (8 + lf * .15 * z), o: k, b: Math.max(0, (z - 1) * 9) });
+  });
+  x.ctx.conf.forEach((p, i) => {
+    const a = hash(i + 40) * Math.PI * 2, sp = 14 + hash(i + 50) * 26, t = Math.max(0, lf - 1);
+    const vx = Math.cos(a) * sp, vy = Math.sin(a) * sp - 10;
+    const px = CX + vx * t * .9 * Math.exp(-t * .02), py = CY + vy * t * .9 * Math.exp(-t * .025) + .35 * t * t;
+    const z = .5 + hash(i + 60) * 1.4;
+    P(p, { x: px, y: py, r: t * (6 + hash(i) * 14) * (i % 2 ? 1 : -1), s: z, o: lf >= 1 ? 1 : 0, b: z > 1.5 ? 3 : 0 });
+  });
+  L(x.ctx.lab.el, { y: CY - V(200, 170) }); type(x.ctx.lab, lf, 4);
+  const sp = spring(lf, 1, { k: 200, c: 15 });
+  P(x.ctx.price, { y: CY + V(20, 20) - prog(lf, 0, d) * 10, s: sp * (1 + .06 * prog(lf, 4, d)) });
+});
+
+// 18 · loader → "?" → pílula (675–720)
+scene(675, 45, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.6'));
+  const shape = add(c, 'el', '', 'border:9px solid #C04FD0;border-radius:999px;box-shadow:0 0 22px rgba(192,79,208,.9),inset 0 0 18px rgba(192,79,208,.6)');
+  const arc = add(c, 'el', `<svg width="240" height="240" viewBox="-120 -120 240 240" style="overflow:visible"><circle r="100" fill="none" stroke="#C04FD0" stroke-width="10" stroke-linecap="round" style="filter:drop-shadow(0 0 10px #C04FD0)"/></svg>`, 'width:240px;height:240px');
+  const q = add(c, 'el', '?', 'font-weight:800;font-size:110px;color:#DA82E5;text-shadow:0 0 18px rgba(192,79,208,.9)');
+  return { shape, arc, circ: arc.querySelector('circle'), q };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.06 });
+  const draw = prog(lf, 0, 18, E.out5), C = 2 * Math.PI * 100;
+  x.ctx.circ.style.strokeDasharray = `${C * lerp(.08, 1, draw)} ${C}`;
+  P(x.ctx.arc, { r: lf * 14, o: 1 - prog(lf, 18, 20) });
+  const m = prog(lf, 24, 40, E.out5), w = lerp(220, V(660, 620), m);
+  Object.assign(x.ctx.shape.style, { width: w + 'px', height: '220px' });
+  x.ctx.shape.style.height = lerp(220, 150, m) + 'px';
+  P(x.ctx.shape, { s: lf < 18 ? 0 : spring(lf, 18, { k: 200, c: 15 }) * (1 + .03 * prog(lf, 18, d)), o: lf < 18 ? 0 : 1 });
+  P(x.ctx.q, { s: spring(lf, 8, { k: 200, c: 15 }) * (1 - prog(lf, 26, 34, E.inC)), r: Math.sin(lf / 5) * 6, b: prog(lf, 26, 34) * 10 });
+});
+
+// 19 · CTA "Peça pelo iFood" (720–780)
+scene(720, 60, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.8'));
+  const ripple = add(c, 'el', '', 'border:4px solid #DA82E5;border-radius:999px;width:660px;height:150px');
+  const btn = add(c, 'el btn', 'Peça pelo iFood', `width:${V(660, 620)}px;height:150px;font-size:${V(54, 50)}px`);
+  const sub = typer(add(c, 'ctr ws', 'Ou venha nos visitar!', 'font-size:' + V(38, 34) + 'px'), 26);
+  const fine = add(c, 'ctr fine', 'Windows Open Mall · Av. dos Holandeses, 13 · Jardim Renascença · São Luís – MA<br>WhatsApp (98) 99158-0508 · @jabuticabacafe');
+  return { ripple, btn, sub, fine, label: btn };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.07, exit: { len: 6, zoom: .25, blur: 8 } });
+  const beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 22) / 3) * (lf >= 22 ? 1 : 0);
+  P(x.ctx.btn, { y: CY - prog(lf, 0, d) * 10, s: (1 + .03 * beat) * (1 - .06 * press) * (1 + .03 * prog(lf, 0, d)) });
+  x.ctx.btn.style.color = `rgba(255,255,255,${prog(lf, 0, 8)})`;
+  const rk = prog(lf, 22, 40, E.out5);
+  P(x.ctx.ripple, { y: CY - prog(lf, 0, d) * 10, s: lerp(1, 1.5, rk), o: lf >= 22 ? 1 - rk : 0 });
+  L(x.ctx.sub.el, { y: CY + 150 - prog(lf, 8, d) * 6 }); type(x.ctx.sub, lf, 9);
+  L(x.ctx.fine, { y: H - V(300, 110), o: prog(lf, 14, 24) * .95 });
+});
+
+// 20 · logo no drop 2 (780–840)
+scene(780, 60, '', c => {
+  darkBg(c, false);
+  const halo = add(c, 'el', '', `width:${V(700, 560)}px;height:${V(700, 560)}px;border-radius:50%;border:5px solid rgba(218,130,229,.8);box-shadow:0 0 40px rgba(192,79,208,.8),inset 0 0 40px rgba(192,79,208,.5)`);
+  const logo = add(c, 'el', '<img src="../../../video/assets/img/logo-10anos.png" style="width:100%;height:100%;display:block">', `width:${V(540, 430)}px;height:${V(540, 430)}px;filter:drop-shadow(0 0 50px rgba(192,79,208,.8))`);
+  const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:#F3C4F8;box-shadow:0 0 10px #D774E3`));
+  return { halo, logo, sparks };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.08, exit: { len: 10, zoom: .35, blur: 18, fade: 1 } });
+  const beat = Math.exp(-((lf % 15) / 3.5));
+  P(x.ctx.logo, { s: lerp(1.6, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)) * (1 + .02 * beat), b: (1 - prog(lf, 0, 10, E.out5)) * 20, r: lerp(10, 0, prog(lf, 0, 16, E.out5)) });
+  P(x.ctx.halo, { s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .08 * beat), o: .5 + .5 * beat });
+  x.ctx.sparks.forEach((p, i) => {
+    const a = hash(i + 80) * Math.PI * 2, r = V(330, 260) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420);
+    P(p, { x: CX + Math.cos(a) * r, y: CY + Math.sin(a) * r, o: clamp(1 - (r - V(330, 260)) / 420) * prog(lf, 2, 8) });
+  });
+});
+
+// 21 · slogan (840–990)
+scene(840, 150, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.45'));
+  return { l1: typer(add(c, 'ctr ws', 'Venha tomar um café com a gente!', 'font-size:' + V(46, 42) + 'px')), l2: typer(add(c, 'ctr', '@jabuticabacafe', 'font-weight:700;font-size:34px;color:#DA82E5;text-shadow:0 0 14px rgba(192,79,208,.9)'), 24) };
+}, (x, lf, d) => {
+  cam(x.cam, lf, d, { s1: 1.12 });
+  const out = 1 - prog(lf, 105, 145, E.inC);
+  x.ctx.l1.el.style.letterSpacing = `${prog(lf, 30, d, E.lin) * .035}em`;   // tracking abrindo devagar
+  x.ctx.l2.el.style.letterSpacing = `${prog(lf, 60, d, E.lin) * .12}em`;
+  L(x.ctx.l1.el, { y: CY - 20 - prog(lf, 0, d) * 46, s: 1 + .02 * prog(lf, 0, d), o: out, b: (1 - out) * 6 }); type(x.ctx.l1, lf, 4);
+  L(x.ctx.l2.el, { y: CY + 50 - prog(lf, 0, d) * 34, o: out }); type(x.ctx.l2, lf, 44);
+});
+
+// ---------------- sobreposições globais ----------------
+const flash = h('div', '', '', ''); flash.id = 'flash'; stage.appendChild(flash);
+const beam = h('div'); beam.id = 'beam'; stage.appendChild(beam);
+const vig = h('div'); vig.id = 'vig'; stage.appendChild(vig);
+const grain = h('div'); grain.id = 'grain'; stage.appendChild(grain);
+// flashes nascem do elemento em foco: [frame, x, y, força]
+const FLASH = [[110, CX, CY, .95], [140, CX, CY, .8], [165, CX, CY - 40, .55], [450, CX, CY, .6], [600, CX, CY + 20, 1], [778, CX, CY, .9], [345, CX, CY, .25], [495, CX - 140, CY, .5]];
+
+// ---------------- efeitos sonoros (frames) ----------------
+const SFX = [
+  ['boom', 0, .5, 0, { dur: 1.2 }], ['shimmer', 2, .35, 0, { dur: .8 }],
+  ...[...Array(6).keys()].map(i => ['tick', 8 + i * 7, .35, i % 2 ? .25 : -.25, {}]),
+  ['pop', 3, .6, 0, {}], ['pop', 24, .45, 0, { f0: 600, f1: 300 }],
+  ['whoosh', 43, .5, 0, { dur: .35, f0: 500, f1: 4000, peak: .8 }],
+  ['boom', 52, .35, 0, { dur: .4 }], ['pop', 61, .4, 0, { f0: 700, f1: 280 }],
+  ['whoosh', 104, .5, 0, { dur: .3, f0: 900, f1: 6000, peak: .9 }], ['boom', 112, .55, 0, { dur: 1.0 }], ['shimmer', 113, .4, 0, { dur: 1.0 }],
+  ['whoosh', 138, .35, 0, { dur: .25 }], ['pop', 147, .4, 0, {}],
+  ['pop', 197, .5, 0, { f0: 500, f1: 900 }],
+  ['whoosh', 233, .45, 0, { dur: .3, f0: 400, f1: 3000, peak: .8 }],
+  ...[0, 19, 38].map((a, i) => ['whoosh', 240 + a, .55, i % 2 ? .5 : -.5, { dur: .45, f0: 300, f1: 2500, peak: .35, panFrom: i % 2 ? .6 : -.6, panTo: i % 2 ? -.6 : .6 }]),
+  ['whoosh', 300, .35, 0, { dur: .6, f0: 200, f1: 1500, peak: .3 }], ...[0, 3, 6].map(a => ['pop', 304 + a, .3, 0, { f0: 900, f1: 500 }]),
+  ['boom', 345, .3, 0, { dur: .35 }], ['whoosh', 346, .35, -.4, { dur: .3 }], ['whoosh', 356, .5, 0, { dur: .4, f0: 200, f1: 1200, peak: .5 }],
+  ['pop', 367, .4, -.4, {}], ['pop', 371, .35, .4, {}], ['whoosh', 375, .35, .4, { dur: .3 }], ['click', 385, .45, .4, {}],
+  ['boom', 405, .25, 0, { dur: .3 }], ['whoosh', 442, .45, 0, { dur: .35, f0: 500, f1: 5000, peak: .9 }],
+  ['boom', 450, .3, 0, { dur: .5 }], ['pop', 454, .4, 0, {}], ['pop', 462, .4, 0, { f0: 600, f1: 250 }],
+  ['glitch', 487, .5, 0, { dur: .27 }],
+  ['whoosh', 495, .5, 0, { dur: .7, f0: 200, f1: 3500, peak: .6 }],
+  ['pop', 539, .4, 0, {}],
+  ['riser', 577, .45, 0, { dur: .77 }],
+  ['boom', 600, .8, 0, { dur: 1.4 }], ['confetti', 600, .6, 0, {}], ['chime', 603, .4, 0, {}],
+  ['click', 675, .3, 0, {}], ['whoosh', 675, .3, 0, { dur: .6, f0: 300, f1: 900, peak: .5 }], ['pop', 693, .45, 0, {}], ['whoosh', 699, .35, 0, { dur: .4, f0: 400, f1: 1800, peak: .6 }],
+  ['click', 742, .6, 0, {}], ['pop', 742, .35, 0, { f0: 400, f1: 900 }],
+  ['whoosh', 772, .45, 0, { dur: .3, f0: 600, f1: 6000, peak: .9 }], ['boom', 780, .85, 0, { dur: 1.6 }], ['shimmer', 781, .45, 0, { dur: 1.4 }],
+  ['chime', 960, .3, 0, {}],
+];
+// digitação: uma rajada por linha digitada (frame inicial, nº de caracteres, cps)
+const TYPE_AT = [[10, 'Seu dia vive', 22, 0], [56, 'Chega de', 22, 52], [88, 'Conheça o.', 22, 82], [143, 'Uma cafeteria', 30, 142], [168, 'Com muito sabor', 24, 165],
+  [208, 'Tudo em um só lugar', 22, 195], [411, 'Cardápio completo', 24, 405], [456, 'Todo dia..', 26, 450], [519, 'Pra curtir cada', 22, 517], [543, 'Pausa do seu dia', 26, 517],
+  [578, 'Tudo isso..', 26, 577], [604, 'A partir de:', 30, 600], [729, 'Ou venha nos visitar!', 26, 720], [844, 'Venha tomar um café com a gente!', 22, 840], [884, '@jabuticabacafe', 24, 840]];
+TYPE_AT.forEach(([f0, txt, cps]) => SFX.push(['typing', f0, .22, 0, { n: [...txt].filter(c => c !== ' ').length, step: FPS / cps / FPS }]));
+const DURATION_F = 990;
+const BOARD = [[30, 'Gancho', 'tile relógio + Corrido?'], [70, 'Chega de', 'X + Pressa'], [100, 'Conheça o.', 'digitado'], [128, 'Logo', 'anel + legenda'],
+  [156, 'Completa', 'anel de pontos'], [185, 'Cartela', 'Com muito sabor'], [225, 'Tile', 'Tudo em um só lugar'], [262, 'Pílulas 3D', 'Cafés/Bolos/Lanches'],
+  [330, 'Órbita', 'pílulas em volta'], [395, 'Tela dividida', 'Feito na hora / Carinho'], [440, 'Cartela', 'Cardápio completo'], [478, 'Disco', 'Fresquinho'],
+  [490, 'Glitch', 'folha'], [508, 'Órbitas 3D', 'Aconchego'], [570, 'Texto', 'Pausa do seu dia'], [595, 'Break', 'Tudo isso..'],
+  [640, 'Preço', 'R$ 3,00 + confete'], [705, 'Morph', '? → pílula'], [760, 'CTA', 'Peça pelo iFood'], [815, 'Logo', 'drop 2'], [900, 'Slogan', 'fade']];
+
+// ---------------- render de um quadro ----------------
+function render(t) {
+  const f = t * FPS;
+  SC.forEach(s => {
+    const lf = f - s.a, on = lf >= 0 && lf < s.d;
+    s.sec.style.visibility = on ? 'visible' : 'hidden';
+    if (!on) return;
+    s.fn(s, lf, s.d);
+    // deriva contínua do fundo em toda cena (regra 1: zero dead holds)
+    s.glows.forEach((g, i) => { g.style.transform = `translate(${Math.sin(f / 23 + i) * 70}px,${Math.cos(f / 29 + i) * 110}px) scale(${1 + .08 * Math.sin(f / 17)})`; });
+    s.grids.forEach(g => { if (!g.dataset.own) g.style.transform = `translate(${Math.sin(f / 40) * 20}px,${-(f * 1.2) % 90}px)`; });
+    if (s.blob) s.blob.style.transform = `translate(${CX + Math.sin(lf / 9) * 420}px,${CY + lerp(-H * .35, H * .35, lf / s.d)}px)`;
+  });
+  // flash/bloom
+  let best = null, amt = 0;
+  FLASH.forEach(([ff, x, y, a]) => { const k = a * Math.exp(-Math.abs(f - ff) / (f < ff ? 2 : 5)); if (k > amt) { amt = k; best = [x, y]; } });
+  if (amt > .02) { flash.style.opacity = amt; flash.style.background = `radial-gradient(circle at ${best[0]}px ${best[1]}px,rgba(255,240,255,1) 0%,rgba(214,110,228,.95) 22%,rgba(150,40,170,.6) 50%,rgba(60,10,70,0) 85%)`; }
+  else flash.style.opacity = 0;
+  beam.style.opacity = f < 12 ? 1 - f / 12 : 0;
+  beam.style.transform = `scaleX(${1 + f * .25})`;
+  vig.style.opacity = .85 + .15 * Math.sin(f / FPS * Math.PI * 2 / 8);
+  const fi = Math.round(f);
+  grain.style.transform = `translate(${Math.floor(hash(fi) * 240) - 120}px,${Math.floor(hash(fi + 77) * 240) - 120}px)`;
+}
+window.render = render;
+window.DURATION = DURATION_F / FPS;
+window.TIMELINE = { DURATION: DURATION_F / FPS, FPS, SFX, BOARD };
+
+if (!window.__RENDER__) {
+  const fit = () => { const s = Math.min(innerWidth / W, innerHeight / H); stage.style.transform = `scale(${s})`; stage.style.left = (innerWidth - W * s) / 2 + 'px'; };
+  addEventListener('resize', fit); fit();
+  if (QS.has('f')) document.fonts.ready.then(() => render(+QS.get('f') / FPS));
+  else { let t0 = null; const loop = now => { if (t0 === null) t0 = now; render(((now - t0) / 1000) % window.DURATION); requestAnimationFrame(loop); }; document.fonts.ready.then(() => requestAnimationFrame(loop)); }
+}
+</script>
+</body>
+</html>
