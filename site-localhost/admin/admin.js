@@ -56,7 +56,18 @@ document.addEventListener('DOMContentLoaded', function () {
     $('#estado-publicacao').textContent = m
       ? 'Há mudanças ainda não publicadas' + (n ? ' (' + n + ' ' + (n === 1 ? 'foto nova' : 'fotos novas') + ')' : '') + '.'
       : 'Tudo publicado. Nenhuma mudança pendente.';
-    $('#site-nome').textContent = dados.config.nome || 'do site';
+    $('#site-nome').textContent = dados.config.nome ? 'Painel de ' + dados.config.nome : 'Painel do site';
+    var a = dados.config.assinatura || {};
+    var partes = String(dados.config.nome || '').split(' ');
+    var txt = {
+      antes: a.antes || partes[0] || '',
+      iniciais: a.iniciais || partes.map(function (p) { return p.charAt(0); }).join('').slice(0, 2).toUpperCase(),
+      depois: a.depois || partes.slice(1).join(' ')
+    };
+    $$('[data-brand]').forEach(function (el) { el.textContent = txt[el.dataset.brand] || ''; });
+    renderDashboard();
+    renderRelatorios();
+    renderAlto();
   }
 
   var toastT = null;
@@ -65,14 +76,81 @@ document.addEventListener('DOMContentLoaded', function () {
     clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('on'); }, 2200);
   }
 
-  /* ---------- abas ---------- */
+  /* ---------- entrada: só o nome ---------- */
 
-  $$('.tabs [data-tab]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      $$('.tabs [data-tab]').forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
-      $$('.tab-panel').forEach(function (p) { p.hidden = p.id !== 'tab-' + b.dataset.tab; });
-    });
+  var CHAVE_NOME = 'admin:nome';
+  function lerNome() { try { return (localStorage.getItem(CHAVE_NOME) || '').trim(); } catch (e) { return ''; } }
+  function entrar() {
+    var nome = lerNome();
+    $('#gate').hidden = !!nome;
+    $('#app').hidden = !nome;
+    if (!nome) { setTimeout(function () { $('#gate-nome').focus(); }, 30); return; }
+    $('#ola').textContent = 'Olá, ' + nome;
+    $('#avatar').textContent = nome.charAt(0).toUpperCase();
+  }
+  $('#gate-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var nome = $('#gate-nome').value.trim();
+    if (!nome) return;
+    try { localStorage.setItem(CHAVE_NOME, nome); } catch (er) { /* sem armazenamento */ }
+    entrar();
+    abrirAba(location.hash.slice(1) || 'dashboard');
   });
+  $('#btn-sair').addEventListener('click', function () {
+    try { localStorage.removeItem(CHAVE_NOME); } catch (e) { /* ok */ }
+    $('#gate-nome').value = '';
+    entrar();
+  });
+
+  /* ---------- tema claro / escuro ---------- */
+
+  var CHAVE_TEMA = 'admin:tema';
+  function aplicarTema(t) {
+    document.documentElement.dataset.theme = t;
+    var claro = t === 'light';
+    $('#btn-tema use').setAttribute('href', claro ? '#a-moon' : '#a-sun');
+    $('#btn-tema').setAttribute('aria-label', claro ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+  }
+  try { aplicarTema(localStorage.getItem(CHAVE_TEMA) || 'dark'); } catch (e) { aplicarTema('dark'); }
+  $('#btn-tema').addEventListener('click', function () {
+    var t = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+    aplicarTema(t);
+    try { localStorage.setItem(CHAVE_TEMA, t); } catch (e) { /* ok */ }
+  });
+
+  /* ---------- navegação lateral ---------- */
+
+  var side = $('#side');
+  var sideScrim = $('#side-scrim');
+  var menuBtn = $('#menu-btn');
+  function fecharLateral() {
+    side.classList.remove('is-open');
+    sideScrim.hidden = true;
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }
+  function abrirAba(nome) {
+    if (!$('#tab-' + nome)) nome = 'dashboard';
+    $$('.side-nav [data-tab]').forEach(function (b) {
+      if (b.dataset.tab === nome) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    $$('.tab-panel').forEach(function (p) { p.hidden = p.id !== 'tab-' + nome; });
+    try { history.replaceState(null, '', '#' + nome); } catch (e) { /* file:// */ }
+    fecharLateral();
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-tab]');
+    if (b) { e.preventDefault(); abrirAba(b.dataset.tab); }
+  });
+  menuBtn.addEventListener('click', function () {
+    side.classList.add('is-open');
+    sideScrim.hidden = false;
+    menuBtn.setAttribute('aria-expanded', 'true');
+    var atual = $('.side-nav [aria-current="page"]');
+    if (atual) atual.focus();
+  });
+  sideScrim.addEventListener('click', fecharLateral);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && side.classList.contains('is-open')) fecharLateral(); });
 
   /* ---------- fotos ---------- */
 
@@ -497,12 +575,166 @@ document.addEventListener('DOMContentLoaded', function () {
     }).then(function () { btn.disabled = false; });
   });
 
+  /* ---------- dashboard ---------- */
+
+  var BRL_CURTO = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', notation: 'compact', maximumFractionDigits: 1 });
+  function semAcento(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim(); }
+  function semCidade(im) { return !im.cidade || semAcento(im.cidade) === 'a definir'; }
+  function disponivel(im) { return !im.status || im.status === 'disponivel'; }
+  function nomesDe(lista) {
+    var n = lista.map(function (im) { return im.titulo || '(sem título)'; });
+    return n.length > 3 ? n.slice(0, 3).join(', ') + ' e mais ' + (n.length - 3) : n.join(', ');
+  }
+  function checklist() {
+    var c = dados.config;
+    var sc = dados.imoveis.filter(semCidade);
+    var sf = dados.imoveis.filter(function (im) { return !(im.fotos || []).length; });
+    var falta = [];
+    if (!c.email) falta.push('e-mail');
+    if (!c.telefone) falta.push('telefone');
+    var nAv = dados.avaliacoes.length;
+    return [
+      { id: 'cidade', feito: !sc.length, titulo: 'Colocar a cidade dos imóveis',
+        texto: sc.length ? nomesDe(sc) + ': a cidade está vazia ou como “A definir” e por isso não aparece no site. Abra o imóvel, troque a cidade e salve.' : 'Todos os imóveis têm cidade.' },
+      { id: 'whatsapp', feito: !!c.whatsapp, titulo: 'Colocar o WhatsApp do corretor',
+        texto: c.whatsapp ? 'Os botões “WhatsApp” do site mandam as mensagens para ' + c.whatsapp + '.' : 'Os botões “WhatsApp” do site mandam as mensagens para este número.' },
+      { id: 'contato', feito: !falta.length, titulo: 'Preencher e-mail e telefone',
+        texto: falta.length ? 'Falta ' + falta.join(' e ') + '. Aparecem na cena Contato do site e no rodapé do menu.' : 'Aparecem na cena Contato do site e no rodapé do menu.' },
+      { id: 'fotos', feito: !sf.length, titulo: 'Colocar fotos em todos os imóveis',
+        texto: sf.length ? nomesDe(sf) + ' ainda sem foto: o site mostra uma casinha no lugar.' : 'Todos os imóveis têm foto.' },
+      { id: 'avaliacoes', feito: nAv >= 3, titulo: 'Ter pelo menos 3 avaliações de clientes',
+        texto: 'A cena Avaliações mostra a nota média e os depoimentos. Hoje ' + (nAv === 1 ? 'há 1 avaliação.' : 'há ' + nAv + ' avaliações.') }
+    ];
+  }
+  function stat(ic, rotulo, valor, extra) {
+    return '<li class="stat"><span class="stat-ic"><svg class="ic" aria-hidden="true"><use href="#a-' + ic + '"/></svg></span>' +
+      '<p>' + esc(rotulo) + '</p><strong>' + esc(valor) + '</strong>' + (extra ? '<small>' + esc(extra) + '</small>' : '') + '</li>';
+  }
+  function renderDashboard() {
+    var clientes = dados.clientes || [];
+    var semana = Date.now() - 7 * 864e5;
+    var novos = clientes.filter(function (c) { return c.criadoEm && Date.parse(c.criadoEm) >= semana; }).length;
+    $('#faixa-clientes').innerHTML = clientes.length
+      ? '<strong>' + clientes.length + (clientes.length === 1 ? ' cliente cadastrado' : ' clientes cadastrados') + '</strong> · ' + novos + (novos === 1 ? ' entrou' : ' entraram') + ' nos últimos 7 dias'
+      : '<strong>Nenhum cliente cadastrado</strong> · as contas de clientes ainda não estão ativas no site';
+    var im = dados.imoveis;
+    $('#stats').innerHTML =
+      stat('home', 'Total de imóveis', im.length) +
+      stat('check', 'Disponíveis', im.filter(disponivel).length) +
+      stat('home', 'Vendidos', im.filter(function (x) { return x.status === 'vendido'; }).length) +
+      stat('home', 'Alugados', im.filter(function (x) { return x.status === 'alugado'; }).length) +
+      stat('star', 'Alto padrão', im.filter(function (x) { return x.destaque; }).length);
+    var itens = checklist();
+    var feitos = itens.filter(function (i) { return i.feito; }).length;
+    $('#check-total').textContent = feitos + ' de ' + itens.length + ' feitos';
+    $('#checklist').innerHTML = itens.map(function (i) {
+      return '<li class="check-item' + (i.feito ? ' is-done' : '') + '">' +
+        '<span class="check-ic"><svg class="ic" aria-hidden="true"><use href="#a-' + (i.feito ? 'check' : 'alert') + '"/></svg></span>' +
+        '<div class="check-text"><strong>' + esc(i.titulo) + '</strong><span>' + esc(i.texto) + '</span></div>' +
+        (i.feito ? '' : '<button type="button" class="btn btn-ghost" data-resolver="' + i.id + '">Resolver</button>') + '</li>';
+    }).join('');
+  }
+  $('#checklist').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-resolver]');
+    if (!b) return;
+    var id = b.dataset.resolver;
+    var foco = function (nome) { setTimeout(function () { var el = fCfg[nome]; el.focus(); el.scrollIntoView({ block: 'center' }); }, 60); };
+    if (id === 'cidade' || id === 'fotos') {
+      abrirAba('imoveis');
+      var alvo = dados.imoveis.findIndex(id === 'cidade' ? semCidade : function (im) { return !(im.fotos || []).length; });
+      if (alvo >= 0) {
+        abrirImovel(alvo);
+        if (id === 'cidade') setTimeout(function () { fIm.cidade.focus(); fIm.cidade.select(); }, 60);
+      }
+    } else if (id === 'whatsapp') { abrirAba('config'); foco('whatsapp'); }
+    else if (id === 'contato') { abrirAba('config'); foco(dados.config.email ? 'telefone' : 'email'); }
+    else if (id === 'avaliacoes') { abrirAba('avaliacoes'); abrirAvaliacao(-1); }
+  });
+
+  /* ---------- relatórios ---------- */
+
+  function barras(titulo, contagem) {
+    var chaves = Object.keys(contagem).sort(function (a, b) { return contagem[b] - contagem[a]; });
+    var max = Math.max.apply(null, chaves.map(function (k) { return contagem[k]; }).concat([1]));
+    return '<div class="card"><h2>' + esc(titulo) + '</h2><ul class="barras">' + (chaves.length ? chaves.map(function (k) {
+      return '<li><div class="barra-top"><span>' + esc(k) + '</span><b>' + contagem[k] + '</b></div><div class="barra"><i style="width:' + (contagem[k] / max * 100).toFixed(1) + '%"></i></div></li>';
+    }).join('') : '<li class="muted">Sem dados.</li>') + '</ul></div>';
+  }
+  function contar(lista, fn) {
+    return lista.reduce(function (acc, x) { var k = fn(x); if (k) acc[k] = (acc[k] || 0) + 1; return acc; }, {});
+  }
+  function renderRelatorios() {
+    var im = dados.imoveis;
+    var venda = im.filter(function (x) { return x.finalidade !== 'aluguel' && disponivel(x) && x.preco; });
+    var aluguel = im.filter(function (x) { return x.finalidade === 'aluguel' && disponivel(x) && x.preco; });
+    var soma = function (l) { return l.reduce(function (s, x) { return s + Number(x.preco); }, 0); };
+    var av = dados.avaliacoes;
+    var media = av.length ? av.reduce(function (s, a) { return s + Number(a.nota || 0); }, 0) / av.length : 0;
+    $('#rel-numeros').innerHTML =
+      stat('chart', 'Valor à venda', venda.length ? BRL_CURTO.format(soma(venda)) : '—', venda.length + (venda.length === 1 ? ' imóvel disponível' : ' imóveis disponíveis')) +
+      stat('home', 'Preço médio de venda', venda.length ? BRL_CURTO.format(soma(venda) / venda.length) : '—') +
+      stat('home', 'Aluguel por mês', aluguel.length ? BRL_CURTO.format(soma(aluguel)) : '—', aluguel.length + (aluguel.length === 1 ? ' imóvel para alugar' : ' imóveis para alugar')) +
+      stat('star', 'Nota média', av.length ? media.toFixed(1).replace('.', ',') : '—', av.length + (av.length === 1 ? ' avaliação' : ' avaliações'));
+    $('#rel-barras').innerHTML =
+      barras('Por tipo', contar(im, function (x) { return TIPO[x.tipo] || 'Outros'; })) +
+      barras('Por cidade', contar(im, function (x) { return semCidade(x) ? 'Sem cidade' : x.cidade; })) +
+      barras('Por situação', contar(im, function (x) { return (x.finalidade === 'aluguel' ? 'Aluguel' : 'Venda') + ' · ' + (STATUS[x.status] || 'Disponível'); }));
+  }
+
+  /* ---------- contatos e clientes ---------- */
+
+  function renderPessoas(lista, ul, resumo, vazioTitulo, vazioTexto, linha) {
+    resumo.textContent = lista.length ? lista.length + (lista.length === 1 ? ' registro' : ' registros') : 'Nenhum registro ainda.';
+    ul.innerHTML = lista.length ? lista.slice().reverse().map(linha).join('') :
+      '<li class="vazio"><strong>' + esc(vazioTitulo) + '</strong>' + esc(vazioTexto) + '</li>';
+  }
+  function renderContatos() {
+    renderPessoas(dados.contatos || [], $('#lista-contatos'), $('#resumo-contatos'),
+      'Nenhum contato por aqui ainda',
+      'As mensagens do formulário do site vão aparecer nesta lista quando o envio for ligado a um banco de dados (por exemplo, o Supabase). Por enquanto, quem envia vê a tela de obrigado e o botão do WhatsApp.',
+      function (c) {
+        return '<li class="item"><div class="item-texto"><strong>' + esc(c.nome) + '</strong><span>' + esc([c.email, c.telefone].filter(Boolean).join(' · ')) + '</span><span>' + esc(c.mensagem || '') + '</span></div>' +
+          (c.data ? '<span class="muted">' + esc(new Date(c.data).toLocaleDateString('pt-BR')) + '</span>' : '') + '</li>';
+      });
+  }
+  function renderClientes() {
+    renderPessoas(dados.clientes || [], $('#lista-clientes'), $('#resumo-clientes'),
+      'As contas de clientes ainda não estão ativas',
+      'No site, a aba “Conta” mostra “Em breve você poderá criar sua conta”. Quando o cadastro for ligado a um banco de dados, os clientes aparecem aqui com a data de entrada.',
+      function (c) {
+        return '<li class="item"><span class="avatar">' + esc(String(c.nome || '?').charAt(0).toUpperCase()) + '</span><div class="item-texto"><strong>' + esc(c.nome) + '</strong><span>' + esc(c.email || '') + '</span></div>' +
+          (c.criadoEm ? '<span class="muted">desde ' + esc(new Date(c.criadoEm).toLocaleDateString('pt-BR')) + '</span>' : '') + '</li>';
+      });
+  }
+
+  /* ---------- alto padrão ---------- */
+
+  function renderAlto() {
+    var ul = $('#lista-alto');
+    ul.innerHTML = dados.imoveis.length ? dados.imoveis.map(function (im, i) {
+      var foto = im.fotos && im.fotos[0];
+      return '<li class="item">' + (foto ? '<img class="item-foto" src="' + esc(srcFoto(foto, true)) + '" alt="">' : '<span class="item-foto"></span>') +
+        '<div class="item-texto"><strong>' + esc(im.titulo) + '</strong><span>' + esc([im.bairro, im.cidade].filter(Boolean).join(' · ')) + '</span></div>' +
+        '<button type="button" class="switch" role="switch" aria-checked="' + String(!!im.destaque) + '" data-alto="' + i + '" aria-label="Alto padrão: ' + esc(im.titulo) + '"></button></li>';
+    }).join('') : '<li class="vazio">Cadastre imóveis para escolher os de alto padrão.</li>';
+  }
+  $('#lista-alto').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-alto]');
+    if (!b) return;
+    var im = dados.imoveis[Number(b.dataset.alto)];
+    im.destaque = !im.destaque;
+    renderAlto(); renderImoveis(); mudou();
+    toast(im.destaque ? 'Marcado como alto padrão' : 'Tirado do alto padrão');
+  });
+
   /* ---------- início ---------- */
 
-  function renderTudo() { renderImoveis(); renderAvaliacoes(); renderConfig(); }
+  function renderTudo() { renderImoveis(); renderAvaliacoes(); renderConfig(); renderContatos(); renderClientes(); renderAlto(); renderDashboard(); renderRelatorios(); }
   window.addEventListener('beforeunload', function (e) {
     if (Object.keys(pendentes).length) { e.preventDefault(); e.returnValue = ''; }
   });
+  entrar();
   renderTudo();
   estado();
+  abrirAba(location.hash.slice(1) || 'dashboard');
 });

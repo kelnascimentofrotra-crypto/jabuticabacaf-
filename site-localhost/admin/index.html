@@ -11,25 +11,95 @@
   <script src="admin.js" defer></script>
 </head>
 <body>
-  <header class="top">
-    <div class="top-brand"><strong>Painel</strong><span id="site-nome">do site</span></div>
-    <nav class="tabs" role="tablist" aria-label="Seções do painel">
-      <button type="button" role="tab" data-tab="imoveis" aria-selected="true">Imóveis</button>
-      <button type="button" role="tab" data-tab="avaliacoes" aria-selected="false">Avaliações</button>
-      <button type="button" role="tab" data-tab="config" aria-selected="false">Configurações</button>
-      <button type="button" role="tab" data-tab="publicar" aria-selected="false">Publicar <span class="dot" id="dot-mudou" hidden></span></button>
-    </nav>
-    <div class="top-actions">
-      <a class="btn btn-ghost" href="../index.html" target="_blank" rel="noopener">Ver site</a>
-      <button type="button" class="btn btn-ghost" id="btn-previa">Pré-visualizar</button>
-    </div>
-  </header>
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="a-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="4.5" rx="1.5"/><rect x="13.5" y="10.5" width="7.5" height="10.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/></symbol>
+    <symbol id="a-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/></symbol>
+    <symbol id="a-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9.5 21v-6.5h5V21"/></symbol>
+    <symbol id="a-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="15" rx="2.5"/><path d="m3 7 9 6 9-6"/></symbol>
+    <symbol id="a-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18.5 14a6.5 6.5 0 0 1 3 6"/></symbol>
+    <symbol id="a-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H8l-4 4z"/></symbol>
+    <symbol id="a-star" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+    <symbol id="a-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+    <symbol id="a-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4"/></symbol>
+    <symbol id="a-external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6"/><path d="M20 4 10 14"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+    <symbol id="a-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="a-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></symbol>
+    <symbol id="a-logout" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h5"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></symbol>
+    <symbol id="a-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 2.4 17.5A2 2 0 0 0 4.1 20.5h15.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+    <symbol id="a-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+    <symbol id="a-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="a-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="a-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+  </svg>
 
-  <p class="aviso" id="aviso-rascunho" hidden></p>
+  <!-- Entrada: só o nome -->
+  <div class="gate" id="gate" hidden>
+    <form class="gate-box" id="gate-form" autocomplete="off">
+      <div class="gate-brand"><span class="brand"><span class="brand-s" data-brand="antes">Nathan</span><span class="brand-tl" data-brand="iniciais">NF</span><span class="brand-s" data-brand="depois">Ferreira</span></span></div>
+      <h1>Como podemos te chamar?</h1>
+      <p class="muted">Só pra deixar o painel com a sua cara. Nada sai daqui.</p>
+      <label class="sr-only" for="gate-nome">Seu nome</label>
+      <input id="gate-nome" name="nome" placeholder="Seu nome" maxlength="40" required autocomplete="given-name">
+      <button type="submit" class="btn btn-gold">Continuar <svg class="ic" aria-hidden="true"><use href="#a-chevron"/></svg></button>
+    </form>
+  </div>
 
-  <main>
-    <!-- Imóveis -->
-    <section class="tab-panel" id="tab-imoveis" role="tabpanel">
+  <div class="app" id="app" hidden>
+    <aside class="side" id="side">
+      <a class="side-brand" href="#dashboard" data-tab="dashboard" aria-label="Dashboard"><span class="brand"><span class="brand-s" data-brand="antes">Nathan</span><span class="brand-tl" data-brand="iniciais">NF</span><span class="brand-s" data-brand="depois">Ferreira</span></span></a>
+      <nav class="side-nav" aria-label="Seções do painel">
+        <button type="button" class="side-item" data-tab="dashboard"><svg class="ic" aria-hidden="true"><use href="#a-grid"/></svg>Dashboard</button>
+        <button type="button" class="side-item" data-tab="relatorios"><svg class="ic" aria-hidden="true"><use href="#a-chart"/></svg>Relatórios</button>
+        <button type="button" class="side-item" data-tab="imoveis"><svg class="ic" aria-hidden="true"><use href="#a-home"/></svg>Imóveis</button>
+        <button type="button" class="side-item" data-tab="contatos"><svg class="ic" aria-hidden="true"><use href="#a-mail"/></svg>Contatos</button>
+        <button type="button" class="side-item" data-tab="clientes"><svg class="ic" aria-hidden="true"><use href="#a-users"/></svg>Clientes</button>
+        <button type="button" class="side-item" data-tab="avaliacoes"><svg class="ic" aria-hidden="true"><use href="#a-chat"/></svg>Avaliações</button>
+        <button type="button" class="side-item" data-tab="alto"><svg class="ic" aria-hidden="true"><use href="#a-star"/></svg>Alto padrão</button>
+        <button type="button" class="side-item" data-tab="config"><svg class="ic" aria-hidden="true"><use href="#a-gear"/></svg>Configurações</button>
+        <button type="button" class="side-item" data-tab="publicar"><svg class="ic" aria-hidden="true"><use href="#a-upload"/></svg>Publicar <span class="dot" id="dot-mudou" hidden aria-label="mudanças não publicadas"></span></button>
+      </nav>
+      <a class="side-item side-link" href="../index.html" target="_blank" rel="noopener"><svg class="ic" aria-hidden="true"><use href="#a-external"/></svg>Ver o site</a>
+    </aside>
+    <div class="side-scrim" id="side-scrim" hidden></div>
+
+    <div class="main-col">
+      <header class="top">
+        <button type="button" class="round menu-btn" id="menu-btn" aria-label="Abrir menu" aria-controls="side" aria-expanded="false"><svg class="ic" aria-hidden="true"><use href="#a-menu"/></svg></button>
+        <span class="grow"></span>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-previa"><svg class="ic" aria-hidden="true"><use href="#a-eye"/></svg>Pré-visualizar</button>
+        <button type="button" class="round" id="btn-tema" aria-label="Mudar para o tema claro"><svg class="ic" aria-hidden="true"><use href="#a-sun"/></svg></button>
+        <div class="user">
+          <span class="avatar" id="avatar" aria-hidden="true">?</span>
+          <div class="user-text"><strong id="ola">Olá</strong><span id="site-nome">Painel do site</span></div>
+        </div>
+        <button type="button" class="sair" id="btn-sair"><svg class="ic" aria-hidden="true"><use href="#a-logout"/></svg>Sair</button>
+      </header>
+
+      <p class="aviso" id="aviso-rascunho" hidden></p>
+
+      <main>
+    <!-- Dashboard -->
+    <section class="tab-panel" id="tab-dashboard" role="region" aria-label="Dashboard">
+      <button type="button" class="faixa" data-tab="clientes">
+        <svg class="ic" aria-hidden="true"><use href="#a-users"/></svg>
+        <span id="faixa-clientes"></span>
+        <span class="faixa-link">Ver clientes <svg class="ic" aria-hidden="true"><use href="#a-chevron"/></svg></span>
+      </button>
+      <ul class="stats" id="stats"></ul>
+      <div class="card checklist">
+        <div class="card-head"><h2>Para o site ficar completo</h2><span class="muted" id="check-total"></span></div>
+        <ul id="checklist"></ul>
+      </div>
+    </section>
+
+    <!-- Relatórios -->
+    <section class="tab-panel" id="tab-relatorios" role="region" aria-label="Relatórios" hidden>
+      <div class="panel-head"><div><h1>Relatórios</h1><p class="muted">Calculado a partir dos imóveis e avaliações cadastrados.</p></div></div>
+      <ul class="stats stats--4" id="rel-numeros"></ul>
+      <div class="cards-3" id="rel-barras"></div>
+    </section>
+
+    <section class="tab-panel" id="tab-imoveis" role="region" aria-label="Imóveis" hidden>
       <div class="panel-head">
         <div>
           <h1>Imóveis</h1>
@@ -40,8 +110,20 @@
       <ul class="lista" id="lista-imoveis"></ul>
     </section>
 
-    <!-- Avaliações -->
-    <section class="tab-panel" id="tab-avaliacoes" role="tabpanel" hidden>
+
+    <!-- Contatos -->
+    <section class="tab-panel" id="tab-contatos" role="region" aria-label="Contatos" hidden>
+      <div class="panel-head"><div><h1>Contatos</h1><p class="muted" id="resumo-contatos"></p></div></div>
+      <ul class="lista" id="lista-contatos"></ul>
+    </section>
+
+    <!-- Clientes -->
+    <section class="tab-panel" id="tab-clientes" role="region" aria-label="Clientes" hidden>
+      <div class="panel-head"><div><h1>Clientes</h1><p class="muted" id="resumo-clientes"></p></div></div>
+      <ul class="lista" id="lista-clientes"></ul>
+    </section>
+
+    <section class="tab-panel" id="tab-avaliacoes" role="region" aria-label="Avaliações" hidden>
       <div class="panel-head">
         <div>
           <h1>Avaliações</h1>
@@ -52,8 +134,14 @@
       <ul class="lista" id="lista-avaliacoes"></ul>
     </section>
 
-    <!-- Configurações -->
-    <section class="tab-panel" id="tab-config" role="tabpanel" hidden>
+
+    <!-- Alto padrão -->
+    <section class="tab-panel" id="tab-alto" role="region" aria-label="Alto padrão" hidden>
+      <div class="panel-head"><div><h1>Alto padrão</h1><p class="muted">Os marcados aparecem no banner da cena “Alto padrão”. O primeiro da lista de imóveis é o destaque da abertura.</p></div></div>
+      <ul class="lista" id="lista-alto"></ul>
+    </section>
+
+    <section class="tab-panel" id="tab-config" role="region" aria-label="Configurações" hidden>
       <div class="panel-head"><div><h1>Configurações</h1><p class="muted">Campos vazios somem do site.</p></div></div>
       <form class="grid card" id="form-config" autocomplete="off">
         <label>Nome<input name="nome"></label>
@@ -73,8 +161,7 @@
       </form>
     </section>
 
-    <!-- Publicar -->
-    <section class="tab-panel" id="tab-publicar" role="tabpanel" hidden>
+    <section class="tab-panel" id="tab-publicar" role="region" aria-label="Publicar" hidden>
       <div class="panel-head"><div><h1>Publicar</h1><p class="muted" id="estado-publicacao"></p></div></div>
 
       <div class="cards-2">
@@ -102,7 +189,9 @@
         </div>
       </div>
     </section>
-  </main>
+      </main>
+    </div>
+  </div>
 
   <!-- Editor de imóvel -->
   <dialog class="editor" id="editor-imovel" aria-labelledby="ed-titulo">
