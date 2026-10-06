@@ -1,11 +1,13 @@
-"""Monta a trilha do motion: narração + efeitos sonoros + trilha lo-fi, tudo sintetizado aqui.
+"""Monta o áudio do motion: narração (opcional) + efeitos sonoros + trilha.
 
     python3 build_audio.py            -> mix.wav (48 kHz, estéreo, -14 LUFS)
+    python3 build_audio.py --sem-voz  -> mix-sem-voz.wav (só efeitos + trilha)
 
-Lê timeline.json (exportado do motion.html com `node render.cjs --timeline audio/timeline.json`)
-e as falas em vo/*.wav (geradas por make_vo.sh). Requer numpy, scipy, soundfile e pyloudnorm.
+Lê timeline.json (exportado do motion.html com `node render.cjs --timeline audio/timeline.json`),
+as falas em vo/*.wav (make_vo.sh) e a trilha.flac (compose_music.py; sem ela, usa a lo-fi sintetizada). Requer numpy, scipy, soundfile e pyloudnorm.
 """
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -336,6 +338,19 @@ FINAL = ([54, 57, 61, 64, 69, 74], 38)  # Dmaj9
 
 
 def build_music():
+    """Usa a bossa nova de compose_music.py (trilha.flac) se existir; senão, a trilha lo-fi sintetizada."""
+    path = HERE / 'trilha.flac'
+    if path.exists():
+        x, sr = sf.read(path)
+        x = (resample_poly(x, SR, sr, axis=0) if sr != SR else x).T
+        x = np.pad(x, ((0, 0), (0, max(0, N - x.shape[1]))))[:, :N]
+        fade = int(1.0 * SR)
+        x[:, -fade:] *= np.linspace(1, 0, fade) ** 2
+        return x
+    return build_lofi()
+
+
+def build_lofi():
     m = TL['MUSIC']
     beat = 60 / m['bpm']
     bar = beat * 4
@@ -448,18 +463,25 @@ def limiter(x, ceiling_db=-1.5):
 
 
 def main():
-    vo, active = build_vo()
+    com_voz = '--sem-voz' not in sys.argv
     sfx = build_sfx()
     music = build_music()
-    vo = set_lufs(vo, -16)
-    music = set_lufs(music, -24)
-    duck = 1 - .58 * np.clip(onepole(onepole(active, .06), .12), 0, 1)   # ~ -7.5 dB sob a voz
-    music = music * duck
+    if com_voz:
+        vo, active = build_vo()
+        vo = set_lufs(vo, -16)
+        music = set_lufs(music, -24)
+        duck = 1 - .58 * np.clip(onepole(onepole(active, .06), .12), 0, 1)   # ~ -7.5 dB sob a voz
+        music = music * duck
+    else:                                    # sem narração: a trilha vira o protagonista
+        vo = np.zeros_like(music)
+        music = set_lufs(music, -18)
     mix = vo + sfx + music
     mix = set_lufs(mix, -14)
     mix = limiter(mix, -1.5)
-    sf.write(HERE / 'mix.wav', mix.T, SR, subtype='PCM_24')
-    for name, x in [('voz', vo), ('efeitos', sfx), ('trilha', music), ('mix', mix)]:
+    out = 'mix.wav' if com_voz else 'mix-sem-voz.wav'
+    sf.write(HERE / out, mix.T, SR, subtype='PCM_24')
+    print('->', out)
+    for name, x in [('voz', vo), ('efeitos', sfx), ('trilha', music), ('mix', mix)][(0 if com_voz else 1):]:
         print(f'{name:8s} {lufs(x):6.1f} LUFS   pico {20 * np.log10(np.max(np.abs(x)) + 1e-9):6.1f} dBFS')
     np.savez_compressed(HERE / '.stems.npz', vo=vo.astype(np.float32), sfx=sfx.astype(np.float32), music=music.astype(np.float32))
 
