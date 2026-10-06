@@ -157,23 +157,26 @@ label.check input { width: 20px; min-height: 20px; height: 20px; accent-color: v
 
 /* dashboard */
 .faixa {
-  display: flex; align-items: center; gap: 14px; width: 100%;
-  margin-bottom: 18px; padding: 20px 28px;
-  border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
-  font-size: 18px; text-align: left; cursor: pointer;
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  margin-bottom: 14px; padding: 13px 18px;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+  font-size: 15px; text-align: left; cursor: pointer;
 }
 .faixa:hover { border-color: var(--line-strong); }
-.faixa > .ic { width: 24px; height: 24px; color: var(--muted); }
+.faixa > .ic { width: 20px; height: 20px; color: var(--muted); }
 .faixa span:first-of-type { flex: 1; }
 .faixa-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; white-space: nowrap; }
-.stats { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; margin: 0 0 22px; padding: 0; list-style: none; }
-.stats--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.stat { padding: 26px 26px 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); }
-.stat-ic { display: grid; place-items: center; width: 50px; height: 50px; margin-bottom: 26px; border-radius: 12px; background: var(--panel-2); }
-.stat-ic .ic { width: 22px; height: 22px; }
-.stat p { color: var(--muted); font-size: 17px; }
-.stat strong { display: block; font-size: 46px; font-weight: 500; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-.stat small { display: block; color: var(--muted); font-size: 13px; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0 0 16px; padding: 0; list-style: none; }
+.stats--4 { grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.stat {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 12px;
+  padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel);
+}
+.stat-ic { grid-row: span 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: var(--panel-2); }
+.stat-ic .ic { width: 18px; height: 18px; }
+.stat p { color: var(--muted); font-size: 13px; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat strong { display: block; font-size: 26px; font-weight: 600; line-height: 1.15; letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stat small { grid-column: 2; display: block; color: var(--muted); font-size: 12px; }
 .checklist ul { margin: 6px 0 0; padding: 0; list-style: none; }
 .check-item { display: flex; align-items: center; gap: 18px; padding: 20px 0; border-bottom: 1px solid var(--line); }
 .check-item:last-child { border-bottom: 0; }
@@ -247,7 +250,6 @@ label.check input { width: 20px; min-height: 20px; height: 20px; accent-color: v
 
 /* telas médias */
 @media (max-width: 1280px) {
-  .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cards-3 { grid-template-columns: 1fr 1fr; }
 }
 /* celular e tablet: menu lateral vira gaveta */
@@ -262,11 +264,11 @@ label.check input { width: 20px; min-height: 20px; height: 20px; accent-color: v
   .round, .avatar { width: 42px; height: 42px; }
   .aviso { margin: 14px 16px 0; }
   main { padding: 18px 16px 40px; }
-  .stats, .stats--4 { grid-template-columns: 1fr 1fr; gap: 12px; }
-  .stat { padding: 18px; }
-  .stat-ic { margin-bottom: 14px; }
-  .stat strong { font-size: 36px; }
-  .faixa { flex-wrap: wrap; padding: 16px 18px; font-size: 16px; }
+  .stats, .stats--4 { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat { padding: 12px; column-gap: 10px; }
+  .stat-ic { width: 34px; height: 34px; }
+  .stat strong { font-size: 22px; }
+  .faixa { flex-wrap: wrap; padding: 12px 14px; font-size: 14px; }
   .card { padding: 20px 18px; }
   .check-item { flex-wrap: wrap; gap: 12px; }
   .check-text { flex-basis: calc(100% - 60px); }
