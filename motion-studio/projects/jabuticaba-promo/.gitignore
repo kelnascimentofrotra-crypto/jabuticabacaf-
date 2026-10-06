@@ -3,3 +3,6 @@ out/check*.json
 out/video*.mp4
 audio/.raw.wav
 audio/kokoro/kokoro-q8.onnx
+audio/elevenlabs/narracao.wav
+audio/elevenlabs/__pycache__/
+audio/__pycache__/

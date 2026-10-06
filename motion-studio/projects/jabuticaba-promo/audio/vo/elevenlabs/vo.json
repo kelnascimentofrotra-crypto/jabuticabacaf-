@@ -1,0 +1,50 @@
+[
+ {
+  "path": "audio/vo/elevenlabs/00.wav",
+  "frame": 6.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/01.wav",
+  "frame": 54.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/02.wav",
+  "frame": 92.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/03.wav",
+  "frame": 146.6
+ },
+ {
+  "path": "audio/vo/elevenlabs/04.wav",
+  "frame": 269.5
+ },
+ {
+  "path": "audio/vo/elevenlabs/05.wav",
+  "frame": 350.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/06.wav",
+  "frame": 435.4
+ },
+ {
+  "path": "audio/vo/elevenlabs/07.wav",
+  "frame": 521.7
+ },
+ {
+  "path": "audio/vo/elevenlabs/08.wav",
+  "frame": 584.6
+ },
+ {
+  "path": "audio/vo/elevenlabs/09.wav",
+  "frame": 612.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/10.wav",
+  "frame": 700.0
+ },
+ {
+  "path": "audio/vo/elevenlabs/11.wav",
+  "frame": 850.0
+ }
+]
