@@ -48,4 +48,14 @@ python3 engine/sfx.py projects/site-promo                            # out/mix.w
 node tools/render.cjs projects/site-promo full --workers 4 --audio projects/site-promo/out/mix.wav
 ```
 
+## Projeto `webvee-promo` (WEBVEE Leads: IA na captação de clientes)
+
+Vertical, 62 s, com a copy inteira em texto cinético e a paleta do app (roxo `#7530F2`, fonte Plus Jakarta Sans). O ponto roxo é a IA: conecta os leads, varre o radar, desenha o ∞, leva a chave de API e abre cada recurso. O logo W foi redesenhado em SVG a partir do print do app (troque pela arte oficial em `LOGO()` se tiver o arquivo).
+
+```bash
+python3 projects/webvee-promo/audio/compose_music.py               # eletrônica escura em ré menor, 120 BPM
+node tools/render.cjs projects/webvee-promo timeline && python3 engine/sfx.py projects/webvee-promo
+node tools/render.cjs projects/webvee-promo full --workers 4 --audio projects/webvee-promo/out/mix.wav
+```
+
 Requer Playwright (Chromium), ffmpeg e Python com `numpy scipy soundfile pyloudnorm pillow mido`.
