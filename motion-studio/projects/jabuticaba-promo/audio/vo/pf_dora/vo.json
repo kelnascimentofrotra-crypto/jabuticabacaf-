@@ -1,0 +1,50 @@
+[
+ {
+  "path": "audio/vo/pf_dora/00.wav",
+  "frame": 6
+ },
+ {
+  "path": "audio/vo/pf_dora/01.wav",
+  "frame": 54
+ },
+ {
+  "path": "audio/vo/pf_dora/02.wav",
+  "frame": 91
+ },
+ {
+  "path": "audio/vo/pf_dora/03.wav",
+  "frame": 146
+ },
+ {
+  "path": "audio/vo/pf_dora/04.wav",
+  "frame": 250
+ },
+ {
+  "path": "audio/vo/pf_dora/05.wav",
+  "frame": 350
+ },
+ {
+  "path": "audio/vo/pf_dora/06.wav",
+  "frame": 426
+ },
+ {
+  "path": "audio/vo/pf_dora/07.wav",
+  "frame": 512
+ },
+ {
+  "path": "audio/vo/pf_dora/08.wav",
+  "frame": 584
+ },
+ {
+  "path": "audio/vo/pf_dora/09.wav",
+  "frame": 612
+ },
+ {
+  "path": "audio/vo/pf_dora/10.wav",
+  "frame": 700
+ },
+ {
+  "path": "audio/vo/pf_dora/11.wav",
+  "frame": 850
+ }
+]

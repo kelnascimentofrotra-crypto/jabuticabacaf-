@@ -26,4 +26,15 @@ node tools/render.cjs projects/jabuticaba-promo full --audio projects/jabuticaba
 node tools/render.cjs projects/jabuticaba-promo full --fmt sq --audio projects/jabuticaba-promo/out/mix.wav   # out/final-sq.mp4
 ```
 
+## Narração (voz neural Kokoro-82M, Apache-2.0)
+
+O roteiro e os frames de cada fala ficam em `projects/jabuticaba-promo/audio/make_vo.py`. Vozes em português: `pm_alex` (masculina, a padrão, como na referência), `pm_santa` (masculina) e `pf_dora` (feminina). O modelo vem do npm (`kokoro-q8-shards`), porque o Hugging Face fica bloqueado aqui; as instruções estão no topo do script.
+
+```bash
+pip install kokoro-onnx
+python3 projects/jabuticaba-promo/audio/make_vo.py pm_alex                                   # falas -> audio/vo/pm_alex/
+python3 engine/sfx.py projects/jabuticaba-promo --vo audio/vo/pm_alex/vo.json --out mix-pm_alex.wav
+ffmpeg -i out/final.mp4 -i out/mix-pm_alex.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest out/final-voz-masculina.mp4
+```
+
 Requer Playwright (Chromium), ffmpeg e Python com `numpy scipy soundfile pyloudnorm pillow mido`.

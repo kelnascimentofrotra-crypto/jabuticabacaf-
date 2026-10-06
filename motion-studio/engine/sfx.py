@@ -1,6 +1,7 @@
 """Sons sintetizados + mixagem com música (no lugar do sfx.py do kit, que não veio).
 
     python3 engine/sfx.py projects/<nome>      -> projects/<nome>/out/mix.wav
+    python3 engine/sfx.py projects/<nome> --vo audio/vo/pm_alex/vo.json --out mix-voz.wav   (com narração)
 
 Lê out/timeline.json (SFX=[[nome, frame, ganho, pan, {opts}]], FPS, DURATION) e audio.json
 ({music:{path, align:{musicTime, frame}, gain, fadeIn, fadeOut}, duck:[[frameIni, frameFim, dB]], loudness}).
@@ -196,20 +197,46 @@ def lufs(x):
     return pyln.Meter(SR).integrated_loudness(x.T)
 
 
-def main(proj):
+def voice_chain(x, sr):
+    """Tratamento de locução: passa-altas, presença, compressor 3:1 e um pouco de sala."""
+    x = resample_poly(x, SR, sr) if sr != SR else x
+    x = filt(x, 'highpass', 85)
+    x = x + .25 * filt(x, 'bandpass', [2500, 5500])                 # presença
+    lvl = np.sqrt(uniform_filter1d(x ** 2, int(.012 * SR))) + 1e-9
+    over = np.maximum(0, 20 * np.log10(lvl) + 24)
+    x = x * db(-over * (1 - 1 / 3))
+    return verb(x, ROOM, .06)
+
+
+def main(proj, vo_list=None, out_name='mix.wav'):
     P = Path(proj)
     tl = json.loads((P / 'out' / 'timeline.json').read_text())
     cfg = json.loads((P / 'audio.json').read_text())
     fps, N = tl['FPS'], int(tl['DURATION'] * SR)
     sfx = np.zeros((2, N + 3 * SR))
     for k, (name, frame, gain, pn, opts) in enumerate(tl['SFX']):
+        if name == 'typing' and (vo_list or cfg.get('vo')):
+            gain *= .55                                                  # com locução, a digitação fica mais discreta
         s = GEN[name](seed=k, **opts)
         s = s / (np.abs(s).max() + 1e-9) * gain
         if pn:
             s = s * np.array([[min(1, 1 - pn)], [min(1, 1 + pn)]])
         place(sfx, s, frame / fps)
     sfx = sfx[:, :N] * db(-4)
-    mix = sfx.copy()
+    # narração (opcional): lista [{path, frame}] em audio.json "vo" ou via --vo
+    vo, active = np.zeros((2, N)), np.zeros(N)
+    vl = vo_list or cfg.get('vo')
+    if vl:
+        for it in json.loads((P / vl).read_text()):
+            x, sr = sf.read(P / it['path'])
+            y = voice_chain(x if x.ndim == 1 else x.mean(axis=1), sr)
+            place(vo, y, it['frame'] / fps)
+            i = int(it['frame'] / fps * SR)
+            active[i:i + y.shape[1]] = 1
+        vo = vo * db(-15 - lufs(vo))
+        print(f'voz     {lufs(vo):6.1f} LUFS  ({vl})')
+    duck = np.clip(uniform_filter1d(uniform_filter1d(active, int(.15 * SR)), int(.25 * SR)) * 1.6, 0, 1)
+    mix = vo + sfx * (1 - .3 * duck)
     m = cfg.get('music')
     if m:
         x, sr = sf.read(P / m['path'])
@@ -223,6 +250,7 @@ def main(proj):
         mus = mus * db(-17 - lufs(mus)) * m.get('gain', 1.0)
         for a, b, d in cfg.get('duck', []):
             mus[:, int(a / fps * SR):int(b / fps * SR)] *= db(d)
+        mus = mus * (1 - (1 - db(-9)) * duck)                            # trilha abaixa ~9 dB sob a voz
         mix = mix + mus
         print(f'trilha  {lufs(mus):6.1f} LUFS')
     print(f'efeitos {lufs(sfx):6.1f} LUFS')
@@ -231,9 +259,11 @@ def main(proj):
     need = np.minimum(1, c / np.maximum(np.abs(mix).max(axis=0), 1e-9))
     w = int(.006 * SR)
     mix = np.clip(mix * uniform_filter1d(minimum_filter1d(need, w), w), -c, c)
-    sf.write(P / 'out' / 'mix.wav', mix.T, SR, subtype='PCM_24')
-    print(f'mix     {lufs(mix):6.1f} LUFS   pico {20 * np.log10(np.abs(mix).max()):5.1f} dBFS -> {P / "out" / "mix.wav"}')
+    sf.write(P / 'out' / out_name, mix.T, SR, subtype='PCM_24')
+    print(f'mix     {lufs(mix):6.1f} LUFS   pico {20 * np.log10(np.abs(mix).max()):5.1f} dBFS -> {P / "out" / out_name}')
 
 
 if __name__ == '__main__':
-    main(sys.argv[1])
+    a = sys.argv[1:]
+    opt = lambda n: a[a.index(n) + 1] if n in a else None
+    main(a[0], opt('--vo'), opt('--out') or 'mix.wav')

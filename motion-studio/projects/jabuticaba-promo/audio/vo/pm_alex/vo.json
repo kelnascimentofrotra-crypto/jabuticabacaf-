@@ -1,0 +1,50 @@
+[
+ {
+  "path": "audio/vo/pm_alex/00.wav",
+  "frame": 6
+ },
+ {
+  "path": "audio/vo/pm_alex/01.wav",
+  "frame": 54
+ },
+ {
+  "path": "audio/vo/pm_alex/02.wav",
+  "frame": 91
+ },
+ {
+  "path": "audio/vo/pm_alex/03.wav",
+  "frame": 146
+ },
+ {
+  "path": "audio/vo/pm_alex/04.wav",
+  "frame": 250
+ },
+ {
+  "path": "audio/vo/pm_alex/05.wav",
+  "frame": 350
+ },
+ {
+  "path": "audio/vo/pm_alex/06.wav",
+  "frame": 426
+ },
+ {
+  "path": "audio/vo/pm_alex/07.wav",
+  "frame": 512
+ },
+ {
+  "path": "audio/vo/pm_alex/08.wav",
+  "frame": 584
+ },
+ {
+  "path": "audio/vo/pm_alex/09.wav",
+  "frame": 612
+ },
+ {
+  "path": "audio/vo/pm_alex/10.wav",
+  "frame": 700
+ },
+ {
+  "path": "audio/vo/pm_alex/11.wav",
+  "frame": 850
+ }
+]
