@@ -3,4 +3,3 @@ out/check*.json
 out/video*.mp4
 audio/.raw.wav
 audio/kokoro/kokoro-q8.onnx
-out/final-voz-feminina*.mp4
