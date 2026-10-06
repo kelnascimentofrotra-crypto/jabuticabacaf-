@@ -161,7 +161,7 @@ html,body{background:#0d0a0e;overflow:hidden;height:100%}
     <div class="line serif" id="s6t" style="top:280px;font-size:124px;font-weight:500;color:var(--cream)">Venha nos <span class="it">visitar.</span></div>
     <div class="abs" id="s6pinWrap" style="left:490px;top:500px;width:100px;height:150px">
       <div class="abs" id="s6rip" style="left:-10px;top:72px;width:120px;height:36px;border-radius:50%;border:3px solid var(--leaf)"></div>
-      <svg class="abs" id="s6pin" viewBox="0 0 24 30" style="left:14px;top:0;width:72px;height:90px;overflow:visible">
+      <svg class="abs" id="s6pin" viewBox="0 0 24 30" style="left:14px;top:0;width:72px;height:90px;overflow:visible;transform-origin:50% 100%">
         <path d="M12 29s-10-8.6-10-17a10 10 0 0 1 20 0c0 8.4-10 17-10 17z" fill="#6FB29D"/>
         <circle cx="12" cy="12" r="4.2" fill="#2E1033"/>
       </svg>
@@ -422,8 +422,8 @@ SC[4] = u => {
 SC[5] = u => {
   words(W.s6lab, u, -.3);
   words(W.s6t, u, -.15, 1e9, { st: .1 });
-  const kp = p(u, .25, .9);
-  tf($('s6pin'), { y: (E.outBounce(kp) - 1) * 420, o: p(u, .25, .1) });
+  const kp = p(u, .25, .8);
+  tf($('s6pin'), { y: (E.outBounce(kp) - 1) * 70, s: E.outBack(p(u, .25, .45)), o: p(u, .25, .1) });
   const rp = ((u - .9) % 1.3 + 1.3) % 1.3 / 1.3;
   tf($('s6rip'), { s: u > .9 ? lerp(.3, 1.8, E.outCubic(rp)) : 0, o: u > .9 ? 1 - rp : 0 });
   words(W.s6a1, u, .55, 1e9, { st: .07 });

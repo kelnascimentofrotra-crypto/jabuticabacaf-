@@ -2,7 +2,7 @@
 
 Vídeo vertical (1080×1920, 30 fps, ~35 s) para Reels/Stories, feito com o logo de 10 anos, as fotos reais e as informações do site.
 
-**Arquivo final:** `jabuticaba-cafe-motion.mp4` (sem áudio; a ideia é colocar a música direto no Instagram).
+**Arquivo final:** `jabuticaba-cafe-motion.mp4` (H.264, ~25 MB, sem áudio; a ideia é colocar a música direto no Instagram).
 
 ## Roteiro
 
@@ -19,7 +19,7 @@ Vídeo vertical (1080×1920, 30 fps, ~35 s) para Reels/Stories, feito com o logo
 ## Como editar e renderizar de novo
 
 - `motion.html` tem a animação inteira. Abra no navegador para assistir em loop (clique pausa) ou use `motion.html?t=12.5` para ver um instante específico. Textos, preços e fotos ficam no próprio HTML (os itens do cardápio estão na lista `MENU`).
-- `render.cjs` gera o MP4 quadro a quadro (precisa do Playwright com Chromium e do ffmpeg):
+- `render.cjs` gera o MP4 quadro a quadro e já comprime a versão final (precisa do Playwright com Chromium e do ffmpeg; leva uns 15 min numa máquina de 4 núcleos):
 
 ```bash
 NODE_PATH=$(npm root -g) node render.cjs                 # gera jabuticaba-cafe-motion.mp4
