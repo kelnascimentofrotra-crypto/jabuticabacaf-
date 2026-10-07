@@ -1,0 +1,5 @@
+out/*.wav
+out/check*.json
+out/video*.mp4
+audio/.raw.wav
+audio/__pycache__/

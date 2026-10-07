@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zorro Gamer — motion design pra gamers</title>
+<style>
+@font-face{font-family:'Teko';font-weight:300 700;font-display:block;src:url(../../fonts/Teko.woff2) format('woff2')}
+@font-face{font-family:'JetBrains Mono';font-weight:100 800;font-display:block;src:url(../../fonts/JetBrainsMono.woff2) format('woff2')}
+/* paleta do logo: marrom quase preto, laranja fogo, âmbar, vermelho, branco creme */
+:root{--k:#0B0503;--o:#FF6A00;--a:#FFB000;--r:#E8320C;--cr:#FFF1E2}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#000;overflow:hidden;height:100%}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--k);transform-origin:0 0;font-family:'Teko',sans-serif;color:var(--cr)}
+.scene{position:absolute;inset:0;overflow:hidden;visibility:hidden}
+.cam,.layer{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:540px 960px}
+.bg{position:absolute;inset:-300px;background:radial-gradient(60% 45% at 50% 48%,#3A1408 0%,#1A0905 45%,#0B0503 80%)}
+.stripes{position:absolute;inset:-400px;background:repeating-linear-gradient(-60deg,rgba(255,106,0,.05) 0 3px,transparent 3px 46px)}
+.glow{position:absolute;left:0;top:0;width:1300px;height:1300px;margin:-650px 0 0 -650px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.42),rgba(232,50,12,.12) 45%,rgba(0,0,0,0) 68%)}
+.el{position:absolute;left:0;top:0}
+.hl{position:absolute;left:0;top:0;width:1080px;text-align:center;white-space:nowrap;font-weight:600;text-transform:uppercase;line-height:.84;letter-spacing:.005em;color:var(--cr);
+  text-shadow:0 0 30px rgba(255,106,0,.35),0 6px 0 rgba(0,0,0,.35)}
+.hl .k{background:linear-gradient(180deg,#FFC23A 0%,#FF7A00 55%,#E8320C 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 22px rgba(255,106,0,.7))}
+.w{display:inline-block;white-space:pre}
+.mono{font-family:'JetBrains Mono';font-weight:600}
+.chip{padding:10px 26px 8px;border:2px solid var(--o);color:var(--o);font-size:26px;letter-spacing:.18em;white-space:nowrap;background:rgba(255,106,0,.08);clip-path:polygon(14px 0,100% 0,calc(100% - 14px) 100%,0 100%)}
+.scr{width:960px;height:540px;border-radius:14px;overflow:hidden;background:#120604;box-shadow:0 0 0 3px rgba(255,106,0,.55),0 0 60px rgba(255,106,0,.25),0 40px 90px rgba(0,0,0,.7)}
+.scr .in{position:absolute;inset:0;overflow:hidden}
+.corner{position:absolute;width:56px;height:56px;border:5px solid var(--o)}
+.cap{font-size:24px;letter-spacing:.2em;color:rgba(255,241,226,.6);white-space:nowrap}
+.rays{position:absolute;left:50%;top:50%;width:1400px;height:1400px;margin:-700px 0 0 -700px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,rgba(255,150,40,.20) 0deg 6deg,rgba(255,150,40,0) 6deg 18deg);-webkit-mask-image:radial-gradient(circle,#000 10%,transparent 62%)}
+.ring{width:60px;height:60px;border-radius:50%;border:6px solid #FFB000;box-shadow:0 0 30px #FF6A00}
+.spark{width:8px;height:8px;border-radius:50%;background:#FFE0A0;box-shadow:0 0 12px #FF8A00,0 0 24px #FF6A00}
+.ember{position:absolute;left:0;top:0;border-radius:50%;background:#FFC060;box-shadow:0 0 10px #FF7A00,0 0 22px rgba(255,106,0,.7)}
+.xp{width:820px;height:58px;border:3px solid rgba(255,241,226,.5);clip-path:polygon(18px 0,100% 0,calc(100% - 18px) 100%,0 100%);background:rgba(0,0,0,.45);overflow:hidden}
+.xp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#E8320C,#FF6A00 60%,#FFB000);box-shadow:0 0 30px #FF6A00}
+.lvl{font-size:64px;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.lvup{font-size:190px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+/* live overlay */
+.live{position:absolute;left:26px;top:22px;padding:6px 16px 4px;background:#E8320C;color:#fff;font-size:24px;letter-spacing:.12em}
+.views{position:absolute;left:150px;top:24px;font-size:20px;color:rgba(255,241,226,.85);letter-spacing:.1em}
+.cam2{position:absolute;left:24px;bottom:24px;width:250px;height:180px;border:4px solid var(--o);border-radius:10px;background:radial-gradient(circle at 50% 40%,#4A1C0A,#140805);overflow:hidden;box-shadow:0 0 30px rgba(255,106,0,.5)}
+.cam2 img{position:absolute;left:50%;top:52%;width:150px;transform:translate(-50%,-50%)}
+.cam2 b{position:absolute;left:0;right:0;bottom:0;background:var(--o);color:#1A0905;font-size:22px;text-align:center;letter-spacing:.12em;padding:2px 0 0}
+.alert{position:absolute;left:50%;top:70px;width:470px;height:120px;margin-left:-235px;background:linear-gradient(180deg,#2A0F06,#160704);border:3px solid var(--o);border-radius:12px;display:flex;align-items:center;gap:18px;padding:0 20px;box-shadow:0 0 50px rgba(255,106,0,.6)}
+.alert img{width:84px}
+.alert b{display:block;font-size:42px;line-height:.9;color:var(--a);letter-spacing:.04em}
+.alert span{font-size:20px;color:var(--cr);letter-spacing:.06em}
+.chat{position:absolute;right:20px;top:90px;width:250px;height:330px;background:rgba(10,4,2,.7);border:2px solid rgba(255,106,0,.35);border-radius:10px;overflow:hidden;padding:12px}
+.chat p{position:absolute;left:12px;right:12px;font-family:'JetBrains Mono';font-size:15px;line-height:1.3;color:rgba(255,241,226,.85)}
+.chat p b{color:var(--a)}
+.game{position:absolute;inset:0;background:linear-gradient(180deg,#2B1208 0%,#5A2410 55%,#1A0905 56%,#0E0503 100%)}
+.reticle{width:90px;height:90px;border:3px solid rgba(255,241,226,.7);border-radius:50%}
+/* vinheta */
+.lt{position:absolute;left:40px;bottom:70px;height:110px}
+.lt .bar{position:absolute;left:0;top:0;height:74px;background:linear-gradient(90deg,#FF6A00,#E8320C);clip-path:polygon(0 0,100% 0,calc(100% - 22px) 100%,0 100%)}
+.lt .t{position:absolute;left:28px;top:6px;font-size:66px;font-weight:600;color:#1A0905;white-space:nowrap;line-height:1}
+.lt .s{position:absolute;left:28px;top:80px;font-size:22px;letter-spacing:.2em;color:var(--cr);white-space:nowrap}
+.slash{position:absolute;left:0;top:0;height:30px;border-radius:15px;background:linear-gradient(90deg,rgba(255,240,210,0),#FFF6E8 30%,#FFF6E8 70%,rgba(255,240,210,0));box-shadow:0 0 30px #FF8A00,0 0 70px #FF5A00;transform-origin:0 50%}
+.cta{padding:22px 54px 16px;background:linear-gradient(180deg,#FF8A00,#E8420C);color:#1A0905;font-size:64px;font-weight:600;letter-spacing:.04em;white-space:nowrap;clip-path:polygon(22px 0,100% 0,calc(100% - 22px) 100%,0 100%);box-shadow:0 0 50px rgba(255,106,0,.7)}
+.pad svg{width:100%;height:100%}
+#slashes,#hud,#flash,#vig,#grain,#embers{position:absolute;inset:0;pointer-events:none}
+#embers{z-index:50}#slashes{z-index:54}#hud{z-index:55}#flash{z-index:56;opacity:0;background:radial-gradient(circle at 50% 50%,#FFF4E0,#FF9A30 40%,rgba(255,80,0,.4) 70%,rgba(0,0,0,0) 95%)}
+#vig{z-index:57;background:radial-gradient(78% 60% at 50% 50%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
+#grain{inset:-240px;opacity:.12;mix-blend-mode:overlay;z-index:58;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");background-size:240px 240px}
+.hc{position:absolute;width:70px;height:70px;border:5px solid rgba(255,106,0,.85)}
+.ht{position:absolute;font-size:22px;letter-spacing:.16em;color:rgba(255,241,226,.75);white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script>
+// ======================================================================================
+// motor mínimo (regras da skill motion-video) — estilo gamer: cortes no beat, glitch,
+// tremida nos impactos, faíscas, transição de garra. 30 fps · 150 BPM = 12 frames por tempo.
+// ======================================================================================
+window.FONTS_REQUIRED = ['600 120px "Teko"', '600 22px "JetBrains Mono"'];
+const QS = new URLSearchParams(location.search);
+const W = 1080, H = 1920, FPS = 30, CX = 540, CY = 960, BEAT = 12;
+const stage = document.getElementById('stage');
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, x) => a + (b - a) * x;
+const E = { lin: x => x, inC: x => x * x * x, outC: x => 1 - (1 - x) ** 3, out5: x => 1 - (1 - x) ** 5, inOutC: x => (x < .5 ? 4 * x ** 3 : 1 - (-2 * x + 2) ** 3 / 2), back: x => 1 + 2.4 * (x - 1) ** 3 + 1.4 * (x - 1) ** 2 };
+const prog = (f, a, b, e = E.lin) => e(clamp((f - a) / (b - a)));
+function spring(f, start, { k = 80, c = 14 } = {}) {
+  const t = (f - start) / FPS; if (t <= 0) return 0;
+  const w0 = Math.sqrt(k), z = c / (2 * w0); if (z >= 1) return 1 - Math.exp(-w0 * t) * (1 + w0 * t);
+  const wd = w0 * Math.sqrt(1 - z * z); return 1 - Math.exp(-z * w0 * t) * (Math.cos(wd * t) + (z * w0 / wd) * Math.sin(wd * t));
+}
+const popS = (lf, t0) => spring(lf, t0, { k: 220, c: 14 });
+const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+const h = (tag, cls, html = '', style = '') => { const e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; if (style) e.style.cssText = style; return e; };
+const add = (c, cls, html = '', style = '') => { const e = h('div', cls, html, style); c.appendChild(e); return e; };
+function P(el, { x = CX, y = CY, s = 1, r = 0, o = 1, b = 0, sk = 0, t3 = '' } = {}) {
+  el.style.transform = `translate(${x}px,${y}px) translate(-50%,-50%) ${t3} rotate(${r}deg) skewX(${sk}deg) scale(${s})`;
+  el.style.opacity = o; el.style.filter = b > .3 ? `blur(${b}px)` : 'none';
+}
+// impactos: tremida de câmera que decai (frame, força)
+const HITS = [[24, 10], [36, 12], [48, 22], [96, 18], [168, 24], [216, 26], [360, 10], [500, 18], [672, 20], [696, 16], [720, 34], [744, 16], [768, 12], [780, 14], [792, 28], [864, 40]];
+const shake = f => { let x = 0, y = 0; HITS.forEach(([t, a], i) => { if (f >= t && f < t + 16) { const k = a * Math.exp(-(f - t) / 3.5); x += (hash(f * 3 + i) - .5) * 2 * k; y += (hash(f * 7 + i) - .5) * 2 * k; } }); return [x, y]; };
+function cam(el, f, lf, d, { s0 = 1, s1 = 1.08, punch = 0, rot = 0 } = {}) {
+  const [sx, sy] = shake(f);
+  const s = lerp(s0, s1, prog(lf, 0, d)) * (1 + punch * (1 - prog(lf, 0, 10, E.out5)));
+  el.style.transform = `translate(${sx}px,${sy}px) rotate(${rot * prog(lf, 0, d)}deg) scale(${s})`;
+}
+// título gamer: palavras batem (escala 1,7 → 1 com blur), *x* = laranja, | = linha
+const kw = line => line.replace(/\*(.+?)\*/g, (m, p) => p.split(' ').map(w => `*${w}*`).join(' '));
+function headline(c, txt, { size = 200, y = CY, sk = -7 } = {}) {
+  const html = kw(txt).split('|').map(l => '<div>' + l.split(' ').map(w => `<span class="w">${w.replace(/\*(.+?)\*/g, '<span class="k">$1</span>')}</span>`).join(' ') + '</div>').join('');
+  const el = add(c, 'hl', html, `font-size:${size}px`);
+  return { el, ws: [...el.querySelectorAll('.w')], lines: [...el.children], y, sk };
+}
+// cada linha bate num tempo da música (times = frame de cada linha)
+function slamLines(hd, lf, times, { exitAt = 1e9, exitLen = 8, drift = -40, d = 90 } = {}) {
+  hd.lines.forEach((ln, i) => {
+    const t = times[i] ?? times[times.length - 1], k = prog(lf, t, t + 6, E.outC);
+    ln.style.transform = `scale(${lerp(1.7, 1, k)})`; ln.style.opacity = lf < t ? 0 : clamp(k * 2.5);
+    ln.style.filter = k < .98 ? `blur(${(1 - k) * 16}px)` : 'none';
+  });
+  const e = prog(lf, exitAt, exitAt + exitLen, E.inC);
+  hd.el.style.transform = `translate(0,${hd.y + drift * prog(lf, times[0], times[0] + d) - 160 * e}px) translateY(-50%) skewX(${hd.sk}deg) scale(${1 + .05 * prog(lf, times[0], times[0] + d) + .3 * e})`;
+  hd.el.style.opacity = 1 - e;
+}
+// glitch: separação RGB + fatias deslocadas por alguns frames
+function glitch(el, f, t0, dur = 6) {
+  if (f >= t0 && f < t0 + dur) {
+    const r = hash(f * 13), dx = (r - .5) * 40;
+    el.style.textShadow = `${dx}px 0 rgba(255,40,0,.9),${-dx}px 0 rgba(0,229,255,.8)`;
+    const a = Math.floor(hash(f) * 70), b = Math.floor(hash(f + 5) * 70);
+    el.style.clipPath = hash(f + 9) > .4 ? `inset(${Math.min(a, b)}% 0 ${100 - Math.max(a, b) - 8}% 0)` : 'none';
+    el.style.translate = `${(hash(f + 2) - .5) * 30}px 0`;
+  } else { el.style.textShadow = ''; el.style.clipPath = 'none'; el.style.translate = '0 0'; }
+}
+function ripple(el, lf, t0, { x = CX, y = CY, max = 12, dur = 22 } = {}) {
+  const k = prog(lf, t0, t0 + dur, E.out5);
+  P(el, { x, y, s: lerp(.4, max, k), o: lf < t0 ? 0 : 1 - k });
+  el.style.borderWidth = `${lerp(10, 1, k)}px`;
+}
+// explosão de faíscas
+function sparks(list, lf, t0, { x = CX, y = CY, r = 420, dur = 26, seed = 0 } = {}) {
+  list.forEach((p, i) => {
+    const a = hash(i + seed) * Math.PI * 2, sp = .4 + hash(i * 3 + seed) * .8, k = prog(lf, t0, t0 + dur, E.outC);
+    P(p, { x: x + Math.cos(a) * r * sp * k, y: y + Math.sin(a) * r * sp * k + 140 * k * k, s: (1 - k) * (.6 + hash(i + 7) * 1.4), o: lf < t0 ? 0 : 1 - k * k });
+  });
+}
+const screen = (c, inner = '') => {
+  const el = add(c, 'el scr', `<div class="in">${inner}</div>`);
+  [[0, 0, '5px 0 0 5px'], [1, 0, '5px 5px 0 0'], [0, 1, '0 0 5px 5px'], [1, 1, '0 5px 5px 0']].forEach(([cx, cy, bw]) => add(el, 'corner', '', `${cx ? 'right' : 'left'}:12px;${cy ? 'bottom' : 'top'}:12px;border-width:${bw}`));
+  el.inn = el.firstChild; return el;
+};
+
+const SC = [];
+function scene(a, d, build, fn) {
+  const sec = h('section', 'scene'); const camEl = h('div', 'cam'); sec.appendChild(camEl); stage.appendChild(sec);
+  camEl.appendChild(h('div', 'bg')); const stripes = h('div', 'stripes'); camEl.appendChild(stripes);
+  const glow = h('div', 'glow'); camEl.appendChild(glow);
+  const ctx = build(camEl) || {};
+  SC.push({ a, d, sec, cam: camEl, ctx, fn, stripes, glow });
+}
+const IMG = { logo: 'assets/logo-cut.png', em: 'assets/emblem.png' };
+
+// ---------------- 1 · gancho: PRESS START → "SEU CANAL TÁ SEM IDENTIDADE?" (0–96) ----------------
+scene(0, 96, c => ({
+  ps: add(c, 'el mono', 'PRESS START', 'font-size:44px;letter-spacing:.3em;color:#FFB000;white-space:nowrap'),
+  p1: add(c, 'el mono', '▶ PLAYER 1', 'font-size:26px;letter-spacing:.24em;color:rgba(255,241,226,.6);white-space:nowrap'),
+  hd: headline(c, 'Seu canal|tá sem|*identidade?*', { y: 960, size: 176 }),
+}), (s, lf, d, f) => {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.1 });
+  const out = prog(lf, 20, 24, E.inC);
+  P(x.ps, { y: 900, o: (Math.floor(lf / 6) % 2 ? .25 : 1) * (1 - out), s: 1 + .03 * lf / 24 + .4 * out, b: out * 12 });
+  P(x.p1, { y: 980, o: prog(lf, 2, 8) * (1 - out) });
+  slamLines(x.hd, lf, [24, 36, 48], { exitAt: 88, drift: -36, d: 70 });
+  const g2 = f >= 68 && f < 72; glitch(x.hd.lines[2], f, g2 ? 68 : 48, g2 ? 4 : 7);
+});
+
+// ---------------- 2 · "BORA SUBIR DE NÍVEL" + barra de XP → LEVEL UP (96–192) ----------------
+scene(96, 96, c => {
+  const hd = headline(c, 'Bora subir|de *nível.*', { y: 600, size: 200 });
+  const xp = add(c, 'el xp', '<i></i>'); const lv = add(c, 'el lvl mono', 'LV. 01');
+  const up = add(c, 'el lvup hl', '<span class="k">LEVEL UP!</span>', 'width:auto;position:absolute');
+  const rings = [0, 1].map(() => add(c, 'el ring')); const sp = [...Array(26).keys()].map(() => add(c, 'el spark'));
+  return { hd, xp, fill: xp.firstChild, lv, up, rings, sp };
+}, (s, lf, d, f) => {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.08, punch: .12 });
+  slamLines(x.hd, lf, [0, 12], { exitAt: 86, drift: -30 });
+  const xk = popS(lf, 18);
+  P(x.xp, { y: 1080, s: lerp(.6, 1, xk), o: lf < 18 ? 0 : clamp(xk * 2), sk: -8 });
+  const fk = prog(lf, 24, 70, E.inOutC);
+  x.fill.style.width = (fk * 100) + '%';
+  x.lv.textContent = 'LV. ' + String(Math.max(1, Math.round(fk * 99))).padStart(2, '0');
+  P(x.lv, { y: 1190, o: prog(lf, 20, 26), s: 1 + .25 * Math.exp(-Math.max(0, lf - 72) / 4) * (lf >= 72 ? 1 : 0) });
+  const uk = prog(lf, 72, 78, E.outC);
+  P(x.up, { y: 1400, s: lerp(2.2, 1, uk) * (1 + .04 * prog(lf, 78, 96)), o: lf < 72 ? 0 : clamp(uk * 2), b: (1 - uk) * 18, sk: -8 });
+  x.rings.forEach((r, i) => ripple(r, lf, 72 + i * 6, { y: 1400, max: 14 }));
+  sparks(x.sp, lf, 72, { y: 1400, r: 520, seed: 3 });
+});
+
+// ---------------- 3–6 · os serviços, cada um numa tela (192–672) ----------------
+const svcBuild = (c, chip, title, inner, cap) => ({ chip: add(c, 'el chip mono', chip), hd: headline(c, title, { y: 470, size: 150 }), scr: screen(c, inner), cap: add(c, 'el cap mono', cap) });
+function svcRun(s, lf, d, f) {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.07, punch: .1 });
+  const ck = popS(lf, 2); P(x.chip, { y: 250 - lf * .4, s: ck, o: lf < 2 ? 0 : 1, sk: -8 });
+  slamLines(x.hd, lf, [4, 12], { exitAt: d - 10, drift: -36 });
+  const sk = spring(lf, 10, { k: 120, c: 15 });
+  const e = prog(lf, d - 10, d, E.inC);
+  P(x.scr, { y: 1090 + (1 - sk) * 500 - lf * .5 - 200 * e, s: lerp(.8, 1, sk) * (1 + .04 * prog(lf, 10, d)), r: (1 - sk) * 6, o: lf < 10 ? 0 : 1, b: e * 14, t3: `perspective(1800px) rotateX(${(1 - sk) * 25 + 4}deg) rotateY(${Math.sin(lf / 20) * 3}deg)` });
+  P(x.cap, { y: 1430 - lf * .3, o: prog(lf, 22, 30) * (1 - e) });
+}
+// 3 · intro de canal
+scene(192, 120, c => {
+  const b = svcBuild(c, '01 · INTRO DE CANAL', 'Intros|*épicas*', '', 'ENTREGA EM 4K · 60 FPS');
+  const i = b.scr.inn;
+  b.rays = add(i, 'rays'); b.ring = add(i, 'el ring'); b.em = add(i, 'el', `<img src="${IMG.em}" style="width:300px;display:block">`);
+  b.tag = add(i, 'el hl', 'CANAL DO <span class="k">ZORRO</span>', 'font-size:64px;width:auto;position:absolute'); b.sp = [...Array(18).keys()].map(() => add(i, 'el spark'));
+  return b;
+}, (s, lf, d, f) => {
+  svcRun(s, lf, d, f); const x = s.ctx;
+  x.rays.style.transform = `rotate(${lf * 1.2}deg) scale(${prog(lf, 24, 40, E.out5)})`;
+  const k = prog(lf, 18, 24, E.inC), st = prog(lf, 24, 32, E.out5);
+  P(x.em, { x: 480, y: 250, s: lf < 24 ? lerp(3.2, 1.05, k) : 1 + .05 * (1 - st) + .04 * prog(lf, 32, d), b: lf < 24 ? (1 - k) * 20 : 0, o: lf < 18 ? 0 : 1, r: lf < 24 ? (1 - k) * -20 : 0 });
+  ripple(x.ring, lf, 24, { x: 480, y: 250, max: 14 });
+  sparks(x.sp, lf, 24, { x: 480, y: 250, r: 400, seed: 11 });
+  const tk = prog(lf, 34, 40, E.outC); P(x.tag, { x: 480, y: 455, s: lerp(1.8, 1, tk), o: lf < 34 ? 0 : tk, b: (1 - tk) * 12, sk: -8 });
+});
+// 4 · overlay pra live
+const CHAT = [['luquinhas', 'que overlay brabo'], ['mel_gg', 'quem fez??'], ['player_br', 'segui!'], ['kaio', 'ZORRO É O CARA'], ['nanda', 'quero um desse']];
+scene(312, 120, c => {
+  const b = svcBuild(c, '02 · OVERLAY PRA LIVE', 'Overlays|pra *live*', '', 'TWITCH · YOUTUBE · KICK');
+  const i = b.scr.inn;
+  add(i, 'game'); b.lines = [...Array(10).keys()].map(k => add(i, 'el', '', `width:${120 + hash(k) * 200}px;height:3px;background:rgba(255,200,140,.35)`));
+  b.ret = add(i, 'el reticle');
+  b.live = add(i, 'live mono', '● AO VIVO'); b.views = add(i, 'views mono', '1.248 ASSISTINDO');
+  b.camb = add(i, 'cam2', `<img src="${IMG.em}"><b>ZORRO</b>`);
+  b.chat = add(i, 'chat', CHAT.map(([u, m]) => `<p><b>${u}:</b> ${m}</p>`).join('')); b.msgs = [...b.chat.children];
+  b.alert = add(i, 'alert', `<img src="${IMG.em}"><div><b>NOVO SEGUIDOR!</b><span class="mono">player_br entrou pro bando</span></div>`);
+  b.sp = [...Array(16).keys()].map(() => add(i, 'el spark'));
+  return b;
+}, (s, lf, d, f) => {
+  svcRun(s, lf, d, f); const x = s.ctx;
+  x.lines.forEach((l, k) => { const v = 30 + hash(k + 4) * 40; P(l, { x: 1100 - ((lf * v + hash(k) * 1400) % 1400), y: 80 + hash(k + 8) * 360 }); });
+  P(x.ret, { x: 480 + Math.sin(lf / 9) * 90, y: 260 + Math.cos(lf / 13) * 50, s: 1 + .1 * Math.sin(lf / 3) });
+  const pk = (t) => popS(lf, t);
+  x.live.style.transform = `scale(${pk(18)})`; x.live.style.opacity = lf > 18 ? (Math.floor(lf / 10) % 2 ? .75 : 1) : 0;
+  x.views.style.opacity = prog(lf, 22, 28); x.views.textContent = (1180 + Math.floor(lf * 1.6)).toLocaleString('pt-BR') + ' ASSISTINDO';
+  x.camb.style.transform = `scale(${pk(24)})`; x.camb.style.transformOrigin = '0 100%';
+  x.chat.style.opacity = prog(lf, 26, 32);
+  x.msgs.forEach((m, k) => { const t = 30 + k * 12, mk = spring(lf, t); m.style.top = `${12 + (k - Math.max(0, Math.floor((lf - 30) / 12) - 3)) * 62}px`; m.style.opacity = lf < t ? 0 : clamp(mk * 2); m.style.transform = `translateX(${(1 - mk) * 40}px)`; });
+  const ak = spring(lf, 48, { k: 160, c: 12 }); x.alert.style.transform = `translateY(${(1 - ak) * -220}px) scale(${lerp(.7, 1, ak)})`; x.alert.style.opacity = lf < 48 ? 0 : 1;
+  sparks(x.sp, lf, 52, { x: 480, y: 130, r: 300, seed: 21 });
+});
+// 5 · vinhetas & transições
+scene(432, 120, c => {
+  const b = svcBuild(c, '03 · VINHETAS & TRANSIÇÕES', 'Vinhetas|& *transições*', '', 'STINGERS · LOWER THIRDS');
+  const i = b.scr.inn;
+  b.v1 = add(i, 'game', '', 'background:linear-gradient(160deg,#3A1A0C,#120604)'); b.v2 = add(i, 'game', '', 'background:linear-gradient(160deg,#5A1E08,#1E0804);opacity:0');
+  b.v2t = add(i, 'el hl', 'CENA <span class="k">2</span>', 'font-size:120px;width:auto;position:absolute');
+  b.lt = add(i, 'lt', '<div class="bar"></div><div class="t">ZORRO GAMER</div><div class="s mono">MOTION DESIGNER</div>');
+  b.bar = b.lt.querySelector('.bar'); b.ltT = b.lt.querySelector('.t'); b.ltS = b.lt.querySelector('.s');
+  b.sl = [0, 1, 2].map(() => add(i, 'slash'));
+  return b;
+}, (s, lf, d, f) => {
+  svcRun(s, lf, d, f); const x = s.ctx;
+  const bw = prog(lf, 18, 28, E.out5) * (1 - prog(lf, 58, 64, E.inC));
+  x.bar.style.width = (bw * 520) + 'px';
+  const tk = prog(lf, 24, 32, E.out5) * (1 - prog(lf, 56, 62, E.inC));
+  x.ltT.style.opacity = tk; x.ltT.style.transform = `translateX(${(1 - tk) * -60}px)`;
+  x.ltS.style.opacity = prog(lf, 30, 36) * (1 - prog(lf, 56, 60)); x.ltS.style.letterSpacing = `${lerp(.4, .2, prog(lf, 30, 60))}em`;
+  // stinger de garra dentro da tela
+  x.sl.forEach((sl, k) => { const t = 66 + k * 2, sk2 = prog(lf, t, t + 4, E.outC), o = 1 - prog(lf, t + 6, t + 16); sl.style.width = '1300px'; sl.style.transform = `translate(${-100 + k * 140}px,${560 - k * 60}px) rotate(-38deg) scaleX(${sk2})`; sl.style.opacity = lf < t ? 0 : o; });
+  const cut = lf >= 70; x.v1.style.opacity = cut ? 0 : 1; x.v2.style.opacity = cut ? 1 : 0;
+  const ck = prog(lf, 72, 80, E.outC); P(x.v2t, { x: 480, y: 270, s: lerp(1.6, 1, ck) * (1 + .05 * prog(lf, 80, d)), o: cut ? ck : 0, sk: -8 });
+});
+// 6 · logo animado
+scene(552, 120, c => {
+  const b = svcBuild(c, '04 · LOGO ANIMADO', 'Logo|*animado*', '', 'SEU MASCOTE GANHA VIDA');
+  const i = b.scr.inn;
+  b.rays = add(i, 'rays', '', 'opacity:.7');
+  b.em = add(i, 'el', `<img src="${IMG.logo}" style="width:300px;display:block">`);
+  b.shine = add(b.em, 'el', '', `inset:0;width:300px;height:323px;background:linear-gradient(105deg,rgba(255,255,255,0) 35%,rgba(255,255,255,.75) 50%,rgba(255,255,255,0) 65%);-webkit-mask-image:url(${IMG.logo});-webkit-mask-size:100% 100%;mix-blend-mode:overlay`);
+  b.orb = [...Array(8).keys()].map(() => add(i, 'el spark'));
+  return b;
+}, (s, lf, d, f) => {
+  svcRun(s, lf, d, f); const x = s.ctx;
+  x.rays.style.transform = `rotate(${-lf * 1.5}deg)`;
+  const k = spring(lf, 18, { k: 150, c: 11 });
+  P(x.em, { x: 480, y: 270, s: k * (1 + .05 * Math.sin(lf / 6)), r: (1 - k) * -180, o: lf < 18 ? 0 : 1 });
+  x.shine.style.backgroundPosition = `${lerp(-300, 300, ((lf - 30) % 40) / 40)}px 0`;
+  x.shine.style.backgroundSize = '200% 100%';
+  x.shine.style.transform = `translateX(${lerp(-320, 320, ((Math.max(0, lf - 30)) % 36) / 36)}px)`;
+  x.shine.style.webkitMaskPosition = `${-lerp(-320, 320, ((Math.max(0, lf - 30)) % 36) / 36)}px 0`;
+  x.orb.forEach((p, j) => { const a = lf / 10 + j * Math.PI / 4; P(p, { x: 480 + Math.cos(a) * 230, y: 270 + Math.sin(a) * 110, o: prog(lf, 24, 30), s: 1.3 }); });
+});
+
+// ---------------- 7 · montagem no beat: GLITCH / FOGO / IMPACTO / ESTILO (672–768) ----------------
+const WORDS = ['Glitch.', 'Fogo.', 'Impacto.', 'Estilo.'];
+scene(672, 96, c => ({
+  ws: WORDS.map(w => headline(c, `*${w}*`, { y: 960, size: 300 })),
+  rings: [0, 1, 2].map(() => add(c, 'el ring')), sp: [...Array(30).keys()].map(() => add(c, 'el spark')),
+  streaks: [...Array(14).keys()].map(k => add(c, 'el', '', `width:${300 + hash(k) * 400}px;height:6px;border-radius:3px;background:linear-gradient(90deg,rgba(255,180,80,0),rgba(255,200,120,.9))`)),
+}), (s, lf, d, f) => {
+  const x = s.ctx, wi = Math.min(3, Math.floor(lf / 24)), l2 = lf - wi * 24;
+  cam(s.cam, f, l2, 24, { s1: 1.06, punch: .18, rot: wi % 2 ? 2 : -2 });
+  x.ws.forEach((w, i) => {
+    const on = i === wi; w.el.style.visibility = on ? 'visible' : 'hidden';
+    if (!on) return;
+    slamLines(w, l2, [0], { drift: -20, d: 24 });
+    if (i === 0) glitch(w.lines[0], f, 672, 10);
+    else w.lines[0].style.textShadow = '';
+    if (i === 1) w.lines[0].firstChild.firstChild.style.filter = `drop-shadow(0 0 ${30 + 20 * hash(f)}px rgba(255,90,0,.95)) brightness(${1 + .25 * hash(f + 3)})`;
+  });
+  sparks(x.sp, lf, 24, { y: 960, r: 620, seed: 5 });
+  x.rings.forEach((r, i) => ripple(r, lf, 48 + i * 4, { y: 960, max: 18 }));
+  x.streaks.forEach((st, k) => { const on = wi === 3; P(st, { x: 1400 - ((l2 * (80 + hash(k) * 60) + hash(k + 1) * 1800) % 2200), y: 500 + hash(k + 2) * 900, o: on ? .8 : 0 }); });
+});
+
+// ---------------- 8 · "MOTION DESIGN FEITO POR QUEM JOGA." (768–864) ----------------
+scene(768, 96, c => ({
+  hd: headline(c, 'Motion design|feito por quem|*joga.*', { y: 900, size: 148 }),
+  pad: add(c, 'el pad', `<svg viewBox="0 0 120 70"><path class="pp" d="M30 8h60c14 0 22 10 25 26l3 18c2 12-10 18-18 9l-9-11H29l-9 11c-8 9-20 3-18-9l3-18C8 18 16 8 30 8z" fill="none" stroke="#FF6A00" stroke-width="3.2" stroke-linejoin="round" pathLength="1" stroke-dasharray="1"/><path d="M30 26v14M23 33h14" stroke="#FFF1E2" stroke-width="3.2" stroke-linecap="round"/><circle cx="86" cy="28" r="3.6" fill="#FFB000"/><circle cx="96" cy="37" r="3.6" fill="#FFB000"/></svg>`, 'width:300px;height:175px'),
+  sp: [...Array(20).keys()].map(() => add(c, 'el spark')),
+}), (s, lf, d, f) => {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.1 });
+  x.hd.lines[2].style.fontSize = '300px';
+  slamLines(x.hd, lf, [0, 12, 24], { exitAt: 84, drift: -50 });
+  x.pad.querySelector('.pp').style.strokeDashoffset = 1 - prog(lf, 30, 56, E.out5);
+  P(x.pad, { y: 1450 - lf * .6, o: prog(lf, 30, 36), r: Math.sin(lf / 8) * 4, s: 1 + .05 * Math.sin(lf / 5) });
+  sparks(x.sp, lf, 24, { y: 1080, r: 560, seed: 41 });
+});
+
+// ---------------- 9 · logo final (864–1008) ----------------
+scene(864, 144, c => ({
+  rays: add(c, 'rays', '', 'width:2200px;height:2200px;margin:-1100px 0 0 -1100px;top:760px'),
+  rings: [0, 1, 2].map(() => add(c, 'el ring')), sp: [...Array(40).keys()].map(() => add(c, 'el spark')),
+  logo: add(c, 'el', `<img src="${IMG.logo}" style="width:760px;display:block">`),
+  sub: add(c, 'el hl', 'MOTION DESIGN <span class="k">PRA GAMERS</span>', 'font-size:84px;width:auto;position:absolute'),
+  cta: add(c, 'el cta', 'CHAMA NA DM →'),
+}), (s, lf, d, f) => {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.06, punch: .2 });
+  x.rays.style.transform = `rotate(${lf * .8}deg) scale(${prog(lf, 0, 16, E.out5)})`;
+  const k = prog(lf, 0, 7, E.inC);
+  const lb = lf < 7 ? (1 - k) * 24 : 0;
+  P(x.logo, { y: 760 - prog(lf, 8, d) * 20, s: lf < 7 ? lerp(2.6, 1, k) : 1 + .06 * Math.exp(-(lf - 7) / 5) + .04 * prog(lf, 8, d), o: clamp(k * 3) });
+  x.logo.style.filter = `${lb > .3 ? `blur(${lb}px) ` : ''}drop-shadow(0 0 ${40 + 20 * Math.sin(lf / 6)}px rgba(255,106,0,.7))`;
+  x.rings.forEach((r, i) => ripple(r, lf, 7 + i * 5, { y: 760, max: 22, dur: 30 }));
+  sparks(x.sp, lf, 7, { y: 760, r: 760, dur: 34, seed: 77 });
+  const sk = prog(lf, 30, 38, E.outC); P(x.sub, { y: 1280 - prog(lf, 30, d) * 14, s: lerp(1.6, 1, sk), o: lf < 30 ? 0 : sk, b: (1 - sk) * 12, sk: -7 });
+  const ck = popS(lf, 50); P(x.cta, { y: 1450 - prog(lf, 50, d) * 10, s: ck * (1 + .04 * Math.sin(lf / 4) * prog(lf, 60, 70)), o: lf < 50 ? 0 : 1, sk: -6 });
+});
+
+// ---------------- camadas globais: brasas, garras, HUD, flash ----------------
+const embers = add(stage, '', ''); embers.id = 'embers';
+const EM = [...Array(46).keys()].map(i => { const e = add(embers, 'ember'); const sz = 3 + hash(i + 50) * 8; e.style.width = e.style.height = sz + 'px'; return e; });
+const slashL = add(stage, ''); slashL.id = 'slashes';
+const SL = [0, 1, 2].map(() => add(slashL, 'slash', '', 'height:44px;border-radius:22px'));
+const SLASH = [88, 184, 304, 424, 544, 664, 856];          // transições de garra (cortam no tempo seguinte)
+const hud = add(stage, ''); hud.id = 'hud';
+[[48, 48, '5px 0 0 5px'], [W - 118, 48, '5px 5px 0 0'], [48, H - 118, '0 0 5px 5px'], [W - 118, H - 118, '0 5px 5px 0']].forEach(([x, y, bw]) => add(hud, 'hc', '', `left:${x}px;top:${y}px;border-width:${bw}`));
+const rec = add(hud, 'ht mono', '● REC', 'left:140px;top:68px;color:#FF5A2A');
+add(hud, 'ht mono', '60 FPS', `right:140px;top:68px`);
+add(hud, 'ht mono', 'ZORRO.GAMER', `left:140px;bottom:68px`);
+const tc = add(hud, 'ht mono', '00:00:00', `right:140px;bottom:68px`);
+const flash = add(stage, ''); flash.id = 'flash';
+const vig = add(stage, ''); vig.id = 'vig';
+const grain = add(stage, ''); grain.id = 'grain';
+const FLASH = [[96, .9], [192, .7], [312, .7], [432, .7], [552, .7], [672, .9], [696, .6], [720, .9], [744, .6], [864, 1], [168, .5], [216, .6]];
+
+// ---------------- efeitos sonoros (frames) ----------------
+const SFX = [
+  ...[0, 6, 12, 18].map(t => ['tick', t, .3, 0, {}]),
+  ['boom', 24, .55, 0, { dur: .5 }], ['boom', 36, .6, 0, { dur: .5 }], ['boom', 48, .8, 0, { dur: .9 }], ['glitch', 48, .5, 0, { dur: .25 }], ['glitch', 69, .35, 0, { dur: .12 }], ['riser', 60, .4, 0, { dur: .95 }],
+  ['boom', 108, .45, 0, { dur: .4 }], ['pop', 114, .4, 0, {}], ['clicks', 120, .22, 0, { n: 22, step: .06 }], ['boom', 168, .8, 0, { dur: 1.0 }], ['chime', 168, .5, 0, {}], ['confetti', 168, .5, 0, {}],
+  ['whoosh', 200, .4, 0, { dur: .5, f0: 300, f1: 2500, peak: .7 }], ['boom', 216, .8, 0, { dur: 1.1 }], ['shimmer', 216, .4, 0, { dur: .9 }], ['confetti', 216, .3, 0, {}],
+  ['pop', 330, .4, -.4, {}], ['pop', 336, .4, -.5, { f0: 500, f1: 800 }], ...[0, 1, 2, 3, 4].map(k => ['tick', 342 + k * 12, .25, .5, {}]), ['chime', 360, .5, 0, {}], ['whoosh', 358, .35, 0, { dur: .35, f0: 500, f1: 4000, peak: .6 }], ['confetti', 364, .3, 0, {}],
+  ['whoosh', 450, .4, -.5, { dur: .35, f0: 400, f1: 3000, peak: .5, panFrom: -.8, panTo: .2 }], ['pop', 456, .35, -.3, {}], ...[0, 1, 2].map(k => ['whoosh', 498 + k * 2, .4, (k - 1) * .5, { dur: .18, f0: 2500, f1: 9000, peak: .3 }]), ['boom', 502, .55, 0, { dur: .5 }],
+  ['whoosh', 568, .35, 0, { dur: .5, f0: 200, f1: 1500, peak: .5 }], ['pop', 576, .45, 0, { f0: 400, f1: 1000 }], ['shimmer', 584, .35, 0, { dur: 1.0 }],
+  ['boom', 672, .7, 0, { dur: .5 }], ['glitch', 672, .6, 0, { dur: .35 }], ['boom', 696, .6, 0, { dur: .5 }], ['whoosh', 696, .45, 0, { dur: .6, f0: 120, f1: 900, peak: .2 }], ['confetti', 698, .3, 0, {}],
+  ['boom', 720, 1.0, 0, { dur: 1.0 }], ['boom', 744, .6, 0, { dur: .5 }], ['whoosh', 744, .5, .6, { dur: .5, f0: 1500, f1: 8000, peak: .2, panFrom: .8, panTo: -.8 }],
+  ['boom', 768, .45, 0, { dur: .4 }], ['boom', 780, .5, 0, { dur: .4 }], ['boom', 792, .85, 0, { dur: .9 }], ['confetti', 792, .35, 0, {}], ['riser', 820, .45, 0, { dur: 1.2 }],
+  ['boom', 864, 1.0, 0, { dur: 2.0 }], ['shimmer', 864, .5, 0, { dur: 2.0 }], ['confetti', 868, .5, 0, {}], ['whoosh', 892, .35, 0, { dur: .4 }], ['pop', 914, .5, 0, { f0: 500, f1: 1100 }], ['chime', 960, .35, 0, {}],
+];
+SLASH.forEach(t => [0, 2, 4].forEach((k, i) => SFX.push(['whoosh', t + k, .45, (i - 1) * .5, { dur: .2, f0: 2500, f1: 9000, peak: .25 }])));
+SLASH.forEach(t => SFX.push(['boom', t + 8, .5, 0, { dur: .5 }]));
+SFX.forEach(x => { x[2] *= .6; });                       // efeitos ~4 dB abaixo, pra trilha respirar
+const DURATION_F = 1008;
+const BOARD = [[30, 'Gancho', 'PRESS START'], [70, 'Glitch', 'tá sem identidade?'], [150, 'XP', 'subindo de nível'], [176, 'Level up', 'explosão'],
+  [250, 'Intros', 'logo bate com raios'], [380, 'Overlay', 'live com alerta e chat'], [470, 'Vinheta', 'lower third'], [512, 'Stinger', 'garra corta a cena'],
+  [600, 'Logo animado', 'gira e brilha'], [684, 'Glitch.', ''], [708, 'Fogo.', ''], [730, 'Impacto.', ''], [756, 'Estilo.', ''],
+  [820, 'Quem joga', 'controle desenhado'], [880, 'Logo', 'impacto + raios'], [990, 'CTA', 'chama na DM']];
+
+// ---------------- render ----------------
+function render(t) {
+  const f = t * FPS;
+  SC.forEach(s => {
+    const lf = f - s.a, on = lf >= 0 && lf < s.d;
+    s.sec.style.visibility = on ? 'visible' : 'hidden'; if (!on) return;
+    s.fn(s, lf, s.d, f);
+    s.stripes.style.transform = `translate(${(f * 2.2) % 53}px,0)`;
+    s.glow.style.transform = `translate(${CX + Math.cos(f / 40) * 160}px,${CY + Math.sin(f / 33) * 260}px) scale(${1 + .12 * Math.sin(f / 9)})`;
+  });
+  // brasas subindo
+  EM.forEach((e, i) => {
+    const sp = 2 + hash(i) * 5, life = 1920 + 300, y = 2050 - ((f * sp + hash(i + 3) * life) % life), x = hash(i + 9) * W + Math.sin(f / (14 + hash(i) * 20) + i) * 40;
+    e.style.transform = `translate(${x}px,${y}px)`; e.style.opacity = (.35 + .65 * hash(Math.floor(f / 3) + i * 5)) * clamp(y / 600);
+  });
+  // garras
+  let sl = null; SLASH.forEach(t0 => { if (f >= t0 && f < t0 + 20) sl = t0; });
+  SL.forEach((el, k) => {
+    if (sl === null) { el.style.opacity = 0; return; }
+    const t = sl + k * 2, sk = prog(f, t, t + 4, E.outC), o = 1 - prog(f, t + 8, t + 18);
+    el.style.width = '2600px'; el.style.transform = `translate(${-500 + k * 260}px,${1700 - k * 240}px) rotate(-52deg) scaleX(${sk})`; el.style.opacity = f < t ? 0 : o;
+  });
+  let fl = 0; FLASH.forEach(([ff, a]) => { fl = Math.max(fl, a * Math.exp(-Math.abs(f - ff) / (f < ff ? 1 : 3))); });
+  flash.style.opacity = fl > .02 ? fl : 0;
+  rec.style.opacity = Math.floor(f / 15) % 2 ? .35 : 1;
+  const sec = Math.floor(f / FPS); tc.textContent = `00:${String(sec).padStart(2, '0')}:${String(Math.floor(f) % FPS).padStart(2, '0')}`;
+  vig.style.opacity = .85 + .15 * Math.sin(f / 20);
+  const fi = Math.round(f); grain.style.transform = `translate(${Math.floor(hash(fi) * 240) - 120}px,${Math.floor(hash(fi + 77) * 240) - 120}px)`;
+}
+window.render = render;
+window.DURATION = DURATION_F / FPS;
+window.TIMELINE = { DURATION: DURATION_F / FPS, FPS, SFX, BOARD };
+if (!window.__RENDER__) {
+  const fit = () => { const s = Math.min(innerWidth / W, innerHeight / H); stage.style.transform = `scale(${s})`; stage.style.left = (innerWidth - W * s) / 2 + 'px'; };
+  addEventListener('resize', fit); fit();
+  if (QS.has('f')) document.fonts.ready.then(() => render(+QS.get('f') / FPS));
+  else { let t0 = null; const loop = now => { if (t0 === null) t0 = now; render(((now - t0) / 1000) % window.DURATION); requestAnimationFrame(loop); }; document.fonts.ready.then(() => requestAnimationFrame(loop)); }
+}
+</script>
+</body>
+</html>

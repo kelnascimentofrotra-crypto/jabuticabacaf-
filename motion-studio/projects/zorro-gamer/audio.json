@@ -1,0 +1,9 @@
+{
+  "music": {
+    "path": "audio/trilha.flac",
+    "align": { "musicTime": 0, "frame": 0 },
+    "gain": 1.0, "fadeIn": 0, "fadeOut": 1.2
+  },
+  "duck": [],
+  "loudness": -14
+}
