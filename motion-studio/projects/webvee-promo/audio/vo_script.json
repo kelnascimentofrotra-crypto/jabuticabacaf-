@@ -1,0 +1,89 @@
+{
+ "narration": "audio/elevenlabs/narracao-diego.mp3",
+ "name": "elevenlabs-diego",
+ "ref_voice": "pm_alex",
+ "lines": [
+  [
+   8,
+   "Imagine ter uma inteligência artificial"
+  ],
+  [
+   80,
+   "trabalhando na captação dos seus clientes por você."
+  ],
+  [
+   182,
+   "Uma IA criada para encontrar oportunidades,"
+  ],
+  [
+   276,
+   "organizar seus leads"
+  ],
+  [
+   348,
+   "e ajudar você a transformar contatos em novos clientes."
+  ],
+  [
+   422,
+   "E o melhor:"
+  ],
+  [
+   456,
+   "você pode usar de forma ilimitada,"
+  ],
+  [
+   528,
+   "utilizando a sua própria API."
+  ],
+  [
+   604,
+   "Sem ficar preso a limites artificiais de uso."
+  ],
+  [
+   694,
+   "Sem precisar começar do zero toda vez."
+  ],
+  [
+   778,
+   "Você conecta sua própria API e deixa a inteligência trabalhar de acordo com a sua operação."
+  ],
+  [
+   902,
+   "Ela pode ajudar na prospecção, análise de leads, criação de abordagens, organização de contatos e muito mais."
+  ],
+  [
+   1144,
+   "É como ter um assistente inteligente trabalhando junto com o seu processo comercial,"
+  ],
+  [
+   1270,
+   "só que disponível a qualquer hora."
+  ],
+  [
+   1384,
+   "Você fornece a API."
+  ],
+  [
+   1444,
+   "A IA faz o trabalho pesado."
+  ],
+  [
+   1502,
+   "Mais automação."
+  ],
+  [
+   1562,
+   "Mais velocidade."
+  ],
+  [
+   1622,
+   "Mais oportunidades de venda."
+  ],
+  [
+   1684,
+   "Sua captação de clientes, potencializada por inteligência artificial."
+  ]
+ ],
+ "pre": 0.35,
+ "max_speed": 1.08
+}

@@ -1,0 +1,20 @@
+{
+ "narration": "audio/elevenlabs/narracao-aline.mp3",
+ "name": "elevenlabs-aline",
+ "ref_voice": "pf_dora",
+ "lines": [
+  [8, "Seu cliente te procurou."],
+  [135, "E não te achou."],
+  [182, "Foi pro concorrente."],
+  [244, "Um site trabalha por você."],
+  [312, "Vende enquanto você dorme."],
+  [387, "Te acham no Google."],
+  [462, "Passa mais confiança."],
+  [537, "E o cliente fala direto no WhatsApp."],
+  [658, "Sites que vendem."],
+  [700, "Feitos sob medida pro seu negócio."],
+  [1018, "O próximo é o seu."],
+  [1094, "Seu negócio merece ser visto."],
+  [1195, "Fale com a gente."]
+ ]
+}
