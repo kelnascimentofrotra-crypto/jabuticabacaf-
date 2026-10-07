@@ -2,307 +2,265 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cristallo Vidraçaria — Vidros sob medida</title>
-  <meta name="description" content="Vidros temperados, box, espelhos, guarda-corpos e esquadrias sob medida. Vidros selecionados para um jeito único de viver.">
-  <meta name="theme-color" content="#f2efe9">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Cristallo Vidraçaria</title>
+  <meta name="description" content="Vidros selecionados para residências, comércios e projetos sob medida: janelas, sacadas, box, coberturas, fachadas e divisórias.">
+  <meta name="theme-color" content="#06101c">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
-  <link rel="preconnect" href="https://images.unsplash.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/hero.jpg">
 
   <style>
+    /* Layout: uma tela só — foto noturna à direita com o texto à esquerda, e a faixa de serviços presa no rodapé da tela */
     :root {
-      --bg: #f2efe9;
-      --ink: #15191a;
-      --muted: #5f6668;
-      --teal: #1e5a60;
-      --teal-dark: #154349;
-      --bronze: #c4874b;
-      --bronze-soft: rgba(196, 135, 75, .45);
-
-      --r-xl: 36px;
-      --r-lg: 24px;
-
-      --side: 115px;      /* coluna do indicador lateral */
-      --gutter: 48px;
-      --notch-h: 360px;   /* atualizado via JS */
+      --bg: #06101c;
+      --ink: #f1f5fa;
+      --ink-soft: #c5d1de;
+      --muted: #93a5b9;
+      --blue: #2b8cff;
+      --blue-deep: #1270e6;
+      --line: rgba(150, 190, 240, .16);
 
       --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
       --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-      --font-script: "Pinyon Script", "Brush Script MT", cursive;
+
+      --gutter: clamp(16px, 8.5vw, 168px);
+      --page-h: 100svh;
+      color-scheme: dark;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { -webkit-text-size-adjust: 100%; }
+    *, *::before, *::after { box-sizing: border-box; }
     body {
+      margin: 0;
       font-family: var(--font-body);
       color: var(--ink);
       background: var(--bg);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
+    h1, h2, h3, p, ul { margin: 0; padding: 0; }
     img, svg { display: block; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
-    :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+    :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 6px; }
 
-    /* ---------- Topo ---------- */
-    .topbar {
-      position: relative;
-      z-index: 20;
+    .page {
+      min-height: var(--page-h);
       display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 24px;
-      padding: 26px var(--gutter) 0 calc(var(--side) - 10px);
+      grid-template-rows: 1fr auto;
+      grid-template-columns: minmax(0, 1fr);
     }
 
-    .brand { display: inline-flex; align-items: baseline; gap: 10px; justify-self: start; line-height: 1; }
-    .brand__script { font-family: var(--font-script); font-size: 44px; color: var(--ink); }
-    .brand__mono {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: 40px;
-      letter-spacing: -.06em;
-      color: var(--teal);
-      transform: translateY(-4px);
-    }
-
-    .nav ul {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      list-style: none;
-      padding: 10px 12px;
-      border: 1px solid var(--bronze-soft);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .35);
-      box-shadow: 0 6px 24px rgba(60, 45, 25, .05);
-    }
-    .nav a {
-      display: block;
-      padding: 13px 22px;
-      border-radius: 999px;
-      font-size: 13.5px;
-      font-weight: 500;
-      letter-spacing: .01em;
-      text-transform: uppercase;
-      transition: background-color .25s, color .25s;
-    }
-    .nav a:hover { background: rgba(30, 90, 96, .08); }
-    .nav a.is-active {
-      background: var(--teal);
-      color: #fff;
-      box-shadow: 0 6px 16px rgba(30, 90, 96, .32), inset 0 1px 0 rgba(255, 255, 255, .18);
-    }
-
-    .actions { display: flex; gap: 14px; justify-self: end; }
-    .icon-btn {
-      display: grid;
-      place-items: center;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      border: 1px solid var(--bronze-soft);
-      background: rgba(255, 255, 255, .3);
-      transition: background-color .25s, border-color .25s;
-    }
-    .icon-btn:hover { background: #fff; border-color: var(--bronze); }
-    .icon-btn svg { width: 16px; height: 16px; }
-    .menu-btn { display: none; }
-
-    /* ---------- Hero ---------- */
-    .hero {
+    /* ---------- Topo (cabeçalho + hero) ---------- */
+    .top {
       position: relative;
-      padding: 24px var(--gutter) 24px var(--side);
-    }
-
-    .pager {
-      position: absolute;
-      top: 210px;
-      left: 0;
-      width: var(--side);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 18px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .pager__num.is-current { color: var(--ink); font-weight: 600; }
-    .pager__track { display: flex; flex-direction: column; align-items: center; gap: 20px; }
-    .pager__track i { display: block; width: 1.5px; height: 14px; background: #b9b5ad; border-radius: 2px; }
-    .pager__track i.is-current { width: 2.5px; height: 34px; background: var(--teal); }
-    .pager__label {
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      letter-spacing: .28em;
-      text-transform: uppercase;
-      font-size: 12px;
-      margin-top: 8px;
-    }
-
-    .stage {
-      position: relative;
-      height: max(640px, calc(100svh - 138px));
-    }
-
-    /* Moldura da imagem */
-    .frame {
-      position: absolute;
-      inset: 0;
-      border-radius: var(--r-xl);
-      overflow: hidden;
       isolation: isolate;
-      background: #a9c7ca;
+      overflow: hidden;
+      background: radial-gradient(700px 480px at 8% 55%, rgba(43, 140, 255, .1), transparent 70%), var(--bg);
     }
-    .frame__art,
-    .frame__photo {
+    .top__photo {
       position: absolute;
-      inset: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 74%;
+      z-index: -1;
+    }
+    .top__photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -2;
+      object-position: 50% 62%;
+      animation: settle 1.8s cubic-bezier(.2, .7, .2, 1) both;
     }
-    .frame__photo { object-position: 62% 60%; animation: settle 1.6s cubic-bezier(.2, .7, .2, 1) both; }
-    .frame::after {
+    .top__photo::after {
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
-      pointer-events: none;
       background:
-        linear-gradient(0deg, rgba(12, 32, 35, .28), transparent 38%),
-        linear-gradient(90deg, rgba(12, 32, 35, .18), transparent 45%);
+        linear-gradient(90deg, var(--bg) 0%, rgba(6, 16, 28, .78) 14%, rgba(6, 16, 28, .18) 40%, transparent 60%),
+        linear-gradient(0deg, var(--bg) 0%, rgba(6, 16, 28, .55) 12%, transparent 32%),
+        linear-gradient(180deg, rgba(6, 16, 28, .6) 0%, transparent 24%);
     }
 
-    /* Recorte superior esquerdo com cantos invertidos */
-    .notch {
-      position: absolute;
-      top: -1px;
-      left: -1px;
-      z-index: 5;
-      width: max-content;
-      max-width: min(700px, 64%);
-      padding: 22px 44px 34px 50px;
-      background: var(--bg);
-      border-bottom-right-radius: var(--r-xl);
+    .topbar {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: clamp(14px, 2.8vh, 30px) var(--gutter) 0;
     }
-    .notch::before,
-    .notch::after {
+
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand__mark { width: 34px; height: 46px; color: var(--blue); filter: drop-shadow(0 0 10px rgba(43, 140, 255, .45)); }
+    .brand__name {
+      display: block;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(22px, 2vw, 30px);
+      letter-spacing: -.01em;
+      line-height: 1;
+    }
+    .brand__tag {
+      display: block;
+      margin-top: 7px;
+      font-size: 9.5px;
+      font-weight: 500;
+      letter-spacing: .36em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .nav ul { display: flex; align-items: center; gap: clamp(18px, 2.6vw, 50px); list-style: none; }
+    .nav a {
+      position: relative;
+      display: block;
+      padding: 10px 0;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: rgba(241, 245, 250, .82);
+      transition: color .25s;
+    }
+    .nav a::after {
       content: "";
       position: absolute;
-      width: var(--r-xl);
-      height: var(--r-xl);
-      background: radial-gradient(circle at 100% 100%, transparent calc(var(--r-xl) - .5px), var(--bg) var(--r-xl));
+      left: -14px;
+      right: -14px;
+      bottom: -6px;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--blue);
+      box-shadow: 0 0 12px rgba(43, 140, 255, .8);
+      transform: scaleX(0);
+      transition: transform .3s cubic-bezier(.2, .7, .2, 1);
     }
-    .notch::before { top: 0; left: 100%; }
-    .notch::after { top: 100%; left: 0; }
+    .nav a:hover { color: var(--ink); }
+    .nav a.is-active { color: var(--ink); font-weight: 600; }
+    .nav a.is-active::after, .nav a:hover::after { transform: scaleX(1); }
+
+    .actions { display: flex; align-items: center; gap: 10px; }
+    .btn-talk {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 26px;
+      border: 1.5px solid var(--blue);
+      border-radius: 999px;
+      background: rgba(43, 140, 255, .08);
+      box-shadow: 0 0 22px rgba(43, 140, 255, .22), inset 0 0 14px rgba(43, 140, 255, .12);
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: background-color .25s, box-shadow .25s;
+    }
+    .btn-talk:hover { background: rgba(43, 140, 255, .2); box-shadow: 0 0 30px rgba(43, 140, 255, .4), inset 0 0 14px rgba(43, 140, 255, .2); }
+    .btn-talk svg { width: 20px; height: 20px; color: var(--blue); }
+
+    .menu-btn {
+      display: none;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .2);
+      background: rgba(255, 255, 255, .06);
+    }
+    .menu-btn svg { width: 18px; height: 18px; }
+
+    .hero {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(12px, 2.4vh, 36px) var(--gutter);
+    }
+    .hero__copy { max-width: 620px; }
 
     .eyebrow {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      font-size: 14px;
+      font-size: clamp(11.5px, 1.6vh, 14px);
+      font-weight: 500;
+      line-height: 1.7;
       letter-spacing: .32em;
       text-transform: uppercase;
-      color: var(--muted);
     }
-    .eyebrow::before { content: ""; width: 44px; height: 2px; background: var(--bronze); border-radius: 2px; }
+    .eyebrow span { display: block; color: var(--blue); }
 
     .title {
-      margin-top: clamp(28px, 3vw, 46px);
+      margin-top: clamp(10px, 1.8vh, 20px);
       font-family: var(--font-display);
-      font-weight: 500;
-      font-size: clamp(44px, 4vw, 78px);
+      font-weight: 700;
+      font-size: clamp(36px, min(4.5vw, 6.6vh), 88px);
       line-height: .98;
-      letter-spacing: -.055em;
+      letter-spacing: -.045em;
     }
-    .title span { color: var(--teal); }
+    .title span {
+      color: var(--blue);
+      background: linear-gradient(90deg, #2b8cff, #63b3ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-    .cta-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px 38px;
-      margin-top: clamp(28px, 3vw, 46px);
+    .lead {
+      max-width: 36em;
+      margin-top: clamp(12px, 2.2vh, 24px);
+      font-size: clamp(14.5px, 1.9vh, 17px);
+      line-height: 1.55;
+      color: var(--ink-soft);
     }
-    .btn-outline {
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px 14px; margin-top: clamp(16px, 3.2vh, 36px); }
+    .btn {
       position: relative;
       display: inline-flex;
       align-items: center;
-      gap: 26px;
-      padding: 14px 40px;
-      border: 2px solid var(--bronze);
+      gap: 12px;
+      height: clamp(46px, 6.2vh, 58px);
+      padding: 0 30px;
       border-radius: 999px;
-      font-size: 19px;
-      font-weight: 500;
-      letter-spacing: -.02em;
-      color: var(--teal-dark);
-      overflow: hidden;
-      isolation: isolate;
-      transition: color .35s;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .btn-outline::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -1;
-      background: var(--teal);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .45s cubic-bezier(.2, .7, .2, 1);
-    }
-    .btn-outline svg { width: 18px; height: 18px; transition: transform .35s; }
-    .btn-outline:hover { color: #fff; border-color: var(--teal); }
-    .btn-outline:hover::before { transform: scaleX(1); }
-    .btn-outline:hover svg { transform: translateX(4px); }
-
-    .scroll-hint {
-      position: relative;
-      padding: 14px 0 14px 16px;
       font-size: 14px;
-      letter-spacing: .3em;
+      font-weight: 700;
+      letter-spacing: .04em;
       text-transform: uppercase;
-      color: var(--muted);
       white-space: nowrap;
+      overflow: hidden;
+      transition: transform .3s, box-shadow .3s, background-color .3s;
     }
-    .scroll-hint::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 1px;
-      background: #b9b5ad;
+    .btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .btn .arrow { width: 18px; height: 18px; transition: transform .3s; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:hover .arrow { transform: translateX(4px); }
+    .btn--primary {
+      background: linear-gradient(180deg, #3d98ff, var(--blue-deep));
+      box-shadow: 0 12px 32px rgba(43, 140, 255, .38), inset 0 1px 0 rgba(255, 255, 255, .3);
     }
-    .scroll-hint::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 1px;
-      height: 10px;
-      background: var(--ink);
-      animation: drip 2.4s ease-in-out infinite;
-    }
+    .btn--primary:hover { box-shadow: 0 16px 40px rgba(43, 140, 255, .5), inset 0 1px 0 rgba(255, 255, 255, .3); }
+    .btn--glass { font-weight: 600; }
+    .btn--glass svg { color: var(--blue); }
 
     /* ---------- Vidro (glassmorphism) ---------- */
     .glass {
       position: relative;
       overflow: hidden;
-      background: linear-gradient(135deg, rgba(255, 255, 255, .66), rgba(255, 255, 255, .38));
-      -webkit-backdrop-filter: blur(16px) saturate(140%);
-      backdrop-filter: blur(16px) saturate(140%);
-      border: 1px solid rgba(255, 255, 255, .62);
-      box-shadow: 0 14px 34px rgba(10, 30, 33, .14), inset 0 1px 0 rgba(255, 255, 255, .75);
+      background: linear-gradient(135deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .05));
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      backdrop-filter: blur(18px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, .18);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .2);
     }
-    .glass::after {
+    .glass::after,
+    .svc::after {
       content: "";
       position: absolute;
       top: -50%;
@@ -310,149 +268,153 @@
       width: 40%;
       height: 200%;
       pointer-events: none;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .22), transparent);
       transform: rotate(18deg) translateX(-120%);
       transition: transform .9s cubic-bezier(.2, .7, .2, 1);
     }
-    .glass:hover::after { transform: rotate(18deg) translateX(520%); }
-
-    .chip {
-      position: absolute;
-      top: calc(var(--notch-h) + 36px);
-      left: 44px;
-      padding: 21px 34px;
-      border-radius: 30px;
-      font-size: 13.5px;
-      font-weight: 500;
-      line-height: 1.45;
-      text-transform: uppercase;
-      letter-spacing: .01em;
-      max-width: 300px;
-    }
+    .glass:hover::after,
+    .svc:hover::after { transform: rotate(18deg) translateX(560%); }
 
     .stats {
       position: absolute;
-      left: 44px;
-      bottom: 44px;
+      right: var(--gutter);
+      bottom: clamp(12px, 2.6vh, 30px);
       display: flex;
-      align-items: stretch;
-      padding: 18px 34px 20px;
-      border-radius: var(--r-lg);
+      align-items: center;
+      padding: clamp(12px, 1.8vh, 18px) 26px;
+      border-radius: 20px;
     }
-    .stats > div { display: flex; flex-direction: column; gap: 10px; }
-    .stats > div + div { margin-left: 26px; padding-left: 26px; border-left: 1px solid rgba(21, 25, 26, .14); }
-    .stats strong {
+    .stat { display: flex; flex-direction: column; gap: 6px; }
+    .stat + .stat { margin-left: 24px; padding-left: 24px; border-left: 1px solid rgba(255, 255, 255, .16); }
+    .stat strong {
       font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 38px;
+      font-weight: 500;
+      font-size: clamp(24px, 3.6vh, 34px);
       line-height: 1;
       letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums;
     }
-    .stats span { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .stat strong small { font-size: .55em; color: #ffc861; vertical-align: .35em; margin-left: 4px; }
+    .stat span { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-soft); }
+    .stat--picks { flex-direction: row; align-items: center; gap: 12px; }
+    .stat--picks span { letter-spacing: .02em; text-transform: none; font-size: 13px; line-height: 1.35; }
+    .stat--picks b { display: block; font-family: var(--font-display); font-size: 16px; font-weight: 600; color: var(--ink); }
+    .avatars { display: flex; }
+    .avatars img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255, 255, 255, .85);
+    }
+    .avatars img + img { margin-left: -8px; }
 
-    .side-cards {
-      position: absolute;
-      right: 30px;
-      bottom: 46px;
-      display: flex;
-      gap: 18px;
+    /* ---------- Serviços ---------- */
+    .services {
+      position: relative;
+      padding: clamp(10px, 2.4vh, 32px) var(--gutter) clamp(14px, 3.2vh, 40px);
     }
-    .card {
+    .services__head {
+      display: flex;
+      align-items: flex-end;
+      gap: clamp(24px, 5vw, 90px);
+      margin-bottom: clamp(12px, 2.2vh, 26px);
+    }
+    .kicker {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+    .kicker::before { content: ""; width: 22px; height: 2px; border-radius: 2px; background: var(--blue); }
+    .services h2 {
+      margin-top: 4px;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(26px, 4.4vh, 46px);
+      line-height: 1;
+      letter-spacing: -.035em;
+    }
+    .services__desc { max-width: 40em; font-size: 14px; line-height: 1.5; color: var(--ink-soft); padding-bottom: 2px; }
+
+    .services__list {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: clamp(10px, 1.1vw, 20px);
+      list-style: none;
+    }
+    .svc {
+      position: relative;
       display: flex;
       flex-direction: column;
-      width: 146px;
-      height: 232px;
-      padding: 16px 12px 18px;
-      border-radius: var(--r-lg);
-    }
-    .card--count { padding: 22px 20px 18px; }
-    .card--count strong {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: 36px;
-      line-height: 1;
-      color: var(--teal);
-    }
-    .card--count > span:first-of-type {
-      margin-top: 14px;
-      font-size: 14px;
-      line-height: 1.35;
-      color: var(--muted);
-    }
-    .avatars { display: flex; margin-top: auto; }
-    .avatars span {
-      position: relative;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
+      height: 100%;
       overflow: hidden;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
-    }
-    .avatars span + span { margin-left: -6px; }
-    .avatars span:nth-child(1) { background: linear-gradient(135deg, #a7d1d4, #2f6a70); }
-    .avatars span:nth-child(2) { background: linear-gradient(135deg, #f1d2ab, #b07a44); }
-    .avatars span:nth-child(3) { background: linear-gradient(135deg, #e7f1f2, #6f9ea3); }
-    .avatars img { width: 100%; height: 100%; object-fit: cover; }
-
-    .card--feature { align-items: center; text-align: center; }
-    .card__thumb {
-      position: relative;
-      width: 100%;
-      height: 78px;
       border-radius: 14px;
-      overflow: hidden;
-      background:
-        linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .55) 38%, transparent 46%),
-        linear-gradient(160deg, #d8ebec, #7fa9ad 55%, #3c6d73);
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .02));
+      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(12px);
+      transition: transform .35s cubic-bezier(.2, .7, .2, 1), border-color .35s, box-shadow .35s;
     }
-    .card__thumb img { width: 100%; height: 100%; object-fit: cover; }
-    .card--feature h2 {
-      margin-top: 16px;
+    .svc:hover {
+      transform: translateY(-4px);
+      border-color: rgba(43, 140, 255, .6);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, .4), 0 0 24px rgba(43, 140, 255, .18);
+    }
+    .svc__img { height: clamp(60px, 11vh, 140px); overflow: hidden; background: #10243a; }
+    .svc__img img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2, .7, .2, 1); }
+    .svc:hover .svc__img img { transform: scale(1.06); }
+    .svc__body { padding: clamp(10px, 1.6vh, 16px) 16px clamp(12px, 1.9vh, 18px); }
+    .svc__icon { width: 24px; height: 24px; color: var(--blue); }
+    .svc h3 {
+      margin-top: clamp(6px, 1.2vh, 12px);
       font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 500;
-      letter-spacing: -.02em;
-      line-height: 1.2;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -.01em;
     }
-    .card--feature p { margin-top: 4px; font-size: 12px; color: var(--muted); }
-    .round-btn {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      margin-top: auto;
-      border-radius: 50%;
-      background: var(--teal);
-      color: #fff;
-      box-shadow: 0 6px 14px rgba(30, 90, 96, .35);
-      transition: transform .3s, background-color .3s;
-    }
-    .round-btn:hover { transform: translateX(3px); background: var(--teal-dark); }
-    .round-btn svg { width: 16px; height: 16px; }
+    .svc p { margin-top: 6px; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
 
     /* ---------- Animações ---------- */
     .reveal { animation: rise .9s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--d, 0s); }
-    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
     @keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
-    @keyframes drip { 0% { height: 0; bottom: 100%; } 50% { height: 100%; bottom: 0; } 100% { height: 0; bottom: 0; } }
-
     @media (prefers-reduced-motion: reduce) {
-      .reveal, .frame__photo, .scroll-hint::after { animation: none; }
-      .glass::after, .btn-outline::before { transition: none; }
+      .reveal, .top__photo img { animation: none; }
+      .glass::after, .svc::after, .svc, .svc__img img, .btn { transition: none; }
+    }
+
+    /* ---------- Telas baixas: tudo continua cabendo sem rolar ---------- */
+    @media (max-height: 820px) and (min-width: 861px) {
+      .svc p { display: none; }
+    }
+    @media (max-height: 700px) and (min-width: 861px) {
+      .lead, .services__desc { display: none; }
+      .eyebrow { line-height: 1.5; }
     }
 
     /* ---------- Responsivo ---------- */
-    @media (max-width: 1360px) {
-      :root { --side: 92px; --gutter: 32px; }
-      .nav a { padding: 12px 16px; font-size: 12.5px; }
+    @media (max-width: 1240px) {
+      .services__list {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        margin-inline: calc(-1 * var(--gutter));
+        padding-inline: var(--gutter);
+        scroll-padding-inline: var(--gutter);
+      }
+      .services__list::-webkit-scrollbar { display: none; }
+      .services__list li { flex: 0 0 clamp(190px, 26vw, 240px); scroll-snap-align: start; }
+      .stat--picks { display: none; }
     }
 
-    @media (max-width: 1100px) {
-      :root { --side: 24px; --gutter: 24px; }
-      .pager { display: none; }
-      .topbar { grid-template-columns: 1fr auto; padding-left: var(--gutter); }
-      .menu-btn { display: grid; }
+    @media (max-width: 1080px) {
       .nav {
         position: absolute;
         top: calc(100% + 10px);
@@ -466,271 +428,211 @@
       .nav ul {
         flex-direction: column;
         align-items: stretch;
-        border-radius: var(--r-lg);
+        gap: 2px;
         padding: 10px;
-        background: rgba(255, 255, 255, .92);
-        -webkit-backdrop-filter: blur(16px);
-        backdrop-filter: blur(16px);
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, .14);
+        background: rgba(8, 20, 34, .92);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, .45);
       }
-      .nav a { padding: 14px 18px; font-size: 14px; }
+      .nav a { padding: 14px 16px; border-radius: 12px; font-size: 14px; }
+      .nav a::after { display: none; }
+      .nav a.is-active { background: rgba(43, 140, 255, .16); }
       .topbar.is-open .nav { opacity: 1; visibility: visible; transform: none; }
+      .menu-btn { display: grid; }
+    }
+
+    @media (max-width: 960px) {
+      .stats { display: none; }
     }
 
     @media (max-width: 860px) {
-      .brand__script { font-size: 36px; }
-      .brand__mono { font-size: 32px; }
-      .stage { height: auto; display: flex; flex-direction: column; }
-      .notch {
-        position: relative;
-        order: -1;
-        top: 0;
-        left: 0;
-        width: auto;
-        padding: 12px 0 30px;
-        background: none;
-        border-radius: 0;
+      .top__photo { width: 100%; }
+      .top__photo img { object-position: 64% 50%; }
+      .top__photo::after {
+        background:
+          linear-gradient(0deg, var(--bg) 0%, rgba(6, 16, 28, .9) 34%, rgba(6, 16, 28, .35) 62%, rgba(6, 16, 28, .5) 100%);
       }
-      .notch::before, .notch::after { display: none; }
-      .notch { max-width: none; }
-      .title { font-size: clamp(40px, 11vw, 64px); }
-      .cta-row { flex-wrap: wrap; gap: 18px 28px; }
-
-      .frame {
-        position: relative;
-        inset: auto;
-        min-height: 640px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto 1fr auto auto;
-        gap: 12px;
-        padding: 16px;
-        border-radius: 28px;
-      }
-      .chip, .stats, .side-cards { position: static; }
-      .chip { grid-column: 1 / -1; justify-self: start; padding: 16px 22px; font-size: 12px; }
-      .side-cards { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-      .card { width: auto; height: 210px; }
-      .stats { grid-column: 1 / -1; grid-row: 4; padding: 16px 22px; }
-      .stats > div { flex: 1; }
-      .stats strong { font-size: 32px; }
-      .stats span { font-size: 11px; letter-spacing: .1em; }
-      .stats > div + div { margin-left: 16px; padding-left: 16px; }
+      .hero { justify-content: flex-end; padding-bottom: 8px; }
+      .btn-talk { padding: 0; width: 44px; height: 44px; justify-content: center; }
+      .btn-talk span { display: none; }
+      .brand__mark { width: 28px; height: 38px; }
+      .title { font-size: clamp(34px, min(10.4vw, 6.4vh), 56px); }
+      .lead { font-size: 15px; }
+      .eyebrow { font-size: 11px; letter-spacing: .2em; }
+      .brand__tag { letter-spacing: .2em; }
+      .cta-row { gap: 10px; }
+      .btn { padding: 0 22px; font-size: 13px; }
+      .services__head { margin-bottom: 12px; }
+      .services__desc { display: none; }
+      .services__list li { flex-basis: clamp(170px, 46vw, 230px); }
+      .svc__img { height: clamp(70px, 11vh, 110px); }
+      .svc p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
     }
-
-    @media (max-width: 560px) {
-      .scroll-hint { display: none; }
+    @media (max-width: 860px) and (max-height: 760px) {
+      .lead { display: none; }
+      .svc p { display: none; }
     }
-
-    @media (max-width: 420px) {
-      .brand__script { font-size: 31px; }
-      .brand__mono { font-size: 27px; }
-      .actions { gap: 8px; }
-      .eyebrow { font-size: 12px; letter-spacing: .26em; }
-      .btn-outline { padding: 12px 28px; font-size: 17px; }
+    @media (max-width: 440px) {
+      .btn { padding: 0 20px; gap: 8px; }
+      .hide-sm { display: none; }
     }
   </style>
 </head>
 <body>
+  <div class="page">
 
-  <header class="topbar" id="topbar">
-    <a href="#inicio" class="brand reveal" aria-label="Cristallo Vidraçaria — página inicial">
-      <span class="brand__script">Cristallo</span>
-      <span class="brand__mono">CV</span>
-    </a>
-
-    <nav class="nav" id="menu" aria-label="Menu principal">
-      <ul class="reveal" style="--d:.05s">
-        <li><a href="#inicio" class="is-active" aria-current="page">Início</a></li>
-        <li><a href="#vidros">Vidros</a></li>
-        <li><a href="#projetos">Projetos</a></li>
-        <li><a href="#esquadrias">Esquadrias</a></li>
-        <li><a href="#avaliacoes">Avaliações</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </nav>
-
-    <div class="actions reveal" style="--d:.1s">
-      <button class="icon-btn" type="button" aria-label="Buscar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
-      </button>
-      <a class="icon-btn" href="#contato" aria-label="Pedir orçamento">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16 16 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4Z"/></svg>
-      </a>
-      <button class="icon-btn menu-btn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu" id="menuBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <main id="inicio">
-    <section class="hero" aria-labelledby="hero-title">
-
-      <aside class="pager reveal" style="--d:.3s" aria-hidden="true">
-        <span class="pager__num is-current">01</span>
-        <span class="pager__track"><i class="is-current"></i><i></i><i></i><i></i><i></i><i></i></span>
-        <span class="pager__num">06</span>
-        <span class="pager__label">Início</span>
-      </aside>
-
-      <div class="stage" id="stage">
-
-        <div class="frame">
-          <!-- Ilustração de reserva: aparece se a foto não carregar -->
-          <svg class="frame__art" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#e4eeee"/>
-                <stop offset=".6" stop-color="#bfd6d8"/>
-                <stop offset="1" stop-color="#93b6b9"/>
-              </linearGradient>
-              <linearGradient id="pane" x1="0" y1="0" x2=".6" y2="1">
-                <stop offset="0" stop-color="#b3d3d5"/>
-                <stop offset=".45" stop-color="#6c9ca1"/>
-                <stop offset="1" stop-color="#244f55"/>
-              </linearGradient>
-              <radialGradient id="warm" cx=".5" cy=".85" r=".55">
-                <stop offset="0" stop-color="#f6cf95" stop-opacity=".85"/>
-                <stop offset="1" stop-color="#f6cf95" stop-opacity="0"/>
-              </radialGradient>
-              <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#fff" stop-opacity="0"/>
-                <stop offset=".5" stop-color="#fff" stop-opacity=".6"/>
-                <stop offset="1" stop-color="#fff" stop-opacity="0"/>
-              </linearGradient>
-              <linearGradient id="slab" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#f1ece3"/>
-                <stop offset="1" stop-color="#cdc3b3"/>
-              </linearGradient>
-              <linearGradient id="soffit" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#8a5f3c"/>
-                <stop offset="1" stop-color="#b98457"/>
-              </linearGradient>
-              <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#7dbcbf"/>
-                <stop offset="1" stop-color="#1f545b"/>
-              </linearGradient>
-              <linearGradient id="rail" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
-                <stop offset=".5" stop-color="#e3f3f4" stop-opacity=".18"/>
-                <stop offset="1" stop-color="#ffffff" stop-opacity=".4"/>
-              </linearGradient>
-              <clipPath id="glassClip"><rect x="440" y="262" width="1160" height="410"/></clipPath>
-            </defs>
-
-            <rect width="1600" height="900" fill="url(#sky)"/>
-
-            <g fill="#6f988c" opacity=".55">
-              <ellipse cx="120" cy="640" rx="260" ry="150"/>
-              <ellipse cx="360" cy="660" rx="200" ry="120"/>
-            </g>
-            <g fill="#557f73" opacity=".7">
-              <ellipse cx="60" cy="700" rx="180" ry="110"/>
-              <ellipse cx="300" cy="715" rx="150" ry="80"/>
-            </g>
-
-            <!-- laje -->
-            <path d="M330 196 H1600 V246 H352 Z" fill="url(#slab)"/>
-            <rect x="352" y="246" width="1248" height="16" fill="url(#soffit)"/>
-
-            <!-- pano de vidro -->
-            <rect x="440" y="262" width="1160" height="410" fill="url(#pane)"/>
-            <rect x="440" y="262" width="1160" height="410" fill="url(#warm)"/>
-            <g fill="#173b40" opacity=".28">
-              <rect x="640" y="580" width="260" height="40" rx="10"/>
-              <rect x="980" y="560" width="120" height="60" rx="8"/>
-            </g>
-            <g clip-path="url(#glassClip)">
-              <polygon points="560,262 690,262 520,672 390,672" fill="url(#shine)" opacity=".75"/>
-              <polygon points="760,262 800,262 630,672 590,672" fill="url(#shine)" opacity=".55"/>
-              <polygon points="1010,262 1120,262 950,672 840,672" fill="url(#shine)" opacity=".65"/>
-              <polygon points="1360,262 1500,262 1330,672 1190,672" fill="url(#shine)" opacity=".7"/>
-            </g>
-            <g stroke="#1b2a2c" stroke-width="7">
-              <path d="M443 262 V672 M635 262 V672 M828 262 V672 M1020 262 V672 M1213 262 V672 M1406 262 V672 M1597 262 V672"/>
-            </g>
-            <path d="M440 300 H1600" stroke="#1b2a2c" stroke-width="4" opacity=".8"/>
-
-            <!-- piso e piscina -->
-            <rect x="290" y="672" width="1310" height="30" fill="url(#slab)"/>
-            <rect x="0" y="702" width="1600" height="198" fill="url(#water)"/>
-            <g stroke="#effafa" stroke-opacity=".35" stroke-width="3" stroke-linecap="round">
-              <path d="M90 744 h200 M420 770 h300 M860 742 h220 M1220 772 h260 M200 812 h240 M700 826 h320 M1160 840 h200"/>
-            </g>
-
-            <!-- guarda-corpo em vidro -->
-            <g stroke="#ffffff" stroke-opacity=".85" stroke-width="2">
-              <rect x="-10" y="560" width="230" height="150" fill="url(#rail)"/>
-              <rect x="228" y="560" width="230" height="150" fill="url(#rail)"/>
-            </g>
-            <path d="M-10 560 H458" stroke="#ffffff" stroke-width="4" stroke-opacity=".9"/>
-          </svg>
-
-          <!-- Troque pela foto do seu projeto (ex.: img/hero.jpg) -->
-          <img class="frame__photo"
-               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=80"
-               alt="Casa moderna com grandes painéis de vidro do piso ao teto"
-               fetchpriority="high"
-               onerror="this.remove()">
-
-          <p class="chip glass reveal" style="--d:.55s">Vidros selecionados para<br>um jeito único de viver</p>
-
-          <div class="stats glass reveal" style="--d:.65s">
-            <div><strong>15+</strong><span>Anos de mercado</span></div>
-            <div><strong>5,0</strong><span>Nota média</span></div>
-          </div>
-
-          <div class="side-cards">
-            <a class="card card--count glass reveal" style="--d:.75s" href="#vidros">
-              <strong>6</strong>
-              <span>vidros<br>selecionados</span>
-              <span class="avatars" aria-hidden="true">
-                <span><img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
-                <span><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
-                <span><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
-              </span>
-            </a>
-
-            <article class="card card--feature glass reveal" style="--d:.85s">
-              <span class="card__thumb">
-                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=320&h=200&q=75" alt="Box de banheiro em vidro temperado" loading="lazy" onerror="this.remove()">
-              </span>
-              <h2>Box Frameless</h2>
-              <p>Temperado 8 mm</p>
-              <a class="round-btn" href="#vidros" aria-label="Ver Box Frameless">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-              </a>
-            </article>
-          </div>
-        </div>
-
-        <div class="notch" id="notch">
-          <p class="eyebrow reveal" style="--d:.15s">Vidros &amp; Esquadrias</p>
-          <h1 class="title reveal" id="hero-title" style="--d:.25s">Vamos encontrar<br>o seu <span>vidro ideal</span></h1>
-          <div class="cta-row reveal" style="--d:.4s">
-            <a class="btn-outline" href="#vidros">
-              Ver vidros
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <span class="scroll-hint">Role para explorar</span>
-          </div>
-        </div>
-
+    <div class="top">
+      <div class="top__photo">
+        <!-- Troque img/hero.jpg pela foto de uma obra do cliente -->
+        <img src="img/hero.jpg" alt="Casa moderna à noite com paredes e guarda-corpos de vidro iluminados" fetchpriority="high">
       </div>
+
+      <header class="topbar" id="topbar">
+        <a href="#inicio" class="brand reveal" aria-label="Cristallo Vidraçaria — página inicial">
+          <svg class="brand__mark" viewBox="0 0 34 46" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 8h20v36H2z"/>
+            <path d="M12 2h20v36"/>
+            <path d="M22 8l10-6"/>
+            <path d="M16 24v4" stroke-linecap="round"/>
+          </svg>
+          <span>
+            <span class="brand__name">CRISTALLO</span>
+            <span class="brand__tag">Vidraçaria especializada</span>
+          </span>
+        </a>
+
+        <nav class="nav" id="menu" aria-label="Menu principal">
+          <ul>
+            <li><a href="#inicio" class="is-active" aria-current="page">Início</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#projetos">Projetos</a></li>
+            <li><a href="#sobre">Sobre nós</a></li>
+            <li><a href="#contato">Contato</a></li>
+          </ul>
+        </nav>
+
+        <div class="actions reveal" style="--d:.1s">
+          <a class="btn-talk" href="#contato" aria-label="Fale conosco pelo WhatsApp">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.5-4.3a8.5 8.5 0 1 1 15.5-4.6Z"/><path d="M9.2 8.4c-.4 2.9 2.6 6.2 5.8 6.1l.9-1.3-1.8-1-.9.7a4.4 4.4 0 0 1-2-2l.7-.9-.9-1.8Z"/></svg>
+            <span>Fale conosco</span>
+          </a>
+          <button class="menu-btn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu" id="menuBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="hero" id="inicio">
+        <div class="hero__copy">
+          <p class="eyebrow reveal" style="--d:.15s">Vidros selecionados <span>para um jeito único de viver</span></p>
+          <h1 class="title reveal" style="--d:.25s">Mais beleza,<br>mais conforto,<br><span>mais você.</span></h1>
+          <p class="lead reveal" style="--d:.35s">A Cristallo é especializada em soluções em vidro para residências, comércios e projetos sob medida, do orçamento à instalação.</p>
+          <div class="cta-row reveal" style="--d:.45s">
+            <a class="btn btn--primary" href="#servicos">
+              Ver vidros
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="btn btn--glass glass" href="#contato">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 11.6a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.5-4.3a8.5 8.5 0 1 1 15.5-4.6Z"/><path d="M9.2 8.4c-.4 2.9 2.6 6.2 5.8 6.1l.9-1.3-1.8-1-.9.7a4.4 4.4 0 0 1-2-2l.7-.9-.9-1.8Z"/></svg>
+              <span><span class="hide-sm">Pedir </span>orçamento</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="stats glass reveal" style="--d:.6s">
+          <div class="stat"><strong>15+</strong><span>Anos de mercado</span></div>
+          <div class="stat"><strong>5,0<small aria-hidden="true">★</small></strong><span>Nota média</span></div>
+          <div class="stat stat--picks">
+            <span class="avatars" aria-hidden="true">
+              <img src="img/servico-box.jpg" alt="">
+              <img src="img/servico-sacadas.jpg" alt="">
+              <img src="img/servico-janelas.jpg" alt="">
+            </span>
+            <span><b>6 vidros</b>selecionados</span>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <section class="services" id="servicos" aria-labelledby="servicos-title">
+      <div class="services__head reveal" style="--d:.5s">
+        <div>
+          <p class="kicker">Nossos</p>
+          <h2 id="servicos-title">Serviços</h2>
+        </div>
+        <p class="services__desc">Do projeto à instalação, soluções completas em vidro com qualidade, segurança e acabamento impecável.</p>
+      </div>
+
+      <ul class="services__list">
+        <li class="reveal" style="--d:.55s">
+          <a class="svc" href="#janelas">
+            <span class="svc__img"><img src="img/servico-janelas.jpg" alt="Sala com portas de correr em vidro" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M9.5 12h.5M14 12h.5"/></svg>
+              <h3>Janelas e Portas de Vidro</h3>
+              <p>Mais luz, modernidade e sofisticação para o seu espaço.</p>
+            </span>
+          </a>
+        </li>
+        <li class="reveal" style="--d:.6s">
+          <a class="svc" href="#sacadas">
+            <span class="svc__img"><img src="img/servico-sacadas.jpg" alt="Sacada com guarda-corpo de vidro de frente para o mar" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 7h18M3 20h18M6 7v13M10 7v13M14 7v13M18 7v13"/></svg>
+              <h3>Sacadas e Guarda-corpos</h3>
+              <p>Segurança e elegância com vidros de alta resistência.</p>
+            </span>
+          </a>
+        </li>
+        <li class="reveal" style="--d:.65s">
+          <a class="svc" href="#box">
+            <span class="svc__img"><img src="img/servico-box.jpg" alt="Box de banheiro em vidro temperado" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V7a3 3 0 0 1 6 0v1"/><path d="M7.5 8h5"/><rect x="13" y="3" width="7" height="18" rx="1"/></svg>
+              <h3>Box para Banheiro</h3>
+              <p>Beleza, praticidade e durabilidade no dia a dia.</p>
+            </span>
+          </a>
+        </li>
+        <li class="reveal" style="--d:.7s">
+          <a class="svc" href="#coberturas">
+            <span class="svc__img"><img src="img/servico-coberturas.jpg" alt="Cobertura de vidro sobre área externa" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9h20L18 4H6L2 9Z"/><path d="M10 4 9 9M14 4l1 5M5 9v11M19 9v11"/></svg>
+              <h3>Coberturas de Vidro</h3>
+              <p>Proteção e luz natural em qualquer ambiente.</p>
+            </span>
+          </a>
+        </li>
+        <li class="reveal" style="--d:.75s">
+          <a class="svc" href="#fachadas">
+            <span class="svc__img"><img src="img/servico-fachadas.jpg" alt="Prédio comercial com fachada de vidro" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M11 21v-3h2v3"/></svg>
+              <h3>Fachadas de Vidro</h3>
+              <p>Um visual moderno e profissional para o seu negócio.</p>
+            </span>
+          </a>
+        </li>
+        <li class="reveal" style="--d:.8s">
+          <a class="svc" href="#divisorias">
+            <span class="svc__img"><img src="img/servico-divisorias.jpg" alt="Escritório com divisórias de vidro" loading="lazy"></span>
+            <span class="svc__body">
+              <svg class="svc__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="1"/><path d="M9 4v16M15 4v16"/></svg>
+              <h3>Divisórias e Espelhos</h3>
+              <p>Ambientes integrados, funcionais e elegantes.</p>
+            </span>
+          </a>
+        </li>
+      </ul>
     </section>
-  </main>
+
+  </div>
 
   <script>
-    // Mantém o selo "Vidros selecionados" logo abaixo do recorte, qualquer que seja a altura do texto
-    (function () {
-      var stage = document.getElementById('stage');
-      var notch = document.getElementById('notch');
-      function sync() { stage.style.setProperty('--notch-h', notch.offsetHeight + 'px'); }
-      sync();
-      if ('ResizeObserver' in window) new ResizeObserver(sync).observe(notch);
-      else window.addEventListener('resize', sync);
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
-    })();
-
     // Menu mobile
     (function () {
       var bar = document.getElementById('topbar');
