@@ -98,7 +98,7 @@ function P(el, { x = CX, y = CY, s = 1, r = 0, o = 1, b = 0, sk = 0, t3 = '' } =
   el.style.opacity = o; el.style.filter = b > .3 ? `blur(${b}px)` : 'none';
 }
 // impactos: tremida de câmera que decai (frame, força)
-const HITS = [[24, 10], [36, 12], [48, 22], [96, 18], [168, 24], [216, 26], [360, 10], [500, 18], [672, 20], [696, 16], [720, 34], [744, 16], [768, 12], [780, 14], [792, 28], [864, 40]];
+const HITS = [[24, 10], [36, 12], [48, 22], [96, 18], [168, 24], [216, 26], [360, 10], [500, 18], [672, 20], [696, 16], [720, 34], [744, 16], [768, 12], [780, 14], [792, 28], [864, 40], [1008, 26], [1020, 26], [1032, 46]];
 const shake = f => { let x = 0, y = 0; HITS.forEach(([t, a], i) => { if (f >= t && f < t + 16) { const k = a * Math.exp(-(f - t) / 3.5); x += (hash(f * 3 + i) - .5) * 2 * k; y += (hash(f * 7 + i) - .5) * 2 * k; } }); return [x, y]; };
 function cam(el, f, lf, d, { s0 = 1, s1 = 1.08, punch = 0, rot = 0 } = {}) {
   const [sx, sy] = shake(f);
@@ -354,12 +354,36 @@ scene(864, 144, c => ({
   const ck = popS(lf, 50); P(x.cta, { y: 1450 - prog(lf, 50, d) * 10, s: ck * (1 + .04 * Math.sin(lf / 4) * prog(lf, 60, 70)), o: lf < 50 ? 0 : 1, sk: -6 });
 });
 
+// ---------------- 10 · o bordão: "DANIEL VAI SE LASCAR!" (1008–1104) ----------------
+scene(1008, 96, c => ({
+  rays: add(c, 'rays', '', 'width:2200px;height:2200px;margin:-1100px 0 0 -1100px;top:520px;opacity:.8'),
+  em: add(c, 'el', `<img src="assets/emblem-solo.png" style="width:470px;display:block;-webkit-mask-image:linear-gradient(#000 72%,transparent 100%)">`),
+  hd: headline(c, '*Daniel*|vai se|*lascar!*', { y: 1250, size: 190 }),
+  q: add(c, 'el mono', '— ZORRO GAMER', 'font-size:28px;letter-spacing:.24em;color:rgba(255,241,226,.7);white-space:nowrap'),
+  rings: [0, 1, 2].map(() => add(c, 'el ring')), sp: [...Array(36).keys()].map(() => add(c, 'el spark')),
+}), (s, lf, d, f) => {
+  const x = s.ctx;
+  cam(s.cam, f, lf, d, { s1: 1.08, punch: .16 });
+  x.rays.style.transform = `rotate(${-lf * 1.4}deg) scale(${prog(lf, 0, 10, E.out5)})`;
+  // o mascote "fala": bate a cada palavra e treme
+  const talk = [0, 12, 24].reduce((m, t) => Math.max(m, lf >= t ? Math.exp(-(lf - t) / 4) : 0), 0);
+  const ek = spring(lf, 0, { k: 160, c: 11 });
+  P(x.em, { y: 520 - prog(lf, 0, d) * 20, s: ek * (1 + .12 * talk), r: (1 - ek) * -30 + Math.sin(lf * 1.9) * 5 * talk, o: lf < 0 ? 0 : 1 });
+  x.em.style.filter = `drop-shadow(0 0 ${36 + 30 * talk}px rgba(255,106,0,.8))`;
+  x.hd.lines[2].style.fontSize = '260px';
+  slamLines(x.hd, lf, [0, 12, 24], { drift: -40, d: 90 });
+  glitch(x.hd.lines[2], f, 1032, 8); glitch(x.hd.lines[0], f, 1008, 5);
+  x.rings.forEach((r, i) => ripple(r, lf, 24 + i * 5, { y: 1340, max: 20, dur: 30 }));
+  sparks(x.sp, lf, 24, { y: 1340, r: 700, dur: 32, seed: 99 });
+  P(x.q, { y: 1640 - prog(lf, 40, d) * 10, o: prog(lf, 40, 48), s: 1 + .03 * prog(lf, 40, d) });
+});
+
 // ---------------- camadas globais: brasas, garras, HUD, flash ----------------
 const embers = add(stage, '', ''); embers.id = 'embers';
 const EM = [...Array(46).keys()].map(i => { const e = add(embers, 'ember'); const sz = 3 + hash(i + 50) * 8; e.style.width = e.style.height = sz + 'px'; return e; });
 const slashL = add(stage, ''); slashL.id = 'slashes';
 const SL = [0, 1, 2].map(() => add(slashL, 'slash', '', 'height:44px;border-radius:22px'));
-const SLASH = [88, 184, 304, 424, 544, 664, 856];          // transições de garra (cortam no tempo seguinte)
+const SLASH = [88, 184, 304, 424, 544, 664, 856, 1000];          // transições de garra (cortam no tempo seguinte)
 const hud = add(stage, ''); hud.id = 'hud';
 [[48, 48, '5px 0 0 5px'], [W - 118, 48, '5px 5px 0 0'], [48, H - 118, '0 0 5px 5px'], [W - 118, H - 118, '0 5px 5px 0']].forEach(([x, y, bw]) => add(hud, 'hc', '', `left:${x}px;top:${y}px;border-width:${bw}`));
 const rec = add(hud, 'ht mono', '● REC', 'left:140px;top:68px;color:#FF5A2A');
@@ -369,7 +393,7 @@ const tc = add(hud, 'ht mono', '00:00:00', `right:140px;bottom:68px`);
 const flash = add(stage, ''); flash.id = 'flash';
 const vig = add(stage, ''); vig.id = 'vig';
 const grain = add(stage, ''); grain.id = 'grain';
-const FLASH = [[96, .9], [192, .7], [312, .7], [432, .7], [552, .7], [672, .9], [696, .6], [720, .9], [744, .6], [864, 1], [168, .5], [216, .6]];
+const FLASH = [[96, .9], [192, .7], [312, .7], [432, .7], [552, .7], [672, .9], [696, .6], [720, .9], [744, .6], [864, 1], [168, .5], [216, .6], [1008, .9], [1032, 1]];
 
 // ---------------- efeitos sonoros (frames) ----------------
 const SFX = [
@@ -384,15 +408,16 @@ const SFX = [
   ['boom', 720, 1.0, 0, { dur: 1.0 }], ['boom', 744, .6, 0, { dur: .5 }], ['whoosh', 744, .5, .6, { dur: .5, f0: 1500, f1: 8000, peak: .2, panFrom: .8, panTo: -.8 }],
   ['boom', 768, .45, 0, { dur: .4 }], ['boom', 780, .5, 0, { dur: .4 }], ['boom', 792, .85, 0, { dur: .9 }], ['confetti', 792, .35, 0, {}], ['riser', 820, .45, 0, { dur: 1.2 }],
   ['boom', 864, 1.0, 0, { dur: 2.0 }], ['shimmer', 864, .5, 0, { dur: 2.0 }], ['confetti', 868, .5, 0, {}], ['whoosh', 892, .35, 0, { dur: .4 }], ['pop', 914, .5, 0, { f0: 500, f1: 1100 }], ['chime', 960, .35, 0, {}],
+  ['glitch', 1008, .5, 0, { dur: .2 }], ['boom', 1020, .7, 0, { dur: .5 }], ['boom', 1032, 1.0, 0, { dur: 1.6 }], ['glitch', 1032, .6, 0, { dur: .3 }], ['confetti', 1034, .5, 0, {}], ['shimmer', 1034, .4, 0, { dur: 1.4 }],
 ];
 SLASH.forEach(t => [0, 2, 4].forEach((k, i) => SFX.push(['whoosh', t + k, .45, (i - 1) * .5, { dur: .2, f0: 2500, f1: 9000, peak: .25 }])));
 SLASH.forEach(t => SFX.push(['boom', t + 8, .5, 0, { dur: .5 }]));
 SFX.forEach(x => { x[2] *= .6; });                       // efeitos ~4 dB abaixo, pra trilha respirar
-const DURATION_F = 1008;
+const DURATION_F = 1104;
 const BOARD = [[30, 'Gancho', 'PRESS START'], [70, 'Glitch', 'tá sem identidade?'], [150, 'XP', 'subindo de nível'], [176, 'Level up', 'explosão'],
   [250, 'Intros', 'logo bate com raios'], [380, 'Overlay', 'live com alerta e chat'], [470, 'Vinheta', 'lower third'], [512, 'Stinger', 'garra corta a cena'],
   [600, 'Logo animado', 'gira e brilha'], [684, 'Glitch.', ''], [708, 'Fogo.', ''], [730, 'Impacto.', ''], [756, 'Estilo.', ''],
-  [820, 'Quem joga', 'controle desenhado'], [880, 'Logo', 'impacto + raios'], [990, 'CTA', 'chama na DM']];
+  [820, 'Quem joga', 'controle desenhado'], [880, 'Logo', 'impacto + raios'], [990, 'CTA', 'chama na DM'], [1022, 'Bordão', 'Daniel vai se…'], [1080, 'Bordão', 'LASCAR!']];
 
 // ---------------- render ----------------
 function render(t) {

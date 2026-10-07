@@ -24,6 +24,7 @@ python3 projects/jabuticaba-promo/audio/compose_music.py       # trilha (fluidsy
 python3 engine/sfx.py projects/jabuticaba-promo                # out/mix.wav (ajuste de som sem re-render)
 node tools/render.cjs projects/jabuticaba-promo full --audio projects/jabuticaba-promo/out/mix.wav            # out/final.mp4
 node tools/render.cjs projects/jabuticaba-promo full --fmt sq --audio projects/jabuticaba-promo/out/mix.wav   # out/final-sq.mp4
+node tools/render.cjs projects/<p> full --from 1000 --audio projects/<p>/out/mix.wav   # só refaz do frame 1000 em diante (o começo vem do out/video.mp4 anterior)
 ```
 
 ## Narração (voz neural Kokoro-82M, Apache-2.0)

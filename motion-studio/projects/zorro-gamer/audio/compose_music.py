@@ -1,4 +1,4 @@
-"""Trilha do Zorro Gamer: phonk/trap a 150 BPM em mi menor, 33,6 s.
+"""Trilha do Zorro Gamer: phonk/trap a 150 BPM em mi menor, 36,8 s.
 
     python3 compose_music.py   -> trilha.mid, trilha.flac e ../out/trilha.mp3
 
@@ -7,7 +7,8 @@
   c2–13   (96–672)    drop: 808 distorcido, bateria trap (rolos de chimbal), cowbell
   c14–15  (672–768)   montagem: pancadas a cada 2 tempos (GLITCH / FOGO / IMPACTO / ESTILO)
   c16–17  (768–864)   respiro: pad + cowbell, subida até o logo
-  c18–20  (864–1008)  drop final no logo e acorde final
+  c18–20  (864–1008)  drop final no logo (para 1 tempo antes do bordão)
+  c21–22  (1008–1104) bordão "DANIEL / VAI SE / LASCAR!": três pancadas e acorde final
 O 808 é sintetizado aqui (seno com queda de afinação + saturação); o resto é FluidR3_GM (MIT).
 """
 import subprocess
@@ -20,11 +21,11 @@ from scipy.signal import butter, sosfilt
 
 HERE = Path(__file__).parent
 SF2 = '/usr/share/sounds/sf2/FluidR3_GM.sf2'
-BPM, DUR, SR = 150, 33.6, 48000
+BPM, DUR, SR = 150, 36.8, 48000
 TPB = 480
 E16, BAR = TPB // 4, TPB * 4
 rng = np.random.default_rng(5)
-SEC = lambda b: 'intro' if b < 2 else 'drop' if b < 14 else 'hits' if b < 16 else 'break' if b < 18 else 'final' if b < 20 else 'end'
+SEC = lambda b: 'intro' if b < 2 else 'drop' if b < 14 else 'hits' if b < 16 else 'break' if b < 18 else 'final' if b < 21 else 'punch' if b < 22 else 'end'
 CH = ['Em', 'C', 'Am', 'B']
 PADV = {'Em': [52, 55, 59, 64], 'C': [52, 55, 60, 64], 'Am': [52, 57, 60, 64], 'B': [51, 54, 59, 63]}
 ROOT = {'Em': 40, 'C': 36, 'Am': 33, 'B': 35}                  # 808 (E2, C2, A1, B1)
@@ -43,15 +44,23 @@ def compose():
     for b in range(nb):
         sec, ch = SEC(b), CH[b % 4]
         b0 = b * BAR
+        if sec == 'punch':
+            for k in range(3):                                   # DANIEL / VAI SE / LASCAR!
+                t = b0 + k * TPB
+                ev.append((t, DR, 36, 127, E16 * 2)); ev.append((t, DR, 49, 110 if k == 2 else 90, BAR))
+                ev.append((t, HIT, 64, 120 if k == 2 else 104, TPB * (3 if k == 2 else 1))); ev.append((t, HIT, 52, 120 if k == 2 else 104, TPB * (3 if k == 2 else 1)))
+                bass.append((t / TPB * 60 / BPM, ROOT['Em'], 1.6 if k == 2 else .4, 0))
+            for n in PADV['Em'] + [71]:
+                ev.append((b0 + 2 * TPB, PAD, n, 74, BAR * 2))
+            continue
         if sec != 'end':
             for n in PADV[ch]:
                 ev.append((b0, PAD, n, v(62 if sec in ('intro', 'break') else 48, 3), BAR - 10))
         else:
-            for n in PADV['Em'] + [71]:
-                ev.append((b0, PAD, n, 70, BAR * 2))
+            pass
         # cowbell (melodia phonk)
         if sec in ('intro', 'drop', 'break', 'final'):
-            pat = COW[b % 2]
+            pat = COW[b % 2] if not (b == 20) else COW[0][:12] + [None] * 4
             for i, n in enumerate(pat):
                 if n is None:
                     continue
@@ -62,12 +71,14 @@ def compose():
             t = b0 / TPB * 60 / BPM
             r = ROOT[ch]
             for pos, dur, gl in [(0, .55, 0), (1.5, .3, 0), (2.5, .55, 0), (3.5, .35, 12 if b % 4 == 3 else 0)]:
+                if b == 20 and pos >= 3:
+                    continue                                        # respiro antes do bordão
                 bass.append((t + pos * 60 / BPM, r, dur, gl))
         elif sec == 'hits':
             for k in range(4):
                 bass.append((b0 / TPB * 60 / BPM + k * 2 * 60 / BPM, ROOT['Em'], .7, 0))
         elif sec == 'end':
-            bass.append((b0 / TPB * 60 / BPM, ROOT['Em'], 1.4, 0))
+            pass                                                    # o 808 do LASCAR! ainda soa
         # bateria (kit TR-808)
         for i in range(16):
             t = b0 + i * E16
@@ -76,6 +87,8 @@ def compose():
                     continue                                    # 1 tempo de silêncio antes do drop
                 ev.append((t, DR, 42, v(28 + b * 18 + (12 if i % 4 == 0 else 0)), E16))
             elif sec in ('drop', 'final'):
+                if b == 20 and i >= 12:
+                    continue
                 if i in (0, 7, 10) or (b % 2 and i == 14):
                     ev.append((t, DR, 36, v(112, 4), E16 * 2))
                 if i in (4, 12):
@@ -97,8 +110,8 @@ def compose():
                     ev.append((t, DR, 38, v(40 + (i - 8) * 10), E16))   # caixa subindo até o logo
                 elif i % 4 == 0:
                     ev.append((t, DR, 42, v(40), E16))
-            elif sec == 'end' and i == 0:
-                ev.append((t, DR, 36, 120, E16 * 2)); ev.append((t, DR, 49, 104, BAR)); ev.append((t, HIT, 64, 110, TPB * 3))
+            elif sec == 'end':
+                pass
     for b in (2, 6, 10, 18):
         ev.append((b * BAR, DR, 49, 104, BAR)); ev.append((b * BAR, HIT, 64, 104, TPB * 2)); ev.append((b * BAR, HIT, 52, 104, TPB * 2))
     return ev, bass

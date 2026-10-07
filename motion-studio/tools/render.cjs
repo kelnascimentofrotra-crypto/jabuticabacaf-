@@ -6,6 +6,7 @@
 //   node tools/render.cjs <projeto> check            -> out/check.json + relatório de dead holds (tools/check.py)
 //   node tools/render.cjs <projeto> full [--audio out/mix.wav]  -> out/final.mp4
 // Opções: --fmt v|sq (padrão v; sq grava com sufixo -sq) · --workers N (padrão 3)
+//          --from F (full): renderiza só a partir do frame F e reaproveita os F primeiros de out/video.mp4
 // Requer: playwright (Chromium), ffmpeg, python3 com pillow/numpy.
 const { chromium } = require('playwright');
 const { spawn, execFileSync } = require('child_process');
@@ -90,10 +91,11 @@ async function shoot(page, f, file) {
   // full: abas em paralelo -> segmentos quase sem perdas -> MP4 final (2 passadas) com áudio
   await probe.close();
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'ms-render-'));
-  const chunk = Math.ceil(N / workers);
+  const from = Number(arg('--from') || 0);
+  const chunk = Math.ceil((N - from) / workers);
   let done = 0; const t0 = Date.now(); const segs = [];
   await Promise.all([...Array(workers).keys()].map(async w => {
-    const a = w * chunk, b = Math.min(N, a + chunk);
+    const a = from + w * chunk, b = Math.min(N, a + chunk);
     if (a >= b) return;
     const file = path.join(tmp, `seg${w}.mp4`); segs[w] = file;
     const page = await open(browser);
@@ -101,11 +103,16 @@ async function shoot(page, f, file) {
     for (let f = a; f < b; f++) {
       const buf = await shoot(page, f);
       if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
-      if (++done % 90 === 0) console.log(`[${fmt}] frame ${done}/${N} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
+      if (++done % 90 === 0) console.log(`[${fmt}] frame ${done}/${N - from} (${((Date.now() - t0) / 1000).toFixed(0)}s)`);
     }
     ff.stdin.end(); await ff.done; await page.close();
   }));
   await browser.close();
+  if (from > 0) {   // começo reaproveitado do master anterior (mesmos frames)
+    const pre = path.join(tmp, 'prefix.mp4');
+    await run('ffmpeg', ['-y', '-loglevel', 'error', '-i', path.join(OUT, `video${sfx}.mp4`), '-frames:v', String(from), '-c:v', 'libx264', '-preset', 'fast', '-crf', '10', '-pix_fmt', 'yuv420p', pre]).done;
+    segs.unshift(pre);
+  }
   const list = path.join(tmp, 'list.txt');
   fs.writeFileSync(list, segs.filter(Boolean).map(s => `file '${s}'`).join('\n'));
   const master = path.join(tmp, 'master.mp4');
