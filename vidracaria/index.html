@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cristallo Vidraçaria — Vidros sob medida</title>
+  <meta name="description" content="Vidros temperados, box, espelhos, guarda-corpos e esquadrias sob medida. Vidros selecionados para um jeito único de viver.">
+  <meta name="theme-color" content="#f2efe9">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <style>
+    :root {
+      --bg: #f2efe9;
+      --ink: #15191a;
+      --muted: #5f6668;
+      --teal: #1e5a60;
+      --teal-dark: #154349;
+      --bronze: #c4874b;
+      --bronze-soft: rgba(196, 135, 75, .45);
+
+      --r-xl: 36px;
+      --r-lg: 24px;
+
+      --side: 115px;      /* coluna do indicador lateral */
+      --gutter: 48px;
+      --notch-h: 360px;   /* atualizado via JS */
+
+      --font-display: "Inter Tight", "Inter", system-ui, sans-serif;
+      --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      --font-script: "Pinyon Script", "Brush Script MT", cursive;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--bg);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
+
+    /* ---------- Topo ---------- */
+    .topbar {
+      position: relative;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 26px var(--gutter) 0 calc(var(--side) - 10px);
+    }
+
+    .brand { display: inline-flex; align-items: baseline; gap: 10px; justify-self: start; line-height: 1; }
+    .brand__script { font-family: var(--font-script); font-size: 44px; color: var(--ink); }
+    .brand__mono {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 40px;
+      letter-spacing: -.06em;
+      color: var(--teal);
+      transform: translateY(-4px);
+    }
+
+    .nav ul {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+      padding: 10px 12px;
+      border: 1px solid var(--bronze-soft);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .35);
+      box-shadow: 0 6px 24px rgba(60, 45, 25, .05);
+    }
+    .nav a {
+      display: block;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: .01em;
+      text-transform: uppercase;
+      transition: background-color .25s, color .25s;
+    }
+    .nav a:hover { background: rgba(30, 90, 96, .08); }
+    .nav a.is-active {
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(30, 90, 96, .32), inset 0 1px 0 rgba(255, 255, 255, .18);
+    }
+
+    .actions { display: flex; gap: 14px; justify-self: end; }
+    .icon-btn {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid var(--bronze-soft);
+      background: rgba(255, 255, 255, .3);
+      transition: background-color .25s, border-color .25s;
+    }
+    .icon-btn:hover { background: #fff; border-color: var(--bronze); }
+    .icon-btn svg { width: 16px; height: 16px; }
+    .menu-btn { display: none; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      padding: 24px var(--gutter) 24px var(--side);
+    }
+
+    .pager {
+      position: absolute;
+      top: 210px;
+      left: 0;
+      width: var(--side);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .pager__num.is-current { color: var(--ink); font-weight: 600; }
+    .pager__track { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .pager__track i { display: block; width: 1.5px; height: 14px; background: #b9b5ad; border-radius: 2px; }
+    .pager__track i.is-current { width: 2.5px; height: 34px; background: var(--teal); }
+    .pager__label {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .stage {
+      position: relative;
+      height: max(640px, calc(100svh - 138px));
+    }
+
+    /* Moldura da imagem */
+    .frame {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      isolation: isolate;
+      background: #a9c7ca;
+    }
+    .frame__art,
+    .frame__photo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+    .frame__photo { object-position: 62% 60%; animation: settle 1.6s cubic-bezier(.2, .7, .2, 1) both; }
+    .frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        linear-gradient(0deg, rgba(12, 32, 35, .28), transparent 38%),
+        linear-gradient(90deg, rgba(12, 32, 35, .18), transparent 45%);
+    }
+
+    /* Recorte superior esquerdo com cantos invertidos */
+    .notch {
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      z-index: 5;
+      width: max-content;
+      max-width: min(700px, 64%);
+      padding: 22px 44px 34px 50px;
+      background: var(--bg);
+      border-bottom-right-radius: var(--r-xl);
+    }
+    .notch::before,
+    .notch::after {
+      content: "";
+      position: absolute;
+      width: var(--r-xl);
+      height: var(--r-xl);
+      background: radial-gradient(circle at 100% 100%, transparent calc(var(--r-xl) - .5px), var(--bg) var(--r-xl));
+    }
+    .notch::before { top: 0; left: 100%; }
+    .notch::after { top: 100%; left: 0; }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 14px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .eyebrow::before { content: ""; width: 44px; height: 2px; background: var(--bronze); border-radius: 2px; }
+
+    .title {
+      margin-top: clamp(28px, 3vw, 46px);
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: clamp(44px, 4vw, 78px);
+      line-height: .98;
+      letter-spacing: -.055em;
+    }
+    .title span { color: var(--teal); }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px 38px;
+      margin-top: clamp(28px, 3vw, 46px);
+    }
+    .btn-outline {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 26px;
+      padding: 14px 40px;
+      border: 2px solid var(--bronze);
+      border-radius: 999px;
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -.02em;
+      color: var(--teal-dark);
+      overflow: hidden;
+      isolation: isolate;
+      transition: color .35s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-outline::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: var(--teal);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .45s cubic-bezier(.2, .7, .2, 1);
+    }
+    .btn-outline svg { width: 18px; height: 18px; transition: transform .35s; }
+    .btn-outline:hover { color: #fff; border-color: var(--teal); }
+    .btn-outline:hover::before { transform: scaleX(1); }
+    .btn-outline:hover svg { transform: translateX(4px); }
+
+    .scroll-hint {
+      position: relative;
+      padding: 14px 0 14px 16px;
+      font-size: 14px;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .scroll-hint::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: #b9b5ad;
+    }
+    .scroll-hint::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 1px;
+      height: 10px;
+      background: var(--ink);
+      animation: drip 2.4s ease-in-out infinite;
+    }
+
+    /* ---------- Vidro (glassmorphism) ---------- */
+    .glass {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .66), rgba(255, 255, 255, .38));
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, .62);
+      box-shadow: 0 14px 34px rgba(10, 30, 33, .14), inset 0 1px 0 rgba(255, 255, 255, .75);
+    }
+    .glass::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 40%;
+      height: 200%;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
+      transform: rotate(18deg) translateX(-120%);
+      transition: transform .9s cubic-bezier(.2, .7, .2, 1);
+    }
+    .glass:hover::after { transform: rotate(18deg) translateX(520%); }
+
+    .chip {
+      position: absolute;
+      top: calc(var(--notch-h) + 36px);
+      left: 44px;
+      padding: 21px 34px;
+      border-radius: 30px;
+      font-size: 13.5px;
+      font-weight: 500;
+      line-height: 1.45;
+      text-transform: uppercase;
+      letter-spacing: .01em;
+      max-width: 300px;
+    }
+
+    .stats {
+      position: absolute;
+      left: 44px;
+      bottom: 44px;
+      display: flex;
+      align-items: stretch;
+      padding: 18px 34px 20px;
+      border-radius: var(--r-lg);
+    }
+    .stats > div { display: flex; flex-direction: column; gap: 10px; }
+    .stats > div + div { margin-left: 26px; padding-left: 26px; border-left: 1px solid rgba(21, 25, 26, .14); }
+    .stats strong {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 38px;
+      line-height: 1;
+      letter-spacing: -.03em;
+    }
+    .stats span { font-size: 12.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+
+    .side-cards {
+      position: absolute;
+      right: 30px;
+      bottom: 46px;
+      display: flex;
+      gap: 18px;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      width: 146px;
+      height: 232px;
+      padding: 16px 12px 18px;
+      border-radius: var(--r-lg);
+    }
+    .card--count { padding: 22px 20px 18px; }
+    .card--count strong {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 1;
+      color: var(--teal);
+    }
+    .card--count > span:first-of-type {
+      margin-top: 14px;
+      font-size: 14px;
+      line-height: 1.35;
+      color: var(--muted);
+    }
+    .avatars { display: flex; margin-top: auto; }
+    .avatars span {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+    }
+    .avatars span + span { margin-left: -6px; }
+    .avatars span:nth-child(1) { background: linear-gradient(135deg, #a7d1d4, #2f6a70); }
+    .avatars span:nth-child(2) { background: linear-gradient(135deg, #f1d2ab, #b07a44); }
+    .avatars span:nth-child(3) { background: linear-gradient(135deg, #e7f1f2, #6f9ea3); }
+    .avatars img { width: 100%; height: 100%; object-fit: cover; }
+
+    .card--feature { align-items: center; text-align: center; }
+    .card__thumb {
+      position: relative;
+      width: 100%;
+      height: 78px;
+      border-radius: 14px;
+      overflow: hidden;
+      background:
+        linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .55) 38%, transparent 46%),
+        linear-gradient(160deg, #d8ebec, #7fa9ad 55%, #3c6d73);
+    }
+    .card__thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .card--feature h2 {
+      margin-top: 16px;
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+      letter-spacing: -.02em;
+      line-height: 1.2;
+    }
+    .card--feature p { margin-top: 4px; font-size: 12px; color: var(--muted); }
+    .round-btn {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      margin-top: auto;
+      border-radius: 50%;
+      background: var(--teal);
+      color: #fff;
+      box-shadow: 0 6px 14px rgba(30, 90, 96, .35);
+      transition: transform .3s, background-color .3s;
+    }
+    .round-btn:hover { transform: translateX(3px); background: var(--teal-dark); }
+    .round-btn svg { width: 16px; height: 16px; }
+
+    /* ---------- Animações ---------- */
+    .reveal { animation: rise .9s cubic-bezier(.2, .7, .2, 1) both; animation-delay: var(--d, 0s); }
+    @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+    @keyframes settle { from { transform: scale(1.06); } to { transform: none; } }
+    @keyframes drip { 0% { height: 0; bottom: 100%; } 50% { height: 100%; bottom: 0; } 100% { height: 0; bottom: 0; } }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .frame__photo, .scroll-hint::after { animation: none; }
+      .glass::after, .btn-outline::before { transition: none; }
+    }
+
+    /* ---------- Responsivo ---------- */
+    @media (max-width: 1360px) {
+      :root { --side: 92px; --gutter: 32px; }
+      .nav a { padding: 12px 16px; font-size: 12.5px; }
+    }
+
+    @media (max-width: 1100px) {
+      :root { --side: 24px; --gutter: 24px; }
+      .pager { display: none; }
+      .topbar { grid-template-columns: 1fr auto; padding-left: var(--gutter); }
+      .menu-btn { display: grid; }
+      .nav {
+        position: absolute;
+        top: calc(100% + 10px);
+        left: var(--gutter);
+        right: var(--gutter);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: opacity .25s, transform .25s, visibility .25s;
+      }
+      .nav ul {
+        flex-direction: column;
+        align-items: stretch;
+        border-radius: var(--r-lg);
+        padding: 10px;
+        background: rgba(255, 255, 255, .92);
+        -webkit-backdrop-filter: blur(16px);
+        backdrop-filter: blur(16px);
+      }
+      .nav a { padding: 14px 18px; font-size: 14px; }
+      .topbar.is-open .nav { opacity: 1; visibility: visible; transform: none; }
+    }
+
+    @media (max-width: 860px) {
+      .brand__script { font-size: 36px; }
+      .brand__mono { font-size: 32px; }
+      .stage { height: auto; display: flex; flex-direction: column; }
+      .notch {
+        position: relative;
+        order: -1;
+        top: 0;
+        left: 0;
+        width: auto;
+        padding: 12px 0 30px;
+        background: none;
+        border-radius: 0;
+      }
+      .notch::before, .notch::after { display: none; }
+      .notch { max-width: none; }
+      .title { font-size: clamp(40px, 11vw, 64px); }
+      .cta-row { flex-wrap: wrap; gap: 18px 28px; }
+
+      .frame {
+        position: relative;
+        inset: auto;
+        min-height: 640px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr auto auto;
+        gap: 12px;
+        padding: 16px;
+        border-radius: 28px;
+      }
+      .chip, .stats, .side-cards { position: static; }
+      .chip { grid-column: 1 / -1; justify-self: start; padding: 16px 22px; font-size: 12px; }
+      .side-cards { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .card { width: auto; height: 210px; }
+      .stats { grid-column: 1 / -1; grid-row: 4; padding: 16px 22px; }
+      .stats > div { flex: 1; }
+      .stats strong { font-size: 32px; }
+      .stats span { font-size: 11px; letter-spacing: .1em; }
+      .stats > div + div { margin-left: 16px; padding-left: 16px; }
+    }
+
+    @media (max-width: 560px) {
+      .scroll-hint { display: none; }
+    }
+
+    @media (max-width: 420px) {
+      .brand__script { font-size: 31px; }
+      .brand__mono { font-size: 27px; }
+      .actions { gap: 8px; }
+      .eyebrow { font-size: 12px; letter-spacing: .26em; }
+      .btn-outline { padding: 12px 28px; font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar" id="topbar">
+    <a href="#inicio" class="brand reveal" aria-label="Cristallo Vidraçaria — página inicial">
+      <span class="brand__script">Cristallo</span>
+      <span class="brand__mono">CV</span>
+    </a>
+
+    <nav class="nav" id="menu" aria-label="Menu principal">
+      <ul class="reveal" style="--d:.05s">
+        <li><a href="#inicio" class="is-active" aria-current="page">Início</a></li>
+        <li><a href="#vidros">Vidros</a></li>
+        <li><a href="#projetos">Projetos</a></li>
+        <li><a href="#esquadrias">Esquadrias</a></li>
+        <li><a href="#avaliacoes">Avaliações</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+    </nav>
+
+    <div class="actions reveal" style="--d:.1s">
+      <button class="icon-btn" type="button" aria-label="Buscar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>
+      </button>
+      <a class="icon-btn" href="#contato" aria-label="Pedir orçamento">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l1.7 4.3-2.2 1.4a11 11 0 0 0 6.3 6.3l1.4-2.2L20 15.5V19a1.5 1.5 0 0 1-1.6 1.5A16 16 0 0 1 3.5 5.6 1.5 1.5 0 0 1 5 4Z"/></svg>
+      </a>
+      <button class="icon-btn menu-btn" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu" id="menuBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="inicio">
+    <section class="hero" aria-labelledby="hero-title">
+
+      <aside class="pager reveal" style="--d:.3s" aria-hidden="true">
+        <span class="pager__num is-current">01</span>
+        <span class="pager__track"><i class="is-current"></i><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="pager__num">06</span>
+        <span class="pager__label">Início</span>
+      </aside>
+
+      <div class="stage" id="stage">
+
+        <div class="frame">
+          <!-- Ilustração de reserva: aparece se a foto não carregar -->
+          <svg class="frame__art" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#e4eeee"/>
+                <stop offset=".6" stop-color="#bfd6d8"/>
+                <stop offset="1" stop-color="#93b6b9"/>
+              </linearGradient>
+              <linearGradient id="pane" x1="0" y1="0" x2=".6" y2="1">
+                <stop offset="0" stop-color="#b3d3d5"/>
+                <stop offset=".45" stop-color="#6c9ca1"/>
+                <stop offset="1" stop-color="#244f55"/>
+              </linearGradient>
+              <radialGradient id="warm" cx=".5" cy=".85" r=".55">
+                <stop offset="0" stop-color="#f6cf95" stop-opacity=".85"/>
+                <stop offset="1" stop-color="#f6cf95" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+                <stop offset=".5" stop-color="#fff" stop-opacity=".6"/>
+                <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+              </linearGradient>
+              <linearGradient id="slab" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f1ece3"/>
+                <stop offset="1" stop-color="#cdc3b3"/>
+              </linearGradient>
+              <linearGradient id="soffit" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#8a5f3c"/>
+                <stop offset="1" stop-color="#b98457"/>
+              </linearGradient>
+              <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#7dbcbf"/>
+                <stop offset="1" stop-color="#1f545b"/>
+              </linearGradient>
+              <linearGradient id="rail" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#ffffff" stop-opacity=".55"/>
+                <stop offset=".5" stop-color="#e3f3f4" stop-opacity=".18"/>
+                <stop offset="1" stop-color="#ffffff" stop-opacity=".4"/>
+              </linearGradient>
+              <clipPath id="glassClip"><rect x="440" y="262" width="1160" height="410"/></clipPath>
+            </defs>
+
+            <rect width="1600" height="900" fill="url(#sky)"/>
+
+            <g fill="#6f988c" opacity=".55">
+              <ellipse cx="120" cy="640" rx="260" ry="150"/>
+              <ellipse cx="360" cy="660" rx="200" ry="120"/>
+            </g>
+            <g fill="#557f73" opacity=".7">
+              <ellipse cx="60" cy="700" rx="180" ry="110"/>
+              <ellipse cx="300" cy="715" rx="150" ry="80"/>
+            </g>
+
+            <!-- laje -->
+            <path d="M330 196 H1600 V246 H352 Z" fill="url(#slab)"/>
+            <rect x="352" y="246" width="1248" height="16" fill="url(#soffit)"/>
+
+            <!-- pano de vidro -->
+            <rect x="440" y="262" width="1160" height="410" fill="url(#pane)"/>
+            <rect x="440" y="262" width="1160" height="410" fill="url(#warm)"/>
+            <g fill="#173b40" opacity=".28">
+              <rect x="640" y="580" width="260" height="40" rx="10"/>
+              <rect x="980" y="560" width="120" height="60" rx="8"/>
+            </g>
+            <g clip-path="url(#glassClip)">
+              <polygon points="560,262 690,262 520,672 390,672" fill="url(#shine)" opacity=".75"/>
+              <polygon points="760,262 800,262 630,672 590,672" fill="url(#shine)" opacity=".55"/>
+              <polygon points="1010,262 1120,262 950,672 840,672" fill="url(#shine)" opacity=".65"/>
+              <polygon points="1360,262 1500,262 1330,672 1190,672" fill="url(#shine)" opacity=".7"/>
+            </g>
+            <g stroke="#1b2a2c" stroke-width="7">
+              <path d="M443 262 V672 M635 262 V672 M828 262 V672 M1020 262 V672 M1213 262 V672 M1406 262 V672 M1597 262 V672"/>
+            </g>
+            <path d="M440 300 H1600" stroke="#1b2a2c" stroke-width="4" opacity=".8"/>
+
+            <!-- piso e piscina -->
+            <rect x="290" y="672" width="1310" height="30" fill="url(#slab)"/>
+            <rect x="0" y="702" width="1600" height="198" fill="url(#water)"/>
+            <g stroke="#effafa" stroke-opacity=".35" stroke-width="3" stroke-linecap="round">
+              <path d="M90 744 h200 M420 770 h300 M860 742 h220 M1220 772 h260 M200 812 h240 M700 826 h320 M1160 840 h200"/>
+            </g>
+
+            <!-- guarda-corpo em vidro -->
+            <g stroke="#ffffff" stroke-opacity=".85" stroke-width="2">
+              <rect x="-10" y="560" width="230" height="150" fill="url(#rail)"/>
+              <rect x="228" y="560" width="230" height="150" fill="url(#rail)"/>
+            </g>
+            <path d="M-10 560 H458" stroke="#ffffff" stroke-width="4" stroke-opacity=".9"/>
+          </svg>
+
+          <!-- Troque pela foto do seu projeto (ex.: img/hero.jpg) -->
+          <img class="frame__photo"
+               src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=80"
+               alt="Casa moderna com grandes painéis de vidro do piso ao teto"
+               fetchpriority="high"
+               onerror="this.remove()">
+
+          <p class="chip glass reveal" style="--d:.55s">Vidros selecionados para<br>um jeito único de viver</p>
+
+          <div class="stats glass reveal" style="--d:.65s">
+            <div><strong>15+</strong><span>Anos de mercado</span></div>
+            <div><strong>5,0</strong><span>Nota média</span></div>
+          </div>
+
+          <div class="side-cards">
+            <a class="card card--count glass reveal" style="--d:.75s" href="#vidros">
+              <strong>6</strong>
+              <span>vidros<br>selecionados</span>
+              <span class="avatars" aria-hidden="true">
+                <span><img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
+                <span><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
+                <span><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=96&h=96&q=70" alt="" loading="lazy" onerror="this.remove()"></span>
+              </span>
+            </a>
+
+            <article class="card card--feature glass reveal" style="--d:.85s">
+              <span class="card__thumb">
+                <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=320&h=200&q=75" alt="Box de banheiro em vidro temperado" loading="lazy" onerror="this.remove()">
+              </span>
+              <h2>Box Frameless</h2>
+              <p>Temperado 8 mm</p>
+              <a class="round-btn" href="#vidros" aria-label="Ver Box Frameless">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+            </article>
+          </div>
+        </div>
+
+        <div class="notch" id="notch">
+          <p class="eyebrow reveal" style="--d:.15s">Vidros &amp; Esquadrias</p>
+          <h1 class="title reveal" id="hero-title" style="--d:.25s">Vamos encontrar<br>o seu <span>vidro ideal</span></h1>
+          <div class="cta-row reveal" style="--d:.4s">
+            <a class="btn-outline" href="#vidros">
+              Ver vidros
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <span class="scroll-hint">Role para explorar</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Mantém o selo "Vidros selecionados" logo abaixo do recorte, qualquer que seja a altura do texto
+    (function () {
+      var stage = document.getElementById('stage');
+      var notch = document.getElementById('notch');
+      function sync() { stage.style.setProperty('--notch-h', notch.offsetHeight + 'px'); }
+      sync();
+      if ('ResizeObserver' in window) new ResizeObserver(sync).observe(notch);
+      else window.addEventListener('resize', sync);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(sync);
+    })();
+
+    // Menu mobile
+    (function () {
+      var bar = document.getElementById('topbar');
+      var btn = document.getElementById('menuBtn');
+      var menu = document.getElementById('menu');
+      function setOpen(open) {
+        bar.classList.toggle('is-open', open);
+        btn.setAttribute('aria-expanded', String(open));
+        btn.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+      }
+      btn.addEventListener('click', function () { setOpen(!bar.classList.contains('is-open')); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setOpen(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    })();
+  </script>
+</body>
+</html>
