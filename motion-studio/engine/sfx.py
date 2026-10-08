@@ -6,7 +6,8 @@
 Lê out/timeline.json (SFX=[[nome, frame, ganho, pan, {opts}]], FPS, DURATION) e audio.json
 ({music:{path, align:{musicTime, frame}, gain, fadeIn, fadeOut}, duck:[[frameIni, frameFim, dB]], loudness}).
 Sons: whoosh{dur,f0,f1,peak,panFrom,panTo} pop{f0,f1,dur} click{freq,dur} tick chime boom{dur} shimmer{dur}
-      typing{n,step} clicks{n,step} glitch{dur} confetti riser{dur}. Som novo = função em GEN.
+      typing{n,step} clicks{n,step} glitch{dur} confetti riser{dur} coin{pitch} coins{n,dur} cash stamp impact{dur}.
+      Som novo = função em GEN.
 """
 import json
 import sys
@@ -180,8 +181,63 @@ def riser(dur=1.0, **_):
     return verb(pan2(x, np.linspace(-.3, .3, len(x))), HALL, .2)
 
 
+def coin(pitch=1.0, seed=0, **_):
+    """Moeda batendo: parciais inarmônicas agudas + dois quiques menores."""
+    r = np.random.default_rng(300 + seed)
+    out = np.zeros(int(.6 * SR))
+    for k, (dt, amp) in enumerate([(0, 1), (.055 + r.random() * .02, .45), (.1 + r.random() * .03, .2)]):
+        t = t_(.45)
+        x = sum(a * np.sin(2 * np.pi * f * pitch * (1 + r.uniform(-.02, .02)) * t) * np.exp(-t / d)
+                for f, a, d in [(3150, 1, .22), (4420, .7, .16), (6080, .5, .1), (7930, .35, .07), (9610, .2, .05)])
+        x += filt(noise(len(t), 310 + seed * 7 + k), 'highpass', 5000) * np.exp(-t / .002) * .6
+        i = int(dt * SR); out[i:i + len(t)] += x[:len(out) - i] * amp
+    return verb(out * .5, ROOM, .18)
+
+
+def coins(n=10, dur=.7, **_):
+    """Chuva de moedas."""
+    out = np.zeros((2, int((dur + .7) * SR)))
+    for i in range(n):
+        place(out, pan2(coin(.85 + R.random() * .35, i)[0], R.uniform(-.8, .8)) * (.5 + .5 * R.random()), R.random() ** 1.3 * dur)
+    return out
+
+
+def cash(**_):
+    """Caixa registradora: 'ka' mecânico + 'ching' de sino + moedas."""
+    out = np.zeros((2, int(2.2 * SR)))
+    t = t_(.07)
+    ka = filt(noise(len(t), 41), 'bandpass', [400, 3500]) * np.exp(-t / .012) + np.sin(2 * np.pi * 180 * t) * np.exp(-t / .02) * .6
+    place(out, pan2(ka, -.1), 0)
+    ching = np.zeros(int(1.8 * SR))
+    for f0, d, a in [(2093, 1.8, .9), (2637, 1.6, .55), (3136, 1.2, .35)]:
+        b = bell(f0, d, a); ching[:len(b)] += b
+    place(out, pan2(ching * .7, .1), .09)
+    place(out, coins(5, .35) * .5, .12)
+    return verb(out, HALL, .22)
+
+
+def stamp(**_):
+    """Carimbo: baque grave + tapa de papel."""
+    t = t_(.4)
+    f = 45 + 70 * np.exp(-t / .03)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / .08)
+    x += filt(noise(len(t), 51), 'bandpass', [500, 4000]) * np.exp(-t / .015) * .7
+    return verb(np.tanh(x * 1.6), ROOM, .2)
+
+
+def impact(dur=1.6, **_):
+    """Impacto cinematográfico: sub + estalo + cauda metálica longa."""
+    t = t_(dur + .8)
+    f = 32 + 90 * np.exp(-t / .07)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t / (.25 * dur + .05)) * 1.2
+    x += filt(noise(len(t), 61), 'lowpass', 3000) * np.exp(-t / .03)
+    x += sum(a * np.sin(2 * np.pi * fr * t) * np.exp(-t / d) for fr, a, d in [(211, .25, .9), (347, .18, .7), (523, .12, .5), (791, .08, .35)])
+    return verb(np.tanh(x * 1.3), HALL, .3)
+
+
 GEN = dict(whoosh=whoosh, pop=pop, click=click, tick=tick, chime=chime, boom=boom, shimmer=shimmer,
-           typing=typing, clicks=clicks, glitch=glitch, confetti=confetti, riser=riser)
+           typing=typing, clicks=clicks, glitch=glitch, confetti=confetti, riser=riser,
+           coin=coin, coins=coins, cash=cash, stamp=stamp, impact=impact)
 
 
 def place(bus, sig, t, g=1.0):
