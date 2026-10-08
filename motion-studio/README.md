@@ -87,6 +87,9 @@ Vertical, tudo em gráfico (dívida subindo, barras de juros, extrato, virada do
 python3 projects/lougan-contabil/audio/compose_music.py
 node tools/render.cjs projects/lougan-contabil timeline && python3 engine/sfx.py projects/lougan-contabil
 node tools/render.cjs projects/lougan-contabil full --workers 4 --audio projects/lougan-contabil/out/mix.wav
+# com a narração do Leonardo (ElevenLabs):
+python3 tools/vo_align.py projects/lougan-contabil && python3 engine/sfx.py projects/lougan-contabil --vo audio/vo/elevenlabs-leonardo/vo.json --out mix-voz.wav
+ffmpeg -i projects/lougan-contabil/out/final.mp4 -i projects/lougan-contabil/out/mix-voz.wav -map 0:v -map 1:a -c:v copy -c:a aac -b:a 192k -shortest projects/lougan-contabil/out/final-voz.mp4
 ```
 
 Requer Playwright (Chromium), ffmpeg e Python com `numpy scipy soundfile pyloudnorm pillow mido`.

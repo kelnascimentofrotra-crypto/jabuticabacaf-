@@ -1,0 +1,66 @@
+[
+ {
+  "path": "audio/vo/elevenlabs-leonardo/00.wav",
+  "frame": 3
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/01.wav",
+  "frame": 100
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/02.wav",
+  "frame": 154
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/03.wav",
+  "frame": 231
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/04.wav",
+  "frame": 295
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/05.wav",
+  "frame": 372
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/06.wav",
+  "frame": 597
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/07.wav",
+  "frame": 706
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/08.wav",
+  "frame": 776
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/09.wav",
+  "frame": 897
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/10.wav",
+  "frame": 950
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/11.wav",
+  "frame": 1058
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/12.wav",
+  "frame": 1104
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/13.wav",
+  "frame": 1253
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/14.wav",
+  "frame": 1300
+ },
+ {
+  "path": "audio/vo/elevenlabs-leonardo/15.wav",
+  "frame": 1343
+ }
+]
