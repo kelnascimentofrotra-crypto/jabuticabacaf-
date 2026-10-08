@@ -313,7 +313,7 @@ function orbitsAt(O, lf, { x = CX, y = CY, t0 = 0 } = {}) {
   });
 }
 // transição "troca de tela" da referência: as duas cenas viram cartões arredondados com borda neon e deslizam juntas
-const SWIPE = [105, 675, 945], SWN = 9;
+const SWIPE = [105, 675, 1035, 1305], SWN = 9;
 let NOEXIT = false;
 
 // ---------- peças de gráfico (a linguagem do gráfico de abertura vale pro vídeo todo) ----------
@@ -573,9 +573,111 @@ scene(675, 120, '', c => {
   pop(c.l2, lf, 58, d, { y: CY + V(440, 340) });
 });
 
+// ---------- 12 s novos (795–1155): todo tipo de dívida · nome limpo · parcela em dia ----------
+const IC3 = {
+  card: '<svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M2.5 9.5h19M6 15h4"/></svg>',
+  car: '<svg viewBox="0 0 24 24"><path d="M3.5 16.5v-3.5l2.2-5.5h12.6l2.2 5.5v3.5z"/><path d="M3.5 13h17"/><circle cx="7.5" cy="16.5" r="1.8"/><circle cx="16.5" cy="16.5" r="1.8"/></svg>',
+  house: '<svg viewBox="0 0 24 24"><path d="M3.5 11L12 4l8.5 7"/><path d="M6 9.5V20h12V9.5"/><path d="M10 20v-5h4v5"/></svg>',
+  cart: '<svg viewBox="0 0 24 24"><path d="M3 4h2.5l2.2 10.5h10.6L20.5 7H7"/><circle cx="9.5" cy="19" r="1.5"/><circle cx="17" cy="19" r="1.5"/></svg>',
+};
+// 7b · "Cartão, empréstimo, cheque… Todo tipo de dívida." — anel de ícones que vira de vermelho pra verde (795–915)
+scene(795, 120, '', c => {
+  darkBg(c); const rg = redGlow(c);
+  const O = mkOrbit(c, V(380, 330), [IC3.card, IC2.building, IC2.receipt, IC3.car, IC3.house, IC3.cart, IC2.pct]);
+  const TG = mkTags(c, [['Financiamento', 160, 230, .85], ['Consignado', 960, 300, .95], ['Crediário', 140, 1640, .9], ['Conta atrasada', 900, 1720, .85]]);
+  return { rg, O, TG, l1: typer(add(c, 'ctr ws', 'Cartão, empréstimo, cheque…', 'font-size:42px'), 30), l2: add(c, 'ctr pb', 'Todo tipo', `font-size:${V(104, 90)}px`), l3: add(c, 'ctr pb', 'de dívida.', `font-size:${V(104, 90)}px`) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 80, exit: { len: 10, zoom: .6, blur: 18 } });
+  const [sx, sy] = shakeAt(lf, [26, 36], 8); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  const oy = CY - 80, gk = prog(lf, 64, 80, E.out5), ex = prog(lf, 100, 118, E.inC);
+  P(c.rg, { y: oy, s: 1 + .1 * Math.sin(lf / 5), o: 1 - gk });
+  orbitAt(c.O, lf, { y: oy, t0: 0, spd: 1.4, s: (1 + .05 * prog(lf, 0, d)) * lerp(1, .55, ex) });
+  const bc1 = mix([255, 138, 149], [93, 240, 168], gk), bc2 = mix([194, 29, 51], [19, 165, 99], gk), gl = gk > .5 ? '34,211,127' : '255,60,80';
+  c.O.bs.forEach(b => { b.style.background = `radial-gradient(circle at 35% 30%,${bc1},${bc2} 70%)`; b.style.boxShadow = `0 0 22px rgba(${gl},.95),0 0 60px rgba(${gl},.5)`; b.style.opacity = 1 - ex; });
+  c.O.ring.style.opacity = +c.O.ring.style.opacity * (1 - ex);
+  L(c.l1.el, { y: oy - V(150, 130) - lf * .2 }); type(c.l1, lf, 6);
+  pop(c.l2, lf, 26, d, { y: oy - V(30, 25) });
+  pop(c.l3, lf, 36, d, { y: oy + V(85, 75) });
+  [c.l2, c.l3].forEach(l => { l.style.color = mix([255, 107, 120], [93, 240, 168], gk); l.style.textShadow = `0 0 16px rgba(${gl},.95),0 0 60px rgba(${gl},.6)`; });
+  tagsAt(c.TG, lf, 40); c.TG.forEach(g => { g.el.style.opacity = +g.el.style.opacity * (1 - .7 * gk); });
+});
+
+// 7c · "Nome limpo, crédito de volta." — o score sobe do vermelho pro verde (915–1035)
+scene(915, 120, '', c => {
+  darkBg(c);
+  const A = mkArcs(c, 600, '#22D37F');
+  const ticks = [...Array(11).keys()].map(i => { const a = Math.PI + i / 10 * Math.PI; return `<line x1="${350 + Math.cos(a) * 250}" y1="${340 + Math.sin(a) * 250}" x2="${350 + Math.cos(a) * 226}" y2="${340 + Math.sin(a) * 226}" stroke="rgba(242,255,248,.35)" stroke-width="4" stroke-linecap="round"/>`; }).join('');
+  const card = add(c, 'el', `<div class="mono" style="display:flex;justify-content:space-between;font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.5);margin-bottom:10px"><span>SEU SCORE</span><span style="letter-spacing:.12em">EXEMPLO ILUSTRATIVO</span></div>
+    <svg width="700" height="370" viewBox="0 0 700 370" style="display:block;margin:0 auto;overflow:visible">
+      <path d="M60 340A290 290 0 0 1 640 340" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="44" stroke-linecap="round"/>
+      <path class="ga" d="M60 340A290 290 0 0 1 640 340" fill="none" stroke="#FF5A6A" stroke-width="44" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/>${ticks}
+      <g class="nd"><line x1="350" y1="340" x2="350" y2="120" stroke="#F2FFF8" stroke-width="10" stroke-linecap="round" style="filter:drop-shadow(0 0 8px rgba(255,255,255,.8))"/><circle cx="350" cy="340" r="22" fill="#F2FFF8"/></g>
+      <text x="60" y="400" text-anchor="middle" fill="rgba(242,255,248,.5)" font-family="Montserrat" font-weight="700" font-size="24">0</text><text x="640" y="400" text-anchor="middle" fill="rgba(242,255,248,.5)" font-family="Montserrat" font-weight="700" font-size="24">1000</text></svg>
+    <div class="sc" style="text-align:center;margin-top:20px;font-weight:900;font-size:120px;line-height:1;color:#FF6B78">320</div>
+    <div style="height:100px;margin-top:30px;perspective:900px;display:flex;justify-content:center"><div class="fl" style="position:relative;width:520px;height:96px;transform-style:preserve-3d">
+      <div style="position:absolute;inset:0;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:14px;background:rgba(255,90,106,.14);border:3px solid #FF6B78;color:#FF8A95;font-weight:800;font-size:38px;backface-visibility:hidden">${icon(IC2.x, 34, '#FF8A95', 3)}Nome negativado</div>
+      <div style="position:absolute;inset:0;border-radius:999px;display:flex;align-items:center;justify-content:center;gap:14px;background:#22D37F;color:#03281A;font-weight:800;font-size:38px;transform:rotateX(180deg);backface-visibility:hidden;box-shadow:0 0 30px rgba(34,211,127,.8)">${icon(IC2.check, 36, '#03281A', 3.2)}Nome limpo</div></div></div>`,
+    'width:860px;padding:36px 40px 40px;border-radius:40px;background:rgba(8,20,15,.86);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+  const D = mkDot(c);
+  return { A, D, card, ga: card.querySelector('.ga'), nd: card.querySelector('.nd'), sc: card.querySelector('.sc'), fl: card.querySelector('.fl'),
+    l1: typer(add(c, 'ctr ws', 'Nome limpo,', 'font-size:54px'), 24), l2: add(c, 'ctr pb', 'crédito de volta.', `font-size:${V(86, 74)}px`) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120 });
+  const cy2 = CY - V(190, 130) - lf * .25;
+  dotTravel(c.D, lf, 0, 10, { x: -40, y: cy2 + 380 }, { x: CX, y: cy2 }, 150);
+  arcsAt(c.A, lf, { y: cy2, t0: 10, spd: 1.6, o: .7 });
+  P(c.card, { y: cy2, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
+  openCard(c.card, c.D, lf, 10, CX, cy2);
+  const g = prog(lf, 24, 80, E.inOutC), val = lerp(320, 780, g), pp = val / 1000;
+  const col = pp < .5 ? mix(RED, [255, 200, 80], clamp((pp - .32) / .18)) : mix([255, 200, 80], GRN, clamp((pp - .5) / .2));
+  c.ga.style.strokeDashoffset = 1 - pp; c.ga.setAttribute('stroke', col); c.ga.style.filter = `drop-shadow(0 0 12px ${col})`;
+  c.nd.setAttribute('transform', `rotate(${-90 + 180 * pp + Math.sin(lf * 1.7) * (1 - g) * 3} 350 340)`);
+  c.sc.textContent = Math.round(val); c.sc.style.color = col; c.sc.style.textShadow = `0 0 24px ${col}`;
+  const hit = lf >= 80 ? Math.exp(-(lf - 80) / 5) : 0; c.sc.style.transform = `scale(${(1 + .12 * hit) * (1 + .03 * prog(lf, 80, d))})`;
+  const fk = prog(lf, 74, 88, E.out5); c.fl.style.transform = `rotateX(${180 * fk + (lf > 88 ? Math.sin((lf - 88) / 3) * 6 * Math.exp(-(lf - 88) / 10) : 0)}deg)`;
+  L(c.l1.el, { y: CY + V(380, 300) - lf * .2 }); type(c.l1, lf, 30);
+  pop(c.l2, lf, 50, d, { y: CY + V(480, 390) });
+});
+
+// 7d · "Parcela em dia, sem susto no fim do mês." — o ponto pula de mês em mês deixando o check (1035–1155)
+const MESES = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+scene(1035, 120, '', c => {
+  darkBg(c);
+  const A = mkArcs(c, 640, '#22D37F');
+  const cal = add(c, 'el', `<div class="mono" style="display:flex;justify-content:space-between;align-items:center;font-size:22px;letter-spacing:.3em;color:rgba(242,255,248,.55);margin-bottom:24px"><span>SEU ANO</span>${BADGE(54)}</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">${MESES.map(m => `<div class="mc" style="position:relative;height:150px;border-radius:24px;background:rgba(3,40,26,.6);border:2px solid rgba(93,240,168,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px"><span style="font-weight:800;font-size:30px;color:rgba(242,255,248,.85);letter-spacing:.08em">${m}</span><div class="ck" style="width:52px;height:52px;border-radius:50%;background:#22D37F;display:flex;align-items:center;justify-content:center;box-shadow:0 0 18px rgba(34,211,127,.8);opacity:0">${icon(IC2.check, 30, '#03281A', 3.4)}</div></div>`).join('')}</div>
+    <div style="margin-top:26px;height:14px;border-radius:7px;background:rgba(242,255,248,.1);overflow:hidden"><div class="pb2" style="height:100%;width:100%;border-radius:7px;background:linear-gradient(90deg,#13A563,#5DF0A8);transform-origin:0 50%;box-shadow:0 0 14px #22D37F;transform:scaleX(0)"></div></div>
+    <div class="hop" style="position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:#E6FFF2;box-shadow:0 0 22px #22D37F,0 0 56px rgba(34,211,127,.6)"></div>`,
+    'width:880px;padding:36px 40px 40px;border-radius:40px;background:rgba(8,20,15,.86);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+  return { A, cal, mcs: [...cal.querySelectorAll('.mc')], cks: [...cal.querySelectorAll('.ck')], pb2: cal.querySelector('.pb2'), hop: cal.querySelector('.hop'),
+    l1: add(c, 'ctr pb', 'Parcela em dia,', `font-size:${V(96, 84)}px`), l2: typer(add(c, 'ctr ws', 'sem susto no fim do mês.', 'font-size:50px'), 28) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.07, oy: CY, exit: { len: 10, zoom: .5, blur: 16 } });
+  pop(c.l1, lf, 4, d, { y: CY - V(640, 470) - lf * .6, grow: .12 }); c.l1.style.transform += ` translateX(${Math.sin(lf / 7) * 14}px)`;
+  L(c.l2.el, { y: CY - V(535, 380) - lf * .5, s: 1 + .05 * prog(lf, 16, d) }); type(c.l2, lf, 16);
+  const cy3 = CY + V(110, 70) - lf * .25, ck = spring(lf, 0, { k: 90, c: 13 });
+  arcsAt(c.A, lf, { y: cy3, t0: 0, spd: -1.4, o: .7 });
+  P(c.cal, { y: cy3, s: lerp(.85, 1, ck) * (1 + .03 * prog(lf, 0, d)), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${lerp(25, 3, ck)}deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
+  const T0 = 14, ST = 5.5;
+  c.mcs.forEach((m, i) => { const t = T0 + i * ST, on = lf >= t, k = on ? popS(lf, t) : 0;
+    m.style.background = on ? 'rgba(34,211,127,.18)' : 'rgba(3,40,26,.6)'; m.style.borderColor = on ? 'rgba(93,240,168,.8)' : 'rgba(93,240,168,.2)';
+    m.style.boxShadow = on ? `0 0 ${18 + 24 * Math.exp(-(lf - t) / 4)}px rgba(34,211,127,.45)` : 'none'; c.cks[i].style.transform = `scale(${k})`; c.cks[i].style.opacity = on ? 1 : 0; });
+  c.pb2.style.transform = `scaleX(${prog(lf, T0, T0 + 11 * ST, E.lin)})`;
+  // o ponto entra pela esquerda e pula de mês em mês (em arco)
+  const cen = i => { const m = c.mcs[i]; return [m.offsetLeft + m.offsetWidth / 2, m.offsetTop + m.offsetHeight / 2 + 32]; };
+  let hx, hy, hs = 1, ho = 1;
+  if (lf < T0) { const k = prog(lf, 6, T0, E.inOutC), [x0, y0] = cen(0); hx = lerp(-260, x0, k); hy = y0 - Math.sin(Math.PI * k) * 80; ho = lf < 6 ? 0 : 1; }
+  else { const idx = Math.min(11, (lf - T0) / ST), i0 = Math.floor(idx), e = E.inOutC(idx - i0), [xa, ya] = cen(i0), [xb, yb] = cen(Math.min(11, i0 + 1));
+    hx = lerp(xa, xb, e); hy = lerp(ya, yb, e) - Math.sin(Math.PI * e) * 60; const q = prog(lf, T0 + 11 * ST, T0 + 11 * ST + 10, E.out5); hs = 1 + 2 * q; ho = 1 - q; }
+  c.hop.style.transform = `translate(${hx - 15}px,${hy - 15}px) scale(${hs})`; c.hop.style.opacity = ho;
+});
+
 // 8 · "E cuida do resto também" — painel de serviços + carimbo DENTRO DA LEI (795–945)
 const SERV2 = [['Imposto de Renda', IC2.doc], ['MEI e regularização', IC2.shield], ['Abertura de empresa', IC2.building], ['Planejamento tributário', IC2.calc]];
-scene(795, 150, '', c => {
+scene(1155, 150, '', c => {
   darkBg(c);
   const A = mkArcs(c, 660, '#22D37F'), T = mkTile(c, IC2.shield, false, V(150, 120));
   const panel = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">${BADGE(64)}<span class="mono" style="font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.6)">LOUGAN · SERVIÇOS</span></div>
@@ -589,20 +691,21 @@ scene(795, 150, '', c => {
   cam(x.cam, lf, d, { s1: 1.07 });
   const [sx, sy] = shakeAt(lf, [96], 18); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   L(c.l.el, { y: CY - V(640, 470) - lf * .6, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
-  const py8 = CY + V(20, 10) - lf * .2;
+  const py8 = CY + V(20, 10) - lf * .35;
   dotTravel(c.D, lf, 0, 10, { x: -40, y: py8 + 380 }, { x: CX, y: py8 }, 160);
   const mT = tileAt(c.T, lf, 0, d, { y: CY - V(470, 340) - lf * .4, anim: 'beat', hero: 8 }); arcsAt(c.A, lf, { y: lerp(CY, py8, mT), t0: 0, spd: -1.6 });
-  P(c.panel, { y: py8, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
+  P(c.panel, { y: py8, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(${3 + Math.sin(lf / 17) * 2}deg) rotateY(${Math.sin(lf / 22) * 5}deg)` });
   openCard(c.panel, c.D, lf, 10, CX, py8);
   c.panel.style.backgroundPosition = `${lerp(110, -10, ((lf + 30) % 75) / 75)}% 0`;   // brilho que atravessa o painel
-  c.rows.forEach((r, i) => { const k = prog(lf, 22 + i * 12, 34 + i * 12, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * 80}px)`; });
+  // linhas: esqueleto pulsando (carregando) até cada uma entrar
+  c.rows.forEach((r, i) => { const k = prog(lf, 22 + i * 12, 34 + i * 12, E.out5); r.style.opacity = lf < 10 ? 0 : lerp(.18 + .12 * Math.sin(lf / 2.5 + i), 1, k); r.style.transform = `translateX(${(1 - k) * 80}px)`; });
   c.cks.forEach((k2, i) => { const k = popS(lf, 32 + i * 12); k2.style.transform = `scale(${lf < 32 + i * 12 ? 0 : k})`; });
   const st = prog(lf, 90, 96, E.inC);
   P(c.stampEl, { y: CY + V(520, 380) - prog(lf, 96, d) * 10, s: lf < 90 ? 0 : lerp(2.6, 1, st) * (1 + .03 * prog(lf, 96, d)), r: -10, o: lf < 90 ? 0 : clamp(st * 2), b: (1 - st) * 10 });
 });
 
 // 9 · "Quem cuida do seu caso é o próprio Lougan." — linha do tempo do atendimento (945–1065)
-scene(945, 120, '', c => {
+scene(1305, 120, '', c => {
   darkBg(c);
   const O = mkOrbit(c, V(300, 250), [IC2.doc, IC2.calc, IC2.shield, IC2.chat, IC2.coins, IC2.check]);
   const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 150, '#FFE9A8', 1.6)}</div>`, `width:${V(290, 250)}px;height:${V(290, 250)}px`);
@@ -626,7 +729,7 @@ scene(945, 120, '', c => {
 });
 
 // 10 · conversa + CTA "Chamar no WhatsApp" (1065–1260)
-scene(1065, 195, '', c => {
+scene(1425, 195, '', c => {
   c.appendChild(h('div', 'glow', '', 'opacity:.7'));
   const A = mkArcs(c, 640, '#22D37F'), T = mkTile(c, IC2.chat, false, V(150, 120));
   const chat = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;padding-bottom:20px;border-bottom:1px solid rgba(242,255,248,.12)">${BADGE(70)}<div><b style="font-size:32px;color:#fff">Lougan Contabilidade</b><span style="display:block;font-size:22px;color:#5DF0A8">online agora</span></div></div>
@@ -671,7 +774,7 @@ scene(1065, 195, '', c => {
 // o monograma nasce grande no centro (giro 3D, ondas de luz, moedas), sobe pro lugar; a frase bate palavra por palavra;
 // o botão do zap abre do ponto e fica pulsando com ondas até o fim
 const EXIT_IC = '<svg viewBox="0 0 24 24"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg>';
-scene(1260, 180, '', c => {
+scene(1620, 180, '', c => {
   darkBg(c);
   const bgl = add(c, 'el', `<svg width="1300" height="1500" viewBox="0 0 1300 1500" style="overflow:visible"><polyline points="0,120 180,260 320,220 470,470 620,430 780,760 930,720 1100,1100 1300,1380" fill="none" stroke="rgba(93,240,168,.14)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/></svg>`, 'width:1300px;height:1500px');
   const A = mkArcs(c, 560, '#22D37F');
@@ -741,7 +844,7 @@ const beam = h('div'); beam.id = 'beam'; stage.appendChild(beam);
 const vig = h('div'); vig.id = 'vig'; stage.appendChild(vig);
 const grain = h('div'); grain.id = 'grain'; stage.appendChild(grain);
 // flashes nascem do elemento em foco: [frame, x, y, força]
-const FLASH = [[300, CX, CY - 100, .4], [312, CX, CY - 80, .55], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 120, 1]];
+const FLASH = [[300, CX, CY - 100, .4], [312, CX, CY - 80, .55], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [795, CX, CY - 80, .7], [995, CX, CY - 160, .45], [1246, CX, CY + 520, .55], [1620, CX, CY - 120, 1]];
 
 // ---------------- efeitos sonoros (frames) ----------------
 const SFX = [
@@ -753,17 +856,17 @@ const SFX = [
   ['whoosh', 459, .35, 0, { dur: .6, f0: 300, f1: 1500, peak: .5 }], ...[0, 1, 2].map(i => ['pop', 471 + i * 5, .35, (i - 1) * .5, {}]), ['whoosh', 483, .3, 0, { dur: .4, f0: 600, f1: 3000, peak: .6, panFrom: -.5, panTo: .5 }], ['clicks', 495, .15, .3, { n: 8, step: .12 }], ['chime', 521, .5, 0, {}], ['pop', 521, .4, 0, { f0: 500, f1: 1100 }],
   ['impact', 540, 1.0, 0, { dur: 1.8 }], ['whoosh', 548, .45, .2, { dur: 2.0, f0: 2500, f1: 180, peak: .15 }], ['clicks', 552, .14, 0, { n: 18, step: .1 }], ['cash', 610, .75, 0, {}], ['coins', 612, .6, 0, { n: 16, dur: 1.0 }], ['boom', 610, .4, 0, { dur: .6 }],
   ['whoosh', 675, .35, 0, { dur: .4 }], ['whoosh', 711, .3, 0, { dur: 1.4, f0: 1800, f1: 300, peak: .2 }], ['pop', 733, .4, 0, {}], ['chime', 755, .45, 0, {}],
-  ['whoosh', 801, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['whoosh', 817 + i * 12, .28, .5, { dur: .3, f0: 800, f1: 3500, peak: .4, panFrom: .8, panTo: 0 }]), ...[0, 1, 2, 3].map(i => ['pop', 827 + i * 12, .35, .4, { f0: 700 + i * 80, f1: 1200 + i * 100 }]),
-  ['whoosh', 883, .35, 0, { dur: .25, f0: 2500, f1: 500, peak: .8 }], ['stamp', 891, .95, 0, {}], ['boom', 891, .5, 0, { dur: .6 }],
-  ['pop', 945, .45, 0, { f0: 400, f1: 900 }], ['pop', 955, .3, 0, {}], ['pop', 979, .35, 0, {}], ['whoosh', 995, .3, 0, { dur: 1.6, f0: 400, f1: 2400, peak: .9, panFrom: -.7, panTo: .7 }], ...[0, 1, 2].map(i => ['pop', 997 + i * 26, .4, (i - 1) * .5, { f0: 500 + i * 150, f1: 900 + i * 250 }]), ['chime', 1049, .4, 0, {}],
-  ['whoosh', 1066, .35, .6, { dur: .35, f0: 600, f1: 3000, peak: .7, panFrom: .7, panTo: 0 }], ['pop', 1077, .35, 0, { f0: 500, f1: 1000 }], ['pop', 1089, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1113, .15, -.3, { n: 8, step: .09 }], ['pop', 1133, .4, -.4, { f0: 1400, f1: 900 }],
-  ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1155, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1177, .3, 0, {}], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
-  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['shimmer', 1280, .25, 0, { dur: .8 }], ['whoosh', 1288, .35, 0, { dur: .45, f0: 500, f1: 2600, peak: .6 }], ['click', 1304, .3, 0, {}],
-  ['boom', 1302, .35, 0, { dur: .5 }], ['pop', 1302, .45, 0, { f0: 300, f1: 700 }], ['pop', 1314, .4, .2, { f0: 400, f1: 900 }], ['boom', 1322, .4, 0, { dur: .6 }], ['pop', 1322, .5, -.2, { f0: 500, f1: 1200 }],
-  ['whoosh', 1326, .25, 0, { dur: .45, f0: 1500, f1: 4000, peak: .4, panFrom: -.5, panTo: .5 }], ['pop', 1330, .4, .3, { f0: 900, f1: 1500 }], ['shimmer', 1340, .2, 0, { dur: .6 }],
-  ['whoosh', 1344, .4, -.6, { dur: .35, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1354, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1356, .35, 0, {}], ['shimmer', 1378, .2, 0, { dur: .8 }], ['click', 1388, .7, 0, {}], ['chime', 1390, .3, 0, {}],
+  ['whoosh', 1161, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['whoosh', 1177 + i * 12, .28, .5, { dur: .3, f0: 800, f1: 3500, peak: .4, panFrom: .8, panTo: 0 }]), ...[0, 1, 2, 3].map(i => ['pop', 1187 + i * 12, .35, .4, { f0: 700 + i * 80, f1: 1200 + i * 100 }]),
+  ['whoosh', 1243, .35, 0, { dur: .25, f0: 2500, f1: 500, peak: .8 }], ['stamp', 1251, .95, 0, {}], ['boom', 1251, .5, 0, { dur: .6 }],
+  ['pop', 1305, .45, 0, { f0: 400, f1: 900 }], ['pop', 1315, .3, 0, {}], ['pop', 1339, .35, 0, {}], ['whoosh', 1355, .3, 0, { dur: 1.6, f0: 400, f1: 2400, peak: .9, panFrom: -.7, panTo: .7 }], ...[0, 1, 2].map(i => ['pop', 1357 + i * 26, .4, (i - 1) * .5, { f0: 500 + i * 150, f1: 900 + i * 250 }]), ['chime', 1409, .4, 0, {}],
+  ['whoosh', 1426, .35, .6, { dur: .35, f0: 600, f1: 3000, peak: .7, panFrom: .7, panTo: 0 }], ['pop', 1437, .35, 0, { f0: 500, f1: 1000 }], ['pop', 1449, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1473, .15, -.3, { n: 8, step: .09 }], ['pop', 1493, .4, -.4, { f0: 1400, f1: 900 }],
+  ['pop', 1525, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1515, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1537, .3, 0, {}], ['click', 1560, .7, 0, {}], ['chime', 1562, .45, 0, {}], ['riser', 1590, .45, 0, { dur: 1.0 }],
+  ['impact', 1620, 1.0, 0, { dur: 2.2 }], ['shimmer', 1621, .5, 0, { dur: 1.8 }], ['coins', 1622, .35, 0, { n: 10, dur: .9 }], ['shimmer', 1640, .25, 0, { dur: .8 }], ['whoosh', 1648, .35, 0, { dur: .45, f0: 500, f1: 2600, peak: .6 }], ['click', 1664, .3, 0, {}],
+  ['boom', 1662, .35, 0, { dur: .5 }], ['pop', 1662, .45, 0, { f0: 300, f1: 700 }], ['pop', 1674, .4, .2, { f0: 400, f1: 900 }], ['boom', 1682, .4, 0, { dur: .6 }], ['pop', 1682, .5, -.2, { f0: 500, f1: 1200 }],
+  ['whoosh', 1686, .25, 0, { dur: .45, f0: 1500, f1: 4000, peak: .4, panFrom: -.5, panTo: .5 }], ['pop', 1690, .4, .3, { f0: 900, f1: 1500 }], ['shimmer', 1700, .2, 0, { dur: .6 }],
+  ['whoosh', 1704, .4, -.6, { dur: .35, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1714, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1716, .35, 0, {}], ['shimmer', 1738, .2, 0, { dur: .8 }], ['click', 1748, .7, 0, {}], ['chime', 1750, .3, 0, {}],
 ];
-[[1, 9], [105, 10], [210, 8], [375, 8], [795, 8], [1065, 10]].forEach(([a, hero], i) => {
+[[1, 9], [105, 10], [210, 8], [375, 8], [1155, 8], [1425, 10]].forEach(([a, hero], i) => {
   if (i) SFX.push(['pop', a, .45, 0, { f0: 380 + i * 50, f1: 900 + i * 70 }]);
   SFX.push(['whoosh', a + hero, .32, 0, { dur: .4, f0: 700, f1: 2600, peak: .5, panFrom: 0, panTo: 0 }]);
   SFX.push(['click', a + hero + 16, .35, 0, {}]);
@@ -771,16 +874,24 @@ const SFX = [
 SFX.push(['whoosh', 111, .2, -.5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: -.8, panTo: -.3 }], ['whoosh', 117, .2, .5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: .8, panTo: .3 }],
   ['whoosh', 216, .2, -.5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: -.8, panTo: -.3 }], ['whoosh', 222, .2, .5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: .8, panTo: .3 }],
   ['whoosh', 626, .25, .3, { dur: .4, f0: 1200, f1: 3500, peak: .5 }], ['pop', 632, .35, 0, { f0: 600, f1: 1200 }], ['shimmer', 679, .2, 0, { dur: 1.0 }],
-  ...[0, 1, 2, 3, 4, 5].map(i => ['tick', 955 + i * 4, .25, (i % 2 ? .4 : -.4), {}]), ['whoosh', 1183, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }], ['whoosh', 1372, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }]);
+  ...[0, 1, 2, 3, 4, 5].map(i => ['tick', 1315 + i * 4, .25, (i % 2 ? .4 : -.4), {}]), ['whoosh', 1543, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }], ['whoosh', 1732, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }]);
+// cenas novas (795–1155): todo tipo de dívida, nome limpo, parcela em dia
+SFX.push(['impact', 795, .8, 0, { dur: 1.4 }], ...[0, 1, 2, 3, 4, 5, 6].map(i => ['pop', 801 + i * 4, .3, (i % 2 ? .4 : -.4), { f0: 500 + i * 60, f1: 1000 + i * 80 }]),
+  ['boom', 821, .35, 0, { dur: .5 }], ['pop', 821, .45, 0, { f0: 300, f1: 700 }], ['pop', 831, .45, .2, { f0: 400, f1: 900 }], ['whoosh', 839, .2, 0, { dur: .4, f0: 800, f1: 2500, peak: .5, panFrom: -.6, panTo: .6 }],
+  ['chime', 861, .45, 0, {}], ['shimmer', 861, .3, 0, { dur: 1.0 }], ['whoosh', 897, .4, 0, { dur: .6, f0: 2500, f1: 300, peak: .3 }],
+  ['whoosh', 915, .35, -.5, { dur: .35, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 925, .4, 0, { f0: 500, f1: 1000 }], ['whoosh', 939, .3, 0, { dur: 1.9, f0: 300, f1: 2400, peak: .9 }],
+  ['clicks', 939, .14, 0, { n: 14, step: .12 }], ['whoosh', 989, .25, 0, { dur: .3, f0: 1500, f1: 500, peak: .5 }], ['chime', 995, .5, 0, {}], ['boom', 995, .4, 0, { dur: .6 }], ['pop', 1003, .45, 0, { f0: 700, f1: 1300 }],
+  ['pop', 1039, .45, 0, { f0: 300, f1: 700 }], ...[...Array(12).keys()].map(i => ['pop', 1049 + Math.round(i * 5.5), .3, (i % 4 - 1.5) * .3, { f0: 500 + i * 60, f1: 900 + i * 90 }]), ['chime', 1111, .45, 0, {}],
+  ['whoosh', 1145, .35, 0, { dur: .5, f0: 300, f1: 2500, peak: .7 }]);
 SWIPE.forEach(T => SFX.push(['whoosh', T - SWN, .55, 0, { dur: .6, f0: 250, f1: 3800, peak: .55, panFrom: .7, panTo: -.7 }]));
 SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
-const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
-  [381, 'A gente analisa cada cobrança', 28], [479, 'e negocia direto com o credor.', 28], [606, 'O resultado? Desconto de', 24], [715, 'E uma parcela que', 24], [797, 'E cuida do resto também.', 26], [959, 'Quem cuida do seu caso é', 24], [1067, 'Manda uma mensagem.', 24]];
+const TYPE_AT = [[801, 'Cartão, empréstimo, cheque…', 30], [945, 'Nome limpo,', 24], [1051, 'sem susto no fim do mês.', 28], [12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
+  [381, 'A gente analisa cada cobrança', 28], [479, 'e negocia direto com o credor.', 28], [606, 'O resultado? Desconto de', 24], [715, 'E uma parcela que', 24], [1157, 'E cuida do resto também.', 26], [1319, 'Quem cuida do seu caso é', 24], [1427, 'Manda uma mensagem.', 24]];
 TYPE_AT.forEach(([f0, txt, cps]) => SFX.push(['typing', f0, .2, 0, { n: [...txt].filter(c => c !== ' ').length, step: 1 / cps }]));
-const DURATION_F = 1440;
+const DURATION_F = 1800;
 const BOARD = [[40, 'Gancho', 'dívida subindo'], [96, 'Gancho', 'só aumenta?'], [190, 'Juros', 'barras mês a mês'], [280, 'O mês', 'a conta não fecha'], [350, 'Logo', 'é aí que entra'],
-  [420, 'Análise', 'extrato escaneado'], [525, 'Negociação', 'você · Lougan · credor'], [600, 'Virada', 'o gráfico despenca'], [665, 'Desconto', 'bem mais que 10%'], [775, 'Parcela', '46% → 21% da renda'],
-  [860, 'Serviços', 'painel'], [925, 'Carimbo', 'dentro da lei'], [1050, 'Lougan', 'análise → acordo'], [1150, 'Conversa', 'tem jeito?'], [1215, 'CTA', 'chamar no WhatsApp'], [1340, 'Assinatura', 'dívida tem saída'], [1420, 'Contato', 'WhatsApp']];
+  [420, 'Análise', 'extrato escaneado'], [525, 'Negociação', 'você · Lougan · credor'], [600, 'Virada', 'o gráfico despenca'], [665, 'Desconto', 'bem mais que 10%'], [775, 'Parcela', '46% → 21% da renda'], [850, 'Toda dívida', 'anel de ícones'], [995, 'Nome limpo', 'score sobe'], [1100, 'Em dia', '12 meses'],
+  [1220, 'Serviços', 'painel'], [1285, 'Carimbo', 'dentro da lei'], [1410, 'Lougan', 'análise → acordo'], [1510, 'Conversa', 'tem jeito?'], [1575, 'CTA', 'chamar no WhatsApp'], [1700, 'Assinatura', 'dívida tem saída'], [1780, 'Contato', 'WhatsApp']];
 
 // ---------------- render de um quadro ----------------
 function render(t) {

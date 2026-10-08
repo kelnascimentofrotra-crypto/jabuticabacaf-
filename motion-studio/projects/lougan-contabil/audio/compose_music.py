@@ -1,4 +1,4 @@
-"""Trilha da Lougan Contabilidade: corporativa inspiradora, 120 BPM, 48 s.
+"""Trilha da Lougan Contabilidade: corporativa inspiradora, 120 BPM, 60 s.
 
     python3 compose_music.py   -> trilha.mid, trilha.flac e ../out/trilha.mp3
 
@@ -8,10 +8,12 @@ do bumbo e limitador). 1 compasso = 2 s = 60 frames. Seções batendo com o stor
   c0–4    (0–300)     problema: lá menor, piano grave, cordas em trêmolo, relógio, tímpanos (dívida, juros, mês no vermelho)
   c5      (300–360)   "É aí que entra a Lougan": rufo de prato → acorde de Dó maior no logo (frame 314)
   c6–8    (360–540)   análise e negociação: piano, pizzicato, chocalho, caixa subindo no fim
-  c9–15   (540–960)   drop no gráfico despencando: C–G–Am–F com bateria, glockenspiel
-  c16–17  (960–1080)  "o próprio Lougan": leve, sem bumbo
-  c18–20  (1080–1260) conversa e CTA: volta crescendo, virada até o logo
-  c21–23  (1260–1440) assinatura: acorde aberto, glockenspiel e fade
+  c9–12   (540–780)   drop no gráfico despencando: C–G–Am–F com bateria, glockenspiel
+  c13–18  (780–1140)  todo tipo de dívida / nome limpo / parcela em dia: mesma progressão, melodia uma oitava acima
+  c19–21  (1140–1320) serviços: groove
+  c22–23  (1320–1440) "o próprio Lougan": leve, sem bumbo
+  c24–26  (1440–1620) conversa e CTA: volta crescendo, virada até o logo
+  c27–29  (1620–1800) assinatura: acorde aberto, glockenspiel e fade
 """
 import subprocess
 from pathlib import Path
@@ -23,7 +25,7 @@ from pedalboard import Compressor, HighpassFilter, HighShelfFilter, Limiter, Low
 
 HERE = Path(__file__).parent
 SF = '/usr/share/sounds/sf3/MuseScore_General_Full.sf3'
-BPM, DUR, SR = 120, 48.0, 48000
+BPM, DUR, SR = 120, 60.0, 48000
 TPB = 480
 E8, E16, BAR = TPB // 2, TPB // 4, TPB * 4
 rng = np.random.default_rng(3)
@@ -32,7 +34,7 @@ F2T = lambda fr: int(round(fr / 15 * TPB))                    # frame (30 fps) -
 V = {'Am': ([57, 60, 64], 33), 'F': ([57, 60, 65], 29), 'E': ([56, 59, 64], 28), 'C': ([60, 64, 67, 72], 36), 'G': ([59, 62, 67, 71], 43),
      'Am2': ([57, 60, 64, 69], 45), 'F2': ([57, 60, 65, 69], 41), 'Gs': ([60, 62, 67, 72], 43), 'Cmaj9': ([59, 62, 64, 67, 71], 36)}
 PROG = ['C', 'G', 'Am2', 'F2']
-SEC = ['intro'] * 5 + ['rise'] + ['pre'] * 3 + ['groove'] * 7 + ['light', 'light'] + ['cta', 'cta', 'cta2'] + ['outro'] * 3
+SEC = ['intro'] * 5 + ['rise'] + ['pre'] * 3 + ['groove'] * 4 + ['drop'] * 6 + ['groove'] * 3 + ['light', 'light'] + ['cta', 'cta', 'cta2'] + ['outro'] * 3
 MEL = {'C': [(0, .5, 76), (.5, .5, 79), (1, 1, 84), (2, .5, 83), (2.5, .5, 79), (3, 1, 76)],
        'G': [(0, .5, 74), (.5, .5, 79), (1, 1, 83), (2, .5, 81), (2.5, .5, 79), (3, 1, 74)],
        'Am2': [(0, .5, 72), (.5, .5, 76), (1, 1, 81), (2, .5, 79), (2.5, .5, 76), (3, 1, 72)],
@@ -98,7 +100,7 @@ def compose():
                     mus.append((b0 + k * 2 * TPB, PNO, n, 72, 2 * TPB - 20)); mus.append((b0 + k * 2 * TPB, STR, n, 50, 2 * TPB))
             continue
         if sec == 'outro':
-            if b == 21:
+            if b == 27:
                 for n in V['Cmaj9'][0] + [48, 84]:
                     mus.append((b0, PNO, n, 84, BAR * 2)); mus.append((b0, STR, n, 70, BAR * 2))
                 mus.append((b0, BAS, 36, 90, BAR * 2)); mus.append((b0, GLK, 88, 84, TPB * 3)); mus.append((b0, TIMP, 48, 96, TPB))
@@ -119,7 +121,7 @@ def compose():
                 mus.append((hum(b0 + i * E8, 3), BAS, root + (12 if i in (3, 7) else 0), v(92 if i % 2 == 0 else 74), E8 - 30))
         else:
             mus.append((b0, BAS, root, 76, BAR - 40))
-        if sec in ('groove', 'drop', 'light') and (b in (9, 10, 11, 12, 13, 14, 15, 16, 17)):
+        if sec in ('groove', 'drop', 'light') and 9 <= b <= 23:
             for beat, d, n in MEL[ch]:
                 mus.append((hum(b0 + int(beat * TPB), 3), GLK, n + (12 if sec == 'drop' else 0), v(86 if beat in (0, 1, 2) else 74), int(d * TPB) - 20))
         for i in range(16):
@@ -150,7 +152,7 @@ def compose():
     for fr in (84, 260):                                                         # pancadas orquestrais (só aumenta? / não fecha.)
         t = F2T(fr)
         mus.append((t, HIT, 57, 110, TPB)); mus.append((t, HIT, 45, 110, TPB)); mus.append((t, TIMP, 45, 112, TPB))
-    for fr in (540, 1260):                                                       # drops
+    for fr in (540, 795, 1155, 1620):                                            # drops e entradas de seção
         t = F2T(fr)
         drm.append((t, DR, 49, 112, BAR)); drm.append((t, DR, 57, 100, BAR)); mus.append((t, TIMP, 48, 116, TPB))
     return mus, drm

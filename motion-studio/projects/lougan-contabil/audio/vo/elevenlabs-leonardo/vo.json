@@ -33,34 +33,34 @@
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/08.wav",
-  "frame": 776
+  "frame": 1136
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/09.wav",
-  "frame": 897
+  "frame": 1257
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/10.wav",
-  "frame": 950
+  "frame": 1310
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/11.wav",
-  "frame": 1058
+  "frame": 1418
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/12.wav",
-  "frame": 1104
+  "frame": 1464
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/13.wav",
-  "frame": 1253
+  "frame": 1613
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/14.wav",
-  "frame": 1300
+  "frame": 1660
  },
  {
   "path": "audio/vo/elevenlabs-leonardo/15.wav",
-  "frame": 1343
+  "frame": 1703
  }
 ]
