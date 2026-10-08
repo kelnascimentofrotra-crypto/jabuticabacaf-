@@ -1,0 +1,85 @@
+{
+ "narration": "audio/elevenlabs/narracao-diego-lbm.mp3",
+ "name": "elevenlabs-diego-lbm",
+ "ref_voice": "pm_alex",
+ "pre": 0.3,
+ "max_speed": 1.08,
+ "lines": [
+  [
+   12,
+   "Você paga todo mês... e a dívida só aumenta?"
+  ],
+  [
+   109,
+   "É juros em cima de juros."
+  ],
+  [
+   145,
+   "Multa em cima de multa."
+  ],
+  [
+   240,
+   "Do jeito que tá, a conta não fecha."
+  ],
+  [
+   302,
+   "É aí que entra a éle bê ême Contabilidade."
+  ],
+  [
+   381,
+   "A gente analisa cada cobrança e negocia direto com o credor."
+  ],
+  [
+   606,
+   "O resultado? Desconto de bem mais que dez por cento."
+  ],
+  [
+   715,
+   "E uma parcela que cabe no seu mês."
+  ],
+  [
+   801,
+   "Cartão, empréstimo, cheque especial... todo tipo de dívida."
+  ],
+  [
+   935,
+   "Nome limpo, e crédito de volta."
+  ],
+  [
+   1039,
+   "Parcela em dia, sem susto no fim do mês."
+  ],
+  [
+   1145,
+   "E cuida do resto também: imposto de renda, MEI e abertura de empresa."
+  ],
+  [
+   1246,
+   "Tudo dentro da lei."
+  ],
+  [
+   1319,
+   "Quem cuida do seu caso é o próprio Lougan."
+  ],
+  [
+   1427,
+   "Manda uma mensagem no WhatsApp."
+  ],
+  [
+   1470,
+   "Conta a sua situação, que ele te mostra quanto dá pra baixar."
+  ],
+  [
+   1622,
+   "éle bê ême Contabilidade."
+  ],
+  [
+   1660,
+   "Dívida tem saída."
+  ],
+  [
+   1695,
+   "Fale com o Lougan."
+  ]
+ ]
+}
