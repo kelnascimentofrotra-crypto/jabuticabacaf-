@@ -7,6 +7,7 @@
 <style>
 @font-face{font-family:'Montserrat';font-weight:100 900;font-display:block;src:url(../../fonts/Montserrat.woff2) format('woff2')}
 @font-face{font-family:'Cormorant Garamond';font-weight:300 700;font-display:block;src:url(../../fonts/CormorantGaramond.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:300 700;font-display:block;src:url(../../fonts/CormorantGaramond-Italic.woff2) format('woff2')}
 /* estilo neon-glow (mesma gramática do promo do Jabuticaba) nas cores da Lougan: verde economia, dourado dinheiro */
 :root{--dark:#020A07;--acc:#22D37F;--accTx:#5DF0A8;--white:#F2FFF8;--g:34,211,127}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -263,6 +264,54 @@ function tileAt(t, lf, t0, d, { x = CX, y = CY, out = null, anim = 'beat', hero 
   g.style.transform = anim === 'spin' ? `rotate(${(lf - t0) * 4}deg)` : anim === 'bob' ? `translateY(${Math.sin(lf / 4) * 8}%)` : anim === 'scan' ? `translate(${Math.sin(lf / 6) * 12}%,${Math.cos(lf / 8) * 9}%)` : `scale(${1 + .12 * beatOf(lf)})`;
   return m;
 }
+// ---------- elementos da referência 2: pílulas neon nas bordas, mãozinha de cursor, anel de ícones, órbitas inclinadas ----------
+function mkTags(c, list, red = true) {
+  const col = red ? '255,107,120' : '93,240,168';
+  return list.map(([t, x, y, z]) => ({ x, y, z, el: add(c, 'el', t, `padding:16px 38px;border-radius:999px;border:4px solid rgba(${col},.9);background:rgba(${red ? '50,0,10' : '0,40,25'},.45);color:rgb(${col});font-weight:700;font-size:38px;white-space:nowrap;text-shadow:0 0 12px rgba(${col},.8);box-shadow:0 0 22px rgba(${col},.55),inset 0 0 14px rgba(${col},.3)`) }));
+}
+function tagsAt(T, lf, t0 = 0) {
+  T.forEach((g, i) => {
+    const t = t0 + i * 3, k = prog(lf, t, t + 18, E.out5), side = g.x < CX ? -1 : 1;
+    P(g.el, { x: g.x + side * (1 - k) * 340 + Math.sin(lf / 23 + i) * 10, y: g.y - lf * (.4 + g.z * .5) + Math.cos(lf / 19 + i) * 8, s: g.z * (1 + .03 * Math.sin(lf / 9 + i)),
+      r: side * (4 + i % 3 * 2) * (1 - .5 * k) + Math.sin(lf / 30 + i) * 2, o: k * (.55 + .45 * Math.min(1, g.z)), b: (1 - k) * 10 + Math.max(0, 1 - g.z) * 5 });
+  });
+}
+// mãozinha de cursor (ponta do dedo em (56,12) no quadro de 150px)
+const HAND = '<svg viewBox="0 0 24 24" width="150" height="150" style="display:block;overflow:visible;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55)) drop-shadow(0 0 12px rgba(255,255,255,.35))"><path d="M7 15V4a2 2 0 0 1 4 0V9a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v1a2 2 0 0 1 3 1.5V14a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82Z" fill="#fff" stroke="#16251d" stroke-width="1.1" stroke-linejoin="round"/><path d="M11 9v3M15 10v2M19 11v1.5" fill="none" stroke="#16251d" stroke-width="1" stroke-linecap="round"/></svg>';
+const mkHand = c => { const e = add(c, 'el', HAND, 'width:150px;height:150px'); e.style.zIndex = 8; return e; };
+function handAt(el, lf, tx, ty, t0, tp, t1 = 1e9) {
+  const k = prog(lf, t0, tp - 2, E.out5), q = prog(lf, t1, t1 + 12, E.inC);
+  const pr = lf >= tp ? Math.exp(-(lf - tp) / 4) : 0, pre = lf < tp ? prog(lf, tp - 4, tp, E.inC) : 0;
+  P(el, { x: tx + 19 + (1 - k) * 260 + q * 220, y: ty + 63 + (1 - k) * 360 + q * 320 + (pre + pr) * 10, s: (1 - .12 * (pre + pr)) * (1 + .02 * Math.sin(lf / 6)),
+    r: lerp(-25, -8, k) + q * 10, o: lf < t0 ? 0 : k * (1 - q), b: (1 - k) * 6 + q * 6 });
+}
+// anel com ícones girando em volta (como o "Suporte pra + de 10 apps")
+function mkOrbit(c, R, icons) {
+  const S = 2 * R + 40;
+  const ring = add(c, 'el', `<svg width="${S}" height="${S}" viewBox="${-S / 2} ${-S / 2} ${S} ${S}" style="display:block;overflow:visible"><circle r="${R}" fill="none" stroke="rgba(230,255,242,.85)" stroke-width="3" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>`, `width:${S}px;height:${S}px`);
+  const bs = icons.map(ic => add(c, 'el', icon(ic, 40, '#fff', 2.2), 'width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 35% 30%,#5DF0A8,#13A563 70%);box-shadow:0 0 22px rgba(34,211,127,.95),0 0 60px rgba(34,211,127,.5)'));
+  return { ring, bs, R };
+}
+function orbitAt(O, lf, { x = CX, y = CY, t0 = 0, spd = .9, s = 1 } = {}) {
+  const k = prog(lf, t0, t0 + 18, E.out5), rr = O.R * lerp(.5, 1, k) * s;
+  P(O.ring, { x, y, s: lerp(.5, 1, k) * s, o: k, b: (1 - k) * 8 });
+  O.bs.forEach((b, i) => { const a = (i / O.bs.length) * Math.PI * 2 + (lf - t0) * spd * Math.PI / 180 - Math.PI / 2, tb = t0 + 6 + i * 4;
+    P(b, { x: x + Math.cos(a) * rr, y: y + Math.sin(a) * rr, s: (lf < tb ? 0 : popS(lf, tb)) * (1 + .1 * beatOf(lf + i * 3)) * s, r: Math.sin(lf / 8 + i) * 6 }); });
+}
+// órbitas inclinadas com moedas viajando (passam na frente e atrás)
+function mkOrbits(c, specs) {
+  const svg = add(c, 'el', `<svg width="1200" height="1200" viewBox="-600 -600 1200 1200" style="display:block;overflow:visible">${specs.map(([rx, ry, rot]) => `<ellipse rx="${rx}" ry="${ry}" transform="rotate(${rot})" fill="none" stroke="rgba(93,240,168,.7)" stroke-width="3" style="filter:drop-shadow(0 0 8px #22D37F)"/>`).join('')}</svg>`, 'width:1200px;height:1200px');
+  return { svg, specs, coins: specs.map(() => add(c, 'el coin', 'R$', 'width:58px;height:58px;font-size:19px')) };
+}
+function orbitsAt(O, lf, { x = CX, y = CY, t0 = 0 } = {}) {
+  const k = prog(lf, t0, t0 + 20, E.out5), m = lerp(1.4, 1, k);
+  P(O.svg, { x, y, s: m, o: k, b: (1 - k) * 10 });
+  O.coins.forEach((cn, i) => {
+    const [rx, ry, rot] = O.specs[i], t = (lf - t0) * (.05 + i * .012) + i * 2.1, r = rot * Math.PI / 180, ex = Math.cos(t) * rx, ey = Math.sin(t) * ry, fr = Math.sin(t) > 0;
+    cn.style.zIndex = fr ? 3 : 1;
+    P(cn, { x: x + (ex * Math.cos(r) - ey * Math.sin(r)) * m, y: y + (ex * Math.sin(r) + ey * Math.cos(r)) * m, s: (fr ? 1.1 : .75) * k, o: k * (fr ? 1 : .5), r: lf * 4 + i * 40 });
+  });
+}
 // transição "troca de tela" da referência: as duas cenas viram cartões arredondados com borda neon e deslizam juntas
 const SWIPE = [105, 675, 945], SWN = 9;
 let NOEXIT = false;
@@ -308,15 +357,17 @@ const MONTHS = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN'];
 scene(105, 105, '', c => {
   darkBg(c); const rg = redGlow(c);
   const A = mkArcs(c, 660, '#FF5A6A'), T = mkTile(c, IC2.pct, true, V(170, 140));
+  const TG = mkTags(c, [['Juros rotativo', 150, 240, .9], ['Multa por atraso', 990, 320, 1.0], ['Encargos', 60, 1560, 1.0], ['IOF', 1020, 1470, .75], ['Cheque especial', 260, 1800, .8], ['Tarifas', 900, 1720, .95]]);
   const bars = MONTHS.map((m, i) => `<g class="bar"><rect class="s0" x="${40 + i * 140}" width="92" rx="10" fill="#5B6B64"/><rect class="s1" x="${40 + i * 140}" width="92" rx="10" fill="#FF5A6A" style="filter:drop-shadow(0 0 8px #FF3045)"/><rect class="s2" x="${40 + i * 140}" width="92" rx="10" fill="#A3122A"/><text x="${86 + i * 140}" y="600" text-anchor="middle" fill="rgba(242,255,248,.6)" font-family="Montserrat" font-weight="700" font-size="26">${m}</text></g>`).join('');
   const chart = add(c, 'el', `<svg width="900" height="620" viewBox="0 0 900 620" style="overflow:visible"><line class="base" x1="20" y1="560" x2="880" y2="560" stroke="rgba(200,255,226,.55)" stroke-width="4" pathLength="1" stroke-dasharray="1"/>${bars}<polyline class="tr" fill="none" stroke="#FF8A95" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round"/><text class="tot" x="826" y="0" text-anchor="middle" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="40">R$ 48 mil</text></svg>`, 'width:900px;height:620px');
   const leg = add(c, 'el', [['#5B6B64', 'valor original'], ['#FF5A6A', 'juros'], ['#A3122A', 'multa']].map(([col, t]) => `<span style="display:inline-flex;align-items:center;gap:10px;margin:0 16px"><i style="width:22px;height:22px;border-radius:6px;background:${col}"></i>${t}</span>`).join(''), 'font-weight:600;font-size:28px;color:rgba(242,255,248,.8);white-space:nowrap');
   const D = mkDot(c);
-  return { A, T, D, base: chart.querySelector('.base'), rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
+  return { TG, A, T, D, base: chart.querySelector('.base'), rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: .5, blur: 18 } });
   P(c.rg, { y: CY + 100, s: 1 + .1 * Math.sin(lf / 5) });
+  tagsAt(c.TG, lf, 6);
   const mT = tileAt(c.T, lf, 0, d, { y: CY - V(700, 520), anim: 'spin', hero: 10 }); arcsAt(c.A, lf, { y: lerp(CY, CY + 40 - lf * .3, mT), t0: 0 });
   P(c.chart, { y: CY + 40 - lf * .3, s: 1 + .04 * prog(lf, 0, d) });
   const by = CY + 40 - lf * .3 + 250;
@@ -344,17 +395,19 @@ const LEDGER = [['Salário', 4500, GRN], ['Parcelas das dívidas', -3180, RED], 
 scene(210, 90, '', c => {
   darkBg(c); const rg = redGlow(c);
   const A = mkArcs(c, 600, '#FF5A6A'), T = mkTile(c, IC2.calc, true, V(160, 130));
+  const TG = mkTags(c, [['Nome negativado', 140, 240, .85], ['Boleto vencido', 980, 330, 1.0], ['Cartão no limite', 120, 1080, .8], ['Atraso', 1000, 1160, .95], ['Cobrança', 200, 1640, 1.0], ['Empréstimo', 900, 1720, .8]]);
   const card = add(c, 'el', `<div class="mono" style="font-size:22px;letter-spacing:.3em;color:rgba(242,255,248,.5);margin-bottom:18px">SEU MÊS</div>
     ${LEDGER.map(([t, v, col]) => `<div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(242,255,248,.1)"><span style="font-weight:600;font-size:34px;color:#F2FFF8">${t}</span><b style="font-size:38px;color:rgb(${col.join(',')})">${v > 0 ? '+ ' : '− '}${brl(Math.abs(v))}</b></div>`).join('')}
     <div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding-top:26px"><span style="font-weight:800;font-size:44px;color:#F2FFF8">Sobra</span><b class="sob" style="font-size:64px;color:#FF6B78">R$ 0,00</b></div>`,
     'width:860px;padding:44px 50px;border-radius:40px;background:rgba(8,20,15,.82);border:2px solid rgba(255,107,120,.35);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const D = mkDot(c);
-  return { A, T, D, rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
+  return { TG, A, T, D, rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: 1.2, blur: 22, fade: .6 } });
   const [sx, sy] = shakeAt(lf, [54], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 54 ? 1.2 : 1) });
+  tagsAt(c.TG, lf, 6);
   const mT = tileAt(c.T, lf, 0, d, { y: CY - V(690, 500) - lf * .3, anim: 'bob', hero: 8 }); arcsAt(c.A, lf, { y: lerp(CY, CY - V(250, 190) - lf * .3, mT), t0: 0, spd: -1.7 });
   const cy3 = CY - V(250, 190) - lf * .3;
   dotTravel(c.D, lf, 0, 10, { x: 1120, y: cy3 + 260 }, { x: CX, y: cy3 }, 120);
@@ -466,7 +519,8 @@ scene(540, 135, '', c => {
     <circle class="hd" r="16" fill="#C8FFE2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>`, 'width:900px;height:640px');
   const num = add(c, 'el', 'R$ 48.370,00', `font-weight:800;font-size:${V(112, 96)}px;white-space:nowrap`);
   const ex = add(c, 'el', 'exemplo ilustrativo', 'font-size:18px;letter-spacing:.2em;color:rgba(242,255,248,.45);text-transform:uppercase;white-space:nowrap');
-  return { A, conf, chart, gl: chart.querySelector('.gl'), hd: chart.querySelector('.hd'), num, ex, l1: typer(add(c, 'ctr ws', 'O resultado? Desconto de', 'font-size:52px'), 24), l2: add(c, 'ctr gold', 'bem mais que 10%', `font-weight:900;font-size:${V(86, 76)}px`) };
+  const note = add(c, 'el', `<svg width="700" height="200" viewBox="0 0 700 200" style="overflow:visible;display:block"><path class="ar" d="M450 150C540 150 610 110 640 30" fill="none" stroke="#FFD66B" stroke-width="5" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 6px rgba(255,200,80,.8))"/><path class="ah" d="M618 50L640 30L650 58" fill="none" stroke="#FFD66B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px rgba(255,200,80,.8))"/></svg><div class="nt" style="position:absolute;left:0;top:112px;font-family:'Cormorant Garamond';font-style:italic;font-weight:600;font-size:60px;color:#FFE9A8;white-space:nowrap;text-shadow:0 0 14px rgba(255,200,80,.6)">R$ 16.930 a menos</div>`, 'width:700px;height:200px');
+  return { note, nar: note.querySelector('.ar'), nah: note.querySelector('.ah'), nt: note.querySelector('.nt'), A, conf, chart, gl: chart.querySelector('.gl'), hd: chart.querySelector('.hd'), num, ex, l1: typer(add(c, 'ctr ws', 'O resultado? Desconto de', 'font-size:52px'), 24), l2: add(c, 'ctr gold', 'bem mais que 10%', `font-weight:900;font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.09, oy: CY - 100 });
@@ -482,6 +536,8 @@ scene(540, 135, '', c => {
   P(c.ex, { y: CY - V(480, 330) - lf * .2, o: prog(lf, 12, 20) * .9 });
   L(c.l1.el, { y: CY + V(430, 320) }); type(c.l1, lf, 66);
   pop(c.l2, lf, 82, d, { y: CY + V(540, 410), from: 1.7, blur: 18 });
+  P(c.note, { x: 700, y: CY + 270 - lf * .3 }); c.nar.style.strokeDashoffset = 1 - prog(lf, 86, 100, E.out5); c.nah.style.opacity = prog(lf, 97, 100);
+  c.nt.style.opacity = prog(lf, 90, 102); c.nt.style.transform = `translateY(${(1 - prog(lf, 90, 104, E.out5)) * 20}px) rotate(-4deg) scale(${1 + .03 * prog(lf, 104, d)})`;
   c.conf.forEach((p, i) => {
     const a = -Math.PI / 2 + (hash(i + 40) - .5) * 2.6, sp = 18 + hash(i + 50) * 24, t = Math.max(0, lf - 72);
     P(p, { x: CX + Math.cos(a) * sp * t * .9, y: CY - 300 + Math.sin(a) * sp * t * .9 + .45 * t * t, r: t * (6 + hash(i) * 14) * (i % 2 ? 1 : -1), s: .5 + hash(i + 60) * 1.2, o: lf >= 72 ? 1 : 0 });
@@ -492,17 +548,18 @@ scene(540, 135, '', c => {
 scene(675, 120, '', c => {
   darkBg(c);
   const R0 = 260, C0 = 2 * Math.PI * R0;
-  const A = mkArcs(c, 400, '#22D37F');
+  const O = mkOrbits(c, [[440, 120, -18], [480, 150, 24]]);
   const donut = add(c, 'el', `<svg width="700" height="700" viewBox="-350 -350 700 700" style="overflow:visible"><circle r="${R0}" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="64"/><circle class="arc" r="${R0}" fill="none" stroke="#FF5A6A" stroke-width="64" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="0 ${C0}" style="filter:drop-shadow(0 0 14px rgba(255,60,80,.7))"/><circle class="ah" r="22" fill="#fff" style="filter:drop-shadow(0 0 14px #fff)"/></svg>`, 'width:700px;height:700px');
   const pct = add(c, 'el', '46%', 'font-weight:900;font-size:150px;color:#FF6B78;white-space:nowrap;line-height:1');
   const lab = add(c, 'el', 'DA SUA RENDA<br><span style="font-size:.8em;opacity:.7">indo pras dívidas</span>', 'font-weight:700;font-size:26px;letter-spacing:.14em;color:rgba(242,255,248,.75);text-align:center;white-space:nowrap');
-  return { A, donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
+  donut.style.zIndex = 2; pct.style.zIndex = lab.style.zIndex = 4;
+  return { O, donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 120 });
   const dy = CY - V(260, 190);
   P(c.donut, { y: dy - lf * .3, s: lerp(.8, 1, spring(lf, 0)) * (1 + .03 * prog(lf, 0, d)), r: lf * .1 });
-  arcsAt(c.A, lf, { y: dy - lf * .3, t0: 2, spd: 2.4 });
+  orbitsAt(c.O, lf, { y: dy - lf * .3, t0: 2 });
   const grow = prog(lf, 2, 20, E.out5), fall = prog(lf, 36, 80, E.inOutC);
   const p = lerp(.46, .21, fall) * grow;
   c.arc.setAttribute('stroke-dasharray', `${c.C0 * p} ${c.C0}`);
@@ -547,18 +604,18 @@ scene(795, 150, '', c => {
 // 9 · "Quem cuida do seu caso é o próprio Lougan." — linha do tempo do atendimento (945–1065)
 scene(945, 120, '', c => {
   darkBg(c);
-  const A = mkArcs(c, 240, '#F2C14E');
+  const O = mkOrbit(c, V(300, 250), [IC2.doc, IC2.calc, IC2.shield, IC2.chat, IC2.coins, IC2.check]);
   const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 150, '#FFE9A8', 1.6)}</div>`, `width:${V(290, 250)}px;height:${V(290, 250)}px`);
   const tag = add(c, 'el', '<b style="letter-spacing:.14em">LOUGAN</b>', 'font-size:56px;color:#fff;text-align:center;white-space:nowrap;padding:12px 40px;border-radius:24px;background:rgba(3,40,26,.85);border:2px solid rgba(242,193,78,.6)');
   const tl = add(c, 'el', `<svg width="860" height="80" viewBox="0 0 860 80" style="overflow:visible"><line x1="80" y1="40" x2="780" y2="40" stroke="rgba(242,255,248,.15)" stroke-width="8" stroke-linecap="round"/><line class="pf" x1="80" y1="40" x2="780" y2="40" stroke="#22D37F" stroke-width="8" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/><circle class="ph" cy="40" r="17" fill="#E6FFF2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>
     ${['Análise', 'Negociação', 'Acordo fechado'].map((t, i) => `<div class="st" style="position:absolute;left:${80 + i * 350}px;top:40px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:16px"><div class="sd" style="width:78px;height:78px;border-radius:50%;background:#0B1F17;border:5px solid rgba(242,255,248,.25);display:flex;align-items:center;justify-content:center;margin-top:76px">${icon(IC2.check, 40, '#03281A', 3.4)}</div><span style="font-weight:700;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}`, 'width:860px;height:80px');
-  return { A, av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
+  return { O, av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 160 });
   const ay = CY - V(560, 400);
   P(c.av, { y: ay - lf * .5, s: spring(lf, 0, { k: 140, c: 13 }) * (1 + .06 * prog(lf, 0, d)), r: Math.sin(lf / 12) * 3 });
-  arcsAt(c.A, lf, { y: ay - lf * .5, t0: 4, spd: 3 });
+  orbitAt(c.O, lf, { y: ay - lf * .5, t0: 4 });
   P(c.tag, { y: ay + V(210, 180) - lf * .5, s: spring(lf, 10) * (1 + .04 * prog(lf, 10, d)), o: lf < 10 ? 0 : 1 });
   L(c.l1.el, { y: CY - V(130, 100) }); type(c.l1, lf, 14);
   pop(c.l2, lf, 34, d, { y: CY - V(30, 10) });
@@ -581,7 +638,7 @@ scene(1065, 195, '', c => {
   const btn = add(c, 'el btn', `${icon(IC2.chat, 62, '#fff', 2.2)}<span style="margin-left:18px">Chamar no WhatsApp</span>`, `width:${V(780, 720)}px;height:150px;font-size:${V(52, 48)}px`);
   const num = add(c, 'ctr', '+55 98 8499-2560', 'font-weight:700;font-size:44px;color:#C8FFE2;letter-spacing:.06em;text-shadow:0 0 14px rgba(34,211,127,.7)');
   const D = mkDot(c), D2 = mkDot(c);
-  return { A, T, D, D2, num, chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
+  return { H: mkHand(c), A, T, D, D2, num, chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07, exit: { len: 8, zoom: .3, blur: 10 } });
@@ -602,6 +659,7 @@ scene(1065, 195, '', c => {
   c.btn.style.boxShadow = `0 0 ${36 + 22 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 120px rgba(34,211,127,.45),inset 0 3px 0 rgba(255,255,255,.35)`;
   P(c.btn, { y: byB, r: Math.sin(lf / 11) * 1.5, s: (1 + .03 * beat) * (1 - .07 * press) * (1 - gone), o: 1 - gone });
   openCard(c.btn, c.D2, lf, 100, CX, byB, 75);
+  handAt(c.H, lf, CX + V(250, 220), byB + 10, 118, 135, 158);
   const nk = prog(lf, 112, 124, E.out5);
   L(c.num, { y: byB + 135 + (1 - nk) * 30 - prog(lf, 112, d) * 8, o: nk * (1 - gone), b: (1 - nk) * 10 });
   c.num.style.letterSpacing = `${.06 + prog(lf, 112, d) * .04}em`;
@@ -629,7 +687,7 @@ scene(1260, 180, '', c => {
   const zap = add(c, 'el btn', `${icon(IC2.chat, 52, '#fff', 2.2)}<span style="margin-left:16px;letter-spacing:.04em">+55 98 8499-2560</span>`, `width:${V(700, 640)}px;height:120px;font-size:${V(50, 46)}px`);
   const tap = add(c, 'el', '', 'width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 30px rgba(255,255,255,.8)');
   return { bgl, bl: bgl.querySelector('polyline'), A, rings, halo, coins, logo, lsh: logo.querySelector('.lsh'), wm, lts: [...wm.querySelectorAll('.lt')], sub: wm.querySelector('.sub'), sparks, l1, ws: [...l1.querySelectorAll('.w')], ul, ulp: ul.querySelector('path'),
-    zrip, zap, tap, D: mkDot(c), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
+    zrip, zap, tap, H: mkHand(c), D: mkDot(c), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150 });
@@ -672,7 +730,8 @@ scene(1260, 180, '', c => {
   openCard(c.zap, c.D, lf, 94, CX, zy, 60);
   c.zrip.forEach((r, i) => { const ph = lf < 106 ? -1 : ((lf - 106 - i * 10 + 300) % 30) / 30; P(r, { y: zy, s: 1 + .35 * Math.max(0, ph), o: ph < 0 ? 0 : .8 * (1 - ph) }); });
   const tk = prog(lf, 122, 128, E.out5), tq = prog(lf, 128, 142, E.out5);
-  P(c.tap, { x: CX + V(230, 200), y: zy + 10, s: lerp(1.4, .5, tk) * lerp(1, 2.4, tq), o: lf < 122 ? 0 : (lf < 128 ? tk * .9 : .9 * (1 - tq)) });
+  handAt(c.H, lf, CX + V(290, 250), zy + 25, 112, 128, 152);
+  P(c.tap, { x: CX + V(290, 250), y: zy + 25, s: lerp(1.4, .5, tk) * lerp(1, 2.4, tq), o: lf < 122 ? 0 : (lf < 128 ? tk * .9 : .9 * (1 - tq)) });
   c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(300, 240) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: lY + Math.sin(a) * r, o: clamp(1 - (r - V(300, 240)) / 420) * prog(lf, 2, 8) }); });
 });
 
@@ -709,6 +768,10 @@ const SFX = [
   SFX.push(['whoosh', a + hero, .32, 0, { dur: .4, f0: 700, f1: 2600, peak: .5, panFrom: 0, panTo: 0 }]);
   SFX.push(['click', a + hero + 16, .35, 0, {}]);
 });
+SFX.push(['whoosh', 111, .2, -.5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: -.8, panTo: -.3 }], ['whoosh', 117, .2, .5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: .8, panTo: .3 }],
+  ['whoosh', 216, .2, -.5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: -.8, panTo: -.3 }], ['whoosh', 222, .2, .5, { dur: .3, f0: 800, f1: 2500, peak: .5, panFrom: .8, panTo: .3 }],
+  ['whoosh', 626, .25, .3, { dur: .4, f0: 1200, f1: 3500, peak: .5 }], ['pop', 632, .35, 0, { f0: 600, f1: 1200 }], ['shimmer', 679, .2, 0, { dur: 1.0 }],
+  ...[0, 1, 2, 3, 4, 5].map(i => ['tick', 955 + i * 4, .25, (i % 2 ? .4 : -.4), {}]), ['whoosh', 1183, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }], ['whoosh', 1372, .25, .4, { dur: .35, f0: 500, f1: 2000, peak: .6, panFrom: .6, panTo: .1 }]);
 SWIPE.forEach(T => SFX.push(['whoosh', T - SWN, .55, 0, { dur: .6, f0: 250, f1: 3800, peak: .55, panFrom: .7, panTo: -.7 }]));
 SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
 const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
