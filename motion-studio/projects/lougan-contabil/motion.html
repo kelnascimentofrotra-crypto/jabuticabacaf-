@@ -106,7 +106,7 @@ function L(el, { y = CY, x = 0, s = 1, o = 1, b = 0 } = {}) {
 // câmera contínua (regra 1) + saídas: zoom com blur a partir de um ponto
 function cam(el, lf, d, { s0 = 1, s1 = 1.08, r = 0, ox = CX, oy = CY, exit = null } = {}) {
   let s = lerp(s0, s1, prog(lf, 0, d, E.lin)), b = 0, o = 1;
-  if (exit) {
+  if (exit && !NOEXIT) {
     const k = prog(lf, d - exit.len, d, E.inC);
     s *= 1 + (exit.zoom ?? .7) * k; b = (exit.blur ?? 22) * k; o = 1 - (exit.fade ?? 0) * k;
   }
@@ -185,6 +185,7 @@ const IC2 = {
   check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   bolt: '<svg viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg>',
+  search: '<svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>',
 };
 const popS = (lf, t0) => spring(lf, t0, { k: 200, c: 15 });
 // ponto que viaja de um lado pro outro (com rastro) e abre a tela: ponto → linha → tela
@@ -222,6 +223,32 @@ const shakeAt = (lf, hits, amp = 14) => { let x = 0, y = 0; hits.forEach((t, i) 
 const redGlow = c => add(c, 'el', '', 'width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,50,70,.30),rgba(255,50,70,.08) 35%,rgba(255,50,70,0) 62%)');
 const coinsEl = (c, n, size = 70) => [...Array(n).keys()].map(i => add(c, 'el coin', 'R$', `width:${size}px;height:${size}px;font-size:${size * .32}px`));
 
+// ---------- elementos da referência: arcos neon girando em volta da cena + ícone em tile com brilho ----------
+const beatOf = lf => Math.exp(-(((lf % 15) + 15) % 15) / 4);   // 120 BPM: um tempo a cada 15 frames
+function mkArcs(c, R = 620, col = '#22D37F') {
+  const segs = [[R, 7, `${R * .9} ${R * .55} ${R * .35} ${R * 4.5}`], [R - 85, 5, `${R * .55} ${R * 2.2}`], [R + 75, 3, `${R * .22} ${R * .7} ${R * .12} ${R * 1.4}`]];
+  const S = 2 * R + 300;
+  const el = add(c, 'el svgfull', `<svg width="${S}" height="${S}" viewBox="${-S / 2} ${-S / 2} ${S} ${S}" style="display:block">${segs.map(([r, w, da]) => `<circle r="${r}" fill="none" stroke="${col}" stroke-width="${w}" stroke-dasharray="${da}" stroke-linecap="round" style="filter:drop-shadow(0 0 12px ${col})"/>`).join('')}</svg>`, `width:${S}px;height:${S}px`);
+  return { el, cs: [...el.querySelectorAll('circle')] };
+}
+function arcsAt(A, lf, { x = CX, y = CY, s = 1, t0 = 0, spd = 1.6, o = 1 } = {}) {
+  const k = prog(lf, t0, t0 + 16, E.out5);
+  P(A.el, { x, y, s: lerp(1.35, 1, k) * s * (1 + .015 * beatOf(lf)), o: k * o, b: (1 - k) * 12 });
+  A.cs.forEach((cc, i) => cc.setAttribute('transform', `rotate(${(i % 2 ? -1 : 1) * (lf - t0) * spd * (1 + i * .4) + i * 75 + lerp(-110, 0, k)})`));
+}
+const mkTile = (c, svg, red = false, sz = V(180, 150)) => add(c, `el tile${red ? ' redtile' : ''}`, svg, `width:${sz}px;height:${sz}px`);
+function tileAt(t, lf, t0, d, { x = CX, y = CY, out = null, anim = 'beat' } = {}) {
+  const ok = prog(lf, t0, t0 + 14, E.out5);
+  let s = popS(lf, t0) * (1 + .06 * prog(lf, t0 + 8, d)) * (1 + .05 * beatOf(lf)), yy = y - prog(lf, t0, d) * 16, b = 0;
+  if (out !== null) { const q = prog(lf, out, out + 8, E.inC); s *= 1 - q; yy -= q * 120; b = q * 10; }
+  P(t, { x, y: yy, s, o: lf < t0 ? 0 : 1, b, r: lerp(-30, 0, ok) + Math.sin(lf * .9) * 2.5 * prog(lf, t0 + 8, t0 + 20) });
+  const g = t.querySelector('svg');
+  g.style.transform = anim === 'spin' ? `rotate(${(lf - t0) * 4}deg)` : anim === 'bob' ? `translateY(${Math.sin(lf / 4) * 8}%)` : anim === 'scan' ? `translate(${Math.sin(lf / 6) * 12}%,${Math.cos(lf / 8) * 9}%)` : `scale(${1 + .12 * beatOf(lf)})`;
+}
+// transição "troca de tela" da referência: as duas cenas viram cartões arredondados com borda neon e deslizam juntas
+const SWIPE = [105, 675, 945], SWN = 9;
+let NOEXIT = false;
+
 // ---------- peças de gráfico (a linguagem do gráfico de abertura vale pro vídeo todo) ----------
 const counter = (el, v, col) => { el.textContent = brl(Math.round(v * 100) / 100); if (col) el.style.color = col; };
 const mix = (a, b, k) => `rgb(${a.map((x, i) => Math.round(lerp(x, b[i], k))).join(',')})`;
@@ -230,17 +257,19 @@ const RED = [255, 107, 120], GRN = [93, 240, 168];
 // 1 · gancho: "Você paga todo mês e a dívida só aumenta?" (0–105)
 scene(0, 105, '', c => {
   darkBg(c); const rg = redGlow(c);
+  const A = mkArcs(c, 640, '#FF5A6A');
   const chart = add(c, 'el', `<svg width="900" height="420" viewBox="0 0 900 420" style="overflow:visible"><polyline class="ln" points="0,400 120,360 230,372 340,300 450,315 560,220 670,240 780,120 900,20" fill="none" stroke="#FF5A6A" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 12px #FF3045)"/>${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<circle class="pd" cx="${[0, 120, 230, 340, 450, 560, 670, 780, 900][i]}" cy="${[400, 360, 372, 300, 315, 220, 240, 120, 20][i]}" r="9" fill="#FF8A95"/>`).join('')}</svg>`, 'width:900px;height:420px');
   const tile = add(c, 'el tile redtile', IC2.alert, `width:${V(200, 170)}px;height:${V(200, 170)}px`);
   const num = add(c, 'el red', 'R$ 21.900,00', `font-weight:800;font-size:${V(118, 100)}px;white-space:nowrap;letter-spacing:-.01em`);
   const arrow = add(c, 'el', icon('<svg viewBox="0 0 24 24"><path d="M12 20V4M5 11l7-7 7 7"/></svg>', 90, '#FF6B78', 2.6));
   const paid = add(c, 'el', `${icon(IC2.check, 30, '#5DF0A8', 3)}<span>parcela paga</span>`, 'display:flex;align-items:center;gap:10px;font-weight:700;font-size:26px;color:#5DF0A8;white-space:nowrap');
-  return { rg, chart, ln: chart.querySelector('.ln'), pds: [...chart.querySelectorAll('.pd')], tile, num, arrow, paid, l1: typer(add(c, 'ctr ws', 'Você paga todo mês e a dívida'), 26), l2: add(c, 'ctr pb red', 'só aumenta?') };
+  return { A, rg, chart, ln: chart.querySelector('.ln'), pds: [...chart.querySelectorAll('.pd')], tile, num, arrow, paid, l1: typer(add(c, 'ctr ws', 'Você paga todo mês e a dívida'), 26), l2: add(c, 'ctr pb red', 'só aumenta?') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.1, oy: CY - 80, exit: { len: 8, zoom: .9, blur: 26, fade: .6 } });
   const [sx, sy] = shakeAt(lf, [62, 84], 10); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 200, s: 1 + .15 * Math.sin(lf / 4) });
+  arcsAt(c.A, lf, { y: CY - 110 - lf * .5, t0: 4, spd: 1.8 });
   const dk = prog(lf, 4, 84, E.inOutC);
   c.ln.style.strokeDashoffset = 1 - dk;
   c.pds.forEach((p, i) => { const on = dk >= i / 8 - .001; p.style.opacity = on ? 1 : 0; p.setAttribute('r', on ? 9 + 5 * Math.exp(-Math.max(0, lf - (4 + i / 8 * 80)) / 4) : 0); });
@@ -260,15 +289,17 @@ scene(0, 105, '', c => {
 const MONTHS = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN'];
 scene(105, 105, '', c => {
   darkBg(c); const rg = redGlow(c);
+  const A = mkArcs(c, 660, '#FF5A6A'), T = mkTile(c, IC2.pct, true, V(170, 140));
   const bars = MONTHS.map((m, i) => `<g class="bar"><rect class="s0" x="${40 + i * 140}" width="92" rx="10" fill="#5B6B64"/><rect class="s1" x="${40 + i * 140}" width="92" rx="10" fill="#FF5A6A" style="filter:drop-shadow(0 0 8px #FF3045)"/><rect class="s2" x="${40 + i * 140}" width="92" rx="10" fill="#A3122A"/><text x="${86 + i * 140}" y="600" text-anchor="middle" fill="rgba(242,255,248,.6)" font-family="Montserrat" font-weight="700" font-size="26">${m}</text></g>`).join('');
   const chart = add(c, 'el', `<svg width="900" height="620" viewBox="0 0 900 620" style="overflow:visible"><line class="base" x1="20" y1="560" x2="880" y2="560" stroke="rgba(200,255,226,.55)" stroke-width="4" pathLength="1" stroke-dasharray="1"/>${bars}<polyline class="tr" fill="none" stroke="#FF8A95" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round"/><text class="tot" x="826" y="0" text-anchor="middle" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="40">R$ 48 mil</text></svg>`, 'width:900px;height:620px');
   const leg = add(c, 'el', [['#5B6B64', 'valor original'], ['#FF5A6A', 'juros'], ['#A3122A', 'multa']].map(([col, t]) => `<span style="display:inline-flex;align-items:center;gap:10px;margin:0 16px"><i style="width:22px;height:22px;border-radius:6px;background:${col}"></i>${t}</span>`).join(''), 'font-weight:600;font-size:28px;color:rgba(242,255,248,.8);white-space:nowrap');
   const D = mkDot(c);
-  return { D, base: chart.querySelector('.base'), rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
+  return { A, T, D, base: chart.querySelector('.base'), rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: .5, blur: 18 } });
   P(c.rg, { y: CY + 100, s: 1 + .1 * Math.sin(lf / 5) });
+  arcsAt(c.A, lf, { y: CY + 40 - lf * .3, t0: 4 }); tileAt(c.T, lf, 2, d, { y: CY - V(700, 520), anim: 'spin' });
   P(c.chart, { y: CY + 40 - lf * .3, s: 1 + .04 * prog(lf, 0, d) });
   const by = CY + 40 - lf * .3 + 250;
   dotTravel(c.D, lf, 0, 12, { x: -40, y: by }, { x: CX + 430, y: by });
@@ -294,17 +325,19 @@ scene(105, 105, '', c => {
 const LEDGER = [['Salário', 4500, GRN], ['Parcelas das dívidas', -3180, RED], ['Contas da casa', -2150, RED]];
 scene(210, 90, '', c => {
   darkBg(c); const rg = redGlow(c);
+  const A = mkArcs(c, 600, '#FF5A6A'), T = mkTile(c, IC2.calc, true, V(160, 130));
   const card = add(c, 'el', `<div class="mono" style="font-size:22px;letter-spacing:.3em;color:rgba(242,255,248,.5);margin-bottom:18px">SEU MÊS</div>
     ${LEDGER.map(([t, v, col]) => `<div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(242,255,248,.1)"><span style="font-weight:600;font-size:34px;color:#F2FFF8">${t}</span><b style="font-size:38px;color:rgb(${col.join(',')})">${v > 0 ? '+ ' : '− '}${brl(Math.abs(v))}</b></div>`).join('')}
     <div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding-top:26px"><span style="font-weight:800;font-size:44px;color:#F2FFF8">Sobra</span><b class="sob" style="font-size:64px;color:#FF6B78">R$ 0,00</b></div>`,
     'width:860px;padding:44px 50px;border-radius:40px;background:rgba(8,20,15,.82);border:2px solid rgba(255,107,120,.35);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const D = mkDot(c);
-  return { D, rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
+  return { A, T, D, rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: 1.2, blur: 22, fade: .6 } });
   const [sx, sy] = shakeAt(lf, [54], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 54 ? 1.2 : 1) });
+  arcsAt(c.A, lf, { y: CY - V(250, 190) - lf * .3, t0: 8, spd: -1.7 }); tileAt(c.T, lf, 4, d, { y: CY - V(690, 500) - lf * .3, anim: 'bob' });
   const cy3 = CY - V(250, 190) - lf * .3;
   dotTravel(c.D, lf, 0, 10, { x: 1120, y: cy3 + 260 }, { x: CX, y: cy3 }, 120);
   P(c.card, { y: cy3, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
@@ -320,15 +353,17 @@ scene(210, 90, '', c => {
 // 4 · "É aí que entra a Lougan Contabilidade." (300–375)
 scene(300, 75, '', c => {
   darkBg(c, false);
+  const A = mkArcs(c, 560, '#22D37F');
   const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(360, 300)}" fill="none" stroke="#22D37F" stroke-width="6" style="filter:drop-shadow(0 0 14px #22D37F)"/><circle r="${V(360, 300)}" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="40 260" opacity=".8"/>${[...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * V(430, 360)}" cy="${Math.sin(a) * V(430, 360)}" r="9" fill="#5DF0A8" style="filter:drop-shadow(0 0 8px #22D37F)"/>`; }).join('')}</svg>`, 'width:1000px;height:1000px');
   const logo = add(c, 'el', BADGE(V(400, 340)), 'filter:drop-shadow(0 0 40px rgba(34,211,127,.6))');
   const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
   const D = mkDot(c);
-  return { D, ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
+  return { A, D, ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
 }, (x, lf, d) => {
   cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120, exit: { len: 8, zoom: .5, blur: 16 } });
   L(x.ctx.l.el, { y: CY - V(620, 480) - lf * .3 }); type(x.ctx.l, lf, 2);
   dotTravel(x.ctx.D, lf, 0, 14, { x: -40, y: CY + 200 }, { x: CX, y: CY - 160 }, 160);
+  arcsAt(x.ctx.A, lf, { y: CY - 160, t0: 14, spd: -1.4 });
   const lk = spring(lf, 14, { k: 120, c: 12 });
   P(x.ctx.ring, { y: CY - 160, s: lerp(1.3, 1, prog(lf, 14, 30, E.out5)) * (1 + .04 * prog(lf, 14, d)), r: lf * 1.2, o: prog(lf, 14, 18) });
   P(x.ctx.logo, { y: CY - 160, s: lerp(.5, 1, lk) * (1 + .05 * prog(lf, 14, d)), o: lf < 14 ? 0 : 1, b: (1 - prog(lf, 14, 24, E.out5)) * 16, r: lerp(-20, 0, prog(lf, 14, 32, E.out5)) });
@@ -339,6 +374,7 @@ scene(300, 75, '', c => {
 const EXTRATO = [['Saldo do cartão', 18200, 0], ['Juros rotativos', 9870, 1], ['Multa por atraso', 2340, 1], ['Empréstimo pessoal', 12600, 0], ['Encargos', 3150, 1], ['Tarifas', 1210, 1], ['IOF', 1000, 0]];
 scene(375, 165, '', c => {
   darkBg(c);
+  const A = mkArcs(c, 640, '#22D37F'), T = mkTile(c, IC2.search, false, V(160, 130));
   const doc = add(c, 'el', `<div class="mono" style="display:flex;justify-content:space-between;font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.5);margin-bottom:14px"><span>EXTRATO DA DÍVIDA</span><span>${icon(IC2.doc, 30, 'rgba(242,255,248,.5)', 1.8)}</span></div>
     ${EXTRATO.map(([t, v, f]) => `<div class="er" data-f="${f}" style="position:relative;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;margin:0 -18px;border-radius:14px"><span style="font-weight:600;font-size:31px;color:#F2FFF8">${t}</span><b style="font-size:31px;color:#F2FFF8">${brl(v)}</b><i class="tg" style="position:absolute;right:-16px;top:-14px;font-style:normal;font-weight:800;font-size:18px;letter-spacing:.08em;padding:6px 12px;border-radius:999px;background:#F2C14E;color:#3A2604;opacity:0">DÁ PRA REDUZIR</i></div>`).join('')}
     <div style="display:flex;justify-content:space-between;align-items:center;padding-top:18px;margin-top:8px;border-top:2px solid rgba(242,255,248,.15)"><span style="font-weight:800;font-size:36px;color:#F2FFF8">Total</span><b style="font-size:44px;color:#FF6B78">R$ 48.370,00</b></div>
@@ -349,7 +385,7 @@ scene(375, 165, '', c => {
     <div class="deal" style="position:absolute;left:450px;top:-100px;transform:translate(-50%,-50%);padding:14px 30px;border-radius:999px;background:#22D37F;color:#03281A;font-weight:800;font-size:32px;white-space:nowrap;box-shadow:0 0 40px rgba(34,211,127,.8)">✓ ACORDO</div>`,
     'width:900px;height:260px');
   const D = mkDot(c);
-  return { D, doc, rows: [...doc.querySelectorAll('.er')], scan: doc.querySelector('.scan'), net, nl: net.querySelector('.nl'), pks: [...net.querySelectorAll('.pk')], nds: [...net.querySelectorAll('.nd')], deal: net.querySelector('.deal'),
+  return { A, T, D, doc, rows: [...doc.querySelectorAll('.er')], scan: doc.querySelector('.scan'), net, nl: net.querySelector('.nl'), pks: [...net.querySelectorAll('.pk')], nds: [...net.querySelectorAll('.nd')], deal: net.querySelector('.deal'),
     l1: typer(add(c, 'ctr ws', 'A gente analisa cada cobrança', 'font-size:52px'), 28), l2: typer(add(c, 'ctr ws', 'e negocia direto com o credor.', 'font-size:52px;color:#5DF0A8'), 28) };
 }, (x, lf, d) => {
   const c = x.ctx;
@@ -357,6 +393,7 @@ scene(375, 165, '', c => {
   const ck = spring(lf, 0), up = prog(lf, 84, 104, E.inOutC);
   const dy5 = lerp(CY - V(90, 60), CY - V(430, 300), up) - lf * .2;
   dotTravel(c.D, lf, 0, 10, { x: 1120, y: dy5 + 420 }, { x: CX, y: dy5 }, 140);
+  arcsAt(c.A, lf, { y: dy5, t0: 10, s: lerp(1, .85, up) }); tileAt(c.T, lf, 4, d, { y: CY - V(640, 460) - lf * .2, out: 78, anim: 'scan' });
   P(c.doc, { y: dy5, s: lerp(1, .72, up) * (1 + .02 * prog(lf, 10, 84)), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
   openCard(c.doc, c.D, lf, 10, CX, dy5);
   const sy = lerp(80, 760, prog(lf, 22, 80, E.inOutC));
@@ -381,6 +418,7 @@ scene(375, 165, '', c => {
 // 6 · drop: o mesmo gráfico vira e despenca — bem mais que 10% (540–675)
 scene(540, 135, '', c => {
   darkBg(c);
+  const A = mkArcs(c, 660, '#F2C14E');
   const conf = [...Array(40).keys()].map(i => i % 2 ? add(c, 'conf', '', `width:${8 + hash(i) * 14}px;height:${4 + hash(i + 1) * 8}px;background:${['#FFE9A8', '#F2C14E', '#ffffff', '#8CF5C2'][i % 4]}`) : add(c, 'el coin', 'R$', `width:${46 + hash(i) * 30}px;height:${46 + hash(i) * 30}px;font-size:16px`));
   const chart = add(c, 'el', `<svg width="900" height="640" viewBox="0 0 900 640" style="overflow:visible">
     <line x1="0" y1="250" x2="900" y2="250" stroke="#F2C14E" stroke-width="4" stroke-dasharray="14 12" opacity=".9"/><text class="t10" x="10" y="236" fill="#FFE9A8" font-family="Montserrat" font-weight="800" font-size="34">−10%</text>
@@ -389,12 +427,13 @@ scene(540, 135, '', c => {
     <circle class="hd" r="16" fill="#C8FFE2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>`, 'width:900px;height:640px');
   const num = add(c, 'el', 'R$ 48.370,00', `font-weight:800;font-size:${V(112, 96)}px;white-space:nowrap`);
   const ex = add(c, 'el', 'exemplo ilustrativo', 'font-size:18px;letter-spacing:.2em;color:rgba(242,255,248,.45);text-transform:uppercase;white-space:nowrap');
-  return { conf, chart, gl: chart.querySelector('.gl'), hd: chart.querySelector('.hd'), num, ex, l1: typer(add(c, 'ctr ws', 'O resultado? Desconto de', 'font-size:52px'), 24), l2: add(c, 'ctr gold', 'bem mais que 10%', `font-weight:900;font-size:${V(86, 76)}px`) };
+  return { A, conf, chart, gl: chart.querySelector('.gl'), hd: chart.querySelector('.hd'), num, ex, l1: typer(add(c, 'ctr ws', 'O resultado? Desconto de', 'font-size:52px'), 24), l2: add(c, 'ctr gold', 'bem mais que 10%', `font-weight:900;font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.09, oy: CY - 100 });
   const [sx, sy] = shakeAt(lf, [0, 70], 16); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.chart, { y: CY - 60 - lf * .3, s: 1 + .05 * prog(lf, 0, d) });
+  arcsAt(c.A, lf, { y: CY - 60 - lf * .3, t0: 0, spd: 2.4 });
   const gk = prog(lf, 10, 70, E.inOutC); c.gl.style.strokeDashoffset = 1 - gk;
   const pt = c.gl.getPointAtLength(c.gl.getTotalLength() * gk); c.hd.setAttribute('cx', pt.x); c.hd.setAttribute('cy', pt.y); c.hd.style.opacity = lf > 10 && lf < 76 ? 1 : 0;
   const vk = prog(lf, 10, 70, E.inOutC);
@@ -414,15 +453,17 @@ scene(540, 135, '', c => {
 scene(675, 120, '', c => {
   darkBg(c);
   const R0 = 260, C0 = 2 * Math.PI * R0;
+  const A = mkArcs(c, 400, '#22D37F');
   const donut = add(c, 'el', `<svg width="700" height="700" viewBox="-350 -350 700 700" style="overflow:visible"><circle r="${R0}" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="64"/><circle class="arc" r="${R0}" fill="none" stroke="#FF5A6A" stroke-width="64" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="0 ${C0}" style="filter:drop-shadow(0 0 14px rgba(255,60,80,.7))"/><circle class="ah" r="22" fill="#fff" style="filter:drop-shadow(0 0 14px #fff)"/></svg>`, 'width:700px;height:700px');
   const pct = add(c, 'el', '46%', 'font-weight:900;font-size:150px;color:#FF6B78;white-space:nowrap;line-height:1');
   const lab = add(c, 'el', 'DA SUA RENDA<br><span style="font-size:.8em;opacity:.7">indo pras dívidas</span>', 'font-weight:700;font-size:26px;letter-spacing:.14em;color:rgba(242,255,248,.75);text-align:center;white-space:nowrap');
-  return { donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
+  return { A, donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 120 });
   const dy = CY - V(260, 190);
   P(c.donut, { y: dy - lf * .3, s: lerp(.8, 1, spring(lf, 0)) * (1 + .03 * prog(lf, 0, d)), r: lf * .1 });
+  arcsAt(c.A, lf, { y: dy - lf * .3, t0: 2, spd: 2.4 });
   const grow = prog(lf, 2, 20, E.out5), fall = prog(lf, 36, 80, E.inOutC);
   const p = lerp(.46, .21, fall) * grow;
   c.arc.setAttribute('stroke-dasharray', `${c.C0 * p} ${c.C0}`);
@@ -440,12 +481,13 @@ scene(675, 120, '', c => {
 const SERV2 = [['Imposto de Renda', IC2.doc], ['MEI e regularização', IC2.shield], ['Abertura de empresa', IC2.building], ['Planejamento tributário', IC2.calc]];
 scene(795, 150, '', c => {
   darkBg(c);
+  const A = mkArcs(c, 660, '#22D37F'), T = mkTile(c, IC2.shield, false, V(150, 120));
   const panel = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">${BADGE(64)}<span class="mono" style="font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.6)">LOUGAN · SERVIÇOS</span></div>
     ${SERV2.map(([t, ic]) => `<div class="sr" style="display:flex;align-items:center;gap:22px;padding:22px 24px;margin-bottom:14px;border-radius:24px;background:rgba(3,40,26,.75);border:2px solid rgba(93,240,168,.25)"><div style="width:74px;height:74px;border-radius:20px;background:linear-gradient(150deg,#4BE8A0,#13A563);display:flex;align-items:center;justify-content:center;flex:none">${icon(ic, 42, '#03281A', 2)}</div><span style="font-weight:700;font-size:38px;color:#fff;white-space:nowrap">${t}</span><div class="ck" style="margin-left:auto;width:58px;height:58px;border-radius:50%;background:#22D37F;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(34,211,127,.8);flex:none">${icon(IC2.check, 34, '#03281A', 3.4)}</div></div>`).join('')}`,
-    'width:900px;padding:40px 40px 26px;border-radius:40px;background:rgba(8,20,15,.85);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+    'width:900px;padding:40px 40px 26px;border-radius:40px;background:linear-gradient(115deg,rgba(93,240,168,0) 42%,rgba(93,240,168,.13) 50%,rgba(93,240,168,0) 58%) 0 0/300% 100% no-repeat,rgba(8,20,15,.85);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const stampEl = add(c, 'el', 'DENTRO DA LEI', 'padding:18px 40px;border:9px solid #22D37F;border-radius:22px;color:#5DF0A8;font-weight:900;font-size:76px;letter-spacing:.04em;white-space:nowrap;text-shadow:0 0 20px rgba(34,211,127,.8);box-shadow:0 0 40px rgba(34,211,127,.5),inset 0 0 30px rgba(34,211,127,.3);background:rgba(2,10,7,.55)');
   const D = mkDot(c);
-  return { D, panel, rows: [...panel.querySelectorAll('.sr')], cks: [...panel.querySelectorAll('.ck')], stampEl, l: typer(add(c, 'ctr ws', 'E cuida do resto também.', 'font-size:54px'), 26) };
+  return { A, T, D, panel, rows: [...panel.querySelectorAll('.sr')], cks: [...panel.querySelectorAll('.ck')], stampEl, l: typer(add(c, 'ctr ws', 'E cuida do resto também.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07 });
@@ -453,8 +495,10 @@ scene(795, 150, '', c => {
   L(c.l.el, { y: CY - V(640, 470) - lf * .6, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
   const py8 = CY + V(20, 10) - lf * .2;
   dotTravel(c.D, lf, 0, 10, { x: -40, y: py8 + 380 }, { x: CX, y: py8 }, 160);
+  arcsAt(c.A, lf, { y: py8, t0: 10, spd: -1.6 }); tileAt(c.T, lf, 4, d, { y: CY - V(470, 340) - lf * .4, anim: 'beat' });
   P(c.panel, { y: py8, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
   openCard(c.panel, c.D, lf, 10, CX, py8);
+  c.panel.style.backgroundPosition = `${lerp(110, -10, ((lf + 30) % 75) / 75)}% 0`;   // brilho que atravessa o painel
   c.rows.forEach((r, i) => { const k = prog(lf, 22 + i * 12, 34 + i * 12, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * 80}px)`; });
   c.cks.forEach((k2, i) => { const k = popS(lf, 32 + i * 12); k2.style.transform = `scale(${lf < 32 + i * 12 ? 0 : k})`; });
   const st = prog(lf, 90, 96, E.inC);
@@ -464,16 +508,18 @@ scene(795, 150, '', c => {
 // 9 · "Quem cuida do seu caso é o próprio Lougan." — linha do tempo do atendimento (945–1065)
 scene(945, 120, '', c => {
   darkBg(c);
+  const A = mkArcs(c, 240, '#F2C14E');
   const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 150, '#FFE9A8', 1.6)}</div>`, `width:${V(290, 250)}px;height:${V(290, 250)}px`);
   const tag = add(c, 'el', '<b style="letter-spacing:.14em">LOUGAN</b>', 'font-size:56px;color:#fff;text-align:center;white-space:nowrap;padding:12px 40px;border-radius:24px;background:rgba(3,40,26,.85);border:2px solid rgba(242,193,78,.6)');
   const tl = add(c, 'el', `<svg width="860" height="80" viewBox="0 0 860 80" style="overflow:visible"><line x1="80" y1="40" x2="780" y2="40" stroke="rgba(242,255,248,.15)" stroke-width="8" stroke-linecap="round"/><line class="pf" x1="80" y1="40" x2="780" y2="40" stroke="#22D37F" stroke-width="8" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/><circle class="ph" cy="40" r="17" fill="#E6FFF2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>
     ${['Análise', 'Negociação', 'Acordo fechado'].map((t, i) => `<div class="st" style="position:absolute;left:${80 + i * 350}px;top:40px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:16px"><div class="sd" style="width:78px;height:78px;border-radius:50%;background:#0B1F17;border:5px solid rgba(242,255,248,.25);display:flex;align-items:center;justify-content:center;margin-top:76px">${icon(IC2.check, 40, '#03281A', 3.4)}</div><span style="font-weight:700;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}`, 'width:860px;height:80px');
-  return { av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
+  return { A, av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 160 });
   const ay = CY - V(560, 400);
   P(c.av, { y: ay - lf * .5, s: spring(lf, 0, { k: 140, c: 13 }) * (1 + .06 * prog(lf, 0, d)), r: Math.sin(lf / 12) * 3 });
+  arcsAt(c.A, lf, { y: ay - lf * .5, t0: 4, spd: 3 });
   P(c.tag, { y: ay + V(210, 180) - lf * .5, s: spring(lf, 10) * (1 + .04 * prog(lf, 10, d)), o: lf < 10 ? 0 : 1 });
   L(c.l1.el, { y: CY - V(130, 100) }); type(c.l1, lf, 14);
   pop(c.l2, lf, 34, d, { y: CY - V(30, 10) });
@@ -486,6 +532,7 @@ scene(945, 120, '', c => {
 // 10 · conversa + CTA "Chamar no WhatsApp" (1065–1260)
 scene(1065, 195, '', c => {
   c.appendChild(h('div', 'glow', '', 'opacity:.7'));
+  const A = mkArcs(c, 640, '#22D37F'), T = mkTile(c, IC2.chat, false, V(150, 120));
   const chat = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;padding-bottom:20px;border-bottom:1px solid rgba(242,255,248,.12)">${BADGE(70)}<div><b style="font-size:32px;color:#fff">Lougan Contabilidade</b><span style="display:block;font-size:22px;color:#5DF0A8">online agora</span></div></div>
     <div class="m1" style="margin:26px 0 0 auto;max-width:600px;padding:22px 28px;border-radius:30px;border-bottom-right-radius:8px;background:#1F8F5B;color:#fff;font-size:32px;font-weight:500;line-height:1.3">Oi! Tô devendo uns R$ 48 mil entre cartão e banco. Tem jeito?</div>
     <div class="td" style="margin-top:22px;width:120px;padding:22px 26px;border-radius:30px;background:rgba(242,255,248,.1);display:flex;gap:10px"><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i></div>
@@ -495,7 +542,7 @@ scene(1065, 195, '', c => {
   const btn = add(c, 'el btn', `${icon(IC2.chat, 62, '#fff', 2.2)}<span style="margin-left:18px">Chamar no WhatsApp</span>`, `width:${V(780, 720)}px;height:150px;font-size:${V(52, 48)}px`);
   const num = add(c, 'ctr', '+55 98 8499-2560', 'font-weight:700;font-size:44px;color:#C8FFE2;letter-spacing:.06em;text-shadow:0 0 14px rgba(34,211,127,.7)');
   const D = mkDot(c), D2 = mkDot(c);
-  return { D, D2, num, chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
+  return { A, T, D, D2, num, chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07, exit: { len: 8, zoom: .3, blur: 10 } });
@@ -504,6 +551,7 @@ scene(1065, 195, '', c => {
   dotTravel(c.D, lf, 2, 12, { x: 1120, y: cy10 - 380 }, { x: CX, y: cy10 }, -120);
   P(c.chat, { y: cy10, s: 1 + .03 * prog(lf, 12, d), t3: `perspective(1600px) rotateX(2deg) rotateY(${Math.sin(lf / 28) * 3}deg)` });
   openCard(c.chat, c.D, lf, 12, CX, cy10, 44);
+  arcsAt(c.A, lf, { y: cy10 + 200, t0: 12, s: 1 + .05 * prog(lf, 12, d), o: 1 - prog(lf, 180, 188) }); tileAt(c.T, lf, 2, d, { y: CY - V(560, 400) - lf * .4, out: 176, anim: 'bob' });
   const b1 = spring(lf, 24); c.m1.style.opacity = lf < 24 ? 0 : clamp(b1 * 2); c.m1.style.transform = `translateY(${(1 - b1) * 40}px) scale(${lerp(.85, 1, b1)})`; c.m1.style.transformOrigin = '100% 100%';
   c.td.style.opacity = lf > 48 && lf < 68 ? 1 : 0; [...c.td.children].forEach((dd, i) => { dd.style.transform = `translateY(${Math.sin(lf / 2.2 - i) * 5}px)`; });
   const b2 = spring(lf, 68); c.m2.style.opacity = lf < 68 ? 0 : clamp(b2 * 2); c.m2.style.transform = `translateY(${(1 - b2) * 40}px) scale(${lerp(.85, 1, b2)})`; c.m2.style.transformOrigin = '0 100%';
@@ -525,18 +573,20 @@ scene(1065, 195, '', c => {
 // 11 · assinatura: "Lougan Contabilidade. Dívida tem saída." (1260–1440)
 scene(1260, 180, '', c => {
   darkBg(c, false);
+  const A = mkArcs(c, 560, '#22D37F');
   const halo = add(c, 'el', '', `width:${V(640, 520)}px;height:${V(640, 520)}px;border-radius:50%;border:5px solid rgba(93,240,168,.8);box-shadow:0 0 40px rgba(34,211,127,.8),inset 0 0 40px rgba(34,211,127,.5)`);
   const logo = add(c, 'el', BADGE(V(470, 390)), 'filter:drop-shadow(0 0 50px rgba(34,211,127,.7))');
   const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
   const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
   const zap = add(c, 'el btn', `${icon(IC2.chat, 52, '#fff', 2.2)}<span style="margin-left:16px;letter-spacing:.04em">+55 98 8499-2560</span>`, `width:${V(700, 640)}px;height:120px;font-size:${V(50, 46)}px`);
-  return { halo, logo, wm, sparks, zap, D: mkDot(c), l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
+  return { A, halo, logo, wm, sparks, zap, D: mkDot(c), l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150 });
   const beat = Math.exp(-((lf % 15) / 3.5)) * (1 - prog(lf, 120, 150)), ly = CY - V(330, 250);
   P(c.logo, { y: ly - lf * .2, s: lerp(1.7, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)) * (1 + .02 * beat), b: (1 - prog(lf, 0, 10, E.out5)) * 20, r: lerp(12, 0, prog(lf, 0, 16, E.out5)) });
   P(c.halo, { y: ly - lf * .2, s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .08 * beat), o: .5 + .5 * beat });
+  arcsAt(c.A, lf, { y: ly - lf * .2, t0: 2, spd: 1.8, o: .85 });
   L(c.wm, { y: ly + V(390, 320) - prog(lf, 14, d) * 14, o: prog(lf, 14, 24), b: (1 - prog(lf, 14, 24)) * 12 });
   pop(c.l1, lf, 40, d, { y: ly + V(590, 480), from: 1.5 });
   c.l2.style.letterSpacing = `${.3 + prog(lf, 60, d) * .1}em`;
@@ -574,6 +624,8 @@ const SFX = [
   ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1155, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1177, .3, 0, {}], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
   ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}], ['whoosh', 1324, .4, -.6, { dur: .4, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1336, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1340, .3, 0, {}],
 ];
+[[105 + 2, .35], [210 + 4, .3], [375 + 4, .3], [795 + 4, .32], [1065 + 2, .32]].forEach(([t, g], i) => SFX.push(['pop', t, g, (i % 2 ? .3 : -.3), { f0: 500 + i * 60, f1: 1100 + i * 80 }]));
+SWIPE.forEach(T => SFX.push(['whoosh', T - SWN, .55, 0, { dur: .6, f0: 250, f1: 3800, peak: .55, panFrom: .7, panTo: -.7 }]));
 SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
 const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
   [381, 'A gente analisa cada cobrança', 28], [479, 'e negocia direto com o credor.', 28], [606, 'O resultado? Desconto de', 24], [715, 'E uma parcela que', 24], [797, 'E cuida do resto também.', 26], [959, 'Quem cuida do seu caso é', 24], [1067, 'Manda uma mensagem.', 24]];
@@ -587,10 +639,23 @@ const BOARD = [[40, 'Gancho', 'dívida subindo'], [96, 'Gancho', 'só aumenta?']
 function render(t) {
   const f = t * FPS;
   SC.forEach(s => {
-    const lf = f - s.a, on = lf >= 0 && lf < s.d;
+    const lf0 = f - s.a, sOut = SWIPE.includes(s.a + s.d) ? SWN : 0, sIn = SWIPE.includes(s.a) ? SWN : 0;
+    const on = lf0 >= -sIn && lf0 < s.d + sOut;
     s.sec.style.visibility = on ? 'visible' : 'hidden';
     if (!on) return;
-    s.fn(s, lf, s.d);
+    const lf = Math.max(0, lf0);
+    NOEXIT = sOut > 0; s.fn(s, lf, s.d); NOEXIT = false;
+    // troca de tela: as duas cenas encolhem em cartões arredondados com borda neon e deslizam pra esquerda
+    let tr = 'none', sk = 0;
+    SWIPE.forEach(T => {
+      if (f < T - SWN || f >= T + SWN || (T !== s.a && T !== s.a + s.d)) return;
+      const k = prog(f, T - SWN, T + SWN, E.inOutC); sk = Math.sin(Math.PI * prog(f, T - SWN, T + SWN));
+      const sc = 1 - .26 * sk, off = W * sc + 70;
+      tr = `translateX(${T === s.a ? (1 - k) * off : -k * off}px) scale(${sc})`;
+    });
+    s.sec.style.transform = tr;
+    s.sec.style.borderRadius = sk > .01 ? `${46 * sk}% / ${26 * sk}%` : '0';
+    s.sec.style.boxShadow = sk > .01 ? `0 0 0 ${5 * sk}px rgba(93,240,168,${sk}),0 0 ${90 * sk}px rgba(34,211,127,${.8 * sk})` : 'none';
     // deriva contínua do fundo em toda cena (regra 1: zero dead holds)
     s.glows.forEach((g, i) => { g.style.transform = `translate(${Math.sin(f / 23 + i) * 70}px,${Math.cos(f / 29 + i) * 110}px) scale(${1 + .08 * Math.sin(f / 17)})`; });
     s.grids.forEach(g => { if (!g.dataset.own) g.style.transform = `translate(${Math.sin(f / 40) * 20}px,${-(f * 1.2) % 90}px)`; });
