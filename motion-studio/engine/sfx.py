@@ -258,7 +258,7 @@ def voice_chain(x, sr):
     x = resample_poly(x, SR, sr) if sr != SR else x
     x = filt(x, 'highpass', 85)
     x = x + .25 * filt(x, 'bandpass', [2500, 5500])                 # presença
-    lvl = np.sqrt(uniform_filter1d(x ** 2, int(.012 * SR))) + 1e-9
+    lvl = np.sqrt(np.maximum(uniform_filter1d(x ** 2, int(.012 * SR)), 0)) + 1e-9   # o filtro pode dar -0,000…: sem isso vira NaN
     over = np.maximum(0, 20 * np.log10(lvl) + 24)
     x = x * db(-over * (1 - 1 / 3))
     return verb(x, ROOM, .06)
