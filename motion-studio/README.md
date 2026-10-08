@@ -79,7 +79,7 @@ node tools/render.cjs projects/zorro-gamer timeline && python3 engine/sfx.py pro
 node tools/render.cjs projects/zorro-gamer full --workers 4 --audio projects/zorro-gamer/out/mix.wav
 ```
 
-## Projeto `lougan-contabil` (Lougan Contabilidade: redução de dívidas, 60 s)
+## Projeto `lougan-contabil` (LBM Contabilidade, do Lougan: redução de dívidas, 60 s)
 
 Vertical, tudo em gráfico (dívida subindo, barras de juros, extrato, virada do gráfico, rosca da renda). Um ponto de luz vai de um lado pro outro e abre cada tela (`mkDot`, `dotTravel`, `openCard`). Os valores na tela são ilustrativos. O WhatsApp (+55 98 8499-2560) aparece no CTA e na assinatura. Trilha orquestral/pop a 120 BPM com MuseScore General (MIT) + pedalboard.
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lougan Contabilidade — Promo (neon-glow)</title>
+<title>LBM Contabilidade — Promo (neon-glow)</title>
 <style>
 @font-face{font-family:'Montserrat';font-weight:100 900;font-display:block;src:url(../../fonts/Montserrat.woff2) format('woff2')}
 @font-face{font-family:'Cormorant Garamond';font-weight:300 700;font-display:block;src:url(../../fonts/CormorantGaramond.woff2) format('woff2')}
@@ -214,14 +214,15 @@ function openCard(el, D, lf, t0, cx, cy, r = 40) {
   P(D.beam, { x: cx, y: cy, o: bo });
 }
 const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-// monograma da Lougan (provisório até chegar o logo oficial): quadrado escuro, filete dourado, "L" serifado
+// monograma da LBM Contabilidade (provisório até chegar o logo oficial): quadrado escuro, filete dourado, "LBM" serifado
 const BADGE = size => `<svg width="${size}" height="${size}" viewBox="0 0 200 200" style="overflow:visible;display:block">
   <defs><linearGradient id="mgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1C4"/><stop offset=".45" stop-color="#E9B84A"/><stop offset="1" stop-color="#9C6A1C"/></linearGradient>
   <linearGradient id="mgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F4A32"/><stop offset="1" stop-color="#03180F"/></linearGradient></defs>
   <rect x="4" y="4" width="192" height="192" rx="44" fill="url(#mgB)" stroke="url(#mgG)" stroke-width="5"/>
   <rect x="17" y="17" width="166" height="166" rx="33" fill="none" stroke="rgba(233,184,74,.35)" stroke-width="1.5"/>
-  <text x="92" y="150" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="156" fill="url(#mgG)">L</text>
-  <path d="M116 60l14 12 10-6 18 20" fill="none" stroke="#5DF0A8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="158" cy="86" r="5.5" fill="#5DF0A8"/></svg>`;
+  <text x="100" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="88" letter-spacing="-2" fill="url(#mgG)">LBM</text>
+  <path d="M52 138H148" stroke="rgba(233,184,74,.6)" stroke-width="2"/>
+  <path d="M74 150l18 10 12-6 22 14" fill="none" stroke="#5DF0A8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="126" cy="168" r="5" fill="#5DF0A8"/></svg>`;
 const icon = (svg, sz, col = '#fff', sw = 2) => svg.replace('<svg', `<svg width="${sz}" height="${sz}" style="fill:none;stroke:${col};stroke-width:${sw};stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px ${col})"`);
 const shakeAt = (lf, hits, amp = 14) => { let x = 0, y = 0; hits.forEach((t, i) => { if (lf >= t && lf < t + 12) { const k = amp * Math.exp(-(lf - t) / 3); x += (hash(lf * 3 + i) - .5) * 2 * k; y += (hash(lf * 7 + i) - .5) * 2 * k; } }); return [x, y]; };
 const redGlow = c => add(c, 'el', '', 'width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,50,70,.30),rgba(255,50,70,.08) 35%,rgba(255,50,70,0) 62%)');
@@ -421,7 +422,7 @@ scene(210, 90, '', c => {
   pop(c.l2, lf, 54, d, { y: CY + V(440, 350) });
 });
 
-// 4 · "É aí que entra a Lougan Contabilidade." — cartão de visita da Lougan (300–375)
+// 4 · "É aí que entra a LBM Contabilidade." — cartão de visita da LBM (300–375)
 scene(300, 75, '', c => {
   darkBg(c);
   const A = mkArcs(c, 600, '#22D37F');
@@ -430,7 +431,7 @@ scene(300, 75, '', c => {
     <svg class="ech" width="900" height="540" style="position:absolute;left:0;top:0;overflow:visible"><polyline points="440,170 520,215 590,195 680,290 760,268 852,400" fill="none" stroke="rgba(93,240,168,.4)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/><circle class="ehd" r="8" fill="#5DF0A8"/></svg>
     <div class="mk" style="position:absolute;left:60px;top:54px">${BADGE(118)}</div>
     <div style="position:absolute;right:60px;top:80px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:24px;letter-spacing:.04em;color:rgba(242,255,248,.7)">${icon(IC2.chat, 30, 'rgba(93,240,168,.9)', 2)}+55 98 8499-2560</div>
-    <div class="nm" style="position:absolute;left:56px;top:196px;height:184px;overflow:hidden;font-family:'Cormorant Garamond';font-weight:600;font-size:156px;line-height:1.15;color:#FFF7E2;letter-spacing:-.005em;white-space:nowrap">${[...'Lougan'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div>
+    <div class="nm" style="position:absolute;left:56px;top:196px;height:184px;overflow:hidden;font-family:'Cormorant Garamond';font-weight:600;font-size:156px;line-height:1.15;color:#FFF7E2;letter-spacing:-.005em;white-space:nowrap">${[...'LBM'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div>
     <div class="sub" style="position:absolute;left:64px;top:384px;font-weight:700;font-size:26px;letter-spacing:.55em;color:#5DF0A8;white-space:nowrap">CONTABILIDADE</div>
     <div class="dv" style="position:absolute;left:60px;right:60px;top:446px;height:2px;transform-origin:0 50%;background:linear-gradient(90deg,#E9B84A,rgba(233,184,74,0))"></div>
     <div class="sv" style="position:absolute;left:60px;top:466px;font-weight:600;font-size:22px;letter-spacing:.08em;color:rgba(242,255,248,.62);white-space:nowrap">REDUÇÃO DE DÍVIDAS · IMPOSTO DE RENDA · EMPRESAS</div>
@@ -473,7 +474,7 @@ scene(375, 165, '', c => {
     <div class="scan" style="position:absolute;left:0;right:0;top:0;height:6px;border-radius:3px;background:#5DF0A8;box-shadow:0 0 30px #22D37F,0 0 80px rgba(34,211,127,.6)"></div>`,
     'width:860px;padding:40px 50px;border-radius:40px;background:rgba(8,20,15,.86);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden');
   const net = add(c, 'el', `<svg width="900" height="260" viewBox="0 0 900 260" style="overflow:visible"><line class="nl" x1="140" y1="110" x2="760" y2="110" stroke="#22D37F" stroke-width="5" stroke-dasharray="1" pathLength="1" style="filter:drop-shadow(0 0 8px #22D37F)"/>${[0, 1, 2].map(i => `<circle class="pk" r="11" fill="#FFE9A8" style="filter:drop-shadow(0 0 8px #F2C14E)"/>`).join('')}</svg>
-    ${[['Você', IC2.user, 140], ['Lougan', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(92)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
+    ${[['Você', IC2.user, 140], ['LBM', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(92)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
     <div class="deal" style="position:absolute;left:450px;top:-100px;transform:translate(-50%,-50%);padding:14px 30px;border-radius:999px;background:#22D37F;color:#03281A;font-weight:800;font-size:32px;white-space:nowrap;box-shadow:0 0 40px rgba(34,211,127,.8)">✓ ACORDO</div>`,
     'width:900px;height:260px');
   const D = mkDot(c);
@@ -680,7 +681,7 @@ const SERV2 = [['Imposto de Renda', IC2.doc], ['MEI e regularização', IC2.shie
 scene(1155, 150, '', c => {
   darkBg(c);
   const A = mkArcs(c, 660, '#22D37F'), T = mkTile(c, IC2.shield, false, V(150, 120));
-  const panel = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">${BADGE(64)}<span class="mono" style="font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.6)">LOUGAN · SERVIÇOS</span></div>
+  const panel = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">${BADGE(64)}<span class="mono" style="font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.6)">LBM · SERVIÇOS</span></div>
     ${SERV2.map(([t, ic]) => `<div class="sr" style="display:flex;align-items:center;gap:22px;padding:22px 24px;margin-bottom:14px;border-radius:24px;background:rgba(3,40,26,.75);border:2px solid rgba(93,240,168,.25)"><div style="width:74px;height:74px;border-radius:20px;background:linear-gradient(150deg,#4BE8A0,#13A563);display:flex;align-items:center;justify-content:center;flex:none">${icon(ic, 42, '#03281A', 2)}</div><span style="font-weight:700;font-size:38px;color:#fff;white-space:nowrap">${t}</span><div class="ck" style="margin-left:auto;width:58px;height:58px;border-radius:50%;background:#22D37F;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(34,211,127,.8);flex:none">${icon(IC2.check, 34, '#03281A', 3.4)}</div></div>`).join('')}`,
     'width:900px;padding:40px 40px 26px;border-radius:40px;background:linear-gradient(115deg,rgba(93,240,168,0) 42%,rgba(93,240,168,.13) 50%,rgba(93,240,168,0) 58%) 0 0/300% 100% no-repeat,rgba(8,20,15,.85);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const stampEl = add(c, 'el', 'DENTRO DA LEI', 'padding:18px 40px;border:9px solid #22D37F;border-radius:22px;color:#5DF0A8;font-weight:900;font-size:76px;letter-spacing:.04em;white-space:nowrap;text-shadow:0 0 20px rgba(34,211,127,.8);box-shadow:0 0 40px rgba(34,211,127,.5),inset 0 0 30px rgba(34,211,127,.3);background:rgba(2,10,7,.55)');
@@ -732,7 +733,7 @@ scene(1305, 120, '', c => {
 scene(1425, 195, '', c => {
   c.appendChild(h('div', 'glow', '', 'opacity:.7'));
   const A = mkArcs(c, 640, '#22D37F'), T = mkTile(c, IC2.chat, false, V(150, 120));
-  const chat = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;padding-bottom:20px;border-bottom:1px solid rgba(242,255,248,.12)">${BADGE(70)}<div><b style="font-size:32px;color:#fff">Lougan Contabilidade</b><span style="display:block;font-size:22px;color:#5DF0A8">online agora</span></div></div>
+  const chat = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;padding-bottom:20px;border-bottom:1px solid rgba(242,255,248,.12)">${BADGE(70)}<div><b style="font-size:32px;color:#fff">LBM Contabilidade</b><span style="display:block;font-size:22px;color:#5DF0A8">online agora</span></div></div>
     <div class="m1" style="margin:26px 0 0 auto;max-width:600px;padding:22px 28px;border-radius:30px;border-bottom-right-radius:8px;background:#1F8F5B;color:#fff;font-size:32px;font-weight:500;line-height:1.3">Oi! Tô devendo uns R$ 48 mil entre cartão e banco. Tem jeito?</div>
     <div class="td" style="margin-top:22px;width:120px;padding:22px 26px;border-radius:30px;background:rgba(242,255,248,.1);display:flex;gap:10px"><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i></div>
     <div class="m2" style="margin-top:-60px;max-width:640px;padding:22px 28px;border-radius:30px;border-bottom-left-radius:8px;background:rgba(242,255,248,.1);color:#fff;font-size:32px;font-weight:500;line-height:1.3">Tem sim! Me manda os detalhes que eu te mostro quanto dá pra baixar.</div>`,
@@ -782,7 +783,7 @@ scene(1620, 180, '', c => {
   const halo = add(c, 'el', '', `width:${V(470, 400)}px;height:${V(470, 400)}px;border-radius:25%;border:4px solid rgba(233,184,74,.75);box-shadow:0 0 30px rgba(233,184,74,.45),inset 0 0 30px rgba(233,184,74,.2)`);
   const coins = coinsEl(c, 16, 62);
   const logo = add(c, 'el', `${BADGE(V(380, 320))}<div style="position:absolute;inset:0;border-radius:22%;overflow:hidden"><i class="lsh" style="position:absolute;top:-30%;height:160%;width:90px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,246,214,.5),rgba(255,255,255,0));transform:skewX(-20deg)"></i></div>`, 'filter:drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 40px rgba(34,211,127,.35))');
-  const wm = add(c, 'ctr', `<div style="display:inline-block;overflow:hidden;height:1.22em;font-family:'Cormorant Garamond';font-weight:600;font-size:1.45em;color:#FFF7E2;line-height:1.2">${[...'Lougan'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div><br><span class="sub" style="font-weight:700;font-size:.27em;letter-spacing:.55em;color:#5DF0A8">CONTABILIDADE</span>`, `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.35)`);
+  const wm = add(c, 'ctr', `<div style="display:inline-block;overflow:hidden;height:1.22em;font-family:'Cormorant Garamond';font-weight:600;font-size:1.45em;color:#FFF7E2;line-height:1.2">${[...'LBM'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div><br><span class="sub" style="font-weight:700;font-size:.27em;letter-spacing:.55em;color:#5DF0A8">CONTABILIDADE</span>`, `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.35)`);
   const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
   const l1 = add(c, 'ctr pb', `<span class="w" style="display:inline-block;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.55),0 0 50px rgba(34,211,127,.5)">Dívida</span> <span class="w" style="display:inline-block">tem</span> <span class="w" style="display:inline-block">saída.</span><span class="w" style="display:inline-block;margin-left:18px;vertical-align:-8px">${icon(EXIT_IC, 74, '#5DF0A8', 2.6)}</span>`, `font-size:${V(78, 68)}px`);
   const ul = add(c, 'el', `<svg width="300" height="40" viewBox="0 0 300 40" style="overflow:visible"><path d="M6 24C90 8 200 6 294 16" fill="none" stroke="#5DF0A8" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>`, 'width:300px;height:40px');
