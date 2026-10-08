@@ -69,4 +69,24 @@ node tools/render.cjs projects/webvee-promo timeline && python3 engine/sfx.py pr
 node tools/render.cjs projects/webvee-promo full --workers 4 --audio projects/webvee-promo/out/mix.wav
 ```
 
+## Projeto `zorro-gamer` (motion designer, 36,8 s)
+
+Phonk/trap a 150 BPM, logo recortado do arquivo do cliente (`assets/logo-cut.png`, `emblem.png`) e o bordão "DANIEL VAI SE LASCAR!" no fim (frames 1008–1104).
+
+```bash
+python3 projects/zorro-gamer/audio/compose_music.py
+node tools/render.cjs projects/zorro-gamer timeline && python3 engine/sfx.py projects/zorro-gamer
+node tools/render.cjs projects/zorro-gamer full --workers 4 --audio projects/zorro-gamer/out/mix.wav
+```
+
+## Projeto `lougan-contabil` (Lougan Contabilidade: redução de dívidas, 48 s)
+
+Vertical, tudo em gráfico (dívida subindo, barras de juros, extrato, virada do gráfico, rosca da renda). Um ponto de luz vai de um lado pro outro e abre cada tela (`mkDot`, `dotTravel`, `openCard`). Os valores na tela são ilustrativos. O WhatsApp (+55 98 8499-2560) aparece no CTA e na assinatura. Trilha orquestral/pop a 120 BPM com MuseScore General (MIT) + pedalboard.
+
+```bash
+python3 projects/lougan-contabil/audio/compose_music.py
+node tools/render.cjs projects/lougan-contabil timeline && python3 engine/sfx.py projects/lougan-contabil
+node tools/render.cjs projects/lougan-contabil full --workers 4 --audio projects/lougan-contabil/out/mix.wav
+```
+
 Requer Playwright (Chromium), ffmpeg e Python com `numpy scipy soundfile pyloudnorm pillow mido`.

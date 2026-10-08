@@ -187,6 +187,28 @@ const IC2 = {
   bolt: '<svg viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg>',
 };
 const popS = (lf, t0) => spring(lf, t0, { k: 200, c: 15 });
+// ponto que viaja de um lado pro outro (com rastro) e abre a tela: ponto → linha → tela
+function mkDot(c) {
+  const g = [...Array(6).keys()].map(i => add(c, 'el', '', `width:${30 - i * 3}px;height:${30 - i * 3}px;border-radius:50%;background:#E6FFF2;box-shadow:0 0 ${22 - i * 2}px #22D37F,0 0 ${56 - i * 6}px rgba(34,211,127,.6)`));
+  const beam = add(c, 'el', '', 'height:6px;border-radius:3px;background:#E6FFF2;box-shadow:0 0 24px #22D37F,0 0 70px rgba(34,211,127,.8)');
+  return { g, beam };
+}
+function dotTravel(D, lf, t0, t1, a, b, bend = 0) {
+  D.g.forEach((e, i) => {
+    const k = prog(lf - i * 1.3, t0, t1, E.inOutC);
+    P(e, { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k) - Math.sin(Math.PI * k) * bend, o: lf >= t0 && lf < t1 + 1 + i * 1.3 ? 1 - i / 6 : 0 });
+  });
+}
+function openCard(el, D, lf, t0, cx, cy, r = 40) {
+  const W = el.offsetWidth, H = el.offsetHeight;
+  const kx = prog(lf, t0, t0 + 8, E.out5), ky = prog(lf, t0 + 6, t0 + 18, E.out5);
+  const hw = lerp(15, W / 2, kx), hh = lerp(lerp(15, 3, kx), H / 2, ky);
+  el.style.clipPath = ky >= 1 ? 'none' : `inset(${H / 2 - hh}px ${W / 2 - hw}px ${H / 2 - hh}px ${W / 2 - hw}px round ${Math.min(hh, lerp(200, r, ky))}px)`;
+  el.style.visibility = lf < t0 ? 'hidden' : 'visible';
+  const bo = lf < t0 ? 0 : 1 - prog(lf, t0 + 8, t0 + 16);
+  D.beam.style.width = (hw * 2) + 'px'; D.beam.style.height = Math.max(6, lerp(30, 6, kx)) + 'px';
+  P(D.beam, { x: cx, y: cy, o: bo });
+}
 const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 // selo "L" (provisório até chegar o logo oficial)
 const BADGE = size => `<svg width="${size}" height="${size}" viewBox="-100 -100 200 200" style="overflow:visible;display:block">
@@ -239,14 +261,18 @@ const MONTHS = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN'];
 scene(105, 105, '', c => {
   darkBg(c); const rg = redGlow(c);
   const bars = MONTHS.map((m, i) => `<g class="bar"><rect class="s0" x="${40 + i * 140}" width="92" rx="10" fill="#5B6B64"/><rect class="s1" x="${40 + i * 140}" width="92" rx="10" fill="#FF5A6A" style="filter:drop-shadow(0 0 8px #FF3045)"/><rect class="s2" x="${40 + i * 140}" width="92" rx="10" fill="#A3122A"/><text x="${86 + i * 140}" y="600" text-anchor="middle" fill="rgba(242,255,248,.6)" font-family="Montserrat" font-weight="700" font-size="26">${m}</text></g>`).join('');
-  const chart = add(c, 'el', `<svg width="900" height="620" viewBox="0 0 900 620" style="overflow:visible"><line x1="20" y1="560" x2="880" y2="560" stroke="rgba(242,255,248,.25)" stroke-width="3"/>${bars}<polyline class="tr" fill="none" stroke="#FF8A95" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round"/><text class="tot" x="826" y="0" text-anchor="middle" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="40">R$ 48 mil</text></svg>`, 'width:900px;height:620px');
+  const chart = add(c, 'el', `<svg width="900" height="620" viewBox="0 0 900 620" style="overflow:visible"><line class="base" x1="20" y1="560" x2="880" y2="560" stroke="rgba(200,255,226,.55)" stroke-width="4" pathLength="1" stroke-dasharray="1"/>${bars}<polyline class="tr" fill="none" stroke="#FF8A95" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round"/><text class="tot" x="826" y="0" text-anchor="middle" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="40">R$ 48 mil</text></svg>`, 'width:900px;height:620px');
   const leg = add(c, 'el', [['#5B6B64', 'valor original'], ['#FF5A6A', 'juros'], ['#A3122A', 'multa']].map(([col, t]) => `<span style="display:inline-flex;align-items:center;gap:10px;margin:0 16px"><i style="width:22px;height:22px;border-radius:6px;background:${col}"></i>${t}</span>`).join(''), 'font-weight:600;font-size:28px;color:rgba(242,255,248,.8);white-space:nowrap');
-  return { rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
+  const D = mkDot(c);
+  return { D, base: chart.querySelector('.base'), rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: .5, blur: 18 } });
   P(c.rg, { y: CY + 100, s: 1 + .1 * Math.sin(lf / 5) });
   P(c.chart, { y: CY + 40 - lf * .3, s: 1 + .04 * prog(lf, 0, d) });
+  const by = CY + 40 - lf * .3 + 250;
+  dotTravel(c.D, lf, 0, 12, { x: -40, y: by }, { x: CX + 430, y: by });
+  c.base.style.strokeDashoffset = 1 - prog(lf, 0, 12, E.inOutC);
   const tops = [];
   c.bars.forEach((g, i) => {
     const k = clamp(spring(lf, 8 + i * 9, { k: 120, c: 12 }), 0, 1.1);
@@ -272,18 +298,21 @@ scene(210, 90, '', c => {
     ${LEDGER.map(([t, v, col]) => `<div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(242,255,248,.1)"><span style="font-weight:600;font-size:34px;color:#F2FFF8">${t}</span><b style="font-size:38px;color:rgb(${col.join(',')})">${v > 0 ? '+ ' : '− '}${brl(Math.abs(v))}</b></div>`).join('')}
     <div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding-top:26px"><span style="font-weight:800;font-size:44px;color:#F2FFF8">Sobra</span><b class="sob" style="font-size:64px;color:#FF6B78">R$ 0,00</b></div>`,
     'width:860px;padding:44px 50px;border-radius:40px;background:rgba(8,20,15,.82);border:2px solid rgba(255,107,120,.35);box-shadow:0 30px 80px rgba(0,0,0,.6)');
-  return { rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
+  const D = mkDot(c);
+  return { D, rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: 1.2, blur: 22, fade: .6 } });
-  const [sx, sy] = shakeAt(lf, [50], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
-  P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 50 ? 1.2 : 1) });
-  const ck = spring(lf, 0);
-  P(c.card, { y: CY - V(250, 190) - lf * .3, s: lerp(.85, 1, ck), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 3}deg)` });
-  c.rows.forEach((r, i) => { const k = prog(lf, 4 + i * 8, 14 + i * 8, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * -60}px)`; });
-  const sv = -830 * prog(lf, 34, 50, E.out5);
+  const [sx, sy] = shakeAt(lf, [54], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 54 ? 1.2 : 1) });
+  const cy3 = CY - V(250, 190) - lf * .3;
+  dotTravel(c.D, lf, 0, 10, { x: 1120, y: cy3 + 260 }, { x: CX, y: cy3 }, 120);
+  P(c.card, { y: cy3, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
+  openCard(c.card, c.D, lf, 10, CX, cy3);
+  c.rows.forEach((r, i) => { const k = prog(lf, 18 + i * 6, 28 + i * 6, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * -60}px)`; });
+  const sv = -830 * prog(lf, 40, 54, E.out5);
   c.sob.textContent = (sv < -0.5 ? '− ' : '') + brl(Math.abs(sv));
-  c.sob.style.textShadow = lf > 50 ? `0 0 ${20 + 20 * Math.abs(Math.sin(lf / 3))}px rgba(255,60,80,.9)` : 'none';
+  c.sob.style.textShadow = lf > 54 ? `0 0 ${20 + 20 * Math.abs(Math.sin(lf / 3))}px rgba(255,60,80,.9)` : 'none';
   L(c.l1.el, { y: CY + V(330, 250) }); type(c.l1, lf, 30);
   pop(c.l2, lf, 54, d, { y: CY + V(440, 350) });
 });
@@ -294,10 +323,12 @@ scene(300, 75, '', c => {
   const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(360, 300)}" fill="none" stroke="#22D37F" stroke-width="6" style="filter:drop-shadow(0 0 14px #22D37F)"/><circle r="${V(360, 300)}" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="40 260" opacity=".8"/>${[...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * V(430, 360)}" cy="${Math.sin(a) * V(430, 360)}" r="9" fill="#5DF0A8" style="filter:drop-shadow(0 0 8px #22D37F)"/>`; }).join('')}</svg>`, 'width:1000px;height:1000px');
   const logo = add(c, 'el', BADGE(V(400, 340)), 'filter:drop-shadow(0 0 40px rgba(34,211,127,.6))');
   const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
-  return { ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
+  const D = mkDot(c);
+  return { D, ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
 }, (x, lf, d) => {
   cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120, exit: { len: 8, zoom: .5, blur: 16 } });
   L(x.ctx.l.el, { y: CY - V(620, 480) - lf * .3 }); type(x.ctx.l, lf, 2);
+  dotTravel(x.ctx.D, lf, 0, 14, { x: -40, y: CY + 200 }, { x: CX, y: CY - 160 }, 160);
   const lk = spring(lf, 14, { k: 120, c: 12 });
   P(x.ctx.ring, { y: CY - 160, s: lerp(1.3, 1, prog(lf, 14, 30, E.out5)) * (1 + .04 * prog(lf, 14, d)), r: lf * 1.2, o: prog(lf, 14, 18) });
   P(x.ctx.logo, { y: CY - 160, s: lerp(.5, 1, lk) * (1 + .05 * prog(lf, 14, d)), o: lf < 14 ? 0 : 1, b: (1 - prog(lf, 14, 24, E.out5)) * 16, r: lerp(-20, 0, prog(lf, 14, 32, E.out5)) });
@@ -317,18 +348,22 @@ scene(375, 165, '', c => {
     ${[['Você', IC2.user, 140], ['Lougan', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(124)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
     <div class="deal" style="position:absolute;left:450px;top:-100px;transform:translate(-50%,-50%);padding:14px 30px;border-radius:999px;background:#22D37F;color:#03281A;font-weight:800;font-size:32px;white-space:nowrap;box-shadow:0 0 40px rgba(34,211,127,.8)">✓ ACORDO</div>`,
     'width:900px;height:260px');
-  return { doc, rows: [...doc.querySelectorAll('.er')], scan: doc.querySelector('.scan'), net, nl: net.querySelector('.nl'), pks: [...net.querySelectorAll('.pk')], nds: [...net.querySelectorAll('.nd')], deal: net.querySelector('.deal'),
+  const D = mkDot(c);
+  return { D, doc, rows: [...doc.querySelectorAll('.er')], scan: doc.querySelector('.scan'), net, nl: net.querySelector('.nl'), pks: [...net.querySelectorAll('.pk')], nds: [...net.querySelectorAll('.nd')], deal: net.querySelector('.deal'),
     l1: typer(add(c, 'ctr ws', 'A gente analisa cada cobrança', 'font-size:52px'), 28), l2: typer(add(c, 'ctr ws', 'e negocia direto com o credor.', 'font-size:52px;color:#5DF0A8'), 28) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07 });
   const ck = spring(lf, 0), up = prog(lf, 84, 104, E.inOutC);
-  P(c.doc, { y: lerp(CY - V(90, 60), CY - V(430, 300), up) - lf * .2, s: lerp(.85, 1, ck) * lerp(1, .72, up), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 3}deg)` });
-  const sy = lerp(80, 760, prog(lf, 12, 70, E.inOutC));
-  c.scan.style.top = sy + 'px'; c.scan.style.opacity = lf > 10 && lf < 74 ? 1 : 0;
+  const dy5 = lerp(CY - V(90, 60), CY - V(430, 300), up) - lf * .2;
+  dotTravel(c.D, lf, 0, 10, { x: 1120, y: dy5 + 420 }, { x: CX, y: dy5 }, 140);
+  P(c.doc, { y: dy5, s: lerp(1, .72, up) * (1 + .02 * prog(lf, 10, 84)), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
+  openCard(c.doc, c.D, lf, 10, CX, dy5);
+  const sy = lerp(80, 760, prog(lf, 22, 80, E.inOutC));
+  c.scan.style.top = sy + 'px'; c.scan.style.opacity = lf > 20 && lf < 84 ? 1 : 0;
   c.rows.forEach((r, i) => {
     const rowY = 100 + i * 66, hit = sy > rowY && r.dataset.f === '1';
-    const k = hit ? prog(lf, 12 + (rowY - 80) / 680 * 58, 18 + (rowY - 80) / 680 * 58, E.out5) : 0;
+    const k = hit ? prog(lf, 22 + (rowY - 80) / 680 * 58, 28 + (rowY - 80) / 680 * 58, E.out5) : 0;
     r.style.background = `rgba(242,193,78,${.16 * k})`; r.style.boxShadow = k ? `inset 0 0 0 2px rgba(242,193,78,${.7 * k})` : 'none';
     r.querySelector('.tg').style.opacity = k; r.querySelector('.tg').style.transform = `scale(${lerp(.6, 1, k)})`;
   });
@@ -379,7 +414,7 @@ scene(540, 135, '', c => {
 scene(675, 120, '', c => {
   darkBg(c);
   const R0 = 260, C0 = 2 * Math.PI * R0;
-  const donut = add(c, 'el', `<svg width="700" height="700" viewBox="-350 -350 700 700" style="overflow:visible"><circle r="${R0}" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="64"/><circle class="arc" r="${R0}" fill="none" stroke="#FF5A6A" stroke-width="64" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="0 ${C0}" style="filter:drop-shadow(0 0 14px rgba(255,60,80,.7))"/></svg>`, 'width:700px;height:700px');
+  const donut = add(c, 'el', `<svg width="700" height="700" viewBox="-350 -350 700 700" style="overflow:visible"><circle r="${R0}" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="64"/><circle class="arc" r="${R0}" fill="none" stroke="#FF5A6A" stroke-width="64" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="0 ${C0}" style="filter:drop-shadow(0 0 14px rgba(255,60,80,.7))"/><circle class="ah" r="22" fill="#fff" style="filter:drop-shadow(0 0 14px #fff)"/></svg>`, 'width:700px;height:700px');
   const pct = add(c, 'el', '46%', 'font-weight:900;font-size:150px;color:#FF6B78;white-space:nowrap;line-height:1');
   const lab = add(c, 'el', 'DA SUA RENDA<br><span style="font-size:.8em;opacity:.7">indo pras dívidas</span>', 'font-weight:700;font-size:26px;letter-spacing:.14em;color:rgba(242,255,248,.75);text-align:center;white-space:nowrap');
   return { donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
@@ -391,6 +426,8 @@ scene(675, 120, '', c => {
   const grow = prog(lf, 2, 20, E.out5), fall = prog(lf, 36, 80, E.inOutC);
   const p = lerp(.46, .21, fall) * grow;
   c.arc.setAttribute('stroke-dasharray', `${c.C0 * p} ${c.C0}`);
+  const ah = c.donut.querySelector('.ah'), aa = -Math.PI / 2 + p * Math.PI * 2;
+  ah.setAttribute('cx', Math.cos(aa) * 260); ah.setAttribute('cy', Math.sin(aa) * 260); ah.style.opacity = lf > 2 ? 1 : 0;
   const col = mix(RED, GRN, fall); c.arc.setAttribute('stroke', col); c.arc.style.filter = `drop-shadow(0 0 14px ${col})`;
   c.pct.textContent = Math.round(p * 100) + '%'; c.pct.style.color = col; c.pct.style.textShadow = `0 0 24px ${col}`;
   P(c.pct, { y: dy - 30 - lf * .3, s: 1 + .08 * Math.exp(-Math.max(0, lf - 80) / 5) * (lf >= 80 ? 1 : 0) });
@@ -407,16 +444,19 @@ scene(795, 150, '', c => {
     ${SERV2.map(([t, ic]) => `<div class="sr" style="display:flex;align-items:center;gap:22px;padding:22px 24px;margin-bottom:14px;border-radius:24px;background:rgba(3,40,26,.75);border:2px solid rgba(93,240,168,.25)"><div style="width:74px;height:74px;border-radius:20px;background:linear-gradient(150deg,#4BE8A0,#13A563);display:flex;align-items:center;justify-content:center;flex:none">${icon(ic, 42, '#03281A', 2)}</div><span style="font-weight:700;font-size:38px;color:#fff;white-space:nowrap">${t}</span><div class="ck" style="margin-left:auto;width:58px;height:58px;border-radius:50%;background:#22D37F;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(34,211,127,.8);flex:none">${icon(IC2.check, 34, '#03281A', 3.4)}</div></div>`).join('')}`,
     'width:900px;padding:40px 40px 26px;border-radius:40px;background:rgba(8,20,15,.85);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const stampEl = add(c, 'el', 'DENTRO DA LEI', 'padding:18px 40px;border:9px solid #22D37F;border-radius:22px;color:#5DF0A8;font-weight:900;font-size:76px;letter-spacing:.04em;white-space:nowrap;text-shadow:0 0 20px rgba(34,211,127,.8);box-shadow:0 0 40px rgba(34,211,127,.5),inset 0 0 30px rgba(34,211,127,.3);background:rgba(2,10,7,.55)');
-  return { panel, rows: [...panel.querySelectorAll('.sr')], cks: [...panel.querySelectorAll('.ck')], stampEl, l: typer(add(c, 'ctr ws', 'E cuida do resto também.', 'font-size:54px'), 26) };
+  const D = mkDot(c);
+  return { D, panel, rows: [...panel.querySelectorAll('.sr')], cks: [...panel.querySelectorAll('.ck')], stampEl, l: typer(add(c, 'ctr ws', 'E cuida do resto também.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07 });
   const [sx, sy] = shakeAt(lf, [96], 18); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   L(c.l.el, { y: CY - V(640, 470) - lf * .6, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
-  const pk = spring(lf, 6);
-  P(c.panel, { y: CY + V(20, 10) - lf * .2, s: lerp(.85, 1, pk), o: clamp(pk * 2), t3: `perspective(1600px) rotateX(${(1 - pk) * 20 + 3}deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
-  c.rows.forEach((r, i) => { const k = prog(lf, 14 + i * 12, 26 + i * 12, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * 80}px)`; });
-  c.cks.forEach((k2, i) => { const k = popS(lf, 24 + i * 12); k2.style.transform = `scale(${lf < 24 + i * 12 ? 0 : k})`; });
+  const py8 = CY + V(20, 10) - lf * .2;
+  dotTravel(c.D, lf, 0, 10, { x: -40, y: py8 + 380 }, { x: CX, y: py8 }, 160);
+  P(c.panel, { y: py8, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
+  openCard(c.panel, c.D, lf, 10, CX, py8);
+  c.rows.forEach((r, i) => { const k = prog(lf, 22 + i * 12, 34 + i * 12, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * 80}px)`; });
+  c.cks.forEach((k2, i) => { const k = popS(lf, 32 + i * 12); k2.style.transform = `scale(${lf < 32 + i * 12 ? 0 : k})`; });
   const st = prog(lf, 90, 96, E.inC);
   P(c.stampEl, { y: CY + V(520, 380) - prog(lf, 96, d) * 10, s: lf < 90 ? 0 : lerp(2.6, 1, st) * (1 + .03 * prog(lf, 96, d)), r: -10, o: lf < 90 ? 0 : clamp(st * 2), b: (1 - st) * 10 });
 });
@@ -426,7 +466,7 @@ scene(945, 120, '', c => {
   darkBg(c);
   const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 150, '#FFE9A8', 1.6)}</div>`, `width:${V(290, 250)}px;height:${V(290, 250)}px`);
   const tag = add(c, 'el', '<b style="letter-spacing:.14em">LOUGAN</b>', 'font-size:56px;color:#fff;text-align:center;white-space:nowrap;padding:12px 40px;border-radius:24px;background:rgba(3,40,26,.85);border:2px solid rgba(242,193,78,.6)');
-  const tl = add(c, 'el', `<svg width="860" height="80" viewBox="0 0 860 80" style="overflow:visible"><line x1="80" y1="40" x2="780" y2="40" stroke="rgba(242,255,248,.15)" stroke-width="8" stroke-linecap="round"/><line class="pf" x1="80" y1="40" x2="780" y2="40" stroke="#22D37F" stroke-width="8" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>
+  const tl = add(c, 'el', `<svg width="860" height="80" viewBox="0 0 860 80" style="overflow:visible"><line x1="80" y1="40" x2="780" y2="40" stroke="rgba(242,255,248,.15)" stroke-width="8" stroke-linecap="round"/><line class="pf" x1="80" y1="40" x2="780" y2="40" stroke="#22D37F" stroke-width="8" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/><circle class="ph" cy="40" r="17" fill="#E6FFF2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>
     ${['Análise', 'Negociação', 'Acordo fechado'].map((t, i) => `<div class="st" style="position:absolute;left:${80 + i * 350}px;top:40px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:16px"><div class="sd" style="width:78px;height:78px;border-radius:50%;background:#0B1F17;border:5px solid rgba(242,255,248,.25);display:flex;align-items:center;justify-content:center;margin-top:76px">${icon(IC2.check, 40, '#03281A', 3.4)}</div><span style="font-weight:700;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}`, 'width:860px;height:80px');
   return { av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
@@ -439,6 +479,7 @@ scene(945, 120, '', c => {
   pop(c.l2, lf, 34, d, { y: CY - V(30, 10) });
   P(c.tl, { y: CY + V(250, 200), o: prog(lf, 44, 52) });
   const pf = prog(lf, 52, 104, E.inOutC); c.pf.style.strokeDashoffset = 1 - pf;
+  const ph = c.tl.querySelector('.ph'); ph.setAttribute('cx', 80 + 700 * pf); ph.style.opacity = lf > 46 && lf < 108 ? 1 : 0;
   c.sts.forEach((s, i) => { const on = pf >= i / 2 - .001; const k = on ? popS(lf, 52 + i * 26) : 0; s.style.background = on ? '#22D37F' : '#0B1F17'; s.style.borderColor = on ? '#5DF0A8' : 'rgba(242,255,248,.25)'; s.style.boxShadow = on ? '0 0 26px rgba(34,211,127,.8)' : 'none'; s.style.transform = `scale(${on ? lerp(1.3, 1, k) : 1})`; s.querySelector('svg').style.opacity = on ? 1 : 0; });
 });
 
@@ -452,19 +493,31 @@ scene(1065, 195, '', c => {
     'width:880px;padding:36px 40px 44px;border-radius:44px;background:rgba(8,20,15,.9);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
   const ripple = add(c, 'el', '', 'border:4px solid #5DF0A8;border-radius:999px;width:780px;height:150px');
   const btn = add(c, 'el btn', `${icon(IC2.chat, 62, '#fff', 2.2)}<span style="margin-left:18px">Chamar no WhatsApp</span>`, `width:${V(780, 720)}px;height:150px;font-size:${V(52, 48)}px`);
-  return { chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
+  const num = add(c, 'ctr', '+55 98 8499-2560', 'font-weight:700;font-size:44px;color:#C8FFE2;letter-spacing:.06em;text-shadow:0 0 14px rgba(34,211,127,.7)');
+  const D = mkDot(c), D2 = mkDot(c);
+  return { D, D2, num, chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.07, exit: { len: 8, zoom: .3, blur: 10 } });
   L(c.l.el, { y: CY - V(700, 500) - lf * .5, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
-  const ck = spring(lf, 4);
-  P(c.chat, { y: CY - V(160, 110) - lf * .25, s: lerp(.85, 1, ck), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 2}deg)` });
-  const b1 = spring(lf, 18); c.m1.style.opacity = lf < 18 ? 0 : clamp(b1 * 2); c.m1.style.transform = `translateY(${(1 - b1) * 40}px) scale(${lerp(.85, 1, b1)})`; c.m1.style.transformOrigin = '100% 100%';
-  c.td.style.opacity = lf > 44 && lf < 66 ? 1 : 0; [...c.td.children].forEach((dd, i) => { dd.style.transform = `translateY(${Math.sin(lf / 2.2 - i) * 5}px)`; });
-  const b2 = spring(lf, 66); c.m2.style.opacity = lf < 66 ? 0 : clamp(b2 * 2); c.m2.style.transform = `translateY(${(1 - b2) * 40}px) scale(${lerp(.85, 1, b2)})`; c.m2.style.transformOrigin = '0 100%';
-  const bt = spring(lf, 100, { k: 200, c: 15 }), beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 135) / 3) * (lf >= 135 ? 1 : 0);
+  const cy10 = CY - V(160, 110) - lf * .25;
+  dotTravel(c.D, lf, 2, 12, { x: 1120, y: cy10 - 380 }, { x: CX, y: cy10 }, -120);
+  P(c.chat, { y: cy10, s: 1 + .03 * prog(lf, 12, d), t3: `perspective(1600px) rotateX(2deg) rotateY(${Math.sin(lf / 28) * 3}deg)` });
+  openCard(c.chat, c.D, lf, 12, CX, cy10, 44);
+  const b1 = spring(lf, 24); c.m1.style.opacity = lf < 24 ? 0 : clamp(b1 * 2); c.m1.style.transform = `translateY(${(1 - b1) * 40}px) scale(${lerp(.85, 1, b1)})`; c.m1.style.transformOrigin = '100% 100%';
+  c.td.style.opacity = lf > 48 && lf < 68 ? 1 : 0; [...c.td.children].forEach((dd, i) => { dd.style.transform = `translateY(${Math.sin(lf / 2.2 - i) * 5}px)`; });
+  const b2 = spring(lf, 68); c.m2.style.opacity = lf < 68 ? 0 : clamp(b2 * 2); c.m2.style.transform = `translateY(${(1 - b2) * 40}px) scale(${lerp(.85, 1, b2)})`; c.m2.style.transformOrigin = '0 100%';
+  const beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 135) / 3) * (lf >= 135 ? 1 : 0);
+  const byB = CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, gone = prog(lf, 180, 186, E.inC);
+  dotTravel(c.D2, lf, 90, 100, { x: CX, y: cy10 + 300 }, { x: CX, y: byB }, -60);
+  dotTravel(c.D2, lf, 184, 195, { x: CX, y: byB }, { x: CX, y: CY - V(330, 250) }, 0);
+  if (lf >= 184) c.D2.g.forEach(e => { e.style.width = e.style.height = '40px'; });
   c.btn.style.boxShadow = `0 0 ${36 + 22 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 120px rgba(34,211,127,.45),inset 0 3px 0 rgba(255,255,255,.35)`;
-  P(c.btn, { y: CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, r: Math.sin(lf / 11) * 1.5, s: (lf < 100 ? 0 : bt) * (1 + .03 * beat) * (1 - .07 * press), o: lf < 100 ? 0 : 1 });
+  P(c.btn, { y: byB, r: Math.sin(lf / 11) * 1.5, s: (1 + .03 * beat) * (1 - .07 * press) * (1 - gone), o: 1 - gone });
+  openCard(c.btn, c.D2, lf, 100, CX, byB, 75);
+  const nk = prog(lf, 112, 124, E.out5);
+  L(c.num, { y: byB + 135 + (1 - nk) * 30 - prog(lf, 112, d) * 8, o: nk * (1 - gone), b: (1 - nk) * 10 });
+  c.num.style.letterSpacing = `${.06 + prog(lf, 112, d) * .04}em`;
   const rk = prog(lf, 135, 155, E.out5);
   P(c.ripple, { y: CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, s: lerp(1, 1.5, rk), o: lf >= 135 ? 1 - rk : 0 });
 });
@@ -476,7 +529,8 @@ scene(1260, 180, '', c => {
   const logo = add(c, 'el', BADGE(V(470, 390)), 'filter:drop-shadow(0 0 50px rgba(34,211,127,.7))');
   const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
   const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
-  return { halo, logo, wm, sparks, l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
+  const zap = add(c, 'el btn', `${icon(IC2.chat, 52, '#fff', 2.2)}<span style="margin-left:16px;letter-spacing:.04em">+55 98 8499-2560</span>`, `width:${V(700, 640)}px;height:120px;font-size:${V(50, 46)}px`);
+  return { halo, logo, wm, sparks, zap, D: mkDot(c), l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150 });
@@ -487,6 +541,11 @@ scene(1260, 180, '', c => {
   pop(c.l1, lf, 40, d, { y: ly + V(590, 480), from: 1.5 });
   c.l2.style.letterSpacing = `${.3 + prog(lf, 60, d) * .1}em`;
   L(c.l2, { y: ly + V(690, 560) - prog(lf, 60, d) * 10, o: prog(lf, 60, 72) });
+  const zy = ly + V(840, 690) - prog(lf, 76, d) * 12 + Math.sin(lf / 8) * 4;
+  dotTravel(c.D, lf, 64, 76, { x: -60, y: zy + 120 }, { x: CX, y: zy }, 140);
+  c.zap.style.boxShadow = `0 0 ${30 + 18 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 100px rgba(34,211,127,.4),inset 0 3px 0 rgba(255,255,255,.35)`;
+  P(c.zap, { y: zy, s: 1 + .04 * prog(lf, 76, d) + .02 * beat, r: Math.sin(lf / 13) * 1.2 });
+  openCard(c.zap, c.D, lf, 76, CX, zy, 60);
   c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(300, 240) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: ly + Math.sin(a) * r, o: clamp(1 - (r - V(300, 240)) / 420) * prog(lf, 2, 8) }); });
 });
 
@@ -502,18 +561,18 @@ const FLASH = [[300, CX, CY - 160, .5], [314, CX, CY - 160, .85], [540, CX, CY -
 const SFX = [
   ['boom', 0, .45, 0, { dur: 1.0 }], ...[...Array(9).keys()].map(i => ['tick', 4 + i * 10, .2 + i * .03, (i % 2 ? .3 : -.3), {}]), ['riser', 48, .35, 0, { dur: 1.2 }], ['boom', 62, .35, 0, { dur: .4 }], ['boom', 84, .5, 0, { dur: .6 }], ['glitch', 84, .3, 0, { dur: .2 }],
   ['whoosh', 104, .4, 0, { dur: .4, f0: 400, f1: 3000, peak: .8 }], ...[0, 1, 2, 3, 4, 5].map(i => ['pop', 113 + i * 9, .32, (i - 2.5) * .2, { f0: 300 + i * 70, f1: 500 + i * 110 }]), ['boom', 167, .45, 0, { dur: .6 }], ['glitch', 167, .25, 0, { dur: .15 }],
-  ['whoosh', 210, .35, 0, { dur: .4, f0: 300, f1: 2500, peak: .7 }], ...[0, 1, 2].map(i => ['click', 214 + i * 8, .4, -.2, {}]), ['clicks', 244, .18, 0, { n: 10, step: .055 }], ['boom', 260, .55, 0, { dur: .7 }], ['glitch', 260, .3, 0, { dur: .2 }],
+  ['whoosh', 210, .35, 0, { dur: .4, f0: 300, f1: 2500, peak: .7 }], ['pop', 220, .35, .3, { f0: 500, f1: 1000 }], ...[0, 1, 2].map(i => ['click', 228 + i * 6, .4, -.2, {}]), ['clicks', 250, .18, 0, { n: 10, step: .045 }], ['boom', 264, .55, 0, { dur: .7 }], ['glitch', 264, .3, 0, { dur: .2 }],
   ['whoosh', 296, .4, 0, { dur: .35, f0: 900, f1: 6000, peak: .9 }], ['impact', 314, .75, 0, { dur: 1.4 }], ['shimmer', 315, .45, 0, { dur: 1.2 }],
-  ['whoosh', 375, .35, 0, { dur: .4 }], ['shimmer', 387, .18, 0, { dur: 2.0 }], ...[394, 400, 411, 417].map((t, i) => ['pop', t, .3, .4, { f0: 1100 + i * 100, f1: 1500 + i * 100 }]),
+  ['whoosh', 375, .35, 0, { dur: .4 }], ['pop', 385, .35, -.3, { f0: 500, f1: 1000 }], ['shimmer', 397, .18, 0, { dur: 2.0 }], ...[404, 410, 421, 427].map((t, i) => ['pop', t, .3, .4, { f0: 1100 + i * 100, f1: 1500 + i * 100 }]),
   ['whoosh', 459, .35, 0, { dur: .6, f0: 300, f1: 1500, peak: .5 }], ...[0, 1, 2].map(i => ['pop', 471 + i * 5, .35, (i - 1) * .5, {}]), ['whoosh', 483, .3, 0, { dur: .4, f0: 600, f1: 3000, peak: .6, panFrom: -.5, panTo: .5 }], ['clicks', 495, .15, .3, { n: 8, step: .12 }], ['chime', 521, .5, 0, {}], ['pop', 521, .4, 0, { f0: 500, f1: 1100 }],
   ['impact', 540, 1.0, 0, { dur: 1.8 }], ['whoosh', 548, .45, .2, { dur: 2.0, f0: 2500, f1: 180, peak: .15 }], ['clicks', 552, .14, 0, { n: 18, step: .1 }], ['cash', 610, .75, 0, {}], ['coins', 612, .6, 0, { n: 16, dur: 1.0 }], ['boom', 610, .4, 0, { dur: .6 }],
   ['whoosh', 675, .35, 0, { dur: .4 }], ['whoosh', 711, .3, 0, { dur: 1.4, f0: 1800, f1: 300, peak: .2 }], ['pop', 733, .4, 0, {}], ['chime', 755, .45, 0, {}],
-  ['whoosh', 801, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['whoosh', 809 + i * 12, .28, .5, { dur: .3, f0: 800, f1: 3500, peak: .4, panFrom: .8, panTo: 0 }]), ...[0, 1, 2, 3].map(i => ['pop', 819 + i * 12, .35, .4, { f0: 700 + i * 80, f1: 1200 + i * 100 }]),
+  ['whoosh', 801, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['whoosh', 817 + i * 12, .28, .5, { dur: .3, f0: 800, f1: 3500, peak: .4, panFrom: .8, panTo: 0 }]), ...[0, 1, 2, 3].map(i => ['pop', 827 + i * 12, .35, .4, { f0: 700 + i * 80, f1: 1200 + i * 100 }]),
   ['whoosh', 883, .35, 0, { dur: .25, f0: 2500, f1: 500, peak: .8 }], ['stamp', 891, .95, 0, {}], ['boom', 891, .5, 0, { dur: .6 }],
   ['pop', 945, .45, 0, { f0: 400, f1: 900 }], ['pop', 955, .3, 0, {}], ['pop', 979, .35, 0, {}], ['whoosh', 995, .3, 0, { dur: 1.6, f0: 400, f1: 2400, peak: .9, panFrom: -.7, panTo: .7 }], ...[0, 1, 2].map(i => ['pop', 997 + i * 26, .4, (i - 1) * .5, { f0: 500 + i * 150, f1: 900 + i * 250 }]), ['chime', 1049, .4, 0, {}],
-  ['whoosh', 1081, .35, .5, { dur: .25, f0: 1500, f1: 5000, peak: .3 }], ['pop', 1083, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1109, .15, -.3, { n: 8, step: .09 }], ['pop', 1131, .4, -.4, { f0: 1400, f1: 900 }],
-  ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
-  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}],
+  ['whoosh', 1066, .35, .6, { dur: .35, f0: 600, f1: 3000, peak: .7, panFrom: .7, panTo: 0 }], ['pop', 1077, .35, 0, { f0: 500, f1: 1000 }], ['pop', 1089, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1113, .15, -.3, { n: 8, step: .09 }], ['pop', 1133, .4, -.4, { f0: 1400, f1: 900 }],
+  ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1155, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1177, .3, 0, {}], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
+  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}], ['whoosh', 1324, .4, -.6, { dur: .4, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1336, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1340, .3, 0, {}],
 ];
 SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
 const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
@@ -522,7 +581,7 @@ TYPE_AT.forEach(([f0, txt, cps]) => SFX.push(['typing', f0, .2, 0, { n: [...txt]
 const DURATION_F = 1440;
 const BOARD = [[40, 'Gancho', 'dívida subindo'], [96, 'Gancho', 'só aumenta?'], [190, 'Juros', 'barras mês a mês'], [280, 'O mês', 'a conta não fecha'], [350, 'Logo', 'é aí que entra'],
   [420, 'Análise', 'extrato escaneado'], [525, 'Negociação', 'você · Lougan · credor'], [600, 'Virada', 'o gráfico despenca'], [665, 'Desconto', 'bem mais que 10%'], [775, 'Parcela', '46% → 21% da renda'],
-  [860, 'Serviços', 'painel'], [925, 'Carimbo', 'dentro da lei'], [1050, 'Lougan', 'análise → acordo'], [1150, 'Conversa', 'tem jeito?'], [1215, 'CTA', 'chamar no WhatsApp'], [1340, 'Assinatura', 'dívida tem saída']];
+  [860, 'Serviços', 'painel'], [925, 'Carimbo', 'dentro da lei'], [1050, 'Lougan', 'análise → acordo'], [1150, 'Conversa', 'tem jeito?'], [1215, 'CTA', 'chamar no WhatsApp'], [1340, 'Assinatura', 'dívida tem saída'], [1420, 'Contato', 'WhatsApp']];
 
 // ---------------- render de um quadro ----------------
 function render(t) {
