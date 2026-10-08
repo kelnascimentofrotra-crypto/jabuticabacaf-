@@ -237,13 +237,28 @@ function arcsAt(A, lf, { x = CX, y = CY, s = 1, t0 = 0, spd = 1.6, o = 1 } = {})
   A.cs.forEach((cc, i) => cc.setAttribute('transform', `rotate(${(i % 2 ? -1 : 1) * (lf - t0) * spd * (1 + i * .4) + i * 75 + lerp(-110, 0, k)})`));
 }
 const mkTile = (c, svg, red = false, sz = V(180, 150)) => add(c, `el tile${red ? ' redtile' : ''}`, svg, `width:${sz}px;height:${sz}px`);
-function tileAt(t, lf, t0, d, { x = CX, y = CY, out = null, anim = 'beat' } = {}) {
-  const ok = prog(lf, t0, t0 + 14, E.out5);
-  let s = popS(lf, t0) * (1 + .06 * prog(lf, t0 + 8, d)) * (1 + .05 * beatOf(lf)), yy = y - prog(lf, t0, d) * 16, b = 0;
-  if (out !== null) { const q = prog(lf, out, out + 8, E.inC); s *= 1 - q; yy -= q * 120; b = q * 10; }
-  P(t, { x, y: yy, s, o: lf < t0 ? 0 : 1, b, r: lerp(-30, 0, ok) + Math.sin(lf * .9) * 2.5 * prog(lf, t0 + 8, t0 + 20) });
+// o ícone nasce grande no meio da tela (em destaque, com onda de luz), segura um instante e voa pro lugar dele
+function tileAt(t, lf, t0, d, { x = CX, y = CY, out = null, anim = 'beat', hero = 10, hs = 2.3, hx = CX, hy = CY } = {}) {
+  if (!t._ring) {
+    const red = t.classList.contains('redtile'), col = red ? '255,107,120' : '93,240,168';
+    t._ring = h('div', 'el', '', `width:${t.style.width};height:${t.style.height};border-radius:26%;border:5px solid rgb(${col});box-shadow:0 0 24px rgba(${col},.9),inset 0 0 18px rgba(${col},.6);z-index:4`);
+    t.parentNode.appendChild(t._ring); t.style.zIndex = 5;
+  }
+  const t1 = t0 + hero, t2 = t1 + 16;
+  const ok = prog(lf, t0, t0 + 14, E.out5), m = prog(lf, t1, t2, E.inOutC), fly = Math.sin(Math.PI * m);
+  const land = lf >= t2 ? Math.exp(-(lf - t2) / 3) : 0;
+  const fy = y - prog(lf, t2, d) * 16;
+  let s = popS(lf, t0) * lerp(hs, 1, m) * (1 + .06 * prog(lf, t2, d)) * (1 + .05 * beatOf(lf)) * (1 + .04 * (1 - m) * Math.sin(lf / 2)), b = fly * 5;
+  let px = lerp(hx, x, m), py = lerp(hy - prog(lf, t0, t1) * 20, fy, m) - fly * 70;
+  if (out !== null) { const q = prog(lf, out, out + 8, E.inC); s *= 1 - q; py -= q * 120; b += q * 10; }
+  P(t, { x: px, y: py, sx: s * (1 + .12 * land), sy: s * (1 - .12 * land), o: lf < t0 ? 0 : 1, b, r: lerp(-30, 0, ok) - fly * 14 + Math.sin(lf * .9) * 2.5 * prog(lf, t2, t2 + 12) });
+  // onda de luz: no nascimento (no centro) e quando pousa
+  const k1 = prog(lf, t0, t0 + 16, E.out5), k2 = prog(lf, t2, t2 + 14, E.out5);
+  if (lf < t2) P(t._ring, { x: hx, y: hy, s: hs * lerp(.9, 1.9, k1), o: lf < t0 ? 0 : .9 * (1 - k1) });
+  else P(t._ring, { x, y: fy, s: lerp(1, 1.7, k2), o: .8 * (1 - k2) * (out !== null && lf > out ? 0 : 1) });
   const g = t.querySelector('svg');
   g.style.transform = anim === 'spin' ? `rotate(${(lf - t0) * 4}deg)` : anim === 'bob' ? `translateY(${Math.sin(lf / 4) * 8}%)` : anim === 'scan' ? `translate(${Math.sin(lf / 6) * 12}%,${Math.cos(lf / 8) * 9}%)` : `scale(${1 + .12 * beatOf(lf)})`;
+  return m;
 }
 // transição "troca de tela" da referência: as duas cenas viram cartões arredondados com borda neon e deslizam juntas
 const SWIPE = [105, 675, 945], SWN = 9;
@@ -269,13 +284,13 @@ scene(0, 105, '', c => {
   cam(x.cam, lf, d, { s1: 1.1, oy: CY - 80, exit: { len: 8, zoom: .9, blur: 26, fade: .6 } });
   const [sx, sy] = shakeAt(lf, [62, 84], 10); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 200, s: 1 + .15 * Math.sin(lf / 4) });
-  arcsAt(c.A, lf, { y: CY - 110 - lf * .5, t0: 4, spd: 1.8 });
+  const mT = tileAt(c.tile, lf, 1, d, { y: CY - V(450, 370) - lf * .4, hero: 9, hs: 2.1 });
+  arcsAt(c.A, lf, { y: lerp(CY, CY - 110 - lf * .5, mT), t0: 2, spd: 1.8 });
   const dk = prog(lf, 4, 84, E.inOutC);
   c.ln.style.strokeDashoffset = 1 - dk;
   c.pds.forEach((p, i) => { const on = dk >= i / 8 - .001; p.style.opacity = on ? 1 : 0; p.setAttribute('r', on ? 9 + 5 * Math.exp(-Math.max(0, lf - (4 + i / 8 * 80)) / 4) : 0); });
   P(c.chart, { y: CY - 110 - lf * .5, s: 1 + .05 * prog(lf, 0, d) });
   const sp = spring(lf, 2, { k: 200, c: 15 });
-  P(c.tile, { y: CY - V(450, 370) - lf * .4, s: sp * (1 + .08 * Math.abs(Math.sin(lf / 3.75 * Math.PI / 2))), r: Math.sin(lf * 1.3) * 4 * prog(lf, 8, 20) });
   counter(c.num, lerp(21900, 48370, prog(lf, 6, 84, E.inC)));
   P(c.num, { y: CY - 150 - lf * .3, s: lerp(.8, 1, prog(lf, 4, 14, E.out5)) * (1 + .08 * prog(lf, 40, 84)), o: prog(lf, 4, 9), x: CX + (lf > 50 ? (hash(lf) - .5) * 6 : 0) });
   P(c.arrow, { x: CX + V(420, 380), y: CY - 230 - prog(lf, 10, d) * 50, o: prog(lf, 10, 16), s: 1 + .1 * Math.sin(lf / 3) });
@@ -299,7 +314,7 @@ scene(105, 105, '', c => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: .5, blur: 18 } });
   P(c.rg, { y: CY + 100, s: 1 + .1 * Math.sin(lf / 5) });
-  arcsAt(c.A, lf, { y: CY + 40 - lf * .3, t0: 4 }); tileAt(c.T, lf, 2, d, { y: CY - V(700, 520), anim: 'spin' });
+  const mT = tileAt(c.T, lf, 0, d, { y: CY - V(700, 520), anim: 'spin', hero: 10 }); arcsAt(c.A, lf, { y: lerp(CY, CY + 40 - lf * .3, mT), t0: 0 });
   P(c.chart, { y: CY + 40 - lf * .3, s: 1 + .04 * prog(lf, 0, d) });
   const by = CY + 40 - lf * .3 + 250;
   dotTravel(c.D, lf, 0, 12, { x: -40, y: by }, { x: CX + 430, y: by });
@@ -337,7 +352,7 @@ scene(210, 90, '', c => {
   cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: 1.2, blur: 22, fade: .6 } });
   const [sx, sy] = shakeAt(lf, [54], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 54 ? 1.2 : 1) });
-  arcsAt(c.A, lf, { y: CY - V(250, 190) - lf * .3, t0: 8, spd: -1.7 }); tileAt(c.T, lf, 4, d, { y: CY - V(690, 500) - lf * .3, anim: 'bob' });
+  const mT = tileAt(c.T, lf, 0, d, { y: CY - V(690, 500) - lf * .3, anim: 'bob', hero: 8 }); arcsAt(c.A, lf, { y: lerp(CY, CY - V(250, 190) - lf * .3, mT), t0: 0, spd: -1.7 });
   const cy3 = CY - V(250, 190) - lf * .3;
   dotTravel(c.D, lf, 0, 10, { x: 1120, y: cy3 + 260 }, { x: CX, y: cy3 }, 120);
   P(c.card, { y: cy3, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
@@ -393,7 +408,7 @@ scene(375, 165, '', c => {
   const ck = spring(lf, 0), up = prog(lf, 84, 104, E.inOutC);
   const dy5 = lerp(CY - V(90, 60), CY - V(430, 300), up) - lf * .2;
   dotTravel(c.D, lf, 0, 10, { x: 1120, y: dy5 + 420 }, { x: CX, y: dy5 }, 140);
-  arcsAt(c.A, lf, { y: dy5, t0: 10, s: lerp(1, .85, up) }); tileAt(c.T, lf, 4, d, { y: CY - V(640, 460) - lf * .2, out: 78, anim: 'scan' });
+  const mT = tileAt(c.T, lf, 0, d, { y: CY - V(640, 460) - lf * .2, out: 78, anim: 'scan', hero: 8 }); arcsAt(c.A, lf, { y: lerp(CY, dy5, mT), t0: 0, s: lerp(1, .85, up) });
   P(c.doc, { y: dy5, s: lerp(1, .72, up) * (1 + .02 * prog(lf, 10, 84)), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 25) * 3}deg)` });
   openCard(c.doc, c.D, lf, 10, CX, dy5);
   const sy = lerp(80, 760, prog(lf, 22, 80, E.inOutC));
@@ -495,7 +510,7 @@ scene(795, 150, '', c => {
   L(c.l.el, { y: CY - V(640, 470) - lf * .6, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
   const py8 = CY + V(20, 10) - lf * .2;
   dotTravel(c.D, lf, 0, 10, { x: -40, y: py8 + 380 }, { x: CX, y: py8 }, 160);
-  arcsAt(c.A, lf, { y: py8, t0: 10, spd: -1.6 }); tileAt(c.T, lf, 4, d, { y: CY - V(470, 340) - lf * .4, anim: 'beat' });
+  const mT = tileAt(c.T, lf, 0, d, { y: CY - V(470, 340) - lf * .4, anim: 'beat', hero: 8 }); arcsAt(c.A, lf, { y: lerp(CY, py8, mT), t0: 0, spd: -1.6 });
   P(c.panel, { y: py8, s: 1 + .03 * prog(lf, 10, d), t3: `perspective(1600px) rotateX(3deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
   openCard(c.panel, c.D, lf, 10, CX, py8);
   c.panel.style.backgroundPosition = `${lerp(110, -10, ((lf + 30) % 75) / 75)}% 0`;   // brilho que atravessa o painel
@@ -551,7 +566,7 @@ scene(1065, 195, '', c => {
   dotTravel(c.D, lf, 2, 12, { x: 1120, y: cy10 - 380 }, { x: CX, y: cy10 }, -120);
   P(c.chat, { y: cy10, s: 1 + .03 * prog(lf, 12, d), t3: `perspective(1600px) rotateX(2deg) rotateY(${Math.sin(lf / 28) * 3}deg)` });
   openCard(c.chat, c.D, lf, 12, CX, cy10, 44);
-  arcsAt(c.A, lf, { y: cy10 + 200, t0: 12, s: 1 + .05 * prog(lf, 12, d), o: 1 - prog(lf, 180, 188) }); tileAt(c.T, lf, 2, d, { y: CY - V(560, 400) - lf * .4, out: 176, anim: 'bob' });
+  const mT = tileAt(c.T, lf, 0, d, { y: CY - V(560, 400) - lf * .4, out: 176, anim: 'bob', hero: 10 }); arcsAt(c.A, lf, { y: lerp(CY, cy10 + 200, mT), t0: 0, s: 1 + .05 * prog(lf, 12, d), o: 1 - prog(lf, 180, 188) });
   const b1 = spring(lf, 24); c.m1.style.opacity = lf < 24 ? 0 : clamp(b1 * 2); c.m1.style.transform = `translateY(${(1 - b1) * 40}px) scale(${lerp(.85, 1, b1)})`; c.m1.style.transformOrigin = '100% 100%';
   c.td.style.opacity = lf > 48 && lf < 68 ? 1 : 0; [...c.td.children].forEach((dd, i) => { dd.style.transform = `translateY(${Math.sin(lf / 2.2 - i) * 5}px)`; });
   const b2 = spring(lf, 68); c.m2.style.opacity = lf < 68 ? 0 : clamp(b2 * 2); c.m2.style.transform = `translateY(${(1 - b2) * 40}px) scale(${lerp(.85, 1, b2)})`; c.m2.style.transformOrigin = '0 100%';
@@ -624,7 +639,11 @@ const SFX = [
   ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1155, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1177, .3, 0, {}], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
   ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}], ['whoosh', 1324, .4, -.6, { dur: .4, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1336, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1340, .3, 0, {}],
 ];
-[[105 + 2, .35], [210 + 4, .3], [375 + 4, .3], [795 + 4, .32], [1065 + 2, .32]].forEach(([t, g], i) => SFX.push(['pop', t, g, (i % 2 ? .3 : -.3), { f0: 500 + i * 60, f1: 1100 + i * 80 }]));
+[[1, 9], [105, 10], [210, 8], [375, 8], [795, 8], [1065, 10]].forEach(([a, hero], i) => {
+  if (i) SFX.push(['pop', a, .45, 0, { f0: 380 + i * 50, f1: 900 + i * 70 }]);
+  SFX.push(['whoosh', a + hero, .32, 0, { dur: .4, f0: 700, f1: 2600, peak: .5, panFrom: 0, panTo: 0 }]);
+  SFX.push(['click', a + hero + 16, .35, 0, {}]);
+});
 SWIPE.forEach(T => SFX.push(['whoosh', T - SWN, .55, 0, { dur: .6, f0: 250, f1: 3800, peak: .55, panFrom: .7, panTo: -.7 }]));
 SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
 const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
