@@ -6,6 +6,7 @@
 <title>Lougan Contabilidade — Promo (neon-glow)</title>
 <style>
 @font-face{font-family:'Montserrat';font-weight:100 900;font-display:block;src:url(../../fonts/Montserrat.woff2) format('woff2')}
+@font-face{font-family:'Cormorant Garamond';font-weight:300 700;font-display:block;src:url(../../fonts/CormorantGaramond.woff2) format('woff2')}
 /* estilo neon-glow (mesma gramática do promo do Jabuticaba) nas cores da Lougan: verde economia, dourado dinheiro */
 :root{--dark:#020A07;--acc:#22D37F;--accTx:#5DF0A8;--white:#F2FFF8;--g:34,211,127}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -65,6 +66,7 @@ body.sq .ws{font-size:40px} body.sq .pb{font-size:104px}
 // motor mínimo (regras da skill motion-video): tempo em frames, easings de cauda longa,
 // molas, câmera contínua, deriva, digitação, motion blur.
 // ======================================================================================
+window.FONTS_REQUIRED = ['800 100px "Montserrat"', '600 100px "Cormorant Garamond"'];
 const QS = new URLSearchParams(location.search);
 const FMT = window.__FMT__ || QS.get('fmt') || 'v';
 const SQ = FMT === 'sq';
@@ -211,13 +213,14 @@ function openCard(el, D, lf, t0, cx, cy, r = 40) {
   P(D.beam, { x: cx, y: cy, o: bo });
 }
 const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-// selo "L" (provisório até chegar o logo oficial)
-const BADGE = size => `<svg width="${size}" height="${size}" viewBox="-100 -100 200 200" style="overflow:visible;display:block">
-  <defs><linearGradient id="lgd" x1="0" y1="-1" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A8"/><stop offset=".55" stop-color="#F2C14E"/><stop offset="1" stop-color="#B47E22"/></linearGradient>
-  <radialGradient id="lgb"><stop offset="0" stop-color="#0E4A31"/><stop offset="1" stop-color="#03200F"/></radialGradient></defs>
-  <circle r="94" fill="url(#lgb)" stroke="url(#lgd)" stroke-width="7"/><circle r="80" fill="none" stroke="rgba(93,240,168,.55)" stroke-width="2"/>
-  <path d="M-30 -50V36H34" fill="none" stroke="url(#lgd)" stroke-width="20" stroke-linejoin="miter"/>
-  <path d="M2 -40L28 -14M28 -30V-14H12" fill="none" stroke="#5DF0A8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 6px #22D37F)"/></svg>`;
+// monograma da Lougan (provisório até chegar o logo oficial): quadrado escuro, filete dourado, "L" serifado
+const BADGE = size => `<svg width="${size}" height="${size}" viewBox="0 0 200 200" style="overflow:visible;display:block">
+  <defs><linearGradient id="mgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF1C4"/><stop offset=".45" stop-color="#E9B84A"/><stop offset="1" stop-color="#9C6A1C"/></linearGradient>
+  <linearGradient id="mgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F4A32"/><stop offset="1" stop-color="#03180F"/></linearGradient></defs>
+  <rect x="4" y="4" width="192" height="192" rx="44" fill="url(#mgB)" stroke="url(#mgG)" stroke-width="5"/>
+  <rect x="17" y="17" width="166" height="166" rx="33" fill="none" stroke="rgba(233,184,74,.35)" stroke-width="1.5"/>
+  <text x="92" y="150" text-anchor="middle" font-family="Cormorant Garamond" font-weight="600" font-size="156" fill="url(#mgG)">L</text>
+  <path d="M116 60l14 12 10-6 18 20" fill="none" stroke="#5DF0A8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="158" cy="86" r="5.5" fill="#5DF0A8"/></svg>`;
 const icon = (svg, sz, col = '#fff', sw = 2) => svg.replace('<svg', `<svg width="${sz}" height="${sz}" style="fill:none;stroke:${col};stroke-width:${sw};stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px ${col})"`);
 const shakeAt = (lf, hits, amp = 14) => { let x = 0, y = 0; hits.forEach((t, i) => { if (lf >= t && lf < t + 12) { const k = amp * Math.exp(-(lf - t) / 3); x += (hash(lf * 3 + i) - .5) * 2 * k; y += (hash(lf * 7 + i) - .5) * 2 * k; } }); return [x, y]; };
 const redGlow = c => add(c, 'el', '', 'width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,50,70,.30),rgba(255,50,70,.08) 35%,rgba(255,50,70,0) 62%)');
@@ -365,24 +368,45 @@ scene(210, 90, '', c => {
   pop(c.l2, lf, 54, d, { y: CY + V(440, 350) });
 });
 
-// 4 · "É aí que entra a Lougan Contabilidade." (300–375)
+// 4 · "É aí que entra a Lougan Contabilidade." — cartão de visita da Lougan (300–375)
 scene(300, 75, '', c => {
-  darkBg(c, false);
-  const A = mkArcs(c, 560, '#22D37F');
-  const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(360, 300)}" fill="none" stroke="#22D37F" stroke-width="6" style="filter:drop-shadow(0 0 14px #22D37F)"/><circle r="${V(360, 300)}" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="40 260" opacity=".8"/>${[...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * V(430, 360)}" cy="${Math.sin(a) * V(430, 360)}" r="9" fill="#5DF0A8" style="filter:drop-shadow(0 0 8px #22D37F)"/>`; }).join('')}</svg>`, 'width:1000px;height:1000px');
-  const logo = add(c, 'el', BADGE(V(400, 340)), 'filter:drop-shadow(0 0 40px rgba(34,211,127,.6))');
-  const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
+  darkBg(c);
+  const A = mkArcs(c, 600, '#22D37F');
+  const floor = add(c, 'el', '', 'width:1000px;height:200px;border-radius:50%;background:radial-gradient(closest-side,rgba(34,211,127,.35),rgba(34,211,127,0))');
+  const card = add(c, 'el', `<div style="position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.025) 0 2px,transparent 2px 9px)"></div>
+    <svg class="ech" width="900" height="540" style="position:absolute;left:0;top:0;overflow:visible"><polyline points="440,170 520,215 590,195 680,290 760,268 852,400" fill="none" stroke="rgba(93,240,168,.4)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/><circle class="ehd" r="8" fill="#5DF0A8"/></svg>
+    <div class="mk" style="position:absolute;left:60px;top:54px">${BADGE(118)}</div>
+    <div style="position:absolute;right:60px;top:80px;display:flex;align-items:center;gap:12px;font-weight:600;font-size:24px;letter-spacing:.04em;color:rgba(242,255,248,.7)">${icon(IC2.chat, 30, 'rgba(93,240,168,.9)', 2)}+55 98 8499-2560</div>
+    <div class="nm" style="position:absolute;left:56px;top:196px;height:184px;overflow:hidden;font-family:'Cormorant Garamond';font-weight:600;font-size:156px;line-height:1.15;color:#FFF7E2;letter-spacing:-.005em;white-space:nowrap">${[...'Lougan'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div>
+    <div class="sub" style="position:absolute;left:64px;top:384px;font-weight:700;font-size:26px;letter-spacing:.55em;color:#5DF0A8;white-space:nowrap">CONTABILIDADE</div>
+    <div class="dv" style="position:absolute;left:60px;right:60px;top:446px;height:2px;transform-origin:0 50%;background:linear-gradient(90deg,#E9B84A,rgba(233,184,74,0))"></div>
+    <div class="sv" style="position:absolute;left:60px;top:466px;font-weight:600;font-size:22px;letter-spacing:.08em;color:rgba(242,255,248,.62);white-space:nowrap">REDUÇÃO DE DÍVIDAS · IMPOSTO DE RENDA · EMPRESAS</div>
+    <div class="sh" style="position:absolute;top:-50%;height:200%;width:200px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,248,225,.18),rgba(255,255,255,0));transform:skewX(-20deg)"></div>`,
+    'width:900px;height:540px;border-radius:36px;overflow:hidden;background:radial-gradient(120% 90% at 0% 0%,#12573A 0%,#062A1B 45%,#031409 100%);border:2px solid rgba(233,184,74,.55)');
   const D = mkDot(c);
-  return { A, D, ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
+  return { A, D, floor, card, lts: [...card.querySelectorAll('.lt')], mk: card.querySelector('.mk'), sub: card.querySelector('.sub'), dv: card.querySelector('.dv'), sv: card.querySelector('.sv'), sh: card.querySelector('.sh'),
+    ech: card.querySelector('.ech polyline'), ehd: card.querySelector('.ehd'), l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
 }, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120, exit: { len: 8, zoom: .5, blur: 16 } });
-  L(x.ctx.l.el, { y: CY - V(620, 480) - lf * .3 }); type(x.ctx.l, lf, 2);
-  dotTravel(x.ctx.D, lf, 0, 14, { x: -40, y: CY + 200 }, { x: CX, y: CY - 160 }, 160);
-  arcsAt(x.ctx.A, lf, { y: CY - 160, t0: 14, spd: -1.4 });
-  const lk = spring(lf, 14, { k: 120, c: 12 });
-  P(x.ctx.ring, { y: CY - 160, s: lerp(1.3, 1, prog(lf, 14, 30, E.out5)) * (1 + .04 * prog(lf, 14, d)), r: lf * 1.2, o: prog(lf, 14, 18) });
-  P(x.ctx.logo, { y: CY - 160, s: lerp(.5, 1, lk) * (1 + .05 * prog(lf, 14, d)), o: lf < 14 ? 0 : 1, b: (1 - prog(lf, 14, 24, E.out5)) * 16, r: lerp(-20, 0, prog(lf, 14, 32, E.out5)) });
-  L(x.ctx.wm, { y: CY + V(360, 300) - prog(lf, 26, d) * 10, o: prog(lf, 26, 34), b: (1 - prog(lf, 26, 34)) * 10, s: 1 + .03 * prog(lf, 26, d) });
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.07, oy: CY - 100, exit: { len: 8, zoom: .5, blur: 16 } });
+  L(c.l.el, { y: CY - V(620, 480) - lf * .3 }); type(c.l, lf, 2);
+  const cy4 = CY - V(80, 60) - lf * .3, k = spring(lf, 12, { k: 90, c: 13 }), bt = beatOf(lf);
+  dotTravel(c.D, lf, 0, 12, { x: -40, y: cy4 + 300 }, { x: CX, y: cy4 }, 160);
+  arcsAt(c.A, lf, { y: cy4, t0: 12, spd: -1.2, o: .6 });
+  // o cartão abre da linha e gira em 3D até ficar de frente (e continua respirando)
+  const ry = lerp(-26, 0, k) + Math.sin(lf / 14) * 4, rx = lerp(10, 0, k) + Math.cos(lf / 17) * 2;
+  P(c.card, { y: cy4, s: lerp(.92, 1, k) * (1 + .04 * prog(lf, 12, d)), t3: `perspective(1800px) rotateX(${rx}deg) rotateY(${ry}deg)` });
+  openCard(c.card, c.D, lf, 12, CX, cy4, 36);
+  c.card.style.boxShadow = `0 40px 90px rgba(0,0,0,.65),0 0 ${40 + 30 * bt}px rgba(34,211,127,${.22 + .2 * bt}),inset 0 1px 0 rgba(255,255,255,.14)`;
+  P(c.floor, { y: cy4 + 330, s: lerp(.6, 1, k), o: .8 * prog(lf, 12, 24) });
+  c.mk.style.transform = `scale(${lf < 18 ? 0 : popS(lf, 18)}) rotate(${lerp(-60, 0, prog(lf, 18, 32, E.out5))}deg)`;
+  c.lts.forEach((e, i) => { const q = prog(lf, 20 + i * 2, 34 + i * 2, E.out5); e.style.transform = `translateY(${(1 - q) * 105}%)`; e.style.opacity = q; });
+  const sq = prog(lf, 30, 48, E.out5); c.sub.style.opacity = sq; c.sub.style.letterSpacing = `${lerp(1.1, .55, sq) + .05 * prog(lf, 48, d)}em`;
+  c.dv.style.transform = `scaleX(${prog(lf, 36, 52, E.out5)})`;
+  const vq = prog(lf, 42, 54, E.out5); c.sv.style.opacity = vq; c.sv.style.transform = `translateY(${(1 - vq) * 16}px)`;
+  const ek = prog(lf, 22, 62, E.inOutC); c.ech.style.strokeDashoffset = 1 - ek;
+  const pt = c.ech.getPointAtLength(c.ech.getTotalLength() * ek); c.ehd.setAttribute('cx', pt.x); c.ehd.setAttribute('cy', pt.y); c.ehd.style.opacity = lf > 22 ? 1 : 0;
+  const s1 = prog(lf, 32, 52, E.inOutC); c.sh.style.left = `${lerp(-320, 1100, s1)}px`; c.sh.style.opacity = lf > 32 && lf < 52 ? 1 : 0;
 });
 
 // 5 · análise do extrato + negociação com o credor (375–540)
@@ -396,7 +420,7 @@ scene(375, 165, '', c => {
     <div class="scan" style="position:absolute;left:0;right:0;top:0;height:6px;border-radius:3px;background:#5DF0A8;box-shadow:0 0 30px #22D37F,0 0 80px rgba(34,211,127,.6)"></div>`,
     'width:860px;padding:40px 50px;border-radius:40px;background:rgba(8,20,15,.86);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden');
   const net = add(c, 'el', `<svg width="900" height="260" viewBox="0 0 900 260" style="overflow:visible"><line class="nl" x1="140" y1="110" x2="760" y2="110" stroke="#22D37F" stroke-width="5" stroke-dasharray="1" pathLength="1" style="filter:drop-shadow(0 0 8px #22D37F)"/>${[0, 1, 2].map(i => `<circle class="pk" r="11" fill="#FFE9A8" style="filter:drop-shadow(0 0 8px #F2C14E)"/>`).join('')}</svg>
-    ${[['Você', IC2.user, 140], ['Lougan', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(124)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
+    ${[['Você', IC2.user, 140], ['Lougan', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(92)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
     <div class="deal" style="position:absolute;left:450px;top:-100px;transform:translate(-50%,-50%);padding:14px 30px;border-radius:999px;background:#22D37F;color:#03281A;font-weight:800;font-size:32px;white-space:nowrap;box-shadow:0 0 40px rgba(34,211,127,.8)">✓ ACORDO</div>`,
     'width:900px;height:260px');
   const D = mkDot(c);
@@ -589,9 +613,9 @@ scene(1065, 195, '', c => {
 scene(1260, 180, '', c => {
   darkBg(c, false);
   const A = mkArcs(c, 560, '#22D37F');
-  const halo = add(c, 'el', '', `width:${V(640, 520)}px;height:${V(640, 520)}px;border-radius:50%;border:5px solid rgba(93,240,168,.8);box-shadow:0 0 40px rgba(34,211,127,.8),inset 0 0 40px rgba(34,211,127,.5)`);
-  const logo = add(c, 'el', BADGE(V(470, 390)), 'filter:drop-shadow(0 0 50px rgba(34,211,127,.7))');
-  const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
+  const halo = add(c, 'el', '', `width:${V(470, 400)}px;height:${V(470, 400)}px;border-radius:25%;border:4px solid rgba(233,184,74,.75);box-shadow:0 0 30px rgba(233,184,74,.45),inset 0 0 30px rgba(233,184,74,.2)`);
+  const logo = add(c, 'el', BADGE(V(380, 320)), 'filter:drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 40px rgba(34,211,127,.35))');
+  const wm = add(c, 'ctr', '<span style="font-family:\'Cormorant Garamond\';font-weight:600;font-size:1.45em;color:#FFF7E2;line-height:1">Lougan</span><br><span style="font-weight:700;font-size:.27em;letter-spacing:.55em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.35)`);
   const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
   const zap = add(c, 'el btn', `${icon(IC2.chat, 52, '#fff', 2.2)}<span style="margin-left:16px;letter-spacing:.04em">+55 98 8499-2560</span>`, `width:${V(700, 640)}px;height:120px;font-size:${V(50, 46)}px`);
   return { A, halo, logo, wm, sparks, zap, D: mkDot(c), l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
@@ -620,14 +644,14 @@ const beam = h('div'); beam.id = 'beam'; stage.appendChild(beam);
 const vig = h('div'); vig.id = 'vig'; stage.appendChild(vig);
 const grain = h('div'); grain.id = 'grain'; stage.appendChild(grain);
 // flashes nascem do elemento em foco: [frame, x, y, força]
-const FLASH = [[300, CX, CY - 160, .5], [314, CX, CY - 160, .85], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 330, 1]];
+const FLASH = [[300, CX, CY - 100, .4], [312, CX, CY - 80, .55], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 330, 1]];
 
 // ---------------- efeitos sonoros (frames) ----------------
 const SFX = [
   ['boom', 0, .45, 0, { dur: 1.0 }], ...[...Array(9).keys()].map(i => ['tick', 4 + i * 10, .2 + i * .03, (i % 2 ? .3 : -.3), {}]), ['riser', 48, .35, 0, { dur: 1.2 }], ['boom', 62, .35, 0, { dur: .4 }], ['boom', 84, .5, 0, { dur: .6 }], ['glitch', 84, .3, 0, { dur: .2 }],
   ['whoosh', 104, .4, 0, { dur: .4, f0: 400, f1: 3000, peak: .8 }], ...[0, 1, 2, 3, 4, 5].map(i => ['pop', 113 + i * 9, .32, (i - 2.5) * .2, { f0: 300 + i * 70, f1: 500 + i * 110 }]), ['boom', 167, .45, 0, { dur: .6 }], ['glitch', 167, .25, 0, { dur: .15 }],
   ['whoosh', 210, .35, 0, { dur: .4, f0: 300, f1: 2500, peak: .7 }], ['pop', 220, .35, .3, { f0: 500, f1: 1000 }], ...[0, 1, 2].map(i => ['click', 228 + i * 6, .4, -.2, {}]), ['clicks', 250, .18, 0, { n: 10, step: .045 }], ['boom', 264, .55, 0, { dur: .7 }], ['glitch', 264, .3, 0, { dur: .2 }],
-  ['whoosh', 296, .4, 0, { dur: .35, f0: 900, f1: 6000, peak: .9 }], ['impact', 314, .75, 0, { dur: 1.4 }], ['shimmer', 315, .45, 0, { dur: 1.2 }],
+  ['whoosh', 296, .4, 0, { dur: .35, f0: 900, f1: 6000, peak: .9 }], ['impact', 312, .7, 0, { dur: 1.4 }], ['shimmer', 313, .35, 0, { dur: 1.0 }], ['pop', 318, .4, -.3, { f0: 450, f1: 950 }], ['clicks', 320, .14, 0, { n: 6, step: .066 }], ['shimmer', 332, .3, .3, { dur: .8 }], ['whoosh', 336, .18, 0, { dur: .4, f0: 1200, f1: 5000, peak: .4 }],
   ['whoosh', 375, .35, 0, { dur: .4 }], ['pop', 385, .35, -.3, { f0: 500, f1: 1000 }], ['shimmer', 397, .18, 0, { dur: 2.0 }], ...[404, 410, 421, 427].map((t, i) => ['pop', t, .3, .4, { f0: 1100 + i * 100, f1: 1500 + i * 100 }]),
   ['whoosh', 459, .35, 0, { dur: .6, f0: 300, f1: 1500, peak: .5 }], ...[0, 1, 2].map(i => ['pop', 471 + i * 5, .35, (i - 1) * .5, {}]), ['whoosh', 483, .3, 0, { dur: .4, f0: 600, f1: 3000, peak: .6, panFrom: -.5, panTo: .5 }], ['clicks', 495, .15, .3, { n: 8, step: .12 }], ['chime', 521, .5, 0, {}], ['pop', 521, .4, 0, { f0: 500, f1: 1100 }],
   ['impact', 540, 1.0, 0, { dur: 1.8 }], ['whoosh', 548, .45, .2, { dur: 2.0, f0: 2500, f1: 180, peak: .15 }], ['clicks', 552, .14, 0, { n: 18, step: .1 }], ['cash', 610, .75, 0, {}], ['coins', 612, .6, 0, { n: 16, dur: 1.0 }], ['boom', 610, .4, 0, { dur: .6 }],
