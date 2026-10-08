@@ -186,6 +186,7 @@ const IC2 = {
   x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
   bolt: '<svg viewBox="0 0 24 24"><path d="M13 2.5L5 13.5h6l-1 8 8-11h-6z"/></svg>',
 };
+const popS = (lf, t0) => spring(lf, t0, { k: 200, c: 15 });
 const brl = v => 'R$ ' + v.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 // selo "L" (provisório até chegar o logo oficial)
 const BADGE = size => `<svg width="${size}" height="${size}" viewBox="-100 -100 200 200" style="overflow:visible;display:block">
@@ -199,388 +200,294 @@ const shakeAt = (lf, hits, amp = 14) => { let x = 0, y = 0; hits.forEach((t, i) 
 const redGlow = c => add(c, 'el', '', 'width:1500px;height:1500px;border-radius:50%;background:radial-gradient(circle,rgba(255,50,70,.30),rgba(255,50,70,.08) 35%,rgba(255,50,70,0) 62%)');
 const coinsEl = (c, n, size = 70) => [...Array(n).keys()].map(i => add(c, 'el coin', 'R$', `width:${size}px;height:${size}px;font-size:${size * .32}px`));
 
-// 1 · gancho: a dívida subindo (0–75)
-scene(0, 75, '', c => {
+// ---------- peças de gráfico (a linguagem do gráfico de abertura vale pro vídeo todo) ----------
+const counter = (el, v, col) => { el.textContent = brl(Math.round(v * 100) / 100); if (col) el.style.color = col; };
+const mix = (a, b, k) => `rgb(${a.map((x, i) => Math.round(lerp(x, b[i], k))).join(',')})`;
+const RED = [255, 107, 120], GRN = [93, 240, 168];
+
+// 1 · gancho: "Você paga todo mês e a dívida só aumenta?" (0–105)
+scene(0, 105, '', c => {
   darkBg(c); const rg = redGlow(c);
-  const chart = add(c, 'el', `<svg width="900" height="420" viewBox="0 0 900 420" style="overflow:visible"><polyline class="ln" points="0,400 120,360 230,372 340,300 450,315 560,220 670,240 780,120 900,20" fill="none" stroke="#FF5A6A" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 12px #FF3045)"/></svg>`, 'width:900px;height:420px;opacity:.55');
-  const tile = add(c, 'el tile redtile', IC2.alert, `width:${V(210, 180)}px;height:${V(210, 180)}px`);
-  const num = add(c, 'el red', 'R$ 21.900,00', `font-weight:800;font-size:${V(120, 104)}px;white-space:nowrap;letter-spacing:-.01em`);
+  const chart = add(c, 'el', `<svg width="900" height="420" viewBox="0 0 900 420" style="overflow:visible"><polyline class="ln" points="0,400 120,360 230,372 340,300 450,315 560,220 670,240 780,120 900,20" fill="none" stroke="#FF5A6A" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 12px #FF3045)"/>${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<circle class="pd" cx="${[0, 120, 230, 340, 450, 560, 670, 780, 900][i]}" cy="${[400, 360, 372, 300, 315, 220, 240, 120, 20][i]}" r="9" fill="#FF8A95"/>`).join('')}</svg>`, 'width:900px;height:420px');
+  const tile = add(c, 'el tile redtile', IC2.alert, `width:${V(200, 170)}px;height:${V(200, 170)}px`);
+  const num = add(c, 'el red', 'R$ 21.900,00', `font-weight:800;font-size:${V(118, 100)}px;white-space:nowrap;letter-spacing:-.01em`);
   const arrow = add(c, 'el', icon('<svg viewBox="0 0 24 24"><path d="M12 20V4M5 11l7-7 7 7"/></svg>', 90, '#FF6B78', 2.6));
-  return { rg, chart, ln: chart.querySelector('.ln'), tile, num, arrow, l1: typer(add(c, 'ctr ws', 'Sua dívida não para'), 24), l2: add(c, 'ctr pb red', 'de crescer?') };
+  const paid = add(c, 'el', `${icon(IC2.check, 30, '#5DF0A8', 3)}<span>parcela paga</span>`, 'display:flex;align-items:center;gap:10px;font-weight:700;font-size:26px;color:#5DF0A8;white-space:nowrap');
+  return { rg, chart, ln: chart.querySelector('.ln'), pds: [...chart.querySelectorAll('.pd')], tile, num, arrow, paid, l1: typer(add(c, 'ctr ws', 'Você paga todo mês e a dívida'), 26), l2: add(c, 'ctr pb red', 'só aumenta?') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.1, oy: CY - 80, exit: { len: 8, zoom: .9, blur: 26, fade: .6 } });
-  const [sx, sy] = shakeAt(lf, [40, 58], 10); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  const [sx, sy] = shakeAt(lf, [62, 84], 10); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
   P(c.rg, { y: CY - 200, s: 1 + .15 * Math.sin(lf / 4) });
-  c.ln.style.strokeDashoffset = 1 - prog(lf, 4, 60, E.inOutC);
-  P(c.chart, { y: CY - 110 - lf * .5, s: 1 + .05 * prog(lf, 0, d), o: .55 });
+  const dk = prog(lf, 4, 84, E.inOutC);
+  c.ln.style.strokeDashoffset = 1 - dk;
+  c.pds.forEach((p, i) => { const on = dk >= i / 8 - .001; p.style.opacity = on ? 1 : 0; p.setAttribute('r', on ? 9 + 5 * Math.exp(-Math.max(0, lf - (4 + i / 8 * 80)) / 4) : 0); });
+  P(c.chart, { y: CY - 110 - lf * .5, s: 1 + .05 * prog(lf, 0, d) });
   const sp = spring(lf, 2, { k: 200, c: 15 });
-  P(c.tile, { y: CY - V(430, 360) - lf * .4, s: sp * (1 + .08 * Math.abs(Math.sin(lf / 3.75 * Math.PI / 2))), r: Math.sin(lf * 1.3) * 4 * prog(lf, 8, 20) });
-  const v = lerp(21900, 48370, prog(lf, 6, 60, E.inC));
-  c.num.textContent = brl(Math.round(v * 100) / 100);
-  P(c.num, { y: CY - 130 - lf * .3, s: lerp(.8, 1, prog(lf, 4, 14, E.out5)) * (1 + .08 * prog(lf, 30, 60)), o: prog(lf, 4, 9), x: CX + (lf > 30 ? (hash(lf) - .5) * 6 : 0) });
-  P(c.arrow, { x: CX + V(420, 380), y: CY - 210 - prog(lf, 10, d) * 50, o: prog(lf, 10, 16), s: 1 + .1 * Math.sin(lf / 3) });
-  L(c.l1.el, { y: CY + V(90, 70) }); type(c.l1, lf, 10);
-  pop(c.l2, lf, 32, d, { y: CY + V(200, 170) });
+  P(c.tile, { y: CY - V(450, 370) - lf * .4, s: sp * (1 + .08 * Math.abs(Math.sin(lf / 3.75 * Math.PI / 2))), r: Math.sin(lf * 1.3) * 4 * prog(lf, 8, 20) });
+  counter(c.num, lerp(21900, 48370, prog(lf, 6, 84, E.inC)));
+  P(c.num, { y: CY - 150 - lf * .3, s: lerp(.8, 1, prog(lf, 4, 14, E.out5)) * (1 + .08 * prog(lf, 40, 84)), o: prog(lf, 4, 9), x: CX + (lf > 50 ? (hash(lf) - .5) * 6 : 0) });
+  P(c.arrow, { x: CX + V(420, 380), y: CY - 230 - prog(lf, 10, d) * 50, o: prog(lf, 10, 16), s: 1 + .1 * Math.sin(lf / 3) });
+  const pk = prog(lf, 20, 26, E.out5), pk2 = Math.max(0, Math.sin(lf / 5));
+  P(c.paid, { x: CX - 220, y: CY - 330 + Math.sin(lf / 9) * 6, o: pk * (1 - prog(lf, 70, 80)), s: .95 + .05 * pk2 });
+  L(c.l1.el, { y: CY + V(90, 70) }); type(c.l1, lf, 12);
+  pop(c.l2, lf, 44, d, { y: CY + V(200, 170) });
 });
 
-// 2 · juros, multas, impostos empilhando (75–135)
-const WEIGHTS = ['Juros', 'Multas', 'Impostos'];
-scene(75, 60, '', c => {
-  darkBg(c, false); const rg = redGlow(c);
-  const pills = WEIGHTS.map(t => add(c, 'el pill redpill', `<div class="pi" style="width:${V(112, 96)}px;height:${V(112, 96)}px">${IC2.pct}</div><span>${t}</span><b style="margin-left:6px">+</b>`,
-    `height:${V(160, 140)}px;padding:0 60px 0 24px;font-size:${V(72, 62)}px`));
-  return { rg, pills, l: typer(add(c, 'ctr ws', 'pesando no seu bolso...'), 24) };
+// 2 · juros em cima de juros: barras empilhadas mês a mês (105–210)
+const MONTHS = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN'];
+scene(105, 105, '', c => {
+  darkBg(c); const rg = redGlow(c);
+  const bars = MONTHS.map((m, i) => `<g class="bar"><rect class="s0" x="${40 + i * 140}" width="92" rx="10" fill="#5B6B64"/><rect class="s1" x="${40 + i * 140}" width="92" rx="10" fill="#FF5A6A" style="filter:drop-shadow(0 0 8px #FF3045)"/><rect class="s2" x="${40 + i * 140}" width="92" rx="10" fill="#A3122A"/><text x="${86 + i * 140}" y="600" text-anchor="middle" fill="rgba(242,255,248,.6)" font-family="Montserrat" font-weight="700" font-size="26">${m}</text></g>`).join('');
+  const chart = add(c, 'el', `<svg width="900" height="620" viewBox="0 0 900 620" style="overflow:visible"><line x1="20" y1="560" x2="880" y2="560" stroke="rgba(242,255,248,.25)" stroke-width="3"/>${bars}<polyline class="tr" fill="none" stroke="#FF8A95" stroke-width="5" stroke-dasharray="14 10" stroke-linecap="round"/><text class="tot" x="826" y="0" text-anchor="middle" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="40">R$ 48 mil</text></svg>`, 'width:900px;height:620px');
+  const leg = add(c, 'el', [['#5B6B64', 'valor original'], ['#FF5A6A', 'juros'], ['#A3122A', 'multa']].map(([col, t]) => `<span style="display:inline-flex;align-items:center;gap:10px;margin:0 16px"><i style="width:22px;height:22px;border-radius:6px;background:${col}"></i>${t}</span>`).join(''), 'font-weight:600;font-size:28px;color:rgba(242,255,248,.8);white-space:nowrap');
+  return { rg, chart, bars: [...chart.querySelectorAll('.bar')], tr: chart.querySelector('.tr'), tot: chart.querySelector('.tot'), leg, l1: typer(add(c, 'ctr ws', 'É juros em cima de juros.', 'font-size:54px'), 26), l2: typer(add(c, 'ctr ws red', 'Multa em cima de multa.', 'font-size:54px'), 26) };
 }, (x, lf, d) => {
   const c = x.ctx;
-  const land = [12, 24, 36];
-  cam(x.cam, lf, d, { s1: 1.08 });
-  const [sx, sy] = shakeAt(lf, land, 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
-  P(c.rg, { y: CY + 200, s: 1 + .1 * Math.sin(lf / 5) });
-  const stackY = [CY + V(330, 260), CY + V(160, 110), CY - V(10, 40)];
-  const fall = prog(lf, 48, 60, E.inC);
-  c.pills.forEach((p, i) => {
-    const t0 = land[i] - 10, k = prog(lf, t0, land[i], E.inC);
-    const bounce = lf >= land[i] ? Math.sin(Math.min(1, (lf - land[i]) / 8) * Math.PI) * -26 * Math.exp(-(lf - land[i]) / 6) : 0;
-    const squash = lf >= land[i] ? 1 - .12 * Math.exp(-(lf - land[i]) / 3) : 1;
-    const comp = c.pills.slice(i + 1).reduce((m, _, j) => m + (lf >= land[i + 1 + j] ? 8 : 0), 0);
-    P(p, { x: CX + (i - 1) * 30, y: lerp(-300, stackY[i], k) + bounce + comp + fall * (900 + i * 120), r: (i - 1) * 3 + fall * (i - 1) * 14, s: 1, sx: 2 - squash, sy: squash, o: lf < t0 ? 0 : 1, b: fall * 12 + (k < 1 && lf > t0 ? 6 : 0) });
+  cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: .5, blur: 18 } });
+  P(c.rg, { y: CY + 100, s: 1 + .1 * Math.sin(lf / 5) });
+  P(c.chart, { y: CY + 40 - lf * .3, s: 1 + .04 * prog(lf, 0, d) });
+  const tops = [];
+  c.bars.forEach((g, i) => {
+    const k = clamp(spring(lf, 8 + i * 9, { k: 120, c: 12 }), 0, 1.1);
+    const h0 = 120 * k, h1 = (24 + i * 34) * k, h2 = (10 + i * 16) * k;
+    const [r0, r1, r2] = g.querySelectorAll('rect');
+    r0.setAttribute('y', 560 - h0); r0.setAttribute('height', h0);
+    r1.setAttribute('y', 560 - h0 - h1); r1.setAttribute('height', h1);
+    r2.setAttribute('y', 560 - h0 - h1 - h2); r2.setAttribute('height', h2);
+    tops.push(`${86 + i * 140},${560 - h0 - h1 - h2 - 24}`);
   });
-  L(c.l.el, { y: CY + V(560, 470), o: 1 - fall }); type(c.l, lf, 38);
+  c.tr.setAttribute('points', tops.join(' ')); c.tr.style.opacity = prog(lf, 60, 70);
+  c.tot.setAttribute('y', 560 - 120 - (24 + 5 * 34) - (10 + 5 * 16) - 50); c.tot.style.opacity = prog(lf, 62, 68);
+  P(c.leg, { y: CY + 420 - lf * .2, o: prog(lf, 30, 40) });
+  L(c.l1.el, { y: CY - V(520, 400) }); type(c.l1, lf, 4);
+  L(c.l2.el, { y: CY - V(430, 320) }); type(c.l2, lf, 40);
 });
 
-// 3 · "Chega de pagar mais." (135–180)
-scene(135, 45, '', c => {
-  darkBg(c, false);
-  c.appendChild(h('div', '', '', 'position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 50%,rgba(20,120,70,.45),rgba(0,0,0,0))'));
-  const xs = add(c, 'el', `<svg viewBox="0 0 100 100" width="${V(200, 170)}" height="${V(200, 170)}" style="overflow:visible;filter:drop-shadow(0 0 14px #22D37F) drop-shadow(0 0 40px #22D37F)"><path d="M18 18L82 82M82 18L18 82" stroke="#4BE8A0" stroke-width="20" stroke-linecap="round"/></svg>`);
-  return { xs, l1: typer(add(c, 'ctr ws', 'Chega de'), 22), l2: add(c, 'ctr pb', 'pagar mais.') };
+// 3 · "Do jeito que tá, a conta não fecha." — o mês no vermelho (210–300)
+const LEDGER = [['Salário', 4500, GRN], ['Parcelas das dívidas', -3180, RED], ['Contas da casa', -2150, RED]];
+scene(210, 90, '', c => {
+  darkBg(c); const rg = redGlow(c);
+  const card = add(c, 'el', `<div class="mono" style="font-size:22px;letter-spacing:.3em;color:rgba(242,255,248,.5);margin-bottom:18px">SEU MÊS</div>
+    ${LEDGER.map(([t, v, col]) => `<div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid rgba(242,255,248,.1)"><span style="font-weight:600;font-size:34px;color:#F2FFF8">${t}</span><b style="font-size:38px;color:rgb(${col.join(',')})">${v > 0 ? '+ ' : '− '}${brl(Math.abs(v))}</b></div>`).join('')}
+    <div class="lr" style="display:flex;justify-content:space-between;align-items:center;padding-top:26px"><span style="font-weight:800;font-size:44px;color:#F2FFF8">Sobra</span><b class="sob" style="font-size:64px;color:#FF6B78">R$ 0,00</b></div>`,
+    'width:860px;padding:44px 50px;border-radius:40px;background:rgba(8,20,15,.82);border:2px solid rgba(255,107,120,.35);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+  return { rg, card, rows: [...card.querySelectorAll('.lr')], sob: card.querySelector('.sob'), l1: typer(add(c, 'ctr ws', 'Do jeito que tá, a conta', 'font-size:52px'), 26), l2: add(c, 'ctr pb red', 'não fecha.') };
 }, (x, lf, d) => {
-  cam(x.cam, lf, d, { s0: 1.4, s1: 1.06, exit: { len: 6, zoom: .3, blur: 12, fade: 1 } });
-  x.cam.style.filter = `blur(${(1 - prog(lf, 0, 10, E.out5)) * 14 + prog(lf, d - 6, d, E.inC) * 10}px)`;
-  const sp = spring(lf, 2, { k: 200, c: 15 });
-  P(x.ctx.xs, { y: CY - V(170, 150) - prog(lf, 0, d) * 12, s: sp * (1 + .05 * prog(lf, 6, d)), r: lerp(-90, 0, prog(lf, 2, 16, E.out5)) });
-  L(x.ctx.l1.el, { y: CY - 10 }); type(x.ctx.l1, lf, 5);
-  pop(x.ctx.l2, lf, 12, d, { y: CY + V(90, 80) });
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.08, exit: { len: 8, zoom: 1.2, blur: 22, fade: .6 } });
+  const [sx, sy] = shakeAt(lf, [50], 12); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  P(c.rg, { y: CY - 100, s: (1 + .1 * Math.sin(lf / 5)) * (lf > 50 ? 1.2 : 1) });
+  const ck = spring(lf, 0);
+  P(c.card, { y: CY - V(250, 190) - lf * .3, s: lerp(.85, 1, ck), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 3}deg)` });
+  c.rows.forEach((r, i) => { const k = prog(lf, 4 + i * 8, 14 + i * 8, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * -60}px)`; });
+  const sv = -830 * prog(lf, 34, 50, E.out5);
+  c.sob.textContent = (sv < -0.5 ? '− ' : '') + brl(Math.abs(sv));
+  c.sob.style.textShadow = lf > 50 ? `0 0 ${20 + 20 * Math.abs(Math.sin(lf / 3))}px rgba(255,60,80,.9)` : 'none';
+  L(c.l1.el, { y: CY + V(330, 250) }); type(c.l1, lf, 30);
+  pop(c.l2, lf, 54, d, { y: CY + V(440, 350) });
 });
 
-// 4 · "Conheça a" (180–210)
-scene(180, 30, '', c => {
-  c.appendChild(h('div', 'glow', '', 'opacity:.6'));
-  const dot = add(c, 'el', '', 'width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 0 20px #fff,0 0 50px #22D37F');
-  return { dot, l: typer(add(c, 'ctr ws', 'Conheça a'), 22) };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.12 });
-  P(x.ctx.dot, { s: prog(lf, 0, 6, E.out5) * (1 - prog(lf, 6, 12, E.inC)), o: 1 - prog(lf, 8, 12) });
-  L(x.ctx.l.el, { y: CY - prog(lf, 0, d) * 10, s: 1 + .05 * prog(lf, 4, d) }); type(x.ctx.l, lf, 6);
-});
-
-// 5 · logo com anel (210–270)
-scene(210, 60, '', c => {
+// 4 · "É aí que entra a Lougan Contabilidade." (300–375)
+scene(300, 75, '', c => {
   darkBg(c, false);
-  const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(400, 340)}" fill="none" stroke="#22D37F" stroke-width="6" style="filter:drop-shadow(0 0 14px #22D37F)"/><circle r="${V(400, 340)}" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="40 260" opacity=".8"/>${[...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * V(470, 400)}" cy="${Math.sin(a) * V(470, 400)}" r="9" fill="#5DF0A8" style="filter:drop-shadow(0 0 8px #22D37F)"/>`; }).join('')}</svg>`, 'width:1000px;height:1000px');
-  const logo = add(c, 'el', BADGE(V(440, 380)), 'filter:drop-shadow(0 0 40px rgba(34,211,127,.6))');
+  const ring = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible"><circle r="${V(360, 300)}" fill="none" stroke="#22D37F" stroke-width="6" style="filter:drop-shadow(0 0 14px #22D37F)"/><circle r="${V(360, 300)}" fill="none" stroke="#FFE9A8" stroke-width="3" stroke-dasharray="40 260" opacity=".8"/>${[...Array(8).keys()].map(i => { const a = i / 8 * Math.PI * 2; return `<circle cx="${Math.cos(a) * V(430, 360)}" cy="${Math.sin(a) * V(430, 360)}" r="9" fill="#5DF0A8" style="filter:drop-shadow(0 0 8px #22D37F)"/>`; }).join('')}</svg>`, 'width:1000px;height:1000px');
+  const logo = add(c, 'el', BADGE(V(400, 340)), 'filter:drop-shadow(0 0 40px rgba(34,211,127,.6))');
   const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
-  const cap = add(c, 'ctr fine', 'Negociação de dívidas · Planejamento tributário · Imposto de Renda', 'font-size:24px;color:rgba(242,255,248,.7)');
-  return { ring, logo, wm, cap };
+  return { ring, logo, wm, l: typer(add(c, 'ctr ws', 'É aí que entra a', 'font-size:52px'), 22) };
 }, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120 });
-  P(x.ctx.ring, { y: CY - 160, s: lerp(1.3, 1, prog(lf, 0, 16, E.out5)) * (1 + .04 * prog(lf, 0, d)), r: lf * 1.2, b: (1 - prog(lf, 0, 10, E.out5)) * 12 });
-  P(x.ctx.logo, { y: CY - 160, s: lerp(.6, 1, spring(lf, 0, { k: 120, c: 12 })) * (1 + .05 * prog(lf, 0, d)), b: (1 - prog(lf, 0, 10, E.out5)) * 16, r: lerp(-20, 0, prog(lf, 0, 18, E.out5)) });
-  L(x.ctx.wm, { y: CY + V(400, 330) - prog(lf, 10, d) * 10, o: prog(lf, 10, 18), b: (1 - prog(lf, 10, 18)) * 10, s: 1 + .03 * prog(lf, 10, d) });
-  L(x.ctx.cap, { y: CY + V(560, 470) - prog(lf, 18, d) * 8, o: prog(lf, 18, 26) });
+  cam(x.cam, lf, d, { s1: 1.07, oy: CY - 120, exit: { len: 8, zoom: .5, blur: 16 } });
+  L(x.ctx.l.el, { y: CY - V(620, 480) - lf * .3 }); type(x.ctx.l, lf, 2);
+  const lk = spring(lf, 14, { k: 120, c: 12 });
+  P(x.ctx.ring, { y: CY - 160, s: lerp(1.3, 1, prog(lf, 14, 30, E.out5)) * (1 + .04 * prog(lf, 14, d)), r: lf * 1.2, o: prog(lf, 14, 18) });
+  P(x.ctx.logo, { y: CY - 160, s: lerp(.5, 1, lk) * (1 + .05 * prog(lf, 14, d)), o: lf < 14 ? 0 : 1, b: (1 - prog(lf, 14, 24, E.out5)) * 16, r: lerp(-20, 0, prog(lf, 14, 32, E.out5)) });
+  L(x.ctx.wm, { y: CY + V(360, 300) - prog(lf, 26, d) * 10, o: prog(lf, 26, 34), b: (1 - prog(lf, 26, 34)) * 10, s: 1 + .03 * prog(lf, 26, d) });
 });
 
-// 6 · cartela verde "A gente reduz a sua dívida" (270–300)
-scene(270, 30, 'accbg', c => {
-  const parts = [...Array(24).keys()].map(i => add(c, 'el', '', `width:${6 + hash(i) * 10}px;height:${6 + hash(i) * 10}px;border-radius:50%;background:rgba(225,255,238,${.25 + hash(i + 9) * .4})`));
-  const ic = add(c, 'el', icon(IC2.down, 110, '#fff', 2.2));
-  return { parts, ic, l: typer(add(c, 'ctr ws', 'A gente reduz a sua dívida', 'font-size:50px'), 30) };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.1, r: 1.2 });
-  x.ctx.parts.forEach((p, i) => P(p, { x: hash(i + 3) * W, y: (hash(i + 7) * H + lf * (3 + hash(i) * 5)) % H, o: .8 }));
-  P(x.ctx.ic, { y: CY - 130 + prog(lf, 0, d) * 20, s: spring(lf, 1, { k: 200, c: 15 }) });
-  L(x.ctx.l.el, { y: CY + 20 - prog(lf, 0, d) * 10, s: 1 + .06 * prog(lf, 0, d) }); type(x.ctx.l, lf, 2);
-});
-
-// 7 · drop 1: 10% riscado → MUITO MAIS de 10% + contador da dívida caindo (300–390)
-scene(300, 90, 'accbg', c => {
-  const conf = [...Array(90).keys()].map(i => i % 3 ? add(c, 'conf', '', `width:${8 + hash(i) * 14}px;height:${4 + hash(i + 1) * 8}px;background:${['#FFE9A8', '#F2C14E', '#ffffff', '#8CF5C2', '#0A5233'][i % 5]}`) : add(c, 'el coin', 'R$', `width:${46 + hash(i) * 30}px;height:${46 + hash(i) * 30}px;font-size:16px`));
-  const ten = add(c, 'el', '10%', `font-weight:800;font-size:${V(280, 240)}px;color:#fff;text-shadow:0 0 30px rgba(255,255,255,.5)`);
-  const strike = add(c, 'el', '', `width:${V(560, 480)}px;height:22px;border-radius:11px;background:#FF4D5E;box-shadow:0 0 30px #FF3045;transform-origin:0 50%`);
-  const big = add(c, 'ctr gold', 'MUITO MAIS', `font-weight:900;font-size:${V(118, 104)}px;letter-spacing:-.01em`);
-  const sub = typer(add(c, 'ctr ws', 'de desconto na sua dívida', 'font-size:46px'), 30);
-  const card = add(c, 'el', `<div class="old">R$ 48.370,00</div><div class="arr">${icon('<svg viewBox="0 0 24 24"><path d="M12 4v16M5 13l7 7 7-7"/></svg>', 54, '#ffffff', 2.6)}</div><div class="new">R$ 48.370,00</div><div class="ex">exemplo ilustrativo</div>`,
-    'width:820px;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border-radius:40px;background:rgba(2,40,24,.72);border:2px solid rgba(140,245,194,.45);box-shadow:0 30px 80px rgba(0,30,15,.6),inset 0 0 40px rgba(34,211,127,.2)');
-  return { conf, ten, strike, big, sub, card, newv: card.querySelector('.new') };
+// 5 · análise do extrato + negociação com o credor (375–540)
+const EXTRATO = [['Saldo do cartão', 18200, 0], ['Juros rotativos', 9870, 1], ['Multa por atraso', 2340, 1], ['Empréstimo pessoal', 12600, 0], ['Encargos', 3150, 1], ['Tarifas', 1210, 1], ['IOF', 1000, 0]];
+scene(375, 165, '', c => {
+  darkBg(c);
+  const doc = add(c, 'el', `<div class="mono" style="display:flex;justify-content:space-between;font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.5);margin-bottom:14px"><span>EXTRATO DA DÍVIDA</span><span>${icon(IC2.doc, 30, 'rgba(242,255,248,.5)', 1.8)}</span></div>
+    ${EXTRATO.map(([t, v, f]) => `<div class="er" data-f="${f}" style="position:relative;display:flex;justify-content:space-between;align-items:center;padding:14px 18px;margin:0 -18px;border-radius:14px"><span style="font-weight:600;font-size:31px;color:#F2FFF8">${t}</span><b style="font-size:31px;color:#F2FFF8">${brl(v)}</b><i class="tg" style="position:absolute;right:-16px;top:-14px;font-style:normal;font-weight:800;font-size:18px;letter-spacing:.08em;padding:6px 12px;border-radius:999px;background:#F2C14E;color:#3A2604;opacity:0">DÁ PRA REDUZIR</i></div>`).join('')}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-top:18px;margin-top:8px;border-top:2px solid rgba(242,255,248,.15)"><span style="font-weight:800;font-size:36px;color:#F2FFF8">Total</span><b style="font-size:44px;color:#FF6B78">R$ 48.370,00</b></div>
+    <div class="scan" style="position:absolute;left:0;right:0;top:0;height:6px;border-radius:3px;background:#5DF0A8;box-shadow:0 0 30px #22D37F,0 0 80px rgba(34,211,127,.6)"></div>`,
+    'width:860px;padding:40px 50px;border-radius:40px;background:rgba(8,20,15,.86);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden');
+  const net = add(c, 'el', `<svg width="900" height="260" viewBox="0 0 900 260" style="overflow:visible"><line class="nl" x1="140" y1="110" x2="760" y2="110" stroke="#22D37F" stroke-width="5" stroke-dasharray="1" pathLength="1" style="filter:drop-shadow(0 0 8px #22D37F)"/>${[0, 1, 2].map(i => `<circle class="pk" r="11" fill="#FFE9A8" style="filter:drop-shadow(0 0 8px #F2C14E)"/>`).join('')}</svg>
+    ${[['Você', IC2.user, 140], ['Lougan', null, 450], ['Credor', IC2.building, 760]].map(([t, ic, xx]) => `<div class="nd" style="position:absolute;left:${xx}px;top:110px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:14px"><div style="width:150px;height:150px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(3,40,26,.9);border:4px solid ${ic ? '#22D37F' : '#F2C14E'};box-shadow:0 0 30px rgba(34,211,127,.5)">${ic ? icon(ic, 70, '#5DF0A8', 1.8) : BADGE(124)}</div><span style="font-weight:800;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}
+    <div class="deal" style="position:absolute;left:450px;top:-100px;transform:translate(-50%,-50%);padding:14px 30px;border-radius:999px;background:#22D37F;color:#03281A;font-weight:800;font-size:32px;white-space:nowrap;box-shadow:0 0 40px rgba(34,211,127,.8)">✓ ACORDO</div>`,
+    'width:900px;height:260px');
+  return { doc, rows: [...doc.querySelectorAll('.er')], scan: doc.querySelector('.scan'), net, nl: net.querySelector('.nl'), pks: [...net.querySelectorAll('.pk')], nds: [...net.querySelectorAll('.nd')], deal: net.querySelector('.deal'),
+    l1: typer(add(c, 'ctr ws', 'A gente analisa cada cobrança', 'font-size:52px'), 28), l2: typer(add(c, 'ctr ws', 'e negocia direto com o credor.', 'font-size:52px;color:#5DF0A8'), 28) };
 }, (x, lf, d) => {
   const c = x.ctx;
-  cam(x.cam, lf, d, { s1: 1.1 });
-  const [sx, sy] = shakeAt(lf, [0, 24], 16); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
-  const tk = spring(lf, 0, { k: 200, c: 15 }), up = prog(lf, 20, 32, E.out5);
-  P(c.ten, { y: lerp(CY - 120, CY - V(560, 400), up), s: tk * lerp(1, .5, up), o: 1 - .35 * up });
-  c.strike.style.transform = `translate(${CX - V(280, 240) * lerp(1, .5, up)}px,${lerp(CY - 120, CY - V(560, 400), up) - 11}px) rotate(-8deg) scaleX(${prog(lf, 12, 20, E.outC) * lerp(1, .5, up)})`;
-  pop(c.big, lf, 24, d, { y: CY - V(250, 190), from: 1.8, blur: 20 });
-  L(c.sub.el, { y: CY - V(130, 90) - prog(lf, 32, d) * 6 }); type(c.sub, lf, 32);
-  const ck = spring(lf, 42);
-  P(c.card, { y: CY + V(250, 210) + (1 - ck) * 300 - prog(lf, 42, d) * 10, s: lerp(.8, 1, ck), o: lf < 42 ? 0 : clamp(ck * 2), t3: `perspective(1400px) rotateX(${(1 - ck) * 30 + 6}deg)` });
-  c.newv.textContent = brl(Math.round(lerp(48370, 31440, prog(lf, 52, 82, E.out5))));
-  c.conf.forEach((p, i) => {
-    const t0 = i < 45 ? 24 : 0, a = hash(i + 40) * Math.PI * 2, sp = 14 + hash(i + 50) * 26, t = Math.max(0, lf - t0);
-    const px = CX + Math.cos(a) * sp * t * .9 * Math.exp(-t * .02), py = CY - 150 + (Math.sin(a) * sp - 10) * t * .9 * Math.exp(-t * .025) + .35 * t * t;
-    const z = .5 + hash(i + 60) * 1.4;
-    P(p, { x: px, y: py, r: t * (6 + hash(i) * 14) * (i % 2 ? 1 : -1), s: z, o: lf >= t0 ? 1 : 0, b: z > 1.6 ? 3 : 0 });
-  });
-});
-
-// 8 · "Você paga MENOS." conta encolhendo, moedas caindo (390–450)
-scene(390, 60, '', c => {
-  darkBg(c);
-  const bill = add(c, 'el', `${icon(IC2.receipt, 84, '#5DF0A8', 1.8)}<div class="bl">R$ 4.200,00</div><div class="bl2">R$ 2.730,00</div>`, 'width:420px;height:300px;border-radius:30px;background:rgba(3,40,26,.8);border:2px solid rgba(93,240,168,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;box-shadow:0 0 40px rgba(34,211,127,.35);transform-origin:50% 100%');
-  const coins = coinsEl(c, 14, 74);
-  return { bill, b1: bill.querySelector('.bl'), b2: bill.querySelector('.bl2'), coins, l1: typer(add(c, 'ctr ws', 'Você paga'), 22), l2: add(c, 'ctr pb', 'MENOS.', `font-size:${V(170, 150)}px`) };
-}, (x, lf, d) => {
-  const c = x.ctx;
-  cam(x.cam, lf, d, { s1: 1.08 });
-  const bk = spring(lf, 0, { k: 160, c: 13 }), sh = prog(lf, 24, 40, E.out5);
-  P(c.bill, { y: CY - V(380, 300) - prog(lf, 0, d) * 14, s: bk, sy: bk * lerp(1, .78, sh), r: Math.sin(lf / 9) * 2 });
-  c.b1.style.textDecoration = sh > .2 ? 'line-through' : 'none'; c.b1.style.opacity = lerp(1, .5, sh);
-  c.b2.style.opacity = sh; c.b2.style.transform = `scale(${lerp(.6, 1, sh)})`;
-  c.coins.forEach((p, i) => { const t = lf - 22 - hash(i) * 14; P(p, { x: 120 + hash(i + 4) * 840, y: -120 + Math.max(0, t) * (26 + hash(i) * 10) + .25 * Math.max(0, t) ** 2, r: t * 14 * (i % 2 ? 1 : -1), o: t > 0 ? 1 : 0, s: .7 + hash(i + 8) * .6 }); });
-  L(c.l1.el, { y: CY + V(40, 20) }); type(c.l1, lf, 4);
-  pop(c.l2, lf, 14, d, { y: CY + V(190, 160), from: 1.6 });
-});
-
-// 9 · tile da calculadora: "Tudo que a sua empresa precisa" (450–495)
-scene(450, 45, '', c => {
-  darkBg(c, false);
-  const tile = add(c, 'el tile', IC2.calc, `width:${V(250, 220)}px;height:${V(250, 220)}px`);
-  return { tile, path: [...tile.querySelectorAll('path,rect')], l: typer(add(c, 'ctr ws', 'Tudo que a sua empresa precisa')) };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 40, exit: { len: 8, zoom: 1.6, blur: 24, fade: .8 } });
-  const sp = spring(lf, 0, { k: 200, c: 15 });
-  P(x.ctx.tile, { y: CY - V(60, 50) - prog(lf, 0, d) * 10, s: lerp(.15, 1, sp) * (1 + .06 * prog(lf, 10, d)), r: lerp(-20, 0, prog(lf, 0, 16, E.out5)) });
-  x.ctx.path.forEach((p, i) => { p.style.strokeDasharray = 80; p.style.strokeDashoffset = 80 * (1 - prog(lf, 4 + i * 2, 18 + i * 2, E.out5)); });
-  L(x.ctx.l.el, { y: CY + V(150, 135) - prog(lf, 12, d) * 8 }); type(x.ctx.l, lf, 12);
-});
-
-// 10 · serviços em pílulas 3D (495–585)
-const SERV = [['Negociação de dívidas', IC2.pct], ['Planejamento tributário', IC2.calc], ['Imposto de Renda', IC2.doc], ['Abertura de empresa', IC2.building], ['Regularização de MEI', IC2.shield]];
-scene(495, 90, '', c => {
-  darkBg(c);
-  const pills = SERV.map(([t, ic]) => add(c, 'el pill', `<div class="pi" style="width:${V(104, 92)}px;height:${V(104, 92)}px">${ic}</div><span>${t}</span>`, `height:${V(150, 132)}px;padding:0 56px 0 22px;font-size:${V(54, 48)}px;white-space:nowrap`));
-  const grid = c.querySelector('.grid'); grid.dataset.own = 1;
-  return { pills, grid };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.1 });
-  x.ctx.grid.style.transform = `translateY(${-lf * 3}px)`;
-  x.ctx.pills.forEach((p, i) => {
-    const a = i * 18 - 6, ki = prog(lf, a, a + 14, E.out5), ko = prog(lf, a + 18, a + 28, E.inC);
-    const dir = i % 2 ? -1 : 1;
-    const xx = CX + dir * (lerp(-560, 0, ki) + lerp(0, 820, ko));
-    const yy = CY + lerp(260, 0, ki) - 40 * prog(lf, a, a + 28) + lerp(0, -200, ko);
-    const ry = dir * (lerp(48, -6, ki) + lerp(0, -40, ko)), rx = lerp(18, 4, ki);
-    const s = lerp(1.5, 1, ki) * (1 + .06 * prog(lf, a, a + 28)) * lerp(1, .7, ko);
-    const vel = Math.abs(lerp(-560, 0, prog(lf + 1, a, a + 14, E.out5)) - lerp(-560, 0, ki)) + ko * 60;
-    P(p, { x: xx, y: yy, s, o: (ki > 0 ? 1 : 0) * (1 - ko), b: Math.min(18, vel * .25), t3: `perspective(1400px) rotateX(${rx}deg) rotateY(${ry}deg)` });
-  });
-});
-
-// 11 · órbita dos serviços em volta da calculadora (585–630)
-scene(585, 45, '', c => {
-  darkBg(c, false);
-  const ghost = add(c, 'el ghost', 'SEM DOR<br>DE CABEÇA', `font-size:${V(150, 130)}px;text-align:center`);
-  const orbit = add(c, 'el', `<svg width="980" height="980" viewBox="-490 -490 980 980" style="overflow:visible"><ellipse rx="${V(330, 320)}" ry="${V(430, 300)}" fill="none" stroke="#22D37F" stroke-width="3" opacity=".55" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>`, 'width:980px;height:980px');
-  const tile = add(c, 'el tile', IC2.calc, `width:${V(200, 180)}px;height:${V(200, 180)}px`);
-  const pills = SERV.map(([t, ic]) => add(c, 'el pill', `<div class="pi" style="width:52px;height:52px">${ic}</div><span>${t.split(' ')[0]}</span>`, 'height:76px;padding:0 28px 0 12px;font-size:32px;gap:12px'));
-  return { ghost, orbit, tile, pills };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s0: 1.22, s1: 1.04 });
-  P(x.ctx.ghost, { y: CY - prog(lf, 0, d) * 20, s: 1.02 + .04 * prog(lf, 0, d), o: .9 });
-  P(x.ctx.orbit, { s: lerp(.8, 1, prog(lf, 0, 16, E.out5)), r: -lf * .6 });
-  P(x.ctx.tile, { s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)), r: Math.sin(lf / 9) * 3 });
-  x.ctx.pills.forEach((p, i) => {
-    const ang = (-90 + i * 72 + lf * 2.2) * Math.PI / 180, k = prog(lf, i * 2, i * 2 + 14, E.out5);
-    P(p, { x: CX + Math.cos(ang) * V(330, 320) * k, y: CY + Math.sin(ang) * V(430, 300) * k, s: lerp(.4, 1, k), o: k });
-  });
-});
-
-// 12 · tela dividida: "Tudo dentro da lei" / "Sem dor de cabeça" (630–690)
-scene(630, 60, '', c => {
-  darkBg(c, false);
-  const ghost = add(c, 'el ghost', 'Segurança', `font-size:${V(260, 210)}px`);
-  const t1 = add(c, 'el', 'Tudo dentro', `font-weight:800;color:#fff;font-size:${V(120, 100)}px;white-space:nowrap;text-shadow:0 0 18px rgba(255,255,255,.4)`);
-  const t2 = add(c, 'el', 'da lei', `font-weight:600;color:#5DF0A8;font-size:${V(86, 70)}px;text-shadow:0 0 14px rgba(34,211,127,.6)`);
-  const sh = add(c, 'el', icon(IC2.shield, V(130, 110), '#5DF0A8', 1.8));
-  const panel = add(c, 'el', '', `width:1300px;height:${V(1300, 760)}px;background:linear-gradient(170deg,#3BE596 0%,#16B06A 40%,#0B6B40 100%);clip-path:polygon(0 120px,100% 0,100% 100%,0 100%);box-shadow:0 0 80px rgba(34,211,127,.6)`);
-  const chk = add(c, 'el', icon(IC2.check, V(140, 110), '#fff', 2.4));
-  const pill = add(c, 'el', 'Sem burocracia', `padding:16px 36px;border-radius:999px;background:rgba(255,255,255,.22);color:#fff;font-weight:700;font-size:${V(38, 32)}px;white-space:nowrap;box-shadow:inset 0 2px 0 rgba(255,255,255,.3)`);
-  const s1 = add(c, 'el', 'Sem dor', `font-weight:800;color:#fff;font-size:${V(160, 130)}px;white-space:nowrap;text-shadow:0 6px 30px rgba(0,60,30,.35)`);
-  const s2 = add(c, 'el', 'de cabeça', `font-weight:600;color:#fff;font-size:${V(70, 56)}px;white-space:nowrap`);
-  const list = add(c, 'el', ['Documentos em dia', 'Prazos em dia', 'Impostos certos'].map(t => `<div class="li">${icon(IC2.check, 34, '#fff', 3)}<span>${t}</span></div>`).join(''), 'display:flex;flex-direction:column;gap:16px;font-weight:700;font-size:32px;color:#fff');
-  return { ghost, t1, t2, sh, panel, chk, pill, s1, s2, list, lis: [...list.children] };
-}, (x, lf, d) => {
   cam(x.cam, lf, d, { s1: 1.07 });
-  const c = x.ctx, top = V(CY - 600, 150), base = V(CY - 190, 380);
-  const inn = (a, n = 14) => prog(lf, a, a + n, E.out5), dr = a => prog(lf, a, d, E.lin);
-  P(c.ghost, { x: CX + 240 - lf * 4, y: top - 60, o: .9 });
-  P(c.t1, { x: V(430, 370) + lerp(-560, 0, inn(0)) - dr(0) * 14, y: top + 60, b: (1 - inn(0)) * 18 });
-  P(c.t2, { x: V(250, 210) + lerp(-560, 0, inn(5)) - dr(5) * 10, y: top + V(180, 150), b: (1 - inn(5)) * 14 });
-  P(c.sh, { x: V(960, 900), y: top + 40, s: spring(lf, 8, { k: 200, c: 15 }) * (1 + .06 * dr(8)), r: Math.sin(lf / 8) * 4 });
-  const sp = spring(lf, 10, { k: 80, c: 14 });
-  const py = base + lerp(V(900, 600), 0, sp) - dr(10) * 10;
-  P(c.panel, { x: CX, y: py + V(650, 380) });
-  P(c.chk, { x: V(170, 140), y: py + V(190, 150), s: spring(lf, 22, { k: 200, c: 15 }) * (1 + .06 * dr(22)), r: Math.sin(lf / 6) * 4 });
-  P(c.pill, { x: V(760, 790) + lerp(260, 0, inn(26)), y: py + V(170, 130), o: inn(26, 6), s: 1 + .05 * dr(26) });
-  P(c.s1, { x: V(640, 720) + lerp(420, 0, inn(28)) - dr(28) * 12, y: py + V(380, 290), b: (1 - inn(28)) * 18 });
-  P(c.s2, { x: V(720, 800) + lerp(420, 0, inn(33)) - dr(33) * 10, y: py + V(500, 390), b: (1 - inn(33)) * 14 });
-  c.list.style.transformOrigin = '0 0';
-  c.list.style.transform = `translate(${V(120, 120)}px,${py + V(600, 450)}px)`;
-  c.lis.forEach((li, i) => { const k = inn(36 + i * 5, 10); li.style.opacity = k; li.style.transform = `translateX(${(1 - k) * -80}px)`; li.style.display = 'flex'; li.style.alignItems = 'center'; li.style.gap = '14px'; });
+  const ck = spring(lf, 0), up = prog(lf, 84, 104, E.inOutC);
+  P(c.doc, { y: lerp(CY - V(90, 60), CY - V(430, 300), up) - lf * .2, s: lerp(.85, 1, ck) * lerp(1, .72, up), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 3}deg)` });
+  const sy = lerp(80, 760, prog(lf, 12, 70, E.inOutC));
+  c.scan.style.top = sy + 'px'; c.scan.style.opacity = lf > 10 && lf < 74 ? 1 : 0;
+  c.rows.forEach((r, i) => {
+    const rowY = 100 + i * 66, hit = sy > rowY && r.dataset.f === '1';
+    const k = hit ? prog(lf, 12 + (rowY - 80) / 680 * 58, 18 + (rowY - 80) / 680 * 58, E.out5) : 0;
+    r.style.background = `rgba(242,193,78,${.16 * k})`; r.style.boxShadow = k ? `inset 0 0 0 2px rgba(242,193,78,${.7 * k})` : 'none';
+    r.querySelector('.tg').style.opacity = k; r.querySelector('.tg').style.transform = `scale(${lerp(.6, 1, k)})`;
+  });
+  const nk = prog(lf, 92, 106, E.out5);
+  P(c.net, { y: CY + V(330, 240), o: nk, s: lerp(.9, 1, nk) });
+  c.nds.forEach((n, i) => { const k = spring(lf, 96 + i * 5); n.style.opacity = lf < 96 + i * 5 ? 0 : 1; n.style.transform = `translate(-50%,-50%) scale(${k})`; });
+  c.nl.style.strokeDashoffset = 1 - prog(lf, 108, 124, E.out5);
+  c.pks.forEach((p, i) => { const q = ((lf - 120) * .035 + i / 3) % 1, xx = q < .5 ? lerp(450, 760, q * 2) : lerp(760, 450, (q - .5) * 2); p.setAttribute('cx', xx); p.setAttribute('cy', 110); p.style.opacity = lf > 120 && lf < 150 ? 1 : 0; });
+  const dk = spring(lf, 146, { k: 200, c: 13 }); c.deal.style.opacity = lf < 146 ? 0 : 1; c.deal.style.transform = `translate(-50%,-50%) scale(${dk})`;
+  const sw = prog(lf, 80, 90, E.inC);
+  L(c.l1.el, { y: CY + V(560, 430) - lf * .3, o: 1 - sw, b: sw * 14 }); type(c.l1, lf, 6);
+  L(c.l2.el, { y: CY + V(640, 470) - lf * .2 }); type(c.l2, lf, 104);
 });
 
-// 13 · "Com o Lougan do seu lado." (690–795)
-scene(690, 105, '', c => {
+// 6 · drop: o mesmo gráfico vira e despenca — bem mais que 10% (540–675)
+scene(540, 135, '', c => {
   darkBg(c);
-  const rings = add(c, 'el', `<svg width="1000" height="1000" viewBox="-500 -500 1000 1000" style="overflow:visible">${[230, 300, 370].map((r, i) => `<circle r="${r}" fill="none" stroke="#22D37F" stroke-opacity="${.6 - i * .15}" stroke-width="${4 - i}" stroke-dasharray="${i ? '6 14' : 'none'}" style="filter:drop-shadow(0 0 8px #22D37F)"/>`).join('')}</svg>`, 'width:1000px;height:1000px');
-  const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 170, '#FFE9A8', 1.6)}</div>`, `width:${V(330, 280)}px;height:${V(330, 280)}px`);
-  const tag = add(c, 'el', '<b style="letter-spacing:.14em">LOUGAN</b><span style="display:block;font-size:.42em;letter-spacing:.3em;color:#5DF0A8;font-weight:600;margin-top:4px">SEU CONTADOR DE CONFIANÇA</span>', 'font-size:58px;color:#fff;text-align:center;white-space:nowrap;padding:18px 44px;border-radius:30px;background:rgba(3,40,26,.85);border:2px solid rgba(242,193,78,.6);box-shadow:0 0 40px rgba(242,193,78,.3)');
-  const bub = [['Atendimento direto', IC2.chat], ['Resposta rápida', IC2.bolt], ['Acompanhamento', IC2.check]].map(([t, ic]) => add(c, 'el pill', `<div class="pi" style="width:56px;height:56px">${ic}</div><span>${t}</span>`, 'height:76px;padding:0 26px 0 12px;font-size:30px;gap:12px;white-space:nowrap'));
-  return { rings, av, tag, bub, l1: typer(add(c, 'ctr ws', 'Com o Lougan', 'font-size:52px'), 22), l2: add(c, 'ctr pb', 'do seu lado.') };
+  const conf = [...Array(40).keys()].map(i => i % 2 ? add(c, 'conf', '', `width:${8 + hash(i) * 14}px;height:${4 + hash(i + 1) * 8}px;background:${['#FFE9A8', '#F2C14E', '#ffffff', '#8CF5C2'][i % 4]}`) : add(c, 'el coin', 'R$', `width:${46 + hash(i) * 30}px;height:${46 + hash(i) * 30}px;font-size:16px`));
+  const chart = add(c, 'el', `<svg width="900" height="640" viewBox="0 0 900 640" style="overflow:visible">
+    <line x1="0" y1="250" x2="900" y2="250" stroke="#F2C14E" stroke-width="4" stroke-dasharray="14 12" opacity=".9"/><text class="t10" x="10" y="236" fill="#FFE9A8" font-family="Montserrat" font-weight="800" font-size="34">−10%</text>
+    <polyline points="0,300 120,240 230,250 340,170 450,190 560,90 620,40" fill="none" stroke="#FF5A6A" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+    <polyline class="gl" points="620,40 680,140 730,230 770,330 820,430 860,520 900,580" fill="none" stroke="#5DF0A8" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 14px #22D37F)"/>
+    <circle class="hd" r="16" fill="#C8FFE2" style="filter:drop-shadow(0 0 12px #22D37F)"/></svg>`, 'width:900px;height:640px');
+  const num = add(c, 'el', 'R$ 48.370,00', `font-weight:800;font-size:${V(112, 96)}px;white-space:nowrap`);
+  const ex = add(c, 'el', 'exemplo ilustrativo', 'font-size:18px;letter-spacing:.2em;color:rgba(242,255,248,.45);text-transform:uppercase;white-space:nowrap');
+  return { conf, chart, gl: chart.querySelector('.gl'), hd: chart.querySelector('.hd'), num, ex, l1: typer(add(c, 'ctr ws', 'O resultado? Desconto de', 'font-size:52px'), 24), l2: add(c, 'ctr gold', 'bem mais que 10%', `font-weight:900;font-size:${V(86, 76)}px`) };
 }, (x, lf, d) => {
   const c = x.ctx;
-  cam(x.cam, lf, d, { s1: 1.09, oy: CY - 200 });
-  const ay = CY - V(470, 360);
-  P(c.rings, { y: ay, s: lerp(.6, 1, prog(lf, 0, 18, E.out5)) * (1 + .04 * Math.sin(lf / 7.5 * Math.PI / 2)), r: lf * .5 });
-  P(c.av, { y: ay - lf * .2, s: spring(lf, 2, { k: 140, c: 13 }) * (1 + .03 * prog(lf, 2, d)) });
-  P(c.tag, { y: ay + V(260, 220) - lf * .2, s: spring(lf, 14), o: lf < 14 ? 0 : 1 });
-  const BP = [[-215, -175], [235, -70], [-205, 105]];
-  c.bub.forEach((b, i) => { const k = spring(lf, 26 + i * 8); P(b, { x: CX + BP[i][0] * V(1, .9), y: ay + BP[i][1] + Math.sin(lf / 14 + i) * 10, s: k, o: lf < 26 + i * 8 ? 0 : 1 }); });
-  L(c.l1.el, { y: CY + V(250, 170) - prog(lf, 50, d) * 10 }); type(c.l1, lf, 50);
-  pop(c.l2, lf, 64, d, { y: CY + V(360, 270) });
+  cam(x.cam, lf, d, { s1: 1.09, oy: CY - 100 });
+  const [sx, sy] = shakeAt(lf, [0, 70], 16); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  P(c.chart, { y: CY - 60 - lf * .3, s: 1 + .05 * prog(lf, 0, d) });
+  const gk = prog(lf, 10, 70, E.inOutC); c.gl.style.strokeDashoffset = 1 - gk;
+  const pt = c.gl.getPointAtLength(c.gl.getTotalLength() * gk); c.hd.setAttribute('cx', pt.x); c.hd.setAttribute('cy', pt.y); c.hd.style.opacity = lf > 10 && lf < 76 ? 1 : 0;
+  const vk = prog(lf, 10, 70, E.inOutC);
+  counter(c.num, lerp(48370, 31440, vk), mix(RED, GRN, prog(lf, 20, 50)));
+  c.num.style.textShadow = `0 0 20px ${mix(RED, GRN, prog(lf, 20, 50))}`;
+  P(c.num, { y: CY - V(560, 400) - lf * .2, s: 1 + .1 * Math.exp(-Math.max(0, lf - 70) / 5) * (lf >= 70 ? 1 : 0) });
+  P(c.ex, { y: CY - V(480, 330) - lf * .2, o: prog(lf, 12, 20) * .9 });
+  L(c.l1.el, { y: CY + V(430, 320) }); type(c.l1, lf, 66);
+  pop(c.l2, lf, 82, d, { y: CY + V(540, 410), from: 1.7, blur: 18 });
+  c.conf.forEach((p, i) => {
+    const a = -Math.PI / 2 + (hash(i + 40) - .5) * 2.6, sp = 18 + hash(i + 50) * 24, t = Math.max(0, lf - 72);
+    P(p, { x: CX + Math.cos(a) * sp * t * .9, y: CY - 300 + Math.sin(a) * sp * t * .9 + .45 * t * t, r: t * (6 + hash(i) * 14) * (i % 2 ? 1 : -1), s: .5 + hash(i + 60) * 1.2, o: lf >= 72 ? 1 : 0 });
+  });
 });
 
-// 14 · gráfico "a economia é de verdade" (795–900)
-scene(795, 105, '', c => {
+// 7 · "E uma parcela que cabe no seu mês." — rosca da renda comprometida (675–795)
+scene(675, 120, '', c => {
   darkBg(c);
-  const card = add(c, 'el', `<svg width="880" height="620" viewBox="0 0 880 620" style="overflow:visible">
-    <line x1="80" y1="540" x2="840" y2="540" stroke="rgba(242,255,248,.3)" stroke-width="3"/>
-    <line class="ref" x1="80" y1="440" x2="840" y2="440" stroke="#FF6B78" stroke-width="4" stroke-dasharray="14 12" pathLength="1"/>
-    <text x="90" y="425" fill="#FF6B78" font-family="Montserrat" font-weight="800" font-size="34">10%</text>
-    ${[0, 1, 2, 3].map(i => `<rect class="br" x="${150 + i * 170}" y="540" width="110" height="0" rx="14" fill="url(#bg${i})"/><linearGradient id="bg${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8CF5C2"/><stop offset="1" stop-color="#119A5C"/></linearGradient>`).join('')}
-    <polyline class="tr" points="205,480 375,400 545,300 715,160" fill="none" stroke="#FFE9A8" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 10px #F2C14E)"/>
-    <text class="mm" x="600" y="110" fill="#FFE9A8" font-family="Montserrat" font-weight="800" font-size="44">MUITO MAIS</text></svg>`,
-    'width:880px;height:620px;padding:0;border-radius:40px;background:rgba(3,30,19,.7);border:2px solid rgba(93,240,168,.35);box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 0 40px rgba(34,211,127,.15)');
-  return { card, ref: card.querySelector('.ref'), brs: [...card.querySelectorAll('.br')], tr: card.querySelector('.tr'), mm: card.querySelector('.mm'), l1: typer(add(c, 'ctr ws', 'a economia é', 'font-size:52px'), 22), l2: add(c, 'ctr pb', 'de verdade.') };
+  const R0 = 260, C0 = 2 * Math.PI * R0;
+  const donut = add(c, 'el', `<svg width="700" height="700" viewBox="-350 -350 700 700" style="overflow:visible"><circle r="${R0}" fill="none" stroke="rgba(242,255,248,.1)" stroke-width="64"/><circle class="arc" r="${R0}" fill="none" stroke="#FF5A6A" stroke-width="64" stroke-linecap="round" transform="rotate(-90)" stroke-dasharray="0 ${C0}" style="filter:drop-shadow(0 0 14px rgba(255,60,80,.7))"/></svg>`, 'width:700px;height:700px');
+  const pct = add(c, 'el', '46%', 'font-weight:900;font-size:150px;color:#FF6B78;white-space:nowrap;line-height:1');
+  const lab = add(c, 'el', 'DA SUA RENDA<br><span style="font-size:.8em;opacity:.7">indo pras dívidas</span>', 'font-weight:700;font-size:26px;letter-spacing:.14em;color:rgba(242,255,248,.75);text-align:center;white-space:nowrap');
+  return { donut, arc: donut.querySelector('.arc'), C0, pct, lab, l1: typer(add(c, 'ctr ws', 'E uma parcela que', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'cabe no seu mês.', `font-size:${V(92, 80)}px`) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 120 });
+  const dy = CY - V(260, 190);
+  P(c.donut, { y: dy - lf * .3, s: lerp(.8, 1, spring(lf, 0)) * (1 + .03 * prog(lf, 0, d)), r: lf * .1 });
+  const grow = prog(lf, 2, 20, E.out5), fall = prog(lf, 36, 80, E.inOutC);
+  const p = lerp(.46, .21, fall) * grow;
+  c.arc.setAttribute('stroke-dasharray', `${c.C0 * p} ${c.C0}`);
+  const col = mix(RED, GRN, fall); c.arc.setAttribute('stroke', col); c.arc.style.filter = `drop-shadow(0 0 14px ${col})`;
+  c.pct.textContent = Math.round(p * 100) + '%'; c.pct.style.color = col; c.pct.style.textShadow = `0 0 24px ${col}`;
+  P(c.pct, { y: dy - 30 - lf * .3, s: 1 + .08 * Math.exp(-Math.max(0, lf - 80) / 5) * (lf >= 80 ? 1 : 0) });
+  P(c.lab, { y: dy + 80 - lf * .3, o: prog(lf, 10, 18) });
+  L(c.l1.el, { y: CY + V(330, 240) }); type(c.l1, lf, 40);
+  pop(c.l2, lf, 58, d, { y: CY + V(440, 340) });
+});
+
+// 8 · "E cuida do resto também" — painel de serviços + carimbo DENTRO DA LEI (795–945)
+const SERV2 = [['Imposto de Renda', IC2.doc], ['MEI e regularização', IC2.shield], ['Abertura de empresa', IC2.building], ['Planejamento tributário', IC2.calc]];
+scene(795, 150, '', c => {
+  darkBg(c);
+  const panel = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;margin-bottom:22px">${BADGE(64)}<span class="mono" style="font-size:22px;letter-spacing:.24em;color:rgba(242,255,248,.6)">LOUGAN · SERVIÇOS</span></div>
+    ${SERV2.map(([t, ic]) => `<div class="sr" style="display:flex;align-items:center;gap:22px;padding:22px 24px;margin-bottom:14px;border-radius:24px;background:rgba(3,40,26,.75);border:2px solid rgba(93,240,168,.25)"><div style="width:74px;height:74px;border-radius:20px;background:linear-gradient(150deg,#4BE8A0,#13A563);display:flex;align-items:center;justify-content:center;flex:none">${icon(ic, 42, '#03281A', 2)}</div><span style="font-weight:700;font-size:38px;color:#fff;white-space:nowrap">${t}</span><div class="ck" style="margin-left:auto;width:58px;height:58px;border-radius:50%;background:#22D37F;display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(34,211,127,.8);flex:none">${icon(IC2.check, 34, '#03281A', 3.4)}</div></div>`).join('')}`,
+    'width:900px;padding:40px 40px 26px;border-radius:40px;background:rgba(8,20,15,.85);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+  const stampEl = add(c, 'el', 'DENTRO DA LEI', 'padding:18px 40px;border:9px solid #22D37F;border-radius:22px;color:#5DF0A8;font-weight:900;font-size:76px;letter-spacing:.04em;white-space:nowrap;text-shadow:0 0 20px rgba(34,211,127,.8);box-shadow:0 0 40px rgba(34,211,127,.5),inset 0 0 30px rgba(34,211,127,.3);background:rgba(2,10,7,.55)');
+  return { panel, rows: [...panel.querySelectorAll('.sr')], cks: [...panel.querySelectorAll('.ck')], stampEl, l: typer(add(c, 'ctr ws', 'E cuida do resto também.', 'font-size:54px'), 26) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.07 });
+  const [sx, sy] = shakeAt(lf, [96], 18); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  L(c.l.el, { y: CY - V(640, 470) - lf * .6, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
+  const pk = spring(lf, 6);
+  P(c.panel, { y: CY + V(20, 10) - lf * .2, s: lerp(.85, 1, pk), o: clamp(pk * 2), t3: `perspective(1600px) rotateX(${(1 - pk) * 20 + 3}deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
+  c.rows.forEach((r, i) => { const k = prog(lf, 14 + i * 12, 26 + i * 12, E.out5); r.style.opacity = k; r.style.transform = `translateX(${(1 - k) * 80}px)`; });
+  c.cks.forEach((k2, i) => { const k = popS(lf, 24 + i * 12); k2.style.transform = `scale(${lf < 24 + i * 12 ? 0 : k})`; });
+  const st = prog(lf, 90, 96, E.inC);
+  P(c.stampEl, { y: CY + V(520, 380) - prog(lf, 96, d) * 10, s: lf < 90 ? 0 : lerp(2.6, 1, st) * (1 + .03 * prog(lf, 96, d)), r: -10, o: lf < 90 ? 0 : clamp(st * 2), b: (1 - st) * 10 });
+});
+
+// 9 · "Quem cuida do seu caso é o próprio Lougan." — linha do tempo do atendimento (945–1065)
+scene(945, 120, '', c => {
+  darkBg(c);
+  const av = add(c, 'el', `<div style="width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1A7A50,#04281A);display:flex;align-items:center;justify-content:center;border:6px solid #F2C14E;box-shadow:0 0 50px rgba(242,193,78,.55),inset 0 0 40px rgba(34,211,127,.35)">${icon(IC2.user, 150, '#FFE9A8', 1.6)}</div>`, `width:${V(290, 250)}px;height:${V(290, 250)}px`);
+  const tag = add(c, 'el', '<b style="letter-spacing:.14em">LOUGAN</b>', 'font-size:56px;color:#fff;text-align:center;white-space:nowrap;padding:12px 40px;border-radius:24px;background:rgba(3,40,26,.85);border:2px solid rgba(242,193,78,.6)');
+  const tl = add(c, 'el', `<svg width="860" height="80" viewBox="0 0 860 80" style="overflow:visible"><line x1="80" y1="40" x2="780" y2="40" stroke="rgba(242,255,248,.15)" stroke-width="8" stroke-linecap="round"/><line class="pf" x1="80" y1="40" x2="780" y2="40" stroke="#22D37F" stroke-width="8" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>
+    ${['Análise', 'Negociação', 'Acordo fechado'].map((t, i) => `<div class="st" style="position:absolute;left:${80 + i * 350}px;top:40px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:16px"><div class="sd" style="width:78px;height:78px;border-radius:50%;background:#0B1F17;border:5px solid rgba(242,255,248,.25);display:flex;align-items:center;justify-content:center;margin-top:76px">${icon(IC2.check, 40, '#03281A', 3.4)}</div><span style="font-weight:700;font-size:30px;color:#fff;white-space:nowrap">${t}</span></div>`).join('')}`, 'width:860px;height:80px');
+  return { av, tag, tl, pf: tl.querySelector('.pf'), sts: [...tl.querySelectorAll('.sd')], l1: typer(add(c, 'ctr ws', 'Quem cuida do seu caso é', 'font-size:52px'), 24), l2: add(c, 'ctr pb', 'o próprio Lougan.', `font-size:${V(86, 76)}px`) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 160 });
+  const ay = CY - V(560, 400);
+  P(c.av, { y: ay - lf * .5, s: spring(lf, 0, { k: 140, c: 13 }) * (1 + .06 * prog(lf, 0, d)), r: Math.sin(lf / 12) * 3 });
+  P(c.tag, { y: ay + V(210, 180) - lf * .5, s: spring(lf, 10) * (1 + .04 * prog(lf, 10, d)), o: lf < 10 ? 0 : 1 });
+  L(c.l1.el, { y: CY - V(130, 100) }); type(c.l1, lf, 14);
+  pop(c.l2, lf, 34, d, { y: CY - V(30, 10) });
+  P(c.tl, { y: CY + V(250, 200), o: prog(lf, 44, 52) });
+  const pf = prog(lf, 52, 104, E.inOutC); c.pf.style.strokeDashoffset = 1 - pf;
+  c.sts.forEach((s, i) => { const on = pf >= i / 2 - .001; const k = on ? popS(lf, 52 + i * 26) : 0; s.style.background = on ? '#22D37F' : '#0B1F17'; s.style.borderColor = on ? '#5DF0A8' : 'rgba(242,255,248,.25)'; s.style.boxShadow = on ? '0 0 26px rgba(34,211,127,.8)' : 'none'; s.style.transform = `scale(${on ? lerp(1.3, 1, k) : 1})`; s.querySelector('svg').style.opacity = on ? 1 : 0; });
+});
+
+// 10 · conversa + CTA "Chamar no WhatsApp" (1065–1260)
+scene(1065, 195, '', c => {
+  c.appendChild(h('div', 'glow', '', 'opacity:.7'));
+  const chat = add(c, 'el', `<div style="display:flex;align-items:center;gap:18px;padding-bottom:20px;border-bottom:1px solid rgba(242,255,248,.12)">${BADGE(70)}<div><b style="font-size:32px;color:#fff">Lougan Contabilidade</b><span style="display:block;font-size:22px;color:#5DF0A8">online agora</span></div></div>
+    <div class="m1" style="margin:26px 0 0 auto;max-width:600px;padding:22px 28px;border-radius:30px;border-bottom-right-radius:8px;background:#1F8F5B;color:#fff;font-size:32px;font-weight:500;line-height:1.3">Oi! Tô devendo uns R$ 48 mil entre cartão e banco. Tem jeito?</div>
+    <div class="td" style="margin-top:22px;width:120px;padding:22px 26px;border-radius:30px;background:rgba(242,255,248,.1);display:flex;gap:10px"><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i><i style="width:14px;height:14px;border-radius:50%;background:#C8FFE2"></i></div>
+    <div class="m2" style="margin-top:-60px;max-width:640px;padding:22px 28px;border-radius:30px;border-bottom-left-radius:8px;background:rgba(242,255,248,.1);color:#fff;font-size:32px;font-weight:500;line-height:1.3">Tem sim! Me manda os detalhes que eu te mostro quanto dá pra baixar.</div>`,
+    'width:880px;padding:36px 40px 44px;border-radius:44px;background:rgba(8,20,15,.9);border:2px solid rgba(93,240,168,.3);box-shadow:0 30px 80px rgba(0,0,0,.6)');
+  const ripple = add(c, 'el', '', 'border:4px solid #5DF0A8;border-radius:999px;width:780px;height:150px');
+  const btn = add(c, 'el btn', `${icon(IC2.chat, 62, '#fff', 2.2)}<span style="margin-left:18px">Chamar no WhatsApp</span>`, `width:${V(780, 720)}px;height:150px;font-size:${V(52, 48)}px`);
+  return { chat, m1: chat.querySelector('.m1'), td: chat.querySelector('.td'), m2: chat.querySelector('.m2'), ripple, btn, l: typer(add(c, 'ctr ws', 'Manda uma mensagem.', 'font-size:56px'), 24) };
+}, (x, lf, d) => {
+  const c = x.ctx;
+  cam(x.cam, lf, d, { s1: 1.07, exit: { len: 8, zoom: .3, blur: 10 } });
+  L(c.l.el, { y: CY - V(700, 500) - lf * .5, s: 1 + .06 * prog(lf, 0, d) }); type(c.l, lf, 2);
+  const ck = spring(lf, 4);
+  P(c.chat, { y: CY - V(160, 110) - lf * .25, s: lerp(.85, 1, ck), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 20 + 2}deg)` });
+  const b1 = spring(lf, 18); c.m1.style.opacity = lf < 18 ? 0 : clamp(b1 * 2); c.m1.style.transform = `translateY(${(1 - b1) * 40}px) scale(${lerp(.85, 1, b1)})`; c.m1.style.transformOrigin = '100% 100%';
+  c.td.style.opacity = lf > 44 && lf < 66 ? 1 : 0; [...c.td.children].forEach((dd, i) => { dd.style.transform = `translateY(${Math.sin(lf / 2.2 - i) * 5}px)`; });
+  const b2 = spring(lf, 66); c.m2.style.opacity = lf < 66 ? 0 : clamp(b2 * 2); c.m2.style.transform = `translateY(${(1 - b2) * 40}px) scale(${lerp(.85, 1, b2)})`; c.m2.style.transformOrigin = '0 100%';
+  const bt = spring(lf, 100, { k: 200, c: 15 }), beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 135) / 3) * (lf >= 135 ? 1 : 0);
+  c.btn.style.boxShadow = `0 0 ${36 + 22 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 120px rgba(34,211,127,.45),inset 0 3px 0 rgba(255,255,255,.35)`;
+  P(c.btn, { y: CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, r: Math.sin(lf / 11) * 1.5, s: (lf < 100 ? 0 : bt) * (1 + .03 * beat) * (1 - .07 * press), o: lf < 100 ? 0 : 1 });
+  const rk = prog(lf, 135, 155, E.out5);
+  P(c.ripple, { y: CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, s: lerp(1, 1.5, rk), o: lf >= 135 ? 1 - rk : 0 });
+});
+
+// 11 · assinatura: "Lougan Contabilidade. Dívida tem saída." (1260–1440)
+scene(1260, 180, '', c => {
+  darkBg(c, false);
+  const halo = add(c, 'el', '', `width:${V(640, 520)}px;height:${V(640, 520)}px;border-radius:50%;border:5px solid rgba(93,240,168,.8);box-shadow:0 0 40px rgba(34,211,127,.8),inset 0 0 40px rgba(34,211,127,.5)`);
+  const logo = add(c, 'el', BADGE(V(470, 390)), 'filter:drop-shadow(0 0 50px rgba(34,211,127,.7))');
+  const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
+  const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
+  return { halo, logo, wm, sparks, l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150 });
-  const ck = spring(lf, 0);
-  P(c.card, { y: CY - V(260, 190) - prog(lf, 0, d) * 14, s: lerp(.85, 1, ck), o: clamp(ck * 2), t3: `perspective(1600px) rotateX(${(1 - ck) * 24 + 4}deg) rotateY(${Math.sin(lf / 30) * 3}deg)` });
-  c.ref.style.strokeDasharray = `${prog(lf, 6, 18, E.out5)} 1`;
-  const H0 = [130, 210, 300, 420];
-  c.brs.forEach((b, i) => { const k = spring(lf, 14 + i * 7, { k: 120, c: 12 }); const hh = H0[i] * clamp(k, 0, 1.1); b.setAttribute('height', hh); b.setAttribute('y', 540 - hh); });
-  c.tr.style.strokeDashoffset = 1 - prog(lf, 40, 62, E.out5);
-  c.mm.style.opacity = prog(lf, 58, 64); c.mm.setAttribute('transform', `translate(0 ${(1 - prog(lf, 58, 70, E.out5)) * 30})`);
-  L(c.l1.el, { y: CY + V(330, 240) - prog(lf, 60, d) * 8 }); type(c.l1, lf, 60);
-  pop(c.l2, lf, 74, d, { y: CY + V(440, 330) });
-});
-
-// 15 · cartela verde "Pague menos. Viva mais leve." (900–960)
-scene(900, 60, 'accbg', c => {
-  const bub = [...Array(30).keys()].map(i => add(c, 'el', '', `width:${10 + hash(i) * 26}px;height:${10 + hash(i) * 26}px;border-radius:50%;border:2px solid rgba(235,255,244,${.3 + hash(i + 2) * .4});background:rgba(235,255,244,.08)`));
-  const leaf = add(c, 'el', icon(IC.leaf, 110, '#fff', 1.8));
-  return { bub, leaf, l1: add(c, 'ctr', 'Pague menos.', `font-weight:800;font-size:${V(118, 100)}px;color:#fff;text-shadow:0 6px 30px rgba(0,60,30,.35)`), l2: typer(add(c, 'ctr ws', 'Viva mais leve.', 'font-size:60px'), 22) };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.1, r: -1.2, exit: { len: 8, zoom: .5, blur: 16 } });
-  x.ctx.bub.forEach((p, i) => P(p, { x: hash(i + 3) * W + Math.sin(lf / 12 + i) * 30, y: ((hash(i + 7) * H - lf * (4 + hash(i) * 6)) % H + H) % H, o: .9 }));
-  P(x.ctx.leaf, { y: CY - 230 - lf * 1.2, r: Math.sin(lf / 10) * 20, x: CX + Math.sin(lf / 14) * 60, s: spring(lf, 0, { k: 200, c: 15 }) });
-  pop(x.ctx.l1, lf, 2, d, { y: CY - 20 });
-  L(x.ctx.l2.el, { y: CY + 110 - prog(lf, 14, d) * 10 }); type(x.ctx.l2, lf, 14);
-});
-
-// 16 · "Tudo isso.." — respiro (960–1020)
-scene(960, 60, '', c => { c.appendChild(h('div', 'glow', '', 'opacity:.4')); return { l: typer(add(c, 'ctr pb', 'Tudo isso..', 'font-size:' + V(90, 80) + 'px'), 22) }; }, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.14 });
-  const wk = prog(lf, 16, 26);
-  x.ctx.l.el.style.color = `rgb(${lerp(93, 255, wk)},${lerp(240, 255, wk)},${lerp(168, 255, wk)})`;
-  x.ctx.l.el.style.letterSpacing = `${prog(lf, 20, d) * .06}em`;
-  L(x.ctx.l.el, { y: CY - prog(lf, 0, d) * 16 }); type(x.ctx.l, lf, 4);
-});
-
-// 17 · loader → "?" → pílula (1020–1050)
-scene(1020, 30, '', c => {
-  c.appendChild(h('div', 'glow', '', 'opacity:.6'));
-  const shape = add(c, 'el', '', 'border:9px solid #22D37F;border-radius:999px;box-shadow:0 0 22px rgba(34,211,127,.9),inset 0 0 18px rgba(34,211,127,.6)');
-  const arc = add(c, 'el', `<svg width="240" height="240" viewBox="-120 -120 240 240" style="overflow:visible"><circle r="100" fill="none" stroke="#22D37F" stroke-width="10" stroke-linecap="round" style="filter:drop-shadow(0 0 10px #22D37F)"/></svg>`, 'width:240px;height:240px');
-  const q = add(c, 'el', '?', 'font-weight:800;font-size:110px;color:#5DF0A8;text-shadow:0 0 18px rgba(34,211,127,.9)');
-  return { shape, arc, circ: arc.querySelector('circle'), q };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.06 });
-  const draw = prog(lf, 0, 12, E.out5), C = 2 * Math.PI * 100;
-  x.ctx.circ.style.strokeDasharray = `${C * lerp(.08, 1, draw)} ${C}`;
-  P(x.ctx.arc, { r: lf * 16, o: 1 - prog(lf, 12, 14) });
-  const m = prog(lf, 16, 28, E.out5);
-  x.ctx.shape.style.width = lerp(220, 760, m) + 'px'; x.ctx.shape.style.height = lerp(220, 150, m) + 'px';
-  P(x.ctx.shape, { s: lf < 12 ? 0 : spring(lf, 12, { k: 200, c: 15 }), o: lf < 12 ? 0 : 1 });
-  P(x.ctx.q, { s: spring(lf, 5, { k: 200, c: 15 }) * (1 - prog(lf, 18, 24, E.inC)), r: Math.sin(lf / 5) * 6, b: prog(lf, 18, 24) * 10 });
-});
-
-// 18 · CTA "Fale com o Lougan" (1050–1140)
-scene(1050, 90, '', c => {
-  c.appendChild(h('div', 'glow', '', 'opacity:.8'));
-  const ripple = add(c, 'el', '', 'border:4px solid #5DF0A8;border-radius:999px;width:760px;height:150px');
-  const btn = add(c, 'el btn', `${icon(IC2.chat, 62, '#fff', 2.2)}<span style="margin-left:18px">Fale com o Lougan</span>`, `width:${V(760, 720)}px;height:150px;font-size:${V(54, 50)}px`);
-  const okb = add(c, 'el', icon(IC2.check, 56, '#fff', 3).replace('<svg', '<svg'), 'width:96px;height:96px;border-radius:50%;background:#F2C14E;display:flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(242,193,78,.8)');
-  const sub = typer(add(c, 'ctr ws', 'e faça a análise da sua dívida', 'font-size:' + V(40, 36) + 'px'), 26);
-  const fine = add(c, 'ctr fine', 'Atendimento online e presencial · Chame no WhatsApp ou no direct', 'font-size:24px');
-  return { ripple, btn, okb, sub, fine };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.07, exit: { len: 6, zoom: .25, blur: 8 } });
-  const beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 30) / 3) * (lf >= 30 ? 1 : 0);
-  P(x.ctx.btn, { y: CY - prog(lf, 0, d) * 10, s: spring(lf, 0, { k: 200, c: 15 }) * (1 + .03 * beat) * (1 - .06 * press) * (1 + .03 * prog(lf, 0, d)) });
-  const rk = prog(lf, 30, 48, E.out5);
-  P(x.ctx.ripple, { y: CY - prog(lf, 0, d) * 10, s: lerp(1, 1.5, rk), o: lf >= 30 ? 1 - rk : 0 });
-  const ok = spring(lf, 34, { k: 200, c: 13 });
-  P(x.ctx.okb, { x: CX + V(380, 360), y: CY - 70 - prog(lf, 0, d) * 10, s: ok, r: (1 - ok) * -90, o: lf < 34 ? 0 : 1 });
-  L(x.ctx.sub.el, { y: CY + 150 - prog(lf, 8, d) * 6 }); type(x.ctx.sub.el ? x.ctx.sub : x.ctx.sub, lf, 9);
-  L(x.ctx.fine, { y: H - V(300, 110), o: prog(lf, 20, 30) * .95 });
-});
-
-// 19 · logo no drop 2 (1140–1245)
-scene(1140, 105, '', c => {
-  darkBg(c, false);
-  const halo = add(c, 'el', '', `width:${V(700, 560)}px;height:${V(700, 560)}px;border-radius:50%;border:5px solid rgba(93,240,168,.8);box-shadow:0 0 40px rgba(34,211,127,.8),inset 0 0 40px rgba(34,211,127,.5)`);
-  const logo = add(c, 'el', BADGE(V(520, 420)), 'filter:drop-shadow(0 0 50px rgba(34,211,127,.7))');
-  const wm = add(c, 'ctr', '<span style="font-weight:800;letter-spacing:.14em">LOUGAN</span><br><span style="font-weight:600;font-size:.42em;letter-spacing:.5em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(104, 86)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.6)`);
-  const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
-  const coins = coinsEl(c, 10, 64);
-  return { halo, logo, wm, sparks, coins };
-}, (x, lf, d) => {
-  const c = x.ctx;
-  cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150, exit: { len: 10, zoom: .35, blur: 18, fade: 1 } });
-  const beat = Math.exp(-((lf % 15) / 3.5)), ly = CY - V(190, 150);
-  P(c.logo, { y: ly, s: lerp(1.7, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)) * (1 + .02 * beat), b: (1 - prog(lf, 0, 10, E.out5)) * 20, r: lerp(12, 0, prog(lf, 0, 16, E.out5)) });
-  P(c.halo, { y: ly, s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .08 * beat), o: .5 + .5 * beat });
-  L(c.wm, { y: ly + V(440, 360) - prog(lf, 14, d) * 10, o: prog(lf, 14, 24), b: (1 - prog(lf, 14, 24)) * 12 });
-  c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(330, 260) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: ly + Math.sin(a) * r, o: clamp(1 - (r - V(330, 260)) / 420) * prog(lf, 2, 8) }); });
-  c.coins.forEach((p, i) => { const a = -Math.PI / 2 + (hash(i + 5) - .5) * 2.4, sp = 26 + hash(i) * 18, t = lf; P(p, { x: CX + Math.cos(a) * sp * t * .8, y: ly + Math.sin(a) * sp * t * .8 + .5 * t * t, r: t * 12 * (i % 2 ? 1 : -1), o: lf < 40 ? 1 : 0, s: .7 + hash(i) * .5 }); });
-});
-
-// 20 · slogan (1245–1380)
-scene(1245, 135, '', c => {
-  c.appendChild(h('div', 'glow', '', 'opacity:.45'));
-  const mini = add(c, 'el', BADGE(150), 'filter:drop-shadow(0 0 24px rgba(34,211,127,.6))');
-  return { mini, l1: typer(add(c, 'ctr ws', 'Sua dívida menor.', 'font-size:' + V(60, 54) + 'px'), 22), l2: typer(add(c, 'ctr', 'Sua vida mais leve.', `font-weight:800;font-size:${V(76, 66)}px;color:#5DF0A8;text-shadow:0 0 16px rgba(34,211,127,.9)`), 22),
-    l3: add(c, 'ctr', 'LOUGAN CONTABILIDADE', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
-}, (x, lf, d) => {
-  cam(x.cam, lf, d, { s1: 1.12 });
-  const out = 1 - prog(lf, 110, 132, E.inC);
-  P(x.ctx.mini, { y: CY - 300 - prog(lf, 0, d) * 30, s: spring(lf, 0) * (1 + .05 * prog(lf, 0, d)), o: out, r: lf * .2 });
-  L(x.ctx.l1.el, { y: CY - 40 - prog(lf, 0, d) * 40, o: out, b: (1 - out) * 6 }); type(x.ctx.l1, lf, 6);
-  L(x.ctx.l2.el, { y: CY + 60 - prog(lf, 0, d) * 34, o: out, s: 1 + .03 * prog(lf, 30, d) }); type(x.ctx.l2, lf, 30);
-  x.ctx.l3.style.letterSpacing = `${.3 + prog(lf, 60, d) * .12}em`;
-  L(x.ctx.l3, { y: CY + 190 - prog(lf, 0, d) * 26, o: prog(lf, 60, 72) * out });
+  const beat = Math.exp(-((lf % 15) / 3.5)) * (1 - prog(lf, 120, 150)), ly = CY - V(330, 250);
+  P(c.logo, { y: ly - lf * .2, s: lerp(1.7, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)) * (1 + .02 * beat), b: (1 - prog(lf, 0, 10, E.out5)) * 20, r: lerp(12, 0, prog(lf, 0, 16, E.out5)) });
+  P(c.halo, { y: ly - lf * .2, s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .08 * beat), o: .5 + .5 * beat });
+  L(c.wm, { y: ly + V(390, 320) - prog(lf, 14, d) * 14, o: prog(lf, 14, 24), b: (1 - prog(lf, 14, 24)) * 12 });
+  pop(c.l1, lf, 40, d, { y: ly + V(590, 480), from: 1.5 });
+  c.l2.style.letterSpacing = `${.3 + prog(lf, 60, d) * .1}em`;
+  L(c.l2, { y: ly + V(690, 560) - prog(lf, 60, d) * 10, o: prog(lf, 60, 72) });
+  c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(300, 240) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: ly + Math.sin(a) * r, o: clamp(1 - (r - V(300, 240)) / 420) * prog(lf, 2, 8) }); });
 });
 
 // ---------------- sobreposições globais ----------------
@@ -589,37 +496,33 @@ const beam = h('div'); beam.id = 'beam'; stage.appendChild(beam);
 const vig = h('div'); vig.id = 'vig'; stage.appendChild(vig);
 const grain = h('div'); grain.id = 'grain'; stage.appendChild(grain);
 // flashes nascem do elemento em foco: [frame, x, y, força]
-const FLASH = [[135, CX, CY, .5], [210, CX, CY - 160, .95], [300, CX, CY - 120, 1], [324, CX, CY - 250, .6], [390, CX, CY, .45], [690, CX, CY - 400, .35], [1050, CX, CY, .4], [1140, CX, CY - 190, 1]];
+const FLASH = [[300, CX, CY - 160, .5], [314, CX, CY - 160, .85], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 330, 1]];
 
 // ---------------- efeitos sonoros (frames) ----------------
 const SFX = [
-  ['boom', 0, .45, 0, { dur: 1.0 }], ...[...Array(8).keys()].map(i => ['tick', 6 + Math.round(i * 7 * (1 - i * .05)), .3, i % 2 ? .3 : -.3, {}]), ['riser', 36, .35, 0, { dur: 1.0 }], ['glitch', 58, .3, 0, { dur: .2 }],
-  ...[0, 1, 2].map(i => ['whoosh', 77 + i * 12, .35, (i - 1) * .4, { dur: .3, f0: 2000, f1: 300, peak: .9 }]), ...[0, 1, 2].map(i => ['stamp', 87 + i * 12, .6 + i * .1, (i - 1) * .3, {}]), ...[0, 1, 2].map(i => ['boom', 87 + i * 12, .3 + i * .05, 0, { dur: .4 }]), ['whoosh', 123, .45, 0, { dur: .4, f0: 900, f1: 150, peak: .6 }],
-  ['boom', 135, .4, 0, { dur: .5 }], ['pop', 137, .45, 0, { f0: 500, f1: 900 }], ['pop', 147, .35, 0, { f0: 700, f1: 300 }],
-  ['whoosh', 200, .5, 0, { dur: .35, f0: 900, f1: 6000, peak: .9 }], ['boom', 210, .6, 0, { dur: 1.2 }], ['shimmer', 211, .45, 0, { dur: 1.2 }],
-  ['whoosh', 268, .4, 0, { dur: .4, f0: 400, f1: 3000, peak: .8 }],
-  ['impact', 300, .9, 0, { dur: 1.6 }], ['confetti', 300, .45, 0, {}], ['chime', 302, .35, 0, {}], ['stamp', 312, .7, 0, {}], ['glitch', 312, .2, 0, { dur: .12 }], ['whoosh', 312, .35, .3, { dur: .25, f0: 2500, f1: 8000, peak: .3 }],
-  ['boom', 324, .55, 0, { dur: .8 }], ['coins', 324, .55, 0, { n: 16, dur: 1.0 }], ['whoosh', 340, .35, 0, { dur: .4, f0: 300, f1: 1500, peak: .6 }], ['clicks', 352, .16, 0, { n: 14, step: .07 }], ['cash', 382, .6, 0, {}],
-  ['pop', 390, .4, 0, {}], ['whoosh', 412, .35, 0, { dur: .4, f0: 1200, f1: 300, peak: .5 }], ['coins', 412, .5, 0, { n: 14, dur: 1.1 }], ['boom', 404, .4, 0, { dur: .5 }],
-  ['pop', 450, .45, 0, { f0: 500, f1: 900 }], ['whoosh', 488, .45, 0, { dur: .35, f0: 500, f1: 4000, peak: .8 }],
-  ...SERV.map((_, i) => ['whoosh', 495 + i * 18 - 6, .5, i % 2 ? .5 : -.5, { dur: .45, f0: 300, f1: 2500, peak: .35, panFrom: i % 2 ? .6 : -.6, panTo: i % 2 ? -.6 : .6 }]),
-  ['whoosh', 585, .35, 0, { dur: .6, f0: 200, f1: 1500, peak: .3 }], ...[0, 1, 2, 3, 4].map(i => ['pop', 586 + i * 2, .22, (i - 2) * .3, { f0: 900, f1: 500 }]),
-  ['boom', 630, .3, 0, { dur: .35 }], ['whoosh', 640, .45, 0, { dur: .4, f0: 200, f1: 1200, peak: .5 }], ...[0, 1, 2].map(i => ['tick', 666 + i * 5, .3, 0, {}]),
-  ['pop', 692, .45, 0, { f0: 400, f1: 900 }], ['shimmer', 694, .3, 0, { dur: .8 }], ...[0, 1, 2].map(i => ['pop', 716 + i * 8, .3, (i - 1) * .4, {}]), ['whoosh', 752, .3, 0, { dur: .3 }],
-  ['whoosh', 795, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['pop', 809 + i * 7, .3, (i - 1.5) * .3, { f0: 400 + i * 120, f1: 800 + i * 150 }]), ['whoosh', 835, .3, .4, { dur: .6, f0: 500, f1: 3000, peak: .7 }], ['chime', 853, .4, 0, {}],
-  ['whoosh', 898, .45, 0, { dur: .5, f0: 300, f1: 4000, peak: .8 }], ['shimmer', 902, .35, 0, { dur: 1.4 }],
-  ['riser', 990, .45, 0, { dur: 1.0 }], ['pop', 1032, .45, 0, { f0: 500, f1: 900 }], ['whoosh', 1036, .35, 0, { dur: .3 }],
-  ['pop', 1050, .45, 0, {}], ['click', 1080, .6, 0, {}], ['chime', 1084, .45, 0, {}], ['whoosh', 1132, .5, 0, { dur: .35, f0: 600, f1: 6000, peak: .9 }],
-  ['impact', 1140, 1.0, 0, { dur: 2.0 }], ['coins', 1142, .45, 0, { n: 12, dur: 1.0 }], ['shimmer', 1141, .5, 0, { dur: 1.6 }], ['confetti', 1142, .45, 0, {}], ['chime', 1260, .35, 0, {}], ['shimmer', 1300, .3, 0, { dur: 1.5 }],
+  ['boom', 0, .45, 0, { dur: 1.0 }], ...[...Array(9).keys()].map(i => ['tick', 4 + i * 10, .2 + i * .03, (i % 2 ? .3 : -.3), {}]), ['riser', 48, .35, 0, { dur: 1.2 }], ['boom', 62, .35, 0, { dur: .4 }], ['boom', 84, .5, 0, { dur: .6 }], ['glitch', 84, .3, 0, { dur: .2 }],
+  ['whoosh', 104, .4, 0, { dur: .4, f0: 400, f1: 3000, peak: .8 }], ...[0, 1, 2, 3, 4, 5].map(i => ['pop', 113 + i * 9, .32, (i - 2.5) * .2, { f0: 300 + i * 70, f1: 500 + i * 110 }]), ['boom', 167, .45, 0, { dur: .6 }], ['glitch', 167, .25, 0, { dur: .15 }],
+  ['whoosh', 210, .35, 0, { dur: .4, f0: 300, f1: 2500, peak: .7 }], ...[0, 1, 2].map(i => ['click', 214 + i * 8, .4, -.2, {}]), ['clicks', 244, .18, 0, { n: 10, step: .055 }], ['boom', 260, .55, 0, { dur: .7 }], ['glitch', 260, .3, 0, { dur: .2 }],
+  ['whoosh', 296, .4, 0, { dur: .35, f0: 900, f1: 6000, peak: .9 }], ['impact', 314, .75, 0, { dur: 1.4 }], ['shimmer', 315, .45, 0, { dur: 1.2 }],
+  ['whoosh', 375, .35, 0, { dur: .4 }], ['shimmer', 387, .18, 0, { dur: 2.0 }], ...[394, 400, 411, 417].map((t, i) => ['pop', t, .3, .4, { f0: 1100 + i * 100, f1: 1500 + i * 100 }]),
+  ['whoosh', 459, .35, 0, { dur: .6, f0: 300, f1: 1500, peak: .5 }], ...[0, 1, 2].map(i => ['pop', 471 + i * 5, .35, (i - 1) * .5, {}]), ['whoosh', 483, .3, 0, { dur: .4, f0: 600, f1: 3000, peak: .6, panFrom: -.5, panTo: .5 }], ['clicks', 495, .15, .3, { n: 8, step: .12 }], ['chime', 521, .5, 0, {}], ['pop', 521, .4, 0, { f0: 500, f1: 1100 }],
+  ['impact', 540, 1.0, 0, { dur: 1.8 }], ['whoosh', 548, .45, .2, { dur: 2.0, f0: 2500, f1: 180, peak: .15 }], ['clicks', 552, .14, 0, { n: 18, step: .1 }], ['cash', 610, .75, 0, {}], ['coins', 612, .6, 0, { n: 16, dur: 1.0 }], ['boom', 610, .4, 0, { dur: .6 }],
+  ['whoosh', 675, .35, 0, { dur: .4 }], ['whoosh', 711, .3, 0, { dur: 1.4, f0: 1800, f1: 300, peak: .2 }], ['pop', 733, .4, 0, {}], ['chime', 755, .45, 0, {}],
+  ['whoosh', 801, .35, 0, { dur: .5, f0: 300, f1: 2000, peak: .6 }], ...[0, 1, 2, 3].map(i => ['whoosh', 809 + i * 12, .28, .5, { dur: .3, f0: 800, f1: 3500, peak: .4, panFrom: .8, panTo: 0 }]), ...[0, 1, 2, 3].map(i => ['pop', 819 + i * 12, .35, .4, { f0: 700 + i * 80, f1: 1200 + i * 100 }]),
+  ['whoosh', 883, .35, 0, { dur: .25, f0: 2500, f1: 500, peak: .8 }], ['stamp', 891, .95, 0, {}], ['boom', 891, .5, 0, { dur: .6 }],
+  ['pop', 945, .45, 0, { f0: 400, f1: 900 }], ['pop', 955, .3, 0, {}], ['pop', 979, .35, 0, {}], ['whoosh', 995, .3, 0, { dur: 1.6, f0: 400, f1: 2400, peak: .9, panFrom: -.7, panTo: .7 }], ...[0, 1, 2].map(i => ['pop', 997 + i * 26, .4, (i - 1) * .5, { f0: 500 + i * 150, f1: 900 + i * 250 }]), ['chime', 1049, .4, 0, {}],
+  ['whoosh', 1081, .35, .5, { dur: .25, f0: 1500, f1: 5000, peak: .3 }], ['pop', 1083, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1109, .15, -.3, { n: 8, step: .09 }], ['pop', 1131, .4, -.4, { f0: 1400, f1: 900 }],
+  ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
+  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}],
 ];
-const TYPE_AT = [[10, 'Sua dívida não para', 24], [38, 'pesando no seu bolso...', 24], [140, 'Chega de', 22], [186, 'Conheça a', 22], [272, 'A gente reduz a sua dívida', 30], [332, 'de desconto na sua dívida', 30],
-  [394, 'Você paga', 22], [462, 'Tudo que a sua empresa precisa', 30], [740, 'Com o Lougan', 22], [855, 'a economia é', 22], [914, 'Viva mais leve.', 22], [964, 'Tudo isso..', 22], [1059, 'e faça a análise da sua dívida', 26], [1251, 'Sua dívida menor.', 22], [1275, 'Sua vida mais leve.', 22]];
+SC.forEach(sc => { if (sc.tr) SFX.push(['whoosh', sc.a - 3, .45, 0, { dur: .5, f0: 300, f1: 5000, peak: .75 }]); });
+const TYPE_AT = [[12, 'Você paga todo mês e a dívida', 26], [109, 'É juros em cima de juros.', 26], [145, 'Multa em cima de multa.', 26], [240, 'Do jeito que tá, a conta', 26], [302, 'É aí que entra a', 22],
+  [381, 'A gente analisa cada cobrança', 28], [479, 'e negocia direto com o credor.', 28], [606, 'O resultado? Desconto de', 24], [715, 'E uma parcela que', 24], [797, 'E cuida do resto também.', 26], [959, 'Quem cuida do seu caso é', 24], [1067, 'Manda uma mensagem.', 24]];
 TYPE_AT.forEach(([f0, txt, cps]) => SFX.push(['typing', f0, .2, 0, { n: [...txt].filter(c => c !== ' ').length, step: 1 / cps }]));
-const DURATION_F = 1380;
-const BOARD = [[30, 'Gancho', 'dívida subindo'], [110, 'Peso', 'juros, multas, impostos'], [160, 'Chega', 'pagar mais.'], [200, 'Conheça a', ''], [250, 'Logo', 'selo + anel'],
-  [290, 'Cartela', 'a gente reduz'], [318, '10%', 'riscado'], [370, 'Muito mais', 'dívida caindo'], [430, 'Você paga menos', 'conta encolhe + moedas'], [482, 'Tudo que…', 'calculadora'],
-  [520, 'Serviços', 'pílulas 3D'], [618, 'Órbita', 'sem dor de cabeça'], [680, 'Dentro da lei', 'tela dividida'], [775, 'Lougan', 'do seu lado'], [880, 'Gráfico', 'economia de verdade'],
-  [940, 'Cartela', 'pague menos'], [1000, 'Respiro', 'tudo isso..'], [1046, '?', 'vira botão'], [1110, 'CTA', 'fale com o Lougan'], [1200, 'Logo', 'drop 2 + moedas'], [1330, 'Slogan', 'vida mais leve']];
+const DURATION_F = 1440;
+const BOARD = [[40, 'Gancho', 'dívida subindo'], [96, 'Gancho', 'só aumenta?'], [190, 'Juros', 'barras mês a mês'], [280, 'O mês', 'a conta não fecha'], [350, 'Logo', 'é aí que entra'],
+  [420, 'Análise', 'extrato escaneado'], [525, 'Negociação', 'você · Lougan · credor'], [600, 'Virada', 'o gráfico despenca'], [665, 'Desconto', 'bem mais que 10%'], [775, 'Parcela', '46% → 21% da renda'],
+  [860, 'Serviços', 'painel'], [925, 'Carimbo', 'dentro da lei'], [1050, 'Lougan', 'análise → acordo'], [1150, 'Conversa', 'tem jeito?'], [1215, 'CTA', 'chamar no WhatsApp'], [1340, 'Assinatura', 'dívida tem saída']];
 
 // ---------------- render de um quadro ----------------
 function render(t) {

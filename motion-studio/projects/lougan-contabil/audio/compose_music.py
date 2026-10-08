@@ -1,19 +1,17 @@
-"""Trilha da Lougan Contabilidade: corporativa inspiradora, 120 BPM, 46 s.
+"""Trilha da Lougan Contabilidade: corporativa inspiradora, 120 BPM, 48 s.
 
     python3 compose_music.py   -> trilha.mid, trilha.flac e ../out/trilha.mp3
 
 Instrumentos do MuseScore General (MIT, pacote musescore-general-soundfont), renderizados em
 duas bases (música e bateria) e mixados com o pedalboard (compressor, reverb, sidechain leve
 do bumbo e limitador). 1 compasso = 2 s = 60 frames. Seções batendo com o storyboard:
-  c0–2    (0–180)     problema: lá menor, piano grave, cordas em trêmolo, relógio, tímpanos
-  c3      (180–240)   "Conheça a": rufo de prato subindo → acorde de Dó maior no logo (frame 210)
-  c4      (240–300)   piano e pizzicato começando, caixa subindo
-  c5–14   (300–900)   groove: C–G–Am–F, piano, cordas, pizzicato, baixo, glockenspiel, bateria pop
-  c15     (900–960)   "Pague menos": leve, sem bumbo
-  c16     (960–1020)  respiro "Tudo isso..": só piano
-  c17–18  (1020–1140) CTA: volta crescendo, virada até o drop 2
-  c19–20  (1140–1260) drop 2 no logo
-  c21–22  (1260–1380) final: acorde aberto e fade
+  c0–4    (0–300)     problema: lá menor, piano grave, cordas em trêmolo, relógio, tímpanos (dívida, juros, mês no vermelho)
+  c5      (300–360)   "É aí que entra a Lougan": rufo de prato → acorde de Dó maior no logo (frame 314)
+  c6–8    (360–540)   análise e negociação: piano, pizzicato, chocalho, caixa subindo no fim
+  c9–15   (540–960)   drop no gráfico despencando: C–G–Am–F com bateria, glockenspiel
+  c16–17  (960–1080)  "o próprio Lougan": leve, sem bumbo
+  c18–20  (1080–1260) conversa e CTA: volta crescendo, virada até o logo
+  c21–23  (1260–1440) assinatura: acorde aberto, glockenspiel e fade
 """
 import subprocess
 from pathlib import Path
@@ -25,7 +23,7 @@ from pedalboard import Compressor, HighpassFilter, HighShelfFilter, Limiter, Low
 
 HERE = Path(__file__).parent
 SF = '/usr/share/sounds/sf3/MuseScore_General_Full.sf3'
-BPM, DUR, SR = 120, 46.0, 48000
+BPM, DUR, SR = 120, 48.0, 48000
 TPB = 480
 E8, E16, BAR = TPB // 2, TPB // 4, TPB * 4
 rng = np.random.default_rng(3)
@@ -34,7 +32,7 @@ F2T = lambda fr: int(round(fr / 15 * TPB))                    # frame (30 fps) -
 V = {'Am': ([57, 60, 64], 33), 'F': ([57, 60, 65], 29), 'E': ([56, 59, 64], 28), 'C': ([60, 64, 67, 72], 36), 'G': ([59, 62, 67, 71], 43),
      'Am2': ([57, 60, 64, 69], 45), 'F2': ([57, 60, 65, 69], 41), 'Gs': ([60, 62, 67, 72], 43), 'Cmaj9': ([59, 62, 64, 67, 71], 36)}
 PROG = ['C', 'G', 'Am2', 'F2']
-SEC = ['intro', 'intro', 'intro', 'rise', 'pre'] + ['groove'] * 10 + ['light', 'break', 'cta', 'cta2', 'drop', 'drop', 'outro', 'outro']
+SEC = ['intro'] * 5 + ['rise'] + ['pre'] * 3 + ['groove'] * 7 + ['light', 'light'] + ['cta', 'cta', 'cta2'] + ['outro'] * 3
 MEL = {'C': [(0, .5, 76), (.5, .5, 79), (1, 1, 84), (2, .5, 83), (2.5, .5, 79), (3, 1, 76)],
        'G': [(0, .5, 74), (.5, .5, 79), (1, 1, 83), (2, .5, 81), (2.5, .5, 79), (3, 1, 74)],
        'Am2': [(0, .5, 72), (.5, .5, 76), (1, 1, 81), (2, .5, 79), (2.5, .5, 76), (3, 1, 72)],
@@ -55,38 +53,43 @@ def compose():
     for b, sec in enumerate(SEC):
         b0 = b * BAR
         if sec == 'intro':
-            ch = ['Am', 'F', 'E'][b]
+            ch = ['Am', 'F', 'E', 'Am', 'E'][b]
             notes, root = V[ch]
             for i in range(8):                                                   # piano grave em colcheias
                 mus.append((hum(b0 + i * E8), PNO, (root + 12) if i % 2 == 0 else notes[i // 2 % 3] - 12, v(46 + b * 6), E8))
             for n in notes:
-                mus.append((b0, TREM, n, v(40 + b * 18, 3), BAR - 20))           # cordas em trêmolo crescendo
-            mus.append((b0, TIMP, root + 12, 92, TPB))
+                mus.append((b0, TREM, n, v(40 + b * 12, 3), BAR - 20))           # cordas em trêmolo crescendo
+            mus.append((b0, TIMP, root + 12, 80 + b * 6, TPB))
             for i in range(8):
-                drm.append((b0 + i * E8, DR, 76 if i % 2 == 0 else 77, v(52 + b * 8), E16))   # relógio (wood block)
+                if not (b == 4 and i >= 6):
+                    drm.append((b0 + i * E8, DR, 76 if i % 2 == 0 else 77, v(52 + b * 6), E16))   # relógio (wood block)
             continue
         if sec == 'rise':
             for n in V['E'][0]:
-                mus.append((b0, TREM, n, 70, F2T(210) - b0 - 10))
-            for k in range(16):                                                  # rufo de prato até o logo
-                t = b0 + k * (F2T(210) - b0) // 16
-                drm.append((t, DR, 49 if k % 2 else 51, v(24 + k * 5), E16))
-            t = F2T(210)                                                          # acorde no logo
+                mus.append((b0, TREM, n, 70, F2T(314) - b0 - 10))
+            for k in range(8):                                                   # rufo de prato até o logo
+                t = b0 + k * (F2T(314) - b0) // 8
+                drm.append((t, DR, 49 if k % 2 else 51, v(30 + k * 9), E16))
+            t = F2T(314)                                                          # acorde no logo
             for n in V['C'][0] + [48]:
                 mus.append((t, PNO, n, 96, TPB * 2)); mus.append((t, STR, n, 84, BAR + TPB))
             mus.append((t, GLK, 84, 90, TPB * 2)); mus.append((t, TIMP, 48, 110, TPB)); drm.append((t, DR, 49, 104, BAR))
             continue
         if sec == 'pre':
-            notes, root = V['C']
+            notes, root = V[['C', 'G', 'Am2'][(b - 6) % 3]]
             for i in range(8):
                 mus.append((hum(b0 + i * E8), PNO, notes[[0, 2, 1, 3][i % 4]], v(62), E8 + 40))
+            for n in notes:
+                mus.append((b0, STR, n, v(46, 3), BAR - 20))
+            for i in range(16):
+                drm.append((hum(b0 + i * E16, 3), DR, 70, v(36 if i % 2 else 48), E16))
             for i in (1, 3, 5, 7):
                 mus.append((b0 + i * E8, PIZ, notes[i % 3] + 12, v(60), E8))
             mus.append((b0, BAS, root, 80, BAR - 40))
             for i in range(16):
                 if i in (0, 8):
-                    drm.append((b0 + i * E16, DR, 36, v(90), E16))
-                if i >= 8:
+                    drm.append((b0 + i * E16, DR, 36, v(84), E16))
+                if b == 8 and i >= 8:
                     drm.append((b0 + i * E16, DR, 38, v(40 + (i - 8) * 9), E16))   # caixa subindo até o drop
             continue
         if sec == 'break':
@@ -116,7 +119,7 @@ def compose():
                 mus.append((hum(b0 + i * E8, 3), BAS, root + (12 if i in (3, 7) else 0), v(92 if i % 2 == 0 else 74), E8 - 30))
         else:
             mus.append((b0, BAS, root, 76, BAR - 40))
-        if sec in ('groove', 'drop', 'light') and (b in (5, 6, 7, 8, 11, 12, 13, 14, 15, 19, 20)):
+        if sec in ('groove', 'drop', 'light') and (b in (9, 10, 11, 12, 13, 14, 15, 16, 17)):
             for beat, d, n in MEL[ch]:
                 mus.append((hum(b0 + int(beat * TPB), 3), GLK, n + (12 if sec == 'drop' else 0), v(86 if beat in (0, 1, 2) else 74), int(d * TPB) - 20))
         for i in range(16):
@@ -144,10 +147,10 @@ def compose():
                 drm.append((t, DR, 38, v(60 + (i - 12) * 14), E16))
         if b % 4 == 1 and hot:
             drm.append((b0, DR, 49, 92, BAR))
-    for fr in (135,):                                                            # "Chega de pagar mais": pancada orquestral
+    for fr in (84, 260):                                                         # pancadas orquestrais (só aumenta? / não fecha.)
         t = F2T(fr)
         mus.append((t, HIT, 57, 110, TPB)); mus.append((t, HIT, 45, 110, TPB)); mus.append((t, TIMP, 45, 112, TPB))
-    for fr in (300, 1140):                                                       # drops
+    for fr in (540, 1260):                                                       # drops
         t = F2T(fr)
         drm.append((t, DR, 49, 112, BAR)); drm.append((t, DR, 57, 100, BAR)); mus.append((t, TIMP, 48, 116, TPB))
     return mus, drm
