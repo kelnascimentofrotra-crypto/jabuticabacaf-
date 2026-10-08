@@ -597,7 +597,7 @@ scene(1065, 195, '', c => {
   const beat = Math.exp(-((lf % 15) / 4)), press = Math.exp(-Math.max(0, lf - 135) / 3) * (lf >= 135 ? 1 : 0);
   const byB = CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, gone = prog(lf, 180, 186, E.inC);
   dotTravel(c.D2, lf, 90, 100, { x: CX, y: cy10 + 300 }, { x: CX, y: byB }, -60);
-  dotTravel(c.D2, lf, 184, 195, { x: CX, y: byB }, { x: CX, y: CY - V(330, 250) }, 0);
+  dotTravel(c.D2, lf, 184, 195, { x: CX, y: byB }, { x: CX, y: CY - 120 }, 0);
   if (lf >= 184) c.D2.g.forEach(e => { e.style.width = e.style.height = '40px'; });
   c.btn.style.boxShadow = `0 0 ${36 + 22 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 120px rgba(34,211,127,.45),inset 0 3px 0 rgba(255,255,255,.35)`;
   P(c.btn, { y: byB, r: Math.sin(lf / 11) * 1.5, s: (1 + .03 * beat) * (1 - .07 * press) * (1 - gone), o: 1 - gone });
@@ -609,33 +609,71 @@ scene(1065, 195, '', c => {
   P(c.ripple, { y: CY + V(560, 420) - lf * .3 + Math.sin(lf / 7) * 10, s: lerp(1, 1.5, rk), o: lf >= 135 ? 1 - rk : 0 });
 });
 
-// 11 · assinatura: "Lougan Contabilidade. Dívida tem saída." (1260–1440)
+// 11 · assinatura: "Lougan Contabilidade. Dívida tem saída. Fale com o Lougan." (1260–1440)
+// o monograma nasce grande no centro (giro 3D, ondas de luz, moedas), sobe pro lugar; a frase bate palavra por palavra;
+// o botão do zap abre do ponto e fica pulsando com ondas até o fim
+const EXIT_IC = '<svg viewBox="0 0 24 24"><path d="M10 4H5v16h5"/><path d="M14 8l4 4-4 4"/><path d="M18 12H9"/></svg>';
 scene(1260, 180, '', c => {
-  darkBg(c, false);
+  darkBg(c);
+  const bgl = add(c, 'el', `<svg width="1300" height="1500" viewBox="0 0 1300 1500" style="overflow:visible"><polyline points="0,120 180,260 320,220 470,470 620,430 780,760 930,720 1100,1100 1300,1380" fill="none" stroke="rgba(93,240,168,.14)" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" pathLength="1" stroke-dasharray="1"/></svg>`, 'width:1300px;height:1500px');
   const A = mkArcs(c, 560, '#22D37F');
+  const rings = [0, 1, 2].map(i => add(c, 'el', '', `width:${V(380, 320)}px;height:${V(380, 320)}px;border-radius:22%;border:${5 - i}px solid ${i % 2 ? 'rgba(233,184,74,.95)' : 'rgba(93,240,168,.95)'};box-shadow:0 0 24px ${i % 2 ? 'rgba(233,184,74,.6)' : 'rgba(34,211,127,.6)'}`));
   const halo = add(c, 'el', '', `width:${V(470, 400)}px;height:${V(470, 400)}px;border-radius:25%;border:4px solid rgba(233,184,74,.75);box-shadow:0 0 30px rgba(233,184,74,.45),inset 0 0 30px rgba(233,184,74,.2)`);
-  const logo = add(c, 'el', BADGE(V(380, 320)), 'filter:drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 40px rgba(34,211,127,.35))');
-  const wm = add(c, 'ctr', '<span style="font-family:\'Cormorant Garamond\';font-weight:600;font-size:1.45em;color:#FFF7E2;line-height:1">Lougan</span><br><span style="font-weight:700;font-size:.27em;letter-spacing:.55em;color:#5DF0A8">CONTABILIDADE</span>', `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.35)`);
+  const coins = coinsEl(c, 16, 62);
+  const logo = add(c, 'el', `${BADGE(V(380, 320))}<div style="position:absolute;inset:0;border-radius:22%;overflow:hidden"><i class="lsh" style="position:absolute;top:-30%;height:160%;width:90px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,246,214,.5),rgba(255,255,255,0));transform:skewX(-20deg)"></i></div>`, 'filter:drop-shadow(0 30px 50px rgba(0,0,0,.6)) drop-shadow(0 0 40px rgba(34,211,127,.35))');
+  const wm = add(c, 'ctr', `<div style="display:inline-block;overflow:hidden;height:1.22em;font-family:'Cormorant Garamond';font-weight:600;font-size:1.45em;color:#FFF7E2;line-height:1.2">${[...'Lougan'].map(ch => `<span class="lt" style="display:inline-block">${ch}</span>`).join('')}</div><br><span class="sub" style="font-weight:700;font-size:.27em;letter-spacing:.55em;color:#5DF0A8">CONTABILIDADE</span>`, `font-size:${V(96, 80)}px;color:#fff;line-height:1.1;text-shadow:0 0 18px rgba(34,211,127,.35)`);
   const sparks = [...Array(40).keys()].map(i => add(c, 'el', '', `width:${4 + hash(i) * 7}px;height:${4 + hash(i) * 7}px;border-radius:50%;background:${i % 3 ? '#C8FFE2' : '#FFE9A8'};box-shadow:0 0 10px ${i % 3 ? '#22D37F' : '#F2C14E'}`));
+  const l1 = add(c, 'ctr pb', `<span class="w" style="display:inline-block;color:#fff;text-shadow:0 0 16px rgba(255,255,255,.55),0 0 50px rgba(34,211,127,.5)">Dívida</span> <span class="w" style="display:inline-block">tem</span> <span class="w" style="display:inline-block">saída.</span><span class="w" style="display:inline-block;margin-left:18px;vertical-align:-8px">${icon(EXIT_IC, 74, '#5DF0A8', 2.6)}</span>`, `font-size:${V(78, 68)}px`);
+  const ul = add(c, 'el', `<svg width="300" height="40" viewBox="0 0 300 40" style="overflow:visible"><path d="M6 24C90 8 200 6 294 16" fill="none" stroke="#5DF0A8" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1" style="filter:drop-shadow(0 0 8px #22D37F)"/></svg>`, 'width:300px;height:40px');
+  const zrip = [0, 1, 2].map(() => add(c, 'el', '', `width:${V(700, 640)}px;height:120px;border-radius:999px;border:3px solid rgba(93,240,168,.9);box-shadow:0 0 20px rgba(34,211,127,.6)`));
   const zap = add(c, 'el btn', `${icon(IC2.chat, 52, '#fff', 2.2)}<span style="margin-left:16px;letter-spacing:.04em">+55 98 8499-2560</span>`, `width:${V(700, 640)}px;height:120px;font-size:${V(50, 46)}px`);
-  return { A, halo, logo, wm, sparks, zap, D: mkDot(c), l1: add(c, 'ctr pb', 'Dívida tem saída.', `font-size:${V(88, 76)}px`), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
+  const tap = add(c, 'el', '', 'width:90px;height:90px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 30px rgba(255,255,255,.8)');
+  return { bgl, bl: bgl.querySelector('polyline'), A, rings, halo, coins, logo, lsh: logo.querySelector('.lsh'), wm, lts: [...wm.querySelectorAll('.lt')], sub: wm.querySelector('.sub'), sparks, l1, ws: [...l1.querySelectorAll('.w')], ul, ulp: ul.querySelector('path'),
+    zrip, zap, tap, D: mkDot(c), l2: add(c, 'ctr', 'FALE COM O LOUGAN', 'font-weight:700;font-size:30px;color:#FFE9A8;letter-spacing:.3em;text-shadow:0 0 12px rgba(242,193,78,.7)') };
 }, (x, lf, d) => {
   const c = x.ctx;
   cam(x.cam, lf, d, { s1: 1.08, oy: CY - 150 });
-  const beat = Math.exp(-((lf % 15) / 3.5)) * (1 - prog(lf, 120, 150)), ly = CY - V(330, 250);
-  P(c.logo, { y: ly - lf * .2, s: lerp(1.7, 1, prog(lf, 0, 14, E.out5)) * (1 + .05 * prog(lf, 0, d)) * (1 + .02 * beat), b: (1 - prog(lf, 0, 10, E.out5)) * 20, r: lerp(12, 0, prog(lf, 0, 16, E.out5)) });
-  P(c.halo, { y: ly - lf * .2, s: lerp(.8, 1, prog(lf, 0, 14, E.out5)) * (1 + .08 * beat), o: .5 + .5 * beat });
-  arcsAt(c.A, lf, { y: ly - lf * .2, t0: 2, spd: 1.8, o: .85 });
-  L(c.wm, { y: ly + V(390, 320) - prog(lf, 14, d) * 14, o: prog(lf, 14, 24), b: (1 - prog(lf, 14, 24)) * 12 });
-  pop(c.l1, lf, 40, d, { y: ly + V(590, 480), from: 1.5 });
-  c.l2.style.letterSpacing = `${.3 + prog(lf, 60, d) * .1}em`;
-  L(c.l2, { y: ly + V(690, 560) - prog(lf, 60, d) * 10, o: prog(lf, 60, 72) });
-  const zy = ly + V(840, 690) - prog(lf, 76, d) * 12 + Math.sin(lf / 8) * 4;
-  dotTravel(c.D, lf, 64, 76, { x: -60, y: zy + 120 }, { x: CX, y: zy }, 140);
-  c.zap.style.boxShadow = `0 0 ${30 + 18 * Math.sin(lf / 5)}px rgba(34,211,127,.9),0 0 100px rgba(34,211,127,.4),inset 0 3px 0 rgba(255,255,255,.35)`;
-  P(c.zap, { y: zy, s: 1 + .04 * prog(lf, 76, d) + .02 * beat, r: Math.sin(lf / 13) * 1.2 });
-  openCard(c.zap, c.D, lf, 76, CX, zy, 60);
-  c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(300, 240) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: ly + Math.sin(a) * r, o: clamp(1 - (r - V(300, 240)) / 420) * prog(lf, 2, 8) }); });
+  const [sx, sy] = shakeAt(lf, [42, 62, 128], 9); x.cam.style.transform += ` translate(${sx}px,${sy}px)`;
+  const beat = beatOf(lf) * (1 - .5 * prog(lf, 150, 180)), hy = CY - 120, ly = CY - V(380, 280);
+  // fundo: o gráfico caindo atravessa a tela
+  P(c.bgl, { x: CX + Math.sin(lf / 30) * 20, y: CY + 40 - lf * .3 }); c.bl.style.strokeDashoffset = 1 - prog(lf, 0, 100, E.inOutC);
+  // monograma: nasce grande no centro girando em 3D, sobe pro lugar (28–44) e quica ao pousar
+  const ent = prog(lf, 0, 24, E.out5), mv = prog(lf, 28, 44, E.inOutC), land = lf >= 44 ? Math.exp(-(lf - 44) / 3) : 0;
+  const lY = lerp(hy, ly, mv) - Math.sin(Math.PI * mv) * 40 - prog(lf, 44, d) * 14, lS = lerp(1.3, 1, mv);
+  const ls = lS * lerp(2.1, 1, ent) * (1 + .02 * beat) * (1 + .04 * prog(lf, 44, d));
+  P(c.logo, { y: lY, sx: ls * (1 + .1 * land), sy: ls * (1 - .1 * land), b: (1 - prog(lf, 0, 12, E.out5)) * 20 + Math.sin(Math.PI * mv) * 3, t3: `perspective(1400px) rotateY(${lerp(540, 0, ent)}deg)` });
+  c.lsh.style.left = `${lerp(-140, 480, prog(lf, 18, 34, E.inOutC)) + (lf > 118 ? lerp(-620, 0, prog(lf, 118, 136, E.inOutC)) : 0)}px`;
+  P(c.halo, { y: lY, s: lS * lerp(.6, 1, prog(lf, 6, 22, E.out5)) * (1 + .08 * beat), o: prog(lf, 6, 14) * (.5 + .5 * beat) });
+  c.rings.forEach((r, i) => { const t = 3 + i * 5, k = prog(lf, t, t + 22, E.out5); P(r, { y: hy, s: lerp(.9, 2.8, k), o: lf < t ? 0 : .9 * (1 - k) }); });
+  arcsAt(c.A, lf, { y: lY, t0: 2, spd: 1.8 + 2 * (1 - ent), o: .85 });
+  // moedas estourando do monograma
+  c.coins.forEach((p, i) => {
+    const a = (i / c.coins.length) * Math.PI * 2 + hash(i) * .4, sp = 20 + hash(i + 9) * 16, t = Math.max(0, lf - 2);
+    P(p, { x: CX + Math.cos(a) * sp * t * .8, y: hy + Math.sin(a) * sp * t * .8 + .5 * t * t, r: t * (8 + hash(i) * 10) * (i % 2 ? 1 : -1), s: .6 + hash(i + 4) * .7, o: lf < 2 ? 0 : 1 - prog(lf, 26, 40) });
+  });
+  // "Lougan" sobe letra por letra; CONTABILIDADE fecha o espaçamento
+  L(c.wm, { y: lY + 190 * lS + 200, s: lerp(1.1, 1, mv) });
+  c.lts.forEach((e, i) => { const q = prog(lf, 10 + i * 2, 24 + i * 2, E.out5); e.style.transform = `translateY(${(1 - q) * 105}%)`; e.style.opacity = q; });
+  const sq = prog(lf, 18, 34, E.out5); c.sub.style.opacity = sq; c.sub.style.letterSpacing = `${lerp(1.2, .55, sq) + .06 * prog(lf, 34, d)}em`;
+  // "Dívida / tem / saída." batendo palavra por palavra + ícone de saída + sublinhado
+  const l1y = ly + V(650, 520) - prog(lf, 42, d) * 10;
+  L(c.l1, { y: l1y, s: 1 + .04 * prog(lf, 62, d) });
+  [42, 54, 62, 70].forEach((t, i) => { const w = c.ws[i], k = prog(lf, t, t + 12, E.out5), sp = popS(lf, t); w.style.opacity = clamp(k * 3); w.style.filter = k < 1 ? `blur(${(1 - k) * 14}px)` : 'none';
+    w.style.transform = i === 3 ? `scale(${lf < t ? 0 : sp}) rotate(${lerp(-90, 0, k)}deg) translateX(${Math.sin(lf / 5) * 4}px)` : `translateY(${(1 - k) * -40}px) scale(${lerp(1.8, 1, k)})`; });
+  const sw = c.ws[2]; P(c.ul, { x: sw.offsetLeft + sw.offsetWidth / 2, y: l1y + 52, s: sw.offsetWidth / 300 * 1.05 }); c.ulp.style.strokeDashoffset = 1 - prog(lf, 66, 80, E.out5);
+  // "FALE COM O LOUGAN" fecha o espaçamento
+  c.l2.style.letterSpacing = `${lerp(1.0, .3, prog(lf, 80, 96, E.out5)) + prog(lf, 96, d) * .08}em`;
+  L(c.l2, { y: ly + V(760, 610) - prog(lf, 80, d) * 10, o: prog(lf, 80, 90), b: (1 - prog(lf, 80, 90)) * 8 });
+  // botão do zap: o ponto abre, ondas a cada tempo, um toque no fim
+  const zy = ly + V(910, 740) - prog(lf, 94, d) * 12 + Math.sin(lf / 8) * 4, press = lf >= 128 ? Math.exp(-(lf - 128) / 3) : 0;
+  dotTravel(c.D, lf, 84, 94, { x: -60, y: zy + 120 }, { x: CX, y: zy }, 140);
+  c.zap.style.boxShadow = `0 0 ${30 + 30 * beat}px rgba(34,211,127,.9),0 0 ${90 + 40 * beat}px rgba(34,211,127,.45),inset 0 3px 0 rgba(255,255,255,.35)`;
+  P(c.zap, { y: zy, s: (1 + .04 * prog(lf, 94, d) + .03 * beat) * (1 - .08 * press), r: Math.sin(lf / 13) * 1.2 });
+  openCard(c.zap, c.D, lf, 94, CX, zy, 60);
+  c.zrip.forEach((r, i) => { const ph = lf < 106 ? -1 : ((lf - 106 - i * 10 + 300) % 30) / 30; P(r, { y: zy, s: 1 + .35 * Math.max(0, ph), o: ph < 0 ? 0 : .8 * (1 - ph) }); });
+  const tk = prog(lf, 122, 128, E.out5), tq = prog(lf, 128, 142, E.out5);
+  P(c.tap, { x: CX + V(230, 200), y: zy + 10, s: lerp(1.4, .5, tk) * lerp(1, 2.4, tq), o: lf < 122 ? 0 : (lf < 128 ? tk * .9 : .9 * (1 - tq)) });
+  c.sparks.forEach((p, i) => { const a = hash(i + 80) * Math.PI * 2, r = V(300, 240) + ((lf * (2 + hash(i) * 3) + hash(i + 3) * 300) % 420); P(p, { x: CX + Math.cos(a) * r, y: lY + Math.sin(a) * r, o: clamp(1 - (r - V(300, 240)) / 420) * prog(lf, 2, 8) }); });
 });
 
 // ---------------- sobreposições globais ----------------
@@ -644,7 +682,7 @@ const beam = h('div'); beam.id = 'beam'; stage.appendChild(beam);
 const vig = h('div'); vig.id = 'vig'; stage.appendChild(vig);
 const grain = h('div'); grain.id = 'grain'; stage.appendChild(grain);
 // flashes nascem do elemento em foco: [frame, x, y, força]
-const FLASH = [[300, CX, CY - 100, .4], [312, CX, CY - 80, .55], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 330, 1]];
+const FLASH = [[300, CX, CY - 100, .4], [312, CX, CY - 80, .55], [540, CX, CY - 60, 1], [610, CX, CY - 400, .5], [886, CX, CY + 520, .55], [1260, CX, CY - 120, 1]];
 
 // ---------------- efeitos sonoros (frames) ----------------
 const SFX = [
@@ -661,7 +699,10 @@ const SFX = [
   ['pop', 945, .45, 0, { f0: 400, f1: 900 }], ['pop', 955, .3, 0, {}], ['pop', 979, .35, 0, {}], ['whoosh', 995, .3, 0, { dur: 1.6, f0: 400, f1: 2400, peak: .9, panFrom: -.7, panTo: .7 }], ...[0, 1, 2].map(i => ['pop', 997 + i * 26, .4, (i - 1) * .5, { f0: 500 + i * 150, f1: 900 + i * 250 }]), ['chime', 1049, .4, 0, {}],
   ['whoosh', 1066, .35, .6, { dur: .35, f0: 600, f1: 3000, peak: .7, panFrom: .7, panTo: 0 }], ['pop', 1077, .35, 0, { f0: 500, f1: 1000 }], ['pop', 1089, .4, .4, { f0: 900, f1: 1400 }], ['typing', 1113, .15, -.3, { n: 8, step: .09 }], ['pop', 1133, .4, -.4, { f0: 1400, f1: 900 }],
   ['pop', 1165, .5, 0, { f0: 400, f1: 900 }], ['whoosh', 1155, .3, 0, { dur: .3, f0: 800, f1: 3000, peak: .6 }], ['tick', 1177, .3, 0, {}], ['click', 1200, .7, 0, {}], ['chime', 1202, .45, 0, {}], ['riser', 1230, .45, 0, { dur: 1.0 }],
-  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['pop', 1300, .45, 0, {}], ['chime', 1320, .35, 0, {}], ['whoosh', 1324, .4, -.6, { dur: .4, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1336, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1340, .3, 0, {}],
+  ['impact', 1260, 1.0, 0, { dur: 2.2 }], ['shimmer', 1261, .5, 0, { dur: 1.8 }], ['coins', 1262, .35, 0, { n: 10, dur: .9 }], ['shimmer', 1280, .25, 0, { dur: .8 }], ['whoosh', 1288, .35, 0, { dur: .45, f0: 500, f1: 2600, peak: .6 }], ['click', 1304, .3, 0, {}],
+  ['boom', 1302, .35, 0, { dur: .5 }], ['pop', 1302, .45, 0, { f0: 300, f1: 700 }], ['pop', 1314, .4, .2, { f0: 400, f1: 900 }], ['boom', 1322, .4, 0, { dur: .6 }], ['pop', 1322, .5, -.2, { f0: 500, f1: 1200 }],
+  ['whoosh', 1326, .25, 0, { dur: .45, f0: 1500, f1: 4000, peak: .4, panFrom: -.5, panTo: .5 }], ['pop', 1330, .4, .3, { f0: 900, f1: 1500 }], ['shimmer', 1340, .2, 0, { dur: .6 }],
+  ['whoosh', 1344, .4, -.6, { dur: .35, f0: 400, f1: 3000, peak: .7, panFrom: -.8, panTo: 0 }], ['pop', 1354, .5, 0, { f0: 450, f1: 1000 }], ['chime', 1356, .35, 0, {}], ['shimmer', 1378, .2, 0, { dur: .8 }], ['click', 1388, .7, 0, {}], ['chime', 1390, .3, 0, {}],
 ];
 [[1, 9], [105, 10], [210, 8], [375, 8], [795, 8], [1065, 10]].forEach(([a, hero], i) => {
   if (i) SFX.push(['pop', a, .45, 0, { f0: 380 + i * 50, f1: 900 + i * 70 }]);
