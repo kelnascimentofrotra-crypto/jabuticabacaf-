@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 
-Sitemap: https://thiagolirocorretor.vercel.app/sitemap.xml
+Sitemap: https://ocaradosapartamentos.vercel.app/sitemap.xml

@@ -27,11 +27,11 @@
   let sb = null;          // cliente do Supabase
   let cfg = null;         // { url, anonKey }
   let user = null;        // usuário admin logado
-  let siteName = 'Thiago Liro';
-  // nomes antigos (o de exemplo "Morada", o do dono anterior e o "Recanto do Acre Flats") não valem: fica o nome da marca
-  const NOME_MARCA = 'Thiago Liro';
+  let siteName = 'O Cara dos Apartamentos';
+  // nomes antigos (o de exemplo "Morada", o do dono anterior, "Recanto do Acre Flats" e "Thiago Liro") não valem: fica o nome da marca
+  const NOME_MARCA = 'O Cara dos Apartamentos';
   const nomeAntigo = (n) => /^morada$|artur|arthur|guimar/i.test(String(n || '').trim());
-  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) && !/^recanto do acre flats$/i.test(v) ? v : ''; };
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) && !/^recanto do acre flats$|^thiago liro$/i.test(v) ? v : ''; };
   // Tema: claro (padrão, verde e bege) ou escuro (verde-floresta). O botão de sol troca e a escolha fica salva neste aparelho.
   const THEME_KEY = 'morada:admin-tema';
   const isLight = () => document.documentElement.dataset.theme === 'light';
