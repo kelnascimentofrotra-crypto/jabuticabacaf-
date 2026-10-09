@@ -2462,7 +2462,7 @@
     const f = $('#cfForm');
     const paintLogo = () => {
       const url = logoPreview || siteUrl(logo);
-      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<span class="logo-prev-tl" role="img" aria-label="Logo padrão">TL</span>';
+      $('#cfLogo').innerHTML = url ? `<img src="${esc(url)}" alt="Logo atual" />` : '<span class="logo-prev-tl" role="img" aria-label="Logo padrão">CA</span>';
       $('#cfLogo').classList.toggle('is-empty', !url);
       $('#cfLogoDel').hidden = !url;
     };
