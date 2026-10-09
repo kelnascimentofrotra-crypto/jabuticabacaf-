@@ -49,9 +49,9 @@
     });
   }
   document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
-  // nome que aparece no painel (assinatura "Thiago TL Liro", como no site)
-  const PAINEL_NOME = 'Thiago Liro';
-  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">Thiago</span><span class="brand-tl">TL</span><span class="brand-s">Liro</span></span>';
+  // nome que aparece no painel (assinatura "O Cara dos Apartamentos", como no site)
+  const PAINEL_NOME = 'O Cara dos Apartamentos';
+  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">O Cara dos</span><span class="brand-w">Apartamentos</span></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -2426,7 +2426,7 @@
                 <label class="btn btn-sm">${icon('upload')}<span>Escolher imagem</span><input type="file" accept="image/png,image/webp,image/jpeg" id="cfLogoFile" hidden /></label>
                 <button class="btn btn-sm btn-danger-ghost" type="button" id="cfLogoDel">Remover</button>
               </div>
-              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “Thiago TL Liro”.</small>
+              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “O Cara dos Apartamentos”.</small>
             </div>
           </div>
         </section>

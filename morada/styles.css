@@ -19,7 +19,7 @@
    Tokens
    ========================================================= */
 
-/* Assinatura da marca: "Thiago" e "Liro" em Sacramento, o monograma TL em Playfair Display */
+/* Assinatura da marca: "O Cara dos" em Sacramento, "Apartamentos" (e o TL do ícone) em Playfair Display */
 @font-face {
   font-family: "Sacramento";
   font-style: normal;
@@ -324,13 +324,18 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
   transition: color 0.6s;
 }
 
-/* Marca: assinatura "Thiago TL Liro" — o nome em Sacramento e o monograma TL em Playfair Display
-   com o degradê verde. O nome segue a cor do texto (escuro no claro, creme no escuro). */
+/* Marca: "O Cara dos" em Sacramento e "Apartamentos" em Playfair Display com o degradê verde.
+   O texto à mão segue a cor do contexto (escuro no claro, creme no escuro). */
 .brand { display: inline-flex; align-items: baseline; white-space: nowrap; line-height: 1; color: var(--ink); }
 .brand-s { font-family: "Sacramento", "Segoe Script", cursive; font-size: 1em; font-weight: 400; letter-spacing: 0; }
 .brand-tl { font-family: "Playfair Display", Georgia, serif; font-size: 1.3em; font-weight: 500; letter-spacing: -0.13em; margin: 0 0.2em 0 0.14em; background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.brand-w { font-family: "Playfair Display", Georgia, serif; font-size: 0.82em; font-weight: 500; letter-spacing: 0; margin-left: 0.24em; background: var(--brand-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .brand-img { display: block; height: 100%; width: auto; max-width: 100%; object-fit: contain; }
 .logo .brand { font-size: max(22px, calc(2.4 * var(--u))); }
+/* no topo e na entrada a assinatura fica em duas linhas: "O Cara dos" em cima, "Apartamentos" embaixo */
+.logo .brand, .gate-logo .brand { flex-direction: column; align-items: flex-start; }
+.logo .brand .brand-s, .gate-logo .brand .brand-s { font-size: 0.8em; margin: 0 0 -0.14em 0.06em; }
+.logo .brand .brand-w, .gate-logo .brand .brand-w { font-size: 0.86em; margin-left: 0; }
 .logo.has-img { height: calc(2.6 * var(--u)); }
 
 .nav-pill {

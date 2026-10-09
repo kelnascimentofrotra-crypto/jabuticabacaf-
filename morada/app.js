@@ -2581,7 +2581,7 @@ const moradaApp = () => {
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
-    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-tl.jpg` };
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-ca.jpg` };
     if (tel) ld.telephone = tel;
     if (c.email) ld.email = c.email;
     if (c.endereco) ld.address = c.endereco;
@@ -2600,7 +2600,7 @@ const moradaApp = () => {
     setStatOrHide('anos', c.anos_mercado, '');
     googleOn = !!c.login_google;
     syncGoogle();
-    // logo enviada no painel: aparece no topo do site no lugar do nome (a entrada mostra sempre o nome Thiago Liro)
+    // logo enviada no painel: aparece no topo do site no lugar do nome (a entrada mostra sempre a assinatura)
     const logo = siteFile(c.logo);
     if (logo) {
       $$('.logo').forEach((el) => {
