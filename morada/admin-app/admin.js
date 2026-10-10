@@ -27,11 +27,11 @@
   let sb = null;          // cliente do Supabase
   let cfg = null;         // { url, anonKey }
   let user = null;        // usuário admin logado
-  let siteName = 'O Cara dos Apartamentos';
+  let siteName = 'Cleuma Maia Corretora de Imóveis';
   // nomes antigos (o de exemplo "Morada", o do dono anterior, "Recanto do Acre Flats" e "Thiago Liro") não valem: fica o nome da marca
-  const NOME_MARCA = 'O Cara dos Apartamentos';
+  const NOME_MARCA = 'Cleuma Maia Corretora de Imóveis';
   const nomeAntigo = (n) => /^morada$|artur|arthur|guimar/i.test(String(n || '').trim());
-  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) && !/^recanto do acre flats$|^thiago liro$/i.test(v) ? v : ''; };
+  const nomeDoSite = (n) => { const v = String(n || '').trim(); return v && !nomeAntigo(v) && !/^recanto do acre flats$|^thiago liro$|^o cara dos apartamentos$/i.test(v) ? v : ''; };
   // Tema: claro (padrão, verde e bege) ou escuro (verde-floresta). O botão de sol troca e a escolha fica salva neste aparelho.
   const THEME_KEY = 'morada:admin-tema';
   const isLight = () => document.documentElement.dataset.theme === 'light';
@@ -49,9 +49,9 @@
     });
   }
   document.addEventListener('click', (e) => { if (e.target.closest('[data-theme-toggle]')) toggleTheme(); });
-  // nome que aparece no painel (assinatura "O Cara dos Apartamentos", como no site)
-  const PAINEL_NOME = 'O Cara dos Apartamentos';
-  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-s">O Cara dos</span><span class="brand-w">Apartamentos</span></span>';
+  // nome que aparece no painel (assinatura "Cleuma Maia Corretora de Imóveis", como no site)
+  const PAINEL_NOME = 'Cleuma Maia Corretora de Imóveis';
+  const BRAND_HTML = '<span class="brand" aria-hidden="true"><span class="brand-w">Cleuma Maia</span><span class="brand-s">Corretora de Imóveis</span></span>';
   let dirty = false;      // formulário com alterações não salvas
   let renderToken = 0;
 
@@ -2426,7 +2426,7 @@
                 <label class="btn btn-sm">${icon('upload')}<span>Escolher imagem</span><input type="file" accept="image/png,image/webp,image/jpeg" id="cfLogoFile" hidden /></label>
                 <button class="btn btn-sm btn-danger-ghost" type="button" id="cfLogoDel">Remover</button>
               </div>
-              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “O Cara dos Apartamentos”.</small>
+              <small class="hint">PNG com fundo transparente fica melhor. Sem logo, o site usa a assinatura “Cleuma Maia Corretora de Imóveis”.</small>
             </div>
           </div>
         </section>

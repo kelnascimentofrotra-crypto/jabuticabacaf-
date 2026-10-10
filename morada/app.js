@@ -23,7 +23,7 @@ const moradaApp = () => {
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'O Cara dos Apartamentos';
+  let BRAND = 'Cleuma Maia Corretora de Imóveis';
   // telefone enquanto digita: (11) 98765-4321 / (11) 3000-1234
   const telMask = (v) => {
     let d = String(v || '').replace(/\D/g, '');
@@ -2574,7 +2574,7 @@ const moradaApp = () => {
     $('#ctInfo').hidden = !info.length;
     // nomes antigos (o de exemplo "Morada", o do dono anterior, "Recanto do Acre Flats" e "Thiago Liro") não valem: fica o nome da marca
     const nomeCfg = String(c.nome_imobiliaria || '').trim();
-    const nome = /^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$/i.test(nomeCfg) ? '' : nomeCfg;
+    const nome = /^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$|^o cara dos apartamentos$/i.test(nomeCfg) ? '' : nomeCfg;
     if (nome) {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;
