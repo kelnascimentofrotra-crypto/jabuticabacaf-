@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 10 11 13;
+  --surface: 17 19 23;
+  --raised: 24 27 32;
+  --line: 36 40 47;
+  --line-strong: 50 56 65;
+  --fg: 233 236 239;
+  --muted: 160 167 178;
+  --dim: 110 117 129;
+  --accent: 16 185 129;
+  --accent-strong: 52 211 153;
+  --info: 96 165 250;
+  --warn: 245 158 11;
+  --danger: 248 113 113;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    @apply bg-bg font-sans text-fg antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+  ::selection {
+    background: rgb(var(--accent) / 0.3);
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--accent) / 0.7);
+    outline-offset: 2px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--line-strong)) transparent;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.015em;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-line bg-surface;
+  }
+  .card-hover {
+    @apply transition-colors duration-150 hover:border-line-strong hover:bg-raised;
+  }
+  .input {
+    @apply w-full rounded-lg border border-line bg-bg px-3 py-2 text-sm text-fg placeholder:text-dim transition-colors focus:border-accent/60 focus:outline-none focus:ring-2 focus:ring-accent/20 disabled:opacity-60;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-medium text-muted;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.08em] text-dim;
+  }
+  .prose-msg {
+    @apply whitespace-pre-line text-[15px] leading-relaxed text-fg;
+  }
+  .placeholder-chip {
+    @apply rounded bg-warn/10 px-1 text-warn;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-area {
+    display: block !important;
+    color: #111 !important;
+    background: #fff !important;
+  }
+  .print-area * {
+    color: #111 !important;
+    border-color: #ddd !important;
+    background: transparent !important;
+  }
+}
