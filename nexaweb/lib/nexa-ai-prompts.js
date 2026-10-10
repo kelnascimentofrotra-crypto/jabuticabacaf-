@@ -28,7 +28,7 @@ const STYLES = {
 };
 
 const FIELDS = { business: 120, segment: 120, city: 120, address: 200, hours: 200, whatsapp: 40, instagram: 60, rating: 6,
-  reviews: 10, description: 2000, style: 20, color: 20 };
+  reviews: 10, description: 20000, style: 20, color: 20 };
 
 export function cleanLandingFields(body) {
   const f = {};
