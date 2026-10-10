@@ -3809,43 +3809,50 @@ function render(){const shell=document.querySelector("#finder .finder-shell");if
 window.nexaRenderFreeSearches=render;render();setTimeout(render,1500);setInterval(render,2000);addEventListener("storage",render);addEventListener("clean-leads-updated",render);document.addEventListener("click",event=>{if(event.target.closest&&event.target.closest("#settings,#finder"))setTimeout(render,400)})})();
 </script>
 <script id="nexa-sale-sound">
-// "Ka-ching" de venda gerado com Web Audio (sem arquivo de som), 1,5 s.
+// Som de venda NexaWeb: moedas caindo e uma moeda girando até parar (1,5 s). Gerado com Web Audio, sem arquivo.
 function nexaKaching(ctx, t0) {
-  const total = 1.5, out = ctx.createGain(), comp = ctx.createDynamicsCompressor();
-  out.gain.setValueAtTime(0.9, t0);
-  out.gain.setValueAtTime(0.9, t0 + total - 0.3);
-  out.gain.linearRampToValueAtTime(0.0001, t0 + total);
-  comp.threshold.value = -10; comp.ratio.value = 4;
-  out.connect(comp); comp.connect(ctx.destination);
-  // "ka": batida curta da gaveta / moedas
-  const len = Math.floor(0.07 * ctx.sampleRate), buffer = ctx.createBuffer(1, len, ctx.sampleRate), data = buffer.getChannelData(0);
-  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3);
-  const noise = ctx.createBufferSource(), band = ctx.createBiquadFilter(), noiseGain = ctx.createGain();
-  noise.buffer = buffer; band.type = "bandpass"; band.frequency.value = 2600; band.Q.value = 0.9; noiseGain.gain.value = 0.9;
-  noise.connect(band).connect(noiseGain).connect(out); noise.start(t0);
-  const thump = ctx.createOscillator(), thumpGain = ctx.createGain();
-  thump.type = "sine"; thump.frequency.setValueAtTime(190, t0); thump.frequency.exponentialRampToValueAtTime(70, t0 + 0.09);
-  thumpGain.gain.setValueAtTime(0.45, t0); thumpGain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.11);
-  thump.connect(thumpGain).connect(out); thump.start(t0); thump.stop(t0 + 0.13);
-  // "ching": sino metálico, duas batidas com cauda até o fim
-  const tone = (t, freq, amp, end, hold = 0.3) => {
-    const osc = ctx.createOscillator(), gain = ctx.createGain();
-    osc.type = "sine"; osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.0001, t);
-    gain.gain.exponentialRampToValueAtTime(amp, t + 0.004);
-    gain.gain.exponentialRampToValueAtTime(amp * 0.32, Math.min(t + hold, end - 0.1));
-    gain.gain.exponentialRampToValueAtTime(Math.max(amp * 0.04, 0.0002), end - 0.04);
-    gain.gain.exponentialRampToValueAtTime(0.0001, end);
-    osc.connect(gain).connect(out); osc.start(t); osc.stop(end + 0.02);
+  const total = 1.5, out = ctx.createGain(), comp = ctx.createDynamicsCompressor(), dry = ctx.createGain(), wet = ctx.createGain(), rev = ctx.createConvolver();
+  let seed = 7;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.002; comp.release.value = 0.12;
+  out.gain.setValueAtTime(2.2, t0); out.gain.setValueAtTime(2.2, t0 + total - 0.28); out.gain.linearRampToValueAtTime(0.0001, t0 + total);
+  const irLen = Math.floor(ctx.sampleRate * 0.9), ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (rand() * 2 - 1) * Math.pow(1 - i / irLen, 3.5); }
+  rev.buffer = ir; dry.gain.value = 0.9; wet.gain.value = 0.18;
+  dry.connect(out); rev.connect(wet).connect(out); out.connect(comp).connect(ctx.destination);
+  const env = (g, t, peak, decay, attack) => { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + attack); g.gain.exponentialRampToValueAtTime(0.0001, t + decay); };
+  const panned = (pan) => { const g = ctx.createGain(); if (ctx.createStereoPanner) { const p = ctx.createStereoPanner(); p.pan.value = pan; g.connect(p); p.connect(dry); p.connect(rev); } else { g.connect(dry); g.connect(rev); } return g; };
+  // batida de moeda: corpo metálico inarmônico (FM) + estalo curto
+  const clink = (t, freq, peak, decay, pan) => {
+    const bus = panned(pan), car = ctx.createOscillator(), mod = ctx.createOscillator(), depth = ctx.createGain(), g = ctx.createGain();
+    car.frequency.value = freq; mod.frequency.value = freq * (2.31 + rand() * 0.2);
+    depth.gain.setValueAtTime(freq * 1.7, t); depth.gain.exponentialRampToValueAtTime(freq * 0.12, t + decay);
+    mod.connect(depth).connect(car.frequency); car.connect(g).connect(bus); env(g, t, peak, decay, 0.0015);
+    car.start(t); mod.start(t); car.stop(t + decay + 0.03); mod.stop(t + decay + 0.03);
+    const second = ctx.createOscillator(), g2 = ctx.createGain();
+    second.frequency.value = freq * 1.52; second.connect(g2).connect(bus); env(g2, t, peak * 0.35, decay * 0.6, 0.0015);
+    second.start(t); second.stop(t + decay + 0.03);
+    const n = Math.floor(0.008 * ctx.sampleRate), b = ctx.createBuffer(1, n, ctx.sampleRate), d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (rand() * 2 - 1) * (1 - i / n);
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), gn = ctx.createGain();
+    s.buffer = b; f.type = "highpass"; f.frequency.value = 5500; gn.gain.value = peak * 0.9;
+    s.connect(f).connect(gn).connect(bus); s.start(t);
   };
-  const bell = (t, base, amp) =>
-    [[1, 1], [2, 0.45], [2.76, 0.32], [5.4, 0.16], [8.93, 0.07]].forEach(([ratio, level]) =>
-      tone(t, base * ratio, amp * level, t + (t0 + total - t) / Math.pow(ratio, 0.45), 0.3 / Math.sqrt(ratio)));
-  bell(t0 + 0.075, 1568, 0.34);
-  bell(t0 + 0.16, 2093, 0.3);
-  // tilintar de moedas
-  [[0.34, 3951], [0.47, 4699], [0.62, 4186], [0.8, 5274], [0.98, 4435]].forEach(([dt, freq], i) =>
-    tone(t0 + dt, freq, 0.06 - i * 0.008, t0 + dt + 0.28, 0.06));
+  // cascata de moedas caindo
+  const pitches = [3322, 3729, 4186, 4435, 4978, 5588, 6272];
+  let t = t0;
+  for (let i = 0; i < 16; i++) {
+    t += i < 3 ? 0.03 + rand() * 0.03 : 0.025 + rand() * 0.045;
+    const fade = Math.pow(1 - i / 18, 1.3);
+    clink(t, pitches[Math.floor(rand() * pitches.length)] * (0.98 + rand() * 0.04), 0.09 + 0.16 * fade * rand() + 0.05 * fade, 0.18 + rand() * 0.35, rand() * 1.4 - 0.7);
+  }
+  // uma moeda girando até parar (batidas cada vez mais rápidas)
+  let spin = t + 0.06, gap = 0.085, level = 0.11;
+  while (spin < t0 + total - 0.12 && gap > 0.012) {
+    clink(spin, 4435 * (0.995 + rand() * 0.01), level, 0.12, 0.15);
+    spin += gap; gap *= 0.8; level *= 0.93;
+  }
+  clink(spin, 4435, 0.09, 0.32, 0.15);
 }
 (()=>{let ctx=null,last=null;const audio=()=>{try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=ctx||new A();if(ctx.state==="suspended")ctx.resume();return ctx}catch(e){return null}},first=()=>{try{const v=JSON.parse(localStorage.getItem("clean-leads-financeiro")||"{}").vendas;return Array.isArray(v)&&v[0]?v[0].id:null}catch(e){return null}};window.nexaPlaySaleSound=()=>{const c=audio();c&&nexaKaching(c,c.currentTime+0.02)};const original=window.submitSale;if(typeof original!=="function")return;window.submitSale=function(){const c=audio(),before=first(),result=original.apply(this,arguments);setTimeout(()=>{const id=first();if(id&&id!==before&&id!==last&&c){last=id;nexaKaching(c,c.currentTime+0.02)}},120);return result}})();
 </script>
