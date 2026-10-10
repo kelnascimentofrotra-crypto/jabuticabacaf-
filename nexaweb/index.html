@@ -1341,255 +1341,759 @@ html.clean-globe-search-open,html.clean-globe-search-open body{overflow:hidden!i
 @media(max-height:350px){#leadLoader .clg-copy p{display:none}#leadLoader .clg-brand{font-size:20px}#leadLoader .clg-copy h2{font-size:16px}}
 @media(prefers-reduced-motion:reduce){#leadLoader::before{animation:none}#leadLoader,#leadLoader.clean-globe-exiting{transition-duration:.12s!important}#leadLoader>.clg-panel{transition-duration:.12s!important;transform:none}#leadLoader .clg-track.is-indeterminate .clg-fill{animation:none;width:100%;opacity:.55}#leadLoader .clg-fill{transition:none}html.clean-globe-search-open #finder,html:not(.clean-globe-search-open) #finder{transition-duration:.12s!important}}
 </style>
-<script id="clean-globe-loader-runtime">
-/* Camada visual de carregamento, acionada pelo estado da busca existente.
-   Texturas: exemplos Three.js / NASA. Contornos: world.geo.json / Natural Earth. */
-(()=>{
-'use strict';
-function mountGlobeLoader(){
-const loader=document.getElementById('leadLoader');
-if(!loader||document.getElementById('cleanLoaderGlobe'))return;
-const panel=document.createElement('section');
-panel.className='clg-panel';panel.tabIndex=-1;
-panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');panel.setAttribute('aria-labelledby','clg-title');
-panel.innerHTML=`<header class="clg-brand"><span>Nexa<em>Web</em></span></header><div class="clg-scene" aria-hidden="true"><canvas id="cleanLoaderGlobe"></canvas><div class="clg-fallback"></div></div><div class="clg-copy"><h2 id="clg-title">Buscando leads qualificados <span id="clg-location">no Brasil</span></h2><p>Analisando empresas, contatos e oportunidades</p></div><footer class="clg-footer"><div class="clg-progress-line"><div class="clg-track" role="progressbar" aria-label="Busca em andamento" aria-valuemin="0" aria-valuemax="100"><i class="clg-fill"></i></div><span class="clg-percent" hidden></span></div><p class="clg-status" role="status">Processando prospecção…</p></footer>`;
-loader.appendChild(panel);
-const canvas=panel.querySelector('canvas'),ctx=canvas.getContext('2d');
-const motion=matchMedia('(prefers-reduced-motion: reduce)');
-const track=panel.querySelector('.clg-track'),fill=panel.querySelector('.clg-fill'),percent=panel.querySelector('.clg-percent'),status=panel.querySelector('.clg-status');
-const sourceProgress=document.getElementById('loaderProgress');
-let assets=null,texturePromise=null;
-let width=0,height=0,radius=0,cx=0,cy=0,elapsed=0,previous=0,frame=0,paused=motion.matches,active=false,activeSince=0,minimumTimer=0,exitPending=false,exitTimer=0,lastProgress=0,focusBefore=null,progressKnown=false;
-let accent=[0,184,177];
-const colorCache=new Map();
-function tint(value){if(colorCache.has(value))return colorCache.get(value);let channels,opacity=1;if(value[0]==='#'){channels=[1,3,5].map(i=>parseInt(value.slice(i,i+2),16));if(value.length===9)opacity=parseInt(value.slice(7,9),16)/255}else{const match=value.match(/rgba?\(([^)]+)\)/);channels=match[1].split(',').map(Number);opacity=channels[3]??1}const [r,g,b]=channels,white=Math.min(g,b)/Math.max(1,r),strength=r/255;const output='rgba('+accent.map(c=>Math.round((c*(1-white)+255*white)*strength)).join(',')+','+opacity+')';colorCache.set(value,output);return output}
-function readTheme(){const value=getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),match=value.match(/^#([a-f0-9]{6})$/i);if(match){const n=parseInt(match[1],16);accent=[n>>16&255,n>>8&255,n&255]}colorCache.clear();lastSurface=-Infinity;}
-let maps=null,lastSurface=-Infinity,surfaceSize=0;
-const surface=document.createElement('canvas'),surfaceCtx=surface.getContext('2d');
-const textureWidth=2048,textureHeight=1024,rad=Math.PI/180;
-let samples=null,sampleCount=0,surfacePixels=null;
-let yaw=-43,pitch=11;
-let seed=79;
-const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
-const stars=Array.from({length:280},()=>[random(),random(),random(),.000015+random()*.00004,random()*Math.PI*2]);
-const cities=[[-46.63,-23.55],[-43.17,-22.9],[-47.88,-15.79],[-38.5,-12.97],[-38.52,-3.73],[-34.88,-8.05],[-51.23,-30.03],[-49.27,-25.43],[-43.94,-19.92],[-60.02,-3.1],[-48.5,-1.45],[-49.25,-16.68],[-56.1,-15.6],[-51.07,.03],[-44.3,-2.53],[-35.21,-5.8],[-40.31,-20.32]];
-function project(lon,lat){const a=lat*rad,b=(lon-yaw)*rad,c=pitch*rad,cl=Math.cos(a);return{x:cx+radius*cl*Math.sin(b),y:cy-radius*(Math.cos(c)*Math.sin(a)-Math.sin(c)*cl*Math.cos(b)),z:Math.sin(c)*Math.sin(a)+Math.cos(c)*cl*Math.cos(b)}}
-function drawPath(points){ctx.beginPath();let down=false;for(let i=0;i<points.length;i++){const p=project(...points[i]);if(p.z>.015){if(down)ctx.lineTo(p.x,p.y);else ctx.moveTo(p.x,p.y);down=true}else down=false}}
-function glow(x,y,size,color){const g=ctx.createRadialGradient(x,y,0,x,y,size);g.addColorStop(0,color);g.addColorStop(1,tint('rgba(255,25,40,0)'));ctx.fillStyle=g;ctx.fillRect(x-size,y-size,size*2,size*2)}
-async function decodeTexture(data){
-  return new Promise((resolve,reject)=>{
-    const image=new Image();
-    image.onload=()=>{try{const c=document.createElement('canvas');c.width=textureWidth;c.height=textureHeight;const g=c.getContext('2d',{willReadFrequently:true});g.drawImage(image,0,0,c.width,c.height);resolve(g.getImageData(0,0,c.width,c.height).data)}catch(error){reject(error)}};
-    image.onerror=()=>reject(Error('Textura indisponível'));image.src=data;
-  });
-}
-function prepareSurface(){
-  const n=Math.min(480,Math.max(220,Math.round(radius*2*Math.min(devicePixelRatio||1,1.1))));
-  if(n===surfaceSize)return;
-  surfaceSize=n;surface.width=n;surface.height=n;surfacePixels=surfaceCtx.createImageData(n,n);samples=new Float32Array(n*n*7);sampleCount=0;
-  const half=n/2;
-  for(let y=0;y<n;y++)for(let x=0;x<n;x++){
-    const nx=(x+.5-half)/half,ny=(half-y-.5)/half,rr=nx*nx+ny*ny;
-    if(rr>=1)continue;
-    const nz=Math.sqrt(1-rr),light=Math.max(0,-nx*.52+ny*.68+nz*.51);
-    samples.set([(y*n+x)*4,nx,ny,nz,light,Math.pow(1-nz,5),Math.min(1,(1-Math.sqrt(rr))*half)],sampleCount*7);sampleCount++;
-  }
-  lastSurface=-Infinity;
-}
-function renderSurface(t){
-  if(!maps||!surfacePixels)return;
-  if(t-lastSurface<85&&t>=lastSurface)return;
-  lastSurface=t;
-  const sp=Math.sin(pitch*rad),cp=Math.cos(pitch*rad),rotation=yaw*rad,out=surfacePixels.data,day=maps[0],night=maps[1];
-  for(let i=0;i<sampleCount;i++){
-    const j=i*7,index=samples[j],nx=samples[j+1],ny=samples[j+2],nz=samples[j+3],light=samples[j+4],rim=samples[j+5],alpha=samples[j+6];
-    const lat=Math.asin(Math.max(-1,Math.min(1,ny*cp+nz*sp))),lon=Math.atan2(nx,nz*cp-ny*sp)+rotation;
-    const u=((lon/(2*Math.PI)+.5)%1+1)%1,v=.5-lat/Math.PI;
-    const px=Math.min(textureWidth-1,Math.floor(u*textureWidth)),py=Math.min(textureHeight-1,Math.floor(v*textureHeight)),k=(py*textureWidth+px)*4;
-    const dr=day[k],dg=day[k+1],db=day[k+2],luma=dr*.24+dg*.58+db*.18;
-    const sea=db>dr*1.22&&db>dg*1.06;
-    const base=luma*(sea?.035:.32)*(.15+.85*light);
-    const city=Math.pow(Math.max(night[k],night[k+1]*.92,night[k+2]*.72)/255,1.04);
-    const cityPower=city*(105+100*(1-light));
-    const inBrazil=maps[2][k]>.5;
-    const warm=inBrazil?1:0;
-    const rimLight=rim*(.18+.82*Math.max(0,-nx*.45+ny*.6+.3));
-    out[index]=Math.min(255,base*.90+cityPower*(inBrazil?(.2+.8*accent[0]/255):1)+rimLight*accent[0]*.47+warm*accent[0]*.051);
-    out[index+1]=Math.min(255,base*.95+cityPower*(inBrazil?(.2+.8*accent[1]/255):.83)+rimLight*accent[1]*.47+warm*accent[1]*.051);
-    out[index+2]=Math.min(255,base*1.08+cityPower*(inBrazil?(.2+.8*accent[2]/255):.88)+rimLight*accent[2]*.47+warm*accent[2]*.051);
-    out[index+3]=Math.round(255*alpha);
-  }
-  surfaceCtx.putImageData(surfacePixels,0,0);
-}
-function orbit(front,t){
-  const tilt=.28;
-  const point=a=>{const x=Math.cos(a)*radius*1.49,y=Math.sin(a)*radius*.34;return{x:cx+x*Math.cos(tilt)-y*Math.sin(tilt),y:cy+x*Math.sin(tilt)+y*Math.cos(tilt),front:Math.sin(a)>0}};
-  ctx.beginPath();let down=false;
-  for(let i=0;i<=220;i++){const p=point(i/220*Math.PI*2);if(p.front===front){if(down)ctx.lineTo(p.x,p.y);else ctx.moveTo(p.x,p.y);down=true}else down=false}
-  ctx.strokeStyle=front?tint('rgba(255,117,123,.88)'):tint('rgba(230,44,61,.62)');ctx.lineWidth=front?1.5:1.25;ctx.shadowColor=tint('#ff1d39');ctx.shadowBlur=front?9:5;ctx.stroke();ctx.shadowBlur=0;
-  for(let j=0;j<3;j++){
-    const a=t*.00019+j*2.094+.42,p=point(a);if(p.front!==front)continue;
-    ctx.beginPath();for(let k=0;k<22;k++){const q=point(a-k*.007);if(k===0)ctx.moveTo(q.x,q.y);else ctx.lineTo(q.x,q.y)}ctx.strokeStyle=tint('#ff686d88');ctx.lineWidth=1.5;ctx.stroke();
-    glow(p.x,p.y,28,tint('rgba(255,30,45,.5)'));glow(p.x,p.y,9,tint('rgba(255,83,101,.8)'));
-    ctx.fillStyle='#fff5f1';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle=tint('#ffb6bca0');ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(p.x-13,p.y);ctx.lineTo(p.x+13,p.y);ctx.moveTo(p.x,p.y-6);ctx.lineTo(p.x,p.y+6);ctx.stroke();
-  }
-}
-function draw(t){
-  if(!ctx||!width||!active||!assets)return;
-  ctx.clearRect(0,0,width,height);yaw=-43+t*.00035;pitch=11+Math.sin(t*.00004)*.7;
-  stars.forEach(([x,y,s,speed,phase])=>{const sx=(x+t*speed)%1,sy=(y+Math.sin(t*.00045+phase)*.008+1)%1;ctx.globalAlpha=(.18+s*.58)*(.68+.32*Math.sin(t*.0012+phase));ctx.fillStyle=s>.84?tint('#ff6574'):'#b8dbdb';ctx.beginPath();ctx.arc(sx*width,sy*height,.35+s*.8,0,Math.PI*2);ctx.fill();if(s>.972)glow(sx*width,sy*height,9,tint('rgba(255,24,44,.42)'))});ctx.globalAlpha=1;
-  // Rastro que entra pela lateral, como na referência.
-  const trace=ctx.createLinearGradient(0,0,cx,cy);trace.addColorStop(0,tint('#ff1c37bb'));trace.addColorStop(.6,tint('#ff26357a'));trace.addColorStop(1,tint('#ff15203a'));
-  ctx.beginPath();ctx.moveTo(-50,height*.13);ctx.bezierCurveTo(width*.16,height*.24,width*.27,height*.25,cx,height*.18);ctx.strokeStyle=trace;ctx.lineWidth=2.8;ctx.shadowColor=tint('#ff2133');ctx.shadowBlur=24;ctx.stroke();ctx.shadowBlur=0;
-  ctx.beginPath();ctx.moveTo(width*.04,height*.27);ctx.bezierCurveTo(width*.25,height*.35,cx*.72,height*.28,cx,height*.34);ctx.strokeStyle=tint('rgba(255,100,125,.40)');ctx.lineWidth=1.2;ctx.shadowColor=tint('#ff4560');ctx.shadowBlur=12;ctx.stroke();ctx.shadowBlur=0;
-  orbit(false,t);
-  const halo=ctx.createRadialGradient(cx,cy,radius*.95,cx,cy,radius*1.105);halo.addColorStop(0,tint('#ff233800'));halo.addColorStop(.37,tint('#ff293b50'));halo.addColorStop(.58,tint('#ff263823'));halo.addColorStop(1,tint('#ff263800'));ctx.fillStyle=halo;ctx.beginPath();ctx.arc(cx,cy,radius*1.11,0,Math.PI*2);ctx.fill();
-  const base=ctx.createRadialGradient(cx-radius*.3,cy-radius*.6,radius*.1,cx,cy,radius);base.addColorStop(0,'#182224');base.addColorStop(.5,'#050909');base.addColorStop(1,'#000102');ctx.fillStyle=base;ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);ctx.fill();
-  renderSurface(t);
-  if(maps)ctx.drawImage(surface,cx-radius,cy-radius,radius*2,radius*2);
-  ctx.save();ctx.beginPath();ctx.arc(cx,cy,radius-.6,0,Math.PI*2);ctx.clip();
-  // Limites reais dos países. O brilho discreto mantém a leitura das texturas.
-  ctx.lineWidth=.48;ctx.strokeStyle='rgba(234,218,224,.28)';
-  for(const polygon of assets.countries){drawPath(polygon);ctx.stroke()}
-  for(const polygon of assets.brazil){
-    drawPath(polygon);ctx.closePath();ctx.fillStyle=tint('rgba(255,12,32,.055)');ctx.fill();
-    ctx.lineWidth=3;ctx.strokeStyle=tint('#ff2638');ctx.shadowColor=tint('#ff162c');ctx.shadowBlur=16;ctx.stroke();
-    ctx.lineWidth=1.5;ctx.strokeStyle=tint('#ff5e66');ctx.shadowBlur=6;ctx.stroke();
-    ctx.lineWidth=.65;ctx.strokeStyle=tint('#ffb6b8');ctx.shadowBlur=0;ctx.stroke();
-  }
-  for(let i=0;i<cities.length;i++){
-    const p=project(...cities[i]);if(p.z<.05)continue;
-    const pulse=.68+.32*Math.sin(t*.002+i*1.4);
-    glow(p.x,p.y,6+pulse*3,tint('rgba(255,22,43,.36)'));
-    ctx.fillStyle=tint('#ffd2ce');ctx.shadowColor=tint('#ff2640');ctx.shadowBlur=5;ctx.beginPath();ctx.arc(p.x,p.y,.8*radius/270,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-  }
-  ctx.restore();
-  const rim=ctx.createLinearGradient(cx-radius,cy-radius,cx+radius*.7,cy+radius);rim.addColorStop(0,tint('#ff5261'));rim.addColorStop(.24,tint('#ffb6c0'));rim.addColorStop(.34,'#fff1f5');rim.addColorStop(.46,tint('#ff6178'));rim.addColorStop(.75,tint('#a62030'));rim.addColorStop(1,tint('#350710'));
-  ctx.strokeStyle=rim;ctx.lineWidth=1.8;ctx.shadowColor=tint('#ff283e');ctx.shadowBlur=10;ctx.beginPath();ctx.arc(cx,cy,radius,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;
-  orbit(true,t);
-}
-function displayPlace(){
-  const query=String(document.getElementById('segment')?.value||'').trim();
-  const explicit=String(document.getElementById('searchCity')?.value||document.getElementById('searchRegion')?.value||'').trim();
-  const match=query.match(/\s+(em|no|na|nos|nas)\s+(.+)$/i);
-  const place=String(explicit||match?.[2]||'').replace(/,?\s+(?:brasil|brazil)$/i,'').trim().slice(0,120);
-  return place?(explicit?'em':match[1].toLowerCase())+' '+place:'no Brasil';
-}
-function updateProgress(){
-  if(!active)return;
-  const value=Number.parseFloat(sourceProgress?.style.width||'0');
-  if(!Number.isFinite(value)||value<=0)return;
-  progressKnown=true;lastProgress=Math.max(lastProgress,Math.min(100,value));
-  track.setAttribute('aria-valuenow',String(Math.round(lastProgress)));
-  track.setAttribute('aria-valuetext',Math.round(lastProgress)+'% das etapas da busca');
-  fill.style.width=lastProgress+'%';percent.hidden=false;percent.textContent=Math.round(lastProgress)+'%';
-}
-function updateStatus(){
-  const text=elapsed<12000?'Processando prospecção…':elapsed<40000?'Aguardando os resultados da busca…':'A busca continua. Aguarde mais um instante…';
-  if(status.textContent!==text)status.textContent=text;
-}
-function render(time){
-  frame=0;if(!active||document.hidden||paused)return;
-  if(previous&&time-previous<24){frame=requestAnimationFrame(render);return}
-  const delta=previous?Math.min(time-previous,100):0;previous=time;elapsed+=delta;
-  draw(elapsed);updateStatus();frame=requestAnimationFrame(render);
-}
-function syncAnimation(){
-  cancelAnimationFrame(frame);frame=0;previous=0;
-  if(active&&!paused&&!document.hidden)frame=requestAnimationFrame(render);
-}
-function resize(){
-  if(!active)return;
-  const box=canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.35);
-  width=box.width;height=box.height;if(width<1||height<1)return;
-  const pixelWidth=Math.round(width*dpr),pixelHeight=Math.round(height*dpr);
-  if(canvas.width!==pixelWidth)canvas.width=pixelWidth;
-  if(canvas.height!==pixelHeight)canvas.height=pixelHeight;
-  if(!ctx)return;
-  // Full-screen canvas: text overlays the globe rather than reducing its area.
-  // Reserve the halo on all four edges, including the upper-biased centre.
-  ctx.setTransform(dpr,0,0,dpr,0,0);cx=width*.5;cy=height*.47;
-  radius=Math.max(1,Math.min((cy-10)/1.11,(height-cy-10)/1.11,(width*.5-10)/1.11,680));
-  prepareSurface();draw(elapsed);
-}
-function loadTextures(){
-  if(texturePromise||!ctx)return texturePromise;
-  texturePromise=Promise.all([decodeTexture(assets.day),decodeTexture(assets.night)]).then(([day,night])=>{
-    const mask=document.createElement('canvas');mask.width=textureWidth;mask.height=textureHeight;
-    const g=mask.getContext('2d',{willReadFrequently:true});g.fillStyle='#fff';
-    for(const ring of assets.brazil){g.beginPath();ring.forEach(([lon,lat],i)=>{const x=(lon/360+.5)*textureWidth,y=(.5-lat/180)*textureHeight;if(i===0)g.moveTo(x,y);else g.lineTo(x,y)});g.closePath();g.fill()}
-    maps=[day,night,g.getImageData(0,0,textureWidth,textureHeight).data];lastSurface=-Infinity;
-    if(active)draw(elapsed);
-  }).catch(error=>{console.warn('Textura do carregamento indisponível:',error.message);panel.classList.add('clg-no-texture')});
-  return texturePromise;
-}
-function synchronize(){
-  const next=loader.classList.contains('show');
-  if(next){
-    clearTimeout(minimumTimer);minimumTimer=0;
-    if(loader.classList.contains('clean-globe-minimum-hold'))loader.classList.remove('clean-globe-minimum-hold');
-    if(exitPending){
-      clearTimeout(exitTimer);exitTimer=0;exitPending=false;
-      if(loader.classList.contains('clean-globe-exiting'))loader.classList.remove('clean-globe-exiting');
-      panel.classList.add('is-visible');activeSince=performance.now();
+<script id="clean-globe-loader-runtime">/* Camada visual de carregamento, acionada pelo estado da busca existente.
+   Texturas: exemplos Three.js / NASA. Contornos: world.geo.json / Natural Earth.
+   Desempenho: tudo que não muda entre quadros (rastros, órbitas, halo, borda)
+   fica em camadas prontas; o globo (textura + países) é redesenhado poucas
+   vezes por segundo, já que gira devagar; cada quadro só compõe as camadas e
+   anima estrelas, cometas e o pulso das cidades. */
+(() => {
+  "use strict";
+  function mountGlobeLoader() {
+    const loader = document.getElementById("leadLoader");
+    if (!loader || document.getElementById("cleanLoaderGlobe")) return;
+    const panel = document.createElement("section");
+    panel.className = "clg-panel";
+    panel.tabIndex = -1;
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "true");
+    panel.setAttribute("aria-labelledby", "clg-title");
+    panel.innerHTML = `<header class="clg-brand"><span>Nexa<em>Web</em></span></header><div class="clg-scene" aria-hidden="true"><canvas id="cleanLoaderGlobe"></canvas><div class="clg-fallback"></div></div><div class="clg-copy"><h2 id="clg-title">Buscando leads qualificados <span id="clg-location">no Brasil</span></h2><p>Analisando empresas, contatos e oportunidades</p></div><footer class="clg-footer"><div class="clg-progress-line"><div class="clg-track" role="progressbar" aria-label="Busca em andamento" aria-valuemin="0" aria-valuemax="100"><i class="clg-fill"></i></div><span class="clg-percent" hidden></span></div><p class="clg-status" role="status">Processando prospecção…</p></footer>`;
+    loader.appendChild(panel);
+    const canvas = panel.querySelector("canvas"),
+      ctx = canvas.getContext("2d");
+    const motion = matchMedia("(prefers-reduced-motion: reduce)");
+    const track = panel.querySelector(".clg-track"),
+      fill = panel.querySelector(".clg-fill"),
+      percent = panel.querySelector(".clg-percent"),
+      status = panel.querySelector(".clg-status");
+    const sourceProgress = document.getElementById("loaderProgress");
+    let assets = null,
+      texturePromise = null;
+    let width = 0,
+      height = 0,
+      dpr = 1,
+      radius = 0,
+      cx = 0,
+      cy = 0,
+      elapsed = 0,
+      previous = 0,
+      frame = 0,
+      paused = motion.matches,
+      active = false,
+      activeSince = 0,
+      minimumTimer = 0,
+      exitPending = false,
+      exitTimer = 0,
+      lastProgress = 0,
+      focusBefore = null,
+      progressKnown = false;
+    let accent = [0, 184, 177],
+      accentKey = "";
+    const colorCache = new Map(),
+      spriteCache = new Map();
+    function tint(value) {
+      if (colorCache.has(value)) return colorCache.get(value);
+      let channels,
+        opacity = 1;
+      if (value[0] === "#") {
+        channels = [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16));
+        if (value.length === 9) opacity = parseInt(value.slice(7, 9), 16) / 255;
+      } else {
+        const match = value.match(/rgba?\(([^)]+)\)/);
+        channels = match[1].split(",").map(Number);
+        opacity = channels[3] ?? 1;
+      }
+      const [r, g, b] = channels,
+        white = Math.min(g, b) / Math.max(1, r),
+        strength = r / 255;
+      const output = "rgba(" + accent.map((c) => Math.round((c * (1 - white) + 255 * white) * strength)).join(",") + "," + opacity + ")";
+      colorCache.set(value, output);
+      return output;
     }
-    if(active)return;
-    active=true;activeSince=performance.now();
-    document.documentElement.classList.add('clean-globe-search-open');
-    panel.classList.remove('is-visible');
-    loader.classList.add('clean-globe-entering');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>setTimeout(()=>{
-      if(active&&!exitPending){loader.classList.remove('clean-globe-entering');panel.classList.add('is-visible')}
-    },motion.matches?0:80)));
-    elapsed=0;lastSurface=-Infinity;lastProgress=0;progressKnown=false;paused=motion.matches;
-    focusBefore=document.activeElement;
-    panel.querySelector('#clg-location').textContent=displayPlace();
-    if(sourceProgress)sourceProgress.style.width='0%';
-    track.classList.remove('is-indeterminate');track.setAttribute('aria-valuenow','0');track.setAttribute('aria-valuetext','0% das etapas da busca');
-    fill.style.width='0%';percent.hidden=false;percent.textContent='0%';status.textContent='Processando prospecção…';
-    loader.setAttribute('aria-busy','true');readTheme();
-    if(!assets){try{assets=JSON.parse(document.getElementById('clean-loader-earth-assets').textContent)}catch(error){panel.classList.add('clg-no-texture');console.warn('Globo indisponível:',error.message)}}
-    panel.focus({preventScroll:true});resize();if(assets)loadTextures();syncAnimation();
-    return;
+    function readTheme() {
+      const value = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim(),
+        match = value.match(/^#([a-f0-9]{6})$/i);
+      if (match) {
+        const n = parseInt(match[1], 16);
+        accent = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      }
+      const key = accent.join(",");
+      if (key === accentKey) return false;
+      accentKey = key;
+      colorCache.clear();
+      spriteCache.clear();
+      staticDirty = true;
+      globeDirty = true;
+      return true;
+    }
+    // Brilho radial pronto (sprite) no lugar de criar um gradiente a cada uso.
+    function sprite(color) {
+      let s = spriteCache.get(color);
+      if (!s) {
+        s = document.createElement("canvas");
+        s.width = s.height = 64;
+        const g = s.getContext("2d"),
+          gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gr.addColorStop(0, color);
+        gr.addColorStop(1, tint("rgba(255,25,40,0)"));
+        g.fillStyle = gr;
+        g.fillRect(0, 0, 64, 64);
+        spriteCache.set(color, s);
+      }
+      return s;
+    }
+    function glow(g, x, y, size, color) {
+      g.drawImage(sprite(color), x - size, y - size, size * 2, size * 2);
+    }
+    let maps = null,
+      surfaceSize = 0,
+      staticDirty = true,
+      globeDirty = true,
+      lastGlobe = -Infinity,
+      globeInterval = 900;
+    const surface = document.createElement("canvas"),
+      surfaceCtx = surface.getContext("2d");
+    const textureWidth = 2048,
+      textureHeight = 1024,
+      rad = Math.PI / 180;
+    let samples = null,
+      sampleCount = 0,
+      surfacePixels = null;
+    let yaw = -43,
+      pitch = 11;
+    let seed = 79;
+    const random = () => {
+      seed = (seed * 1664525 + 1013904223) >>> 0;
+      return seed / 4294967296;
+    };
+    const stars = Array.from({ length: 280 }, () => [random(), random(), random(), 0.000015 + random() * 0.00004, random() * Math.PI * 2]);
+    const cities = [
+      [-46.63, -23.55], [-43.17, -22.9], [-47.88, -15.79], [-38.5, -12.97], [-38.52, -3.73], [-34.88, -8.05],
+      [-51.23, -30.03], [-49.27, -25.43], [-43.94, -19.92], [-60.02, -3.1], [-48.5, -1.45], [-49.25, -16.68],
+      [-56.1, -15.6], [-51.07, 0.03], [-44.3, -2.53], [-35.21, -5.8], [-40.31, -20.32],
+    ];
+    // Camadas prontas (canvas fora da tela).
+    const layer = () => {
+      const c = document.createElement("canvas");
+      return { canvas: c, ctx: c.getContext("2d"), x: 0, y: 0, w: 0, h: 0 };
+    };
+    const under = layer(), // rastros + órbita de trás
+      sphere = layer(), // halo + esfera de fundo
+      globe = layer(), // textura + países + Brasil + cidades
+      front = layer(); // borda + órbita da frente
+    function sizeLayer(l, x, y, w, h) {
+      l.x = x;
+      l.y = y;
+      l.w = w;
+      l.h = h;
+      const pw = Math.max(1, Math.ceil(w * dpr)),
+        ph = Math.max(1, Math.ceil(h * dpr));
+      if (l.canvas.width !== pw) l.canvas.width = pw;
+      if (l.canvas.height !== ph) l.canvas.height = ph;
+      l.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      l.ctx.clearRect(0, 0, pw, ph);
+      l.ctx.setTransform(dpr, 0, 0, dpr, -x * dpr, -y * dpr);
+      return l.ctx;
+    }
+    function blit(l) {
+      if (l.w && l.h) ctx.drawImage(l.canvas, l.x, l.y, l.w, l.h);
+    }
+    function project(lon, lat) {
+      const a = lat * rad,
+        b = (lon - yaw) * rad,
+        c = pitch * rad,
+        cl = Math.cos(a);
+      return {
+        x: cx + radius * cl * Math.sin(b),
+        y: cy - radius * (Math.cos(c) * Math.sin(a) - Math.sin(c) * cl * Math.cos(b)),
+        z: Math.sin(c) * Math.sin(a) + Math.cos(c) * cl * Math.cos(b),
+      };
+    }
+    function addPath(path, points) {
+      let down = false;
+      for (let i = 0; i < points.length; i++) {
+        const p = project(points[i][0], points[i][1]);
+        if (p.z > 0.015) {
+          if (down) path.lineTo(p.x, p.y);
+          else path.moveTo(p.x, p.y);
+          down = true;
+        } else down = false;
+      }
+    }
+    async function decodeTexture(data) {
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+          try {
+            const c = document.createElement("canvas");
+            c.width = textureWidth;
+            c.height = textureHeight;
+            const g = c.getContext("2d", { willReadFrequently: true });
+            g.drawImage(image, 0, 0, c.width, c.height);
+            resolve(g.getImageData(0, 0, c.width, c.height).data);
+          } catch (error) {
+            reject(error);
+          }
+        };
+        image.onerror = () => reject(Error("Textura indisponível"));
+        image.src = data;
+      });
+    }
+    function prepareSurface() {
+      const n = Math.min(440, Math.max(220, Math.round(radius * 2 * Math.min(devicePixelRatio || 1, 1.1))));
+      if (n === surfaceSize) return;
+      surfaceSize = n;
+      surface.width = n;
+      surface.height = n;
+      surfacePixels = surfaceCtx.createImageData(n, n);
+      samples = new Float32Array(n * n * 7);
+      sampleCount = 0;
+      const half = n / 2;
+      for (let y = 0; y < n; y++)
+        for (let x = 0; x < n; x++) {
+          const nx = (x + 0.5 - half) / half,
+            ny = (half - y - 0.5) / half,
+            rr = nx * nx + ny * ny;
+          if (rr >= 1) continue;
+          const nz = Math.sqrt(1 - rr),
+            light = Math.max(0, -nx * 0.52 + ny * 0.68 + nz * 0.51);
+          const j = sampleCount * 7;
+          samples[j] = (y * n + x) * 4;
+          samples[j + 1] = nx;
+          samples[j + 2] = ny;
+          samples[j + 3] = nz;
+          samples[j + 4] = light;
+          samples[j + 5] = Math.pow(1 - nz, 5);
+          samples[j + 6] = Math.min(1, (1 - Math.sqrt(rr)) * half);
+          sampleCount++;
+        }
+      globeDirty = true;
+    }
+    function renderSurface() {
+      if (!maps || !surfacePixels) return;
+      const sp = Math.sin(pitch * rad),
+        cp = Math.cos(pitch * rad),
+        rotation = yaw * rad,
+        out = surfacePixels.data,
+        day = maps[0],
+        night = maps[1],
+        brazil = maps[2],
+        ar = accent[0],
+        ag = accent[1],
+        ab = accent[2],
+        TWO_PI = 2 * Math.PI;
+      for (let i = 0; i < sampleCount; i++) {
+        const j = i * 7,
+          index = samples[j],
+          nx = samples[j + 1],
+          ny = samples[j + 2],
+          nz = samples[j + 3],
+          light = samples[j + 4],
+          rim = samples[j + 5],
+          alpha = samples[j + 6];
+        const lat = Math.asin(Math.max(-1, Math.min(1, ny * cp + nz * sp))),
+          lon = Math.atan2(nx, nz * cp - ny * sp) + rotation;
+        let u = lon / TWO_PI + 0.5;
+        u -= Math.floor(u);
+        const v = 0.5 - lat / Math.PI;
+        const px = Math.min(textureWidth - 1, (u * textureWidth) | 0),
+          py = Math.min(textureHeight - 1, (v * textureHeight) | 0),
+          k = (py * textureWidth + px) * 4;
+        const dr = day[k],
+          dg = day[k + 1],
+          db = day[k + 2],
+          luma = dr * 0.24 + dg * 0.58 + db * 0.18;
+        const sea = db > dr * 1.22 && db > dg * 1.06;
+        const base = luma * (sea ? 0.035 : 0.32) * (0.15 + 0.85 * light);
+        const nr = night[k],
+          ng = night[k + 1] * 0.92,
+          nb = night[k + 2] * 0.72,
+          city = Math.pow((nr > ng ? (nr > nb ? nr : nb) : ng > nb ? ng : nb) / 255, 1.04);
+        const cityPower = city * (105 + 100 * (1 - light));
+        const inBrazil = brazil[k] > 0.5;
+        const warm = inBrazil ? 0.051 : 0;
+        const rimLight = rim * (0.18 + 0.82 * Math.max(0, -nx * 0.45 + ny * 0.6 + 0.3)) * 0.47;
+        const r = base * 0.9 + cityPower * (inBrazil ? 0.2 + (0.8 * ar) / 255 : 1) + (rimLight + warm) * ar,
+          g = base * 0.95 + cityPower * (inBrazil ? 0.2 + (0.8 * ag) / 255 : 0.83) + (rimLight + warm) * ag,
+          b = base * 1.08 + cityPower * (inBrazil ? 0.2 + (0.8 * ab) / 255 : 0.88) + (rimLight + warm) * ab;
+        out[index] = r > 255 ? 255 : r;
+        out[index + 1] = g > 255 ? 255 : g;
+        out[index + 2] = b > 255 ? 255 : b;
+        out[index + 3] = 255 * alpha + 0.5;
+      }
+      surfaceCtx.putImageData(surfacePixels, 0, 0);
+    }
+    const orbitTilt = 0.28;
+    function orbitPoint(a) {
+      const x = Math.cos(a) * radius * 1.49,
+        y = Math.sin(a) * radius * 0.34;
+      return { x: cx + x * Math.cos(orbitTilt) - y * Math.sin(orbitTilt), y: cy + x * Math.sin(orbitTilt) + y * Math.cos(orbitTilt), front: Math.sin(a) > 0 };
+    }
+    function orbitPath(g, front) {
+      g.beginPath();
+      let down = false;
+      for (let i = 0; i <= 220; i++) {
+        const p = orbitPoint((i / 220) * Math.PI * 2);
+        if (p.front === front) {
+          if (down) g.lineTo(p.x, p.y);
+          else g.moveTo(p.x, p.y);
+          down = true;
+        } else down = false;
+      }
+      g.strokeStyle = front ? tint("rgba(255,117,123,.88)") : tint("rgba(230,44,61,.62)");
+      g.lineWidth = front ? 1.5 : 1.25;
+      g.shadowColor = tint("#ff1d39");
+      g.shadowBlur = front ? 9 : 5;
+      g.stroke();
+      g.shadowBlur = 0;
+    }
+    function comets(front, t) {
+      for (let j = 0; j < 3; j++) {
+        const a = t * 0.00019 + j * 2.094 + 0.42,
+          p = orbitPoint(a);
+        if (p.front !== front) continue;
+        ctx.beginPath();
+        for (let k = 0; k < 22; k++) {
+          const q = orbitPoint(a - k * 0.007);
+          if (k === 0) ctx.moveTo(q.x, q.y);
+          else ctx.lineTo(q.x, q.y);
+        }
+        ctx.strokeStyle = tint("#ff686d88");
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        glow(ctx, p.x, p.y, 28, tint("rgba(255,30,45,.5)"));
+        glow(ctx, p.x, p.y, 9, tint("rgba(255,83,101,.8)"));
+        ctx.fillStyle = "#fff5f1";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 1.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = tint("#ffb6bca0");
+        ctx.lineWidth = 0.6;
+        ctx.beginPath();
+        ctx.moveTo(p.x - 13, p.y);
+        ctx.lineTo(p.x + 13, p.y);
+        ctx.moveTo(p.x, p.y - 6);
+        ctx.lineTo(p.x, p.y + 6);
+        ctx.stroke();
+      }
+    }
+    // Camadas que só mudam com tamanho da tela ou cor do tema.
+    function buildStatic() {
+      staticDirty = false;
+      let g = sizeLayer(under, 0, 0, width, height);
+      const trace = g.createLinearGradient(0, 0, cx, cy);
+      trace.addColorStop(0, tint("#ff1c37bb"));
+      trace.addColorStop(0.6, tint("#ff26357a"));
+      trace.addColorStop(1, tint("#ff15203a"));
+      g.beginPath();
+      g.moveTo(-50, height * 0.13);
+      g.bezierCurveTo(width * 0.16, height * 0.24, width * 0.27, height * 0.25, cx, height * 0.18);
+      g.strokeStyle = trace;
+      g.lineWidth = 2.8;
+      g.shadowColor = tint("#ff2133");
+      g.shadowBlur = 24;
+      g.stroke();
+      g.shadowBlur = 0;
+      g.beginPath();
+      g.moveTo(width * 0.04, height * 0.27);
+      g.bezierCurveTo(width * 0.25, height * 0.35, cx * 0.72, height * 0.28, cx, height * 0.34);
+      g.strokeStyle = tint("rgba(255,100,125,.40)");
+      g.lineWidth = 1.2;
+      g.shadowColor = tint("#ff4560");
+      g.shadowBlur = 12;
+      g.stroke();
+      g.shadowBlur = 0;
+      orbitPath(g, false);
+      const hr = radius * 1.12;
+      g = sizeLayer(sphere, cx - hr, cy - hr, hr * 2, hr * 2);
+      const halo = g.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.105);
+      halo.addColorStop(0, tint("#ff233800"));
+      halo.addColorStop(0.37, tint("#ff293b50"));
+      halo.addColorStop(0.58, tint("#ff263823"));
+      halo.addColorStop(1, tint("#ff263800"));
+      g.fillStyle = halo;
+      g.beginPath();
+      g.arc(cx, cy, radius * 1.11, 0, Math.PI * 2);
+      g.fill();
+      const base = g.createRadialGradient(cx - radius * 0.3, cy - radius * 0.6, radius * 0.1, cx, cy, radius);
+      base.addColorStop(0, "#182224");
+      base.addColorStop(0.5, "#050909");
+      base.addColorStop(1, "#000102");
+      g.fillStyle = base;
+      g.beginPath();
+      g.arc(cx, cy, radius, 0, Math.PI * 2);
+      g.fill();
+      g = sizeLayer(front, 0, 0, width, height);
+      const rim = g.createLinearGradient(cx - radius, cy - radius, cx + radius * 0.7, cy + radius);
+      rim.addColorStop(0, tint("#ff5261"));
+      rim.addColorStop(0.24, tint("#ffb6c0"));
+      rim.addColorStop(0.34, "#fff1f5");
+      rim.addColorStop(0.46, tint("#ff6178"));
+      rim.addColorStop(0.75, tint("#a62030"));
+      rim.addColorStop(1, tint("#350710"));
+      g.strokeStyle = rim;
+      g.lineWidth = 1.8;
+      g.shadowColor = tint("#ff283e");
+      g.shadowBlur = 10;
+      g.beginPath();
+      g.arc(cx, cy, radius, 0, Math.PI * 2);
+      g.stroke();
+      g.shadowBlur = 0;
+      orbitPath(g, true);
+      globeDirty = true;
+    }
+    // O globo gira devagar: redesenhar algumas vezes por segundo basta.
+    function buildGlobe(t) {
+      const started = performance.now();
+      globeDirty = false;
+      lastGlobe = t;
+      const g = sizeLayer(globe, cx - radius, cy - radius, radius * 2, radius * 2);
+      if (maps) {
+        renderSurface();
+        g.drawImage(surface, cx - radius, cy - radius, radius * 2, radius * 2);
+      }
+      g.save();
+      g.beginPath();
+      g.arc(cx, cy, radius - 0.6, 0, Math.PI * 2);
+      g.clip();
+      const borders = new Path2D();
+      for (const polygon of assets.countries) addPath(borders, polygon);
+      g.lineWidth = 0.48;
+      g.strokeStyle = "rgba(234,218,224,.28)";
+      g.stroke(borders);
+      const brazil = new Path2D();
+      for (const polygon of assets.brazil) {
+        addPath(brazil, polygon);
+        brazil.closePath();
+      }
+      g.fillStyle = tint("rgba(255,12,32,.055)");
+      g.fill(brazil);
+      g.lineWidth = 3;
+      g.strokeStyle = tint("#ff2638");
+      g.shadowColor = tint("#ff162c");
+      g.shadowBlur = 16;
+      g.stroke(brazil);
+      g.lineWidth = 1.5;
+      g.strokeStyle = tint("#ff5e66");
+      g.shadowBlur = 6;
+      g.stroke(brazil);
+      g.lineWidth = 0.65;
+      g.strokeStyle = tint("#ffb6b8");
+      g.shadowBlur = 0;
+      g.stroke(brazil);
+      g.fillStyle = tint("#ffd2ce");
+      g.shadowColor = tint("#ff2640");
+      g.shadowBlur = 5;
+      g.beginPath();
+      for (let i = 0; i < cities.length; i++) {
+        const p = project(cities[i][0], cities[i][1]);
+        if (p.z < 0.05) continue;
+        const r = (0.8 * radius) / 270;
+        g.moveTo(p.x + r, p.y);
+        g.arc(p.x, p.y, r, 0, Math.PI * 2);
+      }
+      g.fill();
+      g.shadowBlur = 0;
+      g.restore();
+      // Aparelhos mais lentos atualizam o globo com menos frequência.
+      const cost = performance.now() - started;
+      globeInterval = Math.max(700, Math.min(1600, cost * 12));
+    }
+    function draw(t) {
+      if (!ctx || !width || !active || !assets) return;
+      yaw = -43 + t * 0.00035;
+      pitch = 11 + Math.sin(t * 0.00004) * 0.7;
+      if (staticDirty) buildStatic();
+      if (globeDirty || t - lastGlobe >= globeInterval || t < lastGlobe) buildGlobe(t);
+      ctx.clearRect(0, 0, width, height);
+      const accentStar = tint("#ff6574"),
+        starGlow = tint("rgba(255,24,44,.42)");
+      for (let pass = 0; pass < 2; pass++) {
+        ctx.fillStyle = pass ? accentStar : "#b8dbdb";
+        for (let i = 0; i < stars.length; i++) {
+          const star = stars[i],
+            s = star[2];
+          if (s > 0.84 !== (pass === 1)) continue;
+          const sx = (((star[0] + t * star[3]) % 1) + 1) % 1,
+            sy = (star[1] + Math.sin(t * 0.00045 + star[4]) * 0.008 + 1) % 1,
+            size = (0.35 + s * 0.8) * 1.8;
+          ctx.globalAlpha = (0.18 + s * 0.58) * (0.68 + 0.32 * Math.sin(t * 0.0012 + star[4]));
+          ctx.fillRect(sx * width - size / 2, sy * height - size / 2, size, size);
+          if (s > 0.972) glow(ctx, sx * width, sy * height, 9, starGlow);
+        }
+      }
+      ctx.globalAlpha = 1;
+      blit(under);
+      comets(false, t);
+      blit(sphere);
+      blit(globe);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius - 0.6, 0, Math.PI * 2);
+      ctx.clip();
+      const cityGlow = tint("rgba(255,22,43,.36)");
+      for (let i = 0; i < cities.length; i++) {
+        const p = project(cities[i][0], cities[i][1]);
+        if (p.z < 0.05) continue;
+        const pulse = 0.68 + 0.32 * Math.sin(t * 0.002 + i * 1.4);
+        glow(ctx, p.x, p.y, 6 + pulse * 3, cityGlow);
+      }
+      ctx.restore();
+      blit(front);
+      comets(true, t);
+    }
+    function displayPlace() {
+      const query = String(document.getElementById("segment")?.value || "").trim();
+      const explicit = String(document.getElementById("searchCity")?.value || document.getElementById("searchRegion")?.value || "").trim();
+      const match = query.match(/\s+(em|no|na|nos|nas)\s+(.+)$/i);
+      const place = String(explicit || match?.[2] || "")
+        .replace(/,?\s+(?:brasil|brazil)$/i, "")
+        .trim()
+        .slice(0, 120);
+      return place ? (explicit ? "em" : match[1].toLowerCase()) + " " + place : "no Brasil";
+    }
+    function updateProgress() {
+      if (!active) return;
+      const value = Number.parseFloat(sourceProgress?.style.width || "0");
+      if (!Number.isFinite(value) || value <= 0) return;
+      progressKnown = true;
+      lastProgress = Math.max(lastProgress, Math.min(100, value));
+      track.setAttribute("aria-valuenow", String(Math.round(lastProgress)));
+      track.setAttribute("aria-valuetext", Math.round(lastProgress) + "% das etapas da busca");
+      fill.style.width = lastProgress + "%";
+      percent.hidden = false;
+      percent.textContent = Math.round(lastProgress) + "%";
+    }
+    function updateStatus() {
+      const text =
+        elapsed < 12000 ? "Processando prospecção…" : elapsed < 40000 ? "Aguardando os resultados da busca…" : "A busca continua. Aguarde mais um instante…";
+      if (status.textContent !== text) status.textContent = text;
+    }
+    function render(time) {
+      frame = 0;
+      if (!active || document.hidden || paused) return;
+      // ~30 quadros por segundo: suave e leve para o celular.
+      if (previous && time - previous < 32) {
+        frame = requestAnimationFrame(render);
+        return;
+      }
+      const delta = previous ? Math.min(time - previous, 100) : 0;
+      previous = time;
+      elapsed += delta;
+      draw(elapsed);
+      updateStatus();
+      frame = requestAnimationFrame(render);
+    }
+    function syncAnimation() {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      previous = 0;
+      if (active && !paused && !document.hidden) frame = requestAnimationFrame(render);
+    }
+    function resize() {
+      if (!active) return;
+      const box = canvas.getBoundingClientRect();
+      dpr = Math.min(devicePixelRatio || 1, 1.35);
+      width = box.width;
+      height = box.height;
+      if (width < 1 || height < 1) return;
+      const pixelWidth = Math.round(width * dpr),
+        pixelHeight = Math.round(height * dpr);
+      if (canvas.width !== pixelWidth) canvas.width = pixelWidth;
+      if (canvas.height !== pixelHeight) canvas.height = pixelHeight;
+      if (!ctx) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cx = width * 0.5;
+      cy = height * 0.47;
+      radius = Math.max(1, Math.min((cy - 10) / 1.11, (height - cy - 10) / 1.11, (width * 0.5 - 10) / 1.11, 680));
+      prepareSurface();
+      staticDirty = true;
+      globeDirty = true;
+      draw(elapsed);
+    }
+    function loadAssets() {
+      if (assets) return true;
+      try {
+        assets = JSON.parse(document.getElementById("clean-loader-earth-assets").textContent);
+        return true;
+      } catch (error) {
+        panel.classList.add("clg-no-texture");
+        console.warn("Globo indisponível:", error.message);
+        return false;
+      }
+    }
+    function loadTextures() {
+      if (texturePromise || !ctx || !assets) return texturePromise;
+      texturePromise = Promise.all([decodeTexture(assets.day), decodeTexture(assets.night)])
+        .then(([day, night]) => {
+          const mask = document.createElement("canvas");
+          mask.width = textureWidth;
+          mask.height = textureHeight;
+          const g = mask.getContext("2d", { willReadFrequently: true });
+          g.fillStyle = "#fff";
+          for (const ring of assets.brazil) {
+            g.beginPath();
+            ring.forEach(([lon, lat], i) => {
+              const x = (lon / 360 + 0.5) * textureWidth,
+                y = (0.5 - lat / 180) * textureHeight;
+              if (i === 0) g.moveTo(x, y);
+              else g.lineTo(x, y);
+            });
+            g.closePath();
+            g.fill();
+          }
+          maps = [day, night, g.getImageData(0, 0, textureWidth, textureHeight).data];
+          globeDirty = true;
+          if (active) draw(elapsed);
+        })
+        .catch((error) => {
+          console.warn("Textura do carregamento indisponível:", error.message);
+          panel.classList.add("clg-no-texture");
+        });
+      return texturePromise;
+    }
+    // Prepara as texturas antes da primeira busca (quando a tela de busca abre),
+    // para o globo não engasgar no começo.
+    function warmUp() {
+      if (texturePromise) return;
+      const run = () => loadAssets() && loadTextures();
+      if ("requestIdleCallback" in window) requestIdleCallback(run, { timeout: 2500 });
+      else setTimeout(run, 400);
+    }
+    const finder = document.getElementById("finder");
+    if (finder) {
+      if (finder.classList.contains("active")) warmUp();
+      new MutationObserver(() => finder.classList.contains("active") && warmUp()).observe(finder, { attributes: true, attributeFilter: ["class"] });
+    }
+    document.getElementById("segment")?.addEventListener("focus", warmUp, { once: true });
+    function synchronize() {
+      const next = loader.classList.contains("show");
+      if (next) {
+        clearTimeout(minimumTimer);
+        minimumTimer = 0;
+        if (loader.classList.contains("clean-globe-minimum-hold")) loader.classList.remove("clean-globe-minimum-hold");
+        if (exitPending) {
+          clearTimeout(exitTimer);
+          exitTimer = 0;
+          exitPending = false;
+          if (loader.classList.contains("clean-globe-exiting")) loader.classList.remove("clean-globe-exiting");
+          panel.classList.add("is-visible");
+          activeSince = performance.now();
+        }
+        if (active) return;
+        active = true;
+        activeSince = performance.now();
+        document.documentElement.classList.add("clean-globe-search-open");
+        panel.classList.remove("is-visible");
+        loader.classList.add("clean-globe-entering");
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() =>
+            setTimeout(
+              () => {
+                if (active && !exitPending) {
+                  loader.classList.remove("clean-globe-entering");
+                  panel.classList.add("is-visible");
+                }
+              },
+              motion.matches ? 0 : 80,
+            ),
+          ),
+        );
+        elapsed = 0;
+        lastGlobe = -Infinity;
+        globeDirty = true;
+        lastProgress = 0;
+        progressKnown = false;
+        paused = motion.matches;
+        focusBefore = document.activeElement;
+        panel.querySelector("#clg-location").textContent = displayPlace();
+        if (sourceProgress) sourceProgress.style.width = "0%";
+        track.classList.remove("is-indeterminate");
+        track.setAttribute("aria-valuenow", "0");
+        track.setAttribute("aria-valuetext", "0% das etapas da busca");
+        fill.style.width = "0%";
+        percent.hidden = false;
+        percent.textContent = "0%";
+        status.textContent = "Processando prospecção…";
+        loader.setAttribute("aria-busy", "true");
+        readTheme();
+        loadAssets();
+        panel.focus({ preventScroll: true });
+        resize();
+        if (assets) loadTextures();
+        syncAnimation();
+        return;
+      }
+      if (!active || minimumTimer || exitPending) return;
+      const remaining = 8000 - (performance.now() - activeSince);
+      if (remaining > 0) {
+        minimumTimer = setTimeout(() => {
+          minimumTimer = 0;
+          synchronize();
+        }, Math.ceil(remaining));
+        if (!loader.classList.contains("clean-globe-minimum-hold")) loader.classList.add("clean-globe-minimum-hold");
+        return;
+      }
+      exitPending = true;
+      if (!loader.classList.contains("clean-globe-exiting")) loader.classList.add("clean-globe-exiting");
+      panel.classList.remove("is-visible");
+      exitTimer = setTimeout(finishExit, motion.matches ? 140 : 520);
+    }
+    function finishExit() {
+      exitTimer = 0;
+      if (loader.classList.contains("show")) {
+        synchronize();
+        return;
+      }
+      active = false;
+      exitPending = false;
+      if (loader.classList.contains("clean-globe-minimum-hold")) loader.classList.remove("clean-globe-minimum-hold");
+      if (loader.classList.contains("clean-globe-exiting")) loader.classList.remove("clean-globe-exiting");
+      document.documentElement.classList.remove("clean-globe-search-open");
+      loader.setAttribute("aria-busy", "false");
+      syncAnimation();
+      // Libera a memória das camadas enquanto o globo não aparece.
+      for (const l of [under, sphere, globe, front]) {
+        l.canvas.width = l.canvas.height = 1;
+        l.w = l.h = 0;
+      }
+      staticDirty = true;
+      globeDirty = true;
+      if (focusBefore?.isConnected && !focusBefore.disabled) focusBefore.focus({ preventScroll: true });
+      focusBefore = null;
+    }
+    if (!ctx) panel.classList.add("clg-no-texture");
+    new ResizeObserver(resize).observe(panel.querySelector(".clg-scene"));
+    new MutationObserver(synchronize).observe(loader, { attributes: true, attributeFilter: ["class"] });
+    if (sourceProgress) new MutationObserver(updateProgress).observe(sourceProgress, { attributes: true, attributeFilter: ["style"] });
+    let themeQueued = false;
+    new MutationObserver(() => {
+      if (!active || themeQueued) return;
+      themeQueued = true;
+      requestAnimationFrame(() => {
+        themeQueued = false;
+        if (readTheme()) draw(elapsed);
+      });
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ["style"] });
+    document.addEventListener("visibilitychange", syncAnimation);
+    motion.addEventListener("change", () => {
+      paused = motion.matches;
+      if (active) draw(elapsed);
+      syncAnimation();
+    });
+    panel.addEventListener("keydown", (event) => {
+      if (active && event.key === "Tab") {
+        event.preventDefault();
+        panel.focus({ preventScroll: true });
+      }
+    });
+    synchronize();
   }
-  if(!active||minimumTimer||exitPending)return;
-  const remaining=8000-(performance.now()-activeSince);
-  if(remaining>0){
-    minimumTimer=setTimeout(()=>{minimumTimer=0;synchronize()},Math.ceil(remaining));
-    if(!loader.classList.contains('clean-globe-minimum-hold'))loader.classList.add('clean-globe-minimum-hold');
-    return;
-  }
-  exitPending=true;
-  if(!loader.classList.contains('clean-globe-exiting'))loader.classList.add('clean-globe-exiting');
-  panel.classList.remove('is-visible');
-  exitTimer=setTimeout(finishExit,motion.matches?140:520);
-}
-function finishExit(){
-  exitTimer=0;
-  if(loader.classList.contains('show')){synchronize();return}
-  active=false;exitPending=false;
-  if(loader.classList.contains('clean-globe-minimum-hold'))loader.classList.remove('clean-globe-minimum-hold');
-  if(loader.classList.contains('clean-globe-exiting'))loader.classList.remove('clean-globe-exiting');
-  document.documentElement.classList.remove('clean-globe-search-open');
-  loader.setAttribute('aria-busy','false');syncAnimation();
-  if(focusBefore?.isConnected&&!focusBefore.disabled)focusBefore.focus({preventScroll:true});
-  focusBefore=null;
-}
-if(!ctx)panel.classList.add('clg-no-texture');
-new ResizeObserver(resize).observe(panel.querySelector('.clg-scene'));
-new MutationObserver(synchronize).observe(loader,{attributes:true,attributeFilter:['class']});
-if(sourceProgress)new MutationObserver(updateProgress).observe(sourceProgress,{attributes:true,attributeFilter:['style']});
-new MutationObserver(()=>{if(active){readTheme();draw(elapsed)}}).observe(document.documentElement,{attributes:true,attributeFilter:['style']});
-document.addEventListener('visibilitychange',syncAnimation);
-motion.addEventListener('change',()=>{paused=motion.matches;if(active)draw(elapsed);syncAnimation()});
-panel.addEventListener('keydown',event=>{if(active&&event.key==='Tab'){event.preventDefault();panel.focus({preventScroll:true})}});
-synchronize();
-}
-// O loader legado oculta seus descendentes no DOMContentLoaded.
-// Montar depois dele evita que esconda o painel e o canvas novos.
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mountGlobeLoader,{once:true});
-else mountGlobeLoader();
+  // O loader legado oculta seus descendentes no DOMContentLoaded.
+  // Montar depois dele evita que esconda o painel e o canvas novos.
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mountGlobeLoader, { once: true });
+  else mountGlobeLoader();
 })();
 </script>
 
@@ -3942,6 +4446,27 @@ if(sale&&sale.id!==before&&supported()&&Notification.permission==="default"&&!cf
 let asked=null;try{asked=Notification.requestPermission()}catch(e){}
 if(asked&&asked.then)asked.then(p=>{if(p!=="granted")return;const k=cfg();k.notificacoesVendas=true;localStorage.setItem(CONFIG,JSON.stringify(k));window.dispatchEvent(new StorageEvent("storage",{key:CONFIG}));const b=document.querySelector(".notification-preferences button"),sm=document.querySelector(".notification-preferences small");b&&(b.textContent="Notificações ativas",b.classList.add("on"));sm&&(sm.textContent="Avisos do navegador ativados.");window.nexaNotifySale(sale)}).catch(()=>{})}
 return result}})();
+</script>
+<style id="nexa-globe-perf">
+#leadLoader{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#leadLoader::before{animation:nexaSkyDrift 48s linear infinite!important;will-change:transform}
+@keyframes nexaSkyDrift{0%,100%{transform:translate3d(-1.5%,-.8%,0)}50%{transform:translate3d(1.5%,.8%,0)}}
+@media(prefers-reduced-motion:reduce){#leadLoader::before{animation:none!important}}
+</style>
+<style id="nexa-mobile-fit">
+@media(max-width:680px){
+.rail .nav{display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:2px!important;overflow:visible!important}
+.rail .nav>button,.rail .nav>a{flex:none!important;width:auto!important;min-width:0!important;max-width:none!important;padding-left:0!important;padding-right:0!important}
+.rail .nav>button>span[data-mobile-label]{display:block!important;font-size:0!important;width:100%!important;max-width:none!important;overflow:visible!important;white-space:nowrap!important;text-align:center!important}
+.rail .nav>button>span[data-mobile-label]::after{display:block!important;font:700 8px/1.15 Manrope,Arial,sans-serif!important;letter-spacing:-.01em!important;white-space:nowrap!important;overflow:visible!important;text-align:center!important}
+html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
+#pipeline .kanban{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;overflow:visible!important;width:auto!important;max-width:100%!important}
+#pipeline .kanban>.column{flex:none!important;width:auto!important;min-width:0!important;max-width:none!important;min-height:0!important}
+#finance .finance-logo{width:auto!important;max-width:100%!important;white-space:nowrap!important}
+}
+</style>
+<script id="nexa-mobile-placeholders">
+(()=>{const short={"clean-saved-search":"Buscar leads","clref-search":"Buscar no acervo"},mq=matchMedia("(max-width:680px)"),apply=()=>{for(const id in short){const el=document.getElementById(id);if(!el)continue;el.dataset.fullPlaceholder=el.dataset.fullPlaceholder||el.placeholder;el.placeholder=mq.matches?short[id]:el.dataset.fullPlaceholder}};apply();setTimeout(apply,1500);mq.addEventListener?mq.addEventListener("change",apply):mq.addListener(apply)})();
 </script>
 <style id="nexa-local-style">
 .clean-rail-logout,.clean-profile-logout,.clean-account-logout,.clean-profile-plan-button,.clean-saas-plan-pill:not(.nexa-free-pill),.clean-account-plan,.clean-cloud-sync-status,.cloud-local-entry{display:none!important}
