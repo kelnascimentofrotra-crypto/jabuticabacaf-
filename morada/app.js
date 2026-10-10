@@ -2581,7 +2581,7 @@ const moradaApp = () => {
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
-    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-ca.jpg` };
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-cm.jpg` };
     if (tel) ld.telephone = tel;
     if (c.email) ld.email = c.email;
     if (c.endereco) ld.address = c.endereco;

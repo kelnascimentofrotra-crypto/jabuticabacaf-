@@ -31,7 +31,7 @@ supabase/                        SQL do banco (não é publicado no site — vej
    Isso não dá acesso ao painel: só quem está na tabela `admins` consegue alterar alguma coisa.
    - **Confirm email** ligado: o cliente precisa clicar no link do e-mail antes de entrar. O envio de e-mails padrão do Supabase é limitado (poucos por hora); para muitos cadastros, configure um SMTP próprio em **Authentication → Emails → SMTP Settings** ou deixe essa opção desligada.
 6. **Authentication → URL Configuration**:
-   - **Site URL**: o endereço do site (ex.: `https://ocaradosapartamentos.vercel.app`).
+   - **Site URL**: o endereço do site (ex.: `https://cleumamaia.vercel.app`).
    - **Redirect URLs**: adicione `https://SEU-DOMINIO/**` — é para onde voltam os links de “esqueci minha senha” (clientes e painel) e o login com Google.
 
 ### Primeiro administrador
@@ -99,7 +99,7 @@ No plano grátis, o Supabase pausa o projeto depois de 7 dias sem nenhum acesso.
 ## Páginas extras
 
 - `/privacidade` — Política de Privacidade (modelo; revise com o responsável pela imobiliária). Nome e contatos vêm das Configurações.
-- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og-ca.jpg`.
+- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og-cm.jpg`.
 
 ## Rodar sem Supabase
 
