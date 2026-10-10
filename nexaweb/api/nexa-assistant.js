@@ -1,16 +1,9 @@
 // NexaWeb AI assistant (ChatGPT). Runs as a Vercel Edge Function.
 // Needs the OPENAI_API_KEY environment variable; OPENAI_MODEL is optional.
+import { ASSISTANT_SYSTEM, ASSISTANT_MAX_TOKENS } from '../lib/nexa-ai-prompts.js';
+
 export const config = { runtime: 'edge' };
 
-const SYSTEM = `Você é a Nexa, assistente de IA do NexaWeb, um app para quem vende sites e landing pages para pequenos negócios locais no Brasil.
-Especialidades: criação de sites e landing pages, SEO (on-page, técnico e local), Google Perfil da Empresa (Google Meu Negócio), copywriting, conversão, tráfego pago, domínios e hospedagem, velocidade e Core Web Vitals, WordPress e ferramentas no-code, design e UX, prospecção de clientes, como apresentar e precificar sites, contratos e atendimento.
-Como responder:
-- Português do Brasil, tom direto, amigável e prático.
-- Comece pela resposta. Use passos numerados ou listas curtas quando ajudar; evite textos longos sem necessidade.
-- Dê exemplos concretos (títulos, textos, estruturas, checklists) que a pessoa possa usar na hora.
-- Se não souber algo ou depender de dados atuais (preços, regras do Google), diga isso com clareza em vez de inventar.
-- Se a pergunta fugir de sites, marketing digital ou vendas de serviços digitais, responda em uma frase e traga a conversa de volta para esses temas.
-- Formatação permitida: **negrito**, listas com "-" ou "1.", títulos curtos com "###" e \`código\`. Não use tabelas.`;
 
 const LIMITS = { messages: 16, chars: 4000 };
 const hits = new Map();
@@ -35,8 +28,8 @@ export default async function handler(req) {
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
     body: JSON.stringify({
       model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
-      messages: [{ role: 'system', content: SYSTEM }, ...messages],
-      max_completion_tokens: 1400,
+      messages: [{ role: 'system', content: ASSISTANT_SYSTEM }, ...messages],
+      max_completion_tokens: ASSISTANT_MAX_TOKENS,
       stream: true,
     }),
   }).catch(() => null);

@@ -518,6 +518,22 @@
  </div>
 </div>
 </article>
+<article class="card settings-card settings-ai-keys" id="nexaAiKeysCard">
+<div class="settings-card-head">
+<div class="settings-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+<div><h2 class="card-title">Inteligência artificial</h2><p class="card-caption">Cole suas chaves para a IA funcionar em qualquer endereço. Elas ficam salvas só neste navegador; não use em computador compartilhado.</p></div>
+</div>
+<div class="settings-fields">
+<label class="select"><span>Chave da OpenAI (assistente)</span><input id="cfgOpenAI" placeholder="sk-..." type="password" autocomplete="off" spellcheck="false"></label>
+<label class="select"><span>Chave da Anthropic (landing pages)</span><input id="cfgAnthropic" placeholder="sk-ant-..." type="password" autocomplete="off" spellcheck="false"></label>
+<div class="api-links settings-links">
+<a href="https://platform.openai.com/api-keys" rel="noopener" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>Obter chave OpenAI</a>
+<a href="https://console.anthropic.com/settings/keys" rel="noopener" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i>Obter chave Anthropic</a>
+</div>
+<button class="btn primary" type="button" id="nexaAiKeysSave"><i class="fa-solid fa-floppy-disk"></i>Salvar chaves de IA</button>
+<p class="card-caption" id="nexaAiKeysStatus"></p>
+</div>
+</article>
 <article class="card settings-card clean-support-card">
 <div class="settings-card-head">
 <div class="settings-icon"><i class="fa-solid fa-headset"></i></div>
@@ -576,9 +592,12 @@
 <h1>IA NexaWeb</h1>
 <p class="sub">Tire dúvidas sobre sites e SEO e crie landing pages completas em minutos.</p>
 </div>
+<div class="nexa-ai-head-actions">
 <div class="nexa-ai-tabs" role="tablist" aria-label="Ferramentas de IA">
 <button type="button" role="tab" id="nexaAiTabChat" aria-controls="nexaAiChatPanel" aria-selected="true" data-tab="chat"><i class="fa-solid fa-comments" aria-hidden="true"></i>Assistente</button>
 <button type="button" role="tab" id="nexaAiTabLanding" aria-controls="nexaAiLandingPanel" aria-selected="false" tabindex="-1" data-tab="landing"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Landing pages</button>
+</div>
+<button type="button" class="btn nexa-ai-keys-btn" title="Chaves de IA"><i class="fa-solid fa-key" aria-hidden="true"></i><span>Chaves</span></button>
 </div>
 </div>
 <div class="nexa-ai-panel" id="nexaAiChatPanel" role="tabpanel" aria-labelledby="nexaAiTabChat">
@@ -598,7 +617,7 @@
 <div class="nexa-ai-panel" id="nexaAiLandingPanel" role="tabpanel" aria-labelledby="nexaAiTabLanding" hidden>
 <div class="nexa-lp-layout">
 <form class="nexa-lp-form" novalidate>
-<div class="nexa-lp-form-head"><span class="nexa-lp-engine"><i class="fa-solid fa-bolt" aria-hidden="true"></i>Claude Opus 5.5</span><h2>Nova landing page</h2><p>Preencha o básico. A IA escreve os textos, monta o layout e deixa pronta para publicar.</p></div>
+<div class="nexa-lp-form-head"><span class="nexa-lp-engine"><i class="fa-solid fa-bolt" aria-hidden="true"></i>Claude Opus 5.5 · Padrão NexaWeb</span><h2>Nova landing page</h2><p>Mesma estrutura do site do Jabuticaba Café: capa em tela cheia, sobre, experiência, cardápio ou serviços, destaques, galeria, avaliações e localização. Os efeitos de rolagem mudam conforme o nicho.</p></div>
 <label class="nexa-field" id="nexaLpLeadField"><span>Usar um lead salvo <em>(opcional)</em></span><select id="nexaLpLead"><option value="">Escolher lead…</option></select></label>
 <label class="nexa-field"><span>Nome do negócio *</span><input id="nexaLpBusiness" maxlength="120" placeholder="Ex.: Barbearia Dom Corte" required></label>
 <div class="nexa-field-row">
@@ -606,16 +625,25 @@
 <label class="nexa-field"><span>Cidade</span><input id="nexaLpCity" maxlength="120" placeholder="Ex.: São Luís - MA"></label>
 </div>
 <label class="nexa-field"><span>WhatsApp</span><input id="nexaLpWhatsapp" maxlength="40" inputmode="tel" placeholder="(98) 98420-1544"></label>
-<label class="nexa-field"><span>Serviços e diferenciais</span><textarea id="nexaLpDescription" rows="4" maxlength="1500" placeholder="Ex.: corte, barba e sobrancelha; atendimento com hora marcada; ambiente climatizado; estacionamento."></textarea></label>
+<label class="nexa-field"><span>Endereço</span><input id="nexaLpAddress" maxlength="200" placeholder="Ex.: Av. dos Holandeses, 13 - Jardim Renascença"></label>
+<label class="nexa-field"><span>Produtos, serviços, preços e diferenciais</span><textarea id="nexaLpDescription" rows="4" maxlength="2000" placeholder="Ex.: corte R$ 35; barba R$ 25; corte + barba R$ 55. Atendimento com hora marcada, ambiente climatizado."></textarea></label>
+<div class="nexa-field"><span>Fotos do negócio <em>(até 8 · a primeira vira a capa)</em></span><div class="nexa-lp-photos"></div></div>
+<details class="nexa-lp-more"><summary><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Mais detalhes<em>Horário, Instagram, avaliações e logo</em></span></summary><div>
+<label class="nexa-field"><span>Horário de funcionamento</span><input id="nexaLpHours" maxlength="200" placeholder="Ex.: Segunda a sábado, das 8h às 20h"></label>
+<label class="nexa-field"><span>Instagram</span><input id="nexaLpInstagram" maxlength="60" placeholder="@seunegocio"></label>
+<div class="nexa-field-row"><label class="nexa-field"><span>Nota no Google</span><input id="nexaLpRating" maxlength="4" inputmode="decimal" placeholder="4,8"></label><label class="nexa-field"><span>Nº de avaliações</span><input id="nexaLpReviews" maxlength="7" inputmode="numeric" placeholder="120"></label></div>
+<div class="nexa-field"><span>Logo</span><div class="nexa-lp-logo-row"><img class="nexa-lp-logo-prev" alt="" hidden><label class="btn nexa-lp-logo-pick"><input type="file" id="nexaLpLogo" accept="image/*" hidden><i class="fa-solid fa-upload" aria-hidden="true"></i>Enviar logo</label><button type="button" class="btn nexa-lp-logo-clear" hidden>Remover</button></div></div>
+</div></details>
 <fieldset class="nexa-field nexa-lp-styles"><legend>Estilo</legend>
-<label><input type="radio" name="nexaLpStyle" value="moderno" checked><span>Moderno</span></label>
-<label><input type="radio" name="nexaLpStyle" value="elegante"><span>Elegante</span></label>
+<label><input type="radio" name="nexaLpStyle" value="elegante" checked><span>Elegante</span></label>
+<label><input type="radio" name="nexaLpStyle" value="moderno"><span>Moderno</span></label>
 <label><input type="radio" name="nexaLpStyle" value="minimalista"><span>Minimalista</span></label>
 <label><input type="radio" name="nexaLpStyle" value="vibrante"><span>Vibrante</span></label>
 <label><input type="radio" name="nexaLpStyle" value="escuro"><span>Escuro</span></label>
 </fieldset>
 <fieldset class="nexa-field nexa-lp-colors"><legend>Cor principal</legend>
-<label style="--sw:#00b8b1"><input type="radio" name="nexaLpColor" value="#00b8b1" checked><span><span class="nexa-sr">Turquesa</span></span></label>
+<label style="--sw:#b07a4f"><input type="radio" name="nexaLpColor" value="#b07a4f" checked><span><span class="nexa-sr">Caramelo</span></span></label>
+<label style="--sw:#00b8b1"><input type="radio" name="nexaLpColor" value="#00b8b1"><span><span class="nexa-sr">Turquesa</span></span></label>
 <label style="--sw:#2f6bff"><input type="radio" name="nexaLpColor" value="#2f6bff"><span><span class="nexa-sr">Azul</span></span></label>
 <label style="--sw:#7c4dff"><input type="radio" name="nexaLpColor" value="#7c4dff"><span><span class="nexa-sr">Roxo</span></span></label>
 <label style="--sw:#e8473c"><input type="radio" name="nexaLpColor" value="#e8473c"><span><span class="nexa-sr">Vermelho</span></span></label>
@@ -625,7 +653,7 @@
 <label class="nexa-lp-custom" title="Outra cor"><input type="radio" name="nexaLpColor" value="custom"><span><input type="color" id="nexaLpColorCustom" value="#ff3d8b" aria-label="Escolher outra cor"></span></label>
 </fieldset>
 <button type="submit" class="btn primary nexa-lp-go"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Gerar landing page</button>
-<small class="nexa-lp-hint">Leva de 1 a 3 minutos. Toda página sai com a marca “Create with NexaWeb”.</small>
+<small class="nexa-lp-hint">Leva cerca de 1 minuto. Toda página sai com a marca “Create with NexaWeb”.</small>
 </form>
 <div class="nexa-lp-stage" data-state="empty">
 <div class="nexa-lp-toolbar">
@@ -645,7 +673,7 @@
 <span class="nexa-lp-empty-art" aria-hidden="true"><i></i><i></i><i></i></span>
 <h3>Sua landing page aparece aqui</h3>
 <p>Preencha os dados do negócio e toque em <b>Gerar landing page</b>. Você acompanha a página sendo montada em tempo real.</p>
-<button type="button" class="btn nexa-lp-sample"><i class="fa-regular fa-eye" aria-hidden="true"></i>Ver um exemplo</button>
+<button type="button" class="btn nexa-lp-sample"><i class="fa-regular fa-eye" aria-hidden="true"></i>Ver exemplo do Padrão NexaWeb</button>
 </div>
 <div class="nexa-lp-overlay" aria-live="polite">
 <div class="nexa-lp-overlay-card">
@@ -659,7 +687,7 @@
 <div class="nexa-lp-error" role="alert">
 <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
 <p></p>
-<button type="button" class="btn primary nexa-lp-retry"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>Tentar de novo</button>
+<div class="nexa-lp-error-actions"><button type="button" class="btn primary nexa-lp-keybtn" hidden><i class="fa-solid fa-key" aria-hidden="true"></i>Adicionar minha chave</button><button type="button" class="btn nexa-lp-retry"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i>Tentar de novo</button></div>
 </div>
 </div>
 </div>
@@ -4728,6 +4756,34 @@ html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
 .nexa-lp-saved-row button.is-danger{color:#ff8b8b;border-color:rgba(255,94,94,.28)}
 .btn>i.fa-solid,.btn>i.fa-regular{margin-right:7px}
 
+.nexa-ai-head-actions{display:flex;align-items:center;gap:8px}
+.nexa-ai-keys-btn{display:inline-flex;align-items:center;height:48px;border-radius:14px!important}
+.nexa-key-btn{display:inline-flex;align-items:center;margin-top:10px}
+.nexa-field>span em,.nexa-lp-more summary em{color:var(--muted);font-style:normal;font-weight:600}
+.nexa-lp-photos{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.nexa-lp-photo{position:relative;aspect-ratio:1;overflow:hidden;border:1px solid var(--line);border-radius:11px}
+.nexa-lp-photo-cover{display:block;width:100%;height:100%;padding:0;border:0;background:none;cursor:pointer}
+.nexa-lp-photo-cover img{display:block;width:100%;height:100%;object-fit:cover}
+.nexa-lp-photo em{position:absolute;left:5px;bottom:5px;padding:2px 6px;border-radius:6px;background:rgba(0,0,0,.72);color:#fff;font:700 9.5px/1.4 Manrope,Inter,sans-serif;font-style:normal;pointer-events:none}
+.nexa-lp-photo-x{position:absolute;top:4px;right:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.72);color:#fff;font-size:15px;line-height:1;cursor:pointer}
+.nexa-lp-add{display:grid;place-items:center;align-content:center;gap:5px;aspect-ratio:1;border:1px dashed rgba(var(--accent-rgb),.55);border-radius:11px;background:rgba(var(--accent-rgb),.06);color:var(--accent2);font:700 11px/1.2 Manrope,Inter,sans-serif;text-align:center;cursor:pointer;transition:background .18s}
+.nexa-lp-add:hover{background:rgba(var(--accent-rgb),.12)}
+.nexa-lp-add i{font-size:16px}
+.nexa-lp-add:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.nexa-lp-more{border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.18)}
+.nexa-lp-more summary{display:flex;align-items:center;gap:8px;padding:12px;color:#b9cccb;font:700 12.5px/1.3 Manrope,Inter,sans-serif;cursor:pointer;list-style:none}
+.nexa-lp-more summary::-webkit-details-marker{display:none}
+.nexa-lp-more summary em{display:block;margin-top:2px;font-size:11.5px}
+.nexa-lp-more summary::after{content:"\f078";margin-left:auto;font:900 11px "Font Awesome 6 Free";transition:transform .2s}
+.nexa-lp-more[open] summary::after{transform:rotate(180deg)}
+.nexa-lp-more>div{display:grid;gap:12px;padding:0 12px 14px}
+.nexa-lp-logo-row{display:flex;align-items:center;gap:10px}
+.nexa-lp-logo-prev{width:44px;height:44px;border-radius:50%;object-fit:cover;border:1px solid var(--line)}
+.nexa-lp-logo-pick,.nexa-lp-logo-clear{display:inline-flex;align-items:center;cursor:pointer}
+.nexa-lp-logo-pick:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+.nexa-lp-error-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.nexa-lp-error-actions .btn{display:inline-flex;align-items:center}
+@media(max-width:680px){.nexa-ai-head-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%}#nexa-ai .nexa-ai-keys-btn{display:inline-flex!important;justify-content:center;width:48px;padding:0!important}.nexa-ai-keys-btn span{display:none}.nexa-ai-keys-btn>i{margin:0!important}}
 @keyframes nexaSpin{to{transform:rotate(360deg)}}
 @keyframes nexaPulse{0%,100%{box-shadow:0 0 12px rgba(var(--accent-rgb),.25)}50%{box-shadow:0 0 26px rgba(var(--accent-rgb),.55)}}
 @keyframes nexaShimmer{from{background-position:120% 0}to{background-position:-100% 0}}
@@ -4738,7 +4794,7 @@ html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
 @media(max-width:1080px){.nexa-lp-layout{grid-template-columns:1fr}.nexa-lp-stage{position:relative;top:0}.nexa-lp-frame{height:72vh;min-height:460px}}
 @media(max-width:680px){
 .nexa-ai-head{align-items:stretch!important;flex-direction:column}
-.nexa-ai-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%}
+.nexa-ai-tabs{display:grid;grid-template-columns:1fr 1fr;width:100%;min-width:0}
 .nexa-ai-tabs button{justify-content:center;padding:0 8px}
 .nexa-chat{height:calc(100dvh - 300px - env(safe-area-inset-bottom));min-height:430px;border-radius:18px}
 .nexa-chat-top{padding:11px 12px}
@@ -4762,92 +4818,9 @@ html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
 .nexa-lp-saved{padding:16px;border-radius:18px}
 .nexa-lp-saved-list{grid-template-columns:1fr}
 }
-@media(max-width:400px){.nexa-chat-new{font-size:0!important;padding:9px 12px!important}.nexa-chat-new>i{margin:0!important;font-size:13px}}
+@media(max-width:400px){.nexa-ai-tabs button{white-space:nowrap;padding:0 6px}.nexa-ai-tabs button>i{display:none}.nexa-chat-new{font-size:0!important;padding:9px 12px!important}.nexa-chat-new>i{margin:0!important;font-size:13px}}
 @media(prefers-reduced-motion:reduce){#nexa-ai *,#nexa-ai *::before,#nexa-ai *::after{animation-duration:2.4s!important;transition:none!important}.nexa-msg{animation:none!important}.nexa-chat-log{scroll-behavior:auto}}
 </style>
-<script type="text/plain" id="nexa-lp-sample">
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Barbearia Exemplo | Corte e barba com hora marcada</title>
-<meta name="description" content="Barbearia com corte, barba e sobrancelha com hora marcada. Agende pelo WhatsApp.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-:root{--c:#00b8b1;--ink:#0d1516;--soft:#f3f8f8;--muted:#5d6f70}
-*{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:Sora,system-ui,sans-serif;color:var(--ink);background:#fff;line-height:1.6}
-a{color:inherit}
-.wrap{width:min(1100px,100% - 40px);margin:auto}
-header{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.88);backdrop-filter:blur(10px);border-bottom:1px solid #e6eeee}
-header .wrap{display:flex;align-items:center;justify-content:space-between;height:66px}
-.logo{font-weight:800;letter-spacing:-.03em;text-decoration:none}.logo b{color:var(--c)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;background:var(--c);color:#fff;font-weight:600;text-decoration:none;box-shadow:0 10px 24px color-mix(in srgb,var(--c) 35%,transparent);transition:transform .2s}
-.btn:hover{transform:translateY(-2px)}.btn.small{padding:9px 16px;font-size:14px}
-.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-.hero{padding:84px 0 72px;background:radial-gradient(600px 360px at 85% 10%,color-mix(in srgb,var(--c) 22%,transparent),transparent 70%),linear-gradient(180deg,var(--soft),#fff)}
-.tag{display:inline-block;padding:6px 12px;border-radius:999px;background:color-mix(in srgb,var(--c) 14%,#fff);color:color-mix(in srgb,var(--c) 70%,#000);font-size:13px;font-weight:600}
-h1{margin:16px 0 14px;font-size:clamp(34px,6vw,58px);line-height:1.06;letter-spacing:-.04em;max-width:760px}
-.hero p{max-width:560px;margin:0 0 28px;color:var(--muted);font-size:18px}
-section{padding:72px 0}h2{margin:0 0 10px;font-size:clamp(26px,4vw,38px);letter-spacing:-.03em;line-height:1.15}
-.lead{margin:0 0 36px;color:var(--muted);max-width:580px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
-.card{padding:24px;border:1px solid #e3ecec;border-radius:20px;background:#fff}
-.card svg{width:40px;height:40px;padding:9px;border-radius:12px;background:color-mix(in srgb,var(--c) 14%,#fff);color:var(--c)}
-.card h3{margin:14px 0 6px;font-size:18px}.card p{margin:0;color:var(--muted);font-size:15px}
-.steps{counter-reset:s}.steps .card::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800}
-.alt{background:var(--soft)}
-details{padding:18px 20px;border:1px solid #e3ecec;border-radius:16px;background:#fff;margin-bottom:10px}
-summary{cursor:pointer;font-weight:600}details p{margin:10px 0 0;color:var(--muted)}
-.cta{padding:64px 28px;border-radius:28px;background:var(--ink);color:#fff;text-align:center}
-.cta p{color:#b9c9c9;margin:0 auto 26px;max-width:520px}
-footer{padding:30px 0 90px;color:var(--muted);font-size:14px;text-align:center}
-.wa{position:fixed;left:16px;bottom:16px;width:56px;height:56px;display:grid;place-items:center;border-radius:50%;background:#25d366;color:#fff;box-shadow:0 10px 26px rgba(0,0,0,.2)}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
-</style>
-</head>
-<body>
-<header><div class="wrap"><a class="logo" href="#">Barbearia <b>Exemplo</b></a><a class="btn small" href="#contato">Agendar horário</a></div></header>
-<main>
-<section class="hero"><div class="wrap">
-<span class="tag">Corte · Barba · Sobrancelha</span>
-<h1>Seu visual em dia, sem esperar na fila.</h1>
-<p>Atendimento com hora marcada, ambiente confortável e profissionais atentos a cada detalhe do seu corte.</p>
-<a class="btn" href="#contato">Quero agendar agora</a>
-</div></section>
-<section><div class="wrap">
-<h2>Por que escolher a gente</h2><p class="lead">Tudo pensado para você sair daqui satisfeito e voltar sempre.</p>
-<div class="grid">
-<div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><h3>Hora marcada</h3><p>Você escolhe o horário e é atendido na hora combinada.</p></div>
-<div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 3l12 18M18 3L6 21"/></svg><h3>Acabamento caprichado</h3><p>Cortes clássicos e modernos feitos com calma e precisão.</p></div>
-<div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><h3>Ambiente confortável</h3><p>Espaço limpo e agradável para você relaxar enquanto é atendido.</p></div>
-</div></div></section>
-<section class="alt"><div class="wrap">
-<h2>Como funciona</h2><p class="lead">Agendar leva menos de um minuto.</p>
-<div class="grid steps">
-<div class="card"><h3>Chame no WhatsApp</h3><p>Diga o serviço que você quer fazer.</p></div>
-<div class="card"><h3>Escolha o horário</h3><p>Confirmamos o melhor horário para você.</p></div>
-<div class="card"><h3>É só chegar</h3><p>Seu horário fica reservado, sem fila.</p></div>
-</div></div></section>
-<section><div class="wrap">
-<h2>Perguntas frequentes</h2><p class="lead">Ficou alguma dúvida? Fale com a gente.</p>
-<details><summary>Preciso agendar com antecedência?</summary><p>Recomendamos agendar para garantir o seu horário, mas também atendemos conforme a disponibilidade.</p></details>
-<details><summary>Quais serviços vocês fazem?</summary><p>Corte, barba e sobrancelha. Consulte outros serviços pelo WhatsApp.</p></details>
-<details><summary>Como faço para remarcar?</summary><p>É só avisar pelo WhatsApp e encontramos um novo horário.</p></details>
-</div></section>
-<section id="contato"><div class="wrap"><div class="cta">
-<h2>Bora deixar o visual em dia?</h2><p>Chame no WhatsApp e garanta o seu horário.</p>
-<a class="btn" href="#contato">Agendar pelo WhatsApp</a>
-</div></div></section>
-</main>
-<footer><div class="wrap">Barbearia Exemplo · Página de exemplo criada no NexaWeb</div></footer>
-<a class="wa" href="#contato" aria-label="Falar no WhatsApp"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg></a>
-</body>
-</html>
-</script>
 <script id="nexa-ai">
 (()=>{"use strict";
 const section=document.getElementById("nexa-ai");if(!section)return;
@@ -4857,13 +4830,51 @@ const store={get(k,d){try{const v=JSON.parse(localStorage.getItem(k)||"null");re
 const toast=m=>window.toast?window.toast(m):null;
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const firstName=()=>{const c=store.get("kaptar-config",{})||{};return String(c.nome||c.name||"").trim().split(/\s+/)[0]||""};
-const CHAT_KEY="nexa-ai-chat",PAGES_KEY="nexa-ai-landings",TAB_KEY="nexa-ai-tab",LOGO="images/logo-nexaweb-icon.png";
+const CHAT_KEY="nexa-ai-chat",PAGES_KEY="nexa-ai-landings",TAB_KEY="nexa-ai-tab",KEYS_KEY="nexa-ai-keys",LOGO="images/logo-nexaweb-icon.png";
 
-async function apiError(res,kind){let data=null;try{data=await res.json()}catch(e){}
-if(!data&&(res.status===404||res.status===405))return offline(kind);
-if(data&&data.error==="missing_key")return"Falta configurar a chave "+(kind==="chat"?"da OpenAI":"da Anthropic")+": na Vercel, abra Settings → Environment Variables, crie "+(kind==="chat"?"OPENAI_API_KEY":"ANTHROPIC_API_KEY")+" e faça um novo deploy.";
-return data&&(data.error||data.message)||"A IA não respondeu agora (erro "+res.status+"). Tente de novo em instantes."}
-function offline(kind){return"A IA ainda não está ativa neste endereço. Ela funciona com o NexaWeb publicado na Vercel e a variável "+(kind==="chat"?"OPENAI_API_KEY":"ANTHROPIC_API_KEY")+" configurada."}
+/* ---------- AI access: the user's own key (direct from the browser) or the /api server ---------- */
+const aiKeys=()=>{const k=store.get(KEYS_KEY,{})||{};return{openai:String(k.openai||"").trim(),anthropic:String(k.anthropic||"").trim()}};
+let promptsLoad=null;
+const prompts=()=>promptsLoad||(promptsLoad=import(new URL("lib/nexa-ai-prompts.js",document.baseURI).href).catch(e=>{promptsLoad=null;throw e}));
+class AIError extends Error{constructor(message,code){super(message);this.code=code}}
+const PROVIDER={chat:"OpenAI",landing:"Anthropic"};
+const noServer=kind=>"Este endereço não tem o servidor da IA, por isso ela não respondeu. Para usar agora, adicione sua chave da "+PROVIDER[kind]+" em Configurações → Inteligência artificial (fica salva só neste navegador).";
+async function providerError(res,kind){let detail="";try{const d=await res.json();detail=d&&d.error&&(d.error.message||d.error)||""}catch(e){}detail=String(detail);const p=PROVIDER[kind];
+if(res.status===401)return new AIError("A chave da "+p+" foi recusada. Confira se colou a chave certa em Configurações → Inteligência artificial.","key");
+if(res.status===403)return new AIError("A "+p+" bloqueou o acesso desta chave. "+detail,"key");
+if(res.status===429)return new AIError("Limite de uso ou saldo da "+p+" atingido. "+detail,"other");
+if(/credit|billing|balance|quota/i.test(detail))return new AIError("Sua conta da "+p+" está sem créditos. Adicione saldo no painel da "+p+" e tente de novo.","other");
+return new AIError(p+" respondeu com erro "+res.status+". "+detail,"other")}
+async function serverError(res,kind){let data=null;try{data=await res.json()}catch(e){}
+if(!data||typeof data!=="object")return new AIError(noServer(kind),"noserver");
+if(data.error==="missing_key")return new AIError("A IA deste site ainda não tem chave. Adicione sua chave da "+PROVIDER[kind]+" em Configurações → Inteligência artificial, ou configure "+(kind==="chat"?"OPENAI_API_KEY":"ANTHROPIC_API_KEY")+" na Vercel.","noserver");
+return new AIError(String(data.error||data.message||"A IA não respondeu agora (erro "+res.status+")."),"other")}
+async function readStream(res,onChunk){const reader=res.body.getReader(),dec=new TextDecoder();for(;;){const{value,done}=await reader.read();if(done)break;onChunk(dec.decode(value,{stream:true}))}onChunk(dec.decode())}
+async function readSSE(res,extract,push){let buf="";await readStream(res,chunk=>{buf+=chunk;const lines=buf.split("\n");buf=lines.pop();for(const line of lines)if(line.startsWith("data:"))push(extract(line.slice(5).trim()))})}
+const openaiDelta=data=>{if(data==="[DONE]")return"";const ev=JSON.parse(data);if(ev.error)throw new AIError(ev.error.message||"Erro da OpenAI","other");return ev.choices&&ev.choices[0]&&ev.choices[0].delta&&ev.choices[0].delta.content||""};
+const anthropicDelta=data=>{const ev=JSON.parse(data);if(ev.type==="error")throw new AIError(ev.error&&ev.error.message||"Erro da Anthropic","other");if(ev.type==="content_block_delta"&&ev.delta&&ev.delta.type==="text_delta")return ev.delta.text||"";if(ev.type==="message_delta"&&ev.delta&&ev.delta.stop_reason==="max_tokens")throw new AIError("A resposta ficou grande demais e foi cortada. Gere de novo.","other");return""};
+async function runAI(kind,input,onText,signal){const key=aiKeys()[kind==="chat"?"openai":"anthropic"];let text="";const push=t=>{if(t){text+=t;onText(text)}};
+try{
+if(key){let P;try{P=await prompts()}catch(e){throw new AIError("Não foi possível carregar o arquivo lib/nexa-ai-prompts.js. Publique a pasta completa do NexaWeb.","other")}
+const res=kind==="chat"?await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",signal,headers:{"Content-Type":"application/json",Authorization:"Bearer "+key},body:JSON.stringify({model:"gpt-4o-mini",messages:[{role:"system",content:P.ASSISTANT_SYSTEM}].concat(input.messages),max_completion_tokens:P.ASSISTANT_MAX_TOKENS,stream:true})})
+:await fetch("https://api.anthropic.com/v1/messages",{method:"POST",signal,headers:{"Content-Type":"application/json","x-api-key":key,"anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},body:JSON.stringify({model:"claude-opus-5-5",max_tokens:P.LANDING_MAX_TOKENS,system:P.LANDING_SYSTEM,messages:[{role:"user",content:P.landingBrief(input)}],stream:true})});
+if(!res.ok||!res.body)throw await providerError(res,kind);
+await readSSE(res,kind==="chat"?openaiDelta:anthropicDelta,push);return text}
+const res=await fetch(kind==="chat"?"api/nexa-assistant":"api/nexa-landing",{method:"POST",signal,headers:{"Content-Type":"application/json"},body:JSON.stringify(input)});
+if(!res.ok||!res.body)throw await serverError(res,kind);
+let raw="",cut=-1;await readStream(res,chunk=>{raw+=chunk;if(cut>=0)return;cut=raw.indexOf("[nexa-error]");const clean=cut>=0?raw.slice(0,cut):raw;if(clean.length>text.length){text=clean;onText(text)}});
+if(cut>=0)throw new AIError(raw.slice(cut+12).trim()||"A resposta foi interrompida.","cut");return text}
+catch(e){if(e instanceof AIError){e.partial=text;throw e}if(e&&e.name==="AbortError")throw Object.assign(new AIError("Cancelado","abort"),{partial:text});
+const err=key?new AIError("Não foi possível conectar à "+PROVIDER[kind]+". Confira sua internet e a chave em Configurações → Inteligência artificial.","net"):new AIError(noServer(kind),"noserver");err.partial=text;throw err}}
+const needsKey=e=>e&&(e.code==="noserver"||e.code==="key");
+function openKeys(kind){window.go&&window.go("settings");setTimeout(()=>{const card=document.getElementById("nexaAiKeysCard"),input=document.getElementById(kind==="chat"?"cfgOpenAI":"cfgAnthropic");card&&card.scrollIntoView({behavior:"smooth",block:"center"});input&&input.focus({preventScroll:true})},350)}
+/* settings card */
+(()=>{const oa=document.getElementById("cfgOpenAI"),an=document.getElementById("cfgAnthropic"),status=document.getElementById("nexaAiKeysStatus"),btn=document.getElementById("nexaAiKeysSave");if(!oa||!an)return;
+const k=aiKeys();oa.value=k.openai;an.value=k.anthropic;
+const describe=()=>{const v=aiKeys(),on=[v.openai&&"OpenAI",v.anthropic&&"Anthropic"].filter(Boolean);status.textContent=on.length?"Ativas neste navegador: "+on.join(" e ")+".":"Nenhuma chave salva. Sem chave, a IA só funciona com o NexaWeb na Vercel."};
+const save=(quiet)=>{store.set(KEYS_KEY,{openai:oa.value.trim(),anthropic:an.value.trim()});describe();quiet||toast("Chaves de IA salvas")};
+[oa,an].forEach(i=>i.addEventListener("change",()=>save(true)));btn&&btn.addEventListener("click",()=>save(false));describe()})();
+$(".nexa-ai-keys-btn")&&$(".nexa-ai-keys-btn").addEventListener("click",()=>openKeys($("#nexaAiTabLanding").getAttribute("aria-selected")==="true"?"landing":"chat"));
 
 /* tabs */
 const tabs=$$(".nexa-ai-tabs [role=tab]");
@@ -4898,11 +4909,13 @@ if(!Array.isArray(chat.history))chat.history=[];
 const SUGGESTIONS=["Como colocar o site de uma barbearia no topo do Google?","O que não pode faltar numa landing page que vende?","Quanto cobrar por um site para pequeno negócio?","Como otimizar o Google Perfil da Empresa de um cliente?","Checklist de SEO antes de publicar um site","Como oferecer um site no WhatsApp para quem não tem?"];
 const THINK=["Pensando","Analisando sua pergunta","Organizando a resposta"];
 const saveChat=()=>{chat.history=chat.history.slice(-40);store.set(CHAT_KEY,chat.history)};
+const keyButton=kind=>'<button type="button" class="btn nexa-key-btn" data-kind="'+kind+'"><i class="fa-solid fa-key" aria-hidden="true"></i>Adicionar minha chave</button>';
 function bubble(role,html,cls){const row=document.createElement("div");row.className="nexa-msg "+role+(cls?" "+cls:"");row.innerHTML=(role==="assistant"?'<span class="nexa-ai-avatar"><img src="'+LOGO+'" alt=""></span>':"")+'<div class="nexa-bubble">'+html+"</div>";return row}
 const userHtml=t=>esc(t).replace(/\n/g,"<br>");
+const errorHtml=m=>'<div class="nexa-md">'+md(m.content)+"</div>"+(m.keyHelp?keyButton("chat"):"");
 function welcome(){const n=firstName();return'<div class="nexa-chat-welcome"><span class="nexa-ai-avatar big"><img src="'+LOGO+'" alt=""></span><h2>'+(n?"Oi, "+esc(n)+"! ":"Oi! ")+'Eu sou a Nexa.</h2><p>Pergunte o que quiser sobre sites, SEO, Google Meu Negócio, landing pages e como vender seus serviços.</p><div class="nexa-chat-suggestions">'+SUGGESTIONS.map(s=>'<button type="button" class="nexa-chip" data-q="'+esc(s)+'">'+esc(s)+"</button>").join("")+"</div></div>"}
 function renderChat(){chat.log.innerHTML="";if(!chat.history.length){chat.log.innerHTML=welcome();return}
-chat.history.forEach(m=>chat.log.appendChild(bubble(m.role,m.role==="user"?userHtml(m.content):'<div class="nexa-md">'+md(m.content)+"</div>",m.error?"is-error":"")));scrollLog(true)}
+chat.history.forEach(m=>chat.log.appendChild(bubble(m.role,m.role==="user"?userHtml(m.content):m.error?errorHtml(m):'<div class="nexa-md">'+md(m.content)+"</div>",m.error?"is-error":"")));scrollLog(true)}
 let stick=true;chat.log.addEventListener("scroll",()=>{stick=chat.log.scrollHeight-chat.log.scrollTop-chat.log.clientHeight<80},{passive:true});
 function scrollLog(force){if(force||stick){chat.log.style.scrollBehavior="auto";chat.log.scrollTop=chat.log.scrollHeight;chat.log.style.scrollBehavior=""}}
 function setBusy(on){chat.busy=on;chat.send.disabled=on||!chat.input.value.trim();chat.reset.disabled=on;chat.log.setAttribute("aria-busy",on)}
@@ -4913,79 +4926,215 @@ if(!chat.history.length)chat.log.innerHTML="";
 chat.history.push({role:"user",content:question});saveChat();chat.log.appendChild(bubble("user",userHtml(question)));
 const row=bubble("assistant","","is-thinking"),box=row.querySelector(".nexa-bubble"),think=thinking(THINK);box.appendChild(think);chat.log.appendChild(row);scrollLog(true);
 const started=performance.now(),minWait=2700+Math.random()*600,payload=chat.history.filter(m=>!m.error).slice(-12).map(m=>({role:m.role,content:m.content}));
-let full="",done=false,failure="";const visible=()=>full.split("[nexa-error]")[0];
-(async()=>{try{const res=await fetch("api/nexa-assistant",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:payload})});
-if(!res.ok||!res.body){failure=await apiError(res,"chat");return}
-const reader=res.body.getReader(),dec=new TextDecoder();for(;;){const{value,done:end}=await reader.read();if(end)break;full+=dec.decode(value,{stream:true})}full+=dec.decode()}
-catch(e){failure=offline("chat")}finally{done=true}})();
+let full="",done=false,failure=null;
+runAI("chat",{messages:payload},t=>{full=t}).catch(e=>{failure=e;full=e.partial||full}).finally(()=>{done=true});
 await sleep(Math.max(0,minWait-(performance.now()-started)));
-while(!visible().trim()&&!done)await sleep(60);
+while(!full.trim()&&!done)await sleep(60);
 think.stop();row.classList.remove("is-thinking");
-if(!failure&&visible().trim()){box.innerHTML='<div class="nexa-md is-typing"></div>';const out=box.firstChild;let shown=0;
-await new Promise(resolve=>{const tick=()=>{const text=visible();if(shown<text.length){shown=Math.min(text.length,shown+Math.max(3,Math.ceil((text.length-shown)/12)));out.innerHTML=md(text.slice(0,shown));scrollLog()}
-if(done&&shown>=visible().length)return resolve();setTimeout(tick,30)};tick()});
-out.classList.remove("is-typing");const answer=visible().trim(),cut=full.split("[nexa-error]")[1];
-chat.history.push({role:"assistant",content:answer});
-if(cut){const note=document.createElement("small");note.className="nexa-msg-note";note.textContent="Resposta interrompida: "+cut.trim();box.appendChild(note)}}
-else{const msg=failure||(full.split("[nexa-error]")[1]||"").trim()||"A IA não conseguiu responder agora. Tente de novo.";row.classList.add("is-error");box.innerHTML='<div class="nexa-md">'+md(msg)+"</div>";chat.history.push({role:"assistant",content:msg,error:true})}
+if(full.trim()){box.innerHTML='<div class="nexa-md is-typing"></div>';const out=box.firstChild;let shown=0;
+await new Promise(resolve=>{const tick=()=>{if(shown<full.length){shown=Math.min(full.length,shown+Math.max(3,Math.ceil((full.length-shown)/12)));out.innerHTML=md(full.slice(0,shown));scrollLog()}
+if(done&&shown>=full.length)return resolve();setTimeout(tick,30)};tick()});
+out.classList.remove("is-typing");chat.history.push({role:"assistant",content:full.trim()});
+if(failure){const note=document.createElement("small");note.className="nexa-msg-note";note.textContent="Resposta interrompida: "+failure.message;box.appendChild(note)}}
+else{const msg={role:"assistant",content:failure?failure.message:"A IA não conseguiu responder agora. Tente de novo.",error:true,keyHelp:needsKey(failure)};row.classList.add("is-error");box.innerHTML=errorHtml(msg);chat.history.push(msg)}
 saveChat();setBusy(false);scrollLog()}
 
 chat.form.addEventListener("submit",e=>{e.preventDefault();const q=chat.input.value;if(!q.trim()||chat.busy)return;chat.input.value="";autosize();ask(q)});
 chat.input.addEventListener("input",autosize);
 chat.input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&!matchMedia("(pointer:coarse)").matches){e.preventDefault();chat.form.requestSubmit?chat.form.requestSubmit():chat.form.dispatchEvent(new Event("submit",{cancelable:true}))}});
-chat.log.addEventListener("click",e=>{const chip=e.target.closest(".nexa-chip");if(chip)ask(chip.dataset.q)});
+chat.log.addEventListener("click",e=>{const chip=e.target.closest(".nexa-chip");if(chip)ask(chip.dataset.q);const kb=e.target.closest(".nexa-key-btn");if(kb)openKeys("chat")});
 chat.reset.addEventListener("click",()=>{if(chat.busy)return;chat.history=[];saveChat();renderChat();chat.input.focus()});
 const narrow=matchMedia("(max-width:680px)"),placeholder=()=>{chat.input.placeholder=narrow.matches?"Digite sua pergunta…":"Pergunte sobre sites, SEO, Google Meu Negócio…"};
 narrow.addEventListener?narrow.addEventListener("change",placeholder):narrow.addListener(placeholder);placeholder();renderChat();autosize();
 
-/* ---------- landing pages ---------- */
+/* ---------- landing pages (Padrão NexaWeb) ---------- */
+/* ---------- Padrão NexaWeb: landing page template (structure of the Jabuticaba Café site) ---------- */
+const NX_ICONS={coffee:'<path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v2M10 2v2M14 2v2"/>',
+utensils:'<path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/>',
+cake:'<path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20M7 8v3M12 8v3M17 8v3"/><path d="M7 4h.01M12 4h.01M17 4h.01"/>',
+wine:'<path d="M8 22h8M7 10h10M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/>',
+scissors:'<circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>',
+sparkles:'<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9Z"/><path d="M5 3v4M3 5h4M19 17v4M17 19h4"/>',
+heart:'<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
+star:'<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>',
+clock:'<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+pin:'<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
+leaf:'<path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>',
+dumbbell:'<path d="M6.5 6.5l11 11M21 21l-1-1M3 3l1 1M18 22l4-4M2 6l4-4M3 10l7-7M14 21l7-7"/>',
+car:'<path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/>',
+wrench:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>',
+tooth:'<path d="M12 5.5C10.5 4 9 3.5 7.5 3.5 5 3.5 3.5 5.5 3.5 8c0 2 1 3.5 1.5 6 .5 3 1 6.5 2.5 6.5S9.5 16 12 16s3 4.5 4.5 4.5 2-3.5 2.5-6.5c.5-2.5 1.5-4 1.5-6 0-2.5-1.5-4.5-4-4.5-1.5 0-3 .5-4.5 2Z"/>',
+paw:'<circle cx="11" cy="4" r="2"/><circle cx="18" cy="8" r="2"/><circle cx="20" cy="16" r="2"/><path d="M9 10a5 5 0 0 1 5 5v3.5a3.5 3.5 0 0 1-6.84 1.05Q6.52 17.48 4.46 16.84A3.5 3.5 0 0 1 5.5 10Z"/>',
+sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
+music:'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
+gift:'<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C9 3 11 5 12 8c1-3 3-5 4.5-5a2.5 2.5 0 0 1 0 5"/>',
+home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/>',
+briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+smile:'<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>',
+check:'<circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/>',
+users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+camera:'<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/>',
+flower:'<circle cx="12" cy="12" r="3"/><path d="M12 16.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 1 1 12 7.5a4.5 4.5 0 1 1 4.5 4.5 4.5 4.5 0 1 1-4.5 4.5"/>',
+shirt:'<path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"/>',
+book:'<path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>',
+truck:'<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2M15 18H9M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62L18.3 9.38a1 1 0 0 0-.78-.38H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>',
+bolt:'<path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>',
+arrow:'<path d="M12 5v14M19 12l-7 7-7-7"/>',
+menu:'<path d="M4 6h16M4 12h16M4 18h16"/>',
+insta:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>'};
+const NX_WA='<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.4.8 3.2.6a2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>';
+const nxIcon=(n,cls)=>'<svg class="'+(cls||"ic")+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(NX_ICONS[n]||NX_ICONS.sparkles)+"</svg>";
+const NX_STYLES={
+elegante:{fonts:"Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Jost:wght@300;400;500",display:"'Cormorant Garamond',Georgia,serif",body:"Jost,system-ui,sans-serif",dw:300,dls:"-.01em",bw:300,radius:"2px",img:"2px",card:"2px",bc:"uppercase",bt:".22em",et:".32em",bg:"#f8f4ee"},
+moderno:{fonts:"Sora:wght@400;600;700&family=Inter:wght@400;500;600",display:"Sora,system-ui,sans-serif",body:"Inter,system-ui,sans-serif",dw:600,dls:"-.03em",bw:400,radius:"14px",img:"22px",card:"22px",bc:"none",bt:"0",et:".2em",bg:"#f6f8f8"},
+minimalista:{fonts:"Inter+Tight:wght@400;500;600&family=Inter:wght@400;500",display:"'Inter Tight',Inter,system-ui,sans-serif",body:"Inter,system-ui,sans-serif",dw:500,dls:"-.035em",bw:400,radius:"0px",img:"0px",card:"0px",bc:"none",bt:".02em",et:".24em",bg:"#ffffff"},
+vibrante:{fonts:"Outfit:wght@400;500;700;800",display:"Outfit,system-ui,sans-serif",body:"Outfit,system-ui,sans-serif",dw:800,dls:"-.03em",bw:400,radius:"999px",img:"28px",card:"28px",bc:"none",bt:"0",et:".18em",bg:"#fffaf4"},
+escuro:{fonts:"Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500",display:"'Playfair Display',Georgia,serif",body:"Inter,system-ui,sans-serif",dw:400,dls:"-.01em",bw:300,radius:"3px",img:"4px",card:"4px",bc:"uppercase",bt:".16em",et:".3em",bg:"#0f0e0d",dark:true}};
+/* scroll effects by niche */
+const NX_FX={
+aconchegante:{title:"up",text:"up",image:"zoom",card:"up",hero:"parallax",par:.35},
+elegante:{title:"blur",text:"blur",image:"clip",card:"up",hero:"kenburns",lines:true},
+suave:{title:"up",text:"fade",image:"zoom",card:"zoom",hero:"parallax",par:.2},
+energia:{title:"skew",text:"up",image:"side",card:"pop",hero:"parallax",par:.45,progress:true,marquee:true},
+impacto:{title:"left",text:"left",image:"right",card:"up",hero:"parallax",par:.3,progress:true,lines:true},
+editorial:{title:"up",text:"fade",image:"clip",card:"clip",hero:"kenburns"},
+sobrio:{title:"fade",text:"fade",image:"fade",card:"up",hero:"static",lines:true},
+divertido:{title:"pop",text:"up",image:"pop",card:"pop",hero:"float",par:.25,marquee:true}};
+const NX_GUESS=[[/caf[eé]|padaria|restaurante|lanchonete|doceria|confeitaria|pizzaria|hamburgueria|\bbar\b|a[çc]a[ií]|bistr|gastronom|comida|marmit|food|churrasc|sushi|pastel|cervej/i,"aconchegante"],[/sal[aã]o|barbe|est[eé]tica|manicure|unha|spa\b|maquia|sobrancel|beleza|joalher|cabele|depila|c[ií]lios/i,"elegante"],[/dent|odonto|cl[ií]nica|psic|fisio|nutri|veterin|farm[aá]cia|m[eé]dic|sa[uú]de|terapia|laborat/i,"suave"],[/academia|crossfit|luta|jiu|muay|boxe|esporte|dan[çc]a|pilates|funcional|treino|fitness/i,"energia"],[/oficina|mec[aâ]nic|lava.?jato|constru|reforma|el[eé]tric|encan|serralher|vidra|marcen|transporte|frete|mudan|automot|pneu|t[eé]cnic/i,"impacto"],[/roupa|moda|cal[çc]ado|[oó]tica|decora|fotograf|boutique|loja|acess[oó]rio|m[oó]veis/i,"editorial"],[/advoca|contab|imobili|consult|seguro|escrit[oó]rio|jur[ií]dic|finan|corretor|arquitet/i,"sobrio"],[/pet|escola|infantil|festa|brinquedo|sorvet|creche|buffet|bal[aã]o|kids|crian/i,"divertido"]];
+function nxPreset(p,segment){if(NX_FX[p])return p;for(const[re,name]of NX_GUESS)if(re.test(segment||""))return name;return"aconchegante"}
+function nxOnColor(hex){const n=parseInt(hex.slice(1),16),ch=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*ch[0]+.7152*ch[1]+.0722*ch[2]>.2?"#15120f":"#ffffff"}
+function nxPhone(d){d=String(d||"").replace(/^55/,"");return d.length===11?"("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7):d.length===10?"("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6):d}
+
+/* c: content from the AI (may be partial while streaming); f: form fields; media: {photos:[dataURL], logo}; opts: {partial} */
+function nexaTemplate(c,f,media,opts){
+c=c&&typeof c==="object"?c:{};opts=opts||{};media=media||{};
+const o=v=>v&&typeof v==="object"&&!Array.isArray(v)?v:{},A=v=>Array.isArray(v)?v.filter(x=>x&&typeof x==="object"):[],
+S=(v,max)=>{v=String(v??"").replace(/\s+/g," ").trim();return max&&v.length>max?v.slice(0,max-1).trimEnd()+"…":v},E=(v,max)=>esc(S(v,max));
+const st=NX_STYLES[f.style]||NX_STYLES.elegante,preset=nxPreset(c.preset,f.segment),fx=NX_FX[preset],accent=/^#[0-9a-f]{6}$/i.test(f.color)?f.color:"#00b8b1";
+const photos=(media.photos||[]).slice(0,8),logo=media.logo||"",name=S(f.business,80)||"Seu negócio",city=S(f.city,80),address=S(f.address,160),hours=S(f.hours,160),insta=S(f.instagram,40),phone=nxPhone(f.whatsapp);
+const wa=f.whatsapp?"https://wa.me/"+f.whatsapp+"?text="+encodeURIComponent(S(c.whatsappMessage,200)||"Olá! Vim pelo site e gostaria de mais informações."):"";
+const R=(kind,step)=>{let v=fx[kind]||"up";if(v==="side")v=(step||0)%2?"right":"left";return' data-r="'+v+'"'+(step?' style="--d:'+Math.min(step,6)*110+'ms"':"")};
+const hero=o(c.hero),about=o(c.about),pil=o(c.pillars),menu=o(c.menu),hl=o(c.highlights),gal=o(c.gallery),cta=o(c.cta),rev=o(c.reviews),loc=o(c.location),ig=o(c.instagram),foot=o(c.footer),seo=o(c.seo);
+const menuLabel=S(c.menuLabel,20)||"Serviços",cats=A(menu.categories).slice(0,4).map(k=>({name:S(k.name,24),items:A(k.items).slice(0,12)})).filter(k=>k.items.length);
+const pillars=A(pil.items).slice(0,3),highlights=A(hl.items).slice(0,6),hasGallery=photos.length>=3,hasLoc=!!(address||city||phone||hours);
+const primary=wa?{href:wa,ext:true}:{href:hasLoc?"#localizacao":"#ofertas"};
+const link=(h,cls,label,icon)=>'<a class="btn '+cls+'" href="'+esc(h.href)+'"'+(h.ext?' target="_blank" rel="noopener"':"")+">"+(icon||"")+esc(label)+"</a>";
+const ph=(i,alt,cls,attrs)=>'<div class="ph'+(cls?" "+cls:"")+'" style="background-image:var(--p'+i+')"'+(alt?' role="img" aria-label="'+esc(alt)+'"':' aria-hidden="true"')+(attrs||"")+"></div>";
+const title=S(seo.title,70)||name+(f.segment?" | "+S(f.segment,40)+(city?" em "+city:""):""),desc=S(seo.description,170)||S(hero.subtitle,170)||name+(city?" em "+city:"")+".";
+const schemaType={aconchegante:"FoodEstablishment",suave:"MedicalBusiness",energia:"SportsActivityLocation",sobrio:"ProfessionalService"}[preset]||"LocalBusiness";
+const ld={"@context":"https://schema.org","@type":schemaType,name,description:desc};if(f.whatsapp)ld.telephone="+"+f.whatsapp;if(address||city)ld.address={"@type":"PostalAddress",streetAddress:address||undefined,addressLocality:city||undefined,addressCountry:"BR"};if(insta)ld.sameAs=["https://instagram.com/"+insta];if(hours)ld.openingHours=hours;if(f.rating)ld.aggregateRating={"@type":"AggregateRating",ratingValue:f.rating.replace(",","."),reviewCount:f.reviews||undefined};
+const mono=name.split(/\s+/).filter(w=>w.length>2||/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join("").toUpperCase()||name[0].toUpperCase();
+const nav=[["#inicio","Início"],about.title?["#sobre","Sobre"]:null,cats.length?["#ofertas",menuLabel]:null,pillars.length?["#experiencia","Experiência"]:null,hasGallery&&(gal.title||!opts.partial)?["#galeria","Galeria"]:null,hasLoc&&(loc.title||!opts.partial)?["#localizacao","Localização"]:null].filter(Boolean);
+const dark=!!st.dark,bg=st.bg,ink=dark?"#f3eee7":"color-mix(in oklab,"+accent+" 14%,#15120f)";
+let h='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>'+esc(title)+'</title>\n<meta name="description" content="'+esc(desc)+'">\n<meta property="og:title" content="'+esc(title)+'">\n<meta property="og:description" content="'+esc(desc)+'">\n<meta property="og:type" content="website">\n<meta property="og:locale" content="pt_BR">\n<meta name="theme-color" content="'+accent+'">\n'+(logo?'<link rel="icon" href="'+logo+'">\n':"")+'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family='+st.fonts+'&display=swap" rel="stylesheet">\n<script type="application/ld+json">'+JSON.stringify(ld).replace(/</g,"\\u003c")+"<\/script>\n"+(opts.partial?"":"<script>document.documentElement.classList.add('js')<\/script>\n")+"<style>\n"+
+":root{"+photos.map((p,i)=>"--p"+i+":url(\""+p+"\");").join("")+"--a:"+accent+";--on-a:"+nxOnColor(accent)+";--bg:"+bg+";--ink:"+ink+";--deep:color-mix(in oklab,"+accent+" 20%,#0b0a09);--soft:color-mix(in oklab,"+accent+" "+(dark?"9%,#161412":"7%,"+bg)+");--muted:color-mix(in oklab,var(--ink) 64%,var(--bg));--line:color-mix(in oklab,var(--ink) 13%,transparent);--a-text:color-mix(in oklab,var(--a) "+(dark?"78%,#fff":"72%,var(--ink)")+");--display:"+st.display+";--body:"+st.body+";--dw:"+st.dw+";--dls:"+st.dls+";--radius:"+st.radius+";--img-r:"+st.img+";--card-r:"+st.card+";--bc:"+st.bc+";--bt:"+st.bt+";--et:"+st.et+";--ease:cubic-bezier(.16,1,.3,1)}\n"+
+"*{box-sizing:border-box}html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--ink);font:"+st.bw+" 17px/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}img,svg{display:block;max-width:100%}section{position:relative}.ph{background-color:var(--deep);background-position:center;background-size:cover}a{color:inherit;text-decoration:none}h1,h2,h3{margin:0;font-family:var(--display);font-weight:var(--dw);letter-spacing:var(--dls);line-height:1.08}p{margin:0}:focus-visible{outline:2px solid var(--a);outline-offset:3px}\n"+
+".wrap{width:min(1160px,100% - 40px);margin-inline:auto}.sec{padding:clamp(84px,11vw,132px) 0}.eyebrow{display:block;font:500 11px/1.4 var(--body);letter-spacing:var(--et);text-transform:uppercase;color:var(--a-text)}.line{height:1px;width:100%;max-width:8rem;margin:30px 0;background:linear-gradient(90deg,transparent,color-mix(in oklab,var(--ink) 40%,transparent),transparent)}.center .line{margin-inline:auto}\n"+
+".sec-head{max-width:660px;margin:0 auto clamp(40px,6vw,64px);text-align:center}.sec-head h2{margin-top:16px;font-size:clamp(34px,5vw,56px)}.sec-head p{margin:16px auto 0;max-width:520px;color:var(--muted)}\n"+
+".btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 28px;border:1px solid transparent;border-radius:var(--radius);font:500 12.5px/1 var(--body);letter-spacing:var(--bt);text-transform:var(--bc);cursor:pointer;transition:background .35s,color .35s,border-color .35s,transform .35s}.btn:hover{transform:translateY(-2px)}.btn svg{width:18px;height:18px}.btn-solid{background:var(--a);color:var(--on-a)}.btn-solid:hover{background:color-mix(in oklab,var(--a) 84%,#fff)}.btn-light{border-color:rgba(255,255,255,.5);color:#fff}.btn-light:hover{border-color:#fff;background:rgba(255,255,255,.12)}.btn-dark{border-color:var(--ink);color:var(--ink)}.btn-dark:hover{background:var(--ink);color:var(--bg)}\n"+
+".progress{position:fixed;inset:0 0 auto;z-index:70;height:3px;background:var(--a);transform:scaleX(0);transform-origin:left}\n"+
+".top{position:fixed;inset:0 0 auto;z-index:50;padding:22px 0;color:#fff;transition:padding .5s var(--ease),background .5s,color .5s,box-shadow .5s}.top.solid,.top.open{padding:12px 0;background:color-mix(in oklab,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--ink);box-shadow:0 1px 0 var(--line)}.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:12px;min-width:0}.brand img,.mono{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover}.mono{display:grid;place-items:center;background:var(--a);color:var(--on-a);font:600 16px/1 var(--display)}.brand span{overflow:hidden;font:var(--dw) 23px/1.1 var(--display);letter-spacing:var(--dls);white-space:nowrap;text-overflow:ellipsis}\n"+
+".nav{display:flex;align-items:center;gap:30px}.nav a:not(.btn){font:500 11px/1 var(--body);letter-spacing:var(--et);text-transform:uppercase;opacity:.82;transition:opacity .3s,color .3s}.nav a:not(.btn):hover{opacity:1;color:var(--a)}.nav .btn{min-height:42px;padding:0 20px}.burger{display:none;width:44px;height:44px;place-items:center;border:0;background:none;color:inherit;cursor:pointer}.burger svg{width:24px;height:24px}\n"+
+"@media(max-width:980px){.burger{display:grid}.nav{position:absolute;top:100%;left:0;right:0;display:none;flex-direction:column;align-items:stretch;gap:0;padding:6px 20px 22px;background:var(--bg);color:var(--ink);box-shadow:0 24px 40px rgba(0,0,0,.14)}.top.open .nav{display:flex}.nav a:not(.btn){padding:17px 0;border-bottom:1px solid var(--line)}.nav .btn{margin-top:18px}}\n"+
+".hero{display:grid;place-items:center;min-height:100svh;overflow:hidden;background:var(--deep);color:#fff;text-align:center}.hero-bg{position:absolute;left:0;top:-8%;width:100%;height:116%;will-change:transform}.art{position:absolute;inset:0;background:radial-gradient(900px 620px at 76% 14%,color-mix(in oklab,var(--a) 62%,transparent),transparent 62%),radial-gradient(760px 540px at 6% 96%,color-mix(in oklab,var(--a) 40%,transparent),transparent 60%),var(--deep)}.art::after{content:\"\";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:radial-gradient(circle at 50% 42%,#000,transparent 72%);mask-image:radial-gradient(circle at 50% 42%,#000,transparent 72%)}.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.28) 42%,color-mix(in oklab,var(--deep) 94%,transparent))}\n"+
+".hero-in{position:relative;z-index:2;max-width:880px;padding:150px 24px 130px}.hero .eyebrow{color:color-mix(in oklab,var(--a) 62%,#fff)}.hero h1{margin-top:24px;font-size:clamp(42px,7.4vw,90px);line-height:1.04}.hero p{max-width:580px;margin:26px auto 0;color:rgba(255,255,255,.8);font-size:clamp(16px,2vw,19px)}.hero-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:42px}.hint{position:absolute;left:50%;bottom:30px;z-index:2;display:grid;justify-items:center;gap:10px;transform:translateX(-50%);color:rgba(255,255,255,.72);font:500 10px/1 var(--body);letter-spacing:var(--et);text-transform:uppercase}.hint svg{width:16px;height:16px;animation:nxb 2.4s ease-in-out infinite}\n"+
+".rise{animation:nxr 1.1s var(--ease) both}@keyframes nxr{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}@keyframes nxb{50%{transform:translateY(7px)}}.kenburns .hero-bg{animation:nxk 18s ease-out both}@keyframes nxk{from{transform:scale(1.18)}to{transform:scale(1)}}.blob{position:absolute;z-index:1;border-radius:50%;background:color-mix(in oklab,var(--a) 70%,#fff);opacity:.22;animation:nxf 7s ease-in-out infinite}@keyframes nxf{50%{transform:translateY(-26px) scale(1.06)}}\n"+
+".about .wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(48px,7vw,100px);align-items:center}.media{position:relative}.media .main{width:100%;aspect-ratio:4/5;border-radius:var(--img-r)}.media .small{position:absolute;right:-30px;bottom:-42px;width:42%;aspect-ratio:1;border:8px solid var(--bg);border-radius:var(--img-r)}.frame{overflow:hidden;border-radius:var(--img-r)}.about-art{position:relative;display:grid;place-items:center;aspect-ratio:4/5;overflow:hidden;border-radius:var(--img-r);background:linear-gradient(150deg,color-mix(in oklab,var(--a) 80%,#fff),var(--deep));color:#fff}.about-art svg{width:34%;height:auto;stroke-width:1;opacity:.9}.about-art span{position:absolute;left:28px;right:28px;bottom:26px;font:var(--dw) 30px/1.15 var(--display)}.about h2{margin-top:16px;font-size:clamp(34px,4.6vw,54px)}.about p{max-width:30em;color:var(--muted);font-size:18px}.about .btn{margin-top:40px}\n"+
+"@media(max-width:860px){.about .wrap{grid-template-columns:1fr}.media .small{right:12px;width:38%}}\n"+
+".pillars{background:var(--soft)}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,3vw,36px)}.pillar{padding:44px 32px;border:1px solid var(--line);border-radius:var(--card-r);background:var(--bg);text-align:center}.icw{display:grid;place-items:center;width:66px;height:66px;margin:0 auto 26px;border-radius:50%;background:color-mix(in oklab,var(--a) 14%,var(--bg));color:var(--a-text)}.icw svg{width:28px;height:28px}.pillar h3{font-size:29px}.pillar p{margin-top:12px;color:var(--muted);font-size:16px}@media(max-width:860px){.grid3{grid-template-columns:1fr}}\n"+
+".marquee{overflow:hidden;padding:20px 0;background:var(--a);color:var(--on-a)}.marquee div{display:flex;gap:56px;width:max-content;animation:nxm 32s linear infinite;font:var(--dw) clamp(22px,3vw,34px)/1 var(--display);white-space:nowrap}.marquee span::after{content:\"\\2726\";margin-left:56px;opacity:.6}@keyframes nxm{to{transform:translateX(-50%)}}\n"+
+".tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:46px}.tab{padding:13px 22px;border:1px solid var(--line);border-radius:var(--radius);background:none;color:var(--muted);font:500 12px/1 var(--body);letter-spacing:var(--bt);text-transform:var(--bc);cursor:pointer;transition:.3s}.tab:hover{color:var(--ink)}.tab[aria-selected=true]{border-color:var(--ink);background:var(--ink);color:var(--bg)}.panel+.panel{margin-top:56px}.panel h3{margin-bottom:22px;font-size:32px;text-align:center}.js .panel h3{display:none}.js .panel+.panel{margin-top:0}.js .panel:not(.on){display:none}\n"+
+".items{display:grid;grid-template-columns:1fr 1fr;column-gap:60px;max-width:880px;margin:0 auto}.item{padding:19px 0;border-bottom:1px solid var(--line)}.item-top{display:flex;align-items:baseline;gap:12px}.item-top b{font-weight:500;font-size:17px;line-height:1.35}.item-top i{flex:1;min-width:20px;transform:translateY(-4px);border-bottom:1px dotted color-mix(in oklab,var(--ink) 32%,transparent)}.item-top em{color:var(--a-text);font-style:normal;font-weight:500;white-space:nowrap}.item p{margin-top:6px;color:var(--muted);font-size:14.5px}@media(max-width:760px){.items{grid-template-columns:1fr}}\n"+
+".dark{background:var(--deep);color:#fff}.dark .eyebrow{color:color-mix(in oklab,var(--a) 62%,#fff)}.dark .sec-head p{color:rgba(255,255,255,.66)}.hl{overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:var(--card-r);background:rgba(255,255,255,.04)}.hl-media{display:grid;place-items:center;aspect-ratio:4/3;overflow:hidden;background:linear-gradient(140deg,color-mix(in oklab,var(--a) 42%,var(--deep)),color-mix(in oklab,var(--a) 12%,var(--deep)));color:color-mix(in oklab,var(--a) 50%,#fff)}.hl-media .ph{width:100%;height:100%;transition:transform .9s var(--ease)}.hl:hover .hl-media .ph{transform:scale(1.06)}.hl-media svg{width:54px;height:54px;stroke-width:1.2}.hl-body{padding:26px 28px 30px}.hl h3{font-size:27px}.hl p{margin-top:10px;color:rgba(255,255,255,.68);font-size:15.5px}.hl .price{display:block;margin-top:16px;color:color-mix(in oklab,var(--a) 62%,#fff);font-weight:500;letter-spacing:.04em}.hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}@media(max-width:960px){.hl-grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){.hl-grid{grid-template-columns:1fr}}\n"+
+".gal{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:250px;gap:12px}.gal figure{margin:0;overflow:hidden;border-radius:var(--img-r)}.gal figure:first-child{grid-column:span 2;grid-row:span 2}.gal .w2{grid-column:span 2}.gal .w3{grid-column:span 3}.gal .ph{width:100%;height:100%;transition:transform 1s var(--ease)}.gal figure:hover .ph{transform:scale(1.05)}@media(max-width:760px){.gal{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.gal .w2,.gal .w3{grid-column:auto}.gal .mw{grid-column:span 2}}\n"+
+".band{position:relative;overflow:hidden;padding:clamp(110px,14vw,170px) 0;background:var(--deep);color:#fff;text-align:center}.band-bg{position:absolute;left:0;top:-20%;width:100%;height:140%;will-change:transform}.band::after{content:\"\";position:absolute;inset:0;background:color-mix(in oklab,var(--deep) 68%,transparent)}.band .wrap{position:relative;z-index:2;max-width:760px}.band h2{font-size:clamp(34px,5.4vw,62px)}.band p{max-width:540px;margin:20px auto 36px;color:rgba(255,255,255,.8)}\n"+
+".reviews{background:var(--soft);text-align:center}.score{display:inline-grid;justify-items:center;gap:12px}.score b{font:var(--dw) clamp(70px,11vw,110px)/1 var(--display)}.stars{display:flex;gap:6px;color:var(--a)}.stars svg{width:24px;height:24px}.stars .on{fill:currentColor}.score small{color:var(--muted);font-size:15px}\n"+
+".loc .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(36px,6vw,80px);align-items:center}.loc.solo .wrap{grid-template-columns:1fr;max-width:640px;text-align:center}.loc h2{margin-top:16px;font-size:clamp(34px,4.6vw,54px)}.loc-text{margin-top:16px;color:var(--muted)}.loc ul{display:grid;gap:16px;margin:30px 0 0;padding:0;list-style:none}.loc li{display:flex;gap:14px;color:var(--muted)}.loc.solo li{justify-content:center}.loc li svg{flex:none;width:20px;height:20px;margin-top:3px;color:var(--a-text)}.loc-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}.loc.solo .loc-actions{justify-content:center}.map{aspect-ratio:4/3;overflow:hidden;border:1px solid var(--line);border-radius:var(--img-r);background:var(--soft)}.map iframe{width:100%;height:100%;border:0}@media(max-width:860px){.loc .wrap{grid-template-columns:1fr}}\n"+
+".insta{background:var(--soft);text-align:center}.handle{display:inline-block;margin:8px 0 32px;color:var(--a-text);font:var(--dw) clamp(28px,4vw,42px)/1.2 var(--display)}\n"+
+"footer{padding:66px 0 104px;background:var(--deep);color:rgba(255,255,255,.7);font-size:15px;text-align:center}.foot-name{color:#fff;font:var(--dw) 32px/1.2 var(--display)}footer p{margin-top:10px}footer small{display:block;margin-top:30px;font-size:12.5px;opacity:.55}\n"+
+".wa{position:fixed;left:18px;bottom:18px;z-index:40;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;background:#25d366;color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.25);transition:transform .3s}.wa:hover{transform:scale(1.07)}.wa svg{width:28px;height:28px}\n"+
+".js [data-r]{opacity:0;transition:opacity .9s var(--ease),transform .9s var(--ease),filter .9s var(--ease);transition-delay:var(--d,0ms)}.js [data-r=up]{transform:translateY(34px)}.js [data-r=zoom]{transform:scale(.93)}.js [data-r=zoom] .ph{transform:scale(1.14);transition:transform 1.6s var(--ease)}.js [data-r=zoom].in .ph{transform:none}.js [data-r=blur]{transform:translateY(14px);filter:blur(10px)}.js [data-r=left]{transform:translateX(-50px)}.js [data-r=right]{transform:translateX(50px)}.js [data-r=skew]{transform:translateY(50px) skewY(5deg)}.js [data-r=pop]{transform:scale(.82);transition-timing-function:cubic-bezier(.34,1.56,.64,1)}.js [data-r=clip]{position:relative;opacity:1}.js [data-r=clip]::after{content:\"\";position:absolute;inset:-1px;z-index:3;background:var(--bg);transform-origin:top;transition:transform 1.25s var(--ease);transition-delay:var(--d,0ms)}.js .dark [data-r=clip]::after{background:var(--deep)}.js [data-r=clip].in::after{transform:scaleY(0)}.js [data-r].in{opacity:1;transform:none;filter:none}"+(fx.lines?".js .line{transform:scaleX(0);transform-origin:left;transition:transform 1.3s var(--ease) .25s}.js .center .line{transform-origin:center}.js .in .line{transform:none}":"")+"\n"+
+"@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.js [data-r]{opacity:1;transform:none;filter:none}.js [data-r]::after{display:none}}\n"+
+(opts.partial?"*,*::before,*::after{animation:none!important;transition:none!important}\n":"")+"</style>\n</head>\n";
+h+='<body data-preset="'+preset+'">\n'+(fx.progress?'<div class="progress" aria-hidden="true"></div>\n':"");
+h+='<header class="top" id="top"><div class="wrap"><a class="brand" href="#inicio">'+(logo?'<img src="'+logo+'" alt="">':'<span class="mono" aria-hidden="true">'+esc(mono)+"</span>")+"<span>"+esc(name)+'</span></a><button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false">'+nxIcon("menu")+'</button><nav class="nav" aria-label="Menu principal">'+nav.map(n=>'<a href="'+n[0]+'">'+esc(n[1])+"</a>").join("")+link(primary,"btn-solid",wa?"Fale conosco":S(hero.cta,22)||"Contato")+"</nav></div></header>\n<main>\n";
+const heroBg=photos[0]?ph(0,"","hero-bg",fx.hero==="parallax"?' data-par="'+fx.par+'"':"")+'<div class="shade"></div>':'<div class="art"></div>'+(fx.hero==="float"?'<span class="blob" style="width:180px;height:180px;left:8%;top:22%"></span><span class="blob" style="width:110px;height:110px;right:12%;top:30%;animation-delay:-2s"></span><span class="blob" style="width:70px;height:70px;right:24%;bottom:18%;animation-delay:-4s"></span>':"");
+h+='<section id="inicio" class="hero'+(fx.hero==="kenburns"?" kenburns":"")+'">'+heroBg+'<div class="hero-in"><span class="eyebrow rise">'+esc(name)+'</span><h1 class="rise" style="animation-delay:150ms">'+(E(hero.title,70)||esc(name))+'</h1><p class="rise" style="animation-delay:300ms">'+(E(hero.subtitle,130)||esc([S(f.segment,60),city].filter(Boolean).join(" em ")))+'</p><div class="hero-cta rise" style="animation-delay:450ms">'+link(primary,"btn-solid",S(hero.cta,24)||(wa?"Chamar no WhatsApp":"Fale conosco"),wa?NX_WA:"")+(about.title?link({href:"#sobre"},"btn-light",S(hero.ctaSecondary,24)||"Conhecer"):"")+'</div></div><a class="hint" href="#sobre"><span>Role para explorar</span>'+nxIcon("arrow")+"</a></section>\n";
+if(about.title){const media=photos.length?'<div class="media"'+R("image")+'><div class="frame">'+ph(photos[1]?1:0,name,"main")+"</div>"+(photos[2]?ph(2,"","small"):"")+"</div>":'<div class="about-art"'+R("image")+">"+nxIcon(A(pil.items)[0]&&A(pil.items)[0].icon||"sparkles")+"<span>"+esc(S(f.segment,40)||name)+"</span></div>";
+h+='<section id="sobre" class="about sec"><div class="wrap">'+media+"<div"+R("text",1)+'><span class="eyebrow">Sobre</span><h2>'+E(about.title,60)+'</h2><div class="line"></div><p>'+E(about.text,360)+"</p>"+(cats.length?link({href:"#ofertas"},"btn-dark",S(about.cta,24)||"Ver "+menuLabel.toLowerCase()):"")+"</div></div></section>\n"}
+if(pillars.length){h+='<section id="experiencia" class="pillars sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Experiência</span><h2>'+(E(pil.title,60)||"Por que escolher a gente")+'</h2><div class="line"></div></div><div class="grid3">'+pillars.map((p,i)=>'<article class="pillar"'+R("card",i+1)+'><div class="icw">'+nxIcon(p.icon)+"</div><h3>"+E(p.title,30)+"</h3><p>"+E(p.text,130)+"</p></article>").join("")+"</div></div></section>\n"}
+if(fx.marquee&&pillars.length){const words=pillars.map(p=>S(p.title,30)).concat([S(f.segment,30),city]).filter(Boolean),row=words.map(w=>"<span>"+esc(w)+"</span>").join("");h+='<div class="marquee" aria-hidden="true"><div>'+row+row+row+row+"</div></div>\n"}
+if(cats.length){const multi=cats.length>1;h+='<section id="ofertas" class="menu sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">'+esc(menuLabel)+"</span><h2>"+(E(menu.title,50)||esc(menuLabel))+"</h2>"+(menu.subtitle?"<p>"+E(menu.subtitle,110)+"</p>":"")+"</div>"+(multi?'<div class="tabs" role="tablist">'+cats.map((k,i)=>'<button class="tab" type="button" role="tab" aria-controls="cat'+i+'" aria-selected="'+(i===0)+'">'+esc(k.name)+"</button>").join("")+"</div>":"")+
+cats.map((k,i)=>'<div class="panel'+(i===0?" on":"")+'" id="cat'+i+'"'+(multi?' role="tabpanel"':"")+">"+(multi?"<h3>"+esc(k.name)+"</h3>":"")+'<div class="items">'+k.items.map((it,j)=>{const price=S(it.price,20);return'<div class="item"'+(i===0?R("text",j%2+1):"")+'><div class="item-top"><b>'+E(it.name,50)+"</b>"+(price?"<i></i><em>"+esc(price)+"</em>":"")+"</div>"+(it.description?"<p>"+E(it.description,100)+"</p>":"")+"</div>"}).join("")+"</div></div>").join("")+"</div></section>\n"}
+if(highlights.length){h+='<section class="dark sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Destaques</span><h2>'+(E(hl.title,60)||"Nossos destaques")+'</h2></div><div class="hl-grid">'+highlights.map((it,i)=>{const p=photos[3+i];return'<article class="hl"'+R("card",i%3+1)+'><div class="hl-media">'+(p?ph(3+i,S(it.title,40)):nxIcon(it.icon))+'</div><div class="hl-body"><h3>'+E(it.title,40)+"</h3>"+(it.text?"<p>"+E(it.text,110)+"</p>":"")+(S(it.price,24)?'<span class="price">'+E(it.price,24)+"</span>":"")+"</div></article>"}).join("")+"</div></div></section>\n"}
+if(hasGallery&&(gal.title||!opts.partial)){h+='<section id="galeria" class="sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Galeria</span><h2>'+(E(gal.title,60)||"Detalhes que ficam na memória.")+'</h2></div><div class="gal">'+photos.map((p,i)=>{const n=photos.length,last=i===n-1&&i>2,r=(n-3)%3,cls=[last&&r===1?"w3":last&&r===2?"w2":"",last&&(n-1)%2?"mw":""].filter(Boolean).join(" ");return"<figure"+(cls?' class="'+cls+'"':"")+R("image",i%4+1)+">"+ph(i,name+" — foto "+(i+1))+"</figure>"}).join("")+"</div></div></section>\n"}
+if(cta.title){h+='<section class="band">'+(photos.length?ph(photos.length-1,"","band-bg",' data-parc="'+(fx.par?.14:0)+'"'):'<div class="art"></div>')+'<div class="wrap"'+R("title")+"><h2>"+E(cta.title,70)+"</h2>"+(cta.text?"<p>"+E(cta.text,130)+"</p>":"<p></p>")+link(primary,"btn-solid",S(cta.button,24)||"Fale conosco",wa?NX_WA:"")+"</div></section>\n"}
+if(f.rating&&(rev.title||!opts.partial)){const n=Math.round(parseFloat(f.rating.replace(",",".")));h+='<section class="reviews sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Avaliações</span><div class="sec-head" style="margin-bottom:34px"><h2>'+(E(rev.title,60)||"Quem conhece, recomenda.")+'</h2></div><div class="score"><b>'+esc(f.rating)+'</b><div class="stars" aria-label="Nota '+esc(f.rating)+' de 5">'+[1,2,3,4,5].map(i=>nxIcon("star",i<=n?"on":"")).join("")+"</div><small>"+(f.reviews?esc(f.reviews)+" avaliações no Google":"Avaliação no Google")+"</small></div></div></section>\n"}
+if(hasLoc&&(loc.title||!opts.partial)){const q=encodeURIComponent([name,address,city].filter(Boolean).join(", ")),map=address&&!opts.partial;h+='<section id="localizacao" class="loc sec'+(map?"":" solo")+'"><div class="wrap"><div'+R("text")+'><span class="eyebrow">Localização</span><h2>'+(E(loc.title,50)||"Venha nos visitar.")+"</h2>"+(loc.text?'<p class="loc-text">'+E(loc.text,130)+"</p>":"")+"<ul>"+(address||city?"<li>"+nxIcon("pin")+"<span>"+esc([address,city].filter(Boolean).join(" · "))+"</span></li>":"")+(hours?"<li>"+nxIcon("clock")+"<span>"+esc(hours)+"</span></li>":"")+(phone?"<li>"+nxIcon("phone")+"<span>"+esc(phone)+"</span></li>":"")+'</ul><div class="loc-actions">'+(address||city?link({href:"https://www.google.com/maps/search/?api=1&query="+q,ext:true},"btn-solid","Como chegar",nxIcon("pin")):"")+(phone?link({href:"tel:+"+f.whatsapp},"btn-dark","Ligar",nxIcon("phone")):"")+(wa?link({href:wa,ext:true},"btn-dark","WhatsApp",NX_WA):"")+"</div></div>"+(map?'<div class="map"'+R("image",1)+'><iframe title="Mapa: '+esc(name)+'" src="https://www.google.com/maps?q='+q+'&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>':"")+"</div></section>\n"}
+if(insta&&(ig.title||!opts.partial)){h+='<section class="insta sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Instagram</span><div class="sec-head" style="margin-bottom:10px"><h2>'+(E(ig.title,50)||"Acompanhe no Instagram.")+"</h2>"+(ig.text?"<p>"+E(ig.text,110)+"</p>":"")+'</div><a class="handle" href="https://instagram.com/'+encodeURIComponent(insta)+'" target="_blank" rel="noopener">@'+esc(insta)+"</a><br>"+link({href:"https://instagram.com/"+encodeURIComponent(insta),ext:true},"btn-dark","Seguir no Instagram",nxIcon("insta"))+"</div></section>\n"}
+h+="</main>\n";
+if(foot.tagline||!opts.partial)h+='<footer><div class="wrap"><div class="foot-name">'+esc(name)+"</div>"+(foot.tagline?"<p>"+E(foot.tagline,110)+"</p>":"")+(address||city?"<p>"+esc([address,city].filter(Boolean).join(" · "))+"</p>":"")+(phone?"<p>"+esc(phone)+"</p>":"")+"<small>© "+new Date().getFullYear()+" "+esc(name)+". Todos os direitos reservados.</small></div></footer>\n";
+if(wa)h+='<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">'+NX_WA+"</a>\n";
+h+="<script>\n(function(){var d=document,R=d.documentElement,top=d.getElementById('top'),bar=d.querySelector('.progress'),all=function(s){return[].slice.call(d.querySelectorAll(s))},pars=all('[data-par]'),parc=all('[data-parc]'),reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,busy=false;\n"+
+"function frame(){busy=false;var y=window.pageYOffset||0,vh=innerHeight;top&&top.classList.toggle('solid',y>30);if(bar){var max=R.scrollHeight-vh;bar.style.transform='scaleX('+(max>0?Math.min(1,y/max):0)+')'}if(reduce)return;pars.forEach(function(el){var k=+el.getAttribute('data-par')||0;if(y<vh*1.5)el.style.transform='translate3d(0,'+(y*k).toFixed(1)+'px,0)'});parc.forEach(function(el){var k=+el.getAttribute('data-parc')||0,r=el.parentNode.getBoundingClientRect();if(k&&r.bottom>0&&r.top<vh)el.style.transform='translate3d(0,'+(-(r.top+r.height/2-vh/2)*k).toFixed(1)+'px,0)'})}\n"+
+"addEventListener('scroll',function(){if(!busy){busy=true;requestAnimationFrame(frame)}},{passive:true});addEventListener('resize',frame);frame();\n"+
+"var els=all('[data-r]');if(reduce||!('IntersectionObserver'in window))els.forEach(function(e){e.classList.add('in')});else{var io=new IntersectionObserver(function(list){list.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})},{threshold:.12,rootMargin:'0px 0px -8% 0px'});els.forEach(function(e){io.observe(e)})}\n"+
+"all('.tab').forEach(function(t){t.addEventListener('click',function(){all('.tab').forEach(function(x){x.setAttribute('aria-selected',x===t)});all('.panel').forEach(function(p){p.classList.toggle('on',p.id===t.getAttribute('aria-controls'))});all('.panel.on [data-r]').forEach(function(e){e.classList.add('in')})})});\n"+
+"var burger=d.querySelector('.burger');burger&&burger.addEventListener('click',function(){var open=top.classList.toggle('open');burger.setAttribute('aria-expanded',open)});all('.nav a').forEach(function(a){a.addEventListener('click',function(){top.classList.remove('open');burger&&burger.setAttribute('aria-expanded','false')})})})();\n"+
+(opts.partial?"scrollTo(0,document.documentElement.scrollHeight);\n":"")+"<\/script>\n</body>\n</html>\n";
+return h}
 const APP_URL=/^https?:$/.test(location.protocol)?location.origin+location.pathname.replace(/[^/]*$/,""):"";
 const BADGE_IMG="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAGYklEQVR42u2ZW6hdVxWGvzHnWvuccE5KoAlRq4bj5UGrUChBfBCsVGi9UBIUvNS++FBUKvgg9kml4IMgYiHUWlTQvviiFgV9EbUoBUFasKUNJl4orbU2yTl7n732WvM2hg9rnSS1Sfc+ZtM2cCZMFuwb8x//GP/4x9wiIsZVvBxX+doDsAdgD8AegFd3VQt/UuTl3zd7DQMww+YcUBBw8ooDkUU6sTiHWxld/nBOsLZFFXAeTF8jDDiPlczqDbcinz5BmTUg//MVU6hW8OdOku7/FGWyjV0BEztMy7yU3U0K6WiNsnaEooB/aeqLARsbrNzxA+T+jxNV+pL5P0AsevDdqVAxJCnkDlKCGPsdAoQIKSNbgfyO44w+9g1GWnBSzS/8V0pGBUAdmMMUTAXLDssOivSvSQVbHeF9d1PdfCda4pBu9uoDMDWsAMOWokixIcrgVJFsFDxpksgfOcG+d9+ClIjzK/PDI9KnzsV72QDIQFGkAArOCfXmU9RpDCKYFkwNV4wchPKZHzN687uwHBDxL1O0iqmi2j939qLMLZZCRg8gGxSFlKGqyH/7Hf6nd+JdDblAGd7vAkEPwR0/wR+4FtWMiLtkZP3qKtX6fqr1daq1daq1Ner1/eDq5amQASQgK+YMtKARZHSA/PjP8L+5B/nAV7FminoH4nHTGXH9eka3Pwjfu42SQcQwynmJpmRWb/ki+p67oG0x8WCGrwx94BjlmSeQOX1lYRXqGSiQtY9yATRTxJF/+3X8oz9CVtchFEgJU5DtCXr4Vurj38GRMKTv2Bet5A4R/Rtp/QZdtUFXvYXOvw3caIkyqkCyAUCBpEjsawJTFEF/8QVWTj+M1Pt7ic0FzY44mRDf+XlGH/wSXlPPzgDCALoMreG6FulmuK6FWYOVgiwNgAFJh8NniBkyyNCoTDwlNZSHPkl99klwaxATljKoolsT0tFvUt94DNOEib/grZJiM7AuYSFjsaDZltzIzKBEyBlSgZIhx0EtBjshnjx5Dvv5J6i7TUwFckKyQUmk7Qa96T5GGzfAwASApYzMGqzrkDZA1yIx9Mq3VADnD9/XgKXUszE4bUExV5Gffxz59Wep8ZAESwktBikQ2lXkQw9SH3xDHxDAYoRuBl3bH74N0MaFbYibLz9DDUTtQeQCqWCp9NF9kdwW8DX59K+QP9yNG42QEJGQkGJI3CZyBP/hHzJavwYBXOzQZgztFOtaNASknSFLZUAVSRHLEVKEkhCN52vgRSA0gx+hj32X+s8nqPw1kGaQIlZAZ2do195LffO9eAfWTHHTf0MzhnYC3TaEZmFLvlgfUIUckRIxGfxETqAZ2/FK50kTnGay8/DI13D7D8N1H0W6zV77Acb/IrzuGPX7nyT//SRsn0EqB7oP/CrY6twBatc1YDkhqYMUIPbbSr5k3imGYBQK9vCXqc8+1itTmmElgkGePEN+6+eorr8Nzp2CsIl0YyxMIE4XZmBBAIOVzhHJAUkBcuhBXdZ+GOIcpd1Efn8XrvsnWN2DLwFKJk2m5IM3UR08gJx7Fuu2cO0YugmoLpkB7TANWOmfpKbv0Fzad9mQeuYq4tYp3B+/gs8NkhMS+1qS3FKaKfb6G/Hr+5DxfyBMoRsjpSybgQipG5gIUCJS0kUDw+W+m8GvUJ57BHn0HipGSNcMqZggbZM6hz9ylIqENM9jYYotM4WklF4Zdiax2OFC1yvL3CsVAU0U5yn/+CXy1/ug2gdpiqUZljtozxJmgmwchdJh7QsXFG5OMS84D5Q++in20c+h9/m6UwMy14vI0K3LU9/HP/sQTlYhtxBmSAwQxiTdhzv8dlxqejm+cgbsQgqlgOV2ABAht1gZGFhw+DCsdyV/uRc58ydEPRYbLLVYmqHbm+joEP7Am9DlANix0xFSg+QZLs5waQapRUtgd2O7YSKU3CJPfAvfPI2oYLFBUkSsxZoxWl+LjFYXuhHcxUSWegOXM5YT5ITT3t3bLkGI82h7Bjn5bSSfHex6C7GD1FGKLRzbuZ1YACstvn0al7dB6t4c5RriC2RAdnvzYIo5Txqfpjr1APV1x1Fi/0sCLimltAul50JXi4jgXjKY9/eldkXXiAKmOO8xcTvhQkxR04WolYX/pTTjfL5c/ORKL6/k0rZhwasV2fubdQ/AHoA9AHsA9gBczeu/5GUTdRTVwRgAAAAASUVORK5CYII=";
 const BADGE='\n<'+(APP_URL?'a href="'+esc(APP_URL)+'" target="_blank" rel="noopener"':"div")+' id="nexaweb-badge" aria-label="Create with NexaWeb" style="position:fixed;right:14px;bottom:14px;z-index:2147483647;display:inline-flex;align-items:center;gap:8px;margin:0;padding:6px 13px 6px 6px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(10,14,16,.9);color:#fff;font:600 12px/1 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;letter-spacing:0;text-decoration:none;box-shadow:0 8px 28px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)"><img src="'+BADGE_IMG+'" width="22" height="22" alt="" style="display:block;width:22px;height:22px;margin:0;border-radius:7px"><span>Create with <b style="font-weight:800">NexaWeb</b></span></'+(APP_URL?"a":"div")+">\n";
-const lp={form:$(".nexa-lp-form"),stage:$(".nexa-lp-stage"),frameBox:$(".nexa-lp-frame"),frames:$$(".nexa-lp-frame iframe"),status:$(".nexa-lp-status"),phase:$(".nexa-lp-phase"),bar:$(".nexa-lp-bar"),time:$(".nexa-lp-time"),go:$(".nexa-lp-go"),err:$(".nexa-lp-error p"),saved:$(".nexa-lp-saved"),savedList:$(".nexa-lp-saved-list"),lead:document.getElementById("nexaLpLead"),
-front:0,loading:false,pending:null,busy:false,ctrl:null,current:null,timer:0};
+const lp={form:$(".nexa-lp-form"),stage:$(".nexa-lp-stage"),frameBox:$(".nexa-lp-frame"),frames:$$(".nexa-lp-frame iframe"),status:$(".nexa-lp-status"),phase:$(".nexa-lp-phase"),bar:$(".nexa-lp-bar"),time:$(".nexa-lp-time"),go:$(".nexa-lp-go"),err:$(".nexa-lp-error p"),keyBtn:$(".nexa-lp-keybtn"),saved:$(".nexa-lp-saved"),savedList:$(".nexa-lp-saved-list"),lead:document.getElementById("nexaLpLead"),
+front:0,loading:false,pending:null,busy:false,ctrl:null,current:null,timer:0,photos:[],logo:""};
 const field=id=>document.getElementById(id);
 function setState(state,status){lp.stage.dataset.state=state;if(status!==undefined)lp.status.innerHTML=status;if(state!=="working")lp.stage.classList.remove("is-live")}
 function render(doc){if(lp.loading){lp.pending=doc;return}const back=lp.frames[1-lp.front];lp.loading=true;
 back.onload=()=>{lp.loading=false;back.classList.add("is-front");back.removeAttribute("aria-hidden");back.tabIndex=0;const old=lp.frames[lp.front];old.classList.remove("is-front");old.setAttribute("aria-hidden","true");old.tabIndex=-1;lp.front=1-lp.front;if(lp.pending!==null){const next=lp.pending;lp.pending=null;render(next)}};
 back.srcdoc=doc}
-function extractHtml(text){let t=String(text).replace(/^﻿/,"");const start=t.search(/<!doctype html|<html[\s>]/i);if(start<0)return"";t=t.slice(start);const end=t.toLowerCase().lastIndexOf("</html>");return end>=0?t.slice(0,end+7):t.replace(/\s*```\s*$/,"")}
-function partialDoc(raw){let h=extractHtml(raw);const lt=h.lastIndexOf("<"),gt=h.lastIndexOf(">");if(lt>gt)h=h.slice(0,lt);const low=h.toLowerCase();
-if(low.lastIndexOf("<style")>low.lastIndexOf("</style"))h+="</style>";if(low.lastIndexOf("<script")>low.lastIndexOf("<\/script"))h+="<\/script>";
-return h+"<script>try{scrollTo(0,document.documentElement.scrollHeight)}catch(e){}<\/script>"}
 function withBadge(html){html=html.replace(/\n?<(a|div) [^>]*id="nexaweb-badge"[\s\S]*?<\/\1>\n?/g,"");const i=html.toLowerCase().lastIndexOf("</body>");return i>=0?html.slice(0,i)+BADGE+html.slice(i):html+BADGE}
-const MARKS=[[/<h1[\s>]/gi,"Escrevendo o título principal"],[/diferenciais|por que escolher/gi,"Destacando os diferenciais"],[/servi[çc]os?\b|produtos?\b/gi,"Montando os serviços"],[/como funciona|passo a passo/gi,"Explicando como funciona"],[/compromisso|garantimos|garantia/gi,"Escrevendo os compromissos"],[/perguntas frequentes|faq/gi,"Respondendo dúvidas frequentes"],[/<footer[\s>]/gi,"Finalizando o rodapé"]];
-function phaseOf(raw){const body=raw.search(/<body[\s>]/i);if(body<0)return/<\/style>/i.test(raw)?"Preparando o conteúdo":/<style/i.test(raw)?"Criando o visual":"Planejando a estrutura";
-const head=raw.slice(body).search(/<\/header>/i);if(head<0)return"Construindo o topo da página";const tail=raw.slice(body+head);let best="Construindo o topo da página",at=-1;
-for(const[re,label]of MARKS){re.lastIndex=0;let m,last=-1;while((m=re.exec(tail)))last=m.index;if(last>at){at=last;best=label}}return best}
+/* JSON from the AI, readable while it is still being written */
+function parsePartial(text){const s=String(text||""),start=s.indexOf("{");if(start<0)return null;const src=s.slice(start);try{return JSON.parse(src)}catch(e){}
+const stack=[],cuts=[];let str=false,bs=false;
+for(let i=0;i<src.length;i++){const ch=src[i];if(str){if(bs)bs=false;else if(ch==="\\")bs=true;else if(ch==='"')str=false;continue}
+if(ch==='"')str=true;else if(ch==="{"||ch==="["){stack.push(ch==="{"?"}":"]");cuts.push([i+1,stack.join("")])}else if(ch==="}"||ch==="]"){stack.pop();cuts.push([i+1,stack.join("")])}else if(ch===",")cuts.push([i,stack.join("")])}
+for(let k=cuts.length-1,n=0;k>=0&&n<10;k--,n++){const[at,open]=cuts[k];try{return JSON.parse(src.slice(0,at).replace(/,\s*$/,"")+open.split("").reverse().join(""))}catch(e){}}return null}
+function parseContent(text){const s=String(text||"").replace(/```(json)?/gi,""),a=s.indexOf("{"),b=s.lastIndexOf("}");if(a>=0&&b>a){try{return JSON.parse(s.slice(a,b+1))}catch(e){}}const p=parsePartial(s);return p&&p.hero?p:null}
+const STEPS=[["hero","Escrevendo a capa"],["about","Contando a história do negócio"],["pillars","Criando os diferenciais"],["menu","Montando as ofertas"],["highlights","Escolhendo os destaques"],["cta","Escrevendo a chamada final"],["location","Organizando a localização"],["footer","Finalizando a página"]];
 const clock=ms=>{const s=Math.floor(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 function slug(s){return String(s||"landing-page").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,60)||"landing-page"}
-function readForm(){const color=(lp.form.querySelector("[name=nexaLpColor]:checked")||{}).value;return{business:field("nexaLpBusiness").value.trim(),segment:field("nexaLpSegment").value.trim(),city:field("nexaLpCity").value.trim(),whatsapp:field("nexaLpWhatsapp").value.trim(),description:field("nexaLpDescription").value.trim(),style:(lp.form.querySelector("[name=nexaLpStyle]:checked")||{}).value||"moderno",color:color==="custom"?field("nexaLpColorCustom").value:color||"#00b8b1"}}
+function readForm(){const color=(lp.form.querySelector("[name=nexaLpColor]:checked")||{}).value,v=id=>(field(id)||{value:""}).value.trim();
+return{business:v("nexaLpBusiness"),segment:v("nexaLpSegment"),city:v("nexaLpCity"),address:v("nexaLpAddress"),hours:v("nexaLpHours"),whatsapp:v("nexaLpWhatsapp"),instagram:v("nexaLpInstagram"),rating:v("nexaLpRating"),reviews:v("nexaLpReviews"),description:v("nexaLpDescription"),style:(lp.form.querySelector("[name=nexaLpStyle]:checked")||{}).value||"elegante",color:color==="custom"?field("nexaLpColorCustom").value:color||"#b07a4f"}}
+/* same cleanup the AI prompt uses, for the page itself */
+function cleanFields(d){const f={};for(const k in d)f[k]=String(d[k]||"").replace(/\s+/g," ").trim();const w=f.whatsapp.replace(/\D/g,"");f.whatsapp=w.length>=10?(w.startsWith("55")&&w.length>=12?w:"55"+w):"";
+f.instagram=f.instagram.replace(/^@+/,"").replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[/?#].*$/,"");const r=parseFloat(f.rating.replace(",","."));f.rating=r>0&&r<=5?r.toFixed(1).replace(".",","):"";f.reviews=f.rating?f.reviews.replace(/\D/g,""):"";if(!/^#[0-9a-f]{6}$/i.test(f.color))f.color="#b07a4f";return f}
 
 async function generate(){if(lp.busy)return;const data=readForm();
 const missing=[["nexaLpBusiness",data.business],["nexaLpSegment",data.segment]].filter(x=>!x[1]);
 $$(".nexa-field.is-invalid",lp.form).forEach(f=>f.classList.remove("is-invalid"));
 if(missing.length){missing.forEach(([id])=>field(id).closest(".nexa-field").classList.add("is-invalid"));field(missing[0][0]).focus();toast("Preencha o nome do negócio e o segmento");return}
+const fields=cleanFields(data),media={photos:lp.photos.slice(),logo:lp.logo};
 lp.busy=true;lp.ctrl=new AbortController();lp.go.disabled=true;lp.go.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>Criando…';
-const started=Date.now();let raw="",failure="",lastPreview=0;
-setState("working",'Criando com IA <small>· '+esc(data.business)+"</small>");lp.phase.textContent="Planejando a estrutura";lp.bar.style.setProperty("--p","4%");lp.time.textContent="0:00";
+const started=Date.now();let raw="",lastPreview=0,lastParse=0,step=-1;
+setState("working",'Criando com IA <small>· '+esc(data.business)+"</small>");lp.phase.textContent="Pensando no conteúdo";lp.bar.style.setProperty("--p","4%");lp.time.textContent="0:00";
 lp.timer=setInterval(()=>{lp.time.textContent=clock(Date.now()-started)},500);
 if(matchMedia("(max-width:1080px)").matches)lp.stage.scrollIntoView({behavior:"smooth",block:"start"});
-let pct=4;const progress=()=>{pct=Math.max(pct,Math.min(95,4+raw.length/280));lp.phase.textContent=phaseOf(raw);lp.bar.style.setProperty("--p",pct.toFixed(1)+"%");
-const body=raw.search(/<body/i);if(body>=0&&raw.length-body>1200){lp.stage.classList.add("is-live");if(Date.now()-lastPreview>1600&&!lp.loading){lastPreview=Date.now();render(partialDoc(raw))}}};
-try{const res=await fetch("api/nexa-landing",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data),signal:lp.ctrl.signal});
-if(!res.ok||!res.body)failure=await apiError(res,"landing");
-else{const reader=res.body.getReader(),dec=new TextDecoder();for(;;){const{value,done}=await reader.read();if(done)break;raw+=dec.decode(value,{stream:true});progress()}raw+=dec.decode()}}
-catch(e){failure=e&&e.name==="AbortError"?"cancel":offline("landing")}
+const progress=()=>{const now=Date.now();if(now-lastParse<280)return;lastParse=now;const part=parsePartial(raw);if(!part)return;
+STEPS.forEach(([k],i)=>{if(part[k]!==undefined&&i>step)step=i});if(step>=0){lp.phase.textContent=STEPS[step][1];lp.bar.style.setProperty("--p",(8+step/(STEPS.length-1)*86).toFixed(1)+"%")}
+if(part.hero&&part.hero.title){lp.stage.classList.add("is-live");if(now-lastPreview>1500&&!lp.loading){lastPreview=now;render(nexaTemplate(part,fields,media,{partial:true}))}}};
+let failure=null;try{raw=await runAI("landing",data,t=>{raw=t;progress()},lp.ctrl.signal)}catch(e){failure=e;raw=e.partial||raw}
 clearInterval(lp.timer);lp.busy=false;lp.ctrl=null;lp.go.disabled=false;lp.go.innerHTML='<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Gerar landing page';
-const parts=raw.split("[nexa-error]"),html=extractHtml(parts[0]),cut=(parts[1]||"").trim();
-if(failure==="cancel"){if(lp.current)show(lp.current);else setState("empty","Pré-visualização");toast("Criação cancelada");return}
-if(failure||!html||cut&&!/<\/html>/i.test(html)){lp.err.textContent=failure||cut||"A IA não devolveu uma página. Tente de novo.";setState("error","Não foi possível criar a página");return}
-const page={id:Date.now().toString(36),name:data.business,color:data.color,created:new Date().toISOString(),html:withBadge(/<\/html>/i.test(html)?html:html+"\n</body>\n</html>")};
+if(failure&&failure.code==="abort"){if(lp.current)show(lp.current);else setState("empty","Pré-visualização");toast("Criação cancelada");return}
+const content=failure?null:parseContent(raw);
+if(!content){lp.err.textContent=failure?failure.message:"A IA respondeu num formato inesperado. Tente de novo.";lp.keyBtn.hidden=!needsKey(failure);lp.keyBtn.dataset.kind="landing";setState("error","Não foi possível criar a página");return}
+const page={id:Date.now().toString(36),name:data.business,color:fields.color,created:new Date().toISOString(),html:withBadge(nexaTemplate(content,fields,media,{}))};
 savePage(page);show(page,"Pronta em "+clock(Date.now()-started)+" <small>· "+esc(page.name)+"</small>");toast("Landing page criada!")}
 
 function show(page,status){lp.current=page;lp.pending=null;setState("preview",status||esc(page.name)+(page.sample?" <small>· exemplo</small>":""));render(page.html)}
-function savePage(page){let pages=store.get(PAGES_KEY,[]);if(!Array.isArray(pages))pages=[];pages=[page,...pages.filter(p=>p.id!==page.id)].slice(0,6);while(pages.length&&!store.set(PAGES_KEY,pages))pages.pop();if(!pages.length)toast("Sem espaço para salvar no navegador. Baixe o HTML para não perder.");renderSaved()}
+function savePage(page){let pages=store.get(PAGES_KEY,[]);if(!Array.isArray(pages))pages=[];pages=[page,...pages.filter(p=>p.id!==page.id)].slice(0,6);while(pages.length&&!store.set(PAGES_KEY,pages))pages.pop();if(!pages.length)toast("Sem espaço para salvar no navegador. Baixe o HTML para não perder.");else if(pages[0].id!==page.id)toast("Página grande demais para salvar. Baixe o HTML para não perder.");renderSaved()}
 function renderSaved(){const pages=store.get(PAGES_KEY,[]);const list=Array.isArray(pages)?pages:[];lp.saved.hidden=!list.length;
 lp.savedList.innerHTML=list.map(p=>{const d=new Date(p.created);return'<div class="nexa-lp-saved-row" data-id="'+esc(p.id)+'"><span style="--c:'+esc(/^#[0-9a-f]{6}$/i.test(p.color)?p.color:"#00b8b1")+'"><i class="fa-solid fa-window-maximize" aria-hidden="true"></i></span><div><b>'+esc(p.name)+"</b><small>"+(isNaN(d)?"":d.toLocaleDateString("pt-BR")+" às "+d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}))+'</small></div><div><button type="button" data-act="view" title="Ver" aria-label="Ver '+esc(p.name)+'"><i class="fa-regular fa-eye" aria-hidden="true"></i></button><button type="button" data-act="download" title="Baixar HTML" aria-label="Baixar '+esc(p.name)+'"><i class="fa-solid fa-download" aria-hidden="true"></i></button><button type="button" class="is-danger" data-act="delete" title="Excluir" aria-label="Excluir '+esc(p.name)+'"><i class="fa-solid fa-trash-can" aria-hidden="true"></i></button></div></div>'}).join("")}
 function download(page){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([page.html],{type:"text/html;charset=utf-8"}));a.download=slug(page.name)+".html";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000);toast("Download iniciado")}
@@ -4994,13 +5143,26 @@ navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText
 function openTab(page){const wrap='<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(page.name)+' · NexaWeb</title><style>html,body{margin:0;height:100%;background:#fff}iframe{display:block;width:100%;height:100%;border:0}</style></head><body><iframe title="'+esc(page.name)+'" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms" srcdoc="'+esc(page.html)+'"></iframe></body></html>';
 const url=URL.createObjectURL(new Blob([wrap],{type:"text/html;charset=utf-8"}));const w=window.open(url,"_blank");if(!w)toast("Permita pop-ups para abrir a página");setTimeout(()=>URL.revokeObjectURL(url),120000)}
 
+/* photos and logo, shrunk in the browser before going into the page */
+function shrink(file,max,type,quality){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file),im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));const x=c.getContext("2d");if(type==="image/jpeg"){x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height)}x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL(type,quality))};im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("imagem inválida"))};im.src=url})}
+const photoBox=$(".nexa-lp-photos");
+function renderPhotos(){photoBox.innerHTML=lp.photos.map((p,i)=>'<div class="nexa-lp-photo"><button type="button" class="nexa-lp-photo-cover" data-i="'+i+'" aria-label="'+(i?"Usar a foto "+(i+1)+" como capa":"Foto de capa")+'"><img src="'+p+'" alt=""></button>'+(i?"":"<em>Capa</em>")+'<button type="button" class="nexa-lp-photo-x" data-i="'+i+'" aria-label="Remover foto '+(i+1)+'">&times;</button></div>').join("")+(lp.photos.length<8?'<label class="nexa-lp-add"><input type="file" accept="image/*" multiple hidden id="nexaLpPhotos"><i class="fa-solid fa-camera" aria-hidden="true"></i><span>'+(lp.photos.length?"Mais fotos":"Adicionar fotos")+"</span></label>":"")}
+photoBox.addEventListener("change",async e=>{if(e.target.id!=="nexaLpPhotos")return;const files=[...e.target.files].slice(0,8-lp.photos.length);let bad=0;for(const file of files){try{lp.photos.push(await shrink(file,1280,"image/jpeg",.74))}catch(err){bad++}}renderPhotos();bad&&toast(bad+" arquivo(s) não são imagens válidas")});
+photoBox.addEventListener("click",e=>{const x=e.target.closest(".nexa-lp-photo-x"),cv=e.target.closest(".nexa-lp-photo-cover");if(x){lp.photos.splice(+x.dataset.i,1);renderPhotos()}else if(cv&&+cv.dataset.i>0){const [p]=lp.photos.splice(+cv.dataset.i,1);lp.photos.unshift(p);renderPhotos();toast("Foto definida como capa")}});
+const logoInput=field("nexaLpLogo"),logoPrev=$(".nexa-lp-logo-prev"),logoClear=$(".nexa-lp-logo-clear");
+logoInput.addEventListener("change",async()=>{const file=logoInput.files[0];if(!file)return;try{lp.logo=await shrink(file,240,"image/png");logoPrev.src=lp.logo;logoPrev.hidden=false;logoClear.hidden=false}catch(e){toast("Esse arquivo não é uma imagem válida")}logoInput.value=""});
+logoClear.addEventListener("click",()=>{lp.logo="";logoPrev.hidden=true;logoClear.hidden=true});
+renderPhotos();
+
 lp.form.addEventListener("submit",e=>{e.preventDefault();generate()});
 lp.form.addEventListener("input",e=>{const f=e.target.closest(".nexa-field.is-invalid");f&&e.target.value.trim()&&f.classList.remove("is-invalid")});
 const custom=field("nexaLpColorCustom"),customRadio=lp.form.querySelector(".nexa-lp-custom input[type=radio]");
 ["input","click"].forEach(ev=>custom.addEventListener(ev,()=>{customRadio.checked=true}));
 $(".nexa-lp-cancel").addEventListener("click",()=>lp.ctrl&&lp.ctrl.abort());
 $(".nexa-lp-retry").addEventListener("click",generate);
-$(".nexa-lp-sample").addEventListener("click",()=>{const src=document.getElementById("nexa-lp-sample");src&&show({id:"sample",sample:true,name:"Barbearia Exemplo",html:withBadge(src.textContent.trim())})});
+lp.keyBtn.addEventListener("click",()=>openKeys("landing"));
+const SAMPLE={preset:"aconchegante",menuLabel:"Cardápio",seo:{title:"Café Aurora | Cafeteria em São Luís - MA",description:"Cafés especiais, bolos caseiros e um cantinho tranquilo para a sua pausa em São Luís."},hero:{title:"Toda boa pausa começa com um café.",subtitle:"Cafés especiais, bolos caseiros e um cantinho tranquilo para desacelerar.",cta:"Ver cardápio",ctaSecondary:"Conhecer o café"},about:{title:"Uma pausa que vale a pena.",text:"Um espaço pensado para apreciar bons sabores, encontrar quem você gosta e transformar uma simples pausa em um momento especial.",cta:"Ver cardápio"},pillars:{title:"Mais do que café. Uma experiência.",items:[{icon:"coffee",title:"Café",text:"Grãos selecionados e preparados com cuidado para acompanhar seus melhores momentos."},{icon:"cake",title:"Sabores",text:"Bolos, salgados e doces feitos para diferentes momentos do dia."},{icon:"home",title:"Ambiente",text:"Um espaço agradável para conversar, trabalhar ou simplesmente relaxar."}]},menu:{title:"Nosso cardápio",subtitle:"Escolha seu sabor e aproveite o momento.",categories:[{name:"Cafés",items:[{name:"Espresso",description:"Curto e encorpado.",price:"R$ 6,00"},{name:"Cappuccino",description:"Com canela e chocolate.",price:"R$ 12,00"},{name:"Latte",description:"Leite vaporizado e espresso.",price:"R$ 11,00"},{name:"Coado do dia",description:"Método V60.",price:"R$ 9,00"}]},{name:"Comidinhas",items:[{name:"Pão de queijo",description:"",price:"R$ 4,00"},{name:"Misto quente",description:"Na chapa.",price:"R$ 10,00"},{name:"Cuscuz com ovo",description:"Com manteiga da terra.",price:"R$ 14,00"},{name:"Fatia de bolo",description:"Sabor do dia.",price:"R$ 9,00"}]}]},highlights:{title:"Do balcão para a sua mesa.",items:[{icon:"coffee",title:"Espresso da casa",text:"Nosso blend especial, torrado na medida.",price:"R$ 6,00"},{icon:"cake",title:"Bolo de chocolate",text:"Receita de família, fofinho e úmido.",price:"R$ 10,00"},{icon:"sun",title:"Café da manhã",text:"Para começar o dia do jeito certo.",price:"consulte"}]},gallery:{title:"Detalhes que ficam na memória."},cta:{title:"Seu próximo momento especial pode começar aqui.",text:"Venha conhecer o Café Aurora.",button:"Quero conhecer"},reviews:{title:"Uma experiência que merece ser vivida."},location:{title:"Venha nos visitar.",text:"Estamos esperando por você."},instagram:{title:"Momentos Aurora.",text:"Acompanhe as novidades do café."},footer:{tagline:"Página de exemplo do Padrão NexaWeb."},whatsappMessage:"Olá! Vim pelo site."};
+$(".nexa-lp-sample").addEventListener("click",()=>{const f=cleanFields({business:"Café Aurora",segment:"Cafeteria",city:"São Luís - MA",address:"",hours:"Segunda a sábado, das 7h às 20h",whatsapp:"",instagram:"cafeaurora",rating:"4,8",reviews:"120",description:"",style:"elegante",color:"#b07a4f"});show({id:"sample",sample:true,name:"Café Aurora",html:withBadge(nexaTemplate(SAMPLE,f,{photos:lp.photos.slice(),logo:lp.logo},{}))})});
 $(".nexa-lp-actions").addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b||!lp.current)return;({download,copy,open:openTab})[b.dataset.act](lp.current)});
 $$(".nexa-lp-device button").forEach(b=>b.addEventListener("click",()=>{lp.frameBox.dataset.device=b.dataset.device;$$(".nexa-lp-device button").forEach(x=>x.setAttribute("aria-pressed",x===b))}));
 lp.savedList.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const id=b.closest("[data-id]").dataset.id,pages=store.get(PAGES_KEY,[]),page=(Array.isArray(pages)?pages:[]).find(p=>p.id===id);if(!page)return renderSaved();
@@ -5009,15 +5171,16 @@ else if(b.dataset.act==="download")download(page);
 else if(confirm('Excluir a landing page "'+page.name+'"?')){store.set(PAGES_KEY,pages.filter(p=>p.id!==id));if(lp.current&&lp.current.id===id&&!lp.busy){lp.current=null;setState("empty","Pré-visualização")}renderSaved()}});
 
 /* leads -> form */
-const TYPES={barber_shop:"Barbearia",beauty_salon:"Salão de beleza",hair_salon:"Salão de beleza",hair_care:"Cabeleireiro",nail_salon:"Manicure e pedicure",spa:"Spa",dentist:"Clínica odontológica",dental_clinic:"Clínica odontológica",doctor:"Clínica médica",physiotherapist:"Fisioterapia",gym:"Academia",restaurant:"Restaurante",pizza_restaurant:"Pizzaria",hamburger_restaurant:"Hamburgueria",bakery:"Padaria",cafe:"Cafeteria",bar:"Bar",pharmacy:"Farmácia",pet_store:"Pet shop",veterinary_care:"Clínica veterinária",car_repair:"Oficina mecânica",car_wash:"Lava-jato",car_dealer:"Revenda de veículos",lawyer:"Escritório de advocacia",accounting:"Contabilidade",real_estate_agency:"Imobiliária",clothing_store:"Loja de roupas",shoe_store:"Loja de calçados",furniture_store:"Loja de móveis",florist:"Floricultura",electrician:"Eletricista",plumber:"Encanador",painter:"Pintor",locksmith:"Chaveiro",school:"Escola",driving_school:"Autoescola",hotel:"Hotel",store:"Loja",supermarket:"Supermercado",optician:"Ótica",jewelry_store:"Joalheria",tattoo_shop:"Estúdio de tatuagem",laundry:"Lavanderia"};
+const TYPES={barber_shop:"Barbearia",beauty_salon:"Salão de beleza",hair_salon:"Salão de beleza",hair_care:"Cabeleireiro",nail_salon:"Manicure e pedicure",spa:"Spa",dentist:"Clínica odontológica",dental_clinic:"Clínica odontológica",doctor:"Clínica médica",physiotherapist:"Fisioterapia",gym:"Academia",restaurant:"Restaurante",pizza_restaurant:"Pizzaria",hamburger_restaurant:"Hamburgueria",bakery:"Padaria",cafe:"Cafeteria",coffee_shop:"Cafeteria",bar:"Bar",pharmacy:"Farmácia",pet_store:"Pet shop",veterinary_care:"Clínica veterinária",car_repair:"Oficina mecânica",car_wash:"Lava-jato",car_dealer:"Revenda de veículos",lawyer:"Escritório de advocacia",accounting:"Contabilidade",real_estate_agency:"Imobiliária",clothing_store:"Loja de roupas",shoe_store:"Loja de calçados",furniture_store:"Loja de móveis",florist:"Floricultura",electrician:"Eletricista",plumber:"Encanador",painter:"Pintor",locksmith:"Chaveiro",school:"Escola",driving_school:"Autoescola",hotel:"Hotel",store:"Loja",supermarket:"Supermercado",optician:"Ótica",jewelry_store:"Joalheria",tattoo_shop:"Estúdio de tatuagem",laundry:"Lavanderia",ice_cream_shop:"Sorveteria",fitness_center:"Academia"};
 const segmentOf=t=>TYPES[t]||(t?String(t).replace(/_/g," ").replace(/^./,c=>c.toUpperCase()):"");
 const cityOf=a=>{const m=[...String(a||"").matchAll(/([^,]+?)\s+-\s+([A-Z]{2})(?=\s*,|\s*$|\s+\d)/g)].pop();return m?m[1].trim()+" - "+m[2]:""};
+const streetOf=a=>{a=String(a||"");const c=cityOf(a);if(!c)return a.replace(/,\s*Brasil$/i,"");const i=a.indexOf(c.split(" - ")[0]);return(i>0?a.slice(0,i):a).replace(/[,\s-]+$/,"")};
 const mobileOf=p=>{let d=String(p||"").replace(/\D/g,"");if(d.startsWith("55")&&d.length>=12)d=d.slice(2);return d.length===11&&d[2]==="9"?"("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7):""};
 const leads=()=>{const l=store.get("clean-leads-leads",[]);return Array.isArray(l)?l.filter(x=>x&&x.nome):[]};
 function fillLeads(){const list=leads(),current=lp.lead.value;field("nexaLpLeadField").hidden=!list.length;
 lp.lead.innerHTML='<option value="">Escolher lead…</option>'+list.slice(0,200).map((l,i)=>{const c=cityOf(l.endereco);return'<option value="'+i+'">'+esc(l.nome)+(c?" · "+esc(c):"")+"</option>"}).join("");if(current&&+current<list.length)lp.lead.value=current}
 lp.lead.addEventListener("focus",fillLeads);
-lp.lead.addEventListener("change",()=>{const l=leads()[+lp.lead.value];if(!lp.lead.value||!l)return;field("nexaLpBusiness").value=l.nome||"";const seg=segmentOf(l.categoria);seg&&(field("nexaLpSegment").value=seg);field("nexaLpCity").value=cityOf(l.endereco);field("nexaLpWhatsapp").value=mobileOf(l.telefone||l.telefoneInternacional);$$(".nexa-field.is-invalid",lp.form).forEach(f=>f.classList.remove("is-invalid"));toast("Dados do lead preenchidos")});
+lp.lead.addEventListener("change",()=>{const l=leads()[+lp.lead.value];if(!lp.lead.value||!l)return;field("nexaLpBusiness").value=l.nome||"";const seg=segmentOf(l.categoria);seg&&(field("nexaLpSegment").value=seg);field("nexaLpCity").value=cityOf(l.endereco);field("nexaLpAddress").value=streetOf(l.endereco);field("nexaLpWhatsapp").value=mobileOf(l.telefone||l.telefoneInternacional);$$(".nexa-field.is-invalid",lp.form).forEach(f=>f.classList.remove("is-invalid"));toast("Dados do lead preenchidos")});
 fillLeads();renderSaved();showTab(store.get(TAB_KEY,"chat")==="landing"?"landing":"chat");
 window.nexaOpenAI=tab=>{window.go&&window.go("nexa-ai");showTab(tab==="landing"?"landing":"chat")};
 })();
