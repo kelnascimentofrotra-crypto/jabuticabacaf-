@@ -615,8 +615,37 @@
 </article>
 </div>
 <div class="nexa-ai-panel" id="nexaAiLandingPanel" role="tabpanel" aria-labelledby="nexaAiTabLanding" hidden>
-<div class="nexa-lp-layout">
-<form class="nexa-lp-form" novalidate>
+<div class="nexa-lp-layout" data-pane="chat">
+<div class="nexa-lp-panes" role="tablist" aria-label="Alternar entre chat e prévia"><button type="button" role="tab" data-pane="chat" aria-selected="true"><i class="fa-regular fa-comment-dots" aria-hidden="true"></i>Chat</button><button type="button" role="tab" data-pane="preview" aria-selected="false"><i class="fa-regular fa-eye" aria-hidden="true"></i>Prévia</button></div>
+<div class="nexa-lp-side">
+<div class="nexa-lp-side-head">
+<div class="nexa-lp-modes" role="tablist" aria-label="Como criar"><button type="button" role="tab" data-mode="chat" aria-selected="true"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Chat com a IA</button><button type="button" role="tab" data-mode="form" aria-selected="false"><i class="fa-solid fa-list-check" aria-hidden="true"></i>Formulário</button></div>
+<button type="button" class="nexa-build-new" title="Nova conversa" aria-label="Nova conversa"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+</div>
+<div class="nexa-build" data-mode-panel="chat">
+<div class="nexa-build-log" role="log" aria-live="polite" aria-label="Conversa com a IA do NexaWeb"></div>
+<div class="nexa-build-composer">
+<div class="nexa-build-thumbs"></div>
+<textarea class="nexa-build-input" rows="2" maxlength="1500" placeholder="Peça à IA do NexaWeb…" aria-label="Descreva a página ou a alteração que você quer"></textarea>
+<div class="nexa-build-bar">
+<div class="nexa-build-plus-wrap">
+<button type="button" class="nexa-build-plus" aria-label="Adicionar fotos, logo ou lead" aria-haspopup="menu" aria-expanded="false"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+<div class="nexa-build-menu" role="menu" hidden>
+<button type="button" role="menuitem" data-add="photos"><i class="fa-regular fa-images" aria-hidden="true"></i>Fotos do negócio</button>
+<button type="button" role="menuitem" data-add="logo"><i class="fa-solid fa-shapes" aria-hidden="true"></i>Logo</button>
+<button type="button" role="menuitem" data-add="lead"><i class="fa-solid fa-user-group" aria-hidden="true"></i>Usar um lead salvo</button>
+<div class="nexa-build-leads" hidden></div>
+</div>
+<input type="file" accept="image/*" multiple hidden class="nexa-build-file-photos">
+<input type="file" accept="image/*" hidden class="nexa-build-file-logo">
+</div>
+<span class="nexa-build-chip"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Construir</span>
+<button type="button" class="nexa-build-mic" aria-label="Falar o pedido" title="Falar o pedido" hidden><i class="fa-solid fa-microphone" aria-hidden="true"></i></button>
+<button type="button" class="nexa-build-send" aria-label="Enviar pedido" disabled><i class="fa-solid fa-arrow-up" aria-hidden="true"></i></button>
+</div>
+</div>
+</div>
+<form class="nexa-lp-form" novalidate data-mode-panel="form" hidden>
 <div class="nexa-lp-form-head"><span class="nexa-lp-engine"><i class="fa-solid fa-bolt" aria-hidden="true"></i>IA NexaWeb · Padrão NexaWeb</span><h2>Nova landing page</h2><p>Mesma estrutura do site do Jabuticaba Café: capa em tela cheia, sobre, experiência, cardápio ou serviços, destaques, galeria, avaliações e localização. Os efeitos de rolagem mudam conforme o nicho.</p></div>
 <label class="nexa-field" id="nexaLpLeadField"><span>Usar um lead salvo <em>(opcional)</em></span><select id="nexaLpLead"><option value="">Escolher lead…</option></select></label>
 <label class="nexa-field"><span>Nome do negócio *</span><input id="nexaLpBusiness" maxlength="120" placeholder="Ex.: Barbearia Dom Corte" required></label>
@@ -655,6 +684,7 @@
 <button type="submit" class="btn primary nexa-lp-go"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Gerar landing page</button>
 <small class="nexa-lp-hint">Fica pronta em segundos. Toda página sai com a marca “Create with NexaWeb”.</small>
 </form>
+</div>
 <div class="nexa-lp-stage" data-state="empty">
 <div class="nexa-lp-toolbar">
 <div class="nexa-lp-status" aria-live="polite">Pré-visualização</div>
@@ -672,7 +702,7 @@
 <div class="nexa-lp-empty">
 <span class="nexa-lp-empty-art" aria-hidden="true"><i></i><i></i><i></i></span>
 <h3>Sua landing page aparece aqui</h3>
-<p>Preencha os dados do negócio e toque em <b>Gerar landing page</b>. Você acompanha a página sendo montada em tempo real.</p>
+<p>Descreva o negócio no chat ao lado e a IA do NexaWeb monta a página. Depois é só pedir as alterações conversando.</p>
 <button type="button" class="btn nexa-lp-sample"><i class="fa-regular fa-eye" aria-hidden="true"></i>Ver exemplo do Padrão NexaWeb</button>
 </div>
 <div class="nexa-lp-overlay" aria-live="polite">
@@ -4728,7 +4758,7 @@ html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
 .nexa-lp-device button{width:34px;height:30px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer}
 .nexa-lp-device button[aria-pressed=true]{background:rgba(var(--accent-rgb),.16);color:#fff}
 .nexa-lp-actions{display:flex;flex-wrap:wrap;gap:6px}
-.nexa-lp-actions .btn,.nexa-lp-cancel{display:inline-flex;align-items:center;padding:9px 12px}
+.nexa-lp-actions .btn,.nexa-lp-cancel{display:inline-flex;align-items:center;padding:9px 12px}.nexa-lp-actions .nexa-lp-x{margin-left:.28em}
 .nexa-lp-stage:not([data-state=preview]) .nexa-lp-actions,.nexa-lp-stage:not([data-state=working]) .nexa-lp-cancel,.nexa-lp-stage[data-state=empty] .nexa-lp-device,.nexa-lp-stage[data-state=error] .nexa-lp-device{display:none}
 .nexa-lp-frame{position:relative;height:min(760px,calc(100dvh - 200px));min-height:520px;background:#0a0f10}
 .nexa-lp-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -4804,6 +4834,87 @@ html,body{overflow-x:hidden}@supports(overflow:clip){html,body{overflow-x:clip}}
 .nexa-lp-error-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .nexa-lp-error-actions .btn{display:inline-flex;align-items:center}
 @media(max-width:680px){.nexa-ai-head-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;width:100%}#nexa-ai .nexa-ai-keys-btn{display:inline-flex!important;justify-content:center;width:48px;padding:0!important}.nexa-ai-keys-btn span{display:none}.nexa-ai-keys-btn>i{margin:0!important}}
+/* builder chat (Lovable-style) */
+.nexa-lp-layout{grid-template-columns:minmax(330px,410px) minmax(0,1fr)!important}
+.nexa-lp-panes{display:none}
+.nexa-lp-side{position:sticky;top:18px;display:flex;flex-direction:column;min-width:0;height:min(818px,calc(100dvh - 142px));min-height:578px;border:1px solid var(--line);border-radius:22px;background:var(--ai-card);overflow:hidden}
+.nexa-lp-side-head{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 12px;border-bottom:1px solid var(--line)}
+.nexa-lp-modes{display:flex;flex:1;gap:3px;padding:3px;border:1px solid var(--line);border-radius:12px;background:rgba(0,0,0,.2)}
+.nexa-lp-modes button{display:inline-flex;flex:1;align-items:center;justify-content:center;gap:7px;height:34px;padding:0 10px;border:0;border-radius:9px;background:none;color:var(--muted);font:700 12.5px/1 Manrope,Inter,sans-serif;white-space:nowrap;cursor:pointer}
+.nexa-lp-modes button[aria-selected=true]{background:rgba(var(--accent-rgb),.16);color:#fff}
+.nexa-build-new{width:38px;height:38px;flex:none;display:grid;place-items:center;border:1px solid var(--line);border-radius:11px;background:rgba(255,255,255,.03);color:#c9dad9;cursor:pointer}
+.nexa-build-new:hover{border-color:rgba(var(--accent-rgb),.5);color:#fff}
+.nexa-lp-side .nexa-lp-form{flex:1;min-height:0;overflow-y:auto;border:0!important;border-radius:0!important;background:none!important;overscroll-behavior:contain}
+.nexa-build{display:flex;flex:1;flex-direction:column;min-height:0}
+.nexa-build[hidden]{display:none}
+.nexa-build-log{display:flex;flex:1;flex-direction:column;gap:14px;min-height:0;padding:16px 14px;overflow-y:auto;overscroll-behavior:contain}
+.nb-welcome{display:grid;justify-items:center;gap:9px;margin:auto 0;padding:8px 4px;text-align:center}
+.nb-welcome h3{margin:4px 0 0;font-size:19px;letter-spacing:-.02em}
+.nb-welcome p{max-width:300px;margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.nb-welcome .nexa-chat-suggestions{flex-direction:column;align-items:stretch;width:100%;margin-top:6px}
+.nb-welcome .nexa-chip{font-size:12px;line-height:1.4;border-radius:14px;text-align:left}
+.nb-msg{display:flex;flex-direction:column;gap:8px;min-width:0;animation:nexaMsgIn .25s ease both}
+.nb-msg.user{align-items:flex-end}
+.nb-msg.user .nb-bubble{max-width:90%;padding:10px 13px;border:1px solid var(--line);border-radius:16px 16px 6px 16px;background:rgba(255,255,255,.06);color:#eef7f6;font-size:13.5px;line-height:1.5;overflow-wrap:anywhere}
+.nb-msg.ai{color:#dce9e8;font-size:13.5px;line-height:1.6}
+.nb-msg.ai .nexa-md p{margin:0 0 8px}
+.nb-msg.ai .nexa-md ul{margin:0 0 8px;padding-left:18px}
+.nb-think{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:11.5px}
+.nb-card{border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.22);overflow:hidden}
+.nb-card-head{display:flex;align-items:center;gap:9px;padding:11px 12px;font-size:13px}
+.nb-card-head i{color:var(--green,#62d8a0)}
+.nb-card-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 10px 10px}
+.nb-btn{height:34px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.05);color:#e6f0ef;font:700 12px/1 Manrope,Inter,sans-serif;cursor:pointer;transition:background .18s,border-color .18s}
+.nb-btn:hover{border-color:rgba(var(--accent-rgb),.5)}
+.nb-btn-primary{border-color:rgba(var(--accent-rgb),.45);background:rgba(var(--accent-rgb),.14);color:var(--accent2)}
+.nb-details{margin:0;padding:10px 12px 12px 28px;border-top:1px solid var(--line);color:#c9dad9;font-size:12.5px;line-height:1.55}
+.nb-details[hidden]{display:none}
+.nb-tools{display:flex;gap:6px}
+.nb-undo{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:none;color:var(--muted);font:700 11.5px/1 Manrope,Inter,sans-serif;cursor:pointer}
+.nb-undo:hover{color:#fff;border-color:rgba(var(--accent-rgb),.5)}
+.nb-msg.is-thinking{flex-direction:row}
+.nexa-build-composer{margin:0 10px 10px;padding:8px;border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.28);transition:border-color .18s,box-shadow .18s}
+.nexa-build-composer:focus-within{border-color:rgba(var(--accent-rgb),.55);box-shadow:0 0 0 4px rgba(var(--accent-rgb),.1)}
+.nexa-build-thumbs{display:flex;flex-wrap:wrap;gap:6px}
+.nexa-build-thumbs:not(:empty){padding:2px 2px 8px}
+.nb-thumb{position:relative;width:42px;height:42px;border-radius:9px;overflow:hidden;border:1px solid var(--line)}
+.nb-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.nb-thumb.is-logo{border-radius:50%}
+.nb-thumb button{position:absolute;top:1px;right:1px;width:17px;height:17px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:rgba(0,0,0,.75);color:#fff;font-size:11px;line-height:1;cursor:pointer}
+.nexa-build-input{display:block;width:100%;min-height:44px;max-height:180px;padding:6px 6px 8px;border:0;outline:0;resize:none;background:none;color:var(--text);font:500 14px/1.45 Manrope,Inter,sans-serif}
+.nexa-build-input::placeholder{color:#6f8786}
+.nexa-build-bar{display:flex;align-items:center;gap:6px}
+.nexa-build-plus-wrap{position:relative}
+.nexa-build-plus,.nexa-build-mic{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.04);color:#d6e6e5;cursor:pointer}
+.nexa-build-plus[aria-expanded=true]{border-color:rgba(var(--accent-rgb),.6);color:#fff}
+.nexa-build-mic.is-on{border-color:#ff6b6b;color:#ff8b8b;animation:nexaPulse 1.2s ease-in-out infinite}
+.nexa-build-chip{display:inline-flex;align-items:center;gap:6px;height:30px;margin-left:auto;padding:0 11px;border:1px solid var(--line);border-radius:999px;color:#b9cccb;font:700 11.5px/1 Manrope,Inter,sans-serif}
+.nexa-build-chip i{color:var(--accent)}
+.nexa-build-send{width:34px;height:34px;display:grid;place-items:center;border:0;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;cursor:pointer;transition:opacity .15s,transform .15s}
+.nexa-build-send:disabled{opacity:.35;cursor:default}
+.nexa-build-send:not(:disabled):hover{transform:translateY(-1px)}
+.nexa-build-menu{position:absolute;left:0;bottom:calc(100% + 8px);z-index:5;display:grid;gap:2px;min-width:220px;max-width:280px;padding:6px;border:1px solid var(--line);border-radius:14px;background:var(--panel,#0b1617);box-shadow:0 18px 40px rgba(0,0,0,.5)}
+.nexa-build-menu[hidden]{display:none}
+.nexa-build-menu>button,.nexa-build-leads button{display:flex;align-items:center;gap:10px;width:100%;padding:10px;border:0;border-radius:10px;background:none;color:#dce9e8;font:600 13px/1.3 Manrope,Inter,sans-serif;text-align:left;cursor:pointer}
+.nexa-build-menu>button:hover,.nexa-build-leads button:hover{background:rgba(255,255,255,.06)}
+.nexa-build-menu i{width:16px;color:var(--accent);text-align:center}
+.nexa-build-leads{max-height:220px;overflow-y:auto;border-top:1px solid var(--line);padding-top:4px}
+.nexa-build-leads[hidden]{display:none}
+.nexa-build-leads small{display:block;padding:8px 10px;color:var(--muted);font-size:12px}
+.nexa-build-leads button span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nexa-lp-stage.is-flash{box-shadow:0 0 0 3px rgba(var(--accent-rgb),.55);transition:box-shadow .3s}
+.nexa-lp-plus-hint{color:var(--muted)}
+.nb-plus,.nexa-build-plus,.nexa-build-mic,.nexa-build-send,.nexa-build-new,.nb-btn,.nb-undo,.nexa-lp-modes button,.nexa-lp-panes button{-webkit-tap-highlight-color:transparent}
+.nexa-build-plus:focus-visible,.nexa-build-mic:focus-visible,.nexa-build-send:focus-visible,.nexa-build-new:focus-visible,.nb-btn:focus-visible,.nb-undo:focus-visible,.nexa-lp-modes button:focus-visible,.nexa-lp-panes button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media(max-width:1080px){
+.nexa-lp-layout{grid-template-columns:1fr!important}
+.nexa-lp-panes{position:sticky;top:8px;z-index:4;display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border:1px solid var(--line);border-radius:14px;background:rgba(6,11,12,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.nexa-lp-panes button{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border:0;border-radius:10px;background:none;color:var(--muted);font:700 13.5px/1 Manrope,Inter,sans-serif;cursor:pointer}
+.nexa-lp-panes button[aria-selected=true]{background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff}
+.nexa-lp-layout[data-pane=chat] .nexa-lp-stage,.nexa-lp-layout[data-pane=preview] .nexa-lp-side{display:none}
+.nexa-lp-side{position:relative;top:0;height:calc(100dvh - 330px - env(safe-area-inset-bottom));min-height:470px}
+}
+@media(max-width:680px){.nexa-lp-side{border-radius:18px}.nexa-build-chip{display:none}.nexa-build-send{margin-left:auto}.nexa-lp-modes button{font-size:12px;padding:0 6px}}
 @keyframes nexaSpin{to{transform:rotate(360deg)}}
 @keyframes nexaPulse{0%,100%{box-shadow:0 0 12px rgba(var(--accent-rgb),.25)}50%{box-shadow:0 0 26px rgba(var(--accent-rgb),.55)}}
 @keyframes nexaShimmer{from{background-position:120% 0}to{background-position:-100% 0}}
@@ -5172,7 +5283,7 @@ if(p.split(" ").length<=6)out.plain.push(nxCap(p))}return out}
 function nexaLocalLanding(d){const name=String(d.business||"").trim()||"Seu negócio",segRaw=String(d.segment||"").trim(),niche=nxNiche(segRaw)||nxNiche(name)||null;
 const guessed=NX_GUESS.some(g=>g[0].test(segRaw)),fam=niche?niche.fam:guessed?nxPreset("",segRaw):"suave",F=niche||guessed?NX_FAM[fam]:NX_FAM.geral,art=niche?niche.art:(/a$/i.test(nxNorm(segRaw).split(" ")[0]||"")?"a":"o");
 const city=String(d.city||"").replace(/\s*-\s*[A-Z]{2}$/i,"").trim(),offer=nxParseOffer(d.description);
-const said=new Set(nxTokens(d.description)),mentioned=niche?niche.services.filter(sv=>nxTokens(sv).some(t=>t.length>3&&!/^(direito|servico|atendimento|aula|turma)$/.test(t)&&said.has(t))):[];
+const said=new Set(nxTokens(d.description+" "+(d.hint||""))),mentioned=niche?niche.services.filter(sv=>nxTokens(sv).some(t=>t.length>3&&!/^(direito|servico|atendimento|aula|turma)$/.test(t)&&said.has(t))):[];
 const defaults=mentioned.length?mentioned:(niche?niche.services:[nxCap(segRaw)||"Atendimento"]);
 const services=(offer.priced.length||offer.plain.length?offer.priced.map(x=>x.name).concat(offer.plain):defaults).slice(0,10);
 const lista=services.slice(0,3).map(s=>s.toLowerCase()).join(", ").replace(/, ([^,]*)$/," e $1");
@@ -5192,6 +5303,69 @@ highlights:{title:nxPick(F.hlT),items:hlSrc.map((h,i)=>({icon,title:h.title,text
 gallery:{title:nxPick(F.galT)},cta:{title:nxPick(F.ctaT),text:"Fale com "+(art==="a"?"a ":"o ")+name+" pelo WhatsApp.",button:nxPick(F.ctaB)},
 reviews:{title:nxPick(F.revT)},location:{title:"Venha nos visitar.",text:city?"Estamos em "+city+". Será um prazer te receber.":"Será um prazer te receber."},
 instagram:{title:fill(F.igT),text:"Novidades e bastidores no Instagram."},footer:{tagline:seg+(city?" em "+city:"")+"."},whatsappMessage:F.wa}}
+
+/* ---------- landing page builder chat: free-text prompt -> fields, and edits on the current page ---------- */
+const NX_COLORS=[["azul marinho","#1e3a8a"],["azul escuro","#1e40af"],["azul claro","#38bdf8"],["azul bebe","#7dd3fc"],["verde agua","#14b8a6"],["verde escuro","#166534"],["verde limao","#84cc16"],["verde claro","#4ade80"],["vermelho escuro","#991b1b"],["rosa claro","#f9a8d4"],["rosa choque","#ec4899"],["turquesa","#00b8b1"],["ciano","#06b6d4"],["azul","#2f6bff"],["vermelho","#e8473c"],["verde","#1f9d55"],["roxo","#7c4dff"],["lilas","#a78bfa"],["violeta","#8b5cf6"],["laranja","#f2994a"],["dourado","#c9a227"],["ouro","#c9a227"],["amarelo","#eab308"],["rosa","#ec4899"],["pink","#ec4899"],["vinho","#7f1d1d"],["bordo","#7f1d1d"],["marrom","#8b5a2b"],["caramelo","#b07a4f"],["cafe","#6f4e37"],["bege","#c8a97e"],["nude","#d4a58a"],["cinza","#6b7280"],["grafite","#374151"],["preto","#1f1f1f"],["prata","#9ca3af"],["coral","#f97360"],["salmao","#fa8072"],["terracota","#c2603f"],["mostarda","#d4a017"],["menta","#34d399"],["oliva","#6b7f3a"]];
+const NX_STYLE_WORDS=[[/elegan|sofistica|luxo|chique|requintad|classic/,"elegante"],[/moderno|moderna|clean|atual|tecnolog/,"moderno"],[/minimalis|simples|limpo|minimal/,"minimalista"],[/vibrante|colorid|alegre|chamativ|vivo|vivas/,"vibrante"],[/escuro|dark|noturn|preto e/,"escuro"]];
+const NX_PRESET_WORDS=[[/suave|calm|leve|delicad/,"suave"],[/energ|dinamic|forte|intens|rapid/,"energia"],[/elegan|sofistica/,"elegante"],[/divertid|alegre|brincalh|infantil/,"divertido"],[/impact/,"impacto"],[/editorial|revista|moda/,"editorial"],[/sobri|discret|serio/,"sobrio"],[/aconcheg|acolhed|quentinh/,"aconchegante"]];
+const NX_PRESET_LABEL={aconchegante:"aconchegantes, de gastronomia",elegante:"elegantes, de beleza",suave:"suaves, de saúde",energia:"energéticos, de esporte",impacto:"de impacto, de serviços",editorial:"editoriais, de moda e lojas",sobrio:"sóbrios, de escritório",divertido:"divertidos, para público leve"};
+const NX_CAPITALS=["sao luis","sao paulo","rio de janeiro","belo horizonte","salvador","fortaleza","recife","teresina","natal","joao pessoa","maceio","aracaju","belem","manaus","macapa","boa vista","porto velho","rio branco","palmas","goiania","brasilia","cuiaba","campo grande","curitiba","florianopolis","porto alegre","vitoria","campinas","santos","guarulhos","osasco","sorocaba","ribeirao preto","uberlandia","contagem","juiz de fora","niteroi","feira de santana","imperatriz","caxias","londrina","joinville","blumenau","caxias do sul","pelotas","santo andre","sao jose dos campos","jundiai","piracicaba","bauru","maringa","anapolis","mossoro","caruaru","petrolina","juazeiro","parnaiba","timon","sao jose de ribamar","paco do lumiar"];
+function nxColorIn(text){const n=" "+nxNorm(text).replace(/\b(dourad|vermelh|amarel|rox|pret|escur|clar|branc)(a|as|os)\b/g,"$1o")+" ",hex=String(text).match(/#[0-9a-f]{6}\b/i);if(hex)return hex[0].toLowerCase();for(const[name,c]of NX_COLORS)if(n.includes(" "+name+" "))return c;return""}
+function nxStyleIn(text){const n=nxNorm(text);for(const[re,s]of NX_STYLE_WORDS)if(re.test(n))return s;return""}
+function nxTitleCase(s){return String(s).toLowerCase().replace(/(^|\s|-)([a-zà-ú])/g,(m,a,b)=>a+b.toUpperCase()).replace(/\b(De|Da|Do|Dos|Das|E)\b/g,w=>w.toLowerCase())}
+function nxParsePrompt(text){const raw=String(text||"").replace(/\s+/g," ").trim(),n=nxNorm(raw),f={business:"",segment:"",city:"",address:"",hours:"",whatsapp:"",instagram:"",rating:"",reviews:"",description:"",style:"",color:""};
+const ph=raw.match(/(?:\+?55\s*)?\(?\b\d{2}\)?\s*9\s?\d{4}[\s.-]?\d{4}\b|(?:\+?55\s*)?\(?\b\d{2}\)?\s*\d{4}[\s.-]?\d{4}\b/);if(ph)f.whatsapp=ph[0].trim();
+const ig=raw.match(/(?:^|\s)@([a-z0-9._]{2,30})/i)||raw.match(/instagram\.com\/([a-z0-9._]{2,30})/i)||raw.match(/instagram\s*(?:[ée]|:)?\s*@?([a-z0-9._]{3,30})\b/i);if(ig&&!/^(e|é|do|da|de)$/i.test(ig[1]))f.instagram=ig[1];
+const rt=raw.match(/\bnota\s*(?:no google\s*)?(?:de\s*)?([1-5](?:[.,]\d)?)\b/i)||raw.match(/\b([1-5][.,]\d)\s*estrelas?/i);if(rt)f.rating=rt[1];
+const rv=raw.match(/(\d{1,6})\s*avalia[cç](?:[oõ]es|ao|ão)/i);if(rv)f.reviews=rv[1];
+f.color=nxColorIn(raw);f.style=nxStyleIn(raw);
+const hr=raw.match(/((?:de\s+|aberto\s+|abre\s+|funciona\s+)?(?:segunda|seg|ter[cç]a|quarta|quinta|sexta|s[aá]bado|domingo|todos os dias|diariamente)[^.;\n]{0,70})/i)||raw.match(/(\b(?:das\s+)?\d{1,2}h(?:\d{2})?\s*(?:[àa]s|a|-|at[eé])\s*\d{1,2}h(?:\d{2})?)/i);if(hr)f.hours=hr[1].replace(/\s*[,]\s*(?:whats|telefone|insta|cor|estilo).*$/i,"").trim();
+const ad=raw.match(/\b((?:rua|r\.|avenida|av\.|travessa|tv\.|alameda|estrada|rodovia|pra[cç]a)\s[^,;.\n]+(?:,\s*(?:n[ºo°.]*\s*)?\d+[a-z]?)?(?:\s*-\s*[^,;.\n]+)?)/i)||raw.match(/endere[cç]o\s*(?:[ée]|:)?\s*([^;.\n]+)/i);if(ad)f.address=ad[1].trim();
+const niche=nxNiche(raw);
+let name="";const q=raw.match(/["“”']([^"“”']{2,60})["“”']/);if(q)name=q[1];
+if(!name){const m=raw.match(/(?:chamad[oa]|com o nome(?: de)?|nome(?: [ée])?\s*:?|se chama|chama-se|marca)\s+([^,.;\n]{2,60}?)(?=\s+(?:em|no|na|que|com|e|whats|whatsapp|telefone|tel|cor|estilo|de\s+(?:cor|estilo))\b|[,.;\n]|$)/i);if(m)name=m[1]}
+if(!name){const caps=[...raw.matchAll(/(?:^|[\s(])((?:[A-ZÀ-Ú][\wÀ-ú'&.-]*)(?:\s+(?:(?:de|da|do|dos|das|e|&)\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'&.-]*)*)/g)].map(x=>x[1]).filter(c=>c.length>2&&!/^(Landing|Site|Página|Pagina|Crie|Cria|Criar|Faça|Faz|Fazer|Quero|Gere|Gera|Monte|Monta|Preciso|Uma|Um|Para|Com|WhatsApp|Whats|Instagram|Cor|Estilo)$/i.test(c));
+const withNiche=caps.find(c=>niche&&niche.re.test(nxNorm(c))&&c.split(" ").length>1);name=withNiche||caps.find(c=>c.split(" ").length>1&&!NX_CAPITALS.includes(nxNorm(c)))||""}
+name=name.replace(/\s+(em|no|na)\s+[A-ZÀ-Ú].*$/,"").replace(/[,.;:]+$/,"").trim();if(name&&niche&&nxNorm(name)===nxNorm(niche.label))name="";if(name&&/^(sp|rj|mg|ma|pi|ce|ba|pe)$/i.test(name))name="";
+f.business=name;
+let city="";const cm=raw.match(/cidade\s*(?:[ée]|:|de)?\s*([A-Za-zÀ-ú][A-Za-zÀ-ú ]{2,30}?)(?:\s*[-\/,]\s*([A-Za-z]{2}))?(?=[,.;\n]|$)/i);if(cm)city=nxTitleCase(cm[1].trim())+(cm[2]?" - "+cm[2].toUpperCase():"");
+if(!city){for(const m of raw.matchAll(/\b(?:em|de|no|na)\s+((?:[A-ZÀ-Ú][\wÀ-ú'-]+)(?:\s+(?:(?:de|da|do|dos|das)\s+)?[A-ZÀ-Ú][\wÀ-ú'-]+)*)(?:\s*[-\/,]?\s*\b([A-Z]{2})\b)?/g)){if(name&&name.includes(m[1]))continue;if(/^(Segunda|Terça|Quarta|Quinta|Sexta|Sábado|Domingo|Janeiro|Dezembro|WhatsApp|Instagram)$/i.test(m[1]))continue;city=m[1]+(m[2]?" - "+m[2]:"");}}
+if(!city){const nn=" "+n+" ";for(const c of NX_CAPITALS)if(nn.includes(" "+c+" ")){city=nxTitleCase(c);const uf=n.match(new RegExp(c+"\\s*[-/]?\\s*([a-z]{2})\\b"));if(uf&&!["de","da","do","em","no","na","com","e"].includes(uf[1]))city+=" - "+uf[1].toUpperCase();break}}
+f.city=city.replace(/([^\s-])\s+([A-Z]{2})$/,"$1 - $2");
+f.segment=niche?nxCap(niche.label):"";if(niche&&niche.label==="loja"){const lm=raw.match(/[Ll]oja\s+de\s+([a-zà-ú][a-zà-ú ]{2,30}?)(?=\s+[A-ZÀ-Ú]|\s+(?:em|na|no|chamad|com)\s|[,.;\n]|$)/);if(lm)f.segment="Loja de "+lm[1].trim()}if(!f.segment){const sm=raw.match(/(?:site|landing(?: page)?|p[aá]gina)\s+(?:de|da|do|para|pra)\s+(?:uma?\s+|meu\s+|minha\s+)?([a-zà-ú][a-zà-ú ]{2,30}?)(?=\s+(?:chamad|com|em|no|na|que|do|da)\b|[,.;\n]|$)/i);if(sm&&!/^[A-Z]/.test(sm[1]))f.segment=nxCap(sm[1].trim())}
+const items=[];for(const m of raw.matchAll(/([A-Za-zÀ-ú][A-Za-zÀ-ú +&\/]{1,40}?)\s*(?:(?:\bpor\b|\ba\b)\s*|[:=–-]\s*)?(?:R\$\s*(\d+(?:[.,]\d{1,2})?)|(\d+(?:[.,]\d{1,2})?)\s*reais)/gi)){const nm=m[1].replace(/^(?:e|com|o|a|os|as|de|cobra|cobro|valores?|pre[cç]os?:?)\s+/i,"").trim();if(nm.length>1)items.push(nxCap(nm)+" R$ "+(m[2]||m[3]))}
+const list=raw.match(/(?:servi[cç]os|card[aá]pio|produtos|oferece|oferecemos|vende|vendemos|trabalha com|trabalhamos com|especialidades|tratamentos)\s*(?:como|de|:)?\s*([^.\n]+)/i);const plain=[];if(list&&!items.length)list[1].split(/,|;|\se\s/).map(x=>x.trim()).filter(x=>x&&x.length<=40&&!/\d|whats|telefone|insta|\bcor\b|tons?\b|estilo|cidade|endere|\bem\s[A-ZÀ-Ú]/i.test(x)).slice(0,10).forEach(x=>plain.push(nxCap(x.replace(/^(e|o|a|os|as)\s+/i,""))));
+const diffs=NX_DIFFS.filter(d=>d[0].test(n)&&!/^(Experiência|Garantia|Equipe qualificada|Atendimento|Qualidade|Orçamento|Agilidade|Feito com cuidado|24 horas)$/.test(d[2])).map(d=>d[2]);
+f.description=items.concat(plain).concat(diffs).join("; ");
+f.hint=raw;return{fields:f,niche}}
+function nxWantsNewPage(text,current){const n=nxNorm(text);if(!current)return true;if(/\b(nova|novo|outra|outro)\s+(landing|pagina|site)/.test(n))return true;
+if(/\b(cria|crie|criar|faz|faca|fazer|gera|gere|gerar|monta|monte|montar)\b.*\b(landing|pagina|site)\b/.test(n)){const p=nxParsePrompt(text);if(p.niche||p.fields.business)return true}return false}
+const NX_SECTIONS=[[/galeria|fotos do espaco/,"gallery","a galeria"],[/avaliac|depoimento|estrelas/,"reviews","as avaliações"],[/instagram/,"instagram","o Instagram"],[/destaque/,"highlights","os destaques"],[/\bmapa\b/,"map","o mapa"],[/localizac|endereco|secao de contato/,"location","a localização"],[/experiencia|diferencia|pilares/,"pillars","a seção de experiência"],[/\bsobre\b/,"about","a seção Sobre"],[/chamada final|\bcta\b|faixa final/,"cta","a chamada final"],[/botao flutuante|whatsapp flutuante|bolinha|botao redondo/,"wafloat","o botão flutuante do WhatsApp"],[/cardapio|tabela de preco|lista de servico|secao de servico|os servicos|\bmenu\b/,"menu","a lista de serviços"]];
+function nexaEditPage(state,text){const raw=String(text||"").replace(/\s+/g," ").trim(),n=nxNorm(raw),st=JSON.parse(JSON.stringify({fields:state.fields,content:state.content,hide:state.hide||[]})),ch=[];let regenerate=false,photos=false,touched=false;
+const c=st.content,f=st.fields,hide=new Set(st.hide),setF=(k,v,label)=>{if(v&&f[k]!==v){f[k]=v;ch.push(label+": "+v)}};
+if(/(outra versao|gera de novo|gerar de novo|gere de novo|refaz|refazer|outros? textos?|muda os textos|mude os textos|reescrev|nova versao|texto diferente)/.test(n))regenerate=true;
+if(/\b(foto|fotos|imagem|imagens|logo)\b/.test(n)&&/\b(usa|use|usar|coloca|coloque|aplica|aplique|atualiza|atualize|troca|troque|poe|ponha|bota)\b/.test(n)){photos=true;ch.push("Fotos e logo atualizados com os arquivos enviados")}
+let m=raw.match(/subt[ií]tulo\s*(?:principal\s*)?(?:para|pra|por|:|=|como)?\s*["“]?(.+?)["”]?\s*$/i);if(m){c.hero=c.hero||{};c.hero.subtitle=m[1];ch.push("Subtítulo: "+m[1]);touched=true}
+else{m=raw.match(/(?:t[ií]tulo|headline|frase principal|chamada principal)\s*(?:principal\s*)?(?:para|pra|por|:|=|como)?\s*["“]?(.+?)["”]?\s*$/i);if(m){c.hero=c.hero||{};c.hero.title=m[1];ch.push("Título: "+m[1]);touched=true}}
+m=raw.match(/(?:o nome (?:[ée]|vai ser|ser[aá])|(?:muda|troca|altera|mude|troque|altere|coloca|coloque)\s+o\s+nome\s+(?:da (?:empresa|loja|marca)\s+)?(?:para|pra)|nome:|se chama|chama-se)\s*["“]?(.+?)["”]?\s*$/i);if(m){setF("business",m[1].replace(/[.!]$/,""),"Nome");touched=true}
+m=raw.match(/(?:texto do sobre|sobre n[oó]s|texto (?:da se[cç][aã]o )?sobre)\s*(?:para|pra|:|=)\s*["“]?(.+?)["”]?\s*$/i);if(m){c.about=c.about||{};c.about.text=m[1];ch.push("Texto do Sobre atualizado");touched=true}
+const p=nxParsePrompt(raw).fields;
+if(!touched){if(p.color&&/\b(cor|cores|tom|tons|azul|verde|vermelh|rox|laranj|dourad|amarel|rosa|preto|cinza|marrom|bege|vinho|turquesa|lilas|coral|caramelo|#)/.test(n))setF("color",p.color,"Cor principal");
+const eff=/\b(efeito|efeitos|animac|animacoes|rolagem|scroll|movimento)/.test(n);if(eff){for(const[re,pr]of NX_PRESET_WORDS)if(re.test(n)){if(c.preset!==pr){c.preset=pr;ch.push("Efeitos de rolagem: "+NX_PRESET_LABEL[pr])}break}}
+else if(p.style)setF("style",p.style,"Estilo");
+if(p.whatsapp)setF("whatsapp",p.whatsapp,"WhatsApp");if(p.instagram)setF("instagram",p.instagram,"Instagram");if(p.hours&&/horari|abre|funciona|segunda|sabado|domingo|\d+h/.test(n))setF("hours",p.hours,"Horário");if(p.address)setF("address",p.address,"Endereço");
+if(p.city&&/cidade|\bem\b|\bfica\b|\bde\b/.test(n)&&p.city!==f.business)setF("city",p.city,"Cidade");if(p.rating)setF("rating",p.rating,"Nota no Google");if(p.reviews)setF("reviews",p.reviews,"Avaliações")}
+const removing=/\b(remove|remova|remover|tira|tire|tirar|retira|retire|apaga|apague|esconde|esconda|exclui|exclua|sem|nao quero|oculta|oculte)\b/.test(n),adding=/\b(volta|volte|mostra|mostre|adiciona|adicione|inclui|inclua|coloca|coloque|quero|ativa|ative|reexibe)\b/.test(n);
+const cats=(c.menu&&Array.isArray(c.menu.categories))?c.menu.categories:[],allItems=[];cats.forEach(k=>(k.items||[]).forEach(it=>allItems.push({k,it})));
+const named=allItems.filter(x=>x.it&&x.it.name&&(" "+n+" ").includes(" "+nxNorm(x.it.name)+" ")).sort((a,b)=>b.it.name.length-a.it.name.length)[0];
+const priceM=n.match(/(?:preco|valor)\s+(?:d[oa]s?\s+)?(.+?)\s+(?:para|pra|por|=|e|fica|vai para)\s+(?:r\s*)?\$?\s*(\d+(?:[.,]\d{1,2})?)/)||n.match(/(.+?)\s+(?:custa|sai por|fica por|passa a custar|agora custa)\s+(?:r\s*)?\$?\s*(\d+(?:[.,]\d{1,2})?)/);
+let itemDone=false;
+if(priceM&&named){named.it.price="R$ "+priceM[2];ch.push("Preço de "+named.it.name+": R$ "+priceM[2]);itemDone=true}
+else if(removing&&named&&/\b(servico|item|produto|prato|opcao|tratamento|plano)\b|\b(tira|tire|remove|remova)\s+(o|a)\s/.test(n)){named.k.items=named.k.items.filter(x=>x!==named.it);ch.push("Removido: "+named.it.name);itemDone=true}
+if(!itemDone){const keys=new Set();for(const[re,key,label]of NX_SECTIONS){if(!re.test(n)||keys.has(key))continue;if(key==="location"&&keys.has("map"))continue;keys.add(key);if(removing&&!hide.has(key)){hide.add(key);ch.push("Removido: "+label);itemDone=true}else if(adding&&!removing&&hide.has(key)){hide.delete(key);ch.push("De volta: "+label);itemDone=true}else if(key!=="menu"&&(removing||adding))itemDone=true}}
+if(!itemDone&&adding&&!p.whatsapp&&!p.instagram&&!photos){const a=raw.match(/\b(?:adiciona|adicione|acrescenta|acrescente|inclui|inclua|coloca|coloque|p[oõ]e|ponha|bota)\s+(?:o |a |os |as |um |uma |mais )?(?:servi[çc]o|item|produto|prato|op[çc][aã]o|tratamento|plano)?\s*(?:de\s+)?["“]?(.+?)["”]?\s*(?:(?:por|a|de|:|-|=)\s*)?(?:R\$\s*([\d.,]+)|([\d.,]+)\s*reais)?\s*(?:(?:no|na|nos|nas|ao|à|aos)\s+(?:card[aá]pio|menu|servi[çc]os|lista|tabela|p[aá]gina))?\s*[.!]?$/i);
+if(a&&a[1]&&a[1].length<=48&&(a[2]||a[3]||/servi|cardapio|menu|produto|prato|item|tratamento|plano/.test(n))){if(!cats.length){c.menu=c.menu||{};c.menu.categories=[{name:c.menuLabel||"Serviços",items:[]}]}const first=c.menu.categories[0];const item={name:nxCap(a[1].trim()),description:"",price:a[2]||a[3]?"R$ "+(a[2]||a[3]):""};first.items.push(item);hide.delete("menu");ch.push("Adicionado: "+item.name+(item.price?" ("+item.price+")":""))}}
+st.hide=[...hide];return{state:st,changes:ch,regenerate,photos}}
 /* ---------- assistant ---------- */
 const chat={log:$(".nexa-chat-log"),form:$(".nexa-chat-form"),input:$(".nexa-chat-form textarea"),send:$(".nexa-chat-send"),reset:$(".nexa-chat-new"),busy:false,history:store.get(CHAT_KEY,[])};
 if(!Array.isArray(chat.history))chat.history=[];
@@ -5303,7 +5477,7 @@ function nxPhone(d){d=String(d||"").replace(/^55/,"");return d.length===11?"("+d
 
 /* c: content from the AI (may be partial while streaming); f: form fields; media: {photos:[dataURL], logo}; opts: {partial} */
 function nexaTemplate(c,f,media,opts){
-c=c&&typeof c==="object"?c:{};opts=opts||{};media=media||{};
+c=c&&typeof c==="object"?c:{};opts=opts||{};media=media||{};const hide=new Set(opts.hide||[]);
 const o=v=>v&&typeof v==="object"&&!Array.isArray(v)?v:{},A=v=>Array.isArray(v)?v.filter(x=>x&&typeof x==="object"):[],
 S=(v,max)=>{v=String(v??"").replace(/\s+/g," ").trim();return max&&v.length>max?v.slice(0,max-1).trimEnd()+"…":v},E=(v,max)=>esc(S(v,max));
 const st=NX_STYLES[f.style]||NX_STYLES.elegante,preset=nxPreset(c.preset,f.segment),fx=NX_FX[preset],accent=/^#[0-9a-f]{6}$/i.test(f.color)?f.color:"#00b8b1";
@@ -5313,14 +5487,15 @@ const R=(kind,step)=>{let v=fx[kind]||"up";if(v==="side")v=(step||0)%2?"right":"
 const hero=o(c.hero),about=o(c.about),pil=o(c.pillars),menu=o(c.menu),hl=o(c.highlights),gal=o(c.gallery),cta=o(c.cta),rev=o(c.reviews),loc=o(c.location),ig=o(c.instagram),foot=o(c.footer),seo=o(c.seo);
 const menuLabel=S(c.menuLabel,20)||"Serviços",cats=A(menu.categories).slice(0,4).map(k=>({name:S(k.name,24),items:A(k.items).slice(0,12)})).filter(k=>k.items.length);
 const pillars=A(pil.items).slice(0,3),highlights=A(hl.items).slice(0,6),hasGallery=photos.length>=3,hasLoc=!!(address||city||phone||hours);
-const primary=wa?{href:wa,ext:true}:{href:hasLoc?"#localizacao":"#ofertas"};
+const primary=wa?{href:wa,ext:true}:{href:hasLoc&&!hide.has("location")?"#localizacao":"#ofertas"};
 const link=(h,cls,label,icon)=>'<a class="btn '+cls+'" href="'+esc(h.href)+'"'+(h.ext?' target="_blank" rel="noopener"':"")+">"+(icon||"")+esc(label)+"</a>";
 const ph=(i,alt,cls,attrs)=>'<div class="ph'+(cls?" "+cls:"")+'" style="background-image:var(--p'+i+')"'+(alt?' role="img" aria-label="'+esc(alt)+'"':' aria-hidden="true"')+(attrs||"")+"></div>";
 const title=S(seo.title,70)||name+(f.segment?" | "+S(f.segment,40)+(city?" em "+city:""):""),desc=S(seo.description,170)||S(hero.subtitle,170)||name+(city?" em "+city:"")+".";
 const schemaType={aconchegante:"FoodEstablishment",suave:"MedicalBusiness",energia:"SportsActivityLocation",sobrio:"ProfessionalService"}[preset]||"LocalBusiness";
 const ld={"@context":"https://schema.org","@type":schemaType,name,description:desc};if(f.whatsapp)ld.telephone="+"+f.whatsapp;if(address||city)ld.address={"@type":"PostalAddress",streetAddress:address||undefined,addressLocality:city||undefined,addressCountry:"BR"};if(insta)ld.sameAs=["https://instagram.com/"+insta];if(hours)ld.openingHours=hours;if(f.rating)ld.aggregateRating={"@type":"AggregateRating",ratingValue:f.rating.replace(",","."),reviewCount:f.reviews||undefined};
 const mono=name.split(/\s+/).filter(w=>w.length>2||/^[A-Z]/.test(w)).slice(0,2).map(w=>w[0]).join("").toUpperCase()||name[0].toUpperCase();
-const nav=[["#inicio","Início"],about.title?["#sobre","Sobre"]:null,cats.length?["#ofertas",menuLabel]:null,pillars.length?["#experiencia","Experiência"]:null,hasGallery&&(gal.title||!opts.partial)?["#galeria","Galeria"]:null,hasLoc&&(loc.title||!opts.partial)?["#localizacao","Localização"]:null].filter(Boolean);
+const showAbout=!!about.title&&!hide.has("about"),showMenu=cats.length&&!hide.has("menu"),showPil=pillars.length&&!hide.has("pillars"),showGal=hasGallery&&(gal.title||!opts.partial)&&!hide.has("gallery"),showLoc=hasLoc&&(loc.title||!opts.partial)&&!hide.has("location");
+const nav=[["#inicio","Início"],showAbout?["#sobre","Sobre"]:null,showMenu?["#ofertas",menuLabel]:null,showPil?["#experiencia","Experiência"]:null,showGal?["#galeria","Galeria"]:null,showLoc?["#localizacao","Localização"]:null].filter(Boolean);
 const dark=!!st.dark,bg=st.bg,ink=dark?"#f3eee7":"color-mix(in oklab,"+accent+" 14%,#15120f)";
 let h='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>'+esc(title)+'</title>\n<meta name="description" content="'+esc(desc)+'">\n<meta property="og:title" content="'+esc(title)+'">\n<meta property="og:description" content="'+esc(desc)+'">\n<meta property="og:type" content="website">\n<meta property="og:locale" content="pt_BR">\n<meta name="theme-color" content="'+accent+'">\n'+(logo?'<link rel="icon" href="'+logo+'">\n':"")+'<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link href="https://fonts.googleapis.com/css2?family='+st.fonts+'&display=swap" rel="stylesheet">\n<script type="application/ld+json">'+JSON.stringify(ld).replace(/</g,"\\u003c")+"<\/script>\n"+(opts.partial?"":"<script>document.documentElement.classList.add('js')<\/script>\n")+"<style>\n"+
 ":root{"+photos.map((p,i)=>"--p"+i+":url(\""+p+"\");").join("")+"--a:"+accent+";--on-a:"+nxOnColor(accent)+";--bg:"+bg+";--ink:"+ink+";--deep:color-mix(in oklab,"+accent+" 20%,#0b0a09);--soft:color-mix(in oklab,"+accent+" "+(dark?"9%,#161412":"7%,"+bg)+");--muted:color-mix(in oklab,var(--ink) 64%,var(--bg));--line:color-mix(in oklab,var(--ink) 13%,transparent);--a-text:color-mix(in oklab,var(--a) "+(dark?"78%,#fff":"72%,var(--ink)")+");--display:"+st.display+";--body:"+st.body+";--dw:"+st.dw+";--dls:"+st.dls+";--radius:"+st.radius+";--img-r:"+st.img+";--card-r:"+st.card+";--bc:"+st.bc+";--bt:"+st.bt+";--et:"+st.et+";--ease:cubic-bezier(.16,1,.3,1)}\n"+
@@ -5355,22 +5530,22 @@ let h='<!DOCTYPE html>\n<html lang="pt-BR">\n<head>\n<meta charset="UTF-8">\n<me
 h+='<body data-preset="'+preset+'">\n'+(fx.progress?'<div class="progress" aria-hidden="true"></div>\n':"");
 h+='<header class="top" id="top"><div class="wrap"><a class="brand" href="#inicio">'+(logo?'<img src="'+logo+'" alt="">':'<span class="mono" aria-hidden="true">'+esc(mono)+"</span>")+"<span>"+esc(name)+'</span></a><button class="burger" type="button" aria-label="Abrir menu" aria-expanded="false">'+nxIcon("menu")+'</button><nav class="nav" aria-label="Menu principal">'+nav.map(n=>'<a href="'+n[0]+'">'+esc(n[1])+"</a>").join("")+link(primary,"btn-solid",wa?"Fale conosco":S(hero.cta,22)||"Contato")+"</nav></div></header>\n<main>\n";
 const heroBg=photos[0]?ph(0,"","hero-bg",fx.hero==="parallax"?' data-par="'+fx.par+'"':"")+'<div class="shade"></div>':'<div class="art"></div>'+(fx.hero==="float"?'<span class="blob" style="width:180px;height:180px;left:8%;top:22%"></span><span class="blob" style="width:110px;height:110px;right:12%;top:30%;animation-delay:-2s"></span><span class="blob" style="width:70px;height:70px;right:24%;bottom:18%;animation-delay:-4s"></span>':"");
-h+='<section id="inicio" class="hero'+(fx.hero==="kenburns"?" kenburns":"")+'">'+heroBg+'<div class="hero-in"><span class="eyebrow rise">'+esc(name)+'</span><h1 class="rise" style="animation-delay:150ms">'+(E(hero.title,70)||esc(name))+'</h1><p class="rise" style="animation-delay:300ms">'+(E(hero.subtitle,130)||esc([S(f.segment,60),city].filter(Boolean).join(" em ")))+'</p><div class="hero-cta rise" style="animation-delay:450ms">'+link(primary,"btn-solid",S(hero.cta,24)||(wa?"Chamar no WhatsApp":"Fale conosco"),wa?NX_WA:"")+(about.title?link({href:"#sobre"},"btn-light",S(hero.ctaSecondary,24)||"Conhecer"):"")+'</div></div><a class="hint" href="#sobre"><span>Role para explorar</span>'+nxIcon("arrow")+"</a></section>\n";
-if(about.title){const media=photos.length?'<div class="media"'+R("image")+'><div class="frame">'+ph(photos[1]?1:0,name,"main")+"</div>"+(photos[2]?ph(2,"","small"):"")+"</div>":'<div class="about-art"'+R("image")+">"+nxIcon(A(pil.items)[0]&&A(pil.items)[0].icon||"sparkles")+"<span>"+esc(S(f.segment,40)||name)+"</span></div>";
-h+='<section id="sobre" class="about sec"><div class="wrap">'+media+"<div"+R("text",1)+'><span class="eyebrow">Sobre</span><h2>'+E(about.title,60)+'</h2><div class="line"></div><p>'+E(about.text,360)+"</p>"+(cats.length?link({href:"#ofertas"},"btn-dark",S(about.cta,24)||"Ver "+menuLabel.toLowerCase()):"")+"</div></div></section>\n"}
-if(pillars.length){h+='<section id="experiencia" class="pillars sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Experiência</span><h2>'+(E(pil.title,60)||"Por que escolher a gente")+'</h2><div class="line"></div></div><div class="grid3">'+pillars.map((p,i)=>'<article class="pillar"'+R("card",i+1)+'><div class="icw">'+nxIcon(p.icon)+"</div><h3>"+E(p.title,30)+"</h3><p>"+E(p.text,130)+"</p></article>").join("")+"</div></div></section>\n"}
-if(fx.marquee&&pillars.length){const words=pillars.map(p=>S(p.title,30)).concat([S(f.segment,30),city]).filter(Boolean),row=words.map(w=>"<span>"+esc(w)+"</span>").join("");h+='<div class="marquee" aria-hidden="true"><div>'+row+row+row+row+"</div></div>\n"}
-if(cats.length){const multi=cats.length>1;h+='<section id="ofertas" class="menu sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">'+esc(menuLabel)+"</span><h2>"+(E(menu.title,50)||esc(menuLabel))+"</h2>"+(menu.subtitle?"<p>"+E(menu.subtitle,110)+"</p>":"")+"</div>"+(multi?'<div class="tabs" role="tablist">'+cats.map((k,i)=>'<button class="tab" type="button" role="tab" aria-controls="cat'+i+'" aria-selected="'+(i===0)+'">'+esc(k.name)+"</button>").join("")+"</div>":"")+
+h+='<section id="inicio" class="hero'+(fx.hero==="kenburns"?" kenburns":"")+'">'+heroBg+'<div class="hero-in"><span class="eyebrow rise">'+esc(name)+'</span><h1 class="rise" style="animation-delay:150ms">'+(E(hero.title,70)||esc(name))+'</h1><p class="rise" style="animation-delay:300ms">'+(E(hero.subtitle,130)||esc([S(f.segment,60),city].filter(Boolean).join(" em ")))+'</p><div class="hero-cta rise" style="animation-delay:450ms">'+link(primary,"btn-solid",S(hero.cta,24)||(wa?"Chamar no WhatsApp":"Fale conosco"),wa?NX_WA:"")+(showAbout?link({href:"#sobre"},"btn-light",S(hero.ctaSecondary,24)||"Conhecer"):"")+'</div></div><a class="hint" href="#sobre"><span>Role para explorar</span>'+nxIcon("arrow")+"</a></section>\n";
+if(showAbout){const media=photos.length?'<div class="media"'+R("image")+'><div class="frame">'+ph(photos[1]?1:0,name,"main")+"</div>"+(photos[2]?ph(2,"","small"):"")+"</div>":'<div class="about-art"'+R("image")+">"+nxIcon(A(pil.items)[0]&&A(pil.items)[0].icon||"sparkles")+"<span>"+esc(S(f.segment,40)||name)+"</span></div>";
+h+='<section id="sobre" class="about sec"><div class="wrap">'+media+"<div"+R("text",1)+'><span class="eyebrow">Sobre</span><h2>'+E(about.title,60)+'</h2><div class="line"></div><p>'+E(about.text,360)+"</p>"+(showMenu?link({href:"#ofertas"},"btn-dark",S(about.cta,24)||"Ver "+menuLabel.toLowerCase()):"")+"</div></div></section>\n"}
+if(showPil){h+='<section id="experiencia" class="pillars sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Experiência</span><h2>'+(E(pil.title,60)||"Por que escolher a gente")+'</h2><div class="line"></div></div><div class="grid3">'+pillars.map((p,i)=>'<article class="pillar"'+R("card",i+1)+'><div class="icw">'+nxIcon(p.icon)+"</div><h3>"+E(p.title,30)+"</h3><p>"+E(p.text,130)+"</p></article>").join("")+"</div></div></section>\n"}
+if(fx.marquee&&showPil){const words=pillars.map(p=>S(p.title,30)).concat([S(f.segment,30),city]).filter(Boolean),row=words.map(w=>"<span>"+esc(w)+"</span>").join("");h+='<div class="marquee" aria-hidden="true"><div>'+row+row+row+row+"</div></div>\n"}
+if(showMenu){const multi=cats.length>1;h+='<section id="ofertas" class="menu sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">'+esc(menuLabel)+"</span><h2>"+(E(menu.title,50)||esc(menuLabel))+"</h2>"+(menu.subtitle?"<p>"+E(menu.subtitle,110)+"</p>":"")+"</div>"+(multi?'<div class="tabs" role="tablist">'+cats.map((k,i)=>'<button class="tab" type="button" role="tab" aria-controls="cat'+i+'" aria-selected="'+(i===0)+'">'+esc(k.name)+"</button>").join("")+"</div>":"")+
 cats.map((k,i)=>'<div class="panel'+(i===0?" on":"")+'" id="cat'+i+'"'+(multi?' role="tabpanel"':"")+">"+(multi?"<h3>"+esc(k.name)+"</h3>":"")+'<div class="items">'+k.items.map((it,j)=>{const price=S(it.price,20);return'<div class="item"'+(i===0?R("text",j%2+1):"")+'><div class="item-top"><b>'+E(it.name,50)+"</b>"+(price?"<i></i><em>"+esc(price)+"</em>":"")+"</div>"+(it.description?"<p>"+E(it.description,100)+"</p>":"")+"</div>"}).join("")+"</div></div>").join("")+"</div></section>\n"}
-if(highlights.length){h+='<section class="dark sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Destaques</span><h2>'+(E(hl.title,60)||"Nossos destaques")+'</h2></div><div class="hl-grid">'+highlights.map((it,i)=>{const p=photos[3+i];return'<article class="hl"'+R("card",i%3+1)+'><div class="hl-media">'+(p?ph(3+i,S(it.title,40)):nxIcon(it.icon))+'</div><div class="hl-body"><h3>'+E(it.title,40)+"</h3>"+(it.text?"<p>"+E(it.text,110)+"</p>":"")+(S(it.price,24)?'<span class="price">'+E(it.price,24)+"</span>":"")+"</div></article>"}).join("")+"</div></div></section>\n"}
-if(hasGallery&&(gal.title||!opts.partial)){h+='<section id="galeria" class="sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Galeria</span><h2>'+(E(gal.title,60)||"Detalhes que ficam na memória.")+'</h2></div><div class="gal">'+photos.map((p,i)=>{const n=photos.length,last=i===n-1&&i>2,r=(n-3)%3,cls=[last&&r===1?"w3":last&&r===2?"w2":"",last&&(n-1)%2?"mw":""].filter(Boolean).join(" ");return"<figure"+(cls?' class="'+cls+'"':"")+R("image",i%4+1)+">"+ph(i,name+" — foto "+(i+1))+"</figure>"}).join("")+"</div></div></section>\n"}
-if(cta.title){h+='<section class="band">'+(photos.length?ph(photos.length-1,"","band-bg",' data-parc="'+(fx.par?.14:0)+'"'):'<div class="art"></div>')+'<div class="wrap"'+R("title")+"><h2>"+E(cta.title,70)+"</h2>"+(cta.text?"<p>"+E(cta.text,130)+"</p>":"<p></p>")+link(primary,"btn-solid",S(cta.button,24)||"Fale conosco",wa?NX_WA:"")+"</div></section>\n"}
-if(f.rating&&(rev.title||!opts.partial)){const n=Math.round(parseFloat(f.rating.replace(",",".")));h+='<section class="reviews sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Avaliações</span><div class="sec-head" style="margin-bottom:34px"><h2>'+(E(rev.title,60)||"Quem conhece, recomenda.")+'</h2></div><div class="score"><b>'+esc(f.rating)+'</b><div class="stars" aria-label="Nota '+esc(f.rating)+' de 5">'+[1,2,3,4,5].map(i=>nxIcon("star",i<=n?"on":"")).join("")+"</div><small>"+(f.reviews?esc(f.reviews)+" avaliações no Google":"Avaliação no Google")+"</small></div></div></section>\n"}
-if(hasLoc&&(loc.title||!opts.partial)){const q=encodeURIComponent([name,address,city].filter(Boolean).join(", ")),map=address&&!opts.partial;h+='<section id="localizacao" class="loc sec'+(map?"":" solo")+'"><div class="wrap"><div'+R("text")+'><span class="eyebrow">Localização</span><h2>'+(E(loc.title,50)||"Venha nos visitar.")+"</h2>"+(loc.text?'<p class="loc-text">'+E(loc.text,130)+"</p>":"")+"<ul>"+(address||city?"<li>"+nxIcon("pin")+"<span>"+esc([address,city].filter(Boolean).join(" · "))+"</span></li>":"")+(hours?"<li>"+nxIcon("clock")+"<span>"+esc(hours)+"</span></li>":"")+(phone?"<li>"+nxIcon("phone")+"<span>"+esc(phone)+"</span></li>":"")+'</ul><div class="loc-actions">'+(address||city?link({href:"https://www.google.com/maps/search/?api=1&query="+q,ext:true},"btn-solid","Como chegar",nxIcon("pin")):"")+(phone?link({href:"tel:+"+f.whatsapp},"btn-dark","Ligar",nxIcon("phone")):"")+(wa?link({href:wa,ext:true},"btn-dark","WhatsApp",NX_WA):"")+"</div></div>"+(map?'<div class="map"'+R("image",1)+'><iframe title="Mapa: '+esc(name)+'" src="https://www.google.com/maps?q='+q+'&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>':"")+"</div></section>\n"}
-if(insta&&(ig.title||!opts.partial)){h+='<section class="insta sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Instagram</span><div class="sec-head" style="margin-bottom:10px"><h2>'+(E(ig.title,50)||"Acompanhe no Instagram.")+"</h2>"+(ig.text?"<p>"+E(ig.text,110)+"</p>":"")+'</div><a class="handle" href="https://instagram.com/'+encodeURIComponent(insta)+'" target="_blank" rel="noopener">@'+esc(insta)+"</a><br>"+link({href:"https://instagram.com/"+encodeURIComponent(insta),ext:true},"btn-dark","Seguir no Instagram",nxIcon("insta"))+"</div></section>\n"}
+if(highlights.length&&!hide.has("highlights")){h+='<section class="dark sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Destaques</span><h2>'+(E(hl.title,60)||"Nossos destaques")+'</h2></div><div class="hl-grid">'+highlights.map((it,i)=>{const p=photos[3+i];return'<article class="hl"'+R("card",i%3+1)+'><div class="hl-media">'+(p?ph(3+i,S(it.title,40)):nxIcon(it.icon))+'</div><div class="hl-body"><h3>'+E(it.title,40)+"</h3>"+(it.text?"<p>"+E(it.text,110)+"</p>":"")+(S(it.price,24)?'<span class="price">'+E(it.price,24)+"</span>":"")+"</div></article>"}).join("")+"</div></div></section>\n"}
+if(showGal){h+='<section id="galeria" class="sec"><div class="wrap"><div class="sec-head center"'+R("title")+'><span class="eyebrow">Galeria</span><h2>'+(E(gal.title,60)||"Detalhes que ficam na memória.")+'</h2></div><div class="gal">'+photos.map((p,i)=>{const n=photos.length,last=i===n-1&&i>2,r=(n-3)%3,cls=[last&&r===1?"w3":last&&r===2?"w2":"",last&&(n-1)%2?"mw":""].filter(Boolean).join(" ");return"<figure"+(cls?' class="'+cls+'"':"")+R("image",i%4+1)+">"+ph(i,name+" — foto "+(i+1))+"</figure>"}).join("")+"</div></div></section>\n"}
+if(cta.title&&!hide.has("cta")){h+='<section class="band">'+(photos.length?ph(photos.length-1,"","band-bg",' data-parc="'+(fx.par?.14:0)+'"'):'<div class="art"></div>')+'<div class="wrap"'+R("title")+"><h2>"+E(cta.title,70)+"</h2>"+(cta.text?"<p>"+E(cta.text,130)+"</p>":"<p></p>")+link(primary,"btn-solid",S(cta.button,24)||"Fale conosco",wa?NX_WA:"")+"</div></section>\n"}
+if(f.rating&&(rev.title||!opts.partial)&&!hide.has("reviews")){const n=Math.round(parseFloat(f.rating.replace(",",".")));h+='<section class="reviews sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Avaliações</span><div class="sec-head" style="margin-bottom:34px"><h2>'+(E(rev.title,60)||"Quem conhece, recomenda.")+'</h2></div><div class="score"><b>'+esc(f.rating)+'</b><div class="stars" aria-label="Nota '+esc(f.rating)+' de 5">'+[1,2,3,4,5].map(i=>nxIcon("star",i<=n?"on":"")).join("")+"</div><small>"+(f.reviews?esc(f.reviews)+" avaliações no Google":"Avaliação no Google")+"</small></div></div></section>\n"}
+if(showLoc){const q=encodeURIComponent([name,address,city].filter(Boolean).join(", ")),map=address&&!opts.partial&&!hide.has("map");h+='<section id="localizacao" class="loc sec'+(map?"":" solo")+'"><div class="wrap"><div'+R("text")+'><span class="eyebrow">Localização</span><h2>'+(E(loc.title,50)||"Venha nos visitar.")+"</h2>"+(loc.text?'<p class="loc-text">'+E(loc.text,130)+"</p>":"")+"<ul>"+(address||city?"<li>"+nxIcon("pin")+"<span>"+esc([address,city].filter(Boolean).join(" · "))+"</span></li>":"")+(hours?"<li>"+nxIcon("clock")+"<span>"+esc(hours)+"</span></li>":"")+(phone?"<li>"+nxIcon("phone")+"<span>"+esc(phone)+"</span></li>":"")+'</ul><div class="loc-actions">'+(address||city?link({href:"https://www.google.com/maps/search/?api=1&query="+q,ext:true},"btn-solid","Como chegar",nxIcon("pin")):"")+(phone?link({href:"tel:+"+f.whatsapp},"btn-dark","Ligar",nxIcon("phone")):"")+(wa?link({href:wa,ext:true},"btn-dark","WhatsApp",NX_WA):"")+"</div></div>"+(map?'<div class="map"'+R("image",1)+'><iframe title="Mapa: '+esc(name)+'" src="https://www.google.com/maps?q='+q+'&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>':"")+"</div></section>\n"}
+if(insta&&(ig.title||!opts.partial)&&!hide.has("instagram")){h+='<section class="insta sec"><div class="wrap center"'+R("title")+'><span class="eyebrow">Instagram</span><div class="sec-head" style="margin-bottom:10px"><h2>'+(E(ig.title,50)||"Acompanhe no Instagram.")+"</h2>"+(ig.text?"<p>"+E(ig.text,110)+"</p>":"")+'</div><a class="handle" href="https://instagram.com/'+encodeURIComponent(insta)+'" target="_blank" rel="noopener">@'+esc(insta)+"</a><br>"+link({href:"https://instagram.com/"+encodeURIComponent(insta),ext:true},"btn-dark","Seguir no Instagram",nxIcon("insta"))+"</div></section>\n"}
 h+="</main>\n";
 if(foot.tagline||!opts.partial)h+='<footer><div class="wrap"><div class="foot-name">'+esc(name)+"</div>"+(foot.tagline?"<p>"+E(foot.tagline,110)+"</p>":"")+(address||city?"<p>"+esc([address,city].filter(Boolean).join(" · "))+"</p>":"")+(phone?"<p>"+esc(phone)+"</p>":"")+"<small>© "+new Date().getFullYear()+" "+esc(name)+". Todos os direitos reservados.</small></div></footer>\n";
-if(wa)h+='<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">'+NX_WA+"</a>\n";
+if(wa&&!hide.has("wafloat"))h+='<a class="wa" href="'+esc(wa)+'" target="_blank" rel="noopener" aria-label="Conversar no WhatsApp">'+NX_WA+"</a>\n";
 h+="<script>\n(function(){var d=document,R=d.documentElement,top=d.getElementById('top'),bar=d.querySelector('.progress'),all=function(s){return[].slice.call(d.querySelectorAll(s))},pars=all('[data-par]'),parc=all('[data-parc]'),reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,busy=false;\n"+
 "function frame(){busy=false;var y=window.pageYOffset||0,vh=innerHeight;top&&top.classList.toggle('solid',y>30);if(bar){var max=R.scrollHeight-vh;bar.style.transform='scaleX('+(max>0?Math.min(1,y/max):0)+')'}if(reduce)return;pars.forEach(function(el){var k=+el.getAttribute('data-par')||0;if(y<vh*1.5)el.style.transform='translate3d(0,'+(y*k).toFixed(1)+'px,0)'});parc.forEach(function(el){var k=+el.getAttribute('data-parc')||0,r=el.parentNode.getBoundingClientRect();if(k&&r.bottom>0&&r.top<vh)el.style.transform='translate3d(0,'+(-(r.top+r.height/2-vh/2)*k).toFixed(1)+'px,0)'})}\n"+
 "addEventListener('scroll',function(){if(!busy){busy=true;requestAnimationFrame(frame)}},{passive:true});addEventListener('resize',frame);frame();\n"+
@@ -5406,27 +5581,27 @@ return{business:v("nexaLpBusiness"),segment:v("nexaLpSegment"),city:v("nexaLpCit
 function cleanFields(d){const f={};for(const k in d)f[k]=String(d[k]||"").replace(/\s+/g," ").trim();const w=f.whatsapp.replace(/\D/g,"");f.whatsapp=w.length>=10?(w.startsWith("55")&&w.length>=12?w:"55"+w):"";
 f.instagram=f.instagram.replace(/^@+/,"").replace(/^https?:\/\/(www\.)?instagram\.com\//i,"").replace(/[/?#].*$/,"");const r=parseFloat(f.rating.replace(",","."));f.rating=r>0&&r<=5?r.toFixed(1).replace(".",","):"";f.reviews=f.rating?f.reviews.replace(/\D/g,""):"";if(!/^#[0-9a-f]{6}$/i.test(f.color))f.color="#b07a4f";return f}
 
-async function generate(){if(lp.busy)return;const data=readForm();
-const missing=[["nexaLpBusiness",data.business],["nexaLpSegment",data.segment]].filter(x=>!x[1]);
+async function generate(input,opts){opts=opts||{};if(lp.busy)return null;const data=input||readForm();lp.lastData=data;lp.lastOpts=opts;
+const missing=input?[]:[["nexaLpBusiness",data.business],["nexaLpSegment",data.segment]].filter(x=>!x[1]);
 $$(".nexa-field.is-invalid",lp.form).forEach(f=>f.classList.remove("is-invalid"));
-if(missing.length){missing.forEach(([id])=>field(id).closest(".nexa-field").classList.add("is-invalid"));field(missing[0][0]).focus();toast("Preencha o nome do negócio e o segmento");return}
+if(missing.length){missing.forEach(([id])=>field(id).closest(".nexa-field").classList.add("is-invalid"));field(missing[0][0]).focus();toast("Preencha o nome do negócio e o segmento");return null}
 const fields=cleanFields(data),media={photos:lp.photos.slice(),logo:lp.logo};
 lp.busy=true;lp.ctrl=new AbortController();lp.go.disabled=true;lp.go.innerHTML='<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i>Criando…';
 const started=Date.now();let raw="",lastPreview=0,lastParse=0,step=-1;
 setState("working",'Criando com IA <small>· '+esc(data.business)+"</small>");lp.phase.textContent="Pensando no conteúdo";lp.bar.style.setProperty("--p","4%");lp.time.textContent="0:00";
 lp.timer=setInterval(()=>{lp.time.textContent=clock(Date.now()-started)},500);
-if(matchMedia("(max-width:1080px)").matches)lp.stage.scrollIntoView({behavior:"smooth",block:"start"});
+if(matchMedia("(max-width:1080px)").matches){setPane("preview");lp.stage.scrollIntoView({behavior:"smooth",block:"start"})}
 const progress=()=>{const now=Date.now();if(now-lastParse<280)return;lastParse=now;const part=parsePartial(raw);if(!part)return;
 STEPS.forEach(([k],i)=>{if(part[k]!==undefined&&i>step)step=i});if(step>=0){lp.phase.textContent=STEPS[step][1];lp.bar.style.setProperty("--p",(8+step/(STEPS.length-1)*86).toFixed(1)+"%")}
 if(part.hero&&part.hero.title){lp.stage.classList.add("is-live");if(now-lastPreview>1500&&!lp.loading){lastPreview=now;render(nexaTemplate(part,fields,media,{partial:true}))}}};
 let failure=null,result=null;try{result=await runAI("landing",data,t=>{raw=t;if(!t){step=-1;lastParse=0}progress()},lp.ctrl.signal);raw=result.text}catch(e){failure=e;raw=e.partial||raw}
 if(result&&result.note)toast("IA avançada indisponível; página criada com a IA do NexaWeb");
 clearInterval(lp.timer);lp.busy=false;lp.ctrl=null;lp.go.disabled=false;lp.go.innerHTML='<i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Gerar landing page';
-if(failure&&failure.code==="abort"){if(lp.current)show(lp.current);else setState("empty","Pré-visualização");toast("Criação cancelada");return}
+if(failure&&failure.code==="abort"){if(lp.current)show(lp.current);else setState("empty","Pré-visualização");toast("Criação cancelada");return null}
 const content=failure?null:parseContent(raw);
-if(!content){lp.err.textContent=failure?failure.message:"A IA respondeu num formato inesperado. Tente de novo.";lp.keyBtn.hidden=!needsKey(failure);lp.keyBtn.dataset.kind="landing";setState("error","Não foi possível criar a página");return}
-const page={id:Date.now().toString(36),name:data.business,color:fields.color,created:new Date().toISOString(),html:withBadge(nexaTemplate(content,fields,media,{}))};
-savePage(page);show(page,"Pronta em "+clock(Date.now()-started)+" <small>· "+esc(page.name)+"</small>");toast("Landing page criada!")}
+if(!content){lp.err.textContent=failure?failure.message:"A IA respondeu num formato inesperado. Tente de novo.";lp.keyBtn.hidden=!needsKey(failure);lp.keyBtn.dataset.kind="landing";setState("error","Não foi possível criar a página");return null}
+const hide=opts.hide||[],page={id:opts.id||Date.now().toString(36),name:data.business,color:fields.color,created:new Date().toISOString(),content,fields,hide,html:withBadge(nexaTemplate(content,fields,media,{hide}))};
+lp.edit={id:page.id,fields,content,hide,media};savePage(page);show(page,"Pronta em "+clock(Date.now()-started)+" <small>· "+esc(page.name)+"</small>");if(!opts.quiet)toast("Landing page criada!");return{page,content,fields}}
 
 function show(page,status){lp.current=page;lp.pending=null;setState("preview",status||esc(page.name)+(page.sample?" <small>· exemplo</small>":""));render(page.html)}
 function savePage(page){let pages=store.get(PAGES_KEY,[]);if(!Array.isArray(pages))pages=[];pages=[page,...pages.filter(p=>p.id!==page.id)].slice(0,6);while(pages.length&&!store.set(PAGES_KEY,pages))pages.pop();if(!pages.length)toast("Sem espaço para salvar no navegador. Baixe o HTML para não perder.");else if(pages[0].id!==page.id)toast("Página grande demais para salvar. Baixe o HTML para não perder.");renderSaved()}
@@ -5441,7 +5616,7 @@ const url=URL.createObjectURL(new Blob([wrap],{type:"text/html;charset=utf-8"}))
 /* photos and logo, shrunk in the browser before going into the page */
 function shrink(file,max,type,quality){return new Promise((resolve,reject)=>{const url=URL.createObjectURL(file),im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.naturalWidth,im.naturalHeight)),c=document.createElement("canvas");c.width=Math.max(1,Math.round(im.naturalWidth*k));c.height=Math.max(1,Math.round(im.naturalHeight*k));const x=c.getContext("2d");if(type==="image/jpeg"){x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height)}x.drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);resolve(c.toDataURL(type,quality))};im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error("imagem inválida"))};im.src=url})}
 const photoBox=$(".nexa-lp-photos");
-function renderPhotos(){photoBox.innerHTML=lp.photos.map((p,i)=>'<div class="nexa-lp-photo"><button type="button" class="nexa-lp-photo-cover" data-i="'+i+'" aria-label="'+(i?"Usar a foto "+(i+1)+" como capa":"Foto de capa")+'"><img src="'+p+'" alt=""></button>'+(i?"":"<em>Capa</em>")+'<button type="button" class="nexa-lp-photo-x" data-i="'+i+'" aria-label="Remover foto '+(i+1)+'">&times;</button></div>').join("")+(lp.photos.length<8?'<label class="nexa-lp-add"><input type="file" accept="image/*" multiple hidden id="nexaLpPhotos"><i class="fa-solid fa-camera" aria-hidden="true"></i><span>'+(lp.photos.length?"Mais fotos":"Adicionar fotos")+"</span></label>":"")}
+function renderPhotos(){try{renderThumbs()}catch(e){}photoBox.innerHTML=lp.photos.map((p,i)=>'<div class="nexa-lp-photo"><button type="button" class="nexa-lp-photo-cover" data-i="'+i+'" aria-label="'+(i?"Usar a foto "+(i+1)+" como capa":"Foto de capa")+'"><img src="'+p+'" alt=""></button>'+(i?"":"<em>Capa</em>")+'<button type="button" class="nexa-lp-photo-x" data-i="'+i+'" aria-label="Remover foto '+(i+1)+'">&times;</button></div>').join("")+(lp.photos.length<8?'<label class="nexa-lp-add"><input type="file" accept="image/*" multiple hidden id="nexaLpPhotos"><i class="fa-solid fa-camera" aria-hidden="true"></i><span>'+(lp.photos.length?"Mais fotos":"Adicionar fotos")+"</span></label>":"")}
 photoBox.addEventListener("change",async e=>{if(e.target.id!=="nexaLpPhotos")return;const files=[...e.target.files].slice(0,8-lp.photos.length);let bad=0;for(const file of files){try{lp.photos.push(await shrink(file,1280,"image/jpeg",.74))}catch(err){bad++}}renderPhotos();bad&&toast(bad+" arquivo(s) não são imagens válidas")});
 photoBox.addEventListener("click",e=>{const x=e.target.closest(".nexa-lp-photo-x"),cv=e.target.closest(".nexa-lp-photo-cover");if(x){lp.photos.splice(+x.dataset.i,1);renderPhotos()}else if(cv&&+cv.dataset.i>0){const [p]=lp.photos.splice(+cv.dataset.i,1);lp.photos.unshift(p);renderPhotos();toast("Foto definida como capa")}});
 const logoInput=field("nexaLpLogo"),logoPrev=$(".nexa-lp-logo-prev"),logoClear=$(".nexa-lp-logo-clear");
@@ -5450,18 +5625,19 @@ logoClear.addEventListener("click",()=>{lp.logo="";logoPrev.hidden=true;logoClea
 renderPhotos();
 
 lp.form.addEventListener("submit",e=>{e.preventDefault();generate()});
+lp.edit=null;
 lp.form.addEventListener("input",e=>{const f=e.target.closest(".nexa-field.is-invalid");f&&e.target.value.trim()&&f.classList.remove("is-invalid")});
 const custom=field("nexaLpColorCustom"),customRadio=lp.form.querySelector(".nexa-lp-custom input[type=radio]");
 ["input","click"].forEach(ev=>custom.addEventListener(ev,()=>{customRadio.checked=true}));
 $(".nexa-lp-cancel").addEventListener("click",()=>lp.ctrl&&lp.ctrl.abort());
-$(".nexa-lp-retry").addEventListener("click",generate);
+$(".nexa-lp-retry").addEventListener("click",()=>generate(lp.lastData,lp.lastOpts));
 lp.keyBtn.addEventListener("click",()=>openKeys("landing"));
 const SAMPLE={preset:"aconchegante",menuLabel:"Cardápio",seo:{title:"Café Aurora | Cafeteria em São Luís - MA",description:"Cafés especiais, bolos caseiros e um cantinho tranquilo para a sua pausa em São Luís."},hero:{title:"Toda boa pausa começa com um café.",subtitle:"Cafés especiais, bolos caseiros e um cantinho tranquilo para desacelerar.",cta:"Ver cardápio",ctaSecondary:"Conhecer o café"},about:{title:"Uma pausa que vale a pena.",text:"Um espaço pensado para apreciar bons sabores, encontrar quem você gosta e transformar uma simples pausa em um momento especial.",cta:"Ver cardápio"},pillars:{title:"Mais do que café. Uma experiência.",items:[{icon:"coffee",title:"Café",text:"Grãos selecionados e preparados com cuidado para acompanhar seus melhores momentos."},{icon:"cake",title:"Sabores",text:"Bolos, salgados e doces feitos para diferentes momentos do dia."},{icon:"home",title:"Ambiente",text:"Um espaço agradável para conversar, trabalhar ou simplesmente relaxar."}]},menu:{title:"Nosso cardápio",subtitle:"Escolha seu sabor e aproveite o momento.",categories:[{name:"Cafés",items:[{name:"Espresso",description:"Curto e encorpado.",price:"R$ 6,00"},{name:"Cappuccino",description:"Com canela e chocolate.",price:"R$ 12,00"},{name:"Latte",description:"Leite vaporizado e espresso.",price:"R$ 11,00"},{name:"Coado do dia",description:"Método V60.",price:"R$ 9,00"}]},{name:"Comidinhas",items:[{name:"Pão de queijo",description:"",price:"R$ 4,00"},{name:"Misto quente",description:"Na chapa.",price:"R$ 10,00"},{name:"Cuscuz com ovo",description:"Com manteiga da terra.",price:"R$ 14,00"},{name:"Fatia de bolo",description:"Sabor do dia.",price:"R$ 9,00"}]}]},highlights:{title:"Do balcão para a sua mesa.",items:[{icon:"coffee",title:"Espresso da casa",text:"Nosso blend especial, torrado na medida.",price:"R$ 6,00"},{icon:"cake",title:"Bolo de chocolate",text:"Receita de família, fofinho e úmido.",price:"R$ 10,00"},{icon:"sun",title:"Café da manhã",text:"Para começar o dia do jeito certo.",price:"consulte"}]},gallery:{title:"Detalhes que ficam na memória."},cta:{title:"Seu próximo momento especial pode começar aqui.",text:"Venha conhecer o Café Aurora.",button:"Quero conhecer"},reviews:{title:"Uma experiência que merece ser vivida."},location:{title:"Venha nos visitar.",text:"Estamos esperando por você."},instagram:{title:"Momentos Aurora.",text:"Acompanhe as novidades do café."},footer:{tagline:"Página de exemplo do Padrão NexaWeb."},whatsappMessage:"Olá! Vim pelo site."};
 $(".nexa-lp-sample").addEventListener("click",()=>{const f=cleanFields({business:"Café Aurora",segment:"Cafeteria",city:"São Luís - MA",address:"",hours:"Segunda a sábado, das 7h às 20h",whatsapp:"",instagram:"cafeaurora",rating:"4,8",reviews:"120",description:"",style:"elegante",color:"#b07a4f"});show({id:"sample",sample:true,name:"Café Aurora",html:withBadge(nexaTemplate(SAMPLE,f,{photos:lp.photos.slice(),logo:lp.logo},{}))})});
 $(".nexa-lp-actions").addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b||!lp.current)return;({download,copy,open:openTab})[b.dataset.act](lp.current)});
 $$(".nexa-lp-device button").forEach(b=>b.addEventListener("click",()=>{lp.frameBox.dataset.device=b.dataset.device;$$(".nexa-lp-device button").forEach(x=>x.setAttribute("aria-pressed",x===b))}));
 lp.savedList.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;const id=b.closest("[data-id]").dataset.id,pages=store.get(PAGES_KEY,[]),page=(Array.isArray(pages)?pages:[]).find(p=>p.id===id);if(!page)return renderSaved();
-if(b.dataset.act==="view"){if(lp.busy)return toast("Aguarde a página atual ficar pronta");show(page);lp.stage.scrollIntoView({behavior:"smooth",block:"start"})}
+if(b.dataset.act==="view"){if(lp.busy)return toast("Aguarde a página atual ficar pronta");show(page);if(page.content&&page.fields){lp.edit={id:page.id,fields:page.fields,content:page.content,hide:page.hide||[],media:mediaOf(page.html)};B.undo=[]}lp.stage.scrollIntoView({behavior:"smooth",block:"start"})}
 else if(b.dataset.act==="download")download(page);
 else if(confirm('Excluir a landing page "'+page.name+'"?')){store.set(PAGES_KEY,pages.filter(p=>p.id!==id));if(lp.current&&lp.current.id===id&&!lp.busy){lp.current=null;setState("empty","Pré-visualização")}renderSaved()}});
 
@@ -5476,6 +5652,95 @@ function fillLeads(){const list=leads(),current=lp.lead.value;field("nexaLpLeadF
 lp.lead.innerHTML='<option value="">Escolher lead…</option>'+list.slice(0,200).map((l,i)=>{const c=cityOf(l.endereco);return'<option value="'+i+'">'+esc(l.nome)+(c?" · "+esc(c):"")+"</option>"}).join("");if(current&&+current<list.length)lp.lead.value=current}
 lp.lead.addEventListener("focus",fillLeads);
 lp.lead.addEventListener("change",()=>{const l=leads()[+lp.lead.value];if(!lp.lead.value||!l)return;field("nexaLpBusiness").value=l.nome||"";const seg=segmentOf(l.categoria);seg&&(field("nexaLpSegment").value=seg);field("nexaLpCity").value=cityOf(l.endereco);field("nexaLpAddress").value=streetOf(l.endereco);field("nexaLpWhatsapp").value=mobileOf(l.telefone||l.telefoneInternacional);$$(".nexa-field.is-invalid",lp.form).forEach(f=>f.classList.remove("is-invalid"));toast("Dados do lead preenchidos")});
+/* ---------- builder chat: describe the page, then edit it by talking (Lovable-style) ---------- */
+const BUILD_KEY="nexa-ai-build";
+const B={log:$(".nexa-build-log"),input:$(".nexa-build-input"),send:$(".nexa-build-send"),plus:$(".nexa-build-plus"),menu:$(".nexa-build-menu"),leadsBox:$(".nexa-build-leads"),mic:$(".nexa-build-mic"),thumbs:$(".nexa-build-thumbs"),filePhotos:$(".nexa-build-file-photos"),fileLogo:$(".nexa-build-file-logo"),busy:false,undo:[],msgs:store.get(BUILD_KEY,[])};
+if(!Array.isArray(B.msgs))B.msgs=[];
+const layout=$(".nexa-lp-layout"),narrowLp=()=>matchMedia("(max-width:1080px)").matches;
+const FAM_LOOK={aconchegante:["elegante","#b07a4f"],elegante:["elegante","#c9a227"],suave:["minimalista","#2f6bff"],energia:["vibrante","#e8473c"],impacto:["moderno","#f2994a"],editorial:["minimalista","#c8a97e"],sobrio:["escuro","#c9a227"],divertido:["vibrante","#f2994a"]};
+const BUILD_EXAMPLES=["Landing page para a Barbearia Dom Bigode em Campinas - SP, WhatsApp (19) 99876-5432, corte R$ 35 e barba R$ 25","Site de pizzaria em São Luís com cardápio e cor vermelha","Página para a clínica odontológica Sorriso Claro em Fortaleza, estilo minimalista azul"];
+const saveB=()=>{B.msgs=B.msgs.slice(-60);store.set(BUILD_KEY,B.msgs)};
+function setPane(p){layout.dataset.pane=p;$$(".nexa-lp-panes button").forEach(b=>b.setAttribute("aria-selected",b.dataset.pane===p))}
+function setMode(m){$$(".nexa-lp-modes button").forEach(b=>b.setAttribute("aria-selected",b.dataset.mode===m));$$("[data-mode-panel]").forEach(el=>{el.hidden=el.dataset.modePanel!==m});if(m==="form")renderPhotos()}
+const bAutosize=()=>{B.input.style.height="auto";const h=B.input.scrollHeight;B.input.style.height=h?Math.min(h,180)+"px":"";B.send.disabled=B.busy||!B.input.value.trim()};
+function bScroll(){B.log.scrollTop=B.log.scrollHeight}
+function bWelcome(){const n=firstName();return'<div class="nb-welcome"><span class="nexa-ai-avatar big"><img src="'+LOGO+'" alt=""></span><h3>'+(n?esc(n)+", o":"O")+' que vamos criar?</h3><p>Descreva o negócio em uma frase. A IA do NexaWeb monta a landing page e você ajusta conversando.</p><div class="nexa-chat-suggestions">'+BUILD_EXAMPLES.map(s=>'<button type="button" class="nexa-chip" data-q="'+esc(s)+'">'+esc(s)+"</button>").join("")+"</div></div>"}
+function bCard(card,i){return'<div class="nb-card"><div class="nb-card-head"><i class="fa-solid fa-circle-check" aria-hidden="true"></i><b>'+esc(card.title)+'</b></div><div class="nb-card-actions"><button type="button" class="nb-btn" data-details="'+i+'" aria-expanded="false">Detalhes</button><button type="button" class="nb-btn nb-btn-primary" data-preview>Ver prévia</button></div><ul class="nb-details" id="nbd'+i+'" hidden>'+(card.details||[]).map(d=>"<li>"+esc(d)+"</li>").join("")+"</ul></div>"}
+function bMsg(m,i,last){if(m.role==="user")return'<div class="nb-msg user"><div class="nb-bubble">'+esc(m.text).replace(/\n/g,"<br>")+"</div></div>";
+return'<div class="nb-msg ai">'+(m.think?'<small class="nb-think"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i>Pensou por '+m.think+"s</small>":"")+'<div class="nexa-md">'+md(m.text)+"</div>"+(m.card?bCard(m.card,i):"")+(last&&m.undo&&B.undo.length?'<div class="nb-tools"><button type="button" class="nb-undo"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i>Desfazer</button></div>':"")+(last&&m.sug&&m.sug.length?'<div class="nexa-chat-suggestions nexa-follow">'+m.sug.map(q=>'<button type="button" class="nexa-chip" data-q="'+esc(q)+'">'+esc(q)+"</button>").join("")+"</div>":"")+"</div>"}
+function renderB(){B.log.innerHTML=B.msgs.length?B.msgs.map((m,i)=>bMsg(m,i,i===B.msgs.length-1)).join(""):bWelcome();bScroll()}
+function bThinking(){const row=document.createElement("div");row.className="nb-msg ai is-thinking";row.appendChild(thinking(["Pensando","Entendendo o pedido","Montando a página"]));B.log.appendChild(row);bScroll();return row}
+function pushAI(o){B.msgs.push(Object.assign({role:"assistant"},o));saveB();renderB()}
+function bBusy(on){B.busy=on;B.send.disabled=on||!B.input.value.trim();B.log.setAttribute("aria-busy",on)}
+function mediaOf(html){const photos=[],re=/--p(\d+):url\("(data:image\/[^"]+)"\)/g;let m;while((m=re.exec(html)))photos[+m[1]]=m[2];return{photos:photos.filter(Boolean),logo:(String(html).match(/<link rel="icon" href="(data:image\/[^"]+)"/)||[])[1]||""}}
+function rebuild(status){const e=lp.edit,html=withBadge(nexaTemplate(e.content,e.fields,e.media,{hide:e.hide}));const page={id:e.id,name:e.fields.business,color:e.fields.color,created:new Date().toISOString(),content:e.content,fields:e.fields,hide:e.hide,html};savePage(page);show(page,(status||"Atualizada")+" <small>· "+esc(page.name)+"</small>")}
+const snap=()=>({id:lp.edit.id,fields:JSON.parse(JSON.stringify(lp.edit.fields)),content:JSON.parse(JSON.stringify(lp.edit.content)),hide:(lp.edit.hide||[]).slice(),media:lp.edit.media});
+const listPt=a=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+" e "+a[a.length-1];
+function nextSug(){const f=lp.edit?lp.edit.fields:{},out=[];out.push(f.color==="#2f6bff"?"Muda a cor para verde":"Muda a cor para azul");out.push(f.style==="moderno"?"Deixa mais elegante":"Deixa o estilo mais moderno");out.push((lp.edit&&lp.edit.hide||[]).includes("gallery")?"Volta a galeria":"Gera outra versão dos textos");return out}
+async function bSend(text){text=String(text||"").trim();if(!text||B.busy)return;if(lp.busy){toast("Aguarde a página atual ficar pronta");return}
+bBusy(true);B.input.value="";bAutosize();B.msgs.push({role:"user",text});saveB();renderB();
+const row=bThinking(),t0=performance.now(),n=nxNorm(text),wait=async ms=>{await sleep(Math.max(0,ms-(performance.now()-t0)))},secs=()=>Math.max(1,Math.round((performance.now()-t0)/1000));
+try{
+if(/^(desfaz|desfazer|desfaca|desfaça|undo|volta como estava|voltar como estava|volta ao anterior)\b/.test(n)){await wait(1200);row.remove();
+if(B.undo.length&&lp.edit){lp.edit=B.undo.pop();rebuild("Alteração desfeita");pushAI({text:"Pronto, desfiz a última alteração.",card:{title:"Desfez a alteração",details:["A página voltou para a versão anterior"]},undo:true,think:secs()})}
+else pushAI({text:"Não há alteração para desfazer agora.",think:secs()});return}
+if(nxWantsNewPage(text,lp.edit)){const parsed=nxParsePrompt(text),f=parsed.fields,noName=!f.business;
+if(!lp.edit&&!parsed.niche&&!f.business&&!f.segment){await wait(1100);row.remove();pushAI({text:"Me conta qual é o negócio para eu criar a página. Por exemplo: o tipo de negócio, o nome, a cidade e o WhatsApp. Se quiser, já diga os serviços com preços, a cor e o estilo.",sug:BUILD_EXAMPLES.slice(0,2),think:secs()});return}
+const fam=parsed.niche?parsed.niche.fam:NX_GUESS.some(g=>g[0].test(f.segment||text))?nxPreset("",f.segment||text):"suave",look=FAM_LOOK[fam]||FAM_LOOK.aconchegante;
+if(noName)f.business=parsed.niche?(parsed.niche.art==="a"?"Sua ":"Seu ")+nxCap(parsed.niche.label):"Seu Negócio";if(!f.segment)f.segment="Negócio local";if(!f.style)f.style=look[0];if(!f.color)f.color=look[1];
+await wait(900);if(narrowLp())setPane("preview");
+const res=await generate(f,{chat:true,quiet:true});row.remove();
+if(!res){pushAI({text:"Não consegui criar a página agora. Tente de novo em instantes.",think:secs()});if(narrowLp())setPane("chat");return}
+B.undo=[];const e=lp.edit,cf=e.fields,items=(e.content.menu&&e.content.menu.categories||[]).flatMap(k=>k.items||[]).map(i=>i.name+(i.price?" ("+i.price+")":""));
+const missing=[!cf.whatsapp&&"o WhatsApp",!cf.city&&"a cidade",!cf.address&&"o endereço",!lp.photos.length&&"fotos do negócio (no botão +)"].filter(Boolean);
+pushAI({text:"Pronto! Criei a landing page "+(parsed.niche?(parsed.niche.art==="o"?"do":"da"):"de")+" **"+cf.business+"**"+(cf.city?" em "+cf.city:"")+" no Padrão NexaWeb, com efeitos de rolagem "+(NX_PRESET_LABEL[e.content.preset]||"suaves")+"."+(noName?"\n\nNão encontrei o nome do negócio, então usei **"+cf.business+"**. É só me dizer: \"o nome é ...\".":"")+(missing.length?"\n\nPara ficar ainda melhor, me mande "+listPt(missing)+".":"")+"\n\nAgora é só pedir as alterações aqui no chat.",
+card:{title:"Criou a landing page",details:["Nome: "+cf.business,"Segmento: "+cf.segment,cf.city&&"Cidade: "+cf.city,cf.whatsapp&&"WhatsApp: +"+cf.whatsapp,"Estilo: "+cf.style+" · cor "+cf.color,"Efeitos: "+(NX_PRESET_LABEL[e.content.preset]||""),items.length&&e.content.menuLabel+": "+items.slice(0,5).join(", ")].filter(Boolean)},sug:nextSug(),think:secs()});return}
+const r=nexaEditPage(lp.edit,text);
+if(r.regenerate){const before=snap(),data=Object.assign({},lp.edit.fields,{hint:lp.edit.fields.hint||""});await wait(700);if(narrowLp())setPane("preview");const res=await generate(data,{chat:true,quiet:true,id:lp.edit.id,hide:lp.edit.hide});row.remove();
+if(!res){pushAI({text:"Não consegui gerar outra versão agora. Tente de novo.",think:secs()});return}B.undo.push(before);
+pushAI({text:"Fiz uma nova versão dos textos da página, mantendo os dados do negócio.",card:{title:"Gerou outra versão",details:["Novos títulos, textos e diferenciais","Dados, cores e seções mantidos"]},undo:true,sug:nextSug(),think:secs()});return}
+if(r.changes.length){B.undo.push(snap());if(B.undo.length>15)B.undo.shift();const media=r.photos?{photos:lp.photos.slice(),logo:lp.logo}:lp.edit.media;lp.edit={id:lp.edit.id,fields:cleanFields(r.state.fields),content:r.state.content,hide:r.state.hide,media};lp.edit.fields.hint=r.state.fields.hint||"";
+await wait(1500);row.remove();rebuild("Atualizada");
+pushAI({text:"Feito! "+(r.changes.length===1?"Fiz esta alteração:":"Fiz estas alterações:")+"\n"+r.changes.map(c=>"- "+c).join("\n"),card:{title:"Alterou a página",details:r.changes},undo:true,sug:nextSug(),think:secs()});return}
+await wait(1300);row.remove();
+pushAI({text:"Não entendi o que mudar ainda. Posso, por exemplo:\n- trocar a cor, o estilo ou os efeitos de rolagem\n- mudar nome, título, subtítulo, WhatsApp, Instagram, endereço e horário\n- adicionar ou remover serviços e mudar preços\n- remover ou trazer de volta seções (galeria, avaliações, mapa, Instagram...)\n- gerar outra versão dos textos\n\nPara criar outra página, escreva \"nova landing page para ...\".",sug:["Muda a cor para azul","Remove a galeria","Gera outra versão dos textos"],think:secs()})}
+catch(err){row.remove();pushAI({text:"Algo deu errado: "+(err&&err.message||"tente de novo")+"."})}
+finally{bBusy(false)}}
+/* composer */
+B.input.addEventListener("input",bAutosize);
+B.input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.isComposing&&!matchMedia("(pointer:coarse)").matches){e.preventDefault();bSend(B.input.value)}});
+B.send.addEventListener("click",()=>bSend(B.input.value));
+B.log.addEventListener("click",e=>{const chip=e.target.closest(".nexa-chip");if(chip){bSend(chip.dataset.q);return}
+const det=e.target.closest("[data-details]");if(det){const ul=B.log.querySelector("#nbd"+det.dataset.details),open=ul.hidden;ul.hidden=!open;det.setAttribute("aria-expanded",open);det.textContent=open?"Ocultar":"Detalhes";return}
+if(e.target.closest("[data-preview]")){if(narrowLp())setPane("preview");else{lp.stage.classList.add("is-flash");setTimeout(()=>lp.stage.classList.remove("is-flash"),900)}return}
+if(e.target.closest(".nb-undo"))bSend("desfazer")});
+$$(".nexa-lp-panes button").forEach(b=>b.addEventListener("click",()=>setPane(b.dataset.pane)));
+$$(".nexa-lp-modes button").forEach(b=>b.addEventListener("click",()=>setMode(b.dataset.mode)));
+$(".nexa-build-new").addEventListener("click",()=>{if(B.busy)return;B.msgs=[];B.undo=[];lp.edit=null;saveB();renderB();if(!lp.busy)setState("empty","Pré-visualização");setMode("chat");setPane("chat");B.input.focus()});
+/* + menu: photos, logo, saved lead */
+const closeMenu=()=>{B.menu.hidden=true;B.leadsBox.hidden=true;B.plus.setAttribute("aria-expanded","false")};
+B.plus.addEventListener("click",e=>{e.stopPropagation();const open=B.menu.hidden;closeMenu();if(open){B.menu.hidden=false;B.plus.setAttribute("aria-expanded","true");B.menu.querySelector("button").focus()}});
+document.addEventListener("click",e=>{if(!B.menu.hidden&&!e.target.closest(".nexa-build-plus-wrap"))closeMenu()});
+B.menu.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();B.plus.focus()}});
+B.menu.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;e.stopPropagation();
+if(b.dataset.add==="photos"){closeMenu();B.filePhotos.click()}else if(b.dataset.add==="logo"){closeMenu();B.fileLogo.click()}
+else if(b.dataset.add==="lead"){const list=leads().slice(0,40);B.leadsBox.hidden=false;B.leadsBox.innerHTML=list.length?list.map((l,i)=>'<button type="button" data-lead="'+i+'"><i class="fa-solid fa-store" aria-hidden="true"></i><span>'+esc(l.nome)+"</span></button>").join(""):"<small>Nenhum lead salvo ainda. Busque clientes em Encontrar clientes.</small>"}
+else if(b.dataset.lead){const l=leads()[+b.dataset.lead];closeMenu();if(!l)return;const seg=segmentOf(l.categoria),city=cityOf(l.endereco),tel=mobileOf(l.telefone||l.telefoneInternacional),street=streetOf(l.endereco);
+B.input.value="Landing page para "+l.nome+(seg?", "+seg.toLowerCase():"")+(city?" em "+city:"")+(street?", endereço "+street:"")+(tel?", WhatsApp "+tel:"");bAutosize();B.input.focus()}});
+async function addFiles(files,kind){let ok=0;if(kind==="logo"){try{lp.logo=await shrink(files[0],240,"image/png");ok=1;logoPrev.src=lp.logo;logoPrev.hidden=false;logoClear.hidden=false}catch(e){}}
+else for(const file of [...files].slice(0,8-lp.photos.length)){try{lp.photos.push(await shrink(file,1280,"image/jpeg",.74));ok++}catch(e){}}
+renderPhotos();if(!ok){toast("Esse arquivo não é uma imagem válida");return}
+if(lp.edit&&!lp.busy){B.undo.push(snap());lp.edit.media={photos:lp.photos.slice(),logo:lp.logo};rebuild("Atualizada");pushAI({text:kind==="logo"?"Coloquei o logo no topo da página.":"Coloquei "+(ok===1?"a foto":"as "+ok+" fotos")+" na página. A primeira foto da lista é a capa.",card:{title:kind==="logo"?"Atualizou o logo":"Atualizou as fotos",details:[kind==="logo"?"Logo no cabeçalho e no ícone da aba":lp.photos.length+" foto(s) na capa, no Sobre, nos destaques e na galeria"]},undo:true,sug:nextSug()})}
+else pushAI({text:kind==="logo"?"Recebi o logo. Agora me diga o que criar e eu já uso ele na página.":"Recebi "+(ok===1?"1 foto":ok+" fotos")+". Agora me diga o que criar e eu uso na página."})}
+B.filePhotos.addEventListener("change",()=>{const f=B.filePhotos.files;if(f.length)addFiles(f,"photos");B.filePhotos.value=""});
+B.fileLogo.addEventListener("change",()=>{const f=B.fileLogo.files;if(f.length)addFiles(f,"logo");B.fileLogo.value=""});
+function renderThumbs(){B.thumbs.innerHTML=lp.photos.map((p,i)=>'<span class="nb-thumb"><img src="'+p+'" alt=""><button type="button" data-rm="'+i+'" aria-label="Remover foto '+(i+1)+'">&times;</button></span>').join("")+(lp.logo?'<span class="nb-thumb is-logo"><img src="'+lp.logo+'" alt=""><button type="button" data-rm="logo" aria-label="Remover logo">&times;</button></span>':"")}
+B.thumbs.addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;if(b.dataset.rm==="logo"){lp.logo="";logoPrev.hidden=true;logoClear.hidden=true}else lp.photos.splice(+b.dataset.rm,1);renderPhotos()});
+/* voice */
+const Speech=window.SpeechRecognition||window.webkitSpeechRecognition;
+if(Speech){B.mic.hidden=false;let rec=null;B.mic.addEventListener("click",()=>{if(rec){rec.stop();return}try{rec=new Speech();rec.lang="pt-BR";rec.interimResults=true;const base=B.input.value.trim();rec.onresult=ev=>{let t="";for(const r of ev.results)t+=r[0].transcript;B.input.value=(base?base+" ":"")+t;bAutosize()};rec.onend=()=>{rec=null;B.mic.classList.remove("is-on")};rec.onerror=ev=>{if(ev.error!=="aborted")toast("Não consegui ouvir. Verifique a permissão do microfone.")};B.mic.classList.add("is-on");rec.start()}catch(err){rec=null;toast("O microfone não está disponível neste navegador.")}})}
+/* pick up where the conversation stopped */
+(()=>{const pages=store.get(PAGES_KEY,[]),last=Array.isArray(pages)&&pages[0];if(B.msgs.length&&last&&last.content&&last.fields){lp.edit={id:last.id,fields:last.fields,content:last.content,hide:last.hide||[],media:mediaOf(last.html)};show(last)}renderB();renderThumbs();bAutosize()})();
 fillLeads();renderSaved();showTab(store.get(TAB_KEY,"chat")==="landing"?"landing":"chat");
 window.nexaOpenAI=tab=>{window.go&&window.go("nexa-ai");showTab(tab==="landing"?"landing":"chat")};
 })();
