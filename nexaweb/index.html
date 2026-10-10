@@ -3809,11 +3809,12 @@ function render(){const shell=document.querySelector("#finder .finder-shell");if
 window.nexaRenderFreeSearches=render;render();setTimeout(render,1500);setInterval(render,2000);addEventListener("storage",render);addEventListener("clean-leads-updated",render);document.addEventListener("click",event=>{if(event.target.closest&&event.target.closest("#settings,#finder"))setTimeout(render,400)})})();
 </script>
 <script id="nexa-sale-sound">
-// "Ka-ching" de venda gerado com Web Audio (sem arquivo de som).
+// "Ka-ching" de venda gerado com Web Audio (sem arquivo de som), 1,5 s.
 function nexaKaching(ctx, t0) {
-  const out = ctx.createGain();
-  out.gain.value = 0.9;
-  const comp = ctx.createDynamicsCompressor();
+  const total = 1.5, out = ctx.createGain(), comp = ctx.createDynamicsCompressor();
+  out.gain.setValueAtTime(0.9, t0);
+  out.gain.setValueAtTime(0.9, t0 + total - 0.3);
+  out.gain.linearRampToValueAtTime(0.0001, t0 + total);
   comp.threshold.value = -10; comp.ratio.value = 4;
   out.connect(comp); comp.connect(ctx.destination);
   // "ka": batida curta da gaveta / moedas
@@ -3826,19 +3827,25 @@ function nexaKaching(ctx, t0) {
   thump.type = "sine"; thump.frequency.setValueAtTime(190, t0); thump.frequency.exponentialRampToValueAtTime(70, t0 + 0.09);
   thumpGain.gain.setValueAtTime(0.45, t0); thumpGain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.11);
   thump.connect(thumpGain).connect(out); thump.start(t0); thump.stop(t0 + 0.13);
-  // "ching": sino metálico, duas batidas
-  const bell = (t, base, amp) => {
-    [[1, 1], [2, 0.45], [2.76, 0.32], [5.4, 0.16], [8.93, 0.07]].forEach(([ratio, level]) => {
-      const osc = ctx.createOscillator(), gain = ctx.createGain(), end = t + 1.5 / Math.sqrt(ratio);
-      osc.type = "sine"; osc.frequency.value = base * ratio;
-      gain.gain.setValueAtTime(0.0001, t);
-      gain.gain.exponentialRampToValueAtTime(amp * level, t + 0.004);
-      gain.gain.exponentialRampToValueAtTime(0.0001, end);
-      osc.connect(gain).connect(out); osc.start(t); osc.stop(end + 0.02);
-    });
+  // "ching": sino metálico, duas batidas com cauda até o fim
+  const tone = (t, freq, amp, end, hold = 0.3) => {
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(amp, t + 0.004);
+    gain.gain.exponentialRampToValueAtTime(amp * 0.32, Math.min(t + hold, end - 0.1));
+    gain.gain.exponentialRampToValueAtTime(Math.max(amp * 0.04, 0.0002), end - 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, end);
+    osc.connect(gain).connect(out); osc.start(t); osc.stop(end + 0.02);
   };
+  const bell = (t, base, amp) =>
+    [[1, 1], [2, 0.45], [2.76, 0.32], [5.4, 0.16], [8.93, 0.07]].forEach(([ratio, level]) =>
+      tone(t, base * ratio, amp * level, t + (t0 + total - t) / Math.pow(ratio, 0.45), 0.3 / Math.sqrt(ratio)));
   bell(t0 + 0.075, 1568, 0.34);
   bell(t0 + 0.16, 2093, 0.3);
+  // tilintar de moedas
+  [[0.34, 3951], [0.47, 4699], [0.62, 4186], [0.8, 5274], [0.98, 4435]].forEach(([dt, freq], i) =>
+    tone(t0 + dt, freq, 0.06 - i * 0.008, t0 + dt + 0.28, 0.06));
 }
 (()=>{let ctx=null,last=null;const audio=()=>{try{const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ctx=ctx||new A();if(ctx.state==="suspended")ctx.resume();return ctx}catch(e){return null}},first=()=>{try{const v=JSON.parse(localStorage.getItem("clean-leads-financeiro")||"{}").vendas;return Array.isArray(v)&&v[0]?v[0].id:null}catch(e){return null}};window.nexaPlaySaleSound=()=>{const c=audio();c&&nexaKaching(c,c.currentTime+0.02)};const original=window.submitSale;if(typeof original!=="function")return;window.submitSale=function(){const c=audio(),before=first(),result=original.apply(this,arguments);setTimeout(()=>{const id=first();if(id&&id!==before&&id!==last&&c){last=id;nexaKaching(c,c.currentTime+0.02)}},120);return result}})();
 </script>
