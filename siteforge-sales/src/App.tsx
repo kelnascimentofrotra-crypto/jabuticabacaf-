@@ -3,6 +3,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { AppProvider, useApp } from './data/store';
 import { ToastProvider } from './components/ui/toast';
+import { ConfirmProvider } from './components/ui/confirm';
 import { AppShell } from './components/layout/AppShell';
 import { Notice } from './components/ui';
 import { Dashboard } from './pages/Dashboard';
@@ -84,9 +85,11 @@ export function App() {
   return (
     <HashRouter>
       <ToastProvider>
-        <AppProvider>
-          <Gate />
-        </AppProvider>
+        <ConfirmProvider>
+          <AppProvider>
+            <Gate />
+          </AppProvider>
+        </ConfirmProvider>
       </ToastProvider>
     </HashRouter>
   );

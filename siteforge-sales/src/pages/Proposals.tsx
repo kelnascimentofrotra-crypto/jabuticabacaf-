@@ -7,6 +7,15 @@ import { formatBRL, uid } from '../lib/text';
 import { Badge, Button, Card, CopyButton, EmptyState, Field, Input, MessageText, Notice, PageHeader, Select, Textarea, cn } from '../components/ui';
 import { useToast } from '../components/ui/toast';
 
+// Dentro de uma página incorporada (iframe) a impressão costuma ser bloqueada; nesse caso só a cópia do texto aparece.
+const canPrint = (() => {
+  try {
+    return window.self === window.top;
+  } catch {
+    return false;
+  }
+})();
+
 function parseMoney(v: string): number | null {
   const s = v.replace(/[^\d,.-]/g, '');
   if (!s) return null;
@@ -311,9 +320,11 @@ export default function Proposals() {
               </p>
               <div className="flex gap-2">
                 <CopyButton text={text} label="Copiar texto" itemKind="proposal" />
-                <Button size="sm" icon={<Printer size={14} />} onClick={() => window.print()}>
-                  Imprimir / PDF
-                </Button>
+                {canPrint && (
+                  <Button size="sm" icon={<Printer size={14} />} onClick={() => window.print()}>
+                    Imprimir / PDF
+                  </Button>
+                )}
               </div>
             </div>
             <pre className="whitespace-pre-wrap rounded-lg border border-line bg-bg/60 p-4 font-sans text-sm leading-relaxed text-muted" data-testid="proposal-preview">

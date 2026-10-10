@@ -137,7 +137,6 @@ test.describe('dados persistidos no navegador (modo local)', () => {
 
 test.describe('administração do conteúdo', () => {
   test('editar, restaurar, criar e excluir conteúdo sem mexer no código', async ({ page }) => {
-    page.on('dialog', (d) => d.accept());
     await open(page, '/admin');
     await page.getByRole('button', { name: 'Respostas rápidas' }).click();
     const list = page.getByTestId('admin-list');
@@ -181,6 +180,12 @@ test.describe('administração do conteúdo', () => {
     await open(page, '/admin');
     await page.getByLabel('Buscar conteúdo').fill('Já tenho um site');
     await list.getByRole('button', { name: 'Excluir Já tenho um site.' }).click();
+    // cancelar mantém o item
+    await page.getByRole('dialog', { name: 'Excluir item' }).getByRole('button', { name: 'Cancelar' }).click();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByText('Itens originais removidos')).toHaveCount(0);
+    await list.getByRole('button', { name: 'Excluir Já tenho um site.' }).click();
+    await page.getByRole('dialog', { name: 'Excluir item' }).getByRole('button', { name: 'Excluir' }).click();
     await expect(page.getByText('Itens originais removidos')).toBeVisible();
     await open(page, '/objecoes/ja-tenho-site');
     await expect(page.getByText('Objeção não encontrada')).toBeVisible();
@@ -231,5 +236,35 @@ test.describe('administração do conteúdo', () => {
     await page.getByRole('tab', { name: 'Conteúdo' }).click();
     await page.getByRole('button', { name: 'Respostas rápidas' }).click();
     await expect(page.getByText('Título exportado')).toBeVisible();
+
+    // importação colando o JSON (alternativa ao arquivo)
+    await page.getByRole('button', { name: 'Restaurar original' }).click();
+    await expect(page.getByText('Título exportado')).toHaveCount(0);
+    await page.getByRole('tab', { name: 'Importar e exportar' }).click();
+    await page.getByLabel('JSON para importar').fill(JSON.stringify(exported));
+    await page.getByRole('button', { name: 'Importar JSON colado' }).click();
+    await expect(page.getByText('1 alterações importadas.').last()).toBeVisible();
+    await expect(page.getByLabel('JSON para importar')).toHaveValue('');
+    await page.getByLabel('JSON para importar').fill('isso não é json');
+    await page.getByRole('button', { name: 'Importar JSON colado' }).click();
+    await expect(page.getByText(/Importação falhou/)).toBeVisible();
+    await expect(page.getByLabel('JSON para importar')).toHaveValue('isso não é json');
+  });
+
+  test('apagar dados locais pede confirmação no próprio app', async ({ page }) => {
+    await open(page, '/objecoes/vou-pensar');
+    await page.getByRole('button', { name: 'Favoritar' }).first().click();
+    await open(page, '/config');
+    await page.getByRole('button', { name: 'Apagar dados locais' }).click();
+    await page.getByRole('dialog', { name: 'Apagar dados locais' }).getByRole('button', { name: 'Cancelar' }).click();
+    await open(page, '/salvos');
+    await expect(page.getByTestId('favorites-list')).toContainText('Vou pensar e te aviso.');
+
+    await open(page, '/config');
+    await page.getByRole('button', { name: 'Apagar dados locais' }).click();
+    await page.getByRole('dialog', { name: 'Apagar dados locais' }).getByRole('button', { name: 'Apagar' }).click();
+    await page.waitForLoadState('load');
+    await open(page, '/salvos');
+    await expect(page.getByText('Nenhum favorito ainda')).toBeVisible();
   });
 });

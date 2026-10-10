@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, Database, Download, FileUp, Pencil, Plus, RotateCcw, Search, ShieldCheck, Trash2, Undo2, Users } from 'lucide-react';
+import { BarChart3, ClipboardCopy, Database, Download, FileUp, Pencil, Plus, RotateCcw, Search, ShieldCheck, Trash2, Undo2, Users } from 'lucide-react';
 import { useApp } from '../data/store';
 import type { ContentKind, ContentOverride, Profile } from '../types';
 import { BASE_CONTENT, KIND_LABEL, KIND_TO_KEY, isBaseItem, validateContent } from '../data/content';
 import type { UsageStats } from '../data/backend';
 import { SchemaForm, cleanLists, emptyFrom } from '../components/admin/SchemaForm';
 import { finalize, schemaFor, slugify, TITLE_KEY } from './admin/schemas';
-import { Badge, Button, Card, Chip, Input, Modal, Notice, PageHeader, Select, Tabs } from '../components/ui';
+import { Badge, Button, Card, Chip, Input, Modal, Notice, PageHeader, Select, Tabs, Textarea, copyText } from '../components/ui';
 import { useToast } from '../components/ui/toast';
+import { useConfirm } from '../components/ui/confirm';
 import { normalize } from '../lib/normalize';
 
 type Tab = 'conteudo' | 'usuarios' | 'estatisticas' | 'dados';
@@ -38,6 +39,7 @@ const NEW_LABEL: Record<ContentKind, string> = {
 function ContentTab() {
   const { content, overrides, saveOverride, deleteContent, revertOverride } = useApp();
   const toast = useToast();
+  const confirm = useConfirm();
   const [kind, setKind] = useState<ContentKind>('objection');
   const [q, setQ] = useState('');
   const [editing, setEditing] = useState<{ value: Item; isNew: boolean } | null>(null);
@@ -157,7 +159,13 @@ function ContentTab() {
                     aria-label={`Excluir ${String(it[titleKey] ?? it.id)}`}
                     icon={<Trash2 size={13} />}
                     onClick={async () => {
-                      if (!window.confirm(`Excluir "${String(it[titleKey] ?? it.id)}"? Itens originais podem ser restaurados depois.`)) return;
+                      const ok = await confirm({
+                        title: 'Excluir item',
+                        message: `Excluir "${String(it[titleKey] ?? it.id)}"? Itens originais podem ser restaurados depois.`,
+                        confirmLabel: 'Excluir',
+                        danger: true,
+                      });
+                      if (!ok) return;
                       try {
                         if (isBaseItem(kind, it.id)) await deleteContent(kind, it.id);
                         else await revertOverride(kind, it.id);
@@ -386,11 +394,18 @@ function DataTab() {
     URL.revokeObjectURL(url);
   };
 
-  const importFile = async (file: File) => {
+  const copyJson = async (data: unknown) => {
+    const ok = await copyText(JSON.stringify(data, null, 2));
+    toast.show(ok ? 'JSON copiado.' : 'Não foi possível copiar.', ok ? 'ok' : 'error');
+  };
+
+  const [pasted, setPasted] = useState('');
+
+  const importText = async (raw: string): Promise<boolean> => {
     setImporting(true);
     try {
-      const parsed = JSON.parse(await file.text()) as ContentOverride[];
-      if (!Array.isArray(parsed)) throw new Error('O arquivo deve conter uma lista de alterações exportada pelo SiteForge.');
+      const parsed = JSON.parse(raw) as ContentOverride[];
+      if (!Array.isArray(parsed)) throw new Error('O conteúdo deve ser uma lista de alterações exportada pelo SiteForge.');
       let ok = 0;
       const fail: string[] = [];
       for (const o of parsed) {
@@ -413,8 +428,10 @@ function DataTab() {
       }
       toast.show(`${ok} alterações importadas${fail.length ? `, ${fail.length} ignoradas` : ''}.`, fail.length ? 'error' : 'ok');
       if (parsed.some((o) => o.deleted)) setTimeout(() => window.location.reload(), 800);
+      return true;
     } catch (e) {
       toast.show(`Importação falhou: ${(e as Error).message}`, 'error');
+      return false;
     } finally {
       setImporting(false);
     }
@@ -426,26 +443,41 @@ function DataTab() {
         <Card className="p-4">
           <p className="font-medium">Exportar alterações</p>
           <p className="mt-1 text-sm text-muted">Baixa todas as edições, criações e exclusões feitas pelo painel ({overrides.length}). Use como backup ou para levar do modo local para o Supabase.</p>
-          <Button className="mt-3" icon={<Download size={15} />} onClick={() => download('siteforge-alteracoes.json', overrides)}>
-            Baixar alterações
-          </Button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button icon={<Download size={15} />} onClick={() => download('siteforge-alteracoes.json', overrides)}>
+              Baixar alterações
+            </Button>
+            <Button variant="ghost" icon={<ClipboardCopy size={15} />} onClick={() => copyJson(overrides)}>
+              Copiar JSON
+            </Button>
+          </div>
         </Card>
         <Card className="p-4">
           <p className="font-medium">Importar alterações</p>
           <p className="mt-1 text-sm text-muted">Envie um arquivo exportado por este painel. Cada item é validado antes de ser salvo.</p>
           <label className="mt-3 inline-flex">
-            <input type="file" accept="application/json,.json" className="sr-only" onChange={(e) => e.target.files?.[0] && importFile(e.target.files[0])} disabled={importing} />
+            <input type="file" accept="application/json,.json" className="sr-only" onChange={async (e) => e.target.files?.[0] && importText(await e.target.files[0].text())} disabled={importing} />
             <span className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-4 text-sm hover:border-line-strong">
               <FileUp size={15} /> {importing ? 'Importando…' : 'Escolher arquivo'}
             </span>
           </label>
+          <p className="mt-3 text-xs text-dim">Ou cole o JSON copiado:</p>
+          <Textarea className="mt-1.5 font-mono text-xs" rows={3} aria-label="JSON para importar" value={pasted} onChange={(e) => setPasted(e.target.value)} placeholder='[{"kind": "quick", "id": "...", ...}]' />
+          <Button className="mt-2" size="sm" disabled={importing || !pasted.trim()} onClick={async () => (await importText(pasted)) && setPasted('')}>
+            Importar JSON colado
+          </Button>
         </Card>
         <Card className="p-4 md:col-span-2">
           <p className="font-medium">Exportar biblioteca completa</p>
           <p className="mt-1 text-sm text-muted">Conteúdo atual (original + edições) em JSON, útil para revisão ou backup.</p>
-          <Button className="mt-3" icon={<Download size={15} />} onClick={() => download('siteforge-biblioteca.json', content)}>
-            Baixar biblioteca
-          </Button>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Button icon={<Download size={15} />} onClick={() => download('siteforge-biblioteca.json', content)}>
+              Baixar biblioteca
+            </Button>
+            <Button variant="ghost" icon={<ClipboardCopy size={15} />} onClick={() => copyJson(content)}>
+              Copiar JSON
+            </Button>
+          </div>
         </Card>
       </div>
       {invalidOverrides.length > 0 && (

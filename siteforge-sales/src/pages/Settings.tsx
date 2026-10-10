@@ -4,6 +4,7 @@ import { useApp } from '../data/store';
 import { supabase } from '../lib/supabase';
 import { Badge, Button, Card, Field, Input, Notice, PageHeader } from '../components/ui';
 import { useToast } from '../components/ui/toast';
+import { useConfirm } from '../components/ui/confirm';
 
 function Code({ children }: { children: string }) {
   return <pre className="mt-2 overflow-x-auto rounded-lg border border-line bg-bg p-3 text-xs leading-relaxed text-muted">{children}</pre>;
@@ -12,6 +13,7 @@ function Code({ children }: { children: string }) {
 export default function SettingsPage() {
   const { mode, ai, refreshAI, profile, auth } = useApp();
   const toast = useToast();
+  const confirm = useConfirm();
   const [password, setPassword] = useState('');
   const [nome, setNome] = useState(profile?.nome ?? '');
 
@@ -45,8 +47,14 @@ export default function SettingsPage() {
                 variant="danger"
                 size="sm"
                 icon={<Trash2 size={14} />}
-                onClick={() => {
-                  if (!window.confirm('Apagar todos os dados salvos neste navegador (favoritos, histórico, propostas, follow-ups, treinos e edições de conteúdo)?')) return;
+                onClick={async () => {
+                  const ok = await confirm({
+                    title: 'Apagar dados locais',
+                    message: 'Apagar todos os dados salvos neste navegador (favoritos, histórico, propostas, follow-ups, treinos e edições de conteúdo)?',
+                    confirmLabel: 'Apagar',
+                    danger: true,
+                  });
+                  if (!ok) return;
                   try {
                     Object.keys(localStorage)
                       .filter((k) => k.startsWith('sf:v1:'))
