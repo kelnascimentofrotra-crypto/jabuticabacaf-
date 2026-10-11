@@ -26,6 +26,8 @@ Para parar o servidor: `Ctrl + C` no terminal.
 
 O site é estático, não precisa de build.
 
+**Jeito mais seguro:** publique só o arquivo `dist/index.html`. Ele tem o site inteiro dentro (estilos, scripts, fontes e imagens), então nada se perde se as pastas não forem enviadas. Depois de mudar algo no site, gere de novo com `node build.js`.
+
 **Pelo painel (importando do GitHub):** a Vercel publica a branch principal (`main`), então a pasta `estetica-marista` precisa estar nela (faça o merge desta branch antes).
 
 1. Em https://vercel.com/new, importe o repositório `jabuticabacaf-`.
@@ -56,6 +58,8 @@ estetica-marista/
 ├── js/main.js          animações, menu e parallax
 ├── img/                fotos recortadas das referências (WebP) e logo em SVG
 ├── fonts/              DM Serif Display e Figtree (funcionam offline)
+├── dist/index.html     site inteiro num arquivo só, pronto para publicar
+├── build.js            gera o dist/index.html
 ├── server.js           servidor local sem dependências
 ├── iniciar-site.bat    atalho para Windows
 └── package.json

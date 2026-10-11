@@ -11,7 +11,13 @@
   <link rel="preload" href="fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="img/mariana-hero.webp" as="image">
   <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+    // se o js/main.js não carregar, mostra o site sem as animações em vez de travar na tela de entrada
+    setTimeout(function () {
+      if (!document.body.classList.contains('is-loaded')) document.documentElement.classList.remove('js');
+    }, 6000);
+  </script>
 </head>
 <body>
 
