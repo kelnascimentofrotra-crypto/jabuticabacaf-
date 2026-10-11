@@ -1380,6 +1380,78 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
 .footer__bottom a:hover { border-color: var(--lime-200); }
 
 /* =========================================================
+   Botão flutuante do WhatsApp
+   ========================================================= */
+.wa-float {
+  position: fixed;
+  z-index: 60;
+  right: clamp(16px, 2.4vw, 32px);
+  bottom: calc(clamp(16px, 2.4vw, 32px) + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.wa-float__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(145deg, #34dc78 0%, #1faa55 100%);
+  box-shadow: 0 16px 32px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  pointer-events: auto;
+  transition: transform 0.5s var(--ease-out), box-shadow 0.4s;
+}
+.wa-float__icon svg { width: 31px; height: 31px; fill: currentColor; }
+.wa-float__icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid #34dc78;
+  animation: wa-pulse 2.6s var(--ease-out) infinite;
+}
+@keyframes wa-pulse {
+  from { transform: scale(1); opacity: 0.75; }
+  to { transform: scale(1.65); opacity: 0; }
+}
+.wa-float__label {
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(15, 23, 10, 0.86);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--cream-50);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 0.4s, transform 0.5s var(--ease-out);
+}
+.wa-float:hover .wa-float__label,
+.wa-float:focus-visible .wa-float__label { opacity: 1; transform: none; }
+.wa-float:hover .wa-float__icon { transform: scale(1.08) rotate(-8deg); box-shadow: 0 20px 40px -12px rgba(31, 170, 85, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.35); }
+.wa-float:focus-visible { outline: none; }
+.wa-float:focus-visible .wa-float__icon { outline: 2px solid var(--lime-200); outline-offset: 4px; }
+.js .wa-float { opacity: 0; scale: 0.4; }
+.is-loaded .wa-float {
+  opacity: 1;
+  scale: 1;
+  transition: opacity 0.6s ease 2.2s, scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 2.2s;
+}
+@media (hover: none) { .wa-float__label { display: none; } }
+@media (max-width: 760px) {
+  .wa-float__icon { width: 56px; height: 56px; }
+  .wa-float__icon svg { width: 28px; height: 28px; }
+}
+
+/* =========================================================
    Responsivo
    ========================================================= */
 @media (max-width: 1280px) {

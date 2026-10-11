@@ -43,7 +43,7 @@ npx vercel --prod     # publica no endereço principal
 
 ## WhatsApp
 
-Todos os botões de agendamento levam direto para o WhatsApp **+55 62 3988-1915** com uma mensagem pronta. O "Saiba mais" de cada procedimento já cita o procedimento na mensagem. O número também aparece no rodapé.
+Todos os botões de agendamento levam direto para o WhatsApp **+55 62 3988-1915** com uma mensagem pronta. O "Saiba mais" de cada procedimento já cita o procedimento na mensagem. O número também aparece no rodapé e num botão flutuante no canto da tela.
 
 Para trocar o número, substitua `556239881915` em `index.html` (só dígitos com DDI e DDD).
 
