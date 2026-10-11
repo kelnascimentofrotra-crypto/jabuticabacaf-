@@ -26,7 +26,7 @@ Para parar o servidor: `Ctrl + C` no terminal.
 
 O site é estático, não precisa de build.
 
-**Pelo painel (importando do GitHub):**
+**Pelo painel (importando do GitHub):** a Vercel publica a branch principal (`main`), então a pasta `estetica-marista` precisa estar nela (faça o merge desta branch antes).
 
 1. Em https://vercel.com/new, importe o repositório `jabuticabacaf-`.
 2. **Project Name:** `estetica-marista` (o endereço fica `estetica-marista.vercel.app`, se estiver livre).
