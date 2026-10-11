@@ -229,11 +229,11 @@
 <div class="eyebrow">Prospecção inteligente</div>
 <h1>Quem você quer <em>encontrar?</em>
 </h1>
-<p class="sub">Defina o perfil e descubra empresas que precisam do seu serviço.</p>
+<p class="sub">Digite só o nicho e descubra empresas que precisam do seu serviço. Se quiser, inclua a cidade: “barbearias em Campinas”.</p>
 <div class="query">
 <i class="fa-solid fa-bullseye">
 </i>
-<input id="segment" value="Hamburguerias em São Paulo" aria-label="Segmento">
+<input id="segment" value="" placeholder="Ex.: barbearias, dentistas" aria-label="Nicho que você quer buscar" autocomplete="off">
 <input id="searchVolume" placeholder="Ex.: 20 ou 30 leads" type="number" aria-label="Quantidade máxima de leads" inputmode="numeric" max="300" min="1" value="30">
 <button class="btn primary" onclick="searchLeads()">
 <i class="fa-solid fa-radar">
@@ -1075,10 +1075,18 @@ window.cleanLeadReferenceCard=function(lead,index){
     ];
     for(const [pattern,variants] of expansions)if(pattern.test(base))terms.push(...variants);
     const uniqueTerms=[...new Map(terms.map(term=>[normalize(term),term.trim()])).values()];
-    const queries=uniqueTerms.map(term=>term+" em "+place);
-    for(const locality of ["centro","zona norte","zona sul","zona leste","zona oeste"])
+    const queries=uniqueTerms.map(term=>place?term+" em "+place:term);
+    if(place)for(const locality of ["centro","zona norte","zona sul","zona leste","zona oeste"])
       queries.push(segment+" "+locality+" "+place);
     return [...new Map(queries.map(query=>[normalize(query),query.replace(/\s+/g," ").trim()])).values()];
+  }
+  async function nearMe(){
+    if(!navigator.geolocation)return null;
+    try{if(navigator.permissions){const status=await navigator.permissions.query({name:"geolocation"});if(status.state==="denied")return null;}}catch{}
+    const position=await new Promise(resolve=>{let done=false;const finish=value=>{if(!done){done=true;resolve(value);}};setTimeout(()=>finish(null),9000);
+      try{navigator.geolocation.getCurrentPosition(finish,()=>finish(null),{enableHighAccuracy:false,timeout:8000,maximumAge:600000});}catch{finish(null);}});
+    if(!position)return null;
+    return{circle:{center:{latitude:position.coords.latitude,longitude:position.coords.longitude},radius:50000}};
   }
   function classifyWebsite(raw){
     const value=String(raw||"").trim();if(!value)return"missing";
@@ -1136,11 +1144,11 @@ window.cleanLeadReferenceCard=function(lead,index){
     assertAccount();
     const owner=JSON.stringify([window.cleanCloudSync?.user?.id||'',apiKey]);
     if(owner!==cacheOwner){pageCache.clear();cacheOwner=owner;}
-    const cacheKey=JSON.stringify([normalize(textQuery),pageToken||'']);
+    const cacheKey=JSON.stringify([normalize(textQuery),pageToken||'',control.bias?JSON.stringify(control.bias):'']);
     const cached=pageCache.get(cacheKey);
     if(cached&&Date.now()-cached.savedAt<cacheTTL)return cached.data;
     pageCache.delete(cacheKey);
-    const body={textQuery,languageCode:"pt-BR",regionCode:"BR",pageSize:20};if(pageToken)body.pageToken=pageToken;
+    const body={textQuery,languageCode:"pt-BR",regionCode:"BR",pageSize:20};if(control.bias)body.locationBias=control.bias;if(pageToken)body.pageToken=pageToken;
     for(let attempt=0;attempt<2;attempt++){
       assertAccount();
       if(control.remaining<=0)throw Object.assign(new Error('Limite de chamadas desta busca atingido.'),{code:'SEARCH_BUDGET'});
@@ -1245,10 +1253,12 @@ window.cleanLeadReferenceCard=function(lead,index){
     const loader=document.getElementById("leadLoader"),progress=document.getElementById("loaderProgress");
     if(!apiKey){window.notifyCleanSearchResult(window.nexaFreeSearchesLeft?.()===0?"Suas 3 buscas grátis acabaram. Adicione sua chave do Google Maps em Configurações.":"Adicione a Google Maps API Key em Configurações");window.go?.("settings");return;}
     const request=splitRequest(field?.value);
-    if(!request.segment||!request.city){window.notifyCleanSearchResult("Informe o segmento e a cidade. Exemplo: Barbearias em Campinas - SP");field?.focus();return;}
-    const queries=buildQueries(request.segment,request.place),results=new Map(),fingerprints=new Set(),phones=new Set(),oldButton=button?.innerHTML,failures=[];
+    if(!request.segment){window.notifyCleanSearchResult("Digite o nicho que você quer buscar. Exemplo: barbearias");field?.focus();return;}
+    const idleButton=button?.innerHTML;if(button&&!request.city){button.disabled=true;button.innerHTML='<i class="fa-solid fa-location-crosshairs"></i> Localizando';}
+    const bias=request.city?null:await nearMe();
+    const queries=buildQueries(request.segment,request.place),results=new Map(),fingerprints=new Set(),phones=new Set(),oldButton=idleButton,failures=[];
     let completed=0,halted=false;
-    const control={remaining:Math.min(36,Math.max(12,Math.ceil(limit/20)*4)),userId:searchUserId},seenPlaces=new Set();
+    const control={remaining:Math.min(36,Math.max(12,Math.ceil(limit/20)*4)),userId:searchUserId,bias},seenPlaces=new Set();
     const shouldStop=()=>halted||results.size>=limit||control.remaining<=0;
     const collect=places=>{
       let newPlaces=0;
@@ -1258,7 +1268,7 @@ window.cleanLeadReferenceCard=function(lead,index){
         if(seenPlaces.has(identity))continue;
         seenPlaces.add(identity);newPlaces++;
         if(place.businessStatus&&place.businessStatus!=="OPERATIONAL")continue;
-        if(!belongsToCity(place.formattedAddress||"",request))continue;
+        if(request.city&&!belongsToCity(place.formattedAddress||"",request))continue;
         const lead=toLead(place);if(lead.site)continue;
         const placeId=String(place.id||"").trim(),fingerprint=normalize(lead.nome+"|"+lead.endereco);
         const phone=String(lead.telefone||"").replace(/\D/g,"");
@@ -1287,7 +1297,7 @@ window.cleanLeadReferenceCard=function(lead,index){
       const quotaError=failures.find(error=>error.code==='GOOGLE_QUOTA');
       if(quotaError)notifyGoogleQuota(leads.length);
       else{
-        window.notifyCleanSearchResult(leads.length?leads.length+" leads únicos encontrados na cidade":"0 leads novos encontrados. Nenhuma empresa sem site encontrada nessa cidade; confira o segmento e a cidade/UF. Seus leads anteriores foram mantidos.");
+        window.notifyCleanSearchResult(leads.length?leads.length+" leads únicos encontrados"+(request.city?" em "+request.city:bias?" perto de você":""):request.city?"0 leads novos encontrados. Nenhuma empresa sem site encontrada nessa cidade; confira o nicho e a cidade/UF. Seus leads anteriores foram mantidos.":"0 leads novos encontrados para esse nicho. Tente outro nicho ou inclua uma cidade, por exemplo: "+request.segment+" em Campinas. Seus leads anteriores foram mantidos.");
       }
       return leads;
     }catch(error){if(error.code==='GOOGLE_QUOTA')notifyGoogleQuota();else window.notifyCleanSearchError(error.message||"Não foi possível concluir a busca");}
@@ -2824,17 +2834,17 @@ input::placeholder,textarea::placeholder{color:#668180;opacity:1}
     const user=await session(),userToken=state.session?.access_token;if(!user||!userToken)throw Error('Entre novamente na sua conta do NexaWeb.');
     assertAccount();
     const match=String(segment||'').match(/\bem\s+(.+)$/i),location=String(match?.[1]||document.getElementById('searchCity')?.value||document.getElementById('searchRegion')?.value||'').replace(/\s+Brasil$/i,'').trim();
-    if(!location)throw Error('Informe a cidade na busca. Exemplo: barbearias em Mossoró, RN.');
+    
     const requested=Math.max(1,Math.min(100,Number(document.getElementById('searchVolume')?.value||30))),button=document.querySelector('#finder .query .btn'),loader=document.getElementById('leadLoader'),originalButton=button?.innerHTML;
     const call=async payload=>{assertAccount();const {response,data}=await window.cleanFetchSearchJson('/api/apify-search',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({...payload,userToken})});assertAccount();if(!response.ok&&response.status!==202)throw Error(data.error||'Não foi possível consultar a Apify.');return{response,data}};
     button&&(button.disabled=true,button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Buscando…');loader?.classList.add('show');
     try{
       const started=await call({action:'start',segment,maxResults:requested});if(!started.data.job)throw Error(started.data.error||'A Apify não retornou o identificador da busca.');
       const deadline=Date.now()+240000;let data=null;
-      while(Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,2500));const polled=await call({action:'results',job:started.data.job,location});if(polled.response.status===202||polled.data.status==='running')continue;data=polled.data;break}
+      while(Date.now()<deadline){await new Promise(resolve=>setTimeout(resolve,2500));const polled=await call({action:'results',job:started.data.job,location:location||'Brasil'});if(polled.response.status===202||polled.data.status==='running')continue;data=polled.data;break}
       if(!data)throw Error('A busca ainda está demorando. Tente novamente em instantes.');
       let results=Array.isArray(data.results)?data.results:[];const siteFilter=document.getElementById('siteFilter')?.value;if(siteFilter==='with')results=results.filter(item=>item.site);else if(siteFilter==='without')results=results.filter(item=>!item.site);
-      window.cleanPublishSearchResults(results,searchUserId);window.dispatchEvent(new Event('clean-leads-updated'));window.notifyCleanSearchResult(results.length?`${results.length} leads encontrados pela Apify`:'0 leads novos encontrados nessa cidade. Seus leads anteriores foram mantidos.');return results;
+      window.cleanPublishSearchResults(results,searchUserId);window.dispatchEvent(new Event('clean-leads-updated'));window.notifyCleanSearchResult(results.length?`${results.length} leads encontrados pela Apify`:'0 leads novos encontrados'+(location?' nessa cidade':' para esse nicho')+'. Seus leads anteriores foram mantidos.');return results;
     }finally{loader?.classList.remove('show');if(button){button.disabled=false;button.innerHTML=originalButton}}
   }
   async function searchWithFreeGoogle(segment,searchUserId){
@@ -2858,7 +2868,7 @@ input::placeholder,textarea::placeholder{color:#668180;opacity:1}
       const results=data.results;
       window.cleanPublishSearchResults(results,searchUserId);
       window.dispatchEvent(new Event('clean-leads-updated'));
-      const message=data.quotaExhausted?'A API demo compartilhada do Google Maps atingiu o limite. '+results.length+' leads encontrados antes do limite. Aguarde a liberação da cota ou assine o Pro.':results.length?results.length+' leads encontrados pela API geral do Free'+(data.partial?' (busca parcial; tente uma quantidade menor).':''):'0 leads novos encontrados nessa cidade. Seus leads anteriores foram mantidos.';
+      const message=data.quotaExhausted?'A API demo compartilhada do Google Maps atingiu o limite. '+results.length+' leads encontrados antes do limite. Aguarde a liberação da cota ou assine o Pro.':results.length?results.length+' leads encontrados pela API geral do Free'+(data.partial?' (busca parcial; tente uma quantidade menor).':''):'0 leads novos encontrados. Seus leads anteriores foram mantidos.';
       window.notifyCleanSearchResult(message);
       return results;
     }finally{loader?.classList.remove('show');if(button){button.disabled=false;button.innerHTML=oldButton}}
@@ -2895,7 +2905,7 @@ input::placeholder,textarea::placeholder{color:#668180;opacity:1}
       activeSearch=(async()=>{
       try{await window.cleanWaitForSearchAccount?.()}catch(error){if(window.notifyCleanSearchError)window.notifyCleanSearchError(error.message);else window.toast?.(error.message);return}
       const segment=document.getElementById('segment')?.value.trim(),config=(()=>{try{return JSON.parse(localStorage.getItem('kaptar-config')||'{}')||{}}catch{return{}}})();
-      if(!segment){window.notifyCleanSearchResult?.('Informe o segmento e a cidade.');document.getElementById('segment')?.focus();return}
+      if(!segment){window.notifyCleanSearchResult?.('Digite o nicho que você quer buscar. Exemplo: barbearias');document.getElementById('segment')?.focus();return}
       const previousCompletion=window.__cleanLastCompletedSearch;
       const searchUserId=window.cleanCloudSync?.user?.id;
       try{
@@ -5167,7 +5177,7 @@ const NX_KB=[
 "### Abordagem pelo WhatsApp\nCurta, personalizada e com algo de valor. Exemplo:\n> Oi, [nome]! Tudo bem? Vi a [empresa] no Google Maps e notei que vocês ainda não têm site, só o perfil. Hoje muita gente pesquisa \"{seg} em [cidade]\" antes de escolher. Montei uma prévia de como poderia ficar a página de vocês, posso te mandar o link para ver?\n\n**Dicas:**\n- Mande a **prévia pronta**: aqui no NexaWeb você gera a landing page do lead em segundos.\n- Uma mensagem por vez; sem textão nem áudio longo.\n- Se não responder, faça **um** acompanhamento depois de 2 ou 3 dias.\n- Respeite quem disser não e não envie mensagens em massa.",
 ["Como encontrar clientes para vender sites?","Como responder quando o cliente acha caro?"]],
 ["Como encontrar clientes para vender sites?","prospectar|prospeccao|encontrar clientes|achar clientes|conseguir clientes|captar clientes|leads|clientes sem site|onde encontrar|primeiro cliente",
-"### Onde encontrar clientes\n1. **Busca do NexaWeb** (Encontrar clientes): mostra negócios do Google Maps **sem site** na cidade e segmento que você escolher.\n2. Negócios com **muitas avaliações e sem site** costumam ter dinheiro e interesse.\n3. Instagram de negócios locais **sem link na bio** ou só com WhatsApp.\n4. Visita presencial no comércio do seu bairro.\n5. Indicações de clientes satisfeitos (peça sempre).\n\nOrganize tudo no **Pipeline** do NexaWeb e registre as vendas no **Financeiro**.",
+"### Onde encontrar clientes\n1. **Busca do NexaWeb** (Encontrar clientes): mostra negócios do Google Maps **sem site** no nicho que você digitar, perto de você ou na cidade que você escolher.\n2. Negócios com **muitas avaliações e sem site** costumam ter dinheiro e interesse.\n3. Instagram de negócios locais **sem link na bio** ou só com WhatsApp.\n4. Visita presencial no comércio do seu bairro.\n5. Indicações de clientes satisfeitos (peça sempre).\n\nOrganize tudo no **Pipeline** do NexaWeb e registre as vendas no **Financeiro**.",
 ["Como oferecer um site no WhatsApp para quem não tem?","Como usar o NexaWeb?"]],
 ["Como responder quando o cliente acha caro?","objecao|objecoes|quer pagar depois|pagar so depois|ta caro|esta caro|achou caro|muito caro|ja tenho instagram|vou pensar|nao tenho dinheiro|nao preciso de site|cliente nao quer|convencer",
 "### Respondendo objeções\n**\"Já tenho Instagram\"**\n> O Instagram é ótimo para quem já te segue. O site aparece para quem ainda não te conhece e pesquisa no Google. Um completa o outro.\n\n**\"Está caro\"**\n> Entendo. Se o site trouxer [poucos] clientes a mais por mês, ele se paga. Posso parcelar ou começar com uma versão mais simples.\n\n**\"Vou pensar\"**\n> Claro! Ficou alguma dúvida que eu possa esclarecer agora? Posso te mandar a prévia para você mostrar para alguém?\n\n**\"Não tenho tempo\"**\n> Você não precisa fazer nada: eu cuido de tudo e só te peço as fotos e informações.\n\nOuça mais do que fala e nunca pressione. Veja dezenas de respostas prontas na aba **Objeções de Clientes**.",
@@ -5233,7 +5243,7 @@ const NX_KB=[
 "### Prazos comuns\n- **Landing page**: de 2 a 7 dias, se o cliente enviar fotos e informações rápido (com o NexaWeb, a primeira versão sai em segundos).\n- **Site institucional**: de 2 a 4 semanas.\n- **Loja virtual**: de 3 a 6 semanas.\n\nO que mais atrasa é esperar material do cliente. Combine no contrato o prazo dele para enviar fotos e textos.",
 ["Como fazer um contrato de criação de site?"]],
 ["Como usar o NexaWeb?","nexaweb|como usar|usar o app|funciona o app|ferramenta|plataforma nexa|buscar leads|pipeline|financeiro|registrar venda|gerar landing|criar landing aqui",
-"### Como usar o NexaWeb\n1. **Encontrar clientes**: escolha segmento e cidade e veja negócios **sem site** no Google Maps.\n2. **Leads**: salve os interessantes e chame no WhatsApp.\n3. **Pipeline**: acompanhe cada negociação por etapa.\n4. **IA → Landing pages**: escolha o lead, envie fotos e gere a página no Padrão NexaWeb para mostrar como prévia.\n5. **Financeiro**: registre cada venda; você recebe a comemoração e o histórico.\n6. **IA → Assistente**: tire dúvidas sobre sites, SEO e vendas a qualquer momento.",
+"### Como usar o NexaWeb\n1. **Encontrar clientes**: digite só o nicho (a cidade é opcional) e veja negócios **sem site** no Google Maps.\n2. **Leads**: salve os interessantes e chame no WhatsApp.\n3. **Pipeline**: acompanhe cada negociação por etapa.\n4. **IA → Landing pages**: escolha o lead, envie fotos e gere a página no Padrão NexaWeb para mostrar como prévia.\n5. **Financeiro**: registre cada venda; você recebe a comemoração e o histórico.\n6. **IA → Assistente**: tire dúvidas sobre sites, SEO e vendas a qualquer momento.",
 ["Como encontrar clientes para vender sites?","Como oferecer um site no WhatsApp para quem não tem?"]],
 ["Como deixar o site bom no celular?","celular|mobile|responsivo|responsividade|tela pequena|smartphone|versao mobile",
 "### Site bom no celular\nA maioria das visitas de negócios locais vem do celular. Confira:\n- Texto legível sem dar zoom (16 px ou mais)\n- Botões grandes e fáceis de tocar\n- **WhatsApp flutuante** sempre à mão\n- Menu simples\n- Nada saindo para os lados (sem rolagem horizontal)\n- Imagens leves\n\nTeste no seu próprio celular e no modo celular do navegador. As páginas do NexaWeb já são pensadas primeiro para celular.",
