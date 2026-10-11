@@ -1376,6 +1376,9 @@ h1, h2, h3 { margin: 0; font-weight: 400; }
   font-size: 13px;
 }
 .footer__bottom p { margin: 0; }
+.footer__bottom a { color: var(--lime-200); border-bottom: 1px solid var(--line-strong); transition: border-color 0.3s; }
+.footer__bottom a:hover { border-color: var(--lime-200); }
+.booking__notice a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 
 /* =========================================================
    Agendamento (modal)

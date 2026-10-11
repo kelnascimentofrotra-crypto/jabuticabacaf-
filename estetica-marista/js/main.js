@@ -7,7 +7,7 @@
   var CONFIG = {
     // Número do WhatsApp que recebe os agendamentos: DDI + DDD + número, só dígitos.
     // Exemplo: '5511987654321'. Enquanto estiver vazio, o formulário avisa que falta configurar.
-    whatsapp: ''
+    whatsapp: '556239881915'
   };
 
   var root = document.documentElement;
@@ -299,8 +299,16 @@
       return;
     }
 
+    var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg.join('\n'));
     notice.classList.remove('is-error');
-    notice.textContent = 'Abrindo o WhatsApp…';
-    window.open('https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg.join('\n')), '_blank', 'noopener');
+    notice.textContent = 'Abrindo o WhatsApp… Se não abrir, ';
+    var link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'toque aqui para enviar';
+    notice.appendChild(link);
+    notice.appendChild(document.createTextNode('.'));
+    window.open(url, '_blank', 'noopener');
   });
 })();

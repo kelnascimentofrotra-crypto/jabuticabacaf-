@@ -41,18 +41,11 @@ npx vercel            # faz login e cria o projeto; use o nome estetica-marista
 npx vercel --prod     # publica no endereço principal
 ```
 
-## Configurar o WhatsApp do agendamento
+## WhatsApp do agendamento
 
-Os botões "Agendar" e "Saiba mais" abrem um formulário que monta a mensagem e envia pelo WhatsApp.
-Coloque o número da clínica em `js/main.js`:
+Os botões "Agendar" e "Saiba mais" abrem um formulário que monta a mensagem e envia para o WhatsApp **+55 62 3988-1915**. O número também aparece no rodapé.
 
-```js
-var CONFIG = {
-  whatsapp: '5511987654321' // DDI + DDD + número, só dígitos
-};
-```
-
-Enquanto o número estiver vazio, o formulário avisa que falta configurar.
+Para trocar o número, edite `js/main.js` (`CONFIG.whatsapp`, só dígitos com DDI e DDD) e o link do rodapé em `index.html`.
 
 ## Estrutura
 
