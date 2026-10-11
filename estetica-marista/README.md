@@ -1,6 +1,6 @@
 # Estética Marista — site
 
-Site de página única feito a partir das referências visuais (Hero, Sobre, Procedimentos e Resultados), com tela de entrada, animações de entrada e de rolagem, parallax e formulário de agendamento.
+Site de página única feito a partir das referências visuais (Hero, Sobre, Procedimentos e Resultados), com tela de entrada, animações de entrada e de rolagem, parallax e agendamento pelo WhatsApp.
 
 ## Como rodar no computador
 
@@ -41,11 +41,11 @@ npx vercel            # faz login e cria o projeto; use o nome estetica-marista
 npx vercel --prod     # publica no endereço principal
 ```
 
-## WhatsApp do agendamento
+## WhatsApp
 
-Os botões "Agendar" e "Saiba mais" abrem um formulário que monta a mensagem e envia para o WhatsApp **+55 62 3988-1915**. O número também aparece no rodapé.
+Todos os botões de agendamento levam direto para o WhatsApp **+55 62 3988-1915** com uma mensagem pronta. O "Saiba mais" de cada procedimento já cita o procedimento na mensagem. O número também aparece no rodapé.
 
-Para trocar o número, edite `js/main.js` (`CONFIG.whatsapp`, só dígitos com DDI e DDD) e o link do rodapé em `index.html`.
+Para trocar o número, substitua `556239881915` em `index.html` (só dígitos com DDI e DDD).
 
 ## Estrutura
 
@@ -53,7 +53,7 @@ Para trocar o número, edite `js/main.js` (`CONFIG.whatsapp`, só dígitos com D
 estetica-marista/
 ├── index.html          conteúdo do site
 ├── css/style.css       visual, responsivo e animações
-├── js/main.js          animações, menu, parallax e agendamento
+├── js/main.js          animações, menu e parallax
 ├── img/                fotos recortadas das referências (WebP) e logo em SVG
 ├── fonts/              DM Serif Display e Figtree (funcionam offline)
 ├── server.js           servidor local sem dependências

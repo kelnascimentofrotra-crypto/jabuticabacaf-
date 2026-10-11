@@ -4,12 +4,6 @@
 (function () {
   'use strict';
 
-  var CONFIG = {
-    // Número do WhatsApp que recebe os agendamentos: DDI + DDD + número, só dígitos.
-    // Exemplo: '5511987654321'. Enquanto estiver vazio, o formulário avisa que falta configurar.
-    whatsapp: '556239881915'
-  };
-
   var root = document.documentElement;
   var body = document.body;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -191,124 +185,6 @@
   $$('.menu__nav a', menu).forEach(function (a) { a.addEventListener('click', function () { closeMenu(false); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(true); });
 
-  /* ---------- agendamento ---------- */
-  var dialog = $('#booking');
-  var form = $('.booking__form', dialog);
-  var notice = $('.booking__notice', dialog);
-  var info = $('[data-procedure-info]', dialog);
-  var select = form.elements.procedimento;
-  var phone = form.elements.telefone;
-  var supportsDialog = typeof dialog.showModal === 'function';
-
-  function openBooking(procedure, description) {
-    closeMenu(false);
-    notice.textContent = '';
-    notice.classList.remove('is-error');
-    $$('.field', form).forEach(function (f) { f.classList.remove('is-invalid'); });
-
-    if (procedure) {
-      select.value = procedure;
-      info.innerHTML = '';
-      var strong = document.createElement('strong');
-      strong.textContent = procedure;
-      info.appendChild(strong);
-      info.appendChild(document.createTextNode(description || ''));
-      info.hidden = false;
-    } else {
-      info.hidden = true;
-    }
-
-    if (supportsDialog) {
-      dialog.classList.remove('is-closing');
-      dialog.showModal();
-    } else {
-      dialog.setAttribute('open', '');
-    }
-    body.classList.add('is-locked');
-    setTimeout(function () { form.elements.nome.focus({ preventScroll: true }); }, 60);
-  }
-
-  function closeBooking() {
-    if (!dialog.open) return;
-    if (reduceMotion || !supportsDialog) {
-      supportsDialog ? dialog.close() : dialog.removeAttribute('open');
-      return;
-    }
-    dialog.classList.add('is-closing');
-    setTimeout(function () {
-      dialog.classList.remove('is-closing');
-      dialog.close();
-    }, 330);
-  }
-
-  dialog.addEventListener('close', function () { body.classList.remove('is-locked'); });
-  dialog.addEventListener('cancel', function (e) { e.preventDefault(); closeBooking(); });
-  dialog.addEventListener('click', function (e) { if (e.target === dialog) closeBooking(); });
-  $$('[data-close]', dialog).forEach(function (b) { b.addEventListener('click', closeBooking); });
-
-  $$('[data-open-booking]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var card = btn.closest('[data-procedure]');
-      if (card) {
-        var desc = $('p', card);
-        openBooking(card.getAttribute('data-procedure'), desc ? desc.textContent : '');
-      } else {
-        openBooking();
-      }
-    });
-  });
-
-  // máscara simples de telefone: (00) 00000-0000
-  phone.addEventListener('input', function () {
-    var d = phone.value.replace(/\D/g, '').slice(0, 11);
-    var out = d;
-    if (d.length > 2) out = '(' + d.slice(0, 2) + ') ' + d.slice(2);
-    if (d.length > 7) out = '(' + d.slice(0, 2) + ') ' + d.slice(2, d.length - 4) + '-' + d.slice(-4);
-    phone.value = out;
-  });
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var nome = form.elements.nome.value.trim();
-    var tel = phone.value.replace(/\D/g, '');
-    var ok = true;
-
-    form.elements.nome.closest('.field').classList.toggle('is-invalid', !nome);
-    phone.closest('.field').classList.toggle('is-invalid', tel.length < 10);
-    if (!nome || tel.length < 10) ok = false;
-
-    if (!ok) {
-      notice.textContent = 'Preencha seu nome e um WhatsApp válido para continuar.';
-      notice.classList.add('is-error');
-      return;
-    }
-
-    var msg = [
-      'Olá! Gostaria de agendar uma avaliação na Estética Marista.',
-      '',
-      'Nome: ' + nome,
-      'WhatsApp: ' + phone.value,
-      'Procedimento: ' + select.value
-    ];
-    var extra = form.elements.mensagem.value.trim();
-    if (extra) msg.push('Mensagem: ' + extra);
-
-    if (!CONFIG.whatsapp) {
-      notice.textContent = 'Quase lá! O número de WhatsApp da clínica ainda não foi configurado (CONFIG.whatsapp em js/main.js).';
-      notice.classList.add('is-error');
-      return;
-    }
-
-    var url = 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(msg.join('\n'));
-    notice.classList.remove('is-error');
-    notice.textContent = 'Abrindo o WhatsApp… Se não abrir, ';
-    var link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noopener';
-    link.textContent = 'toque aqui para enviar';
-    notice.appendChild(link);
-    notice.appendChild(document.createTextNode('.'));
-    window.open(url, '_blank', 'noopener');
-  });
+  // links do WhatsApp abrem em nova aba; fecha o menu se o clique veio dele
+  $$('[data-whatsapp]', menu).forEach(function (a) { a.addEventListener('click', function () { closeMenu(false); }); });
 })();
