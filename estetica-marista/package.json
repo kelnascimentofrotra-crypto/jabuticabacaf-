@@ -1,8 +1,8 @@
 {
-  "name": "estetica-mariana-costa",
+  "name": "estetica-marista",
   "version": "1.0.0",
   "private": true,
-  "description": "Site da Estética Mariana Costa para rodar localmente",
+  "description": "Site da Estética Marista para rodar localmente",
   "scripts": {
     "start": "node server.js --open",
     "serve": "node server.js"

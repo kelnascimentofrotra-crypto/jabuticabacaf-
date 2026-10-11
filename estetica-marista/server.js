@@ -68,7 +68,7 @@ function listen(port) {
   });
   server.listen(port, () => {
     const url = `http://localhost:${port}`;
-    console.log('\n  Estética Mariana Costa');
+    console.log('\n  Estética Marista');
     console.log(`  Site rodando em: ${url}`);
     console.log('  Para parar: Ctrl + C\n');
     if (OPEN) {

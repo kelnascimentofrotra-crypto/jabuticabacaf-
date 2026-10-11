@@ -1,5 +1,5 @@
 /* =========================================================
-   Estética Mariana Costa — interações e animações
+   Estética Marista — interações e animações
    ========================================================= */
 (function () {
   'use strict';
@@ -284,7 +284,7 @@
     }
 
     var msg = [
-      'Olá! Gostaria de agendar uma avaliação na Estética Mariana Costa.',
+      'Olá! Gostaria de agendar uma avaliação na Estética Marista.',
       '',
       'Nome: ' + nome,
       'WhatsApp: ' + phone.value,

@@ -1,6 +1,6 @@
 @echo off
 cd /d "%~dp0"
-title Estetica Mariana Costa - servidor local
+title Estetica Marista - servidor local
 where node >nul 2>nul
 if %errorlevel%==0 (
   node server.js --open
