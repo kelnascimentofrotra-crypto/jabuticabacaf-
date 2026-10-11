@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estética Mariana Costa | Desperte sua beleza natural</title>
+  <meta name="description" content="Estética Mariana Costa: tratamentos estéticos modernos, seguros e personalizados para realçar a sua beleza natural.">
+  <meta name="theme-color" content="#172312">
+  <link rel="icon" href="img/logo.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/dm-serif-display-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="img/mariana-hero.webp" as="image">
+  <link rel="stylesheet" href="css/style.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+  <!-- Ícones reutilizáveis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <mask id="leaf-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+        <rect width="100" height="100" fill="#fff"/>
+        <path d="M41.5 79C45 60 50 38 58 17" stroke="#000" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </mask>
+    </defs>
+    <symbol id="logo-mark" viewBox="0 0 100 100">
+      <circle class="logo-ring" cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2.2"/>
+      <path class="logo-leaf" d="M41 81C25 66 27 33 59 14C59 41 55 64 41 81Z" fill="currentColor" mask="url(#leaf-cut)"/>
+      <path class="logo-face" d="M60 14C63.5 19 64.8 24.5 64.3 30C64 33 66 36.5 69.3 40.8C70.2 42 69.4 43.3 67.6 43.8C68.3 45 68.2 46.3 67 47C68.2 48.6 67.6 50.6 65.6 51.4C66.2 53.6 65.6 56.2 62.6 57.6C59.4 59 57.6 61.4 57.4 65.6C57.2 71.4 60.8 76.6 68.8 80.6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="logo-glyph" viewBox="22 10 54 74">
+      <path d="M41 81C25 66 27 33 59 14C59 41 55 64 41 81Z" fill="currentColor" mask="url(#leaf-cut)"/>
+      <path d="M60 14C63.5 19 64.8 24.5 64.3 30C64 33 66 36.5 69.3 40.8C70.2 42 69.4 43.3 67.6 43.8C68.3 45 68.2 46.3 67 47C68.2 48.6 67.6 50.6 65.6 51.4C66.2 53.6 65.6 56.2 62.6 57.6C59.4 59 57.6 61.4 57.4 65.6C57.2 71.4 60.8 76.6 68.8 80.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13.5 6.5 19 12l-5.5 5.5"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c0-4.2 3.4-6.8 7.5-6.8s7.5 2.6 7.5 6.8"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19.5C4.6 11 9.6 5 20 4c.4 10.2-5.6 15.6-15 15.5Z"/><path d="M5 19.5 14.5 10"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 19 6v5.2c0 4.7-3 8.3-7 9.8-4-1.5-7-5.1-7-9.8V6l7-3Z"/><path d="m8.8 12 2.2 2.2 4.3-4.4"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="m11 3 1.6 4.4L17 9l-4.4 1.6L11 15l-1.6-4.4L5 9l4.4-1.6L11 3Z"/><path d="m18 13.5.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2Z"/><path d="m5.5 15.5.6 1.4 1.4.6-1.4.6-.6 1.4-.6-1.4-1.4-.6 1.4-.6.6-1.4Z"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3s6.2 6.6 6.2 11.2a6.2 6.2 0 0 1-12.4 0C5.8 9.6 12 3 12 3Z"/><path d="M9.3 14.6a2.8 2.8 0 0 0 2.7 2.6"/></symbol>
+    <symbol id="i-lips" viewBox="0 0 24 24"><path d="M2.5 12c2.6-3.1 5.2-4.7 6.8-4.7 1.1 0 1.9.6 2.7 1.3.8-.7 1.6-1.3 2.7-1.3 1.6 0 4.2 1.6 6.8 4.7-2.6 3.2-5.7 5.2-9.5 5.2S5.1 15.2 2.5 12Z"/><path d="M2.5 12h19"/></symbol>
+    <symbol id="i-syringe" viewBox="0 0 24 24"><path d="M14.5 4.5 6 13l3 3 8.5-8.5"/><path d="M7.5 14.5 3 19"/><path d="M16 6l3-3"/><path d="m17.5 1.5 3 3"/><path d="m10.5 9 1.5 1.5M12.5 7l1.5 1.5"/></symbol>
+    <symbol id="i-waves" viewBox="0 0 24 24"><path d="M3 7.5c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><path d="M3 12c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/><path d="M3 16.5c2-1.6 4-1.6 6 0s4 1.6 6 0 4-1.6 6 0"/></symbol>
+    <symbol id="i-arrows-up" viewBox="0 0 24 24"><path d="M6 20.5V5M3.5 7.5 6 5l2.5 2.5"/><path d="M12 20.5V5M9.5 7.5 12 5l2.5 2.5"/><path d="M18 20.5V5M15.5 7.5 18 5l2.5 2.5"/></symbol>
+    <symbol id="i-face" viewBox="0 0 24 24"><path d="M12 2.8c-3.9 0-6.6 3-6.6 7.4 0 4.7 3 10 6.6 10s6.6-5.3 6.6-10c0-4.4-2.7-7.4-6.6-7.4Z"/><path d="M8.6 9.8c.9-.7 2-.7 2.9 0M12.5 9.8c.9-.7 2-.7 2.9 0"/><path d="M10.2 15.6c1.2.7 2.4.7 3.6 0"/><path d="M5.6 12.5 4 13.4M18.4 12.5l1.6.9" stroke-dasharray="1 1.6"/></symbol>
+    <symbol id="i-body" viewBox="0 0 24 24"><path d="M8.5 2.5c0 3.2-1.6 4.8-1.6 7.6 0 2.2 1.6 3.2 1.6 5.4 0 2.6-1 4.1-1 6"/><path d="M15.5 2.5c0 3.2 1.6 4.8 1.6 7.6 0 2.2-1.6 3.2-1.6 5.4 0 2.6 1 4.1 1 6"/><path d="M12 11.6v.2"/><path d="M8.7 16.2c1.2 1.3 2.3 2 3.3 2s2.1-.7 3.3-2"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.4A4.1 4.1 0 0 1 12 7.2a4.1 4.1 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20Z"/></symbol>
+    <symbol id="i-lotus" viewBox="0 0 24 24"><path d="M12 19.5c-2.8-1.9-4-4.8-4-7.6 0-2.4 1.7-4.8 4-6.9 2.3 2.1 4 4.5 4 6.9 0 2.8-1.2 5.7-4 7.6Z"/><path d="M12 19.5c-4.3 0-8.2-2.2-9.3-6.3 2.1-.5 4.1-.3 5.6.6M12 19.5c4.3 0 8.2-2.2 9.3-6.3-2.1-.5-4.1-.3-5.6.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <!-- Tela de entrada -->
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <svg class="preloader__mark" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <path class="pl-leaf" d="M41 81C25 66 27 33 59 14C59 41 55 64 41 81Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M41.5 79C45 60 50 38 58 17" fill="none" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M60 14C63.5 19 64.8 24.5 64.3 30C64 33 66 36.5 69.3 40.8C70.2 42 69.4 43.3 67.6 43.8C68.3 45 68.2 46.3 67 47C68.2 48.6 67.6 50.6 65.6 51.4C66.2 53.6 65.6 56.2 62.6 57.6C59.4 59 57.6 61.4 57.4 65.6C57.2 71.4 60.8 76.6 68.8 80.6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <p class="preloader__text"><small>Estética</small><span>Mariana Costa</span></p>
+      <span class="preloader__bar"><i></i></span>
+    </div>
+  </div>
+
+  <div class="progress" aria-hidden="true"></div>
+
+  <!-- Cabeçalho -->
+  <header class="header" id="topo">
+    <div class="header__inner">
+      <a href="#inicio" class="brand" aria-label="Estética Mariana Costa — início">
+        <svg class="brand__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+        <span class="brand__text"><small>Estética</small><strong>Mariana Costa</strong></span>
+      </a>
+
+      <nav class="nav" aria-label="Principal">
+        <a href="#inicio" class="is-active">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#procedimentos">Procedimentos</a>
+        <a href="#resultados">Resultados</a>
+      </nav>
+
+      <div class="header__actions">
+        <button type="button" class="btn btn--line header__cta" data-open-booking>Agendar</button>
+        <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu em tela cheia -->
+  <div class="menu" id="menu" aria-hidden="true">
+    <button type="button" class="menu__close" aria-label="Fechar menu"><svg><use href="#i-close"/></svg></button>
+    <div class="menu__inner">
+      <nav class="menu__nav" aria-label="Menu">
+        <a href="#inicio"><span>01</span>Início</a>
+        <a href="#sobre"><span>02</span>Sobre</a>
+        <a href="#procedimentos"><span>03</span>Procedimentos</a>
+        <a href="#resultados"><span>04</span>Resultados</a>
+      </nav>
+      <div class="menu__aside">
+        <svg class="menu__logo" aria-hidden="true"><use href="#logo-mark"/></svg>
+        <p>Beleza natural <br><em>em todas as fases.</em></p>
+        <button type="button" class="btn btn--primary" data-open-booking>Agendar avaliação <svg><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="inicio">
+      <div class="hero__bg" aria-hidden="true"></div>
+      <div class="hero__dust" aria-hidden="true"></div>
+
+      <div class="hero__word" aria-hidden="true">
+        <span style="--i:0">B</span><span style="--i:1">E</span><span style="--i:2">L</span><span style="--i:3">E</span><span style="--i:4">Z</span><span style="--i:5">A</span>
+      </div>
+
+      <div class="hero__waves hero__waves--back" aria-hidden="true">
+        <svg viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="wb1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#6f8545"/>
+              <stop offset=".5" stop-color="#94a568" stop-opacity=".55"/>
+              <stop offset="1" stop-color="#5f7438" stop-opacity=".9"/>
+            </linearGradient>
+          </defs>
+          <path class="wave wave--1" d="M-100 470C180 380 380 560 640 600S1150 470 1700 520V900H-100Z" fill="url(#wb1)"/>
+          <path class="wave wave--2" d="M-100 610C220 540 420 700 760 690S1250 560 1700 640V900H-100Z" fill="#4f6530" opacity=".75"/>
+        </svg>
+      </div>
+
+      <div class="hero__model">
+        <img src="img/mariana-hero.webp" width="726" height="911" alt="Mariana Costa, esteticista, de perfil">
+      </div>
+
+      <div class="hero__waves hero__waves--front" aria-hidden="true">
+        <svg class="waves-soft" viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="wf1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#2d4019"/>
+              <stop offset=".45" stop-color="#4a6129" stop-opacity=".85"/>
+              <stop offset="1" stop-color="#2a3b18"/>
+            </linearGradient>
+          </defs>
+          <path class="wave wave--3" d="M-100 760C240 690 520 860 880 830S1330 700 1700 770V900H-100Z" fill="url(#wf1)"/>
+        </svg>
+        <svg class="waves-lines" viewBox="0 0 1600 900" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#f6f3d8" stop-opacity="0"/>
+              <stop offset=".35" stop-color="#f6f3d8" stop-opacity=".9"/>
+              <stop offset="1" stop-color="#f6f3d8" stop-opacity=".25"/>
+            </linearGradient>
+          </defs>
+          <path class="glow-line" d="M1010 610C1180 540 1390 500 1640 560" stroke="url(#glow)" pathLength="100"/>
+          <path class="glow-line glow-line--spark" d="M1010 610C1180 540 1390 500 1640 560" pathLength="100"/>
+          <path class="glow-line" d="M-40 650C200 570 360 700 520 760S800 850 1000 890" stroke="url(#glow)" pathLength="100"/>
+          <path class="glow-line glow-line--spark glow-line--late" d="M-40 650C200 570 360 700 520 760S800 850 1000 890" pathLength="100"/>
+        </svg>
+        <span class="blob blob--1"></span>
+        <span class="blob blob--2"></span>
+      </div>
+
+      <div class="hero__shade" aria-hidden="true"></div>
+
+      <div class="hero__content container">
+        <div class="hero__left">
+          <ul class="chips" aria-label="Diferenciais">
+            <li data-intro style="--i:0">Natural</li>
+            <li data-intro style="--i:1">Personalizado</li>
+          </ul>
+          <h1 class="hero__title">
+            <span class="line"><span data-intro-line style="--i:0">Desperte sua</span></span>
+            <span class="line"><em class="accent" data-intro-line style="--i:1">beleza natural.</em></span>
+          </h1>
+        </div>
+        <div class="hero__right">
+          <p data-intro style="--i:3">Realce o que já é lindo em você com tratamentos estéticos modernos, seguros e personalizados.</p>
+          <div class="hero__actions" data-intro style="--i:4">
+            <button type="button" class="btn btn--primary" data-open-booking>Agendar avaliação <svg><use href="#i-arrow"/></svg></button>
+            <a href="#procedimentos" class="link-line">Conheça os procedimentos</a>
+          </div>
+        </div>
+      </div>
+
+      <a href="#sobre" class="scroll-cue" aria-label="Rolar para a próxima seção"><span></span></a>
+    </section>
+
+    <!-- ============ SOBRE ============ -->
+    <section class="about section-dark" id="sobre">
+      <div class="about__media" data-reveal="curtain">
+        <img src="img/mariana-sobre.webp" width="630" height="941" alt="Retrato de Mariana Costa entre folhagens" loading="lazy">
+      </div>
+      <div class="about__rail" aria-hidden="true">
+        <span class="rail-line" data-reveal="grow"></span>
+        <svg class="rail-badge" data-reveal="zoom"><use href="#logo-mark"/></svg>
+        <span class="rail-line rail-line--long" data-reveal="grow"></span>
+      </div>
+      <span class="foliage foliage--tl" aria-hidden="true"></span>
+      <span class="foliage foliage--bl" aria-hidden="true"></span>
+
+      <div class="container about__grid">
+        <div class="about__content">
+          <p class="eyebrow" data-reveal>Sobre a Mariana</p>
+          <h2 class="title" data-reveal="lines">
+            <span class="line"><span>Beleza com propósito,</span></span>
+            <span class="line"><em class="accent" style="--d:.12s">cuidado com essência.</em></span>
+          </h2>
+          <p class="lead" data-reveal style="--d:.2s">Acredito que a estética vai além da aparência: é sobre se sentir bem, respeitar sua individualidade e valorizar o que você tem de mais bonito. Cada atendimento é pensado de forma personalizada, com atenção aos detalhes, segurança e naturalidade.</p>
+
+          <ul class="pillars" data-stagger="120" data-reveal="group">
+            <li><span class="ring"><svg class="ico draw"><use href="#i-user"/></svg></span>Cuidado <br>individualizado</li>
+            <li><span class="ring"><svg class="ico draw"><use href="#i-leaf"/></svg></span>Naturalidade em <br>primeiro lugar</li>
+            <li><span class="ring"><svg class="ico draw"><use href="#i-shield"/></svg></span>Tecnologia e <br>segurança</li>
+          </ul>
+
+          <a href="#filosofia" class="btn btn--outline btn--wide" data-reveal style="--d:.35s">Conheça minha filosofia <svg><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PROCEDIMENTOS ============ -->
+    <section class="procedures section-dark" id="procedimentos">
+      <span class="foliage foliage--tr" aria-hidden="true"></span>
+      <span class="foliage foliage--ml" aria-hidden="true"></span>
+
+      <div class="container procedures__head">
+        <div class="procedures__intro">
+          <p class="eyebrow" data-reveal>Procedimentos</p>
+          <h2 class="title" data-reveal="lines">
+            <span class="line"><span>Tratamentos que</span></span>
+            <span class="line"><span style="--d:.08s">realçam o que há</span></span>
+            <span class="line"><span style="--d:.16s">de <em class="accent">mais bonito em você.</em></span></span>
+          </h2>
+          <p class="lead" data-reveal style="--d:.2s">Procedimentos estéticos modernos, seguros e personalizados para cuidar da sua beleza natural, com resultados reais e harmônicos.</p>
+          <ul class="features" data-stagger="120" data-reveal="group">
+            <li><span class="ring"><svg class="ico ico--logo" aria-hidden="true"><use href="#logo-glyph"/></svg></span>Protocolos <br>personalizados</li>
+            <li><span class="ring"><svg class="ico draw"><use href="#i-shield"/></svg></span>Segurança <br>em cada etapa</li>
+            <li><span class="ring"><svg class="ico draw"><use href="#i-sparkles"/></svg></span>Resultados <br>naturais</li>
+          </ul>
+        </div>
+        <figure class="procedures__room" data-reveal="curtain">
+          <img src="img/clinica.webp" width="724" height="418" alt="Sala de atendimento da Estética Mariana Costa com maca e iluminação suave" loading="lazy">
+        </figure>
+      </div>
+
+      <div class="cards-wrap">
+        <div class="cards" data-stagger="90" data-reveal="group">
+          <article class="card" data-procedure="Limpeza de Pele">
+            <div class="card__media"><img src="img/proc-limpeza-de-pele.webp" width="350" height="442" alt="Pele limpa e luminosa" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-sparkles"/></svg></span>
+              <h3>Limpeza de Pele</h3>
+              <p>Pele mais limpa, saudável e luminosa, com cuidado e técnica.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Hidratação Facial">
+            <div class="card__media"><img src="img/proc-hidratacao-facial.webp" width="336" height="442" alt="Aplicação de máscara hidratante no rosto" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-drop"/></svg></span>
+              <h3>Hidratação Facial</h3>
+              <p>Devolve o viço, a maciez e a vitalidade da sua pele.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Preenchimento Facial">
+            <div class="card__media"><img src="img/proc-preenchimento-facial.webp" width="336" height="442" alt="Lábios com preenchimento natural" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-lips"/></svg></span>
+              <h3>Preenchimento Facial</h3>
+              <p>Harmoniza e realça seus traços, com naturalidade e equilíbrio.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Toxina Botulínica">
+            <div class="card__media"><img src="img/proc-toxina-botulinica.webp" width="310" height="466" alt="Aplicação de toxina botulínica" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-syringe"/></svg></span>
+              <h3>Toxina Botulínica</h3>
+              <p>Suaviza as linhas de expressão e proporciona um aspecto mais leve e rejuvenescido.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Peelings e Renovação da Pele">
+            <div class="card__media"><img src="img/proc-peelings.webp" width="350" height="468" alt="Peeling ultrassônico no rosto" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-waves"/></svg></span>
+              <h3>Peelings e Renovação da Pele</h3>
+              <p>Estimula a renovação celular, melhora a textura e uniformiza o tom da pele.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Skinbooster">
+            <div class="card__media"><img src="img/proc-skinbooster.webp" width="336" height="468" alt="Olhar com pele hidratada e firme" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-arrows-up"/></svg></span>
+              <h3>Skinbooster</h3>
+              <p>Hidratação profunda para uma pele mais firme, luminosa e saudável.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Harmonização Facial">
+            <div class="card__media"><img src="img/proc-harmonizacao-facial.webp" width="320" height="468" alt="Perfil com contorno facial harmonizado" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-face"/></svg></span>
+              <h3>Harmonização Facial</h3>
+              <p>Realça sua beleza de forma natural, respeitando suas características únicas.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+          <article class="card" data-procedure="Tratamentos Corporais">
+            <div class="card__media"><img src="img/proc-tratamentos-corporais.webp" width="342" height="468" alt="Contorno corporal" loading="lazy"></div>
+            <div class="card__body">
+              <span class="ring ring--sm"><svg class="ico"><use href="#i-body"/></svg></span>
+              <h3>Tratamentos Corporais</h3>
+              <p>Protocolos que ajudam na firmeza, contorno e bem-estar do seu corpo.</p>
+              <button type="button" class="btn btn--primary btn--sm" data-open-booking>Saiba mais <svg><use href="#i-arrow"/></svg></button>
+            </div>
+          </article>
+        </div>
+
+        <div class="strip" id="filosofia" data-reveal>
+          <ul class="strip__items">
+            <li><svg class="ico ico--lg draw"><use href="#i-leaf"/></svg><span>Beleza natural <br>em todas as fases.</span></li>
+            <li><span class="ring"><svg class="ico draw"><use href="#i-heart"/></svg></span><span>Mais autoconfiança <br>no seu dia a dia.</span></li>
+            <li><svg class="ico ico--lg draw"><use href="#i-lotus"/></svg><span>Cuidar de você <br>também é saúde.</span></li>
+          </ul>
+          <button type="button" class="btn btn--primary" data-open-booking>Agendar avaliação <svg><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ RESULTADOS ============ -->
+    <section class="results section-dark" id="resultados">
+      <span class="foliage foliage--br" aria-hidden="true"></span>
+      <div class="container results__grid">
+        <div class="results__content">
+          <p class="eyebrow" data-reveal>Resultados</p>
+          <h2 class="title" data-reveal="lines">
+            <span class="line"><span>Resultados reais</span></span>
+            <span class="line"><span style="--d:.08s">para a sua</span></span>
+            <span class="line"><em class="accent" style="--d:.16s">melhor versão.</em></span>
+          </h2>
+          <p class="lead" data-reveal style="--d:.2s">Cada procedimento é pensado de forma personalizada, respeitando a sua individualidade e realçando o que você tem de mais bonito, com segurança e naturalidade.</p>
+
+          <ol class="steps" data-stagger="110" data-reveal="group">
+            <li><span class="steps__n">01</span><div><h3>Avaliação</h3><p>Uma conversa para entender seus objetivos, sua pele e sua rotina.</p></div></li>
+            <li><span class="steps__n">02</span><div><h3>Plano personalizado</h3><p>Protocolos pensados para a sua individualidade.</p></div></li>
+            <li><span class="steps__n">03</span><div><h3>Procedimento</h3><p>Técnica, segurança e conforto em cada etapa.</p></div></li>
+            <li><span class="steps__n">04</span><div><h3>Acompanhamento</h3><p>Cuidado contínuo para resultados naturais e harmônicos.</p></div></li>
+          </ol>
+        </div>
+
+        <figure class="results__media" data-reveal="curtain">
+          <img src="img/mariana-resultados.webp" width="580" height="416" alt="Mariana Costa sob luz natural entre plantas" loading="lazy">
+        </figure>
+
+        <div class="results__badge" aria-hidden="true">
+          <span class="rail-line" data-reveal="grow"></span>
+          <svg class="rail-badge" data-reveal="zoom"><use href="#logo-mark"/></svg>
+          <p data-reveal style="--d:.3s">Beleza <br>natural <br>em todas <br>as fases.</p>
+          <span class="rail-line rail-line--long" data-reveal="grow"></span>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="cta-band" data-reveal="zoom">
+          <svg class="ico ico--lg draw"><use href="#i-lotus"/></svg>
+          <p>Cada detalhe é pensado para <em>você se sentir bem, bonita e confiante.</em></p>
+          <button type="button" class="btn btn--primary" data-open-booking>Agendar avaliação <svg><use href="#i-arrow"/></svg></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__grid">
+      <a href="#inicio" class="brand brand--footer" aria-label="Estética Mariana Costa — voltar ao início">
+        <svg class="brand__mark" aria-hidden="true"><use href="#logo-mark"/></svg>
+        <span class="brand__text"><small>Estética</small><strong>Mariana Costa</strong></span>
+      </a>
+      <nav class="footer__nav" aria-label="Rodapé">
+        <a href="#inicio">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#procedimentos">Procedimentos</a>
+        <a href="#resultados">Resultados</a>
+      </nav>
+      <button type="button" class="btn btn--outline" data-open-booking>Agendar avaliação <svg><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="container footer__bottom">
+      <p>© <span data-year>2026</span> Estética Mariana Costa. Todos os direitos reservados.</p>
+      <p>Beleza natural em todas as fases.</p>
+    </div>
+  </footer>
+
+  <!-- Agendamento -->
+  <dialog class="booking" id="booking" aria-labelledby="booking-title">
+    <form class="booking__form" novalidate>
+      <button type="button" class="booking__close" data-close aria-label="Fechar"><svg><use href="#i-close"/></svg></button>
+      <svg class="booking__logo" aria-hidden="true"><use href="#logo-mark"/></svg>
+      <p class="eyebrow eyebrow--center">Agende sua avaliação</p>
+      <h2 id="booking-title">Vamos cuidar de <em class="accent">você?</em></h2>
+      <p class="booking__info" data-procedure-info hidden></p>
+
+      <label class="field">
+        <span>Nome</span>
+        <input type="text" name="nome" autocomplete="name" required placeholder="Seu nome completo">
+      </label>
+      <label class="field">
+        <span>WhatsApp</span>
+        <input type="tel" name="telefone" autocomplete="tel" inputmode="tel" required placeholder="(00) 00000-0000">
+      </label>
+      <label class="field">
+        <span>Procedimento de interesse</span>
+        <select name="procedimento">
+          <option value="Avaliação geral">Ainda não sei — quero uma avaliação</option>
+          <option>Limpeza de Pele</option>
+          <option>Hidratação Facial</option>
+          <option>Preenchimento Facial</option>
+          <option>Toxina Botulínica</option>
+          <option>Peelings e Renovação da Pele</option>
+          <option>Skinbooster</option>
+          <option>Harmonização Facial</option>
+          <option>Tratamentos Corporais</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Mensagem <i>(opcional)</i></span>
+        <textarea name="mensagem" rows="3" placeholder="Conte um pouco sobre o que você procura"></textarea>
+      </label>
+
+      <p class="booking__notice" role="status" aria-live="polite"></p>
+      <button type="submit" class="btn btn--primary btn--block">Enviar pelo WhatsApp <svg><use href="#i-arrow"/></svg></button>
+    </form>
+  </dialog>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
