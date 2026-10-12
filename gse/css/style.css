@@ -527,3 +527,175 @@ img, a, .spot { -webkit-user-drag: none; }
   .toast:not([hidden]) { animation: toastIn .45s var(--spring); }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 16px); } }
 }
+
+/* ================= Celular e tablet em pé =================
+   Cada seção cobre a tela inteira: etiqueta, título e texto legíveis em cima,
+   a arte inteira no meio (sem recorte e sem zoom) e um card com os itens embaixo. */
+.mob { display: none; }
+
+@media (max-aspect-ratio: 1/1) {
+  .sec {
+    display: flex; flex-direction: column;
+    padding-top: var(--h);
+    color: #fff;
+    background:
+      radial-gradient(120% 55% at 100% 0%, rgba(84, 150, 96, .42), transparent 62%),
+      radial-gradient(90% 45% at 0% 100%, rgba(246, 180, 14, .12), transparent 62%),
+      linear-gradient(180deg, #0f2419 0%, #10281d 48%, #0b1c14 100%);
+  }
+  .sec__text { display: none; }
+  .mob { display: block; }
+  /* a arte fica no meio do espaço livre, entre o texto e o card */
+  .stage { position: relative; inset: auto; flex: 1 0 auto; }
+  .frame { width: 100%; box-shadow: 0 18px 40px -18px rgba(0, 0, 0, .65); }
+
+  .mob--top { flex: none; padding: clamp(14px, 2.6vh, 26px) 20px clamp(12px, 2.2vh, 20px); }
+  .mob__eyebrow {
+    display: flex; align-items: center; gap: 14px;
+    margin: 0 0 clamp(8px, 1.4vh, 14px);
+    font-size: 12.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+    color: rgba(225, 240, 228, .85);
+  }
+  .mob__eyebrow::before { content: ""; width: 34px; height: 2px; border-radius: 2px; background: #6fb35c; }
+  .mob__title {
+    margin: 0;
+    font-size: clamp(27px, min(8.4vw, 4.6vh), 46px); line-height: 1.08; font-weight: 800; letter-spacing: -.02em;
+    color: #fff;
+  }
+  .mob__title em { font-style: normal; color: var(--sun-2); }
+  .mob__lead {
+    margin: clamp(8px, 1.4vh, 12px) 0 0; max-width: 38ch;
+    font-size: clamp(13.5px, min(3.8vw, 2vh), 16px); line-height: 1.45; font-weight: 500;
+    color: rgba(255, 255, 255, .74);
+  }
+  .mob__cta {
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-top: clamp(12px, 2vh, 18px); padding: 13px 22px;
+    border-radius: 999px; border: 1.5px solid #7fbf6a;
+    background: rgba(127, 191, 106, .12); color: #e4f5dc;
+    font-size: 15px; font-weight: 700; text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color .25s, transform .3s var(--spring);
+  }
+  .mob__cta:active { transform: scale(.97); background: rgba(127, 191, 106, .24); }
+  .mob__cta--solid { background: linear-gradient(180deg, var(--sun-2), var(--sun)); border-color: transparent; color: var(--navy); }
+  .mob__arrow { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+  .mob--bottom {
+    position: relative; flex: 0 1 auto; min-height: 0;
+    display: flex; flex-direction: column;
+    padding: clamp(12px, 2vh, 18px) 14px calc(84px + env(safe-area-inset-bottom));
+  }
+  .mob__card {
+    flex: 0 1 auto; min-height: 0;
+    display: flex; flex-direction: column;
+    padding: 16px 16px 14px; border-radius: 26px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .09), rgba(255, 255, 255, .035));
+    border: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .08), 0 20px 40px -20px rgba(0, 0, 0, .6);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    overflow: hidden;
+  }
+  .mob__kicker { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255, 255, 255, .66); }
+  .mob__ctitle {
+    margin: 4px 0 0; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, .12);
+    font-size: 16.5px; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: #fff;
+  }
+  .mob__items {
+    flex: 1 1 auto; min-height: 0;
+    margin: 12px -16px 0; padding: 0 16px;
+    display: flex; gap: 10px;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding: 0 16px;
+    overscroll-behavior-x: contain; scrollbar-width: none;
+  }
+  .mob__items::-webkit-scrollbar { display: none; }
+  .mob__item {
+    flex: 0 0 80%; min-height: 0; scroll-snap-align: start;
+    display: flex; flex-direction: column; gap: 7px;
+    padding: 14px; border-radius: 18px;
+    background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12);
+    overflow: hidden;
+  }
+  .mob__item-head { display: flex; align-items: center; gap: 11px; flex: none; }
+  .mob__item-head h3 { margin: 0; }
+  .mob__num {
+    display: grid; place-items: center; min-width: 42px; height: 36px; padding: 0 8px; border-radius: 11px;
+    background: linear-gradient(180deg, var(--sun-2), var(--sun));
+    color: #fff; font-size: 17px; font-weight: 800; text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+  }
+  .mob__icon {
+    flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(160deg, var(--sun-2), #f0a20b);
+    box-shadow: 0 6px 14px -6px rgba(246, 180, 14, .7);
+  }
+  .mob__icon svg { width: 21px; height: 21px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .mob__item h3 { font-size: 15.5px; font-weight: 700; line-height: 1.25; color: #fff; }
+  .mob__item p {
+    flex: none;
+    margin: 0; font-size: 13.5px; line-height: 1.45; color: rgba(255, 255, 255, .72);
+    display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden;
+  }
+  .mob__item--link { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transparent; transition: background-color .25s, border-color .25s; }
+  .mob__item--link:active { background: rgba(255, 255, 255, .12); border-color: rgba(255, 207, 58, .5); }
+  .mob__item--link h3 { flex: 1 1 auto; }
+  .mob__go {
+    flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(180deg, var(--sun-2), var(--sun)); color: var(--navy);
+  }
+  .mob__go .mob__arrow { width: 16px; height: 16px; }
+  .mob__dots { flex: none; display: flex; justify-content: center; gap: 6px; padding-top: 10px; }
+  .mob__dots span { width: 6px; height: 6px; border-radius: 6px; background: rgba(255, 255, 255, .3); transition: width .35s var(--spring), background-color .3s; }
+  .mob__dots span.is-on { width: 18px; background: var(--sun-2); }
+  .mob__tiles { flex: none; margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .mob__tile {
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+    padding: 10px 4px; border-radius: 16px;
+    background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .12);
+    color: #fff; font-size: 14px; font-weight: 700; text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mob__tile:active { background: rgba(255, 255, 255, .12); }
+  .mob__tile .mob__icon { width: 36px; height: 36px; }
+  .mob__tile .mob__icon svg { width: 19px; height: 19px; }
+  .mob__note { margin: 12px 0 0; font-size: 15px; line-height: 1.5; color: rgba(255, 255, 255, .8); }
+  .mob__card .mob__cta { align-self: flex-start; }
+  .mob__next {
+    position: absolute; left: 18px; bottom: calc(18px + env(safe-area-inset-bottom));
+    height: 56px; display: flex; align-items: center; gap: 10px;
+    color: rgba(255, 255, 255, .8); font-size: 13px; text-decoration: none;
+  }
+  .mob__next strong { color: #fff; }
+  .mob__count { padding: 5px 9px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .25); font-size: 11.5px; font-weight: 700; letter-spacing: .06em; color: #fff; }
+  .mob__next svg { width: 18px; height: 18px; fill: none; stroke: var(--sun-2); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* pouco espaço: o card fica mais enxuto (ou some) para nada ficar cortado (níveis aplicados pelo JS) */
+  .fit-1 .mob__item p { -webkit-line-clamp: 2; }
+  .fit-2 .mob__kicker, .fit-2 .mob__item p, .fit-2 .mob__note, .fit-2 .mob__dots { display: none; }
+  .fit-2 .mob__tile { flex-direction: row; gap: 7px; padding: 8px 6px; font-size: 13px; }
+  .fit-2 .mob__tile .mob__icon { width: 28px; height: 28px; }
+  .fit-2 .mob__tile .mob__icon svg { width: 16px; height: 16px; }
+  .fit-3 .mob__card { display: none; }
+
+  /* cabeçalho escuro no celular, como na referência */
+  .topbar { background: rgba(12, 30, 22, .8); border-bottom-color: rgba(255, 255, 255, .08); }
+  .brand { color: #fff; }
+  .burger { background: transparent; border-color: rgba(255, 255, 255, .35); }
+  .burger span { background: #fff; }
+}
+@media (max-aspect-ratio: 1/1) and (max-height: 720px) {
+  .mob__lead { display: none; }
+}
+@media (max-aspect-ratio: 1/1) and (min-width: 600px) {
+  .mob--top, .mob--bottom { width: 100%; max-width: 680px; margin: 0 auto; }
+}
+@media (max-aspect-ratio: 1/1) and (prefers-reduced-motion: no-preference) {
+  .app .sec .mob--top > *, .app .sec .mob__card, .app .sec .mob__next { opacity: 0; }
+  .app .sec.is-in .mob__eyebrow { animation: mUp .7s var(--ease) .05s both; }
+  .app .sec.is-in .mob__title { animation: mUp .8s var(--ease) .12s both; }
+  .app .sec.is-in .mob__lead { animation: mUp .8s var(--ease) .2s both; }
+  .app .sec.is-in .mob--top .mob__cta { animation: mUp .8s var(--ease) .28s both; }
+  .app .sec.is-in .mob__card { animation: mUp .9s var(--spring) .45s both; }
+  .app .sec.is-in .mob__next { animation: fadeIn .6s ease .8s both; }
+  @keyframes mUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+}

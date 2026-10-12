@@ -258,6 +258,48 @@
     hint.addEventListener('click', hideHint);
   }
 
+  /* ---------- Cards do celular: pontinhos que acompanham o deslize ---------- */
+  document.querySelectorAll('.mob__items').forEach((row) => {
+    const dots = row.parentElement.querySelectorAll('.mob__dots span');
+    if (!dots.length) return;
+    const items = [...row.children];
+    const update = () => {
+      const left = row.getBoundingClientRect().left + 16;
+      let best = 0, dist = Infinity;
+      items.forEach((it, i) => {
+        const d = Math.abs(it.getBoundingClientRect().left - left);
+        if (d < dist) { dist = d; best = i; }
+      });
+      if (row.scrollLeft + row.clientWidth >= row.scrollWidth - 4) best = items.length - 1;
+      dots.forEach((d, i) => d.classList.toggle('is-on', i === best));
+    };
+    let raf = 0;
+    row.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    update();
+  });
+
+  /* ---------- Celular: o card de baixo se ajusta ao espaço da tela (nada fica cortado) ---------- */
+  const portrait = window.matchMedia('(max-aspect-ratio: 1/1)');
+  const levels = ['fit-1', 'fit-2', 'fit-3'];
+  const fitCards = () => {
+    document.querySelectorAll('.mob--bottom').forEach((box) => {
+      box.classList.remove(...levels);
+      if (!portrait.matches) return;
+      const card = box.querySelector('.mob__card');
+      const overflows = () => card.scrollHeight > card.clientHeight + 1 ||
+        [...card.querySelectorAll('.mob__item, .mob__tiles')].some((el) => el.scrollHeight > el.clientHeight + 1);
+      for (const lvl of levels) {
+        if (!overflows()) break;
+        box.classList.add(lvl);
+      }
+    });
+  };
+  let fitRaf = 0;
+  const refit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
+  window.addEventListener('resize', refit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
+  fitCards();
+
   /* ---------- Avisos curtos ---------- */
   let toastTimer;
   const showToast = (msg) => {
