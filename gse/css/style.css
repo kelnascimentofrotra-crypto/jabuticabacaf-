@@ -48,6 +48,11 @@ body {
 }
 img, svg { display: block; }
 a { color: inherit; }
+/* o site é feito de artes: arrastar com o mouse troca de seção em vez de selecionar texto */
+body { -webkit-user-select: none; user-select: none; }
+.footer__lead, .footer__copy { -webkit-user-select: text; user-select: text; }
+img, a, .piece, .tile { -webkit-user-drag: none; }
+.pager.is-dragging { cursor: grabbing; }
 ::selection { background: var(--sun-2); color: var(--navy); }
 :focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
 

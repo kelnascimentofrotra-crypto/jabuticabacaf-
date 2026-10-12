@@ -108,6 +108,25 @@
     lastMove = now;
     go(Math.sign(e.deltaY));
   }, { passive: false });
+  // arrastar com o mouse (como deslizar o dedo): para cima vai para a próxima seção, para baixo volta
+  document.querySelectorAll('img, a').forEach((el) => { el.draggable = false; });
+  pager.addEventListener('dragstart', (e) => e.preventDefault());
+  let drag = null;
+  pager.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    if (e.target.closest('a, button, input, textarea, select')) return;
+    drag = { y: e.clientY, moved: false };
+  });
+  window.addEventListener('pointermove', (e) => {
+    if (!drag || drag.moved) return;
+    const dy = e.clientY - drag.y;
+    if (Math.abs(dy) > 8) pager.classList.add('is-dragging');
+    if (Math.abs(dy) > 60) { drag.moved = true; go(dy < 0 ? 1 : -1); }
+  });
+  const endDrag = () => { drag = null; pager.classList.remove('is-dragging'); };
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', endDrag);
+
   document.addEventListener('keydown', (e) => {
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
     const tag = (e.target.tagName || '').toLowerCase();
