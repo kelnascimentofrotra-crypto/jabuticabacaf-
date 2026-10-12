@@ -21,7 +21,10 @@ const favicon = 'data:image/svg+xml,' + encodeURIComponent(
 let css = readFileSync(cssOut, 'utf8')
   .replace('__FONT__', b64('fonts/red-hat-display-latin.woff2', 'font/woff2'))
   .replace('__BG__', b64('img/hero-fundo.jpg', 'image/jpeg'));
-const html = readFileSync(join(dir, 'index.html'), 'utf8')
+const mime = (f) => f.endsWith('.webp') ? 'image/webp' : f.endsWith('.png') ? 'image/png' : f.endsWith('.svg') ? 'image/svg+xml' : 'image/jpeg';
+const inlineImgs = (t) => t.replace(/__IMG:([\w.-]+)__/g, (_, f) => b64('img/' + f, mime(f)));
+css = inlineImgs(css);
+const html = inlineImgs(readFileSync(join(dir, 'index.html'), 'utf8'))
   .replace('__CSS__', () => css)
   .replace('__THUMB__', () => b64('img/card-placas.jpg', 'image/jpeg'))
   .replace('__FAVICON__', () => favicon);
