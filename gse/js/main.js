@@ -24,7 +24,7 @@
   const toTop = document.querySelector('.to-top');
   const cue = document.querySelector('.scroll-cue');
   const toast = document.querySelector('.toast');
-  const hint = document.querySelector('.rotate-hint');
+  const pager = document.getElementById('pager');
 
   const year = document.querySelector('.js-year');
   if (year) year.textContent = new Date().getFullYear();
@@ -72,17 +72,52 @@
   let ticking = false;
   const onScroll = () => {
     ticking = false;
-    const y = window.scrollY;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const y = pager.scrollTop;
+    const max = pager.scrollHeight - pager.clientHeight;
     header.classList.toggle('is-scrolled', y > 8);
     progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max) : 0);
     toTop.classList.toggle('is-on', y > window.innerHeight * 0.6);
     if (cue && y > 40) cue.classList.add('is-hidden');
   };
-  window.addEventListener('scroll', () => {
+  pager.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
   }, { passive: true });
   onScroll();
+
+  /* ---------- Uma seção por vez (roda do mouse e teclado) ---------- */
+  const stops = () => {
+    const max = pager.scrollHeight - pager.clientHeight;
+    return [...new Set(sections.map((sec) => Math.min(sec.offsetTop, max)).concat(max))].sort((a, b) => a - b);
+  };
+  const go = (dir) => {
+    const y = pager.scrollTop;
+    const list = stops();
+    const target = dir > 0 ? list.find((v) => v > y + 4) : [...list].reverse().find((v) => v < y - 4);
+    if (target === undefined) return;
+    pager.scrollTo({ top: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+  };
+  let lastWheel = 0, lastMove = 0;
+  pager.addEventListener('wheel', (e) => {
+    if (e.ctrlKey || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    e.preventDefault();
+    const now = performance.now();
+    const newGesture = now - lastWheel > 220;
+    lastWheel = now;
+    // um gesto (ou um giro contínuo da roda) avança uma seção só
+    if (!newGesture || now - lastMove < 650 || Math.abs(e.deltaY) < 2) return;
+    lastMove = now;
+    go(Math.sign(e.deltaY));
+  }, { passive: false });
+  document.addEventListener('keydown', (e) => {
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || tag === 'button' || e.target.isContentEditable) return;
+    const down = ['ArrowDown', 'PageDown'].includes(e.key) || (e.key === ' ' && !e.shiftKey);
+    const up = ['ArrowUp', 'PageUp'].includes(e.key) || (e.key === ' ' && e.shiftKey);
+    if (down || up) { e.preventDefault(); go(down ? 1 : -1); }
+    else if (e.key === 'Home') { e.preventDefault(); pager.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else if (e.key === 'End') { e.preventDefault(); pager.scrollTo({ top: pager.scrollHeight, behavior: 'smooth' }); }
+  });
 
   /* ---------- Entrada das seções ---------- */
   const settleLater = (sec) => {
@@ -159,7 +194,7 @@
   }
 
   /* ---------- Cards que reagem ao mouse (inclinação, brilho e elevação) ---------- */
-  const lifts = [...document.querySelectorAll('.card, .piece--placas')];
+  const lifts = [...document.querySelectorAll('.frame .card, .frame .piece--placas')];
   lifts.forEach((el) => {
     const glare = el.querySelector('.glare');
     let raf = 0;
@@ -214,6 +249,37 @@
     });
   }
 
+  /* ---------- Cards do celular: pontinhos que acompanham o deslize ---------- */
+  document.querySelectorAll('.m-rail').forEach((rail) => {
+    const dots = rail.parentElement.querySelectorAll('.m-dots span');
+    if (!dots.length) return;
+    const slides = [...rail.children];
+    const update = () => {
+      const mid = rail.scrollLeft + rail.clientWidth / 2;
+      let best = 0, dist = Infinity;
+      slides.forEach((sl, i) => {
+        const d = Math.abs(sl.offsetLeft + sl.offsetWidth / 2 - mid);
+        if (d < dist) { dist = d; best = i; }
+      });
+      dots.forEach((d, i) => d.classList.toggle('is-on', i === best));
+    };
+    let raf = 0;
+    rail.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+
+  /* toque nos cards do celular: sobem por um instante */
+  document.querySelectorAll('.m-slide .tile').forEach((t) => {
+    let timer;
+    t.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'touch') return;
+      t.classList.add('is-lifted');
+      clearTimeout(timer);
+      timer = setTimeout(() => t.classList.remove('is-lifted'), 700);
+    });
+  });
+
   /* ---------- Avisos curtos ---------- */
   let toastTimer;
   const showToast = (msg) => {
@@ -242,22 +308,4 @@
     }
   });
 
-  /* ---------- Dica para girar o celular (as artes são horizontais) ---------- */
-  const portraitPhone = window.matchMedia('(orientation: portrait) and (max-width: 760px)');
-  if (hint && portraitPhone.matches) {
-    let hidden = false;
-    const hideHint = () => {
-      if (hidden) return;
-      hidden = true;
-      hint.classList.add('is-leaving');
-      setTimeout(() => { hint.hidden = true; }, 400);
-    };
-    setTimeout(() => {
-      if (hidden) return;
-      hint.hidden = false;
-      setTimeout(hideHint, 6500);
-    }, 2600);
-    window.addEventListener('orientationchange', hideHint, { once: true });
-    hint.addEventListener('click', hideHint);
-  }
 })();
