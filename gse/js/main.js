@@ -25,6 +25,7 @@
   const cue = document.querySelector('.scroll-cue');
   const toast = document.querySelector('.toast');
   const pager = document.getElementById('pager');
+  const hint = document.querySelector('.rotate-hint');
 
   const year = document.querySelector('.js-year');
   if (year) year.textContent = new Date().getFullYear();
@@ -212,43 +213,23 @@
     start();
   }
 
-  /* ---------- Cards que reagem ao mouse (inclinação, brilho e elevação) ---------- */
-  const lifts = [...document.querySelectorAll('.frame .card, .frame .piece--placas')];
-  lifts.forEach((el) => {
-    const glare = el.querySelector('.glare');
+  /* ---------- Cards e botões que reagem (contorno e luz por cima; a arte não muda) ---------- */
+  document.querySelectorAll('.spot').forEach((el) => {
     let raf = 0;
-    const move = (e) => {
-      if (!canHover || reduceMotion) return;
+    el.addEventListener('pointermove', (e) => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         const r = el.getBoundingClientRect();
-        const px = (e.clientX - r.left) / r.width;
-        const py = (e.clientY - r.top) / r.height;
-        el.style.setProperty('--ry', ((px - 0.5) * 7).toFixed(2) + 'deg');
-        el.style.setProperty('--rx', ((0.5 - py) * 7).toFixed(2) + 'deg');
-        if (glare) {
-          el.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
-          el.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
-        }
+        el.style.setProperty('--gx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        el.style.setProperty('--gy', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
       });
-    };
-    el.addEventListener('pointerenter', (e) => {
-      if (e.pointerType === 'mouse' || e.pointerType === 'pen') el.classList.add('is-lifted');
     });
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', (e) => {
-      if (e.pointerType !== 'mouse' && e.pointerType !== 'pen') return;
-      el.classList.remove('is-lifted');
-      el.style.setProperty('--rx', '0deg');
-      el.style.setProperty('--ry', '0deg');
-    });
-    // toque: o card sobe por um instante
     let tapTimer;
     el.addEventListener('pointerdown', (e) => {
       if (e.pointerType !== 'touch') return;
-      el.classList.add('is-lifted');
+      el.classList.add('is-on');
       clearTimeout(tapTimer);
-      tapTimer = setTimeout(() => el.classList.remove('is-lifted'), 900);
+      tapTimer = setTimeout(() => el.classList.remove('is-on'), 900);
     });
   });
 
@@ -268,36 +249,19 @@
     });
   }
 
-  /* ---------- Cards do celular: pontinhos que acompanham o deslize ---------- */
-  document.querySelectorAll('.m-rail').forEach((rail) => {
-    const dots = rail.parentElement.querySelectorAll('.m-dots span');
-    if (!dots.length) return;
-    const slides = [...rail.children];
-    const update = () => {
-      const mid = rail.scrollLeft + rail.clientWidth / 2;
-      let best = 0, dist = Infinity;
-      slides.forEach((sl, i) => {
-        const d = Math.abs(sl.offsetLeft + sl.offsetWidth / 2 - mid);
-        if (d < dist) { dist = d; best = i; }
-      });
-      dots.forEach((d, i) => d.classList.toggle('is-on', i === best));
+  /* ---------- Dica no celular em pé: girar para ver as artes maiores ---------- */
+  if (hint && window.matchMedia('(orientation: portrait) and (max-width: 760px)').matches) {
+    let gone = false;
+    const hideHint = () => {
+      if (gone) return;
+      gone = true;
+      hint.classList.add('is-leaving');
+      setTimeout(() => { hint.hidden = true; }, 400);
     };
-    let raf = 0;
-    rail.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update); }, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  });
-
-  /* toque nos cards do celular: sobem por um instante */
-  document.querySelectorAll('.m-slide .tile').forEach((t) => {
-    let timer;
-    t.addEventListener('pointerdown', (e) => {
-      if (e.pointerType !== 'touch') return;
-      t.classList.add('is-lifted');
-      clearTimeout(timer);
-      timer = setTimeout(() => t.classList.remove('is-lifted'), 700);
-    });
-  });
+    setTimeout(() => { if (!gone) { hint.hidden = false; setTimeout(hideHint, 6000); } }, 2800);
+    window.addEventListener('orientationchange', hideHint, { once: true });
+    hint.addEventListener('click', hideHint);
+  }
 
   /* ---------- Avisos curtos ---------- */
   let toastTimer;
