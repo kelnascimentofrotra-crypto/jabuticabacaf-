@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 0 104 104">
+  <defs>
+    <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6fe0"/><stop offset="1" stop-color="#1546a8"/></linearGradient>
+    <linearGradient id="s" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#f4a40a"/></linearGradient>
+    <clipPath id="c"><path d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z"/></clipPath>
+  </defs>
+  <g transform="translate(2.7 -1.72)" fill="url(#s)">
+    <path d="M41.89 20.21L43.65 2.58L50.2 19.04ZM55.72 19.16L61.08 7.75L62.42 20.28ZM67.69 21.97L79.24 8.54L75.16 25.77ZM79.62 29.05L90.55 22.77L84.47 33.81ZM87.82 38.21L104.98 33.83L91.75 45.61ZM93.53 50.85L106.08 51.98L94.77 57.53ZM94.99 63.05L111.55 69.31L93.97 71.38ZM92.41 76.69L102.05 84.81L89.6 82.87ZM86.61 87.52L96.59 102.15L81 93.75Z"/>
+    <path d="M42.16 25.29A38 38 0 0 1 81.11 86.43Z"/>
+  </g>
+  <path d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z" fill="url(#b)"/>
+  <g clip-path="url(#c)" fill="none" stroke="#0c2350" stroke-width="2.8" stroke-linecap="round">
+    <path transform="rotate(24 52 62)" d="M52 24A15 38 0 0 1 52 100M52 24A15 38 0 0 0 52 100M52 24A30 38 0 0 1 52 100M52 24A30 38 0 0 0 52 100M52 24V100M19.09 43A32.91 9.87 0 0 0 84.91 43M14 62A38 11.4 0 0 0 90 62M19.09 81A32.91 9.87 0 0 0 84.91 81"/>
+  </g>
+</svg>
