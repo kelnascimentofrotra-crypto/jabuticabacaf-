@@ -21,8 +21,6 @@
   const hero = document.querySelector('.sec--hero');
   const intro = document.querySelector('.intro');
   const progress = document.querySelector('.progress');
-  const toTop = document.querySelector('.to-top');
-  const cue = document.querySelector('.scroll-cue');
   const toast = document.querySelector('.toast');
   const pager = document.getElementById('pager');
   const hint = document.querySelector('.rotate-hint');
@@ -75,10 +73,7 @@
     ticking = false;
     const y = pager.scrollTop;
     const max = pager.scrollHeight - pager.clientHeight;
-    header.classList.toggle('is-scrolled', y > 8);
     progress.style.setProperty('--p', max > 0 ? Math.min(1, y / max) : 0);
-    toTop.classList.toggle('is-on', y > window.innerHeight * 0.6);
-    if (cue && y > 40) cue.classList.add('is-hidden');
   };
   pager.addEventListener('scroll', () => {
     if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
