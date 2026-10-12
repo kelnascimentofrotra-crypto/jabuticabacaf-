@@ -14,37 +14,73 @@
   <link rel="preload" href="fonts/montserrat-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" as="image" href="img/hero.webp" imagesrcset="img/hero-1000.webp 1000w, img/hero.webp 1536w" imagesizes="100vw" type="image/webp">
   <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    document.documentElement.classList.add('js');
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('intro-on');
+  </script>
 </head>
 <body>
   <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+
+  <!-- Definições da logo GSE (usadas no cabeçalho, na abertura e no rodapé) -->
+  <svg class="defs" aria-hidden="true" focusable="false">
+    <defs>
+      <linearGradient id="gseBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6fe0"/><stop offset="1" stop-color="#1546a8"/></linearGradient>
+      <linearGradient id="gseSun" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#f4a40a"/></linearGradient>
+      <clipPath id="gseGlobe"><path d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z"/></clipPath>
+    </defs>
+  </svg>
+
+  <!-- Abertura -->
+  <div class="intro" aria-hidden="true">
+    <div class="intro__glow"></div>
+    <svg class="intro__logo" viewBox="0 0 346 98" role="img" aria-label="GSE Energia Solar">
+        <g transform="translate(-13.3 1.18) scale(.95)"><g class="ic ">
+            <g class="ic__sun" transform="translate(2.7 -1.72)" fill="url(#gseSun)">
+              <path class="ic__rays" d="M41.89 20.21L43.65 2.58L50.2 19.04ZM55.72 19.16L61.08 7.75L62.42 20.28ZM67.69 21.97L79.24 8.54L75.16 25.77ZM79.62 29.05L90.55 22.77L84.47 33.81ZM87.82 38.21L104.98 33.83L91.75 45.61ZM93.53 50.85L106.08 51.98L94.77 57.53ZM94.99 63.05L111.55 69.31L93.97 71.38ZM92.41 76.69L102.05 84.81L89.6 82.87ZM86.61 87.52L96.59 102.15L81 93.75Z"/>
+              <path class="ic__half" d="M42.16 25.29A38 38 0 0 1 81.11 86.43Z"/>
+            </g>
+            <path class="ic__globe" d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z" fill="url(#gseBlue)"/>
+            <g clip-path="url(#gseGlobe)" fill="none" stroke="#0c2350" stroke-width="2.6" stroke-linecap="round">
+              <path class="ic__grid" pathLength="1" transform="rotate(24 52 62)" d="M52 24A15 38 0 0 1 52 100M52 24A15 38 0 0 0 52 100M52 24A30 38 0 0 1 52 100M52 24A30 38 0 0 0 52 100M52 24V100M19.09 43A32.91 9.87 0 0 0 84.91 43M14 62A38 11.4 0 0 0 90 62M19.09 81A32.91 9.87 0 0 0 84.91 81"/>
+            </g>
+          </g></g>
+        <g class="logo__word" transform="translate(104 4) scale(.8)"><g transform="translate(15 0) skewX(-14)">
+            <path class="w w--g" fill="url(#gseBlue)" d="M15 0H92V14H19Q14 14 14 19V41Q14 46 19 46H78V38H48V24H92V45Q92 60 77 60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+            <path class="w w--s" fill="url(#gseSun)" transform="translate(102 0)" d="M15 0H88V14H19Q14 14 14 18V19Q14 23 19 23H73Q88 23 88 38V45Q88 60 73 60H0V46H69Q74 46 74 42V41Q74 37 69 37H15Q0 37 0 22V15Q0 0 15 0Z"/>
+            <path class="w w--e" fill="url(#gseBlue)" transform="translate(200 0)" d="M15 0H84V14H14V23H76V37H14V46H84V60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+          </g></g>
+        <g font-family="Montserrat, Arial, sans-serif" font-weight="700">
+          <text class="logo__energia" x="105" y="72" font-size="16.5" fill="currentColor" textLength="131" lengthAdjust="spacing">ENERGIA</text>
+          <text class="logo__solar" x="250" y="72" font-size="16.5" fill="#f2a20c" textLength="93" lengthAdjust="spacing">SOLAR</text>
+          <path class="logo__line" pathLength="1" d="M105 79H343" stroke="#f2a20c" stroke-width="1" stroke-opacity=".7"/>
+          <text class="logo__tag" x="105" y="93" font-size="8.6" fill="currentColor" textLength="238" lengthAdjust="spacing">INTELIGENTE <tspan fill="#f2a20c">•</tspan> EFICIENTE <tspan fill="#f2a20c">•</tspan> SUSTENTÁVEL</text>
+        </g>
+      </svg>
+    <div class="intro__bar"><span></span></div>
+  </div>
+
+  <div class="progress" aria-hidden="true"><span></span></div>
 
   <header class="topbar" id="topo">
     <a class="brand" href="#inicio" aria-label="GSE Energia Solar, voltar ao início">
       <!-- Logo GSE sem o fundo azul -->
       <svg class="brand__logo" viewBox="0 0 296 80" aria-hidden="true" focusable="false">
-        <defs>
-          <linearGradient id="gseBlue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a6fe0"/><stop offset="1" stop-color="#1546a8"/></linearGradient>
-          <linearGradient id="gseSun" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd23f"/><stop offset="1" stop-color="#f4a40a"/></linearGradient>
-          <clipPath id="gseGlobe"><path d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z"/></clipPath>
-          <g id="gseIcon">
-            <g transform="translate(2.7 -1.72)" fill="url(#gseSun)">
-              <path d="M41.89 20.21L43.65 2.58L50.2 19.04ZM55.72 19.16L61.08 7.75L62.42 20.28ZM67.69 21.97L79.24 8.54L75.16 25.77ZM79.62 29.05L90.55 22.77L84.47 33.81ZM87.82 38.21L104.98 33.83L91.75 45.61ZM93.53 50.85L106.08 51.98L94.77 57.53ZM94.99 63.05L111.55 69.31L93.97 71.38ZM92.41 76.69L102.05 84.81L89.6 82.87ZM86.61 87.52L96.59 102.15L81 93.75Z"/>
-              <path d="M42.16 25.29A38 38 0 0 1 81.11 86.43Z"/>
+        <g transform="translate(-10.64 1.35) scale(.76)"><g class="ic brand__icon">
+            <g class="ic__sun" transform="translate(2.7 -1.72)" fill="url(#gseSun)">
+              <path class="ic__rays" d="M41.89 20.21L43.65 2.58L50.2 19.04ZM55.72 19.16L61.08 7.75L62.42 20.28ZM67.69 21.97L79.24 8.54L75.16 25.77ZM79.62 29.05L90.55 22.77L84.47 33.81ZM87.82 38.21L104.98 33.83L91.75 45.61ZM93.53 50.85L106.08 51.98L94.77 57.53ZM94.99 63.05L111.55 69.31L93.97 71.38ZM92.41 76.69L102.05 84.81L89.6 82.87ZM86.61 87.52L96.59 102.15L81 93.75Z"/>
+              <path class="ic__half" d="M42.16 25.29A38 38 0 0 1 81.11 86.43Z"/>
             </g>
-            <path d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z" fill="url(#gseBlue)"/>
+            <path class="ic__globe" d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z" fill="url(#gseBlue)"/>
             <g clip-path="url(#gseGlobe)" fill="none" stroke="#0c2350" stroke-width="2.6" stroke-linecap="round">
-              <path transform="rotate(24 52 62)" d="M52 24A15 38 0 0 1 52 100M52 24A15 38 0 0 0 52 100M52 24A30 38 0 0 1 52 100M52 24A30 38 0 0 0 52 100M52 24V100M19.09 43A32.91 9.87 0 0 0 84.91 43M14 62A38 11.4 0 0 0 90 62M19.09 81A32.91 9.87 0 0 0 84.91 81"/>
+              <path class="ic__grid" pathLength="1" transform="rotate(24 52 62)" d="M52 24A15 38 0 0 1 52 100M52 24A15 38 0 0 0 52 100M52 24A30 38 0 0 1 52 100M52 24A30 38 0 0 0 52 100M52 24V100M19.09 43A32.91 9.87 0 0 0 84.91 43M14 62A38 11.4 0 0 0 90 62M19.09 81A32.91 9.87 0 0 0 84.91 81"/>
             </g>
-          </g>
-          <g id="gseWord" transform="translate(15 0) skewX(-14)">
-            <path fill="url(#gseBlue)" d="M15 0H92V14H19Q14 14 14 19V41Q14 46 19 46H78V38H48V24H92V45Q92 60 77 60H15Q0 60 0 45V15Q0 0 15 0Z"/>
-            <path fill="url(#gseSun)" transform="translate(102 0)" d="M15 0H88V14H19Q14 14 14 18V19Q14 23 19 23H73Q88 23 88 38V45Q88 60 73 60H0V46H69Q74 46 74 42V41Q74 37 69 37H15Q0 37 0 22V15Q0 0 15 0Z"/>
-            <path fill="url(#gseBlue)" transform="translate(200 0)" d="M15 0H84V14H14V23H76V37H14V46H84V60H15Q0 60 0 45V15Q0 0 15 0Z"/>
-          </g>
-        </defs>
-        <use href="#gseIcon" transform="translate(-10.64 1.35) scale(.76)"/>
-        <use href="#gseWord" transform="translate(84 3) scale(.7)"/>
+          </g></g>
+        <g transform="translate(84 3) scale(.7)"><g transform="translate(15 0) skewX(-14)">
+            <path class="w w--g" fill="url(#gseBlue)" d="M15 0H92V14H19Q14 14 14 19V41Q14 46 19 46H78V38H48V24H92V45Q92 60 77 60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+            <path class="w w--s" fill="url(#gseSun)" transform="translate(102 0)" d="M15 0H88V14H19Q14 14 14 18V19Q14 23 19 23H73Q88 23 88 38V45Q88 60 73 60H0V46H69Q74 46 74 42V41Q74 37 69 37H15Q0 37 0 22V15Q0 0 15 0Z"/>
+            <path class="w w--e" fill="url(#gseBlue)" transform="translate(200 0)" d="M15 0H84V14H14V23H76V37H14V46H84V60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+          </g></g>
         <g font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="15">
           <text x="85" y="64" fill="currentColor" textLength="115" lengthAdjust="spacing">ENERGIA</text>
           <text x="212" y="64" fill="#f2a20c" textLength="82" lengthAdjust="spacing">SOLAR</text>
@@ -54,6 +90,7 @@
 
     <nav class="nav" id="menu" aria-label="Seções do site">
       <ul class="nav__list">
+        <li class="nav__thumb" aria-hidden="true"></li>
         <li><a class="nav__link" href="#inicio">Início</a></li>
         <li><a class="nav__link" href="#como-funciona">Como funciona</a></li>
         <li><a class="nav__link" href="#vantagens">Vantagens</a></li>
@@ -74,8 +111,8 @@
 
   <main id="conteudo">
 
-    <!-- 1. HERO -->
-    <section class="sec sec--hero" id="inicio" style="--rw:1536;--rh:1024" aria-labelledby="t-inicio">
+    <!-- 1. INICIO -->
+    <section class="sec sec--hero" id="inicio" style="--rw:1536;--rh:1024;--unblur:1.25s" aria-labelledby="t-inicio">
       <div class="sec__text sr-only">
         <h1 id="t-inicio">GSE Energia Solar: use mais e pague menos.</h1>
         <p>Energia solar para sua casa, mais economia, mais liberdade e um futuro mais sustentável.</p>
@@ -88,20 +125,20 @@
             <img src="img/hero.jpg" width="1536" height="1024" fetchpriority="high" decoding="async"
                  alt="Casa moderna com placas solares no telhado ao pôr do sol, com a chamada Use mais e pague menos e o botão Solicite um orçamento.">
           </picture>
+          <span class="piece piece--head piece--hero-head" style="--x:40;--y:375;--w:640;--h:290;--i:0;background-image:url(img/hero.webp)" aria-hidden="true"></span>
+          <a class="piece piece--link piece--cta js-wa" href="#" data-msg="Olá! Quero solicitar um orçamento de energia solar."
+             style="--x:62;--y:678;--w:307;--h:56;--r:28;--i:2;background-image:url(img/hero.webp)" aria-label="Solicite um orçamento"><span class="shine" aria-hidden="true"></span></a>
+          <a class="piece piece--link piece--placas js-wa" href="#" data-msg="Olá! Quero conhecer as placas solares selecionadas da GSE."
+             style="--x:1028;--y:722;--w:468;--h:212;--r:22;--i:3;background-image:url(img/hero.webp)" aria-label="Placas selecionadas pra você"></a>
           <span class="glow" aria-hidden="true"></span>
-          <span class="sweep" aria-hidden="true"></span>
-          <a class="hot hot--pill hot--shine js-wa" href="#" data-msg="Olá! Quero solicitar um orçamento de energia solar."
-             style="left:4.036%;top:66.211%;width:19.987%;height:5.469%"
-             aria-label="Solicite um orçamento"></a>
-          <a class="hot hot--card js-wa" href="#" data-msg="Olá! Quero conhecer as placas solares selecionadas da GSE."
-             style="left:66.927%;top:75%;width:30.1%;height:16.05%;--r:1.6cqw"
-             aria-label="Placas selecionadas pra você"></a>
+          <span class="light" aria-hidden="true"></span>
         </div>
       </div>
+      <a class="scroll-cue" href="#como-funciona" aria-label="Ir para Como funciona"><span></span></a>
     </section>
 
-    <!-- 2. COMO FUNCIONA -->
-    <section class="sec" id="como-funciona" style="--rw:1983;--rh:793" aria-labelledby="t-como">
+    <!-- 2. COMO-FUNCIONA -->
+    <section class="sec" id="como-funciona" style="--rw:1983;--rh:793;--unblur:1.75s" aria-labelledby="t-como">
       <div class="sec__text sr-only">
         <h2 id="t-como">Como funciona: do sol para a sua economia</h2>
         <p>Cuidamos de todo o processo para você ter energia solar na sua casa sem complicação, com segurança e total transparência.</p>
@@ -120,12 +157,18 @@
             <img src="img/como-funciona.jpg" width="1983" height="793" loading="lazy" decoding="async"
                  alt="Quatro etapas ilustradas: análise do consumo, projeto personalizado, instalação especializada e economia todos os meses.">
           </picture>
+          <span class="piece piece--head" style="--x:500;--y:55;--w:985;--h:195;--i:0;background-image:url(img/como-funciona.webp)" aria-hidden="true"></span>
+          <span class="piece card" style="--x:72;--y:283;--w:434;--h:443;--r:30;--i:1;background-image:url(img/como-funciona.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:582;--y:285;--w:410;--h:443;--r:30;--i:2;background-image:url(img/como-funciona.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:1058;--y:285;--w:400;--h:443;--r:30;--i:3;background-image:url(img/como-funciona.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:1522;--y:285;--w:390;--h:443;--r:30;--i:4;background-image:url(img/como-funciona.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="light" aria-hidden="true"></span>
         </div>
       </div>
     </section>
 
     <!-- 3. VANTAGENS -->
-    <section class="sec" id="vantagens" style="--rw:1983;--rh:793" aria-labelledby="t-vant">
+    <section class="sec" id="vantagens" style="--rw:1983;--rh:793;--unblur:1.99s" aria-labelledby="t-vant">
       <div class="sec__text sr-only">
         <h2 id="t-vant">Vantagens: mais economia para o seu futuro</h2>
         <p>A energia solar é um investimento seguro e inteligente, que valoriza o seu imóvel e traz inúmeros benefícios para você, sua família e o meio ambiente.</p>
@@ -146,12 +189,20 @@
             <img src="img/vantagens.jpg" width="1983" height="793" loading="lazy" decoding="async"
                  alt="Seis cartões de vantagens ao lado de uma casa com placas solares iluminada ao entardecer.">
           </picture>
+          <span class="piece piece--head" style="--x:430;--y:28;--w:1085;--h:200;--i:0;background-image:url(img/vantagens.webp)" aria-hidden="true"></span>
+          <span class="piece card" style="--x:98;--y:253;--w:412;--h:227;--r:26;--i:1;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:537;--y:253;--w:401;--h:227;--r:26;--i:2;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:962;--y:253;--w:416;--h:227;--r:26;--i:3;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:98;--y:491;--w:412;--h:227;--r:26;--i:4;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:537;--y:491;--w:401;--h:227;--r:26;--i:5;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:962;--y:491;--w:416;--h:227;--r:26;--i:6;background-image:url(img/vantagens.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="light" aria-hidden="true"></span>
         </div>
       </div>
     </section>
 
     <!-- 4. PROJETOS -->
-    <section class="sec" id="projetos" style="--rw:1672;--rh:941" aria-labelledby="t-proj">
+    <section class="sec" id="projetos" style="--rw:1672;--rh:941;--unblur:1.75s" aria-labelledby="t-proj">
       <div class="sec__text sr-only">
         <h2 id="t-proj">Projetos que geram resultados reais</h2>
         <p>Entregamos soluções em energia solar personalizadas para residências, comércios e propriedades rurais, sempre com foco em economia, eficiência e um futuro mais sustentável.</p>
@@ -169,18 +220,18 @@
             <img src="img/projetos.jpg" width="1672" height="941" loading="lazy" decoding="async"
                  alt="Três projetos com placas solares: uma residência com piscina, um prédio comercial e um galpão rural com silos.">
           </picture>
-          <a class="hot hot--pill js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Residencial."
-             style="left:4.844%;top:71.838%;width:11.124%;height:4.782%" aria-label="Ver projeto residencial"></a>
-          <a class="hot hot--pill js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Comercial."
-             style="left:36.842%;top:71.838%;width:11.184%;height:4.782%" aria-label="Ver projeto comercial"></a>
-          <a class="hot hot--pill js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Rural."
-             style="left:67.943%;top:71.838%;width:11.244%;height:4.782%" aria-label="Ver projeto rural"></a>
+          <span class="piece piece--head" style="--x:300;--y:28;--w:1075;--h:195;--i:0;background-image:url(img/projetos.webp)" aria-hidden="true"></span>
+          <span class="piece card" style="--x:55;--y:245;--w:515;--h:500;--r:22;--i:1;background-image:url(img/projetos.webp)"><a class="piece piece--btn js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Residencial." style="--x:81;--y:676;--w:186;--h:45;--r:22;background-image:url(img/projetos.webp)" aria-label="Ver projeto residencial"></a><span class="glare" aria-hidden="true"></span></span>
+          <span class="piece card" style="--x:590;--y:245;--w:500;--h:500;--r:22;--i:2;background-image:url(img/projetos.webp)"><a class="piece piece--btn js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Comercial." style="--x:616;--y:676;--w:187;--h:44;--r:22;background-image:url(img/projetos.webp)" aria-label="Ver projeto comercial"></a><span class="glare" aria-hidden="true"></span></span>
+          <span class="piece card" style="--x:1108;--y:245;--w:512;--h:500;--r:22;--i:3;background-image:url(img/projetos.webp)"><a class="piece piece--btn js-wa" href="#" data-msg="Olá! Quero saber mais sobre o Projeto Rural." style="--x:1136;--y:676;--w:188;--h:45;--r:22;background-image:url(img/projetos.webp)" aria-label="Ver projeto rural"></a><span class="glare" aria-hidden="true"></span></span>
+          <span class="piece card" style="--x:55;--y:763;--w:1563;--h:117;--r:26;--i:4;background-image:url(img/projetos.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="light" aria-hidden="true"></span>
         </div>
       </div>
     </section>
 
     <!-- 5. DEPOIMENTOS -->
-    <section class="sec" id="depoimentos" style="--rw:1983;--rh:793" aria-labelledby="t-dep">
+    <section class="sec" id="depoimentos" style="--rw:1983;--rh:793;--unblur:1.75s" aria-labelledby="t-dep">
       <div class="sec__text sr-only">
         <h2 id="t-dep">Depoimentos: quem já escolheu a GSE</h2>
         <p>A confiança dos nossos clientes é o que nos move. Veja o que eles dizem sobre a experiência com a GSE Energia Solar.</p>
@@ -193,6 +244,12 @@
             <img src="img/depoimentos.jpg" width="1983" height="793" loading="lazy" decoding="async"
                  alt="Cartões de depoimentos de clientes com avaliação de cinco estrelas, ao lado de uma casa com placas solares.">
           </picture>
+          <span class="piece piece--head" style="--x:490;--y:58;--w:860;--h:195;--i:0;background-image:url(img/depoimentos.webp)" aria-hidden="true"></span>
+          <span class="piece card" style="--x:86;--y:272;--w:416;--h:430;--r:30;--i:1;background-image:url(img/depoimentos.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:518;--y:276;--w:419;--h:426;--r:30;--i:2;background-image:url(img/depoimentos.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:953;--y:276;--w:381;--h:426;--r:30;--i:3;background-image:url(img/depoimentos.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="piece card" style="--x:1620;--y:470;--w:318;--h:190;--r:30;--i:4;background-image:url(img/depoimentos.webp)" aria-hidden="true"><span class="glare"></span></span>
+          <span class="light" aria-hidden="true"></span>
         </div>
       </div>
     </section>
@@ -200,17 +257,34 @@
   </main>
 
   <footer class="footer">
+    <div class="footer__sun" aria-hidden="true"></div>
     <div class="footer__inner">
-      <svg class="footer__logo" viewBox="0 0 346 98" role="img" aria-label="GSE Energia Solar. Inteligente, eficiente, sustentável.">
-        <use href="#gseIcon" transform="translate(-13.3 1.18) scale(.95)"/>
-        <use href="#gseWord" transform="translate(104 4) scale(.8)"/>
+      <div class="footer__brand">
+        <svg class="footer__logo" viewBox="0 0 346 98" role="img" aria-label="GSE Energia Solar. Inteligente, eficiente, sustentável.">
+        <g transform="translate(-13.3 1.18) scale(.95)"><g class="ic ">
+            <g class="ic__sun" transform="translate(2.7 -1.72)" fill="url(#gseSun)">
+              <path class="ic__rays" d="M41.89 20.21L43.65 2.58L50.2 19.04ZM55.72 19.16L61.08 7.75L62.42 20.28ZM67.69 21.97L79.24 8.54L75.16 25.77ZM79.62 29.05L90.55 22.77L84.47 33.81ZM87.82 38.21L104.98 33.83L91.75 45.61ZM93.53 50.85L106.08 51.98L94.77 57.53ZM94.99 63.05L111.55 69.31L93.97 71.38ZM92.41 76.69L102.05 84.81L89.6 82.87ZM86.61 87.52L96.59 102.15L81 93.75Z"/>
+              <path class="ic__half" d="M42.16 25.29A38 38 0 0 1 81.11 86.43Z"/>
+            </g>
+            <path class="ic__globe" d="M81.11 86.43A38 38 0 1 1 42.16 25.29Z" fill="url(#gseBlue)"/>
+            <g clip-path="url(#gseGlobe)" fill="none" stroke="#0c2350" stroke-width="2.6" stroke-linecap="round">
+              <path class="ic__grid" pathLength="1" transform="rotate(24 52 62)" d="M52 24A15 38 0 0 1 52 100M52 24A15 38 0 0 0 52 100M52 24A30 38 0 0 1 52 100M52 24A30 38 0 0 0 52 100M52 24V100M19.09 43A32.91 9.87 0 0 0 84.91 43M14 62A38 11.4 0 0 0 90 62M19.09 81A32.91 9.87 0 0 0 84.91 81"/>
+            </g>
+          </g></g>
+        <g class="logo__word" transform="translate(104 4) scale(.8)"><g transform="translate(15 0) skewX(-14)">
+            <path class="w w--g" fill="url(#gseBlue)" d="M15 0H92V14H19Q14 14 14 19V41Q14 46 19 46H78V38H48V24H92V45Q92 60 77 60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+            <path class="w w--s" fill="url(#gseSun)" transform="translate(102 0)" d="M15 0H88V14H19Q14 14 14 18V19Q14 23 19 23H73Q88 23 88 38V45Q88 60 73 60H0V46H69Q74 46 74 42V41Q74 37 69 37H15Q0 37 0 22V15Q0 0 15 0Z"/>
+            <path class="w w--e" fill="url(#gseBlue)" transform="translate(200 0)" d="M15 0H84V14H14V23H76V37H14V46H84V60H15Q0 60 0 45V15Q0 0 15 0Z"/>
+          </g></g>
         <g font-family="Montserrat, Arial, sans-serif" font-weight="700">
-          <text x="105" y="72" font-size="16.5" fill="currentColor" textLength="131" lengthAdjust="spacing">ENERGIA</text>
-          <text x="250" y="72" font-size="16.5" fill="#f2a20c" textLength="93" lengthAdjust="spacing">SOLAR</text>
-          <path d="M105 79H343" stroke="#f2a20c" stroke-width="1" stroke-opacity=".7"/>
-          <text x="105" y="93" font-size="8.6" fill="currentColor" textLength="238" lengthAdjust="spacing">INTELIGENTE <tspan fill="#f2a20c">•</tspan> EFICIENTE <tspan fill="#f2a20c">•</tspan> SUSTENTÁVEL</text>
+          <text class="logo__energia" x="105" y="72" font-size="16.5" fill="currentColor" textLength="131" lengthAdjust="spacing">ENERGIA</text>
+          <text class="logo__solar" x="250" y="72" font-size="16.5" fill="#f2a20c" textLength="93" lengthAdjust="spacing">SOLAR</text>
+          <path class="logo__line" pathLength="1" d="M105 79H343" stroke="#f2a20c" stroke-width="1" stroke-opacity=".7"/>
+          <text class="logo__tag" x="105" y="93" font-size="8.6" fill="currentColor" textLength="238" lengthAdjust="spacing">INTELIGENTE <tspan fill="#f2a20c">•</tspan> EFICIENTE <tspan fill="#f2a20c">•</tspan> SUSTENTÁVEL</text>
         </g>
       </svg>
+        <p class="footer__lead">Energia solar para sua casa, comércio ou propriedade rural.</p>
+      </div>
       <nav class="footer__nav" aria-label="Rodapé">
         <a href="#inicio">Início</a>
         <a href="#como-funciona">Como funciona</a>
@@ -218,9 +292,18 @@
         <a href="#projetos">Projetos</a>
         <a href="#depoimentos">Depoimentos</a>
       </nav>
+      <a class="cta cta--footer js-wa" href="#" data-msg="Olá! Quero solicitar um orçamento de energia solar.">
+        <svg class="cta__wa" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2a9.7 9.7 0 0 0-8.36 14.63L2.3 21.7l5-1.31A9.7 9.7 0 1 0 12 2.2Zm0 17.7a8 8 0 0 1-4.08-1.12l-.29-.17-2.97.78.79-2.9-.19-.3A8 8 0 1 1 12 19.9Zm4.4-5.98c-.24-.12-1.43-.7-1.65-.79-.22-.08-.38-.12-.54.12-.16.24-.62.79-.76.95-.14.16-.28.18-.52.06a6.6 6.6 0 0 1-3.27-2.86c-.25-.42.25-.39.7-1.3.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46a.88.88 0 0 0-.64.3 2.68 2.68 0 0 0-.84 2c0 1.18.86 2.32.98 2.48.12.16 1.69 2.58 4.1 3.62 1.52.66 2.12.71 2.88.6.46-.07 1.43-.58 1.63-1.15.2-.56.2-1.05.14-1.15-.06-.1-.22-.16-.46-.27Z"/></svg>
+        <span>Solicite um orçamento</span>
+        <svg class="cta__chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+      </a>
       <p class="footer__copy">© <span class="js-year">2026</span> GSE Energia Solar. Todos os direitos reservados.</p>
     </div>
   </footer>
+
+  <a class="to-top" href="#inicio" aria-label="Voltar ao topo">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5"/></svg>
+  </a>
 
   <div class="rotate-hint" role="status" aria-live="polite" hidden>
     <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M3 9.5a9 9 0 0 1 3-5.5M2.2 5.6 6 4l.8 3.9"/></svg>
