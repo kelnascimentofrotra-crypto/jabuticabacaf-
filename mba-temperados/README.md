@@ -44,7 +44,9 @@ Substitua o arquivo em `assets/img/` **mantendo o mesmo nome**. Não precisa mex
 | `projeto-residencial.jpg` | Projetos: Boxes para banheiro (bloco grande) | 1600 × 960 px, paisagem |
 | `projeto-comercial.jpg` | Projetos: Fachadas e vitrines (bloco alto) | 900 × 1110 px, retrato |
 | `og-image.jpg` | Prévia ao compartilhar o link | 1200 × 630 px |
-| `favicon.svg` | Ícone da aba do navegador | SVG quadrado |
+| `favicon.svg` | Ícone da aba do navegador (navegadores atuais) | SVG quadrado com os cacos de vidro da logo |
+| `favicon-32.png` | Ícone da aba em navegadores mais antigos | 32 × 32 px |
+| `apple-touch-icon.png` | Ícone ao salvar o site na tela inicial do iPhone | 180 × 180 px, sem cantos arredondados |
 
 Os caminhos das imagens de fundo ficam no bloco `<style>` do `<head>` do `index.html`; as demais estão nas tags `<img>`.
 
