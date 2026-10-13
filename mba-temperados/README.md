@@ -24,7 +24,7 @@ mba-temperados/
 ## Antes de publicar
 
 - [ ] **WhatsApp:** no fim do `index.html`, no bloco `CONFIG`, troque `5500000000000` pelo número com DDI + DDD, só dígitos (ex.: `5511987654321`). Todos os botões de WhatsApp e o formulário usam esse número.
-- [ ] **Contatos visíveis:** na seção Contato, troque `(00) 00000-0000`, `contato@seudominio.com.br` (texto e `mailto:`), "Sua cidade e região" e o horário.
+- [ ] **Contatos visíveis:** na seção Contato **e no rodapé**, troque `(00) 00000-0000`, `contato@seudominio.com.br` (texto e `mailto:`), "Sua cidade e região" e o horário.
 - [ ] **Depoimentos:** os três textos são **exemplos de layout**. Substitua por avaliações reais de clientes, com autorização.
 - [ ] **Números:** "+500 projetos entregues" e "+500 clientes satisfeitos" são ilustrativos. Ajuste para os dados reais da empresa.
 - [ ] **Imagens:** troque pelas fotos reais dos serviços (veja abaixo).
@@ -39,19 +39,23 @@ Substitua o arquivo em `assets/img/` **mantendo o mesmo nome**. Não precisa mex
 | `hero.jpg` | Fundo da hero (tablet e computador) | 2400 × 1600 px, paisagem. Deixe o lado esquerdo mais "limpo" (céu, parede): o texto fica ali |
 | `hero-mobile.jpg` | Fundo da hero (celular) | 1600 × 1080 px. Pode ser a mesma foto, menor. No celular aparece a parte central-direita |
 | `hero-card.jpg` | Miniatura do card "Modelos de box" | 240 × 240 px |
-| `como-funciona-1-medicao.jpg` | Como funciona, etapa 01 | 800 × 600 px (4:3) |
-| `como-funciona-2-projeto.jpg` | Como funciona, etapa 02 | 800 × 600 px (4:3) |
-| `como-funciona-3-fabricacao.jpg` | Como funciona, etapa 03 | 800 × 600 px (4:3) |
-| `como-funciona-4-instalacao.jpg` | Como funciona, etapa 04 | 800 × 600 px (4:3) |
 | `destaque.jpg` | Segunda hero (tablet e computador) | 2400 × 1430 px, paisagem, texto à esquerda |
 | `destaque-mobile.jpg` | Segunda hero (celular) | 1600 × 950 px |
-| `projeto-residencial.jpg` | Projetos: Boxes para banheiro | 800 × 600 px (4:3) |
-| `projeto-comercial.jpg` | Projetos: Fachadas e vitrines | 800 × 600 px (4:3) |
-| `projeto-guarda-corpo.jpg` | Projetos: Guarda-corpos e sacadas | 800 × 600 px (4:3) |
+| `projeto-residencial.jpg` | Projetos: Boxes para banheiro (bloco grande) | 1600 × 960 px, paisagem |
+| `projeto-comercial.jpg` | Projetos: Fachadas e vitrines (bloco alto) | 900 × 1110 px, retrato |
 | `og-image.jpg` | Prévia ao compartilhar o link | 1200 × 630 px |
 | `favicon.svg` | Ícone da aba do navegador | SVG quadrado |
 
 Os caminhos das imagens de fundo ficam no bloco `<style>` do `<head>` do `index.html`; as demais estão nas tags `<img>`.
+
+Cada foto aparece em um só lugar do site. O bloco **Guarda-corpos e sacadas** usa um desenho técnico em vez de foto (a única foto de guarda-corpo é a da hero). Quando tiver uma foto real, no `index.html` troque o bloco `<div class="tile__drawing">…</div>` desse card por:
+
+```html
+<img src="assets/img/projeto-guarda-corpo.jpg" alt="Guarda-corpo de vidro na varanda" width="900" height="1110" loading="lazy" decoding="async" class="tile__img">
+<div class="tile__shade" aria-hidden="true"></div>
+```
+
+e tire `tile--drawing` da lista de classes do card.
 
 **Dicas para fotos leves e nítidas:** JPG com qualidade em torno de 80%, até ~150 KB por foto de card e até ~400 KB para os fundos. O site gratuito [Squoosh](https://squoosh.app) redimensiona e comprime no navegador. Fotos reais de obras entregues pela MBA passam mais confiança que fotos de banco.
 
@@ -80,16 +84,25 @@ Ao abrir a página, uma abertura de cerca de 3 segundos mostra a logo: os cacos 
 
 No computador (telas a partir de 960 px de largura) os links do menu e o botão "Faça seu orçamento" ficam sempre no topo. Abaixo disso, no celular e no tablet em pé, o menu abre pelo botão com três linhas.
 
-## Cores e fontes
+## Sistema visual
+
+O site inteiro segue a atmosfera da hero (céu ao entardecer, vidro, luzes quentes). Depois da hero, cada seção tem um fundo escuro próprio, com luz ambiente em pontos diferentes, e começa na cor em que a anterior termina, para a passagem ser contínua.
 
 | Uso | Valor | Onde mudar |
 |---|---|---|
-| Amarelo da marca (botões, destaques, ícones) | `#FFC93C` (hover `#FFD15C`) | `tailwind.config.js` → `brand` |
-| Laranja da seta do card | `#FF7A00` | `tailwind.config.js` → `accent` |
+| Fundos das seções (do mais fundo ao mais claro) | `night` 950–600: `#06080D` `#0A0F17` `#0D1320` `#111A2A` `#18233A` `#22304A` | `tailwind.config.js` → `night` |
+| Textos sobre fundo escuro | `mist` 100–400: `#F4F6FA` (títulos) `#D6DDE8` `#AEB9CB` (textos) `#8592A8` (secundário) | `tailwind.config.js` → `mist` |
+| Amarelo da marca (botões, destaques nos títulos) | `#FFC93C` (hover `#FFD15C`) | `tailwind.config.js` → `brand` |
+| Azul do vidro (ícones e luz ambiente) | `#3D93D8` e `#8DCBF7` | `tailwind.config.js` → `glass` |
+| Laranja da seta do card da hero | `#FF7A00` | `tailwind.config.js` → `accent` |
 | Azul da logo (degradê) | `#8DCBF7` → `#3D93D8` → `#1F64A6` | `src/input.css` → `.grad` |
-| Fundo escuro | `#0E1116` | `tailwind.config.js` → `ink` |
-| Títulos | Montserrat 600–800 | Google Fonts, no `<head>` |
-| Textos | Inter 400–700 | Google Fonts, no `<head>` |
+| Títulos | Montserrat 800, `.section-title` (32 a 52 px conforme a tela) | `src/input.css` |
+| Textos | Inter, 15 a 17 px, entrelinha 1,7 | `src/input.css` |
+| Raios | 20 px em cards e blocos; 14 px em botões, campos e ícones | `src/input.css` |
+
+Componentes reaproveitados em todo o site (em `src/input.css`): `.eyebrow` (chamada com traço amarelo, igual à da hero), `.section-title` com `.hl` (palavra em amarelo), `.section-lead`, `.section-head`, `.surface` (card de vidro escuro), `.icon-tile` (ícone em placa azul que acende em amarelo no hover), `.tag`, `.link-arrow`, `.btn`.
+
+**Movimento:** entrada suave das seções ao rolar, linha do tempo que se desenha em "Como funciona", leve parallax na foto da segunda hero (só no computador) e efeitos discretos de hover. Tudo isso é desligado para quem configurou o aparelho para reduzir animações.
 
 ## Hero em camadas
 

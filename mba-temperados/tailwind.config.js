@@ -28,7 +28,27 @@ module.exports = {
           soft: '#1A1F27',
           muted: '#5B6472',
         },
-        surface: '#F5F6F8',
+        // Superfícies escuras (tons do céu ao entardecer da hero), do mais fundo ao mais claro
+        night: {
+          950: '#06080D',
+          900: '#0A0F17',
+          850: '#0D1320',
+          800: '#111A2A',
+          700: '#18233A',
+          600: '#22304A',
+        },
+        // Textos sobre fundo escuro
+        mist: {
+          100: '#F4F6FA',
+          200: '#D6DDE8',
+          300: '#AEB9CB',
+          400: '#8592A8',
+        },
+        // Azul da logo (vidro)
+        glass: {
+          DEFAULT: '#3D93D8',
+          light: '#8DCBF7',
+        },
         whatsapp: '#25D366',
       },
       fontFamily: {
