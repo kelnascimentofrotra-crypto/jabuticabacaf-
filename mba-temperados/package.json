@@ -1,0 +1,13 @@
+{
+  "name": "mba-temperados-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing page da MBA Temperados — vidraçaria e vidro temperado sob medida.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --minify",
+    "watch:css": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "3.4.17"
+  }
+}

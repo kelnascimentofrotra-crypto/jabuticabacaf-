@@ -1,0 +1,507 @@
+/*
+ * MBA Temperados — estilos
+ * Fonte do CSS. Depois de editar, gere assets/css/style.css com:
+ *   npm run build:css
+ */
+
+@tailwind base;
+@tailwind components;
+
+/* =====================================================================
+   BASE
+   ===================================================================== */
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  @apply bg-white font-sans text-ink antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+section[id] {
+  scroll-margin-top: 64px;
+}
+
+:focus-visible {
+  outline: 3px solid theme('colors.brand.DEFAULT');
+  outline-offset: 3px;
+}
+
+::selection {
+  background: theme('colors.brand.DEFAULT');
+  color: theme('colors.ink.DEFAULT');
+}
+
+/* Ícones SVG (sprite no início do <body>) */
+.ico {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
+.ico-fill {
+  fill: currentColor;
+  stroke: none;
+  flex-shrink: 0;
+}
+
+/* =====================================================================
+   COMPONENTES
+   ===================================================================== */
+.container-x {
+  @apply mx-auto w-full max-w-container px-5 sm:px-8;
+}
+
+/* Botões */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[14px] font-heading font-bold transition duration-200 ease-out;
+}
+
+.btn .ico {
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .ico {
+  transform: translateX(3px);
+}
+
+.btn-primary {
+  @apply bg-brand text-ink shadow-brand hover:-translate-y-0.5 hover:bg-brand-light active:translate-y-0;
+}
+
+.btn-ghost {
+  @apply border border-white/40 bg-white/5 text-white backdrop-blur-sm hover:border-white/70 hover:bg-white/10;
+}
+
+.btn-md {
+  @apply h-12 px-6 text-[15px];
+}
+
+.btn-lg {
+  @apply h-[60px] px-8 text-base;
+}
+
+/* Títulos de seção */
+.eyebrow {
+  @apply inline-flex items-center gap-2 rounded-full bg-brand-soft px-3.5 py-1.5 font-heading text-xs font-bold uppercase tracking-[0.18em] text-brand-deep;
+}
+
+.eyebrow::before {
+  content: '';
+  @apply h-1.5 w-1.5 rounded-full bg-brand;
+}
+
+.eyebrow--dark {
+  @apply bg-white/10 text-brand;
+}
+
+.section-title {
+  @apply font-heading text-[2rem] font-extrabold leading-[1.12] tracking-[-0.02em] sm:text-[2.5rem] lg:text-[2.875rem];
+  text-wrap: balance;
+}
+
+.section-lead {
+  @apply text-base leading-relaxed sm:text-lg;
+}
+
+/* Marca-texto amarelo atrás de uma palavra do título */
+.marker {
+  background: linear-gradient(
+    transparent 58%,
+    rgba(255, 201, 60, 0.65) 58%,
+    rgba(255, 201, 60, 0.65) 90%,
+    transparent 90%
+  );
+  padding: 0 0.08em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Cards */
+.card {
+  @apply rounded-card border border-black/[0.06] bg-white shadow-card;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  @apply -translate-y-1 shadow-card-hover;
+}
+
+.icon-circle {
+  @apply grid h-14 w-14 shrink-0 place-items-center rounded-full bg-brand text-ink shadow-brand-sm;
+}
+
+.step-badge {
+  @apply absolute left-4 top-4 grid h-11 w-11 place-items-center rounded-full bg-brand font-heading text-sm font-extrabold text-ink shadow-brand-sm;
+}
+
+.tag {
+  @apply absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 font-heading text-[11px] font-bold uppercase tracking-[0.14em] text-ink shadow-sm;
+}
+
+.avatar {
+  @apply grid h-12 w-12 shrink-0 place-items-center rounded-full object-cover font-heading text-sm font-extrabold text-ink;
+  background: linear-gradient(135deg, #ffe08a, #ffc93c);
+}
+
+.avatar--dark {
+  @apply text-brand;
+  background: linear-gradient(135deg, #2a303b, #0e1116);
+}
+
+.avatar--light {
+  @apply text-ink;
+  background: linear-gradient(135deg, #ffffff, #e3e7ee);
+}
+
+/* Formulário */
+.label {
+  @apply mb-2 block text-sm font-semibold text-ink;
+}
+
+.field {
+  @apply block w-full rounded-xl border border-black/10 bg-surface px-4 py-3.5 text-[15px] text-ink transition placeholder:text-ink-muted/70 focus:border-brand focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand/30;
+}
+
+select.field {
+  @apply appearance-none pr-11;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%230E1116' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+/* =====================================================================
+   HEADER (camada 3 da hero) — fixo no topo
+   ===================================================================== */
+.site-header {
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header.is-scrolled,
+.site-header.is-open {
+  background-color: rgba(10, 13, 18, 0.88);
+  -webkit-backdrop-filter: saturate(140%) blur(14px);
+  backdrop-filter: saturate(140%) blur(14px);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06), 0 12px 32px -16px rgba(0, 0, 0, 0.5);
+}
+
+.site-header.is-open {
+  background-color: rgba(10, 13, 18, 0.97);
+}
+
+.nav-link {
+  @apply relative py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.nav-link::after {
+  content: '';
+  @apply absolute -bottom-1 left-0 right-0 h-[3px] rounded-full bg-brand;
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+
+.nav-link:hover::after {
+  transform: scaleX(0.4);
+}
+
+.nav-link.is-active {
+  @apply text-white;
+}
+
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+.menu-toggle {
+  @apply grid h-11 w-11 place-items-center rounded-xl border border-white/25 bg-white/5 text-white backdrop-blur-sm transition hover:bg-white/10;
+}
+
+.menu-toggle .icon-close,
+.menu-toggle[aria-expanded='true'] .icon-open {
+  display: none;
+}
+
+.menu-toggle[aria-expanded='true'] .icon-close {
+  display: block;
+}
+
+/* Menu do celular ocupa a tela toda abaixo do header */
+.mobile-menu {
+  height: calc(100vh - 72px);
+  height: calc(100svh - 72px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (min-width: 1024px) {
+  .mobile-menu {
+    height: calc(100vh - 88px);
+    height: calc(100svh - 88px);
+  }
+}
+
+.mobile-link {
+  @apply flex items-center justify-between border-b border-white/10 py-4 font-heading text-lg font-semibold text-white/90 transition-colors hover:text-brand;
+}
+
+.mobile-link.is-active {
+  @apply text-brand;
+}
+
+/* =====================================================================
+   HERO — construída em camadas
+   1 Background · 2 Overlay · 3 Header · 4 Conteúdo · 5 Card flutuante
+   ===================================================================== */
+.hero {
+  @apply relative isolate flex overflow-hidden bg-ink;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* Camada 1 — background (a imagem fica no <style> do index.html) */
+.hero__bg {
+  @apply absolute inset-0;
+  z-index: 0;
+  background-color: #2b2f3a;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 75% center;
+}
+
+/* Camada 2 — overlay de leitura */
+.hero__overlay {
+  @apply pointer-events-none absolute inset-0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(4, 6, 10, 0.55) 0%, rgba(4, 6, 10, 0.12) 22%, rgba(4, 6, 10, 0.28) 50%, rgba(4, 6, 10, 0.86) 100%);
+}
+
+.hero__inner {
+  @apply relative flex w-full flex-col justify-end pb-8 pt-28 sm:pb-12;
+  z-index: 2;
+}
+
+/* Camada 4 — conteúdo */
+.hero__content {
+  @apply relative max-w-[640px];
+  z-index: 3;
+}
+
+/* Gradiente escuro suave atrás do texto */
+.hero__content::before {
+  content: '';
+  @apply pointer-events-none absolute;
+  inset: -20% -30% -20% -40%;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.16) 60%, rgba(0, 0, 0, 0));
+}
+
+.hero__eyebrow {
+  @apply inline-flex items-start gap-3 font-heading text-[12px] font-bold uppercase leading-normal tracking-[0.2em] text-white sm:text-[13px] sm:tracking-[0.22em];
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Traço amarelo alinhado à primeira linha (mesmo quando o texto quebra) */
+.hero__eyebrow::before {
+  content: '';
+  @apply h-[3px] w-8 shrink-0 rounded-full bg-brand;
+  margin-top: calc(0.75em - 1.5px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Títulos grandes sobre foto (hero e destaque) */
+.display-title {
+  @apply font-heading font-extrabold text-white;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.28), 0 10px 36px rgba(0, 0, 0, 0.4);
+}
+
+.display-title .hl {
+  color: theme('colors.brand.DEFAULT');
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.32), 0 10px 36px rgba(0, 0, 0, 0.45);
+}
+
+.hero__title {
+  font-size: clamp(2.75rem, 1.6rem + 4.6vw, 5.5rem);
+}
+
+.hero__text {
+  @apply max-w-[34rem] text-base leading-relaxed text-white/90 sm:text-lg lg:text-[19px];
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.hero__cta {
+  box-shadow: 0 16px 36px -10px rgba(255, 201, 60, 0.7), 0 4px 12px rgba(0, 0, 0, 0.28);
+}
+
+/* Camada 5 — card flutuante */
+.hero__card {
+  @apply relative mt-8 flex w-full max-w-[420px] items-center gap-4 rounded-card bg-white p-3 pr-4 text-left shadow-float;
+  z-index: 4;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: rise 0.8s 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.hero__card:hover {
+  transform: translateY(-4px);
+}
+
+.hero__card:hover .hero__card-arrow {
+  transform: translateX(3px);
+}
+
+.hero__card-arrow {
+  @apply grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-white;
+  box-shadow: 0 8px 18px -6px rgba(255, 122, 0, 0.7);
+  transition: transform 0.25s ease;
+}
+
+/* Entrada suave do conteúdo da hero */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero__content > * {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.hero__content > :nth-child(2) { animation-delay: 0.08s; }
+.hero__content > :nth-child(3) { animation-delay: 0.16s; }
+.hero__content > :nth-child(4) { animation-delay: 0.24s; }
+
+@media (min-width: 1024px) {
+  .hero__bg {
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  .hero__overlay {
+    background:
+      linear-gradient(180deg, rgba(4, 6, 10, 0.5) 0%, rgba(4, 6, 10, 0) 20%),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, transparent 60%);
+  }
+
+  .hero__inner {
+    @apply justify-center pb-24 pt-[88px];
+  }
+
+  .hero__card {
+    position: absolute;
+    right: 2rem;
+    bottom: 3rem;
+    width: 340px;
+    margin-top: 0;
+  }
+}
+
+/* =====================================================================
+   DESTAQUE (segunda hero)
+   ===================================================================== */
+.destaque__bg {
+  @apply absolute inset-0;
+  z-index: 0;
+  background-color: #1a1d22;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 60% center;
+}
+
+.destaque__overlay {
+  @apply pointer-events-none absolute inset-0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(5, 7, 10, 0.55) 0%, rgba(5, 7, 10, 0.82) 100%);
+}
+
+.destaque__title {
+  font-size: clamp(2.5rem, 1.4rem + 3.8vw, 4.5rem);
+}
+
+@media (min-width: 768px) {
+  .destaque__bg {
+    background-position: center;
+    image-rendering: -webkit-optimize-contrast;
+  }
+
+  .destaque__overlay {
+    background: linear-gradient(90deg, rgba(5, 7, 10, 0.86) 0%, rgba(5, 7, 10, 0.6) 45%, rgba(5, 7, 10, 0.12) 100%);
+  }
+}
+
+/* =====================================================================
+   PROJETOS — barra de resultados
+   ===================================================================== */
+.stat-number {
+  @apply font-heading text-[2.5rem] font-extrabold leading-none tracking-[-0.02em] text-brand;
+}
+
+.stat-label {
+  @apply mt-2 text-[15px] leading-snug text-white/70;
+}
+
+/* =====================================================================
+   WHATSAPP FLUTUANTE
+   ===================================================================== */
+.wa-float {
+  @apply fixed bottom-5 right-5 z-40 grid h-14 w-14 place-items-center rounded-full bg-whatsapp text-white shadow-float sm:bottom-6 sm:right-6;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.js .wa-float:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(16px) scale(0.9);
+  pointer-events: none;
+}
+
+/* =====================================================================
+   ANIMAÇÃO AO ROLAR (só com JavaScript ativo)
+   ===================================================================== */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+
+.js [data-reveal].is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .hero__content > *,
+  .hero__card {
+    animation: none;
+  }
+
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .card,
+  .btn,
+  .hero__card {
+    transition: none;
+  }
+}
+
+@tailwind utilities;
