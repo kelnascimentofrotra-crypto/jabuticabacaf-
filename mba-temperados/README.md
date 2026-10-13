@@ -43,6 +43,7 @@ Substitua o arquivo em `assets/img/` **mantendo o mesmo nome**. Não precisa mex
 | `destaque-mobile.jpg` | Segunda hero (celular) | 1600 × 950 px |
 | `projeto-residencial.jpg` | Projetos: Boxes para banheiro (bloco grande) | 1600 × 960 px, paisagem |
 | `projeto-comercial.jpg` | Projetos: Fachadas e vitrines (bloco alto) | 900 × 1110 px, retrato |
+| `projeto-guarda-corpo.jpg` | Projetos: Guarda-corpos e sacadas | 1000 × 900 px ou maior, com as sacadas do lado esquerdo da foto |
 | `og-image.jpg` | Prévia ao compartilhar o link | 1200 × 630 px |
 | `favicon.svg` | Ícone da aba do navegador (navegadores atuais) | SVG quadrado com os cacos de vidro da logo |
 | `favicon-32.png` | Ícone da aba em navegadores mais antigos | 32 × 32 px |
@@ -50,14 +51,7 @@ Substitua o arquivo em `assets/img/` **mantendo o mesmo nome**. Não precisa mex
 
 Os caminhos das imagens de fundo ficam no bloco `<style>` do `<head>` do `index.html`; as demais estão nas tags `<img>`.
 
-Cada foto aparece em um só lugar do site. O bloco **Guarda-corpos e sacadas** usa um desenho técnico em vez de foto (a única foto de guarda-corpo é a da hero). Quando tiver uma foto real, no `index.html` troque o bloco `<div class="tile__drawing">…</div>` desse card por:
-
-```html
-<img src="assets/img/projeto-guarda-corpo.jpg" alt="Guarda-corpo de vidro na varanda" width="900" height="1110" loading="lazy" decoding="async" class="tile__img">
-<div class="tile__shade" aria-hidden="true"></div>
-```
-
-e tire `tile--drawing` da lista de classes do card.
+Cada foto aparece em um só lugar do site. A foto atual de guarda-corpos é pequena (392 × 348 px) e foi ampliada; se houver o arquivo original maior, troque `projeto-guarda-corpo.jpg` para ela ficar mais nítida.
 
 **Dicas para fotos leves e nítidas:** JPG com qualidade em torno de 80%, até ~150 KB por foto de card e até ~400 KB para os fundos. O site gratuito [Squoosh](https://squoosh.app) redimensiona e comprime no navegador. Fotos reais de obras entregues pela MBA passam mais confiança que fotos de banco.
 
