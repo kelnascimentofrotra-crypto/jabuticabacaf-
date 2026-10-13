@@ -2,6 +2,15 @@
 module.exports = {
   content: ['./index.html'],
   theme: {
+    // "nav": a partir de 960px o menu completo aparece no topo (sem o botão de menu)
+    screens: {
+      sm: '640px',
+      md: '768px',
+      nav: '960px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       colors: {
         // Amarelo da marca (botões, destaques, ícones)

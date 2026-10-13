@@ -195,7 +195,7 @@ select.field {
 }
 
 .nav-link {
-  @apply relative py-2 text-[15px] font-medium text-white/85 transition-colors hover:text-white;
+  @apply relative py-2 text-[14px] font-medium text-white/85 transition-colors hover:text-white xl:text-[15px];
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
@@ -239,19 +239,410 @@ select.field {
   overscroll-behavior: contain;
 }
 
-@media (min-width: 1024px) {
-  .mobile-menu {
-    height: calc(100vh - 88px);
-    height: calc(100svh - 88px);
-  }
-}
-
 .mobile-link {
   @apply flex items-center justify-between border-b border-white/10 py-4 font-heading text-lg font-semibold text-white/90 transition-colors hover:text-brand;
 }
 
 .mobile-link.is-active {
   @apply text-brand;
+}
+
+/* =====================================================================
+   LOGO (header e rodapé)
+   Tudo em "em": muda o font-size do .brand e a logo inteira acompanha.
+   ===================================================================== */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.16em;
+  font-size: 18px;
+  line-height: 1;
+}
+
+@media (min-width: 1024px) {
+  .brand {
+    font-size: 20px;
+  }
+}
+
+.brand__icon {
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  height: 3em;
+  overflow: visible;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+.brand__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.55em;
+  font-family: theme('fontFamily.heading');
+  font-kerning: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+
+.brand__mba {
+  font-size: 1em;
+  font-weight: 800;
+  line-height: 0.86;
+  letter-spacing: -0.03em;
+}
+
+.brand__temp {
+  margin-top: 0.3em;
+  font-size: 0.51em;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.brand__tag {
+  position: absolute;
+  top: calc(100% + 0.45em);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: max(0.27em, 11px);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #c3cdd6;
+}
+
+.brand--footer {
+  font-size: 26px;
+  padding-bottom: 0.9em;
+}
+
+/* Azul da marca em degradê, para fundos escuros */
+.grad {
+  background-image: linear-gradient(180deg, #8dcbf7 0%, #3d93d8 50%, #1f64a6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =====================================================================
+   ENTRADA CINEMATOGRÁFICA DA LOGO
+   html.intro-on   → abertura na tela (classe posta no <head>)
+   html.intro-run  → linha do tempo rodando (depois das fontes)
+   html.intro-exit → fundo some e a logo voa até o header (JS)
+   ===================================================================== */
+.intro {
+  display: none;
+}
+
+.intro-on .intro {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.intro-exit .intro {
+  pointer-events: none;
+}
+
+.intro__bg {
+  position: absolute;
+  inset: 0;
+  background: #05080d;
+  transition: opacity var(--exit, 900ms) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.intro__bg::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120vmax;
+  height: 120vmax;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(40, 118, 190, 0.4), rgba(40, 118, 190, 0.12) 45%, rgba(40, 118, 190, 0) 70%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+}
+
+.intro-run .intro__bg::before {
+  animation: introGlow 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+.intro-exit .intro__bg {
+  opacity: 0;
+}
+
+.intro__logo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.16em;
+  font-size: clamp(34px, 9vw, 66px);
+  line-height: 1;
+}
+
+.intro__icon {
+  display: block;
+  width: auto;
+  height: 3.3em;
+  overflow: visible;
+  transform-origin: 0 0;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.55));
+}
+
+.intro__text {
+  transform-origin: 0 0;
+}
+
+.intro .edge {
+  stroke: #fff;
+  stroke-opacity: 0.85;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+/* 1. Cacos de vidro voam e se encaixam */
+.intro .shard {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.intro-run .intro .shard {
+  animation: shardIn 1.05s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0s) forwards;
+}
+
+/* 2. "MBA" sobe letra por letra, saindo do desfoque */
+.intro .ltr {
+  display: inline-block;
+  opacity: 0;
+}
+
+.intro-run .intro .brand__mba .ltr {
+  animation: letterIn 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) calc(0.62s + var(--i) * 0.09s) forwards;
+}
+
+/* 3. "TEMPERADOS" se fecha do espaçado para o normal */
+.intro-run .intro .brand__temp .ltr {
+  animation: trackIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.92s forwards;
+}
+
+.intro__tag {
+  opacity: 0;
+}
+
+.intro-run .intro__tag {
+  animation: tagIn 0.7s ease-out 1.38s forwards;
+}
+
+/* 4. Lampejos nas pontas do vidro + reflexo horizontal */
+.intro__glint {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+}
+
+.intro-run .intro__glint--1 {
+  animation: glint 0.95s ease-out 1.02s forwards;
+}
+
+.intro-run .intro__glint--2 {
+  animation: glint 0.95s ease-out 1.3s forwards;
+}
+
+.intro__flare {
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: linear-gradient(90deg, rgba(110, 180, 255, 0), rgba(160, 210, 255, 0.9) 50%, rgba(110, 180, 255, 0));
+  box-shadow: 0 0 22px 3px rgba(70, 150, 240, 0.45);
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.intro-run .intro__flare {
+  animation: flare 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.95s forwards;
+}
+
+/* 5. Brilho passando pela logo inteira */
+.intro__sweep {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -30%;
+  width: 30%;
+  pointer-events: none;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 15%, rgba(255, 255, 255, 0.75) 50%, rgba(255, 255, 255, 0) 85%);
+  mix-blend-mode: overlay;
+  opacity: 0;
+}
+
+.intro-run .intro__sweep {
+  animation: sweep 1.05s cubic-bezier(0.45, 0, 0.2, 1) 1.55s forwards;
+}
+
+.intro__hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+  margin: 0;
+  text-align: center;
+  font: 600 11px/1 theme('fontFamily.sans');
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.42);
+  opacity: 0;
+}
+
+.intro-run .intro__hint {
+  animation: fadeIn 0.6s ease 0.9s forwards;
+}
+
+.intro-exit .intro__hint {
+  animation: none;
+  opacity: 0;
+}
+
+.intro__hint-touch {
+  display: none;
+}
+
+@media (hover: none) {
+  .intro__hint-mouse {
+    display: none;
+  }
+
+  .intro__hint-touch {
+    display: inline;
+  }
+}
+
+/* Enquanto a abertura roda: logo do header escondida e hero em espera */
+.intro-on [data-brand] {
+  opacity: 0;
+}
+
+.intro-hold .hero__content > *,
+.intro-hold .hero__card {
+  animation-play-state: paused;
+}
+
+@keyframes introGlow {
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes shardIn {
+  0% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) rotate(var(--r)) scale(0.55);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes letterIn {
+  0% {
+    opacity: 0;
+    transform: translateY(0.5em) scale(0.92);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes trackIn {
+  0% {
+    opacity: 0;
+    transform: translateX(calc(var(--o) * 0.6em));
+    filter: blur(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@keyframes tagIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 0.5em);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes glint {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotate(-35deg);
+  }
+  35% {
+    opacity: 1;
+    transform: scale(1.15) rotate(8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.35) rotate(45deg);
+  }
+}
+
+@keyframes flare {
+  0% {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(0) skewX(-12deg);
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(560%) skewX(-12deg);
+  }
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
 }
 
 /* =====================================================================
@@ -484,6 +875,10 @@ select.field {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .intro {
+    display: none !important;
   }
 
   .hero__content > *,

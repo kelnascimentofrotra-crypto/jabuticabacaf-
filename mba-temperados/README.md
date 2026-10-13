@@ -59,12 +59,34 @@ Os caminhos das imagens de fundo ficam no bloco `<style>` do `<head>` do `index.
 
 As fotos atuais foram recortadas e otimizadas a partir das referências enviadas e são **provisórias**: confirme que você tem direito de uso comercial antes de publicar ou substitua pelas fotos reais da MBA Temperados. Se usar bancos de imagem, [Unsplash](https://unsplash.com/license) e [Pexels](https://www.pexels.com/license/) permitem uso comercial gratuito; confira a licença de cada foto.
 
+## Logo
+
+A logo foi redesenhada em vetor a partir da arte enviada (que era uma montagem da logo numa parede), para ficar nítida em qualquer tamanho e poder ser animada.
+
+- **Ícone (cacos de vidro):** fica no `<symbol id="logo-icon">`, no início do `<body>` do `index.html`. O header e o rodapé usam esse símbolo.
+- **Nome:** "MBA" e "TEMPERADOS" são texto (fonte Montserrat) com o azul da marca em degradê. A frase "projetos em vidros" aparece no rodapé e na abertura.
+- **Tamanho:** tudo é proporcional ao `font-size` da classe `.brand` em `src/input.css`.
+- **Arquivo oficial:** se a MBA tiver a logo original em SVG, PDF ou AI, vale trocar o símbolo pelos desenhos oficiais.
+
+## Abertura com a logo
+
+Ao abrir a página, uma abertura de cerca de 3 segundos mostra a logo: os cacos de vidro voam e se encaixam, o nome aparece, um brilho passa pelo vidro e a logo voa até o topo da página.
+
+- Clicar, tocar, rolar ou apertar qualquer tecla pula a abertura.
+- Quem configurou o celular ou computador para reduzir animações não vê a abertura.
+- **Para desligar:** no `<head>` do `index.html`, apague a linha que contém `d.classList.add('intro-on', 'intro-hold')`.
+
+## Menu
+
+No computador (telas a partir de 960 px de largura) os links do menu e o botão "Faça seu orçamento" ficam sempre no topo. Abaixo disso, no celular e no tablet em pé, o menu abre pelo botão com três linhas.
+
 ## Cores e fontes
 
 | Uso | Valor | Onde mudar |
 |---|---|---|
 | Amarelo da marca (botões, destaques, ícones) | `#FFC93C` (hover `#FFD15C`) | `tailwind.config.js` → `brand` |
 | Laranja da seta do card | `#FF7A00` | `tailwind.config.js` → `accent` |
+| Azul da logo (degradê) | `#8DCBF7` → `#3D93D8` → `#1F64A6` | `src/input.css` → `.grad` |
 | Fundo escuro | `#0E1116` | `tailwind.config.js` → `ink` |
 | Títulos | Montserrat 600–800 | Google Fonts, no `<head>` |
 | Textos | Inter 400–700 | Google Fonts, no `<head>` |
@@ -75,7 +97,7 @@ A hero não é uma imagem com texto: cada parte é um elemento HTML separado.
 
 1. `.hero__bg`: foto de fundo (`background-size: cover`, centralizada no computador e em `75% center` no celular).
 2. `.hero__overlay`: gradiente de leitura, `linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 60%)` no computador e vertical no celular.
-3. `<header>`: fixo, transparente sobre a hero e escuro ao rolar. Abaixo de 1280 px vira menu hambúrguer.
+3. `<header>`: fixo, transparente sobre a hero e escuro ao rolar. Abaixo de 960 px vira menu hambúrguer.
 4. `.hero__content`: chamada, título com `text-shadow` e gradiente radial escuro atrás, texto e botão amarelo com sombra.
 5. `.hero__card`: card flutuante no canto inferior direito (a partir de 1024 px); no celular fica abaixo do botão.
 

@@ -43,7 +43,18 @@
     }
   </style>
 
-  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      // Entrada cinematográfica da logo (não roda para quem pediu menos animação)
+      try {
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('intro-on', 'intro-hold');
+      } catch (e) {}
+      // Segurança: a abertura nunca fica presa na tela
+      setTimeout(function () { d.classList.remove('intro-on', 'intro-hold', 'intro-run', 'intro-exit'); }, 9000);
+    })();
+  </script>
 </head>
 <body>
   <!-- Ícones -->
@@ -64,7 +75,74 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
     <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95z"/></symbol>
     <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></symbol>
+
+    <!-- Logo (vetor redesenhado a partir da arte da MBA Temperados) -->
+    <defs>
+      <linearGradient id="lg-blade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4A97D6"/><stop offset=".5" stop-color="#2467A3"/><stop offset="1" stop-color="#163F69"/></linearGradient>
+      <linearGradient id="lg-blue2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3A86C7"/><stop offset="1" stop-color="#174F84"/></linearGradient>
+      <linearGradient id="lg-silver" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".45" stop-color="#E3E7EB"/><stop offset="1" stop-color="#A9B2BC"/></linearGradient>
+      <linearGradient id="lg-silver2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4F6F8"/><stop offset="1" stop-color="#9EA8B3"/></linearGradient>
+      <radialGradient id="rg-glint"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" stop-color="#BFE0FF" stop-opacity=".45"/><stop offset="1" stop-color="#BFE0FF" stop-opacity="0"/></radialGradient>
+    </defs>
+    <symbol id="logo-icon" viewBox="-6 0 174 366">
+      <polygon points="2,69 -5,75 -3,280 70,364 76,360 4,273" fill="#0D2A49"/>
+      <g stroke="#fff" stroke-opacity=".85" stroke-width="1.4" stroke-linejoin="round">
+        <polygon points="2,69 16,73 58,262 76,360 4,273" fill="url(#lg-blade)"/>
+        <polygon points="14,64 138,3 60,262" fill="url(#lg-silver)"/>
+        <polygon points="14,64 80,120 60,262" fill="#2B3E55" fill-opacity=".16" stroke="none"/>
+        <polygon points="121,69 127,68 61,268 57,266" fill="#0B2540" stroke="none"/>
+        <polygon points="127,68 165,151 60,269" fill="url(#lg-silver2)"/>
+        <polygon points="96,165 165,151 60,269" fill="#2B3E55" fill-opacity=".14" stroke="none"/>
+        <polygon points="58,264 141,280 80,360 76,360" fill="url(#lg-silver2)"/>
+        <polygon points="104,300 141,280 80,360" fill="#2B3E55" fill-opacity=".2" stroke="none"/>
+        <polygon points="142,206 64,272 141,280" fill="url(#lg-blue2)"/>
+      </g>
+    </symbol>
   </svg>
+
+  <!-- =================================================================
+       ENTRADA CINEMATOGRÁFICA DA LOGO
+       Os cacos de vidro se encaixam, o nome aparece, um brilho passa
+       pela logo e ela voa até o topo da página. Clique, toque ou
+       qualquer tecla pula a abertura.
+       ================================================================= -->
+  <div class="intro" data-intro aria-hidden="true">
+    <div class="intro__bg"></div>
+    <div class="intro__flare"></div>
+    <div class="intro__logo">
+      <svg class="intro__icon" viewBox="-6 0 174 366">
+        <g class="shard" style="--x:-170px;--y:40px;--r:-35deg;--d:.05s">
+          <polygon points="2,69 -5,75 -3,280 70,364 76,360 4,273" fill="#0D2A49"/>
+          <polygon class="edge" points="2,69 16,73 58,262 76,360 4,273" fill="url(#lg-blade)"/>
+        </g>
+        <g class="shard" style="--x:-70px;--y:-230px;--r:28deg;--d:.13s">
+          <polygon class="edge" points="14,64 138,3 60,262" fill="url(#lg-silver)"/>
+          <polygon points="14,64 80,120 60,262" fill="#2B3E55" fill-opacity=".16"/>
+        </g>
+        <g class="shard" style="--x:210px;--y:-130px;--r:40deg;--d:.21s">
+          <polygon points="121,69 127,68 61,268 57,266" fill="#0B2540"/>
+          <polygon class="edge" points="127,68 165,151 60,269" fill="url(#lg-silver2)"/>
+          <polygon points="96,165 165,151 60,269" fill="#2B3E55" fill-opacity=".14"/>
+        </g>
+        <g class="shard" style="--x:130px;--y:210px;--r:-32deg;--d:.29s">
+          <polygon class="edge" points="58,264 141,280 80,360 76,360" fill="url(#lg-silver2)"/>
+          <polygon points="104,300 141,280 80,360" fill="#2B3E55" fill-opacity=".2"/>
+        </g>
+        <g class="shard" style="--x:240px;--y:70px;--r:30deg;--d:.37s">
+          <polygon class="edge" points="142,206 64,272 141,280" fill="url(#lg-blue2)"/>
+        </g>
+        <g transform="translate(138 3)"><g class="intro__glint intro__glint--1"><circle r="18" fill="url(#rg-glint)"/><path d="M0-28 1.8-1.8 28 0 1.8 1.8 0 28-1.8 1.8-28 0-1.8-1.8Z" fill="#fff"/></g></g>
+        <g transform="translate(141 280)"><g class="intro__glint intro__glint--2"><circle r="18" fill="url(#rg-glint)"/><path d="M0-28 1.8-1.8 28 0 1.8 1.8 0 28-1.8 1.8-28 0-1.8-1.8Z" fill="#fff"/></g></g>
+      </svg>
+      <div class="brand__text intro__text">
+        <span class="brand__mba"><span class="ltr grad" style="--i:0">M</span><span class="ltr grad" style="--i:1">B</span><span class="ltr grad" style="--i:2">A</span></span>
+        <span class="brand__temp"><span class="ltr grad" style="--o:-4.5">T</span><span class="ltr grad" style="--o:-3.5">E</span><span class="ltr grad" style="--o:-2.5">M</span><span class="ltr grad" style="--o:-1.5">P</span><span class="ltr grad" style="--o:-.5">E</span><span class="ltr grad" style="--o:.5">R</span><span class="ltr grad" style="--o:1.5">A</span><span class="ltr grad" style="--o:2.5">D</span><span class="ltr grad" style="--o:3.5">O</span><span class="ltr grad" style="--o:4.5">S</span></span>
+        <span class="brand__tag intro__tag">projetos em vidros</span>
+      </div>
+      <span class="intro__sweep"></span>
+    </div>
+    <p class="intro__hint"><span class="intro__hint-mouse">Clique para pular</span><span class="intro__hint-touch">Toque para pular</span></p>
+  </div>
 
   <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-lg focus:bg-brand focus:px-4 focus:py-2 focus:font-semibold focus:text-ink">Pular para o conteúdo</a>
 
@@ -73,20 +151,13 @@
        ================================================================= -->
   <header class="site-header fixed inset-x-0 top-0 z-50" data-header>
     <div class="container-x flex h-[72px] items-center justify-between gap-6 lg:h-[88px]">
-      <a href="#inicio" class="flex shrink-0 items-center gap-3" aria-label="MBA Temperados — voltar ao início">
-        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" class="shrink-0 drop-shadow">
-          <rect width="40" height="40" rx="11" fill="#FFC93C"/>
-          <rect x="11" y="9" width="18" height="22" rx="2.5" fill="none" stroke="#0E1116" stroke-width="2.4"/>
-          <path d="M15.5 21.5l6-6M17.5 26.5l8-8" fill="none" stroke="#0E1116" stroke-width="2.2" stroke-linecap="round"/>
-        </svg>
-        <span class="flex flex-col leading-none [text-shadow:0_1px_3px_rgba(0,0,0,.35)]">
-          <span class="font-heading text-[22px] font-extrabold tracking-[0.04em] text-white">MBA</span>
-          <span class="mt-1 font-heading text-[9.5px] font-semibold uppercase tracking-[0.34em] text-white/80">Temperados</span>
-        </span>
+      <a href="#inicio" class="brand shrink-0" aria-label="MBA Temperados — voltar ao início" data-brand>
+        <svg class="brand__icon" viewBox="-6 0 174 366" aria-hidden="true"><use href="#logo-icon"/></svg>
+        <span class="brand__text" aria-hidden="true"><span class="brand__mba grad">MBA</span><span class="brand__temp grad">TEMPERADOS</span></span>
       </a>
 
-      <nav aria-label="Navegação principal" class="hidden xl:block">
-        <ul class="flex items-center gap-9">
+      <nav aria-label="Navegação principal" class="hidden nav:block">
+        <ul class="flex items-center gap-5 xl:gap-9">
           <li><a href="#inicio" class="nav-link is-active" aria-current="true" data-nav>Início</a></li>
           <li><a href="#como-funciona" class="nav-link" data-nav>Como funciona</a></li>
           <li><a href="#vantagens" class="nav-link" data-nav>Vantagens</a></li>
@@ -96,19 +167,19 @@
         </ul>
       </nav>
 
-      <a href="#contato" class="btn btn-primary btn-md hidden xl:inline-flex">
+      <a href="#contato" class="btn btn-primary btn-md hidden px-5 text-[14px] nav:inline-flex xl:px-6 xl:text-[15px]">
         Faça seu orçamento
         <svg class="ico h-4 w-4" aria-hidden="true"><use href="#i-chevron"/></svg>
       </a>
 
-      <button type="button" class="menu-toggle xl:hidden" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>
+      <button type="button" class="menu-toggle nav:hidden" aria-expanded="false" aria-controls="menu-mobile" data-menu-toggle>
         <span class="sr-only">Abrir menu</span>
         <svg class="ico icon-open h-6 w-6" aria-hidden="true"><use href="#i-menu"/></svg>
         <svg class="ico icon-close h-6 w-6" aria-hidden="true"><use href="#i-close"/></svg>
       </button>
     </div>
 
-    <div id="menu-mobile" class="mobile-menu xl:hidden" hidden data-menu>
+    <div id="menu-mobile" class="mobile-menu nav:hidden" hidden data-menu>
       <nav aria-label="Menu" class="container-x pb-6 pt-2">
         <ul>
           <li><a href="#inicio" class="mobile-link is-active" data-nav>Início</a></li>
@@ -594,16 +665,9 @@
   <footer class="bg-[#080A0E] text-white/65">
     <div class="container-x grid grid-cols-2 gap-10 py-14 md:grid-cols-[1.5fr_1fr_1fr]">
       <div class="col-span-2 md:col-span-1">
-        <a href="#inicio" class="inline-flex items-center gap-3" aria-label="MBA Temperados — voltar ao início">
-          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true" class="shrink-0">
-            <rect width="40" height="40" rx="11" fill="#FFC93C"/>
-            <rect x="11" y="9" width="18" height="22" rx="2.5" fill="none" stroke="#0E1116" stroke-width="2.4"/>
-            <path d="M15.5 21.5l6-6M17.5 26.5l8-8" fill="none" stroke="#0E1116" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          <span class="flex flex-col leading-none">
-            <span class="font-heading text-[22px] font-extrabold tracking-[0.04em] text-white">MBA</span>
-            <span class="mt-1 font-heading text-[9.5px] font-semibold uppercase tracking-[0.34em] text-white/80">Temperados</span>
-          </span>
+        <a href="#inicio" class="brand brand--footer" aria-label="MBA Temperados — voltar ao início">
+          <svg class="brand__icon" viewBox="-6 0 174 366" aria-hidden="true"><use href="#logo-icon"/></svg>
+          <span class="brand__text" aria-hidden="true"><span class="brand__mba grad">MBA</span><span class="brand__temp grad">TEMPERADOS</span><span class="brand__tag">projetos em vidros</span></span>
         </a>
         <p class="mt-5 max-w-sm text-[15px] leading-relaxed">Vidraçaria especializada em vidro temperado sob medida para residências, condomínios e empresas.</p>
       </div>
@@ -632,7 +696,7 @@
     </div>
 
     <div class="border-t border-white/10">
-      <div class="container-x flex flex-col gap-2 py-6 text-sm sm:flex-row sm:items-center sm:justify-between">
+      <div class="container-x flex flex-col gap-2 py-6 pr-24 text-sm sm:flex-row sm:items-center sm:justify-between sm:pr-28">
         <p>© <span data-year>2026</span> MBA Temperados. Todos os direitos reservados.</p>
         <a href="#inicio" class="transition-colors hover:text-brand">Voltar ao topo ↑</a>
       </div>
@@ -657,6 +721,77 @@
 
     (function () {
       'use strict';
+
+      // Entrada cinematográfica da logo
+      const root = document.documentElement;
+      const intro = document.querySelector('[data-intro]');
+      const skipEvents = ['pointerdown', 'wheel', 'touchstart', 'keydown'];
+      const introTimers = [];
+      let introState = 'waiting';
+
+      const endIntro = () => {
+        if (introState === 'done') return;
+        introState = 'done';
+        introTimers.forEach(clearTimeout);
+        skipEvents.forEach((ev) => window.removeEventListener(ev, skipIntro));
+        root.classList.remove('intro-on', 'intro-hold', 'intro-run', 'intro-exit');
+        if (intro) intro.remove();
+      };
+
+      // Leva um elemento da abertura até a posição e o tamanho do alvo no header
+      const flyTo = (el, target, duration) => {
+        if (!el || !target || !el.animate) return;
+        const from = el.getBoundingClientRect();
+        const to = target.getBoundingClientRect();
+        if (!from.width || !to.width) return;
+        el.animate([
+          { transform: 'translate(0px, 0px) scale(1)' },
+          { transform: 'translate(' + (to.left - from.left) + 'px, ' + (to.top - from.top) + 'px) scale(' + to.width / from.width + ')' },
+        ], { duration, easing: 'cubic-bezier(.7, 0, .2, 1)', fill: 'forwards' });
+      };
+
+      const leaveIntro = (fast) => {
+        if (introState === 'leaving' || introState === 'done') return;
+        introState = 'leaving';
+        introTimers.forEach(clearTimeout);
+        const duration = fast ? 500 : 950;
+        intro.style.setProperty('--exit', duration + 'ms');
+        root.classList.add('intro-run', 'intro-exit');
+        root.classList.remove('intro-hold');
+        const tag = intro.querySelector('.intro__tag');
+        if (tag && tag.animate) {
+          tag.animate([{ opacity: getComputedStyle(tag).opacity }, { opacity: 0 }], { duration: 250, fill: 'forwards' });
+        }
+        const brand = document.querySelector('[data-brand]');
+        if (brand) {
+          flyTo(intro.querySelector('.intro__icon'), brand.querySelector('.brand__icon'), duration);
+          flyTo(intro.querySelector('.intro__text'), brand.querySelector('.brand__text'), duration);
+        }
+        introTimers.push(setTimeout(endIntro, duration + 60));
+      };
+
+      function skipIntro() {
+        leaveIntro(true);
+      }
+
+      if (intro && root.classList.contains('intro-on')) {
+        try {
+          skipEvents.forEach((ev) => window.addEventListener(ev, skipIntro, { passive: true }));
+          const startIntro = () => {
+            if (introState !== 'waiting') return;
+            introState = 'running';
+            root.classList.add('intro-run');
+            introTimers.push(setTimeout(() => leaveIntro(false), 2400));
+          };
+          // Espera as fontes (no máximo 0,9 s) para o nome não trocar de fonte no meio da animação
+          const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+          Promise.race([fontsReady, new Promise((resolve) => setTimeout(resolve, 900))]).then(startIntro);
+        } catch (err) {
+          endIntro();
+        }
+      } else if (intro) {
+        intro.remove();
+      }
 
       const waUrl = (msg) =>
         'https://wa.me/' + CONFIG.whatsapp.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg || CONFIG.mensagemPadrao);
@@ -734,7 +869,7 @@
           toggle.focus();
         }
       });
-      window.matchMedia('(min-width: 1280px)').addEventListener('change', (e) => {
+      window.matchMedia('(min-width: 960px)').addEventListener('change', (e) => {
         if (e.matches) setMenu(false);
       });
 
