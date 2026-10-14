@@ -23,7 +23,7 @@ const moradaApp = () => {
   // Número do WhatsApp que recebe os pedidos: só dígitos, com DDI e DDD (ex.: '5511999999999').
   // Vem de Configurações no painel. Vazio = o WhatsApp abre e a pessoa escolhe o contato.
   let WHATSAPP = '';
-  let BRAND = 'João Batista Corretor';
+  let BRAND = 'Cleuma Maia Corretora de Imóveis';
   // telefone enquanto digita: (11) 98765-4321 / (11) 3000-1234
   const telMask = (v) => {
     let d = String(v || '').replace(/\D/g, '');
@@ -2574,14 +2574,14 @@ const moradaApp = () => {
     $('#ctInfo').hidden = !info.length;
     // nomes antigos (o de exemplo "Morada", o do dono anterior, "Recanto do Acre Flats" e "Thiago Liro") não valem: fica o nome da marca
     const nomeCfg = String(c.nome_imobiliaria || '').trim();
-    const nome = /^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$|^o cara dos apartamentos$|^cleuma maia corretora de imóveis$/i.test(nomeCfg) ? '' : nomeCfg;
+    const nome = /^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$|^o cara dos apartamentos$/i.test(nomeCfg) ? '' : nomeCfg;
     if (nome) {
       document.title = document.title.split(BRAND).join(nome);
       BRAND = nome;
     }
     $('.menu-foot span').textContent = `© ${new Date().getFullYear()} ${BRAND}`;
     // dados da imobiliária para o Google (aparecem nos resultados de busca)
-    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-jb.jpg` };
+    const ld = { '@context': 'https://schema.org', '@type': 'RealEstateAgent', name: BRAND, url: `${location.origin}/`, image: `${location.origin}/assets/og-cm.jpg` };
     if (tel) ld.telephone = tel;
     if (c.email) ld.email = c.email;
     if (c.endereco) ld.address = c.endereco;

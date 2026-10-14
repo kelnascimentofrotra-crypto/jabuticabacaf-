@@ -1,6 +1,6 @@
 {
-  "name": "João Batista Corretor",
-  "short_name": "João Batista",
+  "name": "Cleuma Maia Corretora de Imóveis",
+  "short_name": "Cleuma Maia",
   "description": "Flats mobiliados e imóveis selecionados.",
   "lang": "pt-BR",
   "start_url": "/",
@@ -9,25 +9,25 @@
   "theme_color": "#faf8f3",
   "icons": [
     {
-      "src": "/jb-192.png",
+      "src": "/cm-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/jb-512.png",
+      "src": "/cm-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/jb-512.png",
+      "src": "/cm-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/jb.svg",
+      "src": "/cm.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
