@@ -99,7 +99,7 @@ No plano grátis, o Supabase pausa o projeto depois de 7 dias sem nenhum acesso.
 ## Páginas extras
 
 - `/privacidade` — Política de Privacidade (modelo; revise com o responsável pela imobiliária). Nome e contatos vêm das Configurações.
-- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og-cm.jpg`.
+- `/sitemap.xml` e `robots.txt` para o Google; página 404 própria; imagem de compartilhamento em `assets/og-jb.jpg`.
 
 ## Rodar sem Supabase
 
