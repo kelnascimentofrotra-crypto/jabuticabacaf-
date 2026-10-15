@@ -23,8 +23,9 @@ mba-temperados/
 
 ## Antes de publicar
 
-- [ ] **WhatsApp:** no fim do `index.html`, no bloco `CONFIG`, troque `5500000000000` pelo número com DDI + DDD, só dígitos (ex.: `5511987654321`). Todos os botões de WhatsApp e o formulário usam esse número.
-- [ ] **Contatos visíveis:** na seção Contato **e no rodapé**, troque `(00) 00000-0000`, `contato@seudominio.com.br` (texto e `mailto:`), "Sua cidade e região" e o horário.
+- [x] **WhatsApp:** configurado com (11) 95832-8927. Para trocar, no fim do `index.html`, no bloco `CONFIG`, mude `5511958328927` (DDI + DDD + número, só dígitos) e o número que aparece escrito na seção Contato e no rodapé. Todos os botões de WhatsApp e o formulário usam o número do `CONFIG`.
+- [x] **Facebook:** link na seção Contato e no rodapé (procure por `facebook.com` no `index.html` para trocar).
+- [ ] **Contatos visíveis:** na seção Contato **e no rodapé**, troque `contato@seudominio.com.br` (texto e `mailto:`), "Sua cidade e região" e o horário.
 - [ ] **Depoimentos:** os três textos são **exemplos de layout**. Substitua por avaliações reais de clientes, com autorização.
 - [ ] **Números:** "+500 projetos entregues" e "+500 clientes satisfeitos" são ilustrativos. Ajuste para os dados reais da empresa.
 - [ ] **Imagens:** troque pelas fotos reais dos serviços (veja abaixo).
