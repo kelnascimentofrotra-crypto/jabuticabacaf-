@@ -75,7 +75,8 @@ Ao abrir a página, uma abertura de cerca de 3 segundos mostra a logo: os cacos 
 
 - Clicar, tocar, rolar ou apertar qualquer tecla pula a abertura.
 - Quem configurou o celular ou computador para reduzir animações não vê a abertura.
-- **Para desligar:** no `<head>` do `index.html`, apague a linha que contém `d.classList.add('intro-on', 'intro-hold')`.
+- Todo o conteúdo da hero já está pronto atrás da abertura: quando ela termina, chamada, título, texto, botão e card aparecem juntos, sem esperar nada.
+- **Para desligar:** no `<head>` do `index.html`, apague a linha que contém `d.classList.add('intro-on')`.
 
 ## Menu
 
@@ -99,7 +100,9 @@ O site inteiro segue a atmosfera da hero (céu ao entardecer, vidro, luzes quent
 
 Componentes reaproveitados em todo o site (em `src/input.css`): `.eyebrow` (chamada com traço amarelo, igual à da hero), `.section-title` com `.hl` (palavra em amarelo), `.section-lead`, `.section-head`, `.surface` (card de vidro escuro), `.icon-tile` (ícone em placa azul que acende em amarelo no hover), `.tag`, `.link-arrow`, `.btn`.
 
-**Movimento:** entrada suave das seções ao rolar, linha do tempo que se desenha em "Como funciona", leve parallax na foto da segunda hero (só no computador) e efeitos discretos de hover. Tudo isso é desligado para quem configurou o aparelho para reduzir animações.
+**Movimento:** nenhum conteúdo fica escondido esperando a rolagem: textos, cards e fotos de todas as seções já estão visíveis quando a pessoa chega neles. O movimento fica na abertura da logo, num leve parallax na foto da segunda hero (só no computador) e em efeitos discretos de hover. Quem configurou o aparelho para reduzir animações não vê nada disso.
+
+**Celular:** a hero é compacta, para chamada, título, texto, botão e card caberem juntos na primeira tela (testado de 320 × 568 a 430 × 932 px). A página não rola para os lados, e os campos do formulário usam letra de 16 px para o iPhone não dar zoom ao tocar neles (era esse zoom que deixava a página "solta" para os lados).
 
 ## Hero em camadas
 
@@ -109,7 +112,7 @@ A hero não é uma imagem com texto: cada parte é um elemento HTML separado.
 2. `.hero__overlay`: gradiente de leitura, `linear-gradient(90deg, rgba(0,0,0,.55) 0%, transparent 60%)` no computador e vertical no celular.
 3. `<header>`: fixo, transparente sobre a hero e escuro ao rolar. Abaixo de 960 px vira menu hambúrguer.
 4. `.hero__content`: chamada, título com `text-shadow` e gradiente radial escuro atrás, texto e botão amarelo com sombra.
-5. `.hero__card`: card flutuante no canto inferior direito (a partir de 1024 px); no celular fica abaixo do botão.
+5. `.hero__card`: card flutuante no canto inferior direito (a partir de 1024 px); no celular fica abaixo do botão, ainda dentro da primeira tela.
 
 ## Editando o layout (opcional)
 

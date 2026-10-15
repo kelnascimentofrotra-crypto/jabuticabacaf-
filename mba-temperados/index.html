@@ -52,10 +52,10 @@
       d.classList.add('js');
       // Entrada cinematográfica da logo (não roda para quem pediu menos animação)
       try {
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('intro-on', 'intro-hold');
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('intro-on');
       } catch (e) {}
       // Segurança: a abertura nunca fica presa na tela
-      setTimeout(function () { d.classList.remove('intro-on', 'intro-hold', 'intro-run', 'intro-exit'); }, 9000);
+      setTimeout(function () { d.classList.remove('intro-on', 'intro-run', 'intro-exit'); }, 9000);
     })();
   </script>
 </head>
@@ -221,14 +221,14 @@
         <!-- CAMADA 4 — CONTEÚDO -->
         <div class="hero__content">
           <p class="hero__eyebrow">Vidro temperado para um ambiente melhor</p>
-          <h1 id="hero-titulo" class="display-title hero__title mt-5">
+          <h1 id="hero-titulo" class="display-title hero__title mt-3 sm:mt-5">
             Mais luz e
             <span class="hl block">mais valor</span>
           </h1>
-          <p class="hero__text mt-6">
+          <p class="hero__text mt-4 sm:mt-6">
             Box para banheiro, fachadas, vitrines, portas e guarda-corpos em vidro temperado sob medida, com instalação profissional e acabamento de alto padrão.
           </p>
-          <div class="mt-9">
+          <div class="mt-6 sm:mt-9">
             <a href="#contato" class="btn btn-primary btn-lg hero__cta w-full sm:w-auto">
               Faça seu orçamento
               <svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-chevron"/></svg>
@@ -238,10 +238,10 @@
 
         <!-- CAMADA 5 — CARD FLUTUANTE -->
         <a href="#projetos" class="hero__card">
-          <img src="assets/img/hero-card.jpg" alt="" width="240" height="240" decoding="async" class="h-[72px] w-[72px] shrink-0 rounded-[14px] object-cover">
+          <img src="assets/img/hero-card.jpg" alt="" width="240" height="240" decoding="async" class="h-[52px] w-[52px] shrink-0 rounded-[12px] object-cover sm:h-[72px] sm:w-[72px] sm:rounded-[14px]">
           <span class="min-w-0 flex-1">
-            <span class="block font-heading text-[15px] font-bold leading-snug text-ink">Modelos de box</span>
-            <span class="block text-sm text-ink-muted">selecionados pra você</span>
+            <span class="block font-heading text-[14px] font-bold leading-snug text-ink sm:text-[15px]">Modelos de box</span>
+            <span class="block text-[13px] text-ink-muted sm:text-sm">selecionados pra você</span>
           </span>
           <span class="hero__card-arrow" aria-hidden="true">
             <svg class="ico h-5 w-5"><use href="#i-arrow"/></svg>
@@ -255,7 +255,7 @@
          ================================================================= -->
     <section id="como-funciona" class="section bg-process blueprint" aria-labelledby="como-funciona-titulo">
       <div class="container-x">
-        <div class="section-head" data-reveal>
+        <div class="section-head">
           <div>
             <p class="eyebrow">Como funciona</p>
             <h2 id="como-funciona-titulo" class="section-title mt-5">Da medição à <span class="hl">instalação</span></h2>
@@ -264,9 +264,9 @@
         </div>
 
         <div class="process mt-14 lg:mt-20">
-          <div class="process__track" aria-hidden="true" data-reveal><span></span></div>
+          <div class="process__track" aria-hidden="true"><span></span></div>
           <ol class="process__list">
-            <li class="process__step" data-reveal style="--d:80ms">
+            <li class="process__step">
               <span class="process__node" aria-hidden="true"></span>
               <div class="process__head">
                 <span class="process__num" aria-hidden="true">01</span>
@@ -275,7 +275,7 @@
               <h3 class="process__title">Visita e medição</h3>
               <p class="process__text">Agendamos uma visita técnica, entendemos o que você precisa e tiramos as medidas exatas do vão.</p>
             </li>
-            <li class="process__step" data-reveal style="--d:160ms">
+            <li class="process__step">
               <span class="process__node" aria-hidden="true"></span>
               <div class="process__head">
                 <span class="process__num" aria-hidden="true">02</span>
@@ -284,7 +284,7 @@
               <h3 class="process__title">Projeto sob medida</h3>
               <p class="process__text">Definimos modelo, espessura, cor do vidro e ferragens, com orçamento claro e sem surpresas.</p>
             </li>
-            <li class="process__step" data-reveal style="--d:240ms">
+            <li class="process__step">
               <span class="process__node" aria-hidden="true"></span>
               <div class="process__head">
                 <span class="process__num" aria-hidden="true">03</span>
@@ -293,7 +293,7 @@
               <h3 class="process__title">Fabricação e têmpera</h3>
               <p class="process__text">O vidro é cortado na medida e passa pela têmpera, ficando muito mais resistente que o vidro comum.</p>
             </li>
-            <li class="process__step" data-reveal style="--d:320ms">
+            <li class="process__step">
               <span class="process__node" aria-hidden="true"></span>
               <div class="process__head">
                 <span class="process__num" aria-hidden="true">04</span>
@@ -313,7 +313,7 @@
     <section id="vantagens" class="section bg-benefits section-divider" aria-labelledby="vantagens-titulo">
       <div class="container-x grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div class="lg:col-span-5">
-          <div class="lg:sticky lg:top-32" data-reveal>
+          <div class="lg:sticky lg:top-32">
             <p class="eyebrow">Vantagens</p>
             <h2 id="vantagens-titulo" class="section-title mt-5">Mais segurança e <span class="hl">beleza</span> para o seu espaço</h2>
             <p class="section-lead mt-6">Vidro temperado sob medida une proteção, durabilidade e um visual moderno que valoriza qualquer ambiente.</p>
@@ -325,42 +325,42 @@
         </div>
 
         <ul class="benefits lg:col-span-7">
-          <li class="benefit" data-reveal>
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-shield"/></svg></span>
             <div>
               <h3 class="benefit__title">Segurança de verdade</h3>
               <p class="benefit__text">O vidro temperado é até 5 vezes mais resistente e, se quebrar, vira pequenos fragmentos sem pontas cortantes.</p>
             </div>
           </li>
-          <li class="benefit" data-reveal style="--d:80ms">
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-frame"/></svg></span>
             <div>
               <h3 class="benefit__title">Feito sob medida</h3>
               <p class="benefit__text">Cada peça é produzida para o seu vão, com encaixe perfeito e sem improvisos.</p>
             </div>
           </li>
-          <li class="benefit" data-reveal>
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-wrench"/></svg></span>
             <div>
               <h3 class="benefit__title">Instalação profissional</h3>
               <p class="benefit__text">Equipe treinada, prazo combinado e obra limpa do início ao fim.</p>
             </div>
           </li>
-          <li class="benefit" data-reveal style="--d:80ms">
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-gem"/></svg></span>
             <div>
               <h3 class="benefit__title">Ferragens de qualidade</h3>
               <p class="benefit__text">Kits e roldanas em alumínio e inox, com acabamento preto, cromado ou escovado.</p>
             </div>
           </li>
-          <li class="benefit" data-reveal>
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-sun"/></svg></span>
             <div>
               <h3 class="benefit__title">Mais luz natural</h3>
               <p class="benefit__text">Ambientes mais claros, amplos e modernos, que valorizam o seu imóvel.</p>
             </div>
           </li>
-          <li class="benefit" data-reveal style="--d:80ms">
+          <li class="benefit">
             <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-chat"/></svg></span>
             <div>
               <h3 class="benefit__title">Orçamento sem compromisso</h3>
@@ -379,7 +379,7 @@
       <div class="destaque__overlay" aria-hidden="true"></div>
 
       <div class="container-x relative z-10 flex min-h-[600px] items-center py-28 lg:min-h-[700px]">
-        <div class="max-w-[620px]" data-reveal>
+        <div class="max-w-[620px]">
           <p class="eyebrow">Para casas e empresas</p>
           <h2 id="destaque-titulo" class="display-title destaque__title mt-6">
             Mais luz e
@@ -404,7 +404,7 @@
          ================================================================= -->
     <section id="projetos" class="section bg-portfolio" aria-labelledby="projetos-titulo">
       <div class="container-x">
-        <div class="section-head" data-reveal>
+        <div class="section-head">
           <div>
             <p class="eyebrow">Projetos</p>
             <h2 id="projetos-titulo" class="section-title mt-5">Projetos que <span class="hl">transformam</span> ambientes</h2>
@@ -413,7 +413,7 @@
         </div>
 
         <div class="bento mt-14 lg:mt-16">
-          <article class="tile tile--a group" data-reveal>
+          <article class="tile tile--a group">
             <img src="assets/img/projeto-residencial.jpg" alt="Box de correr em vidro temperado com ferragens pretas em banheiro com banheira" width="1600" height="960" loading="lazy" decoding="async" class="tile__img">
             <div class="tile__shade" aria-hidden="true"></div>
             <span class="tag">Residencial</span>
@@ -427,7 +427,7 @@
             </div>
           </article>
 
-          <article class="tile tile--b group" data-reveal style="--d:90ms">
+          <article class="tile tile--b group">
             <img src="assets/img/projeto-comercial.jpg" alt="Fachada comercial em vidro temperado com porta de entrada e puxadores longos" width="900" height="1111" loading="lazy" decoding="async" class="tile__img">
             <div class="tile__shade" aria-hidden="true"></div>
             <span class="tag">Comercial</span>
@@ -441,7 +441,7 @@
             </div>
           </article>
 
-          <article class="tile tile--c group" data-reveal style="--d:120ms">
+          <article class="tile tile--c group">
             <img src="assets/img/projeto-guarda-corpo.jpg" alt="Casa com guarda-corpos de vidro nas sacadas e painel de vidro na fachada" width="784" height="696" loading="lazy" decoding="async" class="tile__img tile__img--left">
             <div class="tile__shade" aria-hidden="true"></div>
             <span class="tag">Varandas</span>
@@ -456,7 +456,7 @@
           </article>
 
           <!-- ATENÇÃO: números ilustrativos, ajuste para os dados reais da empresa -->
-          <div class="tile tile--stats" data-reveal style="--d:180ms">
+          <div class="tile tile--stats">
             <dl class="stats__list">
               <div class="stats__item">
                 <dt class="stat-label">projetos entregues</dt>
@@ -500,12 +500,12 @@
     <section id="depoimentos" class="section bg-reviews section-divider" aria-labelledby="depoimentos-titulo">
       <div class="container-x">
         <div class="section-head">
-          <div data-reveal>
+          <div>
             <p class="eyebrow">Depoimentos</p>
             <h2 id="depoimentos-titulo" class="section-title mt-5">Quem já escolheu a <span class="hl whitespace-nowrap">MBA Temperados</span></h2>
             <p class="section-lead mt-6">Clientes que transformaram seus ambientes com vidro temperado sob medida.</p>
           </div>
-          <div class="reviews-badge surface" data-reveal style="--d:120ms">
+          <div class="reviews-badge surface">
             <div class="flex -space-x-1.5" aria-hidden="true">
               <span class="avatar h-11 w-11 text-[11px] ring-4 ring-night-800">MS</span>
               <span class="avatar avatar--dark h-11 w-11 text-[11px] ring-4 ring-night-800">RA</span>
@@ -519,7 +519,7 @@
         </div>
 
         <ul class="reviews mt-14">
-          <li data-reveal>
+          <li>
             <figure class="review surface surface-hover">
               <div class="review__top">
                 <span class="review__quote" aria-hidden="true">&ldquo;</span>
@@ -539,7 +539,7 @@
               </figcaption>
             </figure>
           </li>
-          <li data-reveal style="--d:90ms">
+          <li>
             <figure class="review surface surface-hover">
               <div class="review__top">
                 <span class="review__quote" aria-hidden="true">&ldquo;</span>
@@ -559,7 +559,7 @@
               </figcaption>
             </figure>
           </li>
-          <li data-reveal style="--d:180ms">
+          <li>
             <figure class="review surface surface-hover">
               <div class="review__top">
                 <span class="review__quote" aria-hidden="true">&ldquo;</span>
@@ -592,7 +592,7 @@
       <svg class="contact__motif" viewBox="-6 0 174 366" aria-hidden="true"><use href="#logo-icon"/></svg>
 
       <div class="container-x grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
-        <div class="lg:col-span-5 lg:pt-4" data-reveal>
+        <div class="lg:col-span-5 lg:pt-4">
           <p class="eyebrow">Contato</p>
           <h2 id="contato-titulo" class="section-title mt-5">Vamos tirar o seu <span class="hl">projeto</span> do papel?</h2>
           <p class="section-lead mt-6">Conte o que você precisa e receba um orçamento sem compromisso. Atendemos residências, condomínios, lojas e empresas.</p>
@@ -630,13 +630,13 @@
               <span class="icon-tile"><svg class="ico h-5 w-5" aria-hidden="true"><use href="#i-clock"/></svg></span>
               <span>
                 <span class="contact-item__label">Horário</span>
-                <span class="contact-item__value">Seg. a sex., 8h às 18h · Sáb., 8h às 12h</span>
+                <span class="contact-item__value"><span class="whitespace-nowrap">Seg. a sex., 8h às 18h</span> · <span class="whitespace-nowrap">Sáb., 8h às 12h</span></span>
               </span>
             </li>
           </ul>
         </div>
 
-        <div class="lg:col-span-7" data-reveal style="--d:120ms">
+        <div class="lg:col-span-7">
           <div class="form-panel">
             <h3 class="form-panel__title">Solicite seu orçamento</h3>
             <p class="mt-2 text-[15px] text-mist-300">Preencha os dados e continue a conversa direto no nosso WhatsApp.</p>
@@ -782,7 +782,7 @@
         introState = 'done';
         introTimers.forEach(clearTimeout);
         skipEvents.forEach((ev) => window.removeEventListener(ev, skipIntro));
-        root.classList.remove('intro-on', 'intro-hold', 'intro-run', 'intro-exit');
+        root.classList.remove('intro-on', 'intro-run', 'intro-exit');
         if (intro) intro.remove();
       };
 
@@ -805,7 +805,6 @@
         const duration = fast ? 500 : 950;
         intro.style.setProperty('--exit', duration + 'ms');
         root.classList.add('intro-run', 'intro-exit');
-        root.classList.remove('intro-hold');
         const tag = intro.querySelector('.intro__tag');
         if (tag && tag.animate) {
           tag.animate([{ opacity: getComputedStyle(tag).opacity }, { opacity: 0 }], { duration: 250, fill: 'forwards' });
@@ -936,24 +935,6 @@
       window.matchMedia('(min-width: 960px)').addEventListener('change', (e) => {
         if (e.matches) setMenu(false);
       });
-
-      // Animação de entrada ao rolar
-      const reveals = document.querySelectorAll('[data-reveal]');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      if ('IntersectionObserver' in window && !reduceMotion) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              io.unobserve(entry.target);
-            }
-          });
-        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
-        reveals.forEach((el) => io.observe(el));
-      } else {
-        reveals.forEach((el) => el.classList.add('is-visible'));
-      }
 
       // Formulário → WhatsApp
       const form = document.querySelector('[data-form]');
