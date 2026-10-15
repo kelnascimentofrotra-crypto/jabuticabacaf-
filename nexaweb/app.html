@@ -598,6 +598,7 @@
 <div class="nexa-ai-tabs" role="tablist" aria-label="Ferramentas de IA">
 <button type="button" role="tab" id="nexaAiTabChat" aria-controls="nexaAiChatPanel" aria-selected="true" data-tab="chat"><i class="fa-solid fa-comments" aria-hidden="true"></i>Assistente</button>
 <button type="button" role="tab" id="nexaAiTabLanding" aria-controls="nexaAiLandingPanel" aria-selected="false" tabindex="-1" data-tab="landing"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Landing pages</button>
+<button type="button" role="tab" id="nexaAiTabRefs" aria-controls="nexaAiRefsPanel" aria-selected="false" tabindex="-1" data-tab="refs"><i class="fa-solid fa-swatchbook" aria-hidden="true"></i>Inspirações</button>
 </div>
 </div>
 </div>
@@ -614,6 +615,25 @@
 </form>
 <small class="nexa-chat-note">A IA pode errar. Confira informações importantes antes de usar.</small>
 </article>
+</div>
+<div class="nexa-ai-panel nxi" id="nexaAiRefsPanel" role="tabpanel" aria-labelledby="nexaAiTabRefs" hidden>
+<section class="nxi-hero">
+<div class="nxi-wall" aria-hidden="true"><div class="nxi-plane"></div></div>
+<div class="nxi-hero-copy">
+<span class="nxi-eb"><i></i>Inspirações</span>
+<h2>Escolha um estilo. <em>A IA monta a página.</em></h2>
+<p>Referências de sites por nicho para mostrar ao cliente e usar como ponto de partida. Corretor de imóveis, advocacia e energia solar em destaque.</p>
+</div>
+</section>
+<div class="nxi-bar">
+<label class="nxi-search"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input type="search" placeholder="Pesquisar: corretor, advocacia, solar, dourado, minimalista…" aria-label="Pesquisar referências" autocomplete="off"></label>
+<a class="nxi-pin" href="https://br.pinterest.com/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-pinterest" aria-hidden="true"></i>Buscar no Pinterest</a>
+</div>
+<div class="nxi-chips" role="group" aria-label="Filtrar por nicho"></div>
+<p class="nxi-count" aria-live="polite"></p>
+<div class="nxi-grid"></div>
+<p class="nxi-empty" hidden>Nenhuma referência com esse termo. <a href="https://br.pinterest.com/" target="_blank" rel="noopener noreferrer">Procurar no Pinterest</a></p>
+<p class="nxi-note">As miniaturas são ilustrações feitas pelo NexaWeb. O botão do Pinterest abre ideias parecidas no próprio Pinterest.</p>
 </div>
 <div class="nexa-ai-panel" id="nexaAiLandingPanel" role="tabpanel" aria-labelledby="nexaAiTabLanding" hidden>
 <div class="nexa-lp-layout" data-pane="chat">
@@ -5105,9 +5125,11 @@ const NX_NICHES=[
 {re:/danca|ballet|bale|zumba|forro|samba/,label:"escola de dança",art:"a",fam:"energia",menu:"Modalidades",icon:"music",services:["Ballet","Jazz","Danças urbanas","Dança de salão","Turmas infantis"],hero:["Dance, se divirta e se expresse.","Movimento, ritmo e alegria em cada aula."],kw:["escola de dança em [cidade]","aula de dança [bairro]","ballet infantil [cidade]"],tip:"vídeos curtos das aulas e a grade de horários ajudam a decidir."},
 {re:/oficina|mecanic|auto center|autocenter|pneu|funilaria|retifica|freio|cambio|injecao/,label:"oficina mecânica",art:"a",fam:"impacto",menu:"Serviços",icon:"wrench",services:["Revisão","Troca de óleo","Freios","Suspensão","Alinhamento e balanceamento","Diagnóstico eletrônico"],hero:["Seu carro em boas mãos, sem dor de cabeça.","Manutenção bem feita para rodar tranquilo."],kw:["oficina mecânica em [cidade]","mecânico [bairro]","troca de óleo [cidade]"],tip:"explique como funciona o orçamento e mostre fotos da oficina; transparência é o que o cliente mais procura."},
 {re:/lava jato|lava rapido|lavagem|estetica automotiva|polimento|higienizacao automotiva/,label:"lava-jato",art:"o",fam:"impacto",menu:"Serviços",icon:"car",services:["Lavagem simples","Lavagem completa","Higienização interna","Polimento","Enceramento"],hero:["Seu carro brilhando, do jeito que você gosta.","Cuidado completo por dentro e por fora."],kw:["lava-jato em [cidade]","lava rápido [bairro]","higienização de carro [cidade]"],tip:"antes e depois em fotos e uma tabela simples de serviços ajudam a fechar na hora."},
+{re:/energia solar|fotovolt|placas? solar|paineis solares|painel solar|usina solar|\bsolar\b/,label:"empresa de energia solar",art:"a",fam:"impacto",menu:"Soluções",icon:"sun",services:["Projeto fotovoltaico","Instalação de painéis solares","Homologação na distribuidora","Financiamento solar","Manutenção e limpeza","Monitoramento do sistema"],hero:["Gere a sua própria energia e pague menos de luz.","Energia limpa e economia todo mês.","Sol no telhado, economia na conta."],kw:["energia solar em [cidade]","instalação de painel solar [cidade]","placa solar preço [cidade]"],tip:"mostre uma simulação de economia, fotos de instalações já feitas, as marcas dos equipamentos e a garantia, sem prometer um valor exato de economia."},
 {re:/eletric|encanad|reforma|construc|pedreiro|pintor|pintura|marido de aluguel|serralher|vidracar|marcenar|gesso|drywall|ar condicionado|refrigerac|dedetiz|limpeza|jardin/,label:"prestador de serviços",art:"o",fam:"impacto",menu:"Serviços",icon:"wrench",services:["Visita técnica","Instalações","Manutenção","Reparos","Reformas"],hero:["Serviço bem feito, do orçamento à entrega.","Resolva de vez, com quem entende do assunto."],kw:["[serviço] em [cidade]","[serviço] [bairro]","[serviço] perto de mim"],tip:"mostre fotos de antes e depois, a região que atende e como pedir orçamento."},
 {re:/advoca|advogad|juridic|escritorio de direito/,label:"escritório de advocacia",art:"o",fam:"sobrio",menu:"Áreas de atuação",icon:"briefcase",services:["Direito Civil","Direito de Família","Direito Trabalhista","Direito do Consumidor","Direito Previdenciário"],hero:["Orientação jurídica clara para decisões seguras.","Seus direitos tratados com seriedade."],kw:["advogado em [cidade]","advogado trabalhista [cidade]","advogado de família [bairro]"],tip:"a publicidade da advocacia segue o Provimento 205/2021 da OAB: conteúdo informativo, sem promessa de resultado e sem captação de clientela."},
 {re:/contab|contador|fiscal|abertura de empresa/,label:"escritório de contabilidade",art:"o",fam:"sobrio",menu:"Serviços",icon:"briefcase",services:["Abertura de empresa","Contabilidade para MEI","Imposto de Renda","Folha de pagamento","Planejamento tributário"],hero:["Contabilidade descomplicada para o seu negócio crescer.","Menos burocracia, mais tempo para você."],kw:["contador em [cidade]","contabilidade para MEI [cidade]","abrir empresa [cidade]"],tip:"textos que explicam dúvidas comuns (MEI, abertura de empresa, IR) atraem muitas buscas."},
+{re:/corretor|corretora de imove|consultor imobiliario|consultora imobiliaria/,label:"corretor de imóveis",art:"o",fam:"sobrio",menu:"Serviços",icon:"home",services:["Compra de imóveis","Venda de imóveis","Avaliação do seu imóvel","Imóveis na planta","Apoio no financiamento","Locação"],hero:["Seu próximo imóvel começa com uma boa conversa.","Comprar ou vender com quem conhece a região.","O imóvel certo, sem dor de cabeça."],kw:["corretor de imóveis em [cidade]","apartamento à venda [bairro]","casa à venda [cidade]"],tip:"informe o seu CRECI, mostre os imóveis com fotos boas e facilite o contato pelo WhatsApp."},
 {re:/imobiliar|corretor|imove|aluguel|locacao/,label:"imobiliária",art:"a",fam:"sobrio",menu:"Serviços",icon:"home",services:["Venda de imóveis","Locação","Avaliação de imóveis","Administração de aluguéis"],hero:["O imóvel certo para a sua próxima fase.","Comprar, vender ou alugar com segurança."],kw:["imobiliária em [cidade]","apartamento à venda [bairro]","casa para alugar [cidade]"],tip:"informe o CRECI e leve os clientes para um catálogo atualizado dos imóveis."},
 {re:/roupa|moda\b|boutique|calcad|sapat|bolsa|acessorio|loja de (?:roupa|moda|calcad|sapat|bolsa|acessorio|presente|variedade)/,label:"loja",art:"a",fam:"editorial",menu:"Produtos",icon:"shirt",services:["Novidades","Feminino","Masculino","Acessórios","Promoções"],hero:["Estilo que combina com você.","Peças escolhidas para o seu dia a dia."],kw:["loja de roupas em [cidade]","moda feminina [bairro]","[produto] [cidade]"],tip:"fotos boas dos produtos e um botão para pedir pelo WhatsApp funcionam muito bem antes de ter loja virtual."},
 {re:/(?!)/,label:"comércio",art:"o",fam:"geral",menu:"Produtos",icon:"sparkles",services:["Novidades","Mais vendidos","Promoções"],hero:["Tudo o que você procura, num só lugar.","Qualidade e bom atendimento perto de você."],kw:["loja em [cidade]","[produto] [cidade]","[produto] perto de mim"],tip:"mostre os produtos com fotos boas e preço, e um botão para pedir pelo WhatsApp."},
@@ -5343,7 +5365,7 @@ const unnamed=String(d.noName)==="true",art=unnamed?"":("art" in d)&&/^(a|o)?$/.
 const city=String(d.city||"").replace(/\s*-\s*[A-Z]{2}$/i,"").trim(),structured=Array.isArray(d.items)||Array.isArray(d.benefits);
 const offer=structured?{priced:[],plain:[],diffs:[],about:"",facts:[]}:nxParseOffer(d.story?String(d.description||"").replace(d.story,""):d.description);
 let items=structured?(d.items||[]).filter(x=>x&&x.name).map(x=>({name:nxCapItem(String(x.name).trim()),description:String(x.description||"").trim(),price:String(x.price||"").trim(),cat:String(x.cat||"").trim()})):offer.priced.map(x=>({name:x.name,description:"",price:x.price,cat:""})).concat(offer.plain.map(x=>({name:x,description:"",price:"",cat:""})));
-const skip=new Set(nxTokens((d.menuTitle||"")+" "+(d.hlTitle||""))),said=new Set(nxTokens(d.description+" "+(d.hint||"")).filter(t=>!skip.has(t))),mentioned=niche?niche.services.filter(sv=>nxTokens(sv).some(t=>t.length>3&&!/^(direito|servico|atendimento|aula|turma)$/.test(t)&&said.has(t))):[];
+const skip=new Set(nxTokens((d.menuTitle||"")+" "+(d.hlTitle||"")+" "+(niche?niche.label:""))),said=new Set(nxTokens(d.description+" "+(d.hint||"")).filter(t=>!skip.has(t))),mentioned=niche?niche.services.filter(sv=>nxTokens(sv).some(t=>t.length>3&&!/^(direito|servico|atendimento|aula|turma)$/.test(t)&&said.has(t))):[];
 let defaults=mentioned.length?mentioned:(niche?niche.services:[nxCap(segRaw)||"Atendimento"]);const hn=nxNorm(d.hint||"");
 if(niche&&niche.label==="loja"&&!mentioned.length){const shop=[[/calcad|sapat|tenis/,["Tênis","Sandálias","Sapatos","Botas","Acessórios"]],[/infantil|kids|crianc|bebe/,["Roupas de bebê","Roupas infantis","Conjuntos","Pijamas","Acessórios"]],[/feminin/,["Vestidos","Blusas","Saias e calças","Conjuntos","Acessórios"]],[/masculin/,["Camisas","Camisetas","Calças e bermudas","Acessórios"]],[/bolsa|acessorio|bijou|semijoia/,["Bolsas","Bijuterias","Semijoias","Acessórios"]]].find(x=>x[0].test(hn));if(shop)defaults=shop[1]}
 if(niche&&niche.label==="loja"){if(/feminin/.test(hn)&&!/masculin/.test(hn))defaults=defaults.filter(s=>s!=="Masculino");if(/masculin/.test(hn)&&!/feminin/.test(hn))defaults=defaults.filter(s=>s!=="Feminino")}
@@ -5371,7 +5393,7 @@ menu:{title:String(d.menuTitle||"").trim()||nxOur(menuLabel),subtitle:pricedItem
 highlights:{title:String(d.hlTitle||"").trim()||nxPick(F.hlT),items:hlSrc.map((h,i)=>({icon,title:h.name,text:h.description||hlTexts[i%hlTexts.length],price:h.price}))},
 gallery:{title:nxPick(F.galT)},cta:{title:nxPick(F.ctaT),text:"Fale com "+talk+" pelo WhatsApp.",button:cta||nxPick(F.ctaB)},
 reviews:{title:nxPick(F.revT),items:Array.isArray(d.testimonials)?d.testimonials.filter(t=>t&&t.text):[]},location:{title:"Venha nos visitar.",text:city?"Estamos em "+city+". Será um prazer te receber.":"Será um prazer te receber."},
-instagram:{title:fill(F.igT),text:"Novidades e bastidores no Instagram."},footer:{tagline:seg+(city?" em "+city:"")+"."},whatsappMessage:F.wa};
+instagram:{title:fill(F.igT),text:"Novidades e bastidores no Instagram."},footer:{tagline:seg+(city?" em "+city:"")+"."+(d.creci?" CRECI "+d.creci+".":"")+(d.oab?" OAB "+d.oab+".":"")},whatsappMessage:F.wa};
 if(sections.includes("faq"))out.faq=nxMakeFaq(d,out);return out}
 
 /* ---------- landing page builder chat: free-text prompt -> fields, and edits on the current page ---------- */
@@ -5421,6 +5443,8 @@ else{m=raw.match(/\bpara quem\s+([^.;,\n]{4,120})/i);if(m){f.audience="quem "+m[
 /* contacts and facts */
 m=raw.match(/(?:\+?55\s*)?\(?\b\d{2}\)?\s*9\s?\d{4}[\s.-]?\d{4}\b|(?:\+?55\s*)?\(?\b\d{2}\)?\s*\d{4}[\s.-]?\d{4}\b/);if(m){f.whatsapp=m[0].trim();cut(m[0])}
 m=raw.match(/(?:^|\s)@([a-z0-9._]{2,30})/i)||raw.match(/instagram\.com\/([a-z0-9._]{2,30})/i)||raw.match(/instagram\s*(?:[ée]|:)?\s*@?([a-z0-9._]{3,30})\b/i);if(m&&!/^(e|é|do|da|de)$/i.test(m[1])){f.instagram=m[1].replace(/\.+$/,"");cut(m[0].trim())}
+m=raw.match(/\bCRECI\s*(?:n[ºo°.]*\s*)?[:\-]?\s*([0-9]{3,7}(?:\s*-\s*[A-Z]{1,2})?(?:\s*\/\s*[A-Z]{2})?)/i);if(m){f.creci=m[1].replace(/\s+/g,"");cut(m[0])}
+m=raw.match(/\bOAB\s*(?:\/\s*([A-Z]{2}))?\s*(?:n[ºo°.]*\s*)?[:\-]?\s*([0-9][0-9.]{2,9})(?:\s*\/\s*([A-Z]{2}))?/i);if(m){f.oab=(m[1]||m[3]?(m[1]||m[3]).toUpperCase()+" ":"")+m[2];cut(m[0])}
 m=raw.match(/\bnota\s*(?:no google\s*)?(?:de\s*)?([1-5](?:[.,]\d)?)\b(?:\s*(?:no|do)\s+google)?/i)||raw.match(/\b([1-5][.,]\d)\s*estrelas?/i);if(m){f.rating=m[1];cut(m[0])}
 m=raw.match(/(?:com\s+)?(\d{1,6})\s*avalia[cç](?:[oõ]es|ao|ão)(?:\s*(?:no|do)\s+google)?/i);if(m){f.reviews=m[1];cut(m[0])}
 m=raw.match(/((?:(?:aberto|aberta|abre|abrimos|funciona|funcionamos|atendemos|hor[aá]rio(?: de funcionamento)?\s*:?)\s+)?(?:de\s+)?(?:segunda|seg|ter[cç]a|quarta|quinta|sexta|s[aá]bado|domingo|todos os dias|diariamente)[^.;\n]{0,70})/i)||raw.match(/(\b(?:das\s+)?\d{1,2}h(?:\d{2})?\s*(?:[àa]s|a|-|at[eé])\s*\d{1,2}h(?:\d{2})?)/i);if(m&&/\d|h\b/.test(m[1])){f.hours=m[1].replace(/\s*[,]\s*(?:whats|telefone|insta|cor|estilo).*$/i,"").trim();cut(f.hours)}
@@ -5430,6 +5454,7 @@ const niche=nxNiche(core);let name="",person=false;
 const clean=s=>String(s||"").replace(/^(?:o|a|os|as)\s+/i,"").replace(/^(?:site|landing(?: page)?|p[aá]gina|loja virtual)\s+(?:d[aeo]s?|para|pra)\s+/i,"").replace(/\s+(?:aqui|ali|l[aá]|localizad[oa]|situad[oa]|que|fica|e fica)\b.*$/i,"").replace(/\s+em\s+[A-ZÀ-Ú].*$/,"").replace(/[\s,.;:!?)"“”'‘’]+$/,"").replace(/^["“'‘(]+/,"").trim();
 m=core.match(/(?:o nome (?:[ée]|vai ser|ser[aá]|dela|dele|do neg[oó]cio|da (?:loja|empresa|marca))|com o nome(?: de)?|nome\s*:|se chama|chama-se|chamad[oa])\s*["“'‘]?([^,.;\n"”’]{2,60})/i);if(m)name=clean(m[1]);
 if(!name){m=core.match(/\b(?:minha|meu|nossa|nosso)\s+[a-zà-ú ]{3,40}?,\s*(?:a|o)\s+([A-ZÀ-Ú][\wÀ-ú'&-]*(?:\s+(?:(?:de|da|do|dos|das|e|&)\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'&-]*)*)/);if(m)name=clean(m[1])}
+if(!name){m=core.match(/\b(?:para|pra)\s+(?:a|o|as|os)\s+([A-ZÀ-Ú][\wÀ-ú'&.-]*(?:\s+(?:(?:de|da|do|dos|das|e|&)\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'&.-]*)*)\s*,\s*(?=(?:uma?\s+)?[a-zà-ú])/);if(m&&!NX_CAPITALS.includes(nxNorm(m[1])))name=clean(m[1])}
 if(!name){m=core.match(/["“]([^"”]{2,60})["”]/)||core.match(/(?:^|\s)[‘']([^‘’']{2,60})[’'](?=[\s,.;:!?—–-]|$)/);if(m)name=clean(m[1])}
 const caps=[...core.matchAll(/(?:^|[\s(,])((?:[A-ZÀ-Ú][\wÀ-ú'&.-]*)(?:\s+(?:(?:de|da|do|dos|das|e|&)\s+)?[A-ZÀ-Ú0-9][\wÀ-ú'&.-]*)*)/g)].map(x=>x[1].replace(/^(?:(?:Site|Landing|Page|Página|Pagina|Crie|Cria|Criar|Faça|Faca|Faz|Fazer|Quero|Queria|Gere|Gera|Monte|Monta|Preciso|Uma|Um|Para|Pra|Minha|Meu|Olá|Ola|Oi|Sou|Tenho|Gostaria|Desenvolva|Nosso|Nossa)\b\.?\s*(?:(?:de|da|do|dos|das|para|pra|uma|um)\s+)*)+/,"").replace(/[.,;:]+$/,"").trim()).filter(c=>c.length>2&&!NX_STOPCAPS.test(nxNorm(c.split(" ")[0]))&&!NX_CAPITALS.includes(nxNorm(c.replace(/\s+[A-Z]{2}$/,""))));
 if(!name){const c=caps.find(c=>niche&&niche.re.test(nxNorm(c))&&c.split(" ").length>1);if(c)name=clean(c)}
@@ -5631,7 +5656,7 @@ impacto:{title:"left",text:"left",image:"right",card:"up",hero:"parallax",par:.3
 editorial:{title:"up",text:"fade",image:"clip",card:"clip",hero:"kenburns"},
 sobrio:{title:"fade",text:"fade",image:"fade",card:"up",hero:"static",lines:true},
 divertido:{title:"pop",text:"up",image:"pop",card:"pop",hero:"float",par:.25,marquee:true}};
-const NX_GUESS=[[/caf[eé]|padaria|restaurante|lanchonete|doceria|confeitaria|pizzaria|hamburgueria|\bbar\b|a[çc]a[ií]|bistr|gastronom|comida|marmit|food|churrasc|sushi|pastel|cervej/i,"aconchegante"],[/sal[aã]o|barbe|est[eé]tica|manicure|unha|spa\b|maquia|sobrancel|beleza|joalher|cabele|depila|c[ií]lios/i,"elegante"],[/dent|odonto|cl[ií]nica|psic|fisio|nutri|veterin|farm[aá]cia|m[eé]dic|sa[uú]de|terapia|laborat/i,"suave"],[/academia|crossfit|luta|jiu|muay|boxe|esporte|dan[çc]a|pilates|funcional|treino|fitness/i,"energia"],[/oficina|mec[aâ]nic|lava.?jato|constru|reforma|el[eé]tric|encan|serralher|vidra|marcen|transporte|frete|mudan|automot|pneu|t[eé]cnic/i,"impacto"],[/roupa|moda|cal[çc]ado|[oó]tica|decora|fotograf|boutique|loja|acess[oó]rio|m[oó]veis/i,"editorial"],[/advoca|contab|imobili|consult|seguro|escrit[oó]rio|jur[ií]dic|finan|corretor|arquitet/i,"sobrio"],[/pet|escola|infantil|festa|brinquedo|sorvet|creche|buffet|bal[aã]o|kids|crian/i,"divertido"]];
+const NX_GUESS=[[/caf[eé]|padaria|restaurante|lanchonete|doceria|confeitaria|pizzaria|hamburgueria|\bbar\b|a[çc]a[ií]|bistr|gastronom|comida|marmit|food|churrasc|sushi|pastel|cervej/i,"aconchegante"],[/sal[aã]o|barbe|est[eé]tica|manicure|unha|spa\b|maquia|sobrancel|beleza|joalher|cabele|depila|c[ií]lios/i,"elegante"],[/dent|odonto|cl[ií]nica|psic|fisio|nutri|veterin|farm[aá]cia|m[eé]dic|sa[uú]de|terapia|laborat/i,"suave"],[/academia|crossfit|luta|jiu|muay|boxe|esporte|dan[çc]a|pilates|funcional|treino|fitness/i,"energia"],[/solar|fotovolt|oficina|mec[aâ]nic|lava.?jato|constru|reforma|el[eé]tric|encan|serralher|vidra|marcen|transporte|frete|mudan|automot|pneu|t[eé]cnic/i,"impacto"],[/roupa|moda|cal[çc]ado|[oó]tica|decora|fotograf|boutique|loja|acess[oó]rio|m[oó]veis/i,"editorial"],[/advoca|contab|imobili|consult|seguro|escrit[oó]rio|jur[ií]dic|finan|corretor|arquitet/i,"sobrio"],[/pet|escola|infantil|festa|brinquedo|sorvet|creche|buffet|bal[aã]o|kids|crian/i,"divertido"]];
 function nxPreset(p,segment){if(NX_FX[p])return p;for(const[re,name]of NX_GUESS)if(re.test(segment||""))return name;return"aconchegante"}
 function nxOnColor(hex){const n=parseInt(hex.slice(1),16),ch=[n>>16&255,n>>8&255,n&255].map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*ch[0]+.7152*ch[1]+.0722*ch[2]>.2?"#15120f":"#ffffff"}
 function nxPhone(d){d=String(d||"").replace(/^55/,"");return d.length===11?"("+d.slice(0,2)+") "+d.slice(2,7)+"-"+d.slice(7):d.length===10?"("+d.slice(0,2)+") "+d.slice(2,6)+"-"+d.slice(6):d}
@@ -6104,6 +6129,361 @@ window.nexaObjections={open:id=>{window.go&&window.go("objections");open(id)},se
 @media(prefers-reduced-motion:reduce){#nexaNameGate{transition:none}}
 </style>
 <script id="nexa-name-gate">(()=>{const KEY="kaptar-config",read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){return{}}};if(String(read().nome||"").trim())return;const gate=document.createElement("section");gate.id="nexaNameGate";gate.setAttribute("role","dialog");gate.setAttribute("aria-modal","true");gate.setAttribute("aria-labelledby","nexaNameTitle");gate.innerHTML='<form novalidate><span class="nexa-gate-brand">NEXA<b>WEB</b></span><h1 id="nexaNameTitle">Como podemos te chamar?</h1><p>Só pra deixar o painel com a sua cara. Nada sai daqui.</p><input id="nexaNameInput" name="nome" autocomplete="given-name" maxlength="40" placeholder="Seu nome" aria-label="Seu nome"><button type="submit" disabled>Continuar <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button><small class="nexa-gate-legal">Ao continuar, você concorda com os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a> e a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</small></form>';document.body.appendChild(gate);const form=gate.querySelector("form"),input=gate.querySelector("input"),button=gate.querySelector("button"),overflow=document.body.style.overflow;document.body.style.overflow="hidden";input.addEventListener("input",()=>{button.disabled=!input.value.trim()});setTimeout(()=>input.focus(),60);form.addEventListener("submit",event=>{event.preventDefault();const name=input.value.trim().replace(/\s+/g," ");if(!name)return input.focus();const config=read();config.nome=name;localStorage.setItem(KEY,JSON.stringify(config));const field=document.getElementById("cfgName");if(field)field.value=name;window.dispatchEvent(new StorageEvent("storage",{key:KEY}));window.dispatchEvent(new Event("clean-leads-updated"));gate.classList.add("is-leaving");document.body.style.overflow=overflow==="hidden"?"":overflow;setTimeout(()=>gate.remove(),380)})})();</script>
+<style id="nexa-insp-style">
+/* Inspirações panel */
+.nxi{--nxi-r:calc(var(--cp-radius,18px) + 4px)}
+.nxi-hero{position:relative;min-height:300px;margin-bottom:18px;border:1px solid rgba(255,255,255,.08);border-radius:calc(var(--nxi-r) + 6px);background:radial-gradient(70% 80% at 50% 110%,rgba(var(--accent-rgb),.32),transparent 70%),var(--bg);overflow:hidden;isolation:isolate}
+.nxi-wall{position:absolute;inset:0;z-index:-1;overflow:hidden;perspective:1000px;perspective-origin:70% 0;-webkit-mask:linear-gradient(90deg,transparent 22%,#000 52%);mask:linear-gradient(90deg,transparent 22%,#000 52%)}
+.nxi-plane{position:absolute;left:38%;top:-4%;display:grid;gap:12px;transform:rotateX(34deg) rotateZ(-9deg);transform-origin:0 0}
+.nxi-row{display:flex;gap:12px;width:max-content;animation:nxiMarquee 70s linear infinite}
+.nxi-row.rev{animation-direction:reverse;animation-duration:84s}
+.nxi-row:nth-child(3){animation-duration:96s}
+.nxi-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--bg) 18%,rgba(0,0,0,.25) 55%,transparent 80%),linear-gradient(0deg,rgba(0,0,0,.35),transparent 40%);pointer-events:none}
+.nxi-hero-copy{position:relative;max-width:640px;padding:34px 34px 0}
+.nxi-eb{display:inline-flex;align-items:center;gap:9px;margin-bottom:12px;color:color-mix(in srgb,var(--accent) 62%,#fff);font:700 11.5px/1.2 "Plus Jakarta Sans",Manrope,sans-serif;letter-spacing:.16em;text-transform:uppercase}
+.nxi-eb i{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)}
+.nxi-hero h2{margin:0;font:700 clamp(1.7rem,3.2vw,2.6rem)/1.06 "Plus Jakarta Sans",Manrope,sans-serif;letter-spacing:-.045em;color:#fff}
+.nxi-hero h2 em{font-style:normal;background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 80%,#fff),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nxi-hero p{max-width:52ch;margin:12px 0 0;color:rgba(230,240,240,.72);font-size:14.5px;line-height:1.55}
+.nxi-bar{position:relative;z-index:3;display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.nxi-search{display:flex;align-items:center;gap:10px;flex:1;height:50px;padding:0 16px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(var(--cp-surface-rgb,11,22,23),.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 14px 34px -20px rgba(0,0,0,.9)}
+.nxi-search:focus-within{border-color:rgba(var(--accent-rgb),.6);box-shadow:0 0 0 4px rgba(var(--accent-rgb),.14)}
+.nxi-search i{color:var(--accent)}
+.nxi-search input{flex:1;min-width:0;height:100%;border:0;background:none;color:var(--text,#f0fafa);font:500 15px/1 inherit;outline:none}
+.nxi-search input::placeholder{color:var(--muted,#829998)}
+.nxi-pin{display:inline-flex;align-items:center;gap:8px;height:50px;padding:0 16px;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:rgba(230,0,35,.12);color:#ffd1d8;font:700 13.5px/1 "Plus Jakarta Sans",Manrope,sans-serif;white-space:nowrap;text-decoration:none;transition:background .2s,transform .25s}
+.nxi-pin:hover{background:rgba(230,0,35,.2);transform:translateY(-1px)}
+.nxi-pin i{font-size:16px;color:#ff4d6a}
+.nxi-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin-bottom:4px;scrollbar-width:thin;-webkit-mask:linear-gradient(90deg,#000 92%,transparent);mask:linear-gradient(90deg,#000 92%,transparent)}
+.nxi-chips button{display:inline-flex;align-items:center;gap:7px;flex:none;height:36px;padding:0 13px;border:1px solid rgba(255,255,255,.1);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted,#9fb3b2);font:600 13px/1 inherit;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.nxi-chips button b{font-weight:700;opacity:.6;font-size:11.5px}
+.nxi-chips button i{font-size:12px;opacity:.85}
+.nxi-chips button.hot{border-color:rgba(var(--accent-rgb),.35);color:#e9f7f6}
+.nxi-chips button:hover{color:#fff;border-color:rgba(255,255,255,.22)}
+.nxi-chips button[aria-pressed=true]{border-color:transparent;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 90%,#fff),color-mix(in srgb,var(--accent) 70%,#000));color:var(--cp-accent-text,#fff)}
+.nxi-count{margin:2px 2px 12px;color:var(--muted,#829998);font-size:13px}
+.nxi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.nxi-card{container-type:inline-size;display:flex;flex-direction:column;border:1px solid rgba(255,255,255,.08);border-radius:var(--nxi-r);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),var(--panel,#0b1617);overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),border-color .3s,box-shadow .35s}
+.nxi-card[hidden]{display:none}
+.nxi-card:hover{transform:translateY(-4px);border-color:rgba(var(--accent-rgb),.32);box-shadow:0 30px 60px -36px rgba(0,0,0,.95)}
+.nxi-card>.nxt{border-radius:0;border-width:0 0 1px}
+.nxi-meta{display:flex;flex-direction:column;flex:1;padding:14px 16px 16px}
+.nxi-meta small{display:flex;align-items:center;gap:7px;color:color-mix(in srgb,var(--accent) 65%,#fff);font:700 11px/1.2 "Plus Jakarta Sans",Manrope,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.nxi-meta h3{margin:8px 0 6px;color:#fff;font:700 16.5px/1.25 "Plus Jakarta Sans",Manrope,sans-serif;letter-spacing:-.02em}
+.nxi-meta p{margin:0 0 12px;color:rgba(225,236,236,.68);font-size:13.5px;line-height:1.5}
+.nxi-sw{display:flex;align-items:center;gap:5px;margin:auto 0 14px;color:var(--muted,#829998);font-size:12px}
+.nxi-sw i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(255,255,255,.2)}
+.nxi-sw span{margin-left:4px}
+.nxi-actions{display:flex;gap:8px}
+.nxi-use{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:1;height:42px;border:0;border-radius:13px;background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 92%,#fff),color-mix(in srgb,var(--accent) 70%,#000));color:var(--cp-accent-text,#fff);font:700 13.5px/1 "Plus Jakarta Sans",Manrope,sans-serif;cursor:pointer;box-shadow:0 10px 24px -12px rgba(var(--accent-rgb),.8);transition:transform .25s,filter .25s}
+.nxi-use:hover{transform:translateY(-1px);filter:brightness(1.07)}
+.nxi-pinlink,.nxi-fav{display:grid;place-items:center;width:42px;height:42px;flex:none;border:1px solid rgba(255,255,255,.12);border-radius:13px;background:rgba(255,255,255,.04);color:#e8eef0;font-size:16px;cursor:pointer;text-decoration:none;transition:background .2s,color .2s}
+.nxi-pinlink:hover{background:rgba(230,0,35,.18);color:#ff4d6a}
+.nxi-fav[aria-pressed=true]{color:#ff5c7a;border-color:rgba(255,92,122,.4)}
+.nxi-empty{margin:24px 0;color:var(--muted,#829998);text-align:center}
+.nxi-empty a{color:var(--accent);font-weight:700}
+.nxi-note{margin:18px 2px 0;color:var(--muted,#829998);font-size:12px}
+@keyframes nxiMarquee{to{transform:translateX(calc(-100% / 3))}}
+
+/* thumbnails: a whole landing page drawn with CSS */
+.nxt{position:relative;display:flex;flex-direction:column;gap:.8em;aspect-ratio:16/10;padding:.95em 1.15em;font-size:3.05cqw;background:var(--bg);color:var(--tx);border:1px solid rgba(255,255,255,.06);border-radius:14px;overflow:hidden;font-family:Inter,system-ui,sans-serif}
+.nxt.mini{width:220px;flex:none;font-size:6.7px;box-shadow:0 26px 40px -26px rgba(0,0,0,.9)}
+.nxt.serif strong,.nxt.serif .nxt-nav b{font-family:Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em}
+.nxt-nav{position:relative;z-index:2;display:flex;align-items:center;gap:.6em;font-size:.82em}
+.nxt-nav b{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:42%}
+.nxt-links{display:flex;gap:.5em;margin-left:auto}
+.nxt-links i{width:2.2em;height:.32em;border-radius:1em;background:currentColor;opacity:.25}
+.nxt-nav em{padding:.35em .7em;border-radius:1em;background:var(--ac);color:var(--bg);font-style:normal;font-weight:800;font-size:.85em;white-space:nowrap}
+.nxt-body{position:relative;z-index:1;display:grid;grid-template-columns:1.05fr 1fr;gap:5%;align-items:center;flex:1;min-height:0}
+.nxt-copy{display:flex;flex-direction:column;align-items:flex-start;gap:.45em;min-width:0}
+.nxt-copy small{color:var(--ac);font-weight:800;font-size:.62em;letter-spacing:.16em}
+.nxt-copy strong{font:800 1.42em/1.05 "Plus Jakarta Sans",Inter,sans-serif;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.nxt-copy p{display:grid;gap:.3em;width:100%;margin:0}
+.nxt-copy p i{height:.34em;border-radius:1em;background:currentColor;opacity:.18}
+.nxt-copy p i+i{width:70%}
+.nxt-btn{display:inline-block;padding:.5em .85em;border-radius:.6em;background:var(--ac);color:var(--bg);font-weight:800;font-size:.72em;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.nxt-btn.wide{display:block;text-align:center}
+.nxt-img{position:relative;height:100%;min-height:0;border-radius:.7em;overflow:hidden;background:var(--sf)}
+.nxt-img svg{display:block;width:100%;height:100%}
+.nxt-ico{display:grid;place-items:center;width:100%;height:100%;background:radial-gradient(circle at 70% 25%,color-mix(in srgb,var(--ac) 55%,transparent),transparent 60%),linear-gradient(150deg,color-mix(in srgb,var(--ac) 35%,var(--sf)),var(--sf));color:color-mix(in srgb,var(--ac) 70%,#fff);font-size:2.6em}
+.nxt svg .sk{fill:color-mix(in srgb,var(--ac) 22%,var(--sf))}
+.nxt svg .sun{fill:color-mix(in srgb,var(--ac) 75%,#fff)}
+.nxt svg .gr{fill:color-mix(in srgb,var(--ac) 30%,var(--bg))}
+.nxt svg .m{fill:color-mix(in srgb,var(--tx) 85%,var(--bg))}
+.nxt svg .m2{fill:color-mix(in srgb,var(--tx) 55%,var(--bg))}
+.nxt svg .d{fill:color-mix(in srgb,var(--bg) 70%,#000)}
+.nxt svg .w{fill:color-mix(in srgb,var(--ac) 60%,#fff);opacity:.85}
+.nxt svg .pv{fill:#1d3a6e;stroke:color-mix(in srgb,#9cc4ff 60%,var(--ac));stroke-width:.5}
+.nxt svg .sea{fill:color-mix(in srgb,var(--ac) 65%,var(--bg))}
+.nxt svg .tree{fill:color-mix(in srgb,#3f8f4a 70%,var(--ac))}
+.nxt svg .ln{fill:none;stroke:color-mix(in srgb,var(--tx) 80%,var(--bg));stroke-width:1.4;stroke-linecap:round}
+.nxt-row{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:4%}
+.nxt-card{display:flex;flex-direction:column;gap:.3em;padding:.35em;border-radius:.55em;background:var(--sf);border:1px solid color-mix(in srgb,var(--tx) 10%,transparent)}
+.nxt-card.flat{padding:.6em}
+.nxt-cimg{display:block;height:2.4em;border-radius:.35em;overflow:hidden}
+.nxt-cimg svg,.nxt-cimg .nxt-ico{height:100%;font-size:1.2em}
+.nxt-card i{height:.3em;border-radius:1em;background:currentColor;opacity:.2}
+.nxt-card b{width:45%;height:.42em;border-radius:1em;background:var(--ac)}
+.nxt-stats span,.nxt-steps span{display:flex;flex-direction:column;gap:.3em;padding:.45em .5em;border-radius:.5em;background:var(--sf)}
+.nxt-stats b{color:var(--ac);font:800 1em/1 "Plus Jakarta Sans",sans-serif}
+.nxt-stats i,.nxt-steps i{height:.3em;border-radius:1em;background:currentColor;opacity:.2}
+.nxt-steps b{display:grid;place-items:center;width:1.5em;height:1.5em;border-radius:50%;background:var(--ac);color:var(--bg);font-size:.7em}
+.nxt-faq{display:grid;gap:.35em}
+.nxt-faq span{display:flex;justify-content:space-between;padding:.4em .6em;border-radius:.45em;background:var(--sf);font-size:.62em;font-weight:600}
+.nxt-faq b{color:var(--ac)}
+.nxt-search{display:flex;align-items:center;gap:.45em;width:100%;padding:.25em .25em .25em .6em;border-radius:.6em;background:var(--sf);font-size:.62em;color:color-mix(in srgb,var(--tx) 60%,transparent)}
+.nxt-search b{margin-left:auto;padding:.4em .7em;border-radius:.45em;background:var(--ac);color:var(--bg)}
+.nxt-calc{display:flex;flex-direction:column;justify-content:center;gap:.3em;padding:.7em;background:var(--sf);border:1px solid color-mix(in srgb,var(--tx) 12%,transparent);font-size:.75em}
+.nxt-calc small{opacity:.6;font-size:.8em}
+.nxt-field{display:block;padding:.35em .5em;border-radius:.4em;background:color-mix(in srgb,var(--bg) 70%,var(--sf));font-weight:700}
+.nxt-compare{display:flex;align-items:flex-end;justify-content:center;gap:12%;padding:.6em .6em 1.4em}
+.nxt-compare .bar{position:relative;width:26%;border-radius:.4em .4em 0 0;background:color-mix(in srgb,var(--tx) 30%,var(--bg))}
+.nxt-compare .bar.a{height:80%}.nxt-compare .bar.b{height:24%;background:var(--ac)}
+.nxt-compare .bar b{position:absolute;left:50%;bottom:-1.3em;translate:-50% 0;font-size:.6em;white-space:nowrap}
+.nxt-compare small{position:absolute;top:.4em;right:.6em;font-size:.5em;opacity:.6}
+.nxt-portrait svg{border-radius:50%;width:78%;height:auto;aspect-ratio:1;margin:6% auto 0}
+.nxt-portrait em{position:absolute;left:50%;bottom:8%;translate:-50% 0;padding:.25em .6em;border-radius:1em;background:var(--ac);color:var(--bg);font-style:normal;font-weight:800;font-size:.55em;white-space:nowrap}
+.nxt-play{position:absolute;left:50%;top:50%;translate:-50% -50%;display:grid;place-items:center;width:2.6em;height:2.6em;border-radius:50%;background:color-mix(in srgb,var(--bg) 40%,transparent);border:2px solid var(--ac);color:var(--ac);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+/* layouts */
+.nxt.L-full .nxt-img,.nxt.L-video .nxt-img{position:absolute;inset:0;z-index:0;border-radius:0}
+.nxt.L-full::after,.nxt.L-video::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(90deg,color-mix(in srgb,var(--bg) 88%,transparent),color-mix(in srgb,var(--bg) 25%,transparent) 70%)}
+.nxt.L-full .nxt-body,.nxt.L-video .nxt-body{grid-template-columns:1fr;align-items:end;padding-bottom:3%}
+.nxt.L-full .nxt-copy,.nxt.L-video .nxt-copy{position:relative;z-index:1;max-width:62%}
+.nxt.L-video .nxt-img{z-index:0}.nxt.L-video .nxt-play{z-index:2;left:72%}
+.nxt.L-full .nxt-nav,.nxt.L-video .nxt-nav{z-index:2}
+.nxt.L-center .nxt-body,.nxt.L-faq .nxt-body,.nxt.L-steps .nxt-body{grid-template-columns:1fr;justify-items:center;text-align:center;flex:none}
+.nxt.L-center .nxt-copy,.nxt.L-faq .nxt-copy,.nxt.L-steps .nxt-copy{align-items:center}
+.nxt.L-center .nxt-copy p,.nxt.L-faq .nxt-copy p,.nxt.L-steps .nxt-copy p{display:none}
+.nxt.L-center .nxt-img,.nxt.L-faq .nxt-img,.nxt.L-steps .nxt-img{display:none}
+.nxt.L-editorial .nxt-body{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:4%}
+.nxt.L-editorial .nxt-copy{flex-direction:row;flex-wrap:wrap;align-items:flex-end;gap:.4em 1em;padding-bottom:3%;border-bottom:1px solid color-mix(in srgb,var(--tx) 18%,transparent)}
+.nxt.L-editorial .nxt-copy strong{font-size:1.65em;flex:1 1 70%}
+.nxt.L-editorial .nxt-copy small,.nxt.L-editorial .nxt-copy p{display:none}
+.nxt.L-cards .nxt-body,.nxt.L-stats .nxt-body,.nxt.L-search .nxt-body{flex:none;height:56%}
+.nxt.L-search .nxt-copy strong{font-size:1.3em}
+.nxt.L-cards .nxt-copy p,.nxt.L-stats .nxt-copy p,.nxt.L-search .nxt-copy p{display:none}
+
+@media (min-width:681px){.nxi-bar{position:sticky;top:8px}}
+@media (max-width:680px){
+.nexa-ai-tabs{display:grid!important;grid-template-columns:repeat(3,1fr)!important}
+.nexa-ai-tabs button{justify-content:center!important;padding:0 6px!important;font-size:12.5px!important}
+.nexa-ai-tabs button i{display:none!important}
+.nxi-hero{min-height:340px}
+.nxi-hero-copy{padding:22px 18px 0}
+.nxi-plane{left:0;top:66%;transform:rotateX(34deg) rotateZ(-8deg)}
+.nxi-wall{-webkit-mask:linear-gradient(180deg,transparent 30%,#000 70%);mask:linear-gradient(180deg,transparent 30%,#000 70%)}
+.nxi-hero::after{background:linear-gradient(180deg,var(--bg) 30%,transparent 75%)}
+.nxt.mini{width:170px;font-size:5.2px}
+.nxi-bar{flex-wrap:wrap;top:4px}
+.nxi-pin{height:44px;width:100%;justify-content:center}
+.nxi-search{height:48px}
+.nxi-grid{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.nxi-row{animation:none}.nxi-card,.nxi-use{transition:none}}
+html[data-cp-motion=quiet] .nxi-row{animation:none}
+</style>
+<script id="nexa-insp">
+/* Inspirações: original style references by niche (no third-party images).
+   [niche, title, layout, font, [background, surface, accent, text], art, brand, headline, cta, description, colours for the builder, tags, Pinterest search] */
+const NXI_NICHES=[["corretor","Corretor de imóveis","fa-house"],["advocacia","Advocacia","fa-scale-balanced"],["solar","Energia solar","fa-solar-panel"],
+["barbearia","Barbearia","fa-scissors"],["odonto","Odontologia","fa-tooth"],["estetica","Estética","fa-spa"],["academia","Academia","fa-dumbbell"],["restaurante","Restaurante","fa-utensils"],
+["hamburgueria","Hamburgueria","fa-burger"],["pizzaria","Pizzaria","fa-pizza-slice"],["cafeteria","Cafeteria","fa-mug-hot"],["pet","Pet shop","fa-paw"],["oficina","Oficina mecânica","fa-wrench"],
+["contabilidade","Contabilidade","fa-calculator"],["arquitetura","Arquitetura","fa-compass-drafting"],["psicologia","Psicologia","fa-brain"],["nutricao","Nutrição","fa-apple-whole"],
+["idiomas","Escola de idiomas","fa-language"],["fotografia","Fotografia","fa-camera"],["construtora","Construtora e reformas","fa-helmet-safety"],["clinica","Clínica médica","fa-stethoscope"]];
+const NXI_NICHE_TEXT={corretor:"corretor de imóveis",advocacia:"escritório de advocacia",solar:"empresa de energia solar",barbearia:"barbearia",odonto:"clínica odontológica",estetica:"clínica de estética",academia:"academia",restaurante:"restaurante",hamburgueria:"hamburgueria",pizzaria:"pizzaria",cafeteria:"cafeteria",pet:"pet shop",oficina:"oficina mecânica",contabilidade:"escritório de contabilidade",arquitetura:"escritório de arquitetura",psicologia:"consultório de psicologia",nutricao:"consultório de nutrição",idiomas:"escola de idiomas",fotografia:"estúdio de fotografia",construtora:"construtora",clinica:"clínica médica"};
+const NXI_REFS=[
+/* corretor de imóveis */
+["corretor","Luxo em preto e dourado","full","r",["#0e0d0b","#1b1916","#c9a45c","#f5efe6"],"house","Lima Prime","Imóveis de alto padrão","Agendar visita","Capa com foto do imóvel em tela cheia, títulos com serifa e botão de WhatsApp sempre visível.","dourado com preto","luxo alto padrão elegante escuro","site corretor de imóveis luxo preto dourado"],
+["corretor","Azul confiança com busca de imóveis","search","s",["#f4f7fb","#ffffff","#1f4fd1","#0d1b3e"],"tower","Casa Certa","Encontre o imóvel certo","Buscar imóveis","Barra de busca por bairro e tipo logo na capa e cards de imóveis com preço e metragem.","azul com branco","busca cards moderno claro","site imobiliária busca de imóveis azul"],
+["corretor","Minimalista claro com fotos grandes","editorial","s",["#fafaf7","#efeee9","#111111","#111111"],"house","Morada","Casa, do jeito que você imagina","Ver imóveis","Tipografia grande, muito espaço em branco e fotos amplas dos imóveis.","preto com branco","minimalista clean fotos","site corretor de imóveis minimalista"],
+["corretor","Lançamentos na planta","cards","s",["#0b1f2a","#12303f","#19c3a6","#eaf6f4"],"tower","Vértice","Lançamentos com condição de planta","Quero saber mais","Destaque para empreendimentos, plantas, etapas da obra e simulação de entrada.","verde agua com azul escuro","lançamento planta construtora","landing page lançamento imobiliário na planta"],
+["corretor","Corretor com foto e CRECI","portrait","s",["#f6f1ea","#ffffff","#8a5a3b","#2b1d14"],"user","Rafael Lima","Seu corretor de confiança","Falar com o corretor","Foto do corretor na capa, CRECI em destaque, depoimentos de clientes e WhatsApp direto.","marrom com bege","pessoal autoridade creci depoimentos","site pessoal corretor de imóveis"],
+["corretor","Casas de praia","full","s",["#e9f6f7","#ffffff","#0aa5b8","#0b2a33"],"beach","Vista Mar","Seu refúgio perto do mar","Ver casas de praia","Paleta de areia e mar, fotos com céu aberto e lista de casas por praia.","turquesa com bege","praia temporada leve","site imobiliária litoral praia"],
+["corretor","Chácaras e sítios","split","r",["#f3efe3","#fbf8ef","#4e7a3a","#23301b"],"field","Raízes","Chácaras e sítios para viver melhor","Ver propriedades","Tons de terra e verde, fotos de natureza e filtros por tamanho do terreno.","verde com bege","rural natureza campo","site venda de chácaras sítios"],
+["corretor","Aluguel rápido e sem burocracia","steps","s",["#ffffff","#fff4ee","#ff6b35","#1d1d1f"],"key","Aluga Já","Alugue sem complicação","Ver imóveis para alugar","Passo a passo em três etapas, lista de documentos e contato rápido.","laranja com branco","aluguel locação simples","site aluguel de imóveis simples"],
+["corretor","Avaliação gratuita do seu imóvel","calc","s",["#0f172a","#1e293b","#f59e0b","#f8fafc"],"chart","Valora","Quanto vale o seu imóvel?","Avaliar meu imóvel","Formulário de avaliação na capa para captar quem quer vender.","amarelo com azul marinho","avaliação captação formulário","landing page avaliação de imóvel"],
+["corretor","Studios para investidores","cards","s",["#111827","#1f2937","#22d3ee","#f9fafb"],"tower","Urban Studio","Studios com renda de aluguel","Ver rentabilidade","Cards com metragem, rentabilidade e localização para quem compra para investir.","ciano com grafite","investimento studio moderno escuro","site investimento imobiliário studio"],
+["corretor","Condomínio fechado para a família","full","s",["#fdf8f3","#ffffff","#2b6cb0","#1a2433"],"house","Recanto Verde","Segurança e lazer para a família","Agendar visita","Fotos do lazer do condomínio, mapa da região e planta das casas.","azul com branco","família condomínio lazer","site condomínio fechado casas"],
+["corretor","Editorial em tons terrosos","editorial","r",["#efe7dc","#f7f1e8","#a0522d","#2c1e16"],"house","Terra Casa","Arquitetura que acolhe","Conhecer imóveis","Títulos grandes com serifa, fotos de interiores e textos sobre cada imóvel.","terracota com bege","editorial arquitetura sofisticado","site imobiliária editorial terroso"],
+["corretor","Imobiliária de bairro","center","s",["#fffaf0","#ffffff","#e11d48","#1f2937"],"house","Ponto Lar","A imobiliária do seu bairro","Falar com a gente","Visual acolhedor, equipe em destaque e imóveis separados por bairro.","vermelho com bege","local acolhedor equipe","site imobiliária de bairro"],
+["corretor","Tour virtual em vídeo","video","s",["#050505","#151515","#ffffff","#fafafa"],"house","Lumen Imóveis","Conheça o imóvel sem sair de casa","Assistir ao tour","Vídeo do imóvel na capa, galeria de fotos e agendamento de visita.","preto com branco","vídeo tour virtual moderno escuro","site imobiliária tour virtual vídeo"],
+/* advocacia */
+["advocacia","Clássico azul-marinho e dourado","split","r",["#0b1a33","#13264a","#c8a96a","#f3efe6"],"columns","Duarte & Melo","Orientação jurídica com clareza","Agendar consulta","Serifa elegante, áreas de atuação em cards e equipe com OAB.","dourado com azul marinho","clássico tradicional sóbrio elegante","site escritório de advocacia azul marinho dourado"],
+["advocacia","Minimalista branco com serifa","editorial","r",["#fbfbfa","#f1f1ef","#1f2937","#111111"],"scales","Moraes Advocacia","Direito de família com escuta e cuidado","Falar com a advogada","Muito espaço em branco, frases curtas e perguntas frequentes no final.","grafite com branco","minimalista família perguntas frequentes","site advocacia minimalista"],
+["advocacia","Trabalhista direto ao ponto","center","s",["#f2f5f9","#ffffff","#1d4ed8","#0f172a"],"briefcase","Costa Trabalhista","Conheça seus direitos trabalhistas","Tirar uma dúvida","Conteúdo informativo sobre direitos, lista de situações comuns e contato.","azul com branco","trabalhista informativo","site advogado trabalhista"],
+["advocacia","Boutique em verde-escuro","split","r",["#0f2a22","#163a2f","#d4b483","#eef3ee"],"columns","Vieira Sociedade","Advocacia empresarial sob medida","Conversar com o escritório","Visual de boutique, foco em empresas e casos atendidos descritos sem promessas.","dourado com verde escuro","boutique empresarial elegante","site advocacia empresarial verde escuro"],
+["advocacia","Previdenciário acolhedor","split","s",["#fff8ee","#ffffff","#b45309","#3b2a1a"],"hands","Previ Lima","Aposentadoria e benefícios do INSS","Tirar dúvidas","Linguagem simples para quem busca aposentadoria, lista de benefícios e WhatsApp.","caramelo com bege","previdenciário inss acolhedor","site advogado previdenciário"],
+["advocacia","Advogada com foto e OAB","portrait","r",["#f7f3f1","#ffffff","#7c2d4a","#2a1720"],"user","Dra. Ana Paula","Atendimento próximo e humano","Agendar conversa","Foto da advogada na capa, número da OAB, áreas de atuação e artigos.","vinho com rosa claro","advogada pessoal humano","site advogada pessoal"],
+["advocacia","Criminal sóbrio em preto","full","s",["#0a0a0a","#161616","#b91c1c","#fafafa"],"scales","Rocha Criminal","Defesa técnica e sigilosa","Falar com o escritório","Fundo escuro, poucas cores e texto direto sobre a atuação e o sigilo.","vermelho escuro com preto","criminal sério escuro","site advogado criminalista"],
+["advocacia","Direito imobiliário","cards","s",["#f5f7f6","#ffffff","#0f766e","#0b2321"],"house","Lex Imóveis","Segurança jurídica na compra do imóvel","Analisar meu contrato","Cards com serviços como análise de contrato, usucapião e regularização.","verde escuro com branco","imobiliário contratos","site advocacia direito imobiliário"],
+["advocacia","Consumidor com perguntas frequentes","faq","s",["#fefce8","#ffffff","#ca8a04","#1c1917"],"chat","Defesa Já","Problema com uma compra ou serviço?","Contar o meu caso","Perguntas frequentes na capa, explicações curtas e botão para contar o caso.","amarelo com preto","consumidor perguntas frequentes","site advogado direito do consumidor"],
+["advocacia","Tributário para empresas","stats","s",["#0b1220","#111b2e","#38bdf8","#f1f5f9"],"chart","Tax Advisory","Planejamento tributário para empresas","Agendar reunião","Visual corporativo com dados, segmentos atendidos e equipe.","azul claro com azul escuro","tributário empresas dados corporativo","site advocacia tributária corporativa"],
+["advocacia","Família e sucessões em tons suaves","editorial","r",["#f1f5f9","#ffffff","#64748b","#1e293b"],"scales","Almeida & Prado","Inventário e partilha com tranquilidade","Agendar atendimento","Cores suaves, textos acolhedores e explicação de cada etapa do inventário.","cinza com branco","sucessões inventário suave","site advocacia família sucessões"],
+["advocacia","Tradicional com fachada","full","r",["#1c1917","#292524","#e7d3a3","#fafaf9"],"columns","Bastos Advogados","Tradição e ética na advocacia","Conhecer o escritório","Foto da fachada na capa, história do escritório e sócios em destaque.","bege com marrom","tradicional institucional","site escritório de advocacia tradicional"],
+["advocacia","Jurídico para startups","center","s",["#f5f3ff","#ffffff","#6d28d9","#1e1b4b"],"scales","Legal Lab","Contratos e LGPD para startups","Falar com o time","Visual moderno, planos de atendimento por demanda e linguagem sem juridiquês.","roxo com lilas","moderno startups digital lgpd","site advocacia para startups"],
+["advocacia","Agrário e ambiental","split","s",["#f0f5ec","#ffffff","#3f6212","#1a2e05"],"field","Terra & Lei","Direito agrário e ambiental","Agendar consulta","Fotos do campo, atuação para produtores rurais e regularização ambiental.","oliva com bege","agrário rural ambiental","site advocacia agrária"],
+/* energia solar */
+["solar","Laranja vibrante com simulador","calc","s",["#fff7ed","#ffffff","#f97316","#1c1917"],"solar","SolarMax","Reduza a sua conta de luz","Simular economia","Simulador de economia na capa, etapas da instalação e fotos de obras entregues.","laranja com branco","simulador economia vibrante","landing page energia solar simulador"],
+["solar","Azul tecnológico com painéis","full","s",["#0b1d3a","#12294d","#facc15","#f8fafc"],"solar","Fóton Energia","Energia solar para a sua casa","Pedir orçamento","Foto de telhado com painéis, números de projetos e marcas dos equipamentos.","amarelo com azul marinho","tecnológico residencial","site energia solar azul amarelo"],
+["solar","Verde sustentável","split","s",["#f0fdf4","#ffffff","#16a34a","#052e16"],"leaf","Verde Sol","Energia limpa e economia de verdade","Quero economizar","Mensagem de sustentabilidade, benefícios ambientais e garantia dos equipamentos.","verde com branco","sustentável ecológico","site energia solar sustentável verde"],
+["solar","Solar para empresas","stats","s",["#111827","#1f2937","#f59e0b","#f9fafb"],"factory","SunPower Biz","Energia solar para o seu negócio","Falar com um especialista","Números de usinas instaladas, segmentos atendidos e retorno do investimento.","mostarda com grafite","empresarial indústria dados","site energia solar para empresas"],
+["solar","Agro e fazendas","full","s",["#fefce8","#ffffff","#65a30d","#1a2e05"],"solarfield","Agro Solar","Energia solar no campo","Simular para minha fazenda","Usina no solo em foto ampla, linguagem para produtores e linhas de crédito rural.","verde com amarelo","agro rural campo","energia solar agronegócio site"],
+["solar","Pôr do sol em degradê","center","s",["#1e1b4b","#2e2a6b","#fb923c","#ffffff"],"sun","Horizonte","Sol no telhado, economia na conta","Fazer simulação","Degradê de pôr do sol na capa, frases curtas e números em destaque.","laranja com roxo","degradê impacto","site energia solar degradê pôr do sol"],
+["solar","Clean em branco e azul","split","s",["#ffffff","#f1f5ff","#2563eb","#0f172a"],"solar","Lumina","Projeto, instalação e homologação","Pedir visita técnica","Visual institucional limpo, etapas numeradas e selos de garantia.","azul com branco","clean institucional etapas","site energia solar clean"],
+["solar","Financiamento facilitado","calc","s",["#ecfeff","#ffffff","#0891b2","#083344"],"chart","Crédito Solar","Financie o seu sistema solar","Simular parcelas","Simulação de parcelas na capa e bancos parceiros em destaque.","ciano com branco","financiamento parcelas","landing page financiamento energia solar"],
+["solar","Premium escuro com dourado","full","s",["#0c0a09","#1c1917","#eab308","#fafaf9"],"solar","Aurum Solar","Energia solar de alto desempenho","Falar com um consultor","Fundo escuro, detalhes dourados e foco em equipamentos premium.","dourado com preto","premium escuro elegante","site energia solar premium preto"],
+["solar","Conta antes e depois","compare","s",["#f8fafc","#ffffff","#16a34a","#0f172a"],"chart","EconoSol","Veja quanto você pode economizar","Calcular minha economia","Comparativo de conta de luz antes e depois, com aviso de que é uma estimativa.","verde com cinza","comparativo economia","site energia solar antes e depois conta de luz"],
+["solar","Instalador da região com equipe","split","s",["#fffbeb","#ffffff","#d97706","#292524"],"team","Sol do Norte","Instalação feita por quem é da região","Chamar no WhatsApp","Fotos da equipe trabalhando, cidades atendidas e avaliações de clientes.","mostarda com bege","local equipe regional","site instalador energia solar"],
+["solar","Solar e carro elétrico","center","s",["#0f172a","#1e293b","#22c55e","#f8fafc"],"car","Volt Casa","Abasteça o carro com o sol","Quero saber mais","Integração de painéis e carregador veicular, com visual tecnológico.","verde com azul escuro","mobilidade carro elétrico tecnológico","energia solar carregador carro elétrico site"],
+["solar","Monitoramento pelo celular","stats","s",["#f1f5f9","#ffffff","#7c3aed","#0f172a"],"chart","GeraMais","Acompanhe a geração pelo celular","Ver como funciona","Telas do aplicativo de monitoramento e gráficos de geração mensal.","roxo com cinza","app monitoramento tecnologia","site energia solar monitoramento app"],
+["solar","Condomínios e energia compartilhada","cards","s",["#f0f9ff","#ffffff","#0284c7","#0c4a6e"],"tower","SolarCond","Energia solar para condomínios","Agendar apresentação","Cards por tipo de condomínio, economia nas áreas comuns e etapas da aprovação.","azul claro com branco","condomínio compartilhada","energia solar para condomínio site"],
+/* outros nichos */
+["barbearia","Vintage em preto e dourado","full","r",["#111111","#1c1c1c","#c9a227","#f5f5f4"],"fa-scissors","Dom Bigode","Corte na régua, barba alinhada","Agendar horário","Fundo escuro, serifa clássica, preços em lista e agendamento pelo WhatsApp.","dourado com preto","vintage clássico escuro","site barbearia vintage"],
+["barbearia","Urbana com cores vivas","split","s",["#0f0f12","#1a1a20","#f43f5e","#fafafa"],"fa-scissors","Navalha Street","Seu estilo, sem fila","Marcar agora","Visual urbano, galeria de cortes e combos em destaque.","rosa choque com preto","urbano jovem vibrante","site barbearia moderna urbana"],
+["barbearia","Clean em verde-escuro","center","s",["#f4f4f0","#ffffff","#14532d","#1c1917"],"fa-scissors","Barba & Co.","Cuidado masculino com calma","Ver serviços","Fundo claro, cards de serviços e fotos do ambiente.","verde escuro com branco","clean minimalista","site barbearia clean"],
+["odonto","Azul claro acolhedor","split","s",["#f0f9ff","#ffffff","#0284c7","#0c4a6e"],"fa-tooth","Sorriso Leve","Seu sorriso merece cuidado","Agendar avaliação","Cores suaves, tratamentos em cards e equipe com CRO.","azul claro com branco","suave saúde acolhedor","site clínica odontológica azul claro"],
+["odonto","Estética dental premium","full","r",["#0c0a09","#1c1917","#d6b98c","#fafaf9"],"fa-tooth","Lumière Odonto","Estética do sorriso","Agendar consulta","Fundo escuro elegante, lentes e clareamento em destaque.","bege com preto","premium estética elegante","site clínica odontológica premium"],
+["odonto","Infantil colorido","center","s",["#fefce8","#ffffff","#f97316","#1f2937"],"fa-tooth","Dentinho Feliz","Dentista para os pequenos","Marcar consulta","Cores alegres, ilustrações e explicações para pais.","laranja com amarelo","infantil alegre colorido","site odontopediatria"],
+["estetica","Nude sofisticado","editorial","r",["#f8f1ec","#ffffff","#b08968","#2d221c"],"fa-spa","Bela Pele","Cuide de você","Agendar procedimento","Tons nude, serifa delicada e procedimentos com antes e depois.","nude com bege","sofisticado delicado elegante","site clínica de estética nude"],
+["estetica","Rosa moderno","split","s",["#fff1f5","#ffffff","#db2777","#3f0d26"],"fa-spa","Glow Studio","Autoestima em cada detalhe","Marcar avaliação","Visual moderno em rosa, pacotes e depoimentos.","rosa com branco","moderno feminino","site estética rosa moderno"],
+["estetica","Spa natural","full","s",["#f2f5ef","#ffffff","#5f7a4e","#1f2a19"],"fa-leaf","Essência Spa","Relaxe e renove a energia","Reservar horário","Fotos de ambiente, tons de verde e massagens em destaque.","oliva com bege","natural relaxante spa","site spa day natural"],
+["academia","Energia em preto e neon","full","s",["#0a0a0a","#161616","#a3e635","#fafafa"],"fa-dumbbell","Força Total","Treine sem desculpas","Aula experimental","Fundo escuro com verde neon, modalidades e planos.","verde limao com preto","energia neon escuro","site academia preto neon"],
+["academia","Funcional vibrante","split","s",["#fff7ed","#ffffff","#ea580c","#1c1917"],"fa-dumbbell","Move Fit","Seu melhor treino começa hoje","Quero começar","Cores quentes, horários das turmas e professores.","laranja com branco","vibrante funcional","site treino funcional"],
+["academia","Pilates suave","center","s",["#f5f5f4","#ffffff","#78716c","#1c1917"],"fa-person-walking","Equilíbrio","Mais movimento, menos dor","Agendar aula","Tons neutros, fotos leves e planos mensais.","cinza com bege","suave pilates neutro","site estúdio de pilates"],
+["restaurante","Bistrô à luz de velas","full","r",["#1a120b","#2a1d12","#d4a373","#faf3e0"],"fa-utensils","Bistrô Lume","Sabores que ficam na memória","Reservar mesa","Fotos de pratos em fundo escuro e reserva em destaque.","caramelo com marrom","bistrô elegante escuro","site restaurante bistrô elegante"],
+["restaurante","Caseiro e colorido","split","s",["#fffbeb","#ffffff","#dc2626","#292524"],"fa-utensils","Sabor de Casa","Comida feita com carinho","Ver cardápio","Cardápio do dia, marmitas e entrega pelo WhatsApp.","vermelho com bege","caseiro acolhedor","site restaurante comida caseira"],
+["restaurante","Japonês minimalista","editorial","s",["#fafaf9","#ffffff","#b91c1c","#0c0a09"],"fa-fish","Sakura","Tradição em cada peça","Fazer pedido","Muito branco, detalhe em vermelho e combinados em destaque.","vermelho com branco","japonês minimalista","site restaurante japonês minimalista"],
+["hamburgueria","Smash em amarelo e preto","full","s",["#111111","#1c1c1c","#facc15","#fafafa"],"fa-burger","Smash House","Burger artesanal de verdade","Pedir agora","Fotos grandes de lanches, combos e delivery.","amarelo com preto","impacto delivery escuro","site hamburgueria preto amarelo"],
+["hamburgueria","Retrô americano","center","s",["#fef2f2","#ffffff","#dc2626","#1f2937"],"fa-burger","Route 66","Clássicos americanos","Ver cardápio","Visual retrô, milkshakes e combos com cores fortes.","vermelho com branco","retrô divertido","site hamburgueria retrô"],
+["hamburgueria","Gourmet escuro","split","r",["#0c0a09","#1c1917","#f97316","#fafaf9"],"fa-burger","Brasa Burger","Feito na brasa","Fazer pedido","Fundo escuro, serifa e lanches gourmet em destaque.","laranja com preto","gourmet escuro","site hamburgueria gourmet"],
+["pizzaria","Napolitana tradicional","full","r",["#1f130b","#2b1b10","#ef4444","#fef3c7"],"fa-pizza-slice","Forno da Vila","Pizza de forno a lenha","Pedir agora","Fotos do forno, sabores tradicionais e delivery.","vermelho com marrom","tradicional italiano","site pizzaria forno a lenha"],
+["pizzaria","Delivery moderno","split","s",["#fff7ed","#ffffff","#ea580c","#1c1917"],"fa-pizza-slice","Pizza Já","Pizza quentinha na sua porta","Pedir pelo WhatsApp","Cardápio com preços, bordas e combos da semana.","laranja com branco","delivery moderno","site pizzaria delivery"],
+["pizzaria","Verde, branco e vermelho","center","s",["#f0fdf4","#ffffff","#15803d","#14532d"],"fa-pizza-slice","Bella Napoli","Sabor da Itália","Ver sabores","Cores da Itália, história da casa e massas artesanais.","verde com vermelho","italiano tradicional","site pizzaria italiana"],
+["cafeteria","Aconchegante em tons de café","split","r",["#f5ede3","#fffaf3","#6f4e37","#2b1d14"],"fa-mug-hot","Grão Nobre","Café coado na hora","Ver cardápio","Tons de café, fotos do balcão e cardápio do dia.","cafe com bege","aconchegante clássico","site cafeteria aconchegante"],
+["cafeteria","Minimalista moderna","editorial","s",["#fafafa","#ffffff","#111111","#111111"],"fa-mug-hot","Brew","Café especial, do grão à xícara","Conhecer","Fundo branco, tipografia forte e fotos de produto.","preto com branco","minimalista moderno","site cafeteria minimalista"],
+["cafeteria","Colorida e jovem","center","s",["#fdf4ff","#ffffff","#c026d3","#3b0764"],"fa-mug-hot","Cafuné","Seu cantinho favorito","Ver novidades","Cores alegres, bebidas geladas e doces em destaque.","roxo com rosa","jovem colorido","site cafeteria colorida"],
+["pet","Alegre em azul e amarelo","split","s",["#eff6ff","#ffffff","#2563eb","#1e3a8a"],"fa-paw","Patas Felizes","Seu pet feliz e cheiroso","Agendar banho","Cores alegres, serviços de banho e tosa e leva e traz.","azul com amarelo","alegre divertido","site pet shop alegre"],
+["pet","Veterinária suave","center","s",["#f0fdfa","#ffffff","#0d9488","#134e4a"],"fa-paw","Vet Amigo","Cuidado de verdade para quem é da família","Agendar consulta","Tons de verde-água, equipe veterinária e emergência.","verde agua com branco","suave saúde","site clínica veterinária"],
+["pet","Boutique pet premium","full","r",["#1c1917","#292524","#f59e0b","#fafaf9"],"fa-paw","Pet Royale","Mimo para o seu melhor amigo","Conhecer","Fundo escuro elegante e serviços de spa pet.","mostarda com preto","premium elegante","site pet shop premium"],
+["oficina","Industrial em vermelho","full","s",["#111827","#1f2937","#ef4444","#f9fafb"],"fa-wrench","Auto Center Silva","Revisão sem dor de cabeça","Pedir orçamento","Fundo escuro, serviços em lista e orçamento rápido.","vermelho com grafite","industrial impacto","site oficina mecânica"],
+["oficina","Funilaria e pintura","split","s",["#f8fafc","#ffffff","#2563eb","#0f172a"],"fa-car","Brilho Car","Seu carro como novo","Ver antes e depois","Galeria de antes e depois e serviços de funilaria.","azul com cinza","antes e depois","site funilaria e pintura"],
+["oficina","Moto peças e serviços","center","s",["#0a0a0a","#171717","#f97316","#fafafa"],"fa-motorcycle","Moto Point","Sua moto em boas mãos","Chamar no WhatsApp","Visual escuro com laranja, peças e serviços.","laranja com preto","moto impacto","site oficina de motos"],
+["contabilidade","Corporativo azul","split","s",["#f8fafc","#ffffff","#1e40af","#0f172a"],"chart","Conta Certa","Contabilidade descomplicada","Falar com um contador","Serviços para MEI e empresas, planos e atendimento online.","azul escuro com branco","corporativo confiável","site escritório de contabilidade"],
+["contabilidade","Digital para MEI","center","s",["#f0fdf4","#ffffff","#16a34a","#14532d"],"chart","MEI Fácil","Abra e organize o seu MEI","Começar agora","Linguagem simples, passo a passo e planos mensais.","verde com branco","digital simples","site contabilidade para MEI"],
+["contabilidade","Escuro com dados","stats","s",["#0b1220","#111b2e","#14b8a6","#f1f5f9"],"chart","Prisma Contábil","Números claros para decisões seguras","Agendar reunião","Gráficos, indicadores e equipe técnica.","verde agua com azul escuro","dados corporativo escuro","site contabilidade moderna"],
+["arquitetura","Portfólio editorial","editorial","r",["#f5f5f4","#ffffff","#1c1917","#1c1917"],"house","Ateliê Linha","Espaços pensados para viver","Ver projetos","Projetos em grande escala, texto curto e muito espaço.","preto com bege","editorial portfólio","site arquitetura portfólio editorial"],
+["arquitetura","Interiores aconchegantes","split","r",["#f3ede6","#fbf8f4","#9c6b4e","#2e211a"],"house","Casa Bela","Interiores com a sua cara","Agendar conversa","Fotos de interiores, etapas do projeto e depoimentos.","terracota com bege","interiores aconchegante","site design de interiores"],
+["arquitetura","Moderno em preto","full","s",["#0a0a0a","#171717","#e5e5e5","#fafafa"],"tower","Monolito","Arquitetura contemporânea","Ver portfólio","Fundo preto, fotos de fachadas e lista de projetos.","cinza com preto","contemporâneo escuro","site arquitetura contemporânea"],
+["psicologia","Suave em verde","split","s",["#f0fdf4","#ffffff","#4d7c0f","#1a2e05"],"fa-brain","Espaço Acolher","Um lugar seguro para cuidar de você","Agendar sessão","Cores suaves, abordagem explicada e atendimento online.","oliva com branco","suave acolhedor","site psicóloga acolhedor"],
+["psicologia","Lilás delicado","portrait","r",["#faf5ff","#ffffff","#7e22ce","#3b0764"],"user","Dra. Júlia","Terapia com escuta e cuidado","Marcar conversa","Foto da psicóloga, CRP e perguntas frequentes.","roxo com lilas","delicado pessoal","site psicóloga lilás"],
+["psicologia","Minimalista em areia","editorial","r",["#f7f3ee","#ffffff","#a16207","#292524"],"fa-brain","Mente Leve","Desacelere. Respire.","Agendar","Muito espaço, frases curtas e artigos.","mostarda com bege","minimalista calmo","site psicologia minimalista"],
+["nutricao","Fresco em verde e laranja","split","s",["#f7fee7","#ffffff","#65a30d","#1a2e05"],"fa-apple-whole","Nutri Vida","Alimentação que cabe na sua rotina","Agendar consulta","Cores frescas, planos e resultados de pacientes.","verde com laranja","fresco saudável","site nutricionista"],
+["nutricao","Esportiva","full","s",["#0f172a","#1e293b","#22c55e","#f8fafc"],"fa-apple-whole","Performance Nutri","Nutrição para o seu treino","Quero meu plano","Visual esportivo e planos para atletas.","verde com azul escuro","esportivo energia","site nutrição esportiva"],
+["nutricao","Delicada em rosa","center","s",["#fff1f2","#ffffff","#e11d48","#4c0519"],"fa-apple-whole","Leve Nutri","Comer bem pode ser simples","Marcar consulta","Visual delicado, receitas e atendimento online.","rosa com branco","delicado feminino","site nutricionista rosa"],
+["idiomas","Inglês vibrante","split","s",["#eef2ff","#ffffff","#4f46e5","#1e1b4b"],"fa-language","Speak Up","Fale inglês com confiança","Aula experimental","Turmas, níveis e professores em destaque.","violeta com branco","vibrante jovem","site escola de inglês"],
+["idiomas","Espanhol caloroso","center","s",["#fff7ed","#ffffff","#dc2626","#431407"],"fa-language","Hola Escola","Aprenda espanhol de verdade","Quero uma aula","Cores quentes, cursos e intercâmbio.","vermelho com amarelo","caloroso divertido","site escola de espanhol"],
+["idiomas","Online minimalista","editorial","s",["#fafafa","#ffffff","#0f172a","#0f172a"],"fa-language","Fluent","Aulas ao vivo, de onde estiver","Começar agora","Planos online, metodologia e depoimentos.","azul marinho com branco","online minimalista","site curso de idiomas online"],
+["fotografia","Portfólio escuro","full","r",["#0a0a0a","#141414","#fafafa","#fafafa"],"fa-camera","Camila Rocha","Fotos que contam a sua história","Ver portfólio","Galeria em tela cheia e ensaios por categoria.","preto com branco","portfólio escuro","site fotógrafa portfólio"],
+["fotografia","Casamentos em tons pastel","editorial","r",["#fdf8f6","#ffffff","#c08497","#3d2a2f"],"fa-camera","Laço Fotos","Seu grande dia, para sempre","Pedir orçamento","Tons pastel, histórias de casais e pacotes.","rosa claro com bege","casamento romântico","site fotógrafo de casamento"],
+["fotografia","Newborn delicado","center","s",["#f0f9ff","#ffffff","#60a5fa","#1e3a8a"],"fa-camera","Pequenos Momentos","Os primeiros dias merecem ser lembrados","Agendar ensaio","Fotos leves e informações para os pais.","azul bebe com branco","delicado newborn","site fotografia newborn"],
+["construtora","Obra em amarelo e grafite","full","s",["#1f2937","#374151","#facc15","#f9fafb"],"fa-helmet-safety","Base Forte","Construção com prazo e qualidade","Pedir orçamento","Fotos de obras, etapas e garantia.","amarelo com grafite","construção impacto","site construtora"],
+["construtora","Reformas de casa","split","s",["#f8fafc","#ffffff","#ea580c","#0f172a"],"fa-paint-roller","Reforma Já","Reforma sem dor de cabeça","Ver antes e depois","Antes e depois, serviços e regiões atendidas.","laranja com cinza","reformas antes e depois","site empresa de reformas"],
+["construtora","Engenharia corporativa","stats","s",["#0b1220","#111b2e","#3b82f6","#f1f5f9"],"tower","Eixo Engenharia","Engenharia para grandes projetos","Falar com a engenharia","Números de obras, clientes e certificações.","azul com azul escuro","corporativo dados","site engenharia civil corporativo"],
+["clinica","Clínica moderna em azul","split","s",["#f0f9ff","#ffffff","#0369a1","#0c4a6e"],"fa-stethoscope","Vida Clínica","Saúde com atenção de perto","Agendar consulta","Especialidades em cards, convênios e equipe médica.","azul com branco","saúde moderna","site clínica médica moderna"],
+["clinica","Dermatologia elegante","editorial","r",["#faf5f0","#ffffff","#9a7b5f","#2e241d"],"fa-stethoscope","Derma Lumi","Pele saudável, com ciência","Marcar avaliação","Tons claros, tratamentos e médica com CRM.","bege com marrom","elegante sofisticado","site dermatologista elegante"],
+["clinica","Pediatria alegre","center","s",["#fefce8","#ffffff","#0ea5e9","#0c4a6e"],"fa-stethoscope","Crescer Bem","Cuidado para quem está crescendo","Agendar","Cores alegres, ilustrações e orientações para os pais.","azul claro com amarelo","infantil alegre","site pediatra"]
+];
+
+/* Inspirações: references by niche inside IA NexaWeb, with search and "use in the builder" */
+(()=>{"use strict";
+const panel=document.getElementById("nexaAiRefsPanel");if(!panel)return;
+const FAV_KEY="nexa-insp-favs",esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const norm=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const nicheName=Object.fromEntries(NXI_NICHES.map(n=>[n[0],n[1]]));
+const REFS=NXI_REFS.map((r,i)=>({i,id:r[0]+"-"+i,niche:r[0],title:r[1],layout:r[2],serif:r[3]==="r",c:r[4],art:r[5],brand:r[6],headline:r[7],cta:r[8],desc:r[9],colors:r[10],tags:r[11],pin:r[12],
+  hay:norm([nicheName[r[0]],NXI_NICHE_TEXT[r[0]],r[1],r[6],r[7],r[9],r[10],r[11]].join(" "))}));
+let favs=new Set();try{favs=new Set(JSON.parse(localStorage.getItem(FAV_KEY)||"[]"))}catch(e){}
+const saveFavs=()=>{try{localStorage.setItem(FAV_KEY,JSON.stringify([...favs]))}catch(e){}};
+const pinUrl=q=>"https://br.pinterest.com/search/pins/?q="+encodeURIComponent(q);
+
+/* drawings: simple original scenes, coloured by each reference */
+const winRows=(x,y,cols,rows,w,h,gx,gy)=>{let s="";for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)s+='<rect class="w" x="'+(x+c*(w+gx))+'" y="'+(y+r*(h+gy))+'" width="'+w+'" height="'+h+'" rx=".6"/>';return s};
+const panels=(x,y,cols,rows,w,h)=>{let s="";for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)s+='<rect class="pv" x="'+(x+c*(w+1.6))+'" y="'+(y+r*(h+1.6))+'" width="'+w+'" height="'+h+'" rx=".6"/>';return s};
+const ART={
+house:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="128" cy="22" r="9"/><rect class="gr" y="80" width="160" height="20"/><rect class="m" x="30" y="48" width="66" height="32"/><rect class="m2" x="82" y="32" width="48" height="48"/><rect class="d" x="26" y="45" width="74" height="3.5"/><rect class="d" x="78" y="29" width="56" height="3.5"/><rect class="w" x="38" y="56" width="20" height="14"/><rect class="w" x="64" y="56" width="18" height="24"/><rect class="w" x="90" y="40" width="32" height="18"/><rect class="w" x="90" y="62" width="14" height="18"/>',
+tower:'<rect class="sk" width="160" height="100"/><rect class="gr" y="86" width="160" height="14"/><rect class="m2" x="22" y="44" width="28" height="42"/><rect class="m" x="54" y="14" width="40" height="72"/><rect class="m2" x="98" y="34" width="36" height="52"/>'+winRows(58,20,4,7,6,5,3,4)+winRows(102,40,4,5,5,4,3,4)+winRows(26,50,3,4,5,4,3,4),
+beach:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="40" cy="30" r="12"/><path class="sea" d="M0 62q20-6 40 0t40 0 40 0 40 0V100H0z"/><path class="gr" d="M0 80q40-8 80 0t80 0V100H0z"/><rect class="m" x="96" y="50" width="40" height="22"/><path class="d" d="M92 51l24-14 24 14z"/><rect class="w" x="102" y="56" width="10" height="8"/><rect class="w" x="118" y="56" width="12" height="16"/>',
+field:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="126" cy="24" r="9"/><path class="m2" d="M0 70q40-24 80-6t80-10V100H0z"/><path class="gr" d="M0 84q50-14 160 0V100H0z"/><rect class="m" x="44" y="56" width="34" height="22"/><path class="d" d="M40 57l21-14 21 14z"/><rect class="w" x="50" y="62" width="8" height="7"/><rect class="w" x="64" y="62" width="8" height="16"/><circle class="tree" cx="104" cy="58" r="9"/><rect class="d" x="103" y="64" width="2.5" height="14"/>',
+columns:'<rect class="sk" width="160" height="100"/><path class="m" d="M40 34L80 14l40 20z"/><rect class="m" x="38" y="34" width="84" height="5"/>'+[46,62,78,94,110].map(x=>'<rect class="m2" x="'+(x-3)+'" y="40" width="6" height="36"/>').join("")+'<rect class="m" x="34" y="76" width="92" height="5"/><rect class="m" x="28" y="81" width="104" height="6"/>',
+scales:'<rect class="sk" width="160" height="100"/><rect class="m" x="78" y="20" width="4" height="58"/><rect class="m" x="60" y="78" width="40" height="5" rx="2"/><rect class="m" x="44" y="26" width="72" height="3" rx="1.5"/><path class="m2" d="M30 55a14 6 0 0028 0zM102 55a14 6 0 0028 0z"/><path class="ln" d="M44 29 32 55M44 29 56 55M116 29l-12 26M116 29l12 26"/><circle class="sun" cx="80" cy="20" r="4"/>',
+solar:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="132" cy="20" r="10"/><path class="m2" d="M14 86 50 50h96l-36 36z"/><g transform="matrix(1 0 -1 .9 64 58)">'+panels(0,-4,5,3,13,7)+'</g><rect class="gr" y="86" width="160" height="14"/>',
+solarfield:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="28" cy="22" r="9"/><rect class="gr" y="56" width="160" height="44"/>'+[60,74,88].map((y,k)=>'<g transform="matrix(1 0 -.5 .55 '+(10+k*4)+' '+y+')">'+panels(0,0,9,1,14,12)+'</g>').join(""),
+sun:'<rect class="sk" width="160" height="100"/><circle class="sun" cx="80" cy="62" r="26"/><rect class="gr" y="74" width="160" height="26"/>'+[0,1,2,3,4].map(k=>'<rect class="m2" x="'+(18+k*26)+'" y="78" width="20" height="8" rx="1"/>').join(""),
+key:'<rect class="sk" width="160" height="100"/><circle class="m" cx="62" cy="50" r="18"/><circle class="sk" cx="62" cy="50" r="8"/><rect class="m" x="78" y="46" width="48" height="8" rx="2"/><rect class="m" x="110" y="54" width="6" height="10"/><rect class="m" x="120" y="54" width="6" height="7"/>',
+chart:'<rect class="sk" width="160" height="100"/>'+[[30,60],[52,48],[74,52],[96,34],[118,22]].map(([x,y])=>'<rect class="m2" x="'+x+'" y="'+y+'" width="14" height="'+(84-y)+'" rx="2"/>').join("")+'<path class="ln" d="M24 66 46 52l22 6 22-20 24-12 18-8"/><rect class="gr" y="84" width="160" height="16"/>',
+user:'<rect class="sk" width="160" height="100"/><circle class="m" cx="80" cy="40" r="17"/><path class="m2" d="M44 100c2-24 16-34 36-34s34 10 36 34z"/>',
+};
+const FA_ART={briefcase:"fa-briefcase",hands:"fa-hand-holding-heart",chat:"fa-comments",team:"fa-people-group",car:"fa-car",factory:"fa-industry",leaf:"fa-leaf"};
+function art(name){if(ART[name])return'<svg viewBox="0 0 160 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true">'+ART[name]+"</svg>";
+  const fa=FA_ART[name]||(name.startsWith("fa-")?name:"fa-star");return'<span class="nxt-ico"><i class="fa-solid '+fa+'"></i></span>'}
+const BADGE={corretor:"CRECI 00000-F",advocacia:"OAB/UF 00.000",psicologia:"CRP 00/00000"};
+function thumb(r,mini){const n=nicheName[r.niche].toUpperCase(),lines='<p><i></i><i></i></p>',btn='<span class="nxt-btn">'+esc(r.cta)+"</span>";
+  let img='<div class="nxt-img">'+art(r.art)+"</div>",copyExtra="",foot="";
+  switch(r.layout){
+    case"search":copyExtra='<span class="nxt-search"><i class="fa-solid fa-magnifying-glass"></i>Bairro ou cidade<b>Buscar</b></span>';foot='<div class="nxt-row">'+[0,1,2].map(()=>'<span class="nxt-card"><span class="nxt-cimg">'+art("house")+'</span><i></i><b></b></span>').join("")+"</div>";break;
+    case"cards":foot='<div class="nxt-row">'+[0,1,2].map(()=>'<span class="nxt-card"><span class="nxt-cimg">'+art(r.art)+'</span><i></i><b></b></span>').join("")+"</div>";break;
+    case"center":foot='<div class="nxt-row">'+[0,1,2].map(()=>'<span class="nxt-card flat"><i></i><b></b></span>').join("")+"</div>";break;
+    case"stats":foot='<div class="nxt-row nxt-stats"><span><b>+250</b><i></i></span><span><b>4,9</b><i></i></span><span><b>10 anos</b><i></i></span></div>';break;
+    case"steps":foot='<div class="nxt-row nxt-steps"><span><b>1</b><i></i></span><span><b>2</b><i></i></span><span><b>3</b><i></i></span></div>';break;
+    case"faq":foot='<div class="nxt-faq"><span>Como funciona?<b>+</b></span><span>Quanto tempo leva?<b>+</b></span><span>Atendem online?<b>+</b></span></div>';break;
+    case"calc":{const s=r.niche==="solar";img='<div class="nxt-img nxt-calc"><small>'+(s?"Sua conta de luz":r.niche==="corretor"?"Tipo do imóvel":"Valor")+'</small><span class="nxt-field">'+(s?"R$ 480":"Apartamento")+'</span><small>'+(s?"Cidade":"Bairro")+'</small><span class="nxt-field">&nbsp;</span><span class="nxt-btn wide">'+esc(r.cta)+"</span></div>";break}
+    case"compare":img='<div class="nxt-img nxt-compare"><span class="bar a"><b>Antes</b></span><span class="bar b"><b>Depois</b></span><small>Exemplo ilustrativo</small></div>';break;
+    case"portrait":img='<div class="nxt-img nxt-portrait">'+art("user")+(BADGE[r.niche]?'<em>'+BADGE[r.niche]+"</em>":"")+"</div>";break;
+    case"video":img='<div class="nxt-img">'+art(r.art)+'<span class="nxt-play"><i class="fa-solid fa-play"></i></span></div>';break}
+  return'<div class="nxt L-'+r.layout+(r.serif?" serif":"")+(mini?" mini":"")+'" style="--bg:'+r.c[0]+";--sf:"+r.c[1]+";--ac:"+r.c[2]+";--tx:"+r.c[3]+'" aria-hidden="true">'+
+    '<div class="nxt-nav"><b>'+esc(r.brand)+'</b><span class="nxt-links"><i></i><i></i><i></i></span><em>'+esc(r.cta.split(" ").slice(0,2).join(" "))+"</em></div>"+
+    '<div class="nxt-body"><div class="nxt-copy"><small>'+n+"</small><strong>"+esc(r.headline)+"</strong>"+lines+(copyExtra||btn)+"</div>"+img+"</div>"+foot+"</div>"}
+
+/* building the panel the first time it is opened */
+const grid=panel.querySelector(".nxi-grid"),chips=panel.querySelector(".nxi-chips"),input=panel.querySelector(".nxi-search input"),count=panel.querySelector(".nxi-count"),
+  empty=panel.querySelector(".nxi-empty"),pinAll=panel.querySelector(".nxi-pin"),emptyPin=panel.querySelector(".nxi-empty a");
+let built=false,filter="all",query="";
+function card(r){return'<article class="nxi-card" data-id="'+r.id+'">'+thumb(r)+'<div class="nxi-meta"><small><i class="fa-solid '+(NXI_NICHES.find(n=>n[0]===r.niche)||[0,0,"fa-star"])[2]+'" aria-hidden="true"></i>'+esc(nicheName[r.niche])+"</small><h3>"+esc(r.title)+"</h3><p>"+esc(r.desc)+'</p><div class="nxi-sw" aria-label="Cores">'+r.c.slice(0,3).map(c=>'<i style="background:'+c+'"></i>').join("")+'<span>'+esc(r.colors)+"</span></div>"+
+  '<div class="nxi-actions"><button type="button" class="nxi-use"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>Usar no criador</button><a class="nxi-pinlink" href="'+pinUrl(r.pin)+'" target="_blank" rel="noopener noreferrer" title="Ver ideias parecidas no Pinterest" aria-label="Ver ideias parecidas no Pinterest: '+esc(r.title)+'"><i class="fa-brands fa-pinterest" aria-hidden="true"></i></a><button type="button" class="nxi-fav" aria-pressed="'+favs.has(r.id)+'" aria-label="Favoritar '+esc(r.title)+'"><i class="fa-'+(favs.has(r.id)?"solid":"regular")+' fa-heart" aria-hidden="true"></i></button></div></div></article>'}
+function build(){if(built)return;built=true;
+  const counts={};REFS.forEach(r=>counts[r.niche]=(counts[r.niche]||0)+1);
+  chips.innerHTML='<button type="button" data-f="all" aria-pressed="true">Todos <b>'+REFS.length+"</b></button>"+NXI_NICHES.map((n,k)=>'<button type="button" data-f="'+n[0]+'" aria-pressed="false"'+(k<3?' class="hot"':"")+'><i class="fa-solid '+n[2]+'" aria-hidden="true"></i>'+esc(n[1])+" <b>"+(counts[n[0]]||0)+"</b></button>").join("")+'<button type="button" data-f="fav" aria-pressed="false"><i class="fa-solid fa-heart" aria-hidden="true"></i>Favoritos <b class="nxi-favn">'+favs.size+"</b></button>";
+  grid.innerHTML=REFS.map(card).join("");
+  const plane=panel.querySelector(".nxi-plane"),pick=k=>REFS.filter((r,i)=>i%3===k&&(i<42||i%2===0)).slice(0,10);
+  if(plane)plane.innerHTML=[0,1,2].map(k=>{const h=pick(k).map(r=>thumb(r,true)).join("");return'<div class="nxi-row'+(k===1?" rev":"")+'">'+h+'<div style="display:contents">'+h+h+"</div></div>"}).join("");
+  apply()}
+function apply(){const toks=norm(query).split(/\s+/).filter(Boolean);let n=0;
+  grid.querySelectorAll(".nxi-card").forEach(el=>{const r=REFS[+el.dataset.id.split("-").pop()],show=(filter==="all"||(filter==="fav"?favs.has(r.id):r.niche===filter))&&toks.every(t=>r.hay.includes(t));el.hidden=!show;if(show)n++});
+  count.textContent=n+(n===1?" referência":" referências")+(query?" para “"+query+"”":"");
+  const pinQ=(query||(filter!=="all"&&filter!=="fav"?NXI_NICHE_TEXT[filter]:"landing page"))+" site design";
+  pinAll.href=pinUrl(pinQ);if(emptyPin)emptyPin.href=pinUrl(pinQ);empty.hidden=n>0}
+chips.addEventListener("click",e=>{const b=e.target.closest("button[data-f]");if(!b)return;filter=b.dataset.f;chips.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));apply()});
+let typing=0;input.addEventListener("input",()=>{clearTimeout(typing);typing=setTimeout(()=>{query=input.value.trim();apply()},120)});
+input.addEventListener("keydown",e=>{if(e.key==="Escape"){input.value="";query="";apply()}});
+grid.addEventListener("click",e=>{const el=e.target.closest(".nxi-card");if(!el)return;const r=REFS[+el.dataset.id.split("-").pop()];
+  const fav=e.target.closest(".nxi-fav");if(fav){if(favs.has(r.id))favs.delete(r.id);else favs.add(r.id);saveFavs();const on=favs.has(r.id);fav.setAttribute("aria-pressed",on);fav.innerHTML='<i class="fa-'+(on?"solid":"regular")+' fa-heart" aria-hidden="true"></i>';const fn=chips.querySelector(".nxi-favn");if(fn)fn.textContent=favs.size;if(filter==="fav")apply();return}
+  if(e.target.closest(".nxi-use"))useRef(r)});
+
+/* "Usar no criador": opens the landing page builder with a prompt in this style */
+function useRef(r){const placeholder="[nome do negócio]",prompt="Crie uma landing page de "+NXI_NICHE_TEXT[r.niche]+" chamada "+placeholder+", em [cidade]. WhatsApp [seu número]. Estilo da referência “"+r.title+"”: "+r.desc+" Cores: "+r.colors+".";
+  const tab=document.getElementById("nexaAiTabLanding");if(tab)tab.click();
+  const mode=document.querySelector('.nexa-lp-modes [data-mode="chat"]');if(mode&&mode.getAttribute("aria-selected")!=="true")mode.click();
+  const pane=document.querySelector('.nexa-lp-panes [data-pane="chat"]');if(pane&&getComputedStyle(pane.parentElement).display!=="none")pane.click();
+  const box=document.querySelector(".nexa-build-input");if(!box)return;box.value=prompt;box.dispatchEvent(new Event("input",{bubbles:true}));
+  setTimeout(()=>{box.focus({preventScroll:true});const at=prompt.indexOf(placeholder);try{box.setSelectionRange(at,at+placeholder.length)}catch(e){}box.scrollIntoView({block:"nearest",behavior:"smooth"})},80);
+  if(window.toast)window.toast("Troque o que está entre colchetes e envie")}
+
+/* build when the tab is opened (or if it was the last tab used) */
+new MutationObserver(()=>{if(!panel.hidden)build()}).observe(panel,{attributes:true,attributeFilter:["hidden"]});
+if(!panel.hidden)build();
+window.__nxInsp={refs:REFS.length,build,apply:(f,q)=>{if(f)filter=f;if(q!=null){query=q;input.value=q}apply()}};
+})();
+</script>
 <style id="nexa-skin-style">
 /* NexaWeb app skin: the landing page style, in the colours of Personalização */
 :root{--nx-ease:cubic-bezier(.2,.8,.2,1);--nx-head:"Plus Jakarta Sans",Manrope,Inter,system-ui,sans-serif;--nx-r:calc(var(--cp-radius,18px) + 4px)}
@@ -6201,6 +6581,27 @@ main#main-content{margin-left:98px!important;width:calc(100% - 98px)!important;m
 .kanban>.column::after{font-size:72px}
 }
 @media (prefers-reduced-motion:reduce){.nx-pill,.nx-ar{transition:none}}
+
+/* the glass N next to the titles of every view */
+.nx-n-host{position:relative;padding-left:104px!important;min-height:88px}
+.nx-n-slot{position:absolute;pointer-events:none}
+.nx-n-host-badge>.nx-n-slot{left:0;top:50%;width:88px;height:88px;translate:0 -50%}
+.nx-n-host-big{position:relative}
+.nx-n-host-big>.nx-n-slot{right:5%;top:16px;width:128px;height:128px;z-index:1}
+.nx-n-host-big>h1,.nx-n-host-big>.sub{max-width:calc(100% - 150px)}
+.nx-n-top-host>.nx-n-slot{position:relative;width:92px;height:92px;margin:0 auto 4px}
+.nx-n-top-host .finance-logo{display:none!important}
+.nx-badge-gl{position:absolute;left:-40%;top:-40%;width:180%;height:180%;display:block}
+.nx-n-slot svg{width:100%;height:100%;fill:var(--accent);filter:drop-shadow(0 0 18px rgba(var(--accent-rgb),.55));opacity:.92}
+.nx-n-slot.nx-gl-on svg{display:none}
+.nx-added-head{margin:4px 0 18px}
+@media (max-width:680px){
+.nx-n-host{padding-left:74px!important;min-height:64px}
+.nx-n-host-badge>.nx-n-slot{width:62px;height:62px}
+.nx-n-host-big>.nx-n-slot{right:3%;top:18px;width:76px;height:76px}
+.nx-n-host-big>h1,.nx-n-host-big>.sub{max-width:calc(100% - 80px)}
+.nx-n-top-host>.nx-n-slot{width:72px;height:72px}
+}
 </style>
 <script id="nexa-skin">
 /* NexaWeb app skin: silk of light + glass N in the colour chosen in Personalização */
@@ -6212,7 +6613,7 @@ function glowLevel(){var g=parseFloat(getComputedStyle(root).getPropertyValue("-
 var VS="attribute vec2 a;void main(){gl_Position=vec4(a,0.,1.);}";
 var FS=[
 "precision highp float;",
-"uniform vec2 R;uniform float T;uniform vec2 M;uniform float I;uniform vec3 NP;uniform float Q;uniform vec3 A;uniform float G;uniform float AMB;",
+"uniform vec2 R;uniform float T;uniform vec2 M;uniform float I;uniform vec3 NP;uniform float Q;uniform vec3 A;uniform float G;uniform float AMB;uniform float TR;",
 "float hs(vec2 p,float t){vec2 q=p;",
 " q+=.30*vec2(sin(q.y*1.9+t*.9),sin(q.x*1.4-t*.7));",
 " q+=.16*vec2(sin(q.y*3.3-t*1.2+1.3),sin(q.x*2.7+t*.85+2.1));",
@@ -6254,7 +6655,7 @@ var FS=[
 "void main(){",
 " vec2 uv=(gl_FragCoord.xy-.5*R)/R.y;float t=T;",
 " float ei=1.-pow(1.-clamp(I,0.,1.),3.);",
-" vec3 col=silk(uv,t*.55)*smoothstep(0.,.75,I)*G;",
+" vec3 col=TR>.5?vec3(0.):silk(uv,t*.55)*smoothstep(0.,.75,I)*G;float al=TR>.5?0.:1.;",
 " if(NP.z>0.){",
 "  vec2 c=NP.xy+vec2(0.,-(1.-ei)*.22);float sz=NP.z*(.9+.1*ei);",
 "  vec2 k=(uv-c)/sz*1.5;",
@@ -6275,19 +6676,19 @@ var FS=[
 "    vec3 rr=silk(uv+nw.xy*.14,t*.55)*2.2+base*.2;o=mix(o,rr,face*.35);",
 "    float sw=exp(-pow(p.x*.8+p.y*.55-(mod(t*.32,3.2)-1.4),2.)*22.);o+=mix(A,vec3(1.),.75)*sw*(.25+.55*face);",
 "    o+=mix(A,vec3(1.),.4)*fr*.5+mix(A,vec3(1.),.6)*pow(1.-face,6.)*.35;",
-"    col=mix(col,o,smoothstep(0.,.35,ei));",
-"   }else{col+=mix(A,vec3(1.),.4)*(1.-smoothstep(0.,px,md))*.5*ei;}",
+"    float k2=smoothstep(0.,.35,ei);col=mix(col,o,k2);al=max(al,k2);",
+"   }else{float eg=(1.-smoothstep(0.,px,md))*.5*ei;col+=mix(A,vec3(1.),.4)*eg;al=max(al,eg);}",
 "  }",
-"  col+=A*glow*ei*(.7+.3*sin(t*1.3));",
+"  float gl=glow*ei*(.7+.3*sin(t*1.3));col+=A*gl;al=max(al,gl*.9);",
 " }",
 " col=1.-exp(-col*1.25);",
-" col+=(hash(gl_FragCoord.xy+fract(t)*91.)-.5)*.016;",
-" gl_FragColor=vec4(col,1.);}"].join("\n");
+" col+=(hash(gl_FragCoord.xy+fract(t)*91.)-.5)*.016*al;",
+" gl_FragColor=vec4(min(col,vec3(al)),al);}"].join("\n");
 
 /* one canvas = one animated scene; opts: core (element for the N), scale, fps, ambient, intro */
 function silk(canvas,opts){
   opts=opts||{};var gl=null;
-  try{gl=canvas.getContext("webgl",{antialias:false,alpha:false,premultipliedAlpha:false,powerPreference:opts.ambient?"low-power":"high-performance"})}catch(e){}
+  try{gl=canvas.getContext("webgl",{antialias:false,alpha:!!opts.transparent,premultipliedAlpha:true,powerPreference:opts.ambient?"low-power":"high-performance"})}catch(e){}
   if(!gl)return null;
   function sh(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){window.__nxSkinGLError=gl.getShaderInfoLog(s);return null}return s}
   var vs=sh(gl.VERTEX_SHADER,VS),fs=sh(gl.FRAGMENT_SHADER,FS);if(!vs||!fs)return null;
@@ -6295,18 +6696,18 @@ function silk(canvas,opts){
   if(!gl.getProgramParameter(pr,gl.LINK_STATUS))return null;
   gl.useProgram(pr);var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var loc=gl.getAttribLocation(pr,"a");gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
-  var U={};["R","T","M","I","NP","Q","A","G","AMB"].forEach(function(n){U[n]=gl.getUniformLocation(pr,n)});
+  var U={};["R","T","M","I","NP","Q","A","G","AMB","TR"].forEach(function(n){U[n]=gl.getUniformLocation(pr,n)});
   var coarse=matchMedia("(pointer: coarse)").matches,scale=opts.scale||Math.min(window.devicePixelRatio||1,coarse?1.15:1.35),quality=coarse?.7:1,
     W=0,H=0,np=[0,0,0],col=accent(),glow=opts.ambient?glowLevel()*.5:1,intro=opts.intro&&!quiet()?0:1,start=0,raf=0,running=false,visible=true,last=0,
     frameGap=1000/(opts.fps||60),mouse=[0,0],target=[0,0],slow=0,frames=0,dead=false;
   function layout(){var r=canvas.getBoundingClientRect(),cw=Math.max(1,r.width),ch=Math.max(1,r.height),px=Math.min(scale,Math.sqrt((opts.maxPixels||1200000)/(cw*ch)));
     W=Math.max(2,Math.round(cw*px));H=Math.max(2,Math.round(ch*px));if(canvas.width!==W||canvas.height!==H){canvas.width=W;canvas.height=H}
-    if(opts.core&&opts.core.isConnected){var c=opts.core.getBoundingClientRect();np=c.height>0?[(c.left+c.width/2-r.left-cw/2)/ch,(ch/2-(c.top+c.height/2-r.top))/ch,c.height/ch]:[0,0,0]}else np=[0,0,0]}
+    var core=typeof opts.core==="function"?opts.core():opts.core;if(core&&core.isConnected){var c=core.getBoundingClientRect();np=c.height>0?[(c.left+c.width/2-r.left-cw/2)/ch,(ch/2-(c.top+c.height/2-r.top))/ch,c.height/ch]:[0,0,0]}else np=[0,0,0]}
   function draw(now){if(dead)return;var t=now/1000;
     if(intro<1){if(!start)start=now;intro=Math.min(1,(now-start)/1600)}
     mouse[0]+=(target[0]-mouse[0])*.06;mouse[1]+=(target[1]-mouse[1])*.06;
     gl.viewport(0,0,W,H);gl.uniform2f(U.R,W,H);gl.uniform1f(U.T,quiet()?6:t);gl.uniform2f(U.M,mouse[0],mouse[1]);gl.uniform1f(U.I,intro);
-    gl.uniform3f(U.NP,np[0],np[1],np[2]);gl.uniform1f(U.Q,quality);gl.uniform3f(U.A,col[0],col[1],col[2]);gl.uniform1f(U.G,glow);gl.uniform1f(U.AMB,opts.ambient?1:0);
+    gl.uniform3f(U.NP,np[0],np[1],np[2]);gl.uniform1f(U.Q,quality);gl.uniform3f(U.A,col[0],col[1],col[2]);gl.uniform1f(U.G,glow);gl.uniform1f(U.AMB,opts.ambient?1:0);gl.uniform1f(U.TR,opts.transparent?1:0);if(opts.transparent){gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT)}
     gl.drawArrays(gl.TRIANGLES,0,3)}
   function loop(now){raf=0;if(!running)return;
     if(now-last>=frameGap-2){var dt=now-last;if(last){frames++;if(dt>frameGap*2.2)slow++;if(frames===60){if(slow>20&&scale>.4){scale*=.8;quality=Math.max(.5,quality*.85);layout()}frames=0;slow=0}}
@@ -6319,12 +6720,13 @@ function silk(canvas,opts){
   addEventListener("pointermove",onMove,{passive:true});
   addEventListener("resize",function(){layout();if(!running)draw(performance.now())});
   document.addEventListener("visibilitychange",sync);
-  var io="IntersectionObserver" in window?new IntersectionObserver(function(es){visible=es[0].isIntersecting;sync()}):null;if(io)io.observe(canvas);
+  var io="IntersectionObserver" in window?new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;sync()}):null;if(io)io.observe(canvas);
   canvas.addEventListener("webglcontextlost",function(e){e.preventDefault();dead=true;running=false;canvas.classList.add("nx-gl-lost")});
   layout();draw(performance.now());sync();
   return{sync:sync,layout:function(){layout();if(!running)draw(performance.now())},
     recolor:function(){col=accent();if(opts.ambient)glow=glowLevel()*.5;if(!running)draw(performance.now())},
     stop:function(){dead=true;running=false;if(raf)cancelAnimationFrame(raf);removeEventListener("pointermove",onMove);if(io)io.disconnect();var ext=gl.getExtension("WEBGL_lose_context");if(ext)ext.loseContext()},
+    replay:function(){if(quiet())return;intro=0;start=0;layout();if(!running)draw(performance.now())},
     info:function(){return{W:W,H:H,running:running,np:np,col:col,glow:glow}}};
 }
 window.nxSkin={silk:silk,accent:accent,quiet:quiet};
@@ -6392,6 +6794,34 @@ if(intro){var icv=document.createElement("canvas");icv.className="nx-intro-gl";i
     scenes.forEach(function(s){s.sync()})};
   new MutationObserver(introSync).observe(intro,{attributes:true,attributeFilter:["class"]});introSync()}
 
+
+/* views without a title get one in the same style */
+var HEADS={leads:["Leads","Seus leads","Empresas que você salvou nas buscas, prontas para o contato."],
+  pipeline:["Pipeline","Funil de vendas","Arraste cada lead da primeira conversa até a venda fechada."],
+  references:["Referências","Sites premiados","Ideias de design de sites do mundo todo para se inspirar."]};
+Object.keys(HEADS).forEach(function(id){var v=document.getElementById(id);if(!v||v.querySelector(".nx-added-head"))return;var h=HEADS[id],row=document.createElement("div");
+  row.className="title-row nx-added-head";row.innerHTML='<div><div class="eyebrow">'+h[0]+'</div><h1>'+h[1]+'</h1><p class="sub">'+h[2]+"</p></div>";v.insertBefore(row,v.firstChild)});
+
+/* the glass N in every view: one canvas that moves to the view that is open */
+var badgeCanvas=document.createElement("canvas"),badgeScene=null,badgeSlot=null;badgeCanvas.className="nx-badge-gl";badgeCanvas.setAttribute("aria-hidden","true");
+function slotFor(view){if(!view||view.id==="dashboard")return null;var s=view.querySelector(":scope .nx-n-slot");if(s)return s;
+  var host=null,kind="badge";
+  if(view.id==="finder"){host=view.querySelector(".finder-shell");kind="big"}
+  else if(view.id==="finance"){host=view.querySelector(".finance-stage-head");kind="top"}
+  else{var h=[].find.call(view.querySelectorAll("h1"),function(x){return x.offsetParent&&!x.classList.contains("greeting-swap")})||view.querySelector(".nx-added-head h1");host=h&&h.parentElement}
+  if(!host)return null;s=document.createElement("div");s.className="nx-n-slot nx-n-"+kind;s.setAttribute("aria-hidden","true");
+  s.innerHTML='<svg viewBox="0 0 48 48"><path d="M6 42V6h10l16 24V14h10v28H32L16 18v24z"/></svg>';
+  if(kind==="top"){host.classList.add("nx-n-top-host");host.insertBefore(s,host.firstChild)}else{host.classList.add("nx-n-host","nx-n-host-"+kind);host.insertBefore(s,host.firstChild)}
+  return s}
+function placeBadge(){var view=document.querySelector(".view.active"),slot=slotFor(view);if(!slot){if(badgeScene)badgeScene.sync();return}
+  if(slot!==badgeSlot){badgeSlot=slot;slot.appendChild(badgeCanvas);
+    if(!badgeScene){badgeScene=add(S.silk(badgeCanvas,{transparent:true,core:function(){return badgeSlot},fps:60,intro:true,scale:Math.min(window.devicePixelRatio||1,2),maxPixels:420000,
+      active:function(){return!!badgeSlot&&!!badgeSlot.closest(".view.active")&&!document.getElementById("nexaNameGate")&&!document.querySelector("#cleanV3Intro.is-visible")}}));
+      if(!badgeScene)root.classList.add("nx-no-badge-gl")}
+    else badgeScene.replay();
+    if(badgeScene)each(document.querySelectorAll(".nx-n-slot"),function(s){s.classList.toggle("nx-gl-on",s===slot)})}
+  if(badgeScene){badgeScene.layout();badgeScene.sync()}}
+
 /* view titles: the last word in the accent colour, eyebrow with a dot */
 function titles(){each(document.querySelectorAll(".view h1"),function(h){if(h.dataset.nx||h.closest(".nx-hero"))return;h.dataset.nx="1";
   var prev=h.previousElementSibling;if(prev&&/eyebrow|overline/.test(prev.className))prev.classList.add("nx-eb");
@@ -6406,9 +6836,9 @@ function enter(view){if(!view||S.quiet())return;var k=0;
   each(view.children,function(c){var cs=getComputedStyle(c);if(cs.position==="fixed"||cs.position==="absolute"||cs.display==="none"||k>7)return;
     c.style.animation="none";void c.offsetWidth;c.style.animation="nxRise .7s cubic-bezier(.2,.8,.2,1) "+(k*.06).toFixed(2)+"s both";k++;
     c.addEventListener("animationend",function done(e){if(e.target!==c)return;c.style.animation="";c.removeEventListener("animationend",done)})})}
-function watchViews(){var v=document.querySelector(".view.active");if(v!==lastView){lastView=v;enter(v);heroText();titles();scenes.forEach(function(s){s.sync()})}}
+function watchViews(){var v=document.querySelector(".view.active");if(v!==lastView){lastView=v;enter(v);heroText();titles();placeBadge();scenes.forEach(function(s){s.sync()})}}
 each(document.querySelectorAll(".view"),function(v){new MutationObserver(watchViews).observe(v,{attributes:true,attributeFilter:["class"]})});
-lastView=document.querySelector(".view.active");enter(lastView);
+lastView=document.querySelector(".view.active");enter(lastView);placeBadge();addEventListener("resize",function(){if(badgeScene)badgeScene.layout()});
 
 /* colour or motion changed in Personalização */
 var recolorQueued=0;

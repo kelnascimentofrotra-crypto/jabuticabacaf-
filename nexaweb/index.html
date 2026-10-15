@@ -1318,7 +1318,7 @@ var heroGL=(function(){
   addEventListener("pointermove",function(e){if(e.pointerType==="touch")return;target[0]=e.clientX/innerWidth*2-1;target[1]=e.clientY/innerHeight*2-1},{passive:true});
   addEventListener("resize",function(){layout();if(!running)draw(performance.now())});
   document.addEventListener("visibilitychange",run);
-  if("IntersectionObserver" in window)new IntersectionObserver(function(es){visible=es[0].isIntersecting;run()},{threshold:0}).observe(hero);
+  if("IntersectionObserver" in window)new IntersectionObserver(function(es){visible=es[es.length-1].isIntersecting;run()},{threshold:0}).observe(hero);
   canvas.addEventListener("webglcontextlost",function(e){e.preventDefault();running=false;hero.classList.add("no-gl")});
   layout();draw(performance.now());hero.classList.add("gl-on");run();
   return{setScroll:function(p){scrollP=p;if(!running)draw(performance.now())},layout:layout,info:function(){return{W:W,H:H,scale:scale,quality:quality,np:np,running:running}}};
