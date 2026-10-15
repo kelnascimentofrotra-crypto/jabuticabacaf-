@@ -215,7 +215,7 @@
 </div>
 </section>
 <section class="view" id="finder">
-<div class="finder">
+<div class="finder nxp">
 <div class="title-row">
 <div>
 <div class="eyebrow">Inteligência comercial</div>
@@ -225,26 +225,59 @@
 <i class="fa-solid fa-sliders">
 </i>Filtros salvos</button>
 </div>
-<div class="finder-shell">
-<div class="eyebrow">Prospecção inteligente</div>
-<h1>Quem você quer <em>encontrar?</em>
-</h1>
-<p class="sub">Digite só o nicho e descubra empresas que precisam do seu serviço. Se quiser, inclua a cidade: “barbearias em Campinas”.</p>
-<div class="query">
-<i class="fa-solid fa-bullseye">
-</i>
-<input id="segment" value="" placeholder="Ex.: barbearias, dentistas" aria-label="Nicho que você quer buscar" autocomplete="off">
-<input id="searchVolume" placeholder="Ex.: 20 ou 30 leads" type="number" aria-label="Quantidade máxima de leads" inputmode="numeric" max="300" min="1" value="30">
-<button class="btn primary" onclick="searchLeads()">
-<i class="fa-solid fa-radar">
-</i>Buscar leads</button>
+<div class="finder-shell nxp-side">
+<header class="nxp-head">
+<div class="nx-n-slot nxp-n" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M6 42V6h10l16 24V14h10v28H32L16 18v24z"/></svg></div>
+<div class="nxp-crumb">/ NexaWeb / Prospecção</div>
+<h1 class="nxp-title" data-nx="1">Nexa <em>Prospect</em><span>.</span></h1>
+<p class="sub">Escolha o nicho, marque o território no mapa e encontre empresas sem site para oferecer o seu serviço.</p>
+</header>
+<div class="nxp-steps">
+<section class="nxp-step" aria-labelledby="nxpStep1">
+<h2 class="nxp-step-h" id="nxpStep1"><b>01</b>Defina o alvo</h2>
+<div class="nxp-card nxp-target">
+<label class="nxp-field"><span class="nxp-label">Nicho</span><span class="nxp-input"><i class="fa-solid fa-bullseye" aria-hidden="true"></i><span class="clean-search-field clean-segment-field nxp-seg"><input id="segment" value="" placeholder="Ex.: barbearias, dentistas" aria-label="Nicho que você quer buscar" autocomplete="off"></span></span></label>
+<label class="nxp-field"><span class="nxp-label">Cidade <small>opcional</small></span><span class="nxp-input"><i class="fa-solid fa-location-dot" aria-hidden="true"></i><input id="searchCity" placeholder="Ex.: Campinas ou Campinas - SP" autocomplete="off" aria-describedby="nxpCityHint"></span></label>
+<p class="nxp-hint" id="nxpCityHint">Em branco, a busca usa as áreas marcadas no mapa ou a sua localização.</p>
 </div>
+</section>
+<section class="nxp-step">
+<button type="button" class="nxp-card nxp-qual" aria-expanded="false" aria-controls="nxpQual"><b>02</b><span class="nxp-ico"><i class="fa-solid fa-sliders" aria-hidden="true"></i></span><span class="nxp-qual-t"><strong>Qualificação</strong><small id="nxpQualSum">Sem site próprio · até 30 empresas</small></span><i class="fa-solid fa-chevron-down nxp-chev" aria-hidden="true"></i></button>
+<div class="nxp-qual-body" id="nxpQual" hidden>
 <div class="clean-finder-options" role="group" aria-label="Opções da busca">
 <div class="clean-finder-option clean-finder-volume" id="cleanFinderVolumeField"><span>VOLUME</span><select id="cleanFinderVolume" aria-label="Quantidade máxima de empresas"><option value="10">Até 10 empresas</option><option value="20">Até 20 empresas</option><option value="30" selected="">Até 30 empresas</option><option value="60">Até 60 empresas</option><option value="100">Até 100 empresas</option><option value="150">Até 150 empresas</option><option value="300">Até 300 empresas</option></select><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></div>
 <label class="clean-finder-option clean-finder-presence"><span>PRESENÇA DIGITAL</span><select id="siteFilter" aria-label="Presença digital das empresas"><option value="">Qualquer presença</option><option value="without" selected="">Sem site próprio</option><option value="with" disabled="">Com site próprio · Pro</option></select><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></label>
 </div>
+</div>
+</section>
+<section class="nxp-step nxp-terr" aria-labelledby="nxpStep3">
+<div class="nxp-terr-h"><h2 class="nxp-step-h" id="nxpStep3"><b>03</b><i class="fa-solid fa-earth-americas" aria-hidden="true"></i>Território</h2><span id="nxpCount">0/3 áreas</span></div>
+<div class="nxp-range"><label for="nxpRadius">Raio das áreas</label><output id="nxpRadiusOut" for="nxpRadius">10 km</output><input type="range" id="nxpRadius" min="1" max="50" step="1" value="10"></div>
+<div class="nxp-areas-h"><span>Áreas no mapa</span><button type="button" id="nxpClear" hidden>Limpar</button></div>
+<ol class="nxp-areas" id="nxpAreas"></ol>
+<p class="nxp-areas-empty" id="nxpAreasEmpty"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>Clique no mapa para marcar até 3 áreas.</p>
+</section>
+</div>
+<div class="query nxp-go">
+<span class="clean-search-field clean-volume-field nxp-vol"><input id="searchVolume" placeholder="Ex.: 20 ou 30 leads" type="number" aria-label="Quantidade máxima de leads" inputmode="numeric" max="300" min="1" value="30"></span>
+<button class="btn primary" onclick="searchLeads()">
+<i class="fa-solid fa-radar">
+</i>Buscar leads</button>
+</div>
 <div class="filters" style="display:none">
 </div>
+</div>
+<div class="nxp-map" id="nxpMap">
+<canvas class="nxp-canvas" tabindex="0" role="application" aria-roledescription="mapa" aria-label="Mapa do território. Clique ou tecle Enter para marcar uma área, arraste ou use as setas para mover, + e − para o zoom."></canvas>
+<div class="nxp-top">
+<div class="nxp-mc nxp-mc-terr"><span class="nxp-mc-eb"><i></i>Território</span><strong id="nxpTerrT">Nenhuma área marcada</strong><em id="nxpTerrN">00 / 03</em><small id="nxpTerrS">Clique no mapa para marcar</small></div>
+<form class="nxp-mc nxp-mc-find" id="nxpFind" role="search"><span class="nxp-mc-eb">Explorar o mapa</span><span class="nxp-find-row"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><input id="nxpFindIn" list="nxpCityList" placeholder="Cidade ou estado" autocomplete="off" aria-label="Buscar cidade ou estado no mapa"><button type="submit">Ir <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></span><datalist id="nxpCityList"></datalist></form>
+<div class="nxp-mc nxp-mc-pot"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="18"/><circle class="nxp-ring" cx="22" cy="22" r="18" pathLength="100"/></svg><div><strong id="nxpPotP">—</strong><span>Contato direto</span><small id="nxpPotS">Aguardando a primeira busca</small></div></div>
+</div>
+<div class="nxp-zoom" role="group" aria-label="Zoom do mapa"><button type="button" data-nxp-z="in" aria-label="Aproximar"><i class="fa-solid fa-plus" aria-hidden="true"></i></button><span><small>Zoom</small><b id="nxpZ">4</b></span><button type="button" data-nxp-z="out" aria-label="Afastar"><i class="fa-solid fa-minus" aria-hidden="true"></i></button><button type="button" data-nxp-z="me" aria-label="Ir para a minha localização"><i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i></button></div>
+<button type="button" class="nxp-mark" id="nxpMarkHere" hidden><i class="fa-solid fa-plus" aria-hidden="true"></i>Marcar área aqui</button>
+<div class="nxp-pop" id="nxpPop" role="dialog" aria-label="Lead no mapa" hidden></div>
+<p class="nxp-foot"><span>Clique para marcar · arraste para mover</span><span>Mapa: Natural Earth · IBGE</span></p>
 </div>
 </div>
 </section>
@@ -1165,17 +1198,17 @@ window.cleanLeadReferenceCard=function(lead,index){
     assertAccount();
     const owner=JSON.stringify([window.cleanCloudSync?.user?.id||'',apiKey]);
     if(owner!==cacheOwner){pageCache.clear();cacheOwner=owner;}
-    const cacheKey=JSON.stringify([normalize(textQuery),pageToken||'',control.bias?JSON.stringify(control.bias):'']);
+    const cacheKey=JSON.stringify([normalize(textQuery),pageToken||'',control.area?JSON.stringify(control.area.rect):control.bias?JSON.stringify(control.bias):'']);
     const cached=pageCache.get(cacheKey);
     if(cached&&Date.now()-cached.savedAt<cacheTTL)return cached.data;
     pageCache.delete(cacheKey);
-    const body={textQuery,languageCode:"pt-BR",regionCode:"BR",pageSize:20};if(control.bias)body.locationBias=control.bias;if(pageToken)body.pageToken=pageToken;
+    const body={textQuery,languageCode:"pt-BR",regionCode:"BR",pageSize:20};if(control.area)body.locationRestriction={rectangle:control.area.rect};else if(control.bias)body.locationBias=control.bias;if(pageToken)body.pageToken=pageToken;
     for(let attempt=0;attempt<2;attempt++){
       assertAccount();
       if(control.remaining<=0)throw Object.assign(new Error('Limite de chamadas desta busca atingido.'),{code:'SEARCH_BUDGET'});
       control.remaining--;
       const {response,data}=await window.cleanFetchSearchJson("https://places.googleapis.com/v1/places:searchText",{
-        method:"POST",headers:{"Content-Type":"application/json","X-Goog-Api-Key":apiKey,"X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.googleMapsUri,places.primaryType,places.businessStatus,nextPageToken"},
+        method:"POST",headers:{"Content-Type":"application/json","X-Goog-Api-Key":apiKey,"X-Goog-FieldMask":"places.id,places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.googleMapsUri,places.primaryType,places.businessStatus,places.location,nextPageToken"},
         body:JSON.stringify(body)
       });
       assertAccount();
@@ -1273,13 +1306,13 @@ window.cleanLeadReferenceCard=function(lead,index){
     const limit=Math.min(Math.max(Number(volumeInput?.value||30),1),300),button=document.querySelector("#finder .query .btn");
     const loader=document.getElementById("leadLoader"),progress=document.getElementById("loaderProgress");
     if(!apiKey){window.notifyCleanSearchResult(window.nexaFreeSearchesLeft?.()===0?"Suas 3 buscas grátis acabaram. Adicione sua chave do Google Maps em Configurações.":"Adicione a Google Maps API Key em Configurações");window.go?.("settings");return;}
-    const request=splitRequest(field?.value);
+    const request=splitRequest(window.nexaProspect?window.nexaProspect.query(field?.value):field?.value);const nxpAreas=request.city?[]:(window.nexaProspect?.areas()||[]);
     if(!request.segment){window.notifyCleanSearchResult("Digite o nicho que você quer buscar. Exemplo: barbearias");field?.focus();return;}
-    const idleButton=button?.innerHTML;if(button&&!request.city){button.disabled=true;button.innerHTML='<i class="fa-solid fa-location-crosshairs"></i> Localizando';}
-    const bias=request.city?null:await nearMe();
+    const idleButton=button?.innerHTML;if(button&&!request.city&&!nxpAreas.length){button.disabled=true;button.innerHTML='<i class="fa-solid fa-location-crosshairs"></i> Localizando';}
+    const bias=request.city||nxpAreas.length?null:await nearMe();if(bias)window.nexaProspect?.here(bias.circle.center);
     const queries=buildQueries(request.segment,request.place),results=new Map(),fingerprints=new Set(),phones=new Set(),oldButton=idleButton,failures=[];
     let completed=0,halted=false;
-    const control={remaining:Math.min(36,Math.max(12,Math.ceil(limit/20)*4)),userId:searchUserId,bias},seenPlaces=new Set();
+    const control={remaining:Math.min(36,Math.max(12,Math.ceil(limit/20)*4)+(nxpAreas.length>1?nxpAreas.length*4:0)),userId:searchUserId,bias},seenPlaces=new Set();
     const shouldStop=()=>halted||results.size>=limit||control.remaining<=0;
     const collect=places=>{
       let newPlaces=0;
@@ -1289,13 +1322,14 @@ window.cleanLeadReferenceCard=function(lead,index){
         if(seenPlaces.has(identity))continue;
         seenPlaces.add(identity);newPlaces++;
         if(place.businessStatus&&place.businessStatus!=="OPERATIONAL")continue;
+        if(control.area&&place.location&&!window.nexaProspect?.inside(place.location,control.area))continue;
         if(request.city&&!belongsToCity(place.formattedAddress||"",request))continue;
         const lead=toLead(place);if(lead.site)continue;
         const placeId=String(place.id||"").trim(),fingerprint=normalize(lead.nome+"|"+lead.endereco);
         const phone=String(lead.telefone||"").replace(/\D/g,"");
         const phoneKey=phone.length>=10?normalize(lead.nome)+"|"+phone:"";
         if((placeId&&results.has(placeId))||(fingerprint&&fingerprints.has(fingerprint))||(phoneKey&&phones.has(phoneKey)))continue;
-        results.set(placeId||fingerprint||phoneKey,lead);
+        results.set(placeId||fingerprint||phoneKey,lead);window.nexaProspect?.found(lead,place.location);
         if(fingerprint)fingerprints.add(fingerprint);
         if(phoneKey)phones.add(phoneKey);
         if(shouldStop())break;
@@ -1305,15 +1339,16 @@ window.cleanLeadReferenceCard=function(lead,index){
     if(button){button.disabled=true;button.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Buscando';}
     loader?.classList.add("show");
     try{
-      for(const query of queries){
+      const jobs=nxpAreas.length?queries.flatMap(query=>nxpAreas.map(area=>[query,area])):queries.map(query=>[query,null]);
+      for(const [query,area] of jobs){control.area=area;
         if(shouldStop())break;
         try{await searchQuery(apiKey,query,collect,shouldStop,control);}
         catch(error){if(error.code!=='SEARCH_BUDGET')failures.push(error);if(error.code==='GOOGLE_QUOTA'||error.fatal)halted=true;}
-        finally{completed++;if(progress)progress.style.width=Math.min(96,Math.round(completed/queries.length*96))+"%";}
+        finally{completed++;if(progress)progress.style.width=Math.min(96,Math.round(completed/jobs.length*96))+"%";}
       }
       const leads=[...results.values()].slice(0,limit);
       if(!leads.length&&failures.length)throw failures[0];
-      window.cleanPublishSearchResults(leads,searchUserId);
+      window.nexaProspect?.done(leads,{areas:nxpAreas.length,city:request.city,near:!!bias,segment:request.segment});window.cleanPublishSearchResults(leads,searchUserId);
       if(progress)progress.style.width="100%";
       const quotaError=failures.find(error=>error.code==='GOOGLE_QUOTA');
       if(quotaError)notifyGoogleQuota(leads.length);
@@ -6482,6 +6517,566 @@ function useRef(r){const placeholder="[nome do negócio]",prompt="Crie uma landi
 new MutationObserver(()=>{if(!panel.hidden)build()}).observe(panel,{attributes:true,attributeFilter:["hidden"]});
 if(!panel.hidden)build();
 window.__nxInsp={refs:REFS.length,build,apply:(f,q)=>{if(f)filter=f;if(q!=null){query=q;input.value=q}apply()}};
+})();
+</script>
+<style id="nexa-prospect-style">
+/* Nexa Prospect: steps on the left, territory map on the right */
+#finder.view{padding-top:18px!important}
+#finder .finder.nxp{--nxp-line:rgba(255,255,255,.08);--nxp-glass:rgba(5,14,15,.8);max-width:none!important;width:100%!important;margin:0!important;display:grid;grid-template-columns:minmax(318px,370px) minmax(0,1fr);gap:16px;height:calc(100vh - 36px);height:calc(100dvh - 36px);min-height:640px;max-height:1080px;position:relative;font-size:14px}
+#finder .nxp>.title-row{display:none!important}
+#finder .finder-shell.nxp-side{display:flex!important;flex-direction:column!important;min-height:0;padding:0!important;margin:0!important;border-radius:24px!important;border:1px solid var(--nxp-line)!important;background:linear-gradient(180deg,rgba(8,21,22,.94),rgba(4,11,12,.96))!important;overflow:hidden!important;box-shadow:0 30px 70px -44px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.05)!important}
+#finder .finder-shell.nxp-side:before,#finder .finder-shell.nxp-side:after{display:none!important}
+#finder .nxp-side>*{position:relative;z-index:1}
+
+/* header card */
+#finder .nxp-head{position:relative;flex:none;padding:22px 22px 20px;overflow:hidden;border-bottom:1px solid rgba(var(--accent-rgb),.22);background:radial-gradient(120% 150% at 0 0,rgba(var(--accent-rgb),.42),rgba(var(--accent-rgb),.1) 52%,transparent 78%),linear-gradient(140deg,color-mix(in srgb,var(--accent) 22%,#031314),#051011 70%)}
+#finder .nxp-head:before{content:"";position:absolute;right:-70px;bottom:-110px;width:250px;height:250px;border-radius:50%;border:1px solid rgba(255,255,255,.08);box-shadow:0 0 0 28px rgba(255,255,255,.018),0 0 0 62px rgba(255,255,255,.012);pointer-events:none}
+#finder .nxp-head>*{position:relative}
+#finder .nxp-head .nx-n-slot.nxp-n{position:absolute!important;right:20px;top:18px;width:70px;height:70px;z-index:2}
+#finder .nxp-crumb{margin:0 0 14px;font:700 10px/1 "DM Mono",ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.66)}
+#finder .nxp-head .nxp-title{margin:0;max-width:calc(100% - 84px);font-size:38px!important;line-height:1!important;letter-spacing:-.055em!important;color:#fff;font-weight:800}
+#finder .nxp-title em{font-style:normal;background:linear-gradient(100deg,#fff 0%,color-mix(in srgb,var(--accent) 60%,#fff) 55%,var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+#finder .nxp-title span{color:var(--accent)}
+#finder .nxp-head .sub{margin:12px 0 0!important;max-width:30ch;font-size:12.5px!important;line-height:1.55!important;color:rgba(255,255,255,.66)!important}
+#finder .nxp-head .clean-saas-plan-pill{margin:14px 0 0!important}
+
+/* steps */
+#finder .nxp-steps{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:18px 18px 10px;display:grid;gap:20px;align-content:start;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent}
+#finder .nxp-step{margin:0;padding:0;border:0;background:none}
+#finder .nxp-step-h{display:flex;align-items:center;gap:10px;margin:0 0 10px!important;font:700 11px/1 "DM Mono",ui-monospace,monospace!important;letter-spacing:.14em!important;text-transform:uppercase;color:#e7f3f2!important}
+#finder .nxp-step-h b{color:var(--accent);font-weight:700}
+#finder .nxp-step-h:after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.14),transparent)}
+#finder .nxp-card{border:1px solid var(--nxp-line);border-radius:16px;background:rgba(255,255,255,.025);transition:border-color .25s,box-shadow .25s,background .25s}
+#finder .nxp-target{display:grid;gap:12px;padding:14px;background:linear-gradient(180deg,rgba(var(--accent-rgb),.07),rgba(255,255,255,.02))}
+#finder .nxp-target:focus-within{border-color:rgba(var(--accent-rgb),.5);box-shadow:0 0 0 4px rgba(var(--accent-rgb),.08)}
+#finder .nxp-field{display:grid;gap:7px;margin:0}
+#finder .nxp-label{font-size:12.5px;font-weight:700;color:#fff}
+#finder .nxp-label small{margin-left:6px;font-size:11px;font-weight:500;color:rgba(255,255,255,.45)}
+#finder .nxp-input{display:flex;align-items:center;gap:10px;height:46px;padding:0 12px 0 9px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(0,0,0,.34);transition:border-color .2s}
+#finder .nxp-input:focus-within{border-color:rgba(var(--accent-rgb),.55)}
+#finder .nxp-input>i{flex:none;width:28px;height:28px;display:grid;place-items:center;border-radius:9px;background:rgba(var(--accent-rgb),.15);color:var(--accent);font-size:12px}
+#finder .nxp .clean-search-field.nxp-seg{display:contents!important}
+#finder .nxp .nxp-input input,#finder .nxp #segment{flex:1!important;width:100%!important;min-width:0!important;height:100%!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;box-shadow:none!important;outline:0!important;color:#fff!important;font:500 14px/1.2 inherit!important;font-family:inherit!important}
+#finder .nxp .nxp-input input::placeholder{color:rgba(255,255,255,.38)!important}
+#finder .nxp-hint{margin:-2px 0 0;font-size:11px;line-height:1.45;color:rgba(255,255,255,.45)}
+
+#finder .nxp-qual{width:100%;display:flex;align-items:center;gap:12px;padding:13px 14px;text-align:left;color:#fff;font:inherit;cursor:pointer}
+#finder .nxp-qual:hover{border-color:rgba(var(--accent-rgb),.4);background:rgba(var(--accent-rgb),.05)}
+#finder .nxp-qual:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#finder .nxp-qual>b{font:700 11px "DM Mono",ui-monospace,monospace;color:var(--accent)}
+#finder .nxp-ico{flex:none;width:36px;height:36px;display:grid;place-items:center;border-radius:11px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05);font-size:13px}
+#finder .nxp-qual-t{flex:1;min-width:0;display:grid;gap:3px}
+#finder .nxp-qual-t strong{font-size:15px;letter-spacing:-.01em}
+#finder .nxp-qual-t small{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:11.5px;color:rgba(255,255,255,.55)}
+#finder .nxp-chev{color:rgba(255,255,255,.6);transition:transform .3s}
+#finder .nxp-qual[aria-expanded=true]{border-color:rgba(var(--accent-rgb),.4)}
+#finder .nxp-qual[aria-expanded=true] .nxp-chev{transform:rotate(180deg)}
+#finder .nxp-qual-body{padding:10px 0 0}
+#finder .nxp-qual-body[hidden]{display:none!important}
+#finder .nxp .clean-finder-options{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;margin:0!important;max-width:none!important;width:100%!important}
+#finder .nxp .clean-finder-option{width:100%!important;max-width:none!important}
+
+#finder .nxp-terr-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#finder .nxp-terr-h .nxp-step-h{flex:1;margin:0!important}
+#finder .nxp-terr-h .nxp-step-h i{color:var(--accent);font-size:13px}
+#finder #nxpCount{font:600 11px "DM Mono",ui-monospace,monospace;color:rgba(255,255,255,.55);white-space:nowrap}
+#finder .nxp-range{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px 8px;font-size:12.5px;color:rgba(255,255,255,.72)}
+#finder .nxp-range output{font-size:15px;font-weight:800;color:#fff}
+#finder .nxp-range input{grid-column:1/-1;width:100%;height:20px;margin:0;background:none;-webkit-appearance:none;appearance:none;cursor:pointer;--p:18%}
+#finder .nxp-range input::-webkit-slider-runnable-track{height:4px;border-radius:4px;background:linear-gradient(90deg,var(--accent) var(--p),rgba(255,255,255,.12) var(--p))}
+#finder .nxp-range input::-moz-range-track{height:4px;border-radius:4px;background:rgba(255,255,255,.12)}
+#finder .nxp-range input::-moz-range-progress{height:4px;border-radius:4px;background:var(--accent)}
+#finder .nxp-range input::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;border:3px solid #041011;background:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 16px rgba(var(--accent-rgb),.7)}
+#finder .nxp-range input::-moz-range-thumb{width:14px;height:14px;border-radius:50%;border:3px solid #041011;background:var(--accent);box-shadow:0 0 0 1px var(--accent),0 0 16px rgba(var(--accent-rgb),.7)}
+#finder .nxp-range input:focus-visible{outline:2px solid var(--accent);outline-offset:4px;border-radius:6px}
+#finder .nxp-areas-h{display:flex;align-items:center;justify-content:space-between;margin:16px 0 8px;font-size:11.5px;color:rgba(255,255,255,.5)}
+#finder #nxpClear{padding:4px 8px;border:0;border-radius:8px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);font:600 11.5px inherit;font-family:inherit;cursor:pointer}
+#finder #nxpClear:hover{color:#fff;background:rgba(255,255,255,.1)}
+#finder #nxpClear[hidden],#finder .nxp-areas-empty[hidden]{display:none}
+#finder .nxp-areas{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+#finder .nxp-areas li{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:10px;padding:9px 9px 9px 10px;border-radius:13px;border:1px solid rgba(255,255,255,.07);background:rgba(0,0,0,.3);cursor:pointer;transition:border-color .2s,background .2s}
+#finder .nxp-areas li:hover,#finder .nxp-areas li:focus-visible{border-color:rgba(var(--accent-rgb),.45);background:rgba(var(--accent-rgb),.06);outline:0}
+#finder .nxp-areas .pin{width:28px;height:28px;display:grid;place-items:center;border-radius:50%;border:1.5px solid var(--accent);background:#041011;color:#fff;font:700 10px "DM Mono",ui-monospace,monospace;box-shadow:0 0 14px rgba(var(--accent-rgb),.45)}
+#finder .nxp-areas .nm{display:grid;min-width:0;gap:2px}
+#finder .nxp-areas .nm b{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px;color:#fff}
+#finder .nxp-areas .nm small{font:500 10px "DM Mono",ui-monospace,monospace;color:rgba(255,255,255,.4)}
+#finder .nxp-areas em{font-style:normal;font-size:11px;color:rgba(255,255,255,.6);white-space:nowrap}
+#finder .nxp-areas button{width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:9px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.6);cursor:pointer}
+#finder .nxp-areas button:hover{color:#fff;background:rgba(255,90,90,.18)}
+#finder .nxp-areas-empty{display:flex;align-items:center;gap:10px;margin:0;padding:12px;border-radius:13px;border:1px dashed rgba(255,255,255,.13);font-size:12px;line-height:1.4;color:rgba(255,255,255,.5)}
+#finder .nxp-areas-empty i{color:var(--accent)}
+
+/* search button */
+#finder .nxp .query.nxp-go{display:block!important;flex:none;position:relative!important;height:auto!important;min-height:0!important;margin:0!important;padding:14px 18px 18px!important;border:0!important;border-top:1px solid rgba(255,255,255,.06)!important;border-radius:0!important;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.28))!important;box-shadow:none!important;backdrop-filter:none!important}
+#finder .nxp .query.nxp-go:before,#finder .nxp .query.nxp-go:after,#finder .nxp .query.nxp-go>i{display:none!important}
+#finder .nxp .clean-search-field.nxp-vol{display:none!important}
+#finder .nxp .query.nxp-go .btn{position:static!important;display:flex!important;align-items:center;justify-content:center;gap:9px;width:100%!important;height:52px!important;min-height:0!important;margin:0!important;padding:0 18px!important;border-radius:15px!important;font-size:14.5px!important;font-weight:800!important;transform:none!important}
+#finder .nxp .query.nxp-go .btn i{display:inline-block!important}
+
+/* map */
+#finder .nxp-map{container-type:inline-size;position:relative;min-height:0;overflow:hidden;isolation:isolate;border-radius:24px;border:1px solid var(--nxp-line);background:#030909;box-shadow:0 30px 70px -44px rgba(0,0,0,.95)}
+#finder .nxp-map:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;border-radius:inherit;background:radial-gradient(130% 100% at 50% 45%,transparent 55%,rgba(0,0,0,.55));box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+#finder .nxp-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;cursor:crosshair;touch-action:none;outline:0;-webkit-tap-highlight-color:transparent}
+#finder .nxp-canvas.is-hover{cursor:pointer}
+#finder .nxp-canvas.is-drag{cursor:grabbing}
+#finder .nxp-map:has(.nxp-canvas:focus-visible){box-shadow:0 0 0 2px var(--accent),0 30px 70px -44px rgba(0,0,0,.95)}
+#finder .nxp-top{position:absolute;z-index:3;left:16px;right:78px;top:16px;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.35fr) minmax(0,.9fr);gap:12px;align-items:start;pointer-events:none}
+#finder .nxp-mc{position:relative;min-width:0;padding:14px 16px;border-radius:17px;border:1px solid rgba(255,255,255,.08);background:var(--nxp-glass);-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);box-shadow:0 18px 40px -22px rgba(0,0,0,.95);pointer-events:auto}
+#finder .nxp-mc:before{content:"";position:absolute;left:14px;right:40%;top:-1px;height:1px;background:linear-gradient(90deg,var(--accent),transparent)}
+#finder .nxp-mc-eb{display:flex;align-items:center;gap:7px;font:700 9.5px/1 "DM Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:color-mix(in srgb,var(--accent) 70%,#fff)}
+#finder .nxp-mc-eb i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+#finder .nxp-mc-terr strong{display:block;margin:9px 64px 5px 0;font-size:21px;line-height:1.1;letter-spacing:-.035em;color:#fff}
+#finder .nxp-mc-terr em{position:absolute;right:14px;top:38px;padding:4px 7px;border-radius:8px;background:rgba(var(--accent-rgb),.13);color:var(--accent);font:700 10px "DM Mono",ui-monospace,monospace;font-style:normal}
+#finder .nxp-mc-terr small{display:block;font-size:11px;line-height:1.4;color:rgba(255,255,255,.5)}
+#finder .nxp-find-row{display:flex;align-items:center;gap:10px;margin-top:10px}
+#finder .nxp-find-row>i{flex:none;width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:rgba(var(--accent-rgb),.15);color:var(--accent)}
+#finder .nxp-find-row input{flex:1;min-width:0;height:38px;padding:0;border:0;background:none;outline:0;color:#fff;font:500 13.5px inherit;font-family:inherit}
+#finder .nxp-find-row input::placeholder{color:rgba(255,255,255,.42)}
+#finder .nxp-find-row button{flex:none;display:flex;align-items:center;gap:8px;height:38px;padding:0 15px;border:0;border-radius:11px;background:var(--accent);color:#021414;font:800 13px inherit;font-family:inherit;cursor:pointer;box-shadow:0 10px 24px -10px rgba(var(--accent-rgb),.9);transition:transform .2s,filter .2s}
+#finder .nxp-find-row button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+#finder .nxp-mc-find:focus-within{border-color:rgba(var(--accent-rgb),.5)}
+#finder .nxp-mc-pot{display:flex;align-items:center;gap:13px}
+#finder .nxp-mc-pot svg{flex:none;width:54px;height:54px;transform:rotate(-90deg)}
+#finder .nxp-mc-pot circle{fill:none;stroke:rgba(255,255,255,.1);stroke-width:4}
+#finder .nxp-mc-pot .nxp-ring{stroke:var(--accent);stroke-linecap:round;stroke-dasharray:0 100;transition:stroke-dasharray 1s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 0 4px rgba(var(--accent-rgb),.9))}
+#finder .nxp-mc-pot div{min-width:0}
+#finder .nxp-mc-pot strong{display:block;font-size:23px;line-height:1;letter-spacing:-.03em;color:#fff}
+#finder .nxp-mc-pot span{display:block;margin-top:5px;font-size:11.5px;font-weight:700;color:#fff}
+#finder .nxp-mc-pot small{display:block;margin-top:2px;font-size:10.5px;line-height:1.35;color:rgba(255,255,255,.45)}
+#finder .nxp-zoom{position:absolute;z-index:3;right:16px;top:50%;translate:0 -50%;display:grid;gap:4px;padding:6px;border-radius:17px;border:1px solid rgba(255,255,255,.08);background:var(--nxp-glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+#finder .nxp-zoom button{width:38px;height:38px;display:grid;place-items:center;border:0;border-radius:11px;background:none;color:#fff;cursor:pointer;font-size:13px;transition:background .2s,color .2s}
+#finder .nxp-zoom button:hover{background:rgba(var(--accent-rgb),.16);color:var(--accent)}
+#finder .nxp-zoom button:focus-visible,#finder .nxp-find-row button:focus-visible,#finder .nxp-mark:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#finder .nxp-zoom span{display:grid;place-items:center;gap:2px;padding:6px 0;border-radius:11px;background:rgba(255,255,255,.05)}
+#finder .nxp-zoom small{font:700 7.5px "DM Mono",ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+#finder .nxp-zoom b{font-size:15px;color:#fff}
+#finder .nxp-mark{position:absolute;z-index:3;translate:-50% 0;display:flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid rgba(255,255,255,.2);border-radius:999px;background:var(--accent);color:#021414;font:800 12.5px inherit;font-family:inherit;white-space:nowrap;cursor:pointer;box-shadow:0 14px 34px -12px rgba(var(--accent-rgb),.95);animation:nxpPop .35s cubic-bezier(.2,.8,.2,1) both}
+#finder .nxp-mark[hidden],#finder .nxp-pop[hidden]{display:none}
+#finder .nxp-pop{position:absolute;z-index:4;width:258px;padding:14px 14px 12px;border-radius:15px;border:1px solid rgba(var(--accent-rgb),.38);background:rgba(4,13,14,.95);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 24px 50px -18px rgba(0,0,0,.95);font-size:12px;color:rgba(255,255,255,.7);animation:nxpPop .25s cubic-bezier(.2,.8,.2,1) both}
+#finder .nxp-pop strong{display:block;margin:8px 22px 6px 0;font-size:15px;line-height:1.25;color:#fff}
+#finder .nxp-pop p{margin:0 0 6px;line-height:1.45}
+#finder .nxp-pop-tel i{margin-right:7px;color:var(--accent)}
+#finder .nxp-pop-x{position:absolute;right:8px;top:8px;width:28px;height:28px;display:grid;place-items:center;border:0;border-radius:9px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);cursor:pointer}
+#finder .nxp-pop-act{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+#finder .nxp-pop-act a,#finder .nxp-pop-act button{display:inline-flex;align-items:center;gap:7px;height:32px;padding:0 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;font:700 11.5px inherit;font-family:inherit;text-decoration:none;cursor:pointer}
+#finder .nxp-pop-act button:not(.ghost){border-color:transparent;background:var(--accent);color:#021414}
+#finder .nxp-pop-act a:hover,#finder .nxp-pop-act .ghost:hover{border-color:rgba(var(--accent-rgb),.5)}
+#finder .nxp-foot{position:absolute;z-index:2;left:18px;right:18px;bottom:12px;display:flex;justify-content:space-between;gap:12px;margin:0;pointer-events:none;font:600 9px/1.3 "DM Mono",ui-monospace,monospace;letter-spacing:.11em;text-transform:uppercase;color:rgba(255,255,255,.34)}
+@keyframes nxpPop{from{opacity:0;transform:translateY(6px) scale(.97)}to{opacity:1;transform:none}}
+[data-cp-motion=quiet] #finder .nxp-mark,[data-cp-motion=quiet] #finder .nxp-pop{animation:none}
+
+@container (max-width:760px){
+  #finder .nxp-top{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  #finder .nxp-mc-find{grid-column:1/-1;grid-row:1}
+}
+@media (max-width:1100px) and (min-width:981px){
+  #finder .finder.nxp{grid-template-columns:minmax(300px,330px) minmax(0,1fr)}
+  #finder .nxp-head .nxp-title{font-size:33px!important}
+}
+
+/* tablets and phones: one column, map after the steps, search button pinned */
+@media (max-width:980px){
+  #finder.view{padding-top:10px!important}
+  #finder .finder.nxp{display:flex;flex-direction:column;gap:14px;height:auto;min-height:0;max-height:none}
+  #finder .finder-shell.nxp-side{display:contents!important}
+  #finder .nxp-head{order:1;border:1px solid rgba(var(--accent-rgb),.22);border-radius:22px}
+  #finder .nxp-steps{order:2;overflow:visible;padding:16px;border:1px solid var(--nxp-line);border-radius:22px;background:linear-gradient(180deg,rgba(8,21,22,.94),rgba(4,11,12,.96))}
+  #finder .nxp-map{order:3;display:flex;flex-direction:column;border-radius:22px}
+  #finder .nxp .query.nxp-go{order:4;position:sticky!important;bottom:calc(84px + env(safe-area-inset-bottom));z-index:20;padding:0!important;border:0!important;background:none!important}
+  #finder .nxp .query.nxp-go .btn{box-shadow:0 18px 40px -14px rgba(0,0,0,.95),0 10px 30px -12px rgba(var(--accent-rgb),.9)!important}
+  #finder .nxp-top{position:relative;order:-1;left:auto;right:auto;top:auto;padding:12px 12px 0;grid-template-columns:1fr 1fr;gap:10px}
+  #finder .nxp-mc-find{grid-column:1/-1}
+  #finder .nxp-canvas{position:relative;inset:auto;height:420px;margin-top:12px}
+  #finder .nxp-map:after{top:auto;height:420px}
+  #finder .nxp-zoom{top:auto;bottom:46px;translate:none;right:12px}
+  #finder .nxp-foot{bottom:10px;left:14px;right:14px}
+}
+@media (max-width:640px){
+  #finder .nxp-head{padding:20px 18px 18px}
+  #finder .nxp-head .nx-n-slot.nxp-n{width:58px;height:58px;right:14px;top:14px}
+  #finder .nxp-head .nxp-title{font-size:32px!important;max-width:calc(100% - 64px)}
+  #finder .nxp-head .sub{font-size:12px!important}
+  #finder .nxp-steps{padding:14px}
+  #finder .nxp-mc{padding:12px 13px;border-radius:15px}
+  #finder .nxp-mc-terr strong{margin-right:0;font-size:16px}
+  #finder .nxp-mc-terr em{position:static;display:inline-block;margin:0 0 4px}
+  #finder .nxp-mc-pot{gap:10px}
+  #finder .nxp-mc-pot svg{width:42px;height:42px}
+  #finder .nxp-mc-pot strong{font-size:18px}
+  #finder .nxp-mc-pot small{display:none}
+  #finder .nxp-canvas{height:380px}
+  #finder .nxp-map:after{height:380px}
+  #finder .nxp-foot span:first-child{display:none}
+  #finder .nxp-zoom button{width:36px;height:36px}
+}
+@media (max-width:980px) and (hover:none){
+  #finder .nxp-canvas{touch-action:pan-y}
+}
+</style>
+<script id="nexa-prospect">
+var NXP_STATES=[{"c":"AC","n":"Acre","l":[-70.47,-9.3],"p":[[-66.63,-9.93,-67.11,-10.27,-67.42,-10.39,-67.72,-10.68,-68.07,-10.7,-68.31,-10.98,-68.62,-11.11,-68.73,-11.12,-68.85,-11.01,-69.23,-10.96,-69.96,-10.93,-70.34,-11.07,-70.53,-10.95,-70.64,-11.01,-70.64,-9.82,-70.57,-9.7,-70.59,-9.54,-70.54,-9.44,-71.24,-9.97,-72.14,-10.01,-72.18,-10.0,-72.17,-9.84,-72.26,-9.77,-72.32,-9.56,-72.38,-9.51,-72.81,-9.41,-73.21,-9.41,-72.97,-9.12,-72.97,-8.99,-73.3,-8.65,-73.36,-8.48,-73.55,-8.35,-73.64,-8.07,-73.78,-7.94,-73.72,-7.78,-74.0,-7.56,-73.96,-7.38,-73.72,-7.31,-73.8,-7.12,-72.66,-7.59,-70.37,-8.16,-66.63,-9.93]]},{"c":"AL","n":"Alagoas","l":[-36.62,-9.52],"p":[[-37.98,-9.51,-38.22,-9.35,-38.09,-9.19,-37.97,-9.14,-37.75,-8.86,-37.68,-8.98,-37.52,-8.95,-37.18,-9.24,-36.94,-9.36,-36.83,-9.26,-36.58,-9.29,-36.35,-9.2,-36.02,-8.9,-35.8,-8.87,-35.72,-8.92,-35.47,-8.83,-35.15,-8.91,-35.6,-9.54,-35.76,-9.7,-35.89,-9.69,-35.85,-9.77,-35.89,-9.85,-36.41,-10.49,-36.65,-10.25,-36.88,-10.15,-37.02,-9.96,-37.98,-9.51]]},{"c":"AM","n":"Amazonas","l":[-64.72,-4.18],"p":[[-66.83,-9.84,-70.37,-8.16,-72.66,-7.59,-73.8,-7.12,-73.76,-6.91,-73.69,-6.83,-73.14,-6.47,-73.24,-6.1,-72.98,-5.63,-72.89,-5.12,-72.7,-5.07,-72.35,-4.79,-71.84,-4.5,-70.97,-4.35,-70.8,-4.17,-70.4,-4.15,-70.24,-4.3,-69.97,-4.3,-69.4,-1.2,-69.45,-1.0,-69.61,-0.76,-69.63,-0.51,-69.92,-0.32,-70.07,-0.14,-70.05,0.58,-69.47,0.73,-69.28,0.63,-69.15,0.66,-69.16,0.86,-69.31,1.05,-69.85,1.06,-69.85,1.71,-69.54,1.77,-69.32,1.72,-68.18,1.72,-68.26,1.85,-68.19,1.99,-68.03,1.79,-67.94,1.75,-67.81,1.79,-67.56,2.07,-67.4,2.12,-67.12,1.7,-67.08,1.19,-66.88,1.22,-66.3,0.75,-66.06,0.79,-65.68,0.98,-65.52,0.84,-65.56,0.69,-65.47,0.69,-65.1,1.11,-64.73,1.25,-64.49,1.45,-64.3,1.46,-64.21,1.53,-64.11,1.62,-64.04,1.9,-63.98,1.95,-63.46,2.14,-63.39,2.22,-63.31,2.17,-63.15,2.18,-63.0,2.02,-62.85,2.02,-62.71,1.95,-62.71,1.74,-62.79,1.6,-62.62,1.42,-62.44,0.8,-62.53,0.73,-62.48,0.54,-62.57,0.25,-62.53,0.09,-62.58,0.02,-62.37,-0.34,-62.31,-0.64,-62.38,-0.72,-62.48,-0.7,-62.51,-0.77,-62.03,-1.15,-61.88,-1.39,-61.62,-1.45,-61.53,-0.73,-61.22,-0.5,-60.93,-0.56,-60.73,-0.85,-60.52,-0.83,-60.47,-0.74,-60.34,-0.7,-60.32,-0.62,-60.39,-0.52,-60.31,-0.24,-60.13,0.13,-60.03,0.22,-58.87,0.22,-58.86,-0.35,-58.74,-0.43,-58.7,-0.7,-58.44,-0.86,-58.39,-1.05,-57.65,-1.59,-57.09,-1.81,-57.01,-1.94,-56.74,-2.05,-56.75,-2.18,-56.64,-2.22,-56.5,-2.16,-56.39,-2.39,-58.29,-6.5,-58.44,-6.68,-58.46,-6.79,-58.39,-6.95,-58.14,-7.34,-58.33,-7.78,-58.35,-8.28,-58.47,-8.69,-58.55,-8.75,-61.61,-8.77,-61.61,-8.72,-61.72,-8.69,-61.84,-8.74,-61.92,-8.87,-62.13,-8.77,-62.17,-8.61,-62.31,-8.57,-62.37,-8.38,-62.54,-8.36,-62.72,-8.06,-62.9,-8.01,-63.54,-8.0,-63.59,-8.16,-63.73,-8.19,-63.75,-8.28,-63.92,-8.33,-63.99,-8.44,-63.92,-8.53,-64.0,-8.68,-64.13,-8.69,-64.12,-8.94,-64.48,-8.95,-64.6,-9.03,-64.78,-8.99,-64.93,-9.12,-64.9,-9.21,-65.09,-9.44,-65.22,-9.26,-65.44,-9.45,-65.63,-9.45,-65.77,-9.57,-65.93,-9.41,-66.4,-9.41,-66.4,-9.53,-66.5,-9.63,-66.83,-9.84]]},{"c":"AP","n":"Amapá","l":[-51.98,1.46],"p":[[-51.89,-1.16,-52.24,-1.15,-52.36,-1.07,-52.4,-0.87,-52.52,-0.87,-52.53,-0.65,-52.63,-0.56,-52.63,-0.4,-52.83,-0.18,-52.91,-0.19,-53.02,0.05,-53.04,0.25,-53.13,0.38,-53.11,0.72,-53.27,0.78,-53.42,0.94,-53.44,1.26,-53.54,1.24,-53.56,1.37,-53.65,1.36,-53.66,1.42,-53.89,1.41,-54.01,1.52,-54.08,1.51,-54.17,1.66,-54.36,1.76,-54.73,1.77,-54.79,2.13,-54.72,2.26,-54.71,2.43,-54.66,2.33,-54.52,2.25,-54.13,2.12,-53.77,2.35,-53.51,2.25,-53.33,2.34,-53.23,2.2,-52.9,2.21,-52.58,2.53,-52.33,3.18,-52.16,3.36,-51.99,3.7,-51.77,3.99,-51.65,4.06,-51.55,4.31,-51.46,4.31,-51.22,4.09,-51.08,3.67,-50.99,3.08,-50.68,2.21,-50.71,2.13,-50.61,2.1,-50.46,1.83,-50.19,1.79,-49.96,1.66,-49.88,1.42,-49.9,1.16,-50.29,0.84,-50.76,0.22,-50.97,0.13,-51.1,-0.03,-51.28,-0.09,-51.4,-0.39,-51.7,-0.76,-51.72,-1.02,-51.89,-1.16],[-50.36,2.15,-50.29,1.98,-50.4,1.89,-50.51,2.03,-50.49,2.13,-50.36,2.15]]},{"c":"BA","n":"Bahia","l":[-41.71,-12.47],"p":[[-46.03,-14.87,-45.91,-14.69,-45.96,-14.53,-45.92,-14.35,-46.13,-14.18,-46.22,-14.0,-46.27,-13.66,-46.19,-13.41,-46.1,-13.35,-46.08,-13.25,-46.18,-13.22,-46.18,-13.16,-46.15,-13.03,-46.07,-12.98,-46.23,-12.8,-46.16,-12.5,-46.32,-12.42,-46.35,-12.34,-46.32,-12.09,-46.08,-11.93,-46.16,-11.83,-46.25,-11.84,-46.28,-11.77,-46.08,-11.6,-46.43,-11.5,-46.57,-11.32,-46.37,-10.97,-46.25,-10.91,-46.3,-10.76,-45.86,-10.47,-45.76,-10.33,-45.61,-10.33,-45.52,-10.41,-45.32,-10.78,-45.04,-10.9,-44.78,-10.86,-44.54,-10.63,-44.42,-10.59,-44.22,-10.63,-43.91,-10.43,-43.7,-10.03,-43.68,-9.8,-43.83,-9.5,-43.81,-9.43,-43.69,-9.45,-43.66,-9.36,-43.45,-9.3,-43.38,-9.41,-43.13,-9.37,-42.85,-9.55,-42.62,-9.57,-42.31,-9.31,-42.15,-9.29,-42.04,-9.21,-41.85,-9.25,-41.73,-9.13,-41.73,-8.98,-41.5,-8.94,-41.37,-8.71,-41.11,-8.72,-41.1,-8.78,-40.89,-8.86,-40.85,-9.15,-40.7,-9.22,-40.69,-9.34,-40.74,-9.42,-40.69,-9.47,-40.41,-9.4,-40.27,-9.14,-39.95,-9.02,-39.88,-8.85,-39.74,-8.79,-39.6,-8.62,-39.44,-8.56,-39.33,-8.57,-38.67,-8.9,-38.5,-8.83,-38.48,-8.96,-38.29,-9.04,-38.22,-9.35,-37.98,-9.51,-38.04,-9.61,-37.99,-9.65,-38.03,-9.73,-37.78,-10.08,-37.84,-10.42,-37.78,-10.63,-37.97,-10.75,-38.19,-10.72,-38.23,-10.9,-37.98,-11.24,-38.01,-11.36,-37.8,-11.53,-37.66,-11.56,-37.41,-11.5,-37.69,-12.1,-38.24,-12.84,-38.4,-12.97,-38.5,-12.96,-38.52,-12.76,-38.69,-12.62,-38.74,-12.75,-38.85,-12.79,-38.76,-12.91,-38.84,-13.15,-39.03,-13.37,-39.09,-13.59,-39.04,-13.56,-38.99,-13.62,-39.05,-14.04,-39.01,-14.1,-38.97,-14.0,-38.94,-14.03,-39.06,-14.65,-38.88,-15.86,-39.2,-17.18,-39.15,-17.7,-39.49,-17.99,-39.67,-18.33,-40.19,-18.01,-40.23,-17.92,-40.21,-17.77,-40.41,-17.56,-40.48,-17.56,-40.5,-17.42,-40.61,-17.39,-40.52,-16.93,-40.47,-16.87,-40.3,-16.88,-40.24,-16.83,-40.28,-16.74,-40.25,-16.57,-40.14,-16.54,-39.94,-16.31,-39.86,-16.11,-39.94,-16.0,-40.23,-15.82,-40.53,-15.8,-40.83,-15.68,-40.94,-15.67,-41.16,-15.78,-41.33,-15.72,-41.36,-15.49,-41.8,-15.11,-42.09,-15.18,-42.63,-14.94,-42.95,-14.68,-43.23,-14.64,-43.49,-14.79,-43.82,-14.7,-43.88,-14.62,-43.78,-14.34,-44.21,-14.24,-44.56,-14.35,-44.84,-14.52,-44.88,-14.6,-45.23,-14.74,-45.46,-14.94,-45.55,-14.94,-45.71,-15.12,-45.93,-15.13,-46.07,-15.25,-45.98,-14.99,-46.03,-14.87],[-38.91,-13.4,-38.9,-13.47,-38.98,-13.52,-39.01,-13.42,-38.91,-13.4],[-38.6,-12.99,-38.78,-13.12,-38.67,-12.88,-38.6,-12.99]]},{"c":"CE","n":"Ceará","l":[-39.63,-5.1],"p":[[-40.54,-7.39,-40.58,-7.2,-40.42,-6.81,-40.48,-6.74,-40.71,-6.66,-40.77,-6.49,-40.89,-6.01,-40.95,-5.42,-41.07,-5.31,-41.06,-5.17,-41.19,-4.91,-41.24,-4.62,-41.07,-4.32,-41.45,-3.44,-41.43,-3.32,-41.26,-3.08,-41.27,-2.92,-40.47,-2.8,-39.96,-2.86,-39.01,-3.39,-38.69,-3.65,-38.48,-3.72,-38.05,-4.22,-37.63,-4.59,-37.3,-4.71,-37.23,-4.82,-37.54,-4.93,-37.72,-5.06,-37.91,-5.46,-38.05,-5.61,-38.13,-5.88,-38.3,-6.07,-38.41,-6.06,-38.49,-6.13,-38.58,-6.26,-38.61,-6.4,-38.53,-6.38,-38.73,-7.0,-38.68,-7.16,-38.53,-7.29,-38.7,-7.62,-38.82,-7.66,-38.97,-7.85,-39.07,-7.86,-39.11,-7.75,-39.35,-7.55,-39.65,-7.37,-40.54,-7.39]]},{"c":"DF","n":"Distrito Federal","l":[-47.79,-15.77],"p":[[-47.3,-16.04,-48.25,-16.03,-48.28,-15.84,-48.2,-15.74,-48.24,-15.69,-48.18,-15.49,-47.42,-15.5,-47.31,-15.59,-47.36,-15.99,-47.3,-16.04]]},{"c":"ES","n":"Espírito Santo","l":[-40.67,-19.57],"p":[[-40.97,-21.28,-41.07,-21.21,-41.27,-21.23,-41.71,-21.11,-41.74,-20.82,-41.88,-20.76,-41.8,-20.53,-41.8,-20.43,-41.86,-20.37,-41.72,-20.21,-41.36,-20.19,-41.31,-19.95,-41.19,-19.87,-41.16,-19.66,-41.03,-19.55,-41.05,-19.49,-40.96,-19.47,-40.94,-19.15,-41.11,-18.89,-41.23,-18.85,-41.19,-18.81,-40.93,-18.81,-40.93,-18.7,-41.03,-18.64,-41.0,-18.45,-41.14,-18.3,-41.06,-18.18,-40.91,-18.1,-40.77,-18.14,-40.91,-17.97,-40.43,-17.89,-39.67,-18.33,-39.74,-18.64,-39.7,-19.28,-39.78,-19.57,-40.0,-19.74,-40.14,-19.97,-40.2,-20.21,-40.3,-20.29,-40.4,-20.57,-40.79,-20.91,-40.97,-21.28]]},{"c":"GO","n":"Goiás","l":[-49.61,-16.02],"p":[[-50.96,-19.51,-51.14,-19.28,-51.84,-19.05,-52.5,-18.7,-52.87,-18.68,-52.78,-18.39,-53.03,-18.36,-53.05,-18.02,-53.21,-17.41,-53.02,-16.91,-52.68,-16.58,-52.61,-16.43,-52.68,-16.36,-52.67,-16.29,-52.53,-16.23,-52.54,-16.17,-52.26,-15.94,-51.85,-15.75,-51.59,-15.14,-51.47,-15.04,-51.19,-14.98,-50.87,-14.1,-50.8,-13.61,-50.6,-13.25,-50.57,-13.01,-50.39,-12.62,-50.16,-12.39,-50.14,-12.48,-50.28,-12.79,-50.24,-12.93,-49.69,-13.18,-49.38,-13.25,-49.14,-12.74,-49.02,-12.66,-49.0,-12.75,-48.8,-12.93,-48.74,-13.38,-48.65,-13.18,-48.37,-13.19,-48.23,-13.09,-48.16,-13.1,-48.17,-13.18,-47.68,-13.36,-47.72,-13.15,-47.64,-13.12,-47.56,-13.24,-47.44,-13.25,-47.09,-13.1,-46.83,-13.07,-46.59,-12.89,-46.23,-12.8,-46.07,-12.98,-46.15,-13.03,-46.18,-13.16,-46.18,-13.22,-46.08,-13.25,-46.27,-13.66,-46.26,-13.87,-46.13,-14.18,-45.92,-14.35,-45.96,-14.47,-45.93,-14.75,-46.08,-14.92,-46.19,-14.94,-46.3,-14.91,-46.39,-14.77,-46.52,-14.71,-46.58,-14.79,-46.55,-15.04,-46.89,-15.05,-46.93,-15.23,-46.86,-15.32,-46.94,-15.43,-46.93,-15.54,-46.87,-15.59,-46.86,-15.88,-47.13,-15.92,-47.23,-16.03,-47.3,-16.04,-47.36,-15.99,-47.31,-15.59,-47.42,-15.5,-48.18,-15.49,-48.24,-15.69,-48.2,-15.74,-48.28,-15.84,-48.25,-16.03,-47.3,-16.04,-47.32,-16.23,-47.45,-16.49,-47.27,-16.66,-47.15,-16.98,-47.45,-17.35,-47.5,-17.33,-47.53,-17.45,-47.46,-17.53,-47.29,-17.55,-47.27,-17.67,-47.36,-17.82,-47.28,-18.06,-47.93,-18.45,-48.23,-18.34,-48.95,-18.33,-49.18,-18.4,-49.34,-18.58,-49.42,-18.6,-49.55,-18.51,-49.68,-18.6,-50.25,-18.69,-50.46,-18.88,-50.53,-19.09,-50.79,-19.24,-50.86,-19.44,-50.96,-19.51]]},{"c":"MA","n":"Maranhão","l":[-45.29,-5.11],"p":[[-48.72,-5.36,-47.8,-4.6,-47.65,-4.61,-47.58,-4.55,-47.38,-4.28,-47.31,-4.07,-47.07,-3.84,-47.03,-3.57,-46.97,-3.53,-46.94,-3.4,-46.82,-3.33,-46.67,-3.09,-46.65,-2.91,-46.57,-2.85,-46.67,-2.74,-46.43,-2.51,-46.41,-2.24,-46.28,-2.14,-46.22,-1.81,-46.3,-1.8,-46.32,-1.73,-46.2,-1.68,-46.14,-1.24,-46.01,-1.15,-45.64,-1.35,-45.46,-1.36,-45.33,-1.72,-45.18,-1.51,-45.08,-1.47,-44.72,-1.73,-44.78,-1.8,-44.65,-1.75,-44.54,-2.05,-44.66,-2.23,-44.76,-2.27,-44.66,-2.37,-44.58,-2.23,-44.44,-2.17,-44.38,-2.37,-44.52,-2.41,-44.59,-2.57,-44.72,-3.2,-44.44,-2.94,-44.31,-2.54,-44.23,-2.47,-44.11,-2.49,-44.11,-2.6,-44.23,-2.75,-44.19,-2.81,-43.93,-2.58,-43.46,-2.5,-43.38,-2.38,-42.94,-2.47,-42.25,-2.79,-41.85,-2.76,-41.84,-3.03,-42.0,-3.23,-42.11,-3.26,-42.22,-3.43,-42.5,-3.45,-42.68,-3.7,-42.66,-3.79,-42.73,-3.92,-42.99,-4.24,-42.86,-4.5,-42.95,-4.78,-42.81,-5.16,-42.83,-5.31,-43.1,-5.62,-43.11,-5.77,-43.07,-6.06,-42.85,-6.25,-42.92,-6.67,-42.98,-6.74,-43.46,-6.84,-43.68,-6.7,-44.04,-6.77,-44.31,-7.11,-44.45,-7.15,-44.71,-7.4,-44.82,-7.36,-45.47,-7.67,-45.58,-8.15,-45.82,-8.7,-45.93,-8.79,-45.98,-8.93,-45.9,-9.33,-45.8,-9.46,-45.94,-10.32,-46.09,-10.21,-46.35,-10.17,-46.47,-10.0,-46.51,-9.86,-46.67,-9.74,-46.53,-9.56,-46.56,-9.5,-46.75,-9.41,-46.94,-9.07,-47.08,-9.03,-46.9,-8.83,-46.88,-8.58,-46.79,-8.44,-46.5,-8.4,-46.54,-8.32,-46.47,-8.07,-46.49,-7.96,-46.57,-7.91,-46.74,-7.92,-47.02,-8.04,-47.41,-7.53,-47.46,-7.53,-47.51,-7.31,-47.67,-7.28,-47.72,-7.22,-47.54,-7.03,-47.41,-6.42,-47.4,-6.07,-47.49,-5.56,-47.85,-5.35,-47.88,-5.29,-48.38,-5.17,-48.72,-5.36],[-44.57,-2.92,-44.57,-2.78,-44.48,-2.72,-44.5,-2.94,-44.6,-3.04,-44.57,-2.92],[-45.01,-1.34,-44.98,-1.27,-44.89,-1.28,-44.97,-1.39,-45.01,-1.34]]},{"c":"MG","n":"Minas Gerais","l":[-44.68,-18.45],"p":[[-50.99,-20.1,-50.96,-19.51,-50.86,-19.44,-50.79,-19.24,-50.53,-19.09,-50.46,-18.88,-50.25,-18.69,-49.68,-18.6,-49.55,-18.51,-49.42,-18.6,-49.34,-18.58,-49.18,-18.4,-48.95,-18.33,-48.23,-18.34,-47.93,-18.45,-47.28,-18.06,-47.36,-17.82,-47.27,-17.67,-47.29,-17.55,-47.46,-17.53,-47.53,-17.45,-47.5,-17.33,-47.45,-17.35,-47.15,-16.98,-47.27,-16.66,-47.45,-16.49,-47.32,-16.23,-47.3,-16.04,-47.23,-16.03,-47.13,-15.92,-46.83,-15.84,-46.87,-15.59,-46.93,-15.54,-46.94,-15.43,-46.86,-15.32,-46.93,-15.23,-46.89,-15.05,-46.55,-15.04,-46.58,-14.79,-46.52,-14.71,-46.39,-14.77,-46.3,-14.91,-46.08,-14.92,-46.03,-14.87,-45.98,-14.99,-46.07,-15.25,-45.93,-15.13,-45.71,-15.12,-45.55,-14.94,-45.46,-14.94,-45.23,-14.74,-45.1,-14.72,-44.56,-14.35,-44.32,-14.24,-43.84,-14.32,-43.78,-14.34,-43.88,-14.62,-43.82,-14.7,-43.49,-14.79,-43.23,-14.64,-42.95,-14.68,-42.63,-14.94,-42.09,-15.18,-41.8,-15.11,-41.36,-15.49,-41.33,-15.72,-41.16,-15.78,-40.94,-15.67,-40.83,-15.68,-40.53,-15.8,-40.23,-15.82,-39.94,-16.0,-39.86,-16.11,-39.94,-16.31,-40.14,-16.54,-40.25,-16.57,-40.28,-16.74,-40.24,-16.83,-40.3,-16.88,-40.47,-16.87,-40.57,-17.13,-40.61,-17.39,-40.5,-17.42,-40.48,-17.56,-40.41,-17.56,-40.21,-17.77,-40.21,-17.98,-40.43,-17.89,-40.91,-17.97,-40.77,-18.14,-40.91,-18.1,-41.06,-18.18,-41.14,-18.3,-41.0,-18.45,-41.03,-18.64,-40.93,-18.7,-40.93,-18.81,-41.19,-18.81,-41.23,-18.85,-41.11,-18.89,-40.94,-19.15,-40.96,-19.47,-41.05,-19.49,-41.03,-19.55,-41.16,-19.66,-41.19,-19.87,-41.31,-19.95,-41.36,-20.19,-41.72,-20.21,-41.86,-20.37,-41.8,-20.43,-41.85,-20.62,-41.81,-20.65,-41.96,-20.91,-42.14,-20.96,-42.1,-21.0,-42.36,-21.59,-42.37,-21.63,-42.28,-21.64,-42.28,-21.71,-43.06,-22.06,-43.34,-22.0,-43.46,-22.06,-43.82,-22.07,-44.22,-22.25,-44.44,-22.25,-44.66,-22.37,-45.06,-22.47,-45.27,-22.61,-45.53,-22.65,-45.67,-22.62,-45.8,-22.7,-45.74,-22.73,-45.79,-22.85,-45.91,-22.82,-46.29,-22.88,-46.47,-22.68,-46.4,-22.62,-46.45,-22.52,-46.7,-22.32,-46.6,-22.13,-46.66,-22.05,-46.62,-21.99,-46.67,-21.81,-46.49,-21.53,-46.51,-21.46,-46.65,-21.37,-47.0,-21.4,-47.15,-20.98,-47.22,-20.91,-47.11,-20.63,-47.15,-20.53,-47.29,-20.42,-47.24,-20.17,-47.46,-20.0,-47.82,-19.98,-47.86,-20.06,-48.05,-20.12,-48.18,-20.08,-48.81,-20.16,-48.92,-20.43,-49.04,-20.19,-49.2,-20.29,-49.28,-20.15,-49.28,-19.99,-50.36,-19.86,-50.49,-19.79,-50.99,-20.1]]},{"c":"MS","n":"Mato Grosso do Sul","l":[-54.85,-20.33],"p":[[-50.96,-19.51,-50.99,-20.1,-51.16,-20.31,-51.53,-20.56,-51.62,-20.81,-51.87,-21.18,-51.87,-21.33,-51.95,-21.47,-52.05,-21.51,-52.12,-21.72,-52.4,-22.07,-53.62,-23.0,-53.77,-23.32,-53.91,-23.41,-54.0,-23.57,-54.12,-23.98,-54.24,-24.05,-54.63,-23.81,-55.19,-24.02,-55.42,-23.95,-55.46,-23.69,-55.54,-23.58,-55.52,-23.42,-55.65,-22.89,-55.62,-22.67,-55.85,-22.31,-56.25,-22.26,-56.45,-22.08,-56.63,-22.23,-56.94,-22.27,-57.57,-22.18,-57.72,-22.1,-57.88,-22.14,-57.99,-22.05,-57.92,-21.7,-57.95,-21.49,-57.87,-21.36,-57.83,-21.0,-57.92,-20.69,-57.98,-20.66,-58.0,-20.47,-58.16,-20.16,-57.86,-19.98,-58.13,-19.74,-57.8,-19.08,-57.72,-19.04,-57.73,-18.92,-57.78,-18.91,-57.57,-18.28,-57.5,-18.21,-57.59,-18.12,-57.75,-17.73,-57.63,-17.74,-57.47,-17.9,-57.2,-17.81,-56.75,-17.32,-56.44,-17.32,-56.1,-17.19,-55.61,-17.39,-55.53,-17.5,-55.18,-17.69,-54.9,-17.65,-54.7,-17.52,-54.53,-17.51,-54.42,-17.58,-54.39,-17.67,-54.32,-17.67,-54.08,-17.59,-53.82,-17.31,-53.68,-17.26,-53.75,-17.64,-53.86,-17.69,-53.98,-17.93,-53.73,-18.01,-53.05,-18.02,-53.03,-18.36,-52.78,-18.39,-52.87,-18.68,-52.5,-18.7,-51.84,-19.05,-51.14,-19.28,-50.96,-19.51]]},{"c":"MT","n":"Mato Grosso","l":[-55.93,-12.96],"p":[[-60.72,-13.66,-60.38,-13.42,-60.27,-13.07,-60.04,-12.87,-59.82,-12.39,-59.89,-12.13,-59.98,-11.92,-60.06,-11.91,-60.1,-11.74,-60.1,-11.6,-59.91,-11.38,-60.0,-11.15,-60.38,-11.1,-60.44,-11.0,-61.47,-11.0,-61.52,-10.95,-61.47,-10.44,-61.57,-10.26,-61.52,-9.86,-61.57,-9.73,-61.48,-9.64,-61.61,-9.32,-61.59,-9.24,-61.53,-9.23,-61.56,-9.13,-61.48,-8.91,-61.61,-8.77,-58.55,-8.75,-58.47,-8.69,-58.35,-8.28,-58.33,-7.78,-58.14,-7.34,-57.98,-7.53,-57.78,-8.05,-57.64,-8.23,-57.68,-8.44,-57.58,-8.76,-57.1,-9.05,-57.05,-9.23,-56.84,-9.27,-56.77,-9.4,-56.68,-9.38,-56.49,-9.47,-55.09,-9.57,-50.23,-9.84,-50.6,-10.69,-50.61,-11.0,-50.71,-11.35,-50.67,-11.65,-50.72,-11.75,-50.66,-11.85,-50.63,-12.29,-50.66,-12.67,-50.57,-12.82,-50.48,-12.84,-50.6,-13.25,-50.86,-13.81,-50.87,-14.1,-50.94,-14.2,-50.98,-14.46,-51.19,-14.98,-51.47,-15.04,-51.59,-15.14,-51.85,-15.75,-52.26,-15.94,-52.54,-16.17,-52.53,-16.23,-52.67,-16.29,-52.68,-16.36,-52.61,-16.43,-52.68,-16.58,-53.02,-16.91,-53.2,-17.3,-53.05,-18.02,-53.73,-18.01,-53.98,-17.93,-53.86,-17.69,-53.75,-17.64,-53.68,-17.26,-53.82,-17.31,-54.15,-17.63,-54.39,-17.67,-54.42,-17.58,-54.53,-17.51,-54.7,-17.52,-54.9,-17.65,-55.18,-17.69,-55.53,-17.5,-55.61,-17.39,-56.1,-17.19,-56.44,-17.32,-56.75,-17.32,-57.08,-17.73,-57.47,-17.9,-57.63,-17.74,-57.75,-17.73,-57.83,-17.51,-57.99,-17.51,-58.4,-17.23,-58.48,-16.7,-58.35,-16.49,-58.35,-16.28,-58.54,-16.33,-60.18,-16.27,-60.24,-15.48,-60.58,-15.1,-60.27,-15.09,-60.3,-14.62,-60.47,-14.18,-60.41,-14.02,-60.51,-13.79,-60.72,-13.66]]},{"c":"PA","n":"Pará","l":[-53.27,-4.18],"p":[[-58.87,0.22,-58.97,1.3,-58.82,1.2,-58.68,1.28,-58.51,1.28,-58.51,1.44,-58.4,1.48,-58.34,1.59,-58.03,1.52,-57.98,1.65,-57.59,1.7,-57.37,1.94,-57.12,2.01,-57.01,1.92,-56.84,1.88,-56.48,1.94,-55.96,1.86,-55.92,2.04,-56.14,2.26,-55.98,2.52,-55.73,2.41,-55.39,2.44,-54.98,2.6,-54.88,2.45,-54.71,2.43,-54.79,2.01,-54.73,1.77,-54.36,1.76,-54.17,1.66,-54.08,1.51,-54.01,1.52,-53.89,1.41,-53.66,1.42,-53.65,1.36,-53.56,1.37,-53.54,1.24,-53.44,1.26,-53.42,0.94,-53.27,0.78,-53.11,0.72,-53.13,0.38,-53.04,0.25,-53.02,0.05,-52.91,-0.19,-52.83,-0.18,-52.63,-0.4,-52.63,-0.56,-52.53,-0.65,-52.52,-0.87,-52.4,-0.87,-52.36,-1.07,-52.24,-1.15,-51.89,-1.16,-51.93,-1.32,-52.02,-1.4,-52.23,-1.36,-52.66,-1.55,-52.31,-1.56,-52.2,-1.64,-51.95,-1.59,-50.89,-0.94,-50.84,-1.04,-50.92,-1.12,-50.68,-1.64,-50.69,-1.76,-50.4,-2.02,-50.0,-1.83,-49.72,-1.93,-49.31,-1.73,-49.64,-2.66,-49.46,-2.5,-49.21,-1.92,-48.99,-1.83,-48.71,-1.49,-48.6,-1.49,-48.46,-1.61,-48.45,-1.52,-48.35,-1.48,-48.47,-1.39,-48.41,-1.23,-48.45,-1.15,-48.31,-1.04,-48.32,-0.96,-48.07,-0.71,-47.96,-0.77,-47.81,-0.66,-47.69,-0.72,-47.56,-0.67,-47.42,-0.77,-47.44,-0.65,-47.27,-0.65,-47.13,-0.75,-46.81,-0.78,-46.62,-0.97,-46.22,-1.03,-46.21,-1.1,-46.14,-1.12,-46.04,-1.1,-46.01,-1.15,-46.14,-1.24,-46.2,-1.68,-46.32,-1.73,-46.3,-1.8,-46.22,-1.81,-46.28,-2.14,-46.41,-2.24,-46.43,-2.51,-46.67,-2.74,-46.57,-2.85,-46.65,-2.91,-46.67,-3.09,-46.82,-3.33,-46.94,-3.4,-46.97,-3.53,-47.03,-3.57,-47.07,-3.84,-47.31,-4.07,-47.38,-4.28,-47.58,-4.55,-47.65,-4.61,-47.8,-4.6,-48.73,-5.34,-48.36,-5.42,-48.19,-5.57,-48.16,-5.62,-48.28,-5.8,-48.25,-5.95,-48.31,-5.97,-48.32,-6.11,-48.39,-6.14,-48.41,-6.36,-48.58,-6.41,-48.65,-6.6,-49.08,-6.86,-49.21,-7.01,-49.2,-7.17,-49.34,-7.51,-49.33,-7.65,-49.17,-7.87,-49.28,-8.3,-49.5,-8.71,-49.98,-9.22,-50.23,-9.84,-56.49,-9.47,-56.68,-9.38,-56.77,-9.4,-56.84,-9.27,-57.05,-9.23,-57.1,-9.05,-57.58,-8.76,-57.68,-8.44,-57.64,-8.23,-57.78,-8.05,-57.98,-7.53,-58.39,-6.95,-58.46,-6.79,-58.44,-6.68,-58.29,-6.5,-56.39,-2.39,-56.5,-2.16,-56.64,-2.22,-56.75,-2.18,-56.74,-2.05,-57.01,-1.94,-57.09,-1.81,-57.65,-1.59,-58.39,-1.05,-58.44,-0.86,-58.7,-0.7,-58.74,-0.43,-58.86,-0.35,-58.87,0.22],[-51.42,-0.57,-51.25,-0.54,-51.16,-0.67,-51.28,-1.02,-51.64,-1.34,-51.94,-1.45,-51.68,-1.09,-51.68,-0.86,-51.55,-0.65,-51.42,-0.57],[-48.44,-0.27,-48.38,-0.35,-48.5,-0.66,-48.57,-0.68,-48.55,-0.85,-48.84,-1.23,-48.8,-1.33,-48.93,-1.48,-49.09,-1.51,-49.17,-1.41,-49.23,-1.6,-49.51,-1.51,-49.59,-1.71,-49.81,-1.79,-50.07,-1.7,-50.44,-1.8,-50.6,-1.7,-50.76,-1.24,-50.73,-1.13,-50.6,-1.15,-50.58,-1.1,-50.71,-1.08,-50.78,-1.01,-50.8,-0.91,-50.77,-0.65,-50.65,-0.27,-50.46,-0.16,-50.25,-0.12,-49.63,-0.23,-49.22,-0.16,-48.44,-0.27],[-50.77,-0.04,-50.67,-0.06,-50.65,-0.13,-50.93,-0.33,-51.02,-0.26,-51.0,-0.11,-50.77,-0.04],[-49.5,0.08,-49.37,0.0,-49.44,-0.11,-49.71,-0.14,-49.83,-0.09,-49.71,0.02,-49.5,0.08],[-49.88,0.3,-49.7,0.22,-49.84,0.01,-50.0,-0.03,-50.11,0.03,-50.34,0.04,-50.35,0.13,-50.27,0.23,-49.88,0.3],[-50.35,0.58,-50.33,0.26,-50.43,0.14,-50.44,-0.01,-50.62,0.05,-50.61,0.2,-50.45,0.33,-50.42,0.56,-50.35,0.58],[-50.1,0.63,-50.06,0.64,-50.04,0.52,-50.15,0.39,-50.26,0.36,-50.25,0.59,-50.1,0.63]]},{"c":"PB","n":"Paraíba","l":[-36.83,-7.12],"p":[[-38.7,-7.62,-38.53,-7.29,-38.68,-7.16,-38.73,-6.89,-38.65,-6.84,-38.65,-6.69,-38.53,-6.38,-38.13,-6.52,-37.84,-6.34,-37.76,-6.18,-37.26,-6.03,-37.18,-6.05,-37.18,-6.11,-37.4,-6.39,-37.43,-6.52,-37.51,-6.55,-37.52,-6.68,-37.34,-6.7,-37.22,-6.82,-36.99,-6.71,-36.79,-6.77,-36.74,-6.82,-36.77,-6.93,-36.71,-6.98,-36.57,-6.93,-36.5,-6.78,-36.53,-6.64,-36.44,-6.62,-36.52,-6.48,-36.49,-6.38,-36.29,-6.31,-36.25,-6.41,-35.93,-6.47,-35.67,-6.43,-35.31,-6.53,-34.97,-6.5,-34.88,-7.0,-34.83,-7.02,-34.81,-7.29,-34.86,-7.55,-34.98,-7.51,-35.07,-7.41,-35.27,-7.38,-35.37,-7.46,-35.5,-7.45,-35.56,-7.66,-35.89,-7.73,-35.93,-7.84,-36.12,-7.78,-36.17,-7.82,-36.22,-7.78,-36.42,-7.82,-36.45,-7.91,-36.57,-7.92,-36.66,-8.01,-36.63,-8.08,-36.78,-8.22,-36.96,-8.28,-37.13,-8.16,-37.15,-7.98,-37.34,-8.0,-37.17,-7.76,-37.2,-7.57,-37.02,-7.51,-37.02,-7.4,-37.25,-7.27,-37.44,-7.35,-37.55,-7.48,-37.98,-7.77,-38.06,-7.76,-38.09,-7.82,-38.15,-7.77,-38.26,-7.85,-38.36,-7.7,-38.53,-7.77,-38.7,-7.62]]},{"c":"PE","n":"Pernambuco","l":[-38.0,-8.33],"p":[[-41.37,-8.71,-41.08,-8.53,-41.02,-8.42,-40.92,-8.43,-40.89,-8.35,-40.83,-8.36,-40.59,-8.12,-40.53,-7.91,-40.66,-7.76,-40.62,-7.64,-40.69,-7.43,-40.65,-7.4,-39.65,-7.37,-39.35,-7.55,-39.11,-7.75,-39.07,-7.86,-38.97,-7.85,-38.82,-7.66,-38.7,-7.62,-38.53,-7.77,-38.36,-7.7,-38.26,-7.85,-38.15,-7.77,-38.09,-7.82,-38.06,-7.76,-37.98,-7.77,-37.44,-7.35,-37.25,-7.27,-37.02,-7.4,-37.02,-7.51,-37.2,-7.57,-37.17,-7.76,-37.34,-8.0,-37.15,-7.98,-37.13,-8.16,-36.96,-8.28,-36.78,-8.22,-36.63,-8.08,-36.66,-8.01,-36.57,-7.92,-36.45,-7.91,-36.42,-7.82,-36.22,-7.78,-36.17,-7.82,-36.12,-7.78,-35.93,-7.84,-35.89,-7.73,-35.56,-7.66,-35.5,-7.45,-35.37,-7.46,-35.27,-7.38,-35.07,-7.41,-34.98,-7.51,-34.86,-7.55,-34.83,-7.97,-35.15,-8.91,-35.47,-8.83,-35.72,-8.92,-35.8,-8.87,-36.02,-8.9,-36.35,-9.2,-36.58,-9.29,-36.83,-9.26,-36.94,-9.36,-37.18,-9.24,-37.52,-8.95,-37.68,-8.98,-37.75,-8.86,-37.97,-9.14,-38.09,-9.19,-38.22,-9.35,-38.29,-9.04,-38.48,-8.96,-38.5,-8.83,-38.67,-8.9,-39.33,-8.57,-39.44,-8.56,-39.6,-8.62,-39.74,-8.79,-39.88,-8.85,-39.95,-9.02,-40.27,-9.14,-40.41,-9.4,-40.69,-9.47,-40.74,-9.42,-40.69,-9.34,-40.7,-9.22,-40.85,-9.15,-40.89,-8.86,-41.1,-8.78,-41.11,-8.72,-41.37,-8.71]]},{"c":"PI","n":"Piauí","l":[-42.99,-7.41],"p":[[-45.76,-10.33,-45.94,-10.32,-45.8,-9.46,-45.9,-9.33,-45.98,-8.93,-45.93,-8.79,-45.82,-8.7,-45.58,-8.15,-45.47,-7.67,-44.82,-7.36,-44.71,-7.4,-44.45,-7.15,-44.31,-7.11,-44.04,-6.77,-43.68,-6.7,-43.46,-6.84,-42.98,-6.74,-42.86,-6.48,-42.85,-6.25,-43.07,-6.06,-43.1,-5.62,-42.83,-5.31,-42.81,-5.16,-42.95,-4.78,-42.86,-4.5,-42.99,-4.24,-42.73,-3.92,-42.66,-3.79,-42.68,-3.7,-42.5,-3.45,-42.22,-3.43,-42.11,-3.26,-42.0,-3.23,-41.84,-3.03,-41.85,-2.76,-41.64,-2.88,-41.27,-2.92,-41.26,-3.08,-41.43,-3.32,-41.45,-3.44,-41.07,-4.32,-41.23,-4.54,-41.19,-4.91,-41.06,-5.17,-41.07,-5.31,-40.95,-5.42,-40.89,-6.01,-40.71,-6.66,-40.48,-6.74,-40.42,-6.81,-40.58,-7.2,-40.54,-7.39,-40.69,-7.43,-40.62,-7.64,-40.66,-7.76,-40.53,-7.91,-40.59,-8.12,-40.83,-8.36,-40.89,-8.35,-40.92,-8.43,-41.02,-8.42,-41.08,-8.53,-41.37,-8.71,-41.5,-8.94,-41.73,-8.98,-41.73,-9.13,-41.85,-9.25,-42.04,-9.21,-42.15,-9.29,-42.31,-9.31,-42.62,-9.57,-42.85,-9.55,-43.13,-9.37,-43.38,-9.41,-43.45,-9.3,-43.66,-9.36,-43.69,-9.45,-43.81,-9.43,-43.83,-9.5,-43.68,-9.8,-43.7,-10.03,-43.91,-10.43,-44.12,-10.59,-44.22,-10.63,-44.42,-10.59,-44.62,-10.69,-44.78,-10.86,-45.04,-10.9,-45.32,-10.78,-45.61,-10.33,-45.76,-10.33]]},{"c":"PR","n":"Paraná","l":[-51.63,-24.63],"p":[[-54.24,-24.05,-54.12,-23.98,-54.0,-23.57,-53.91,-23.41,-53.77,-23.32,-53.62,-23.0,-53.48,-22.85,-52.95,-22.57,-52.26,-22.6,-52.22,-22.64,-52.07,-22.52,-51.69,-22.66,-51.36,-22.65,-50.88,-22.82,-50.78,-22.95,-49.97,-22.91,-49.91,-23.03,-49.73,-23.11,-49.64,-23.26,-49.65,-23.51,-49.55,-23.71,-49.6,-23.86,-49.33,-24.14,-49.34,-24.21,-49.23,-24.34,-49.31,-24.53,-49.3,-24.66,-48.61,-24.68,-48.49,-24.74,-48.54,-24.81,-48.57,-25.06,-48.51,-25.08,-48.41,-24.96,-48.23,-25.01,-48.19,-25.19,-48.08,-25.29,-48.2,-25.42,-48.24,-25.4,-48.19,-25.31,-48.4,-25.27,-48.46,-25.31,-48.43,-25.4,-48.48,-25.44,-48.64,-25.44,-48.73,-25.37,-48.69,-25.49,-48.51,-25.52,-48.4,-25.6,-48.55,-25.82,-48.67,-25.84,-48.59,-25.99,-49.11,-25.99,-49.49,-26.22,-49.6,-26.22,-49.95,-26.01,-50.37,-26.09,-50.54,-26.03,-50.65,-26.07,-50.74,-26.23,-50.9,-26.28,-51.07,-26.24,-51.25,-26.35,-51.29,-26.42,-51.24,-26.61,-51.42,-26.7,-51.5,-26.6,-52.01,-26.58,-52.2,-26.45,-52.82,-26.34,-53.12,-26.37,-53.36,-26.24,-53.46,-26.29,-53.67,-26.26,-53.82,-25.96,-53.89,-25.67,-54.01,-25.58,-54.15,-25.52,-54.44,-25.63,-54.62,-25.58,-54.61,-25.43,-54.44,-25.12,-54.28,-24.31,-54.32,-24.13,-54.24,-24.05]]},{"c":"RJ","n":"Rio de Janeiro","l":[-42.67,-22.19],"p":[[-44.78,-23.35,-44.86,-23.2,-44.81,-23.14,-44.8,-22.99,-44.59,-22.88,-44.28,-22.82,-44.17,-22.7,-44.22,-22.59,-44.64,-22.6,-44.83,-22.41,-44.44,-22.25,-44.22,-22.25,-43.82,-22.07,-43.46,-22.06,-43.34,-22.0,-43.06,-22.06,-42.28,-21.71,-42.28,-21.64,-42.37,-21.63,-42.36,-21.59,-42.1,-21.0,-42.14,-20.96,-41.96,-20.91,-41.86,-20.78,-41.74,-20.82,-41.71,-21.11,-41.27,-21.23,-41.07,-21.21,-40.97,-21.28,-41.05,-21.51,-41.0,-22.0,-41.71,-22.31,-41.98,-22.58,-41.94,-22.79,-42.04,-22.95,-42.96,-22.97,-43.08,-22.9,-43.07,-22.77,-43.15,-22.73,-43.24,-22.8,-43.22,-22.99,-43.9,-23.1,-43.97,-23.06,-43.68,-23.01,-43.87,-22.91,-44.15,-23.01,-44.64,-23.06,-44.67,-23.21,-44.57,-23.27,-44.78,-23.35],[-44.16,-23.17,-44.32,-23.21,-44.36,-23.17,-44.24,-23.07,-44.1,-23.17,-44.16,-23.17]]},{"c":"RN","n":"Rio Grande do Norte","l":[-36.68,-5.84],"p":[[-38.53,-6.38,-38.61,-6.4,-38.58,-6.26,-38.49,-6.13,-38.41,-6.06,-38.3,-6.07,-38.13,-5.88,-38.05,-5.61,-37.91,-5.46,-37.72,-5.06,-37.54,-4.93,-37.23,-4.82,-37.17,-4.91,-36.95,-4.94,-36.59,-5.1,-35.98,-5.05,-35.48,-5.17,-35.24,-5.57,-34.97,-6.5,-35.31,-6.53,-35.67,-6.43,-35.93,-6.47,-36.25,-6.41,-36.29,-6.31,-36.38,-6.3,-36.49,-6.38,-36.52,-6.48,-36.44,-6.62,-36.53,-6.64,-36.5,-6.78,-36.57,-6.93,-36.71,-6.98,-36.77,-6.93,-36.74,-6.82,-36.79,-6.77,-36.99,-6.71,-37.22,-6.82,-37.34,-6.7,-37.52,-6.68,-37.51,-6.55,-37.43,-6.52,-37.18,-6.05,-37.26,-6.03,-37.76,-6.18,-37.84,-6.34,-38.13,-6.52,-38.53,-6.38]]},{"c":"RO","n":"Rondônia","l":[-62.84,-10.92],"p":[[-66.63,-9.93,-66.83,-9.84,-66.5,-9.63,-66.4,-9.53,-66.4,-9.41,-65.93,-9.41,-65.77,-9.57,-65.63,-9.45,-65.44,-9.45,-65.22,-9.26,-65.09,-9.44,-64.9,-9.21,-64.93,-9.12,-64.78,-8.99,-64.6,-9.03,-64.48,-8.95,-64.12,-8.94,-64.13,-8.69,-64.0,-8.68,-63.92,-8.53,-63.99,-8.44,-63.92,-8.33,-63.75,-8.28,-63.73,-8.19,-63.59,-8.16,-63.54,-8.0,-62.83,-8.02,-62.72,-8.06,-62.54,-8.36,-62.37,-8.38,-62.31,-8.57,-62.17,-8.61,-62.13,-8.77,-61.92,-8.87,-61.84,-8.74,-61.72,-8.69,-61.61,-8.72,-61.51,-8.85,-61.53,-9.23,-61.59,-9.24,-61.61,-9.32,-61.48,-9.64,-61.57,-9.73,-61.52,-9.86,-61.57,-10.26,-61.47,-10.44,-61.52,-10.95,-61.47,-11.0,-60.44,-11.0,-60.38,-11.1,-60.0,-11.15,-59.91,-11.38,-60.1,-11.6,-60.1,-11.74,-60.06,-11.91,-59.98,-11.92,-59.89,-12.13,-59.82,-12.39,-59.91,-12.62,-60.08,-12.93,-60.27,-13.07,-60.38,-13.42,-60.72,-13.66,-61.08,-13.49,-61.79,-13.53,-62.09,-13.24,-62.12,-13.16,-62.77,-13.0,-63.02,-12.81,-63.07,-12.67,-63.35,-12.68,-63.69,-12.48,-63.94,-12.53,-64.42,-12.44,-64.51,-12.25,-64.99,-11.98,-65.09,-11.74,-65.19,-11.75,-65.18,-11.65,-65.39,-11.25,-65.33,-10.89,-65.45,-10.51,-65.3,-10.15,-65.31,-9.87,-65.4,-9.71,-65.56,-9.8,-66.26,-9.83,-66.63,-9.93]]},{"c":"RR","n":"Roraima","l":[-61.41,2.07],"p":[[-58.87,0.22,-60.03,0.22,-60.13,0.13,-60.31,-0.24,-60.39,-0.52,-60.32,-0.62,-60.34,-0.7,-60.47,-0.74,-60.52,-0.83,-60.73,-0.85,-60.93,-0.56,-61.22,-0.5,-61.53,-0.73,-61.62,-1.45,-61.88,-1.39,-62.03,-1.15,-62.51,-0.77,-62.48,-0.7,-62.38,-0.72,-62.31,-0.64,-62.37,-0.34,-62.57,-0.05,-62.53,0.09,-62.57,0.25,-62.48,0.54,-62.53,0.73,-62.44,0.8,-62.62,1.42,-62.79,1.6,-62.71,1.74,-62.71,1.95,-62.85,2.02,-63.0,2.02,-63.15,2.18,-63.31,2.17,-63.39,2.22,-63.39,2.41,-64.05,2.5,-64.01,2.67,-64.22,3.2,-64.22,3.59,-64.67,4.01,-64.82,4.23,-64.79,4.28,-64.58,4.14,-64.19,4.13,-64.02,3.93,-63.65,3.94,-63.53,3.89,-63.34,3.94,-62.97,3.59,-62.86,3.59,-62.76,3.67,-62.71,4.02,-62.41,4.16,-62.15,4.1,-61.82,4.2,-61.55,4.29,-61.48,4.4,-61.28,4.52,-61.04,4.52,-60.91,4.69,-60.63,4.89,-60.64,5.08,-60.74,5.2,-60.14,5.24,-59.99,5.08,-60.03,4.74,-60.15,4.53,-59.83,4.48,-59.7,4.38,-59.74,4.23,-59.55,3.93,-59.68,3.7,-59.85,3.59,-59.83,3.35,-59.97,2.99,-59.99,2.69,-59.89,2.36,-59.76,2.27,-59.76,1.9,-59.67,1.84,-59.67,1.75,-59.54,1.7,-59.23,1.38,-58.97,1.3,-58.87,0.22]]},{"c":"RS","n":"Rio Grande do Sul","l":[-53.32,-29.74],"p":[[-53.94,-27.16,-53.72,-27.16,-53.62,-27.21,-53.35,-27.08,-53.23,-27.17,-53.03,-27.14,-52.74,-27.25,-52.14,-27.28,-51.87,-27.51,-51.64,-27.5,-51.12,-27.81,-50.58,-28.39,-50.23,-28.47,-49.84,-28.47,-49.71,-28.53,-49.7,-28.6,-49.8,-28.62,-49.95,-28.79,-49.94,-28.95,-50.01,-29.1,-50.07,-29.09,-50.16,-29.2,-50.17,-29.28,-50.05,-29.36,-50.08,-29.24,-49.95,-29.2,-49.71,-29.32,-50.03,-29.8,-50.3,-30.43,-50.62,-30.9,-51.15,-31.48,-52.04,-32.11,-52.06,-31.83,-51.89,-31.87,-51.68,-31.77,-51.45,-31.56,-51.27,-31.48,-51.17,-31.34,-51.16,-31.12,-50.98,-31.09,-50.94,-30.9,-50.77,-30.81,-50.69,-30.7,-50.72,-30.43,-50.58,-30.44,-50.56,-30.25,-50.65,-30.24,-50.93,-30.37,-51.03,-30.37,-51.04,-30.26,-51.18,-30.21,-51.3,-30.03,-51.28,-30.24,-51.16,-30.36,-51.29,-30.59,-51.28,-30.75,-51.36,-30.67,-51.38,-30.85,-51.46,-30.91,-51.51,-31.1,-51.97,-31.38,-52.03,-31.6,-52.19,-31.89,-52.13,-32.17,-52.34,-32.44,-52.65,-33.14,-53.37,-33.74,-53.53,-33.66,-53.53,-33.17,-53.13,-32.74,-53.6,-32.4,-53.76,-32.06,-54.22,-31.86,-54.59,-31.49,-54.9,-31.39,-55.04,-31.28,-55.17,-31.28,-55.6,-30.85,-55.81,-31.04,-56.0,-31.08,-56.0,-30.84,-56.04,-30.78,-56.83,-30.11,-57.12,-30.14,-57.21,-30.28,-57.55,-30.26,-57.61,-30.19,-57.41,-30.03,-57.22,-29.78,-56.94,-29.59,-56.64,-29.2,-56.39,-29.0,-56.23,-28.74,-55.9,-28.44,-55.89,-28.37,-55.69,-28.38,-55.73,-28.2,-55.48,-28.09,-55.24,-27.9,-55.1,-27.87,-55.04,-27.77,-54.91,-27.71,-54.83,-27.55,-54.33,-27.42,-54.16,-27.25,-54.11,-27.27,-53.94,-27.16]]},{"c":"SC","n":"Santa Catarina","l":[-50.5,-27.25],"p":[[-53.67,-26.26,-53.46,-26.29,-53.36,-26.24,-53.12,-26.37,-52.82,-26.34,-52.2,-26.45,-52.01,-26.58,-51.5,-26.6,-51.42,-26.7,-51.24,-26.61,-51.29,-26.42,-51.25,-26.35,-51.07,-26.24,-50.9,-26.28,-50.74,-26.23,-50.65,-26.07,-50.54,-26.03,-50.37,-26.09,-49.95,-26.01,-49.6,-26.22,-49.49,-26.22,-49.11,-25.99,-48.59,-25.99,-48.62,-26.18,-48.75,-26.27,-48.65,-26.41,-48.68,-26.7,-48.55,-27.2,-48.64,-27.56,-48.62,-28.08,-48.69,-28.31,-48.8,-28.44,-48.8,-28.58,-49.27,-28.87,-49.71,-29.32,-49.95,-29.2,-50.08,-29.24,-50.05,-29.36,-50.17,-29.28,-50.16,-29.2,-50.07,-29.09,-50.01,-29.1,-49.94,-28.95,-49.95,-28.79,-49.8,-28.62,-49.7,-28.6,-49.74,-28.51,-50.58,-28.39,-51.12,-27.81,-51.64,-27.5,-51.87,-27.51,-52.14,-27.28,-52.74,-27.25,-53.03,-27.14,-53.23,-27.17,-53.35,-27.08,-53.62,-27.21,-53.72,-27.16,-53.94,-27.16,-53.84,-27.12,-53.72,-26.88,-53.75,-26.75,-53.67,-26.26],[-48.46,-27.44,-48.41,-27.4,-48.38,-27.45,-48.49,-27.77,-48.55,-27.81,-48.54,-27.57,-48.46,-27.44],[-48.6,-26.41,-48.67,-26.29,-48.54,-26.17,-48.5,-26.22,-48.6,-26.41]]},{"c":"SE","n":"Sergipe","l":[-37.44,-10.58],"p":[[-37.41,-11.5,-37.66,-11.56,-37.8,-11.53,-38.01,-11.36,-37.98,-11.24,-38.23,-10.9,-38.19,-10.72,-37.97,-10.75,-37.78,-10.63,-37.84,-10.42,-37.78,-10.08,-38.03,-9.73,-37.99,-9.65,-38.04,-9.61,-37.98,-9.51,-37.02,-9.96,-36.88,-10.15,-36.65,-10.25,-36.41,-10.49,-36.77,-10.67,-36.94,-10.82,-37.09,-11.05,-37.18,-11.07,-37.18,-11.19,-37.36,-11.4,-37.32,-11.22,-37.36,-11.25,-37.44,-11.39,-37.41,-11.5]]},{"c":"SP","n":"São Paulo","l":[-48.74,-22.26],"p":[[-53.12,-22.64,-52.96,-22.45,-52.4,-22.07,-52.12,-21.72,-52.05,-21.51,-51.95,-21.47,-51.87,-21.33,-51.87,-21.18,-51.62,-20.81,-51.53,-20.56,-51.16,-20.31,-50.99,-20.1,-50.49,-19.79,-50.36,-19.86,-49.28,-19.99,-49.28,-20.15,-49.2,-20.29,-49.04,-20.19,-48.92,-20.43,-48.81,-20.16,-48.18,-20.08,-48.05,-20.12,-47.86,-20.06,-47.82,-19.98,-47.46,-20.0,-47.24,-20.17,-47.29,-20.42,-47.15,-20.53,-47.11,-20.63,-47.22,-20.91,-47.15,-20.98,-47.0,-21.4,-46.65,-21.37,-46.51,-21.46,-46.49,-21.53,-46.67,-21.81,-46.62,-21.99,-46.66,-22.05,-46.6,-22.13,-46.7,-22.32,-46.45,-22.52,-46.4,-22.62,-46.47,-22.68,-46.37,-22.75,-46.36,-22.84,-46.29,-22.88,-46.15,-22.85,-46.15,-22.89,-45.91,-22.82,-45.79,-22.85,-45.74,-22.73,-45.8,-22.7,-45.67,-22.62,-45.41,-22.65,-44.83,-22.41,-44.64,-22.6,-44.22,-22.59,-44.17,-22.7,-44.28,-22.82,-44.59,-22.88,-44.8,-22.99,-44.81,-23.14,-44.86,-23.2,-44.78,-23.35,-44.95,-23.38,-45.33,-23.6,-45.46,-23.8,-45.66,-23.76,-45.97,-23.8,-46.87,-24.24,-47.14,-24.49,-47.99,-25.04,-47.91,-25.07,-47.93,-25.17,-48.08,-25.29,-48.19,-25.19,-48.23,-25.01,-48.41,-24.96,-48.51,-25.08,-48.57,-25.06,-48.54,-24.81,-48.49,-24.74,-48.61,-24.68,-49.3,-24.66,-49.31,-24.53,-49.23,-24.34,-49.34,-24.21,-49.33,-24.14,-49.6,-23.86,-49.55,-23.71,-49.65,-23.51,-49.64,-23.26,-49.73,-23.11,-49.91,-23.03,-49.97,-22.91,-50.78,-22.95,-50.88,-22.82,-51.36,-22.65,-51.69,-22.66,-52.07,-22.52,-52.22,-22.64,-52.61,-22.57,-52.95,-22.57,-53.12,-22.64],[-45.25,-23.78,-45.26,-23.94,-45.45,-23.9,-45.3,-23.73,-45.25,-23.78]]},{"c":"TO","n":"Tocantins","l":[-48.33,-10.14],"p":[[-50.23,-9.84,-49.98,-9.22,-49.5,-8.71,-49.28,-8.3,-49.17,-7.87,-49.33,-7.65,-49.34,-7.51,-49.2,-7.17,-49.21,-7.01,-49.08,-6.86,-48.65,-6.6,-48.58,-6.41,-48.41,-6.36,-48.39,-6.14,-48.32,-6.11,-48.31,-5.97,-48.25,-5.95,-48.28,-5.8,-48.16,-5.62,-48.19,-5.57,-48.42,-5.4,-48.72,-5.36,-48.38,-5.17,-47.88,-5.29,-47.85,-5.35,-47.49,-5.56,-47.4,-6.07,-47.47,-6.8,-47.54,-7.03,-47.72,-7.22,-47.67,-7.28,-47.51,-7.31,-47.46,-7.53,-47.41,-7.53,-47.02,-8.04,-46.74,-7.92,-46.57,-7.91,-46.49,-7.96,-46.47,-8.07,-46.54,-8.32,-46.5,-8.4,-46.79,-8.44,-46.88,-8.58,-46.9,-8.83,-47.08,-9.03,-46.94,-9.07,-46.75,-9.41,-46.56,-9.5,-46.53,-9.56,-46.67,-9.74,-46.51,-9.86,-46.47,-10.0,-46.35,-10.17,-46.09,-10.21,-45.94,-10.32,-45.76,-10.33,-45.86,-10.47,-46.3,-10.76,-46.25,-10.91,-46.37,-10.97,-46.57,-11.32,-46.43,-11.5,-46.08,-11.6,-46.28,-11.77,-46.25,-11.84,-46.16,-11.83,-46.08,-11.93,-46.34,-12.13,-46.32,-12.42,-46.16,-12.5,-46.23,-12.8,-46.59,-12.89,-46.83,-13.07,-47.09,-13.1,-47.44,-13.25,-47.56,-13.24,-47.64,-13.12,-47.72,-13.15,-47.68,-13.36,-48.17,-13.18,-48.16,-13.1,-48.23,-13.09,-48.37,-13.19,-48.65,-13.18,-48.74,-13.38,-48.8,-12.93,-49.0,-12.75,-49.02,-12.66,-49.14,-12.74,-49.38,-13.25,-49.69,-13.18,-50.24,-12.93,-50.28,-12.79,-50.14,-12.48,-50.16,-12.39,-50.39,-12.62,-50.48,-12.84,-50.57,-12.82,-50.66,-12.67,-50.63,-12.29,-50.66,-11.85,-50.72,-11.75,-50.67,-11.65,-50.71,-11.35,-50.61,-11.0,-50.6,-10.69,-50.23,-9.84]]}];
+var NXP_CITIES=[["Belo Horizonte","MG",-19.91,-43.927,9,1],["Brasília","DF",-15.78,-47.93,9,1],["Porto Alegre","RS",-30.032,-51.206,9,1],["Curitiba","PR",-25.419,-49.265,9,1],["Fortaleza","CE",-3.717,-38.542,9,1],["Salvador","BA",-12.972,-38.501,9,1],["Recife","PE",-8.047,-34.877,9,1],["Rio de Janeiro","RJ",-22.913,-43.2,9,1],["São Paulo","SP",-23.533,-46.639,9,1],["Niterói","RJ",-22.883,-43.103,8,0],["Vitória","ES",-20.316,-40.313,8,1],["Santos","SP",-23.953,-46.335,8,0],["Campinas","SP",-22.905,-47.066,8,0],["Manaus","AM",-3.119,-60.021,8,1],["Belém","PA",-1.455,-48.49,8,1],["Goiânia","GO",-16.686,-49.264,8,1],["Nova Iguaçu","RJ",-22.756,-43.46,7,0],["Duque de Caxias","RJ",-22.786,-43.305,7,0],["Olinda","PE",-8.01,-34.855,7,0],["Novo Hamburgo","RS",-29.688,-51.133,7,0],["Joinville","SC",-26.305,-48.849,7,0],["João Pessoa","PB",-7.115,-34.864,7,1],["São Luís","MA",-2.539,-44.282,7,1],["Cuiabá","MT",-15.601,-56.097,7,1],["Teresina","PI",-5.092,-42.803,7,1],["Maceió","AL",-9.666,-35.735,7,1],["Vila Velha","ES",-20.342,-40.288,7,0],["Natal","RN",-5.794,-35.199,7,1],["Florianópolis","SC",-27.595,-48.548,7,1],["Canoas","RS",-29.913,-51.186,6,0],["São José dos Pinhais","PR",-25.531,-49.203,6,0],["Santo André","SP",-23.674,-46.543,6,0],["Jundiaí","SP",-23.185,-46.897,6,0],["São José dos Campos","SP",-23.19,-45.884,6,0],["Americana","SP",-22.737,-47.333,6,0],["Jaboatão dos Guararapes","PE",-8.113,-35.015,6,0],["Ipatinga","MG",-19.47,-42.548,6,0],["Foz do Iguaçu","PR",-25.543,-54.583,6,0],["Volta Redonda","RJ",-22.52,-44.1,6,0],["Taubaté","SP",-23.01,-45.559,6,0],["Juiz de Fora","MG",-21.759,-43.34,6,0],["Campina Grande","PB",-7.222,-35.873,6,0],["Palmas","TO",-10.24,-48.356,6,1],["Londrina","PR",-23.304,-51.169,6,0],["Aracaju","SE",-10.909,-37.068,6,1],["Rio Branco","AC",-9.975,-67.824,6,1],["Porto Velho","RO",-8.761,-63.9,6,1],["Uberlândia","MG",-18.914,-48.275,6,0],["Sorocaba","SP",-23.497,-47.445,6,0],["Ribeirão Preto","SP",-21.17,-47.81,6,0],["Campo Grande","MS",-20.449,-54.63,6,1],["Feira de Santana","BA",-12.266,-38.966,6,0],["Boa Vista","RR",2.824,-60.675,6,1],["Macapá","AP",0.035,-51.069,6,1],["Timon","MA",-5.098,-42.833,5,0],["Várzea Grande","MT",-15.646,-56.132,5,0],["Blumenau","SC",-26.916,-49.071,5,0],["Cabo Frio","RJ",-22.889,-42.029,5,0],["Guaratinguetá","SP",-22.808,-45.194,5,0],["Piracicaba","SP",-22.734,-47.648,5,0],["São Carlos","SP",-22.017,-47.886,5,0],["Presidente Prudente","SP",-22.121,-51.392,5,0],["Marília","SP",-22.217,-49.95,5,0],["Itu","SP",-23.254,-47.293,5,0],["Sete Lagoas","MG",-19.457,-44.241,5,0],["Maringá","PR",-23.421,-51.933,5,0],["Cascavel","PR",-24.957,-53.459,5,0],["Itajaí","SC",-26.91,-48.67,5,0],["Crato","CE",-7.215,-39.41,5,0],["Itabuna","BA",-14.788,-39.278,5,0],["Petrópolis","RJ",-22.52,-43.193,5,0],["Anápolis","GO",-16.328,-48.953,5,0],["São José do Rio Preto","SP",-20.811,-49.376,5,0],["Limeira","SP",-22.566,-47.397,5,0],["Governador Valadares","MG",-18.855,-41.956,5,0],["Santa Maria","RS",-29.687,-53.815,5,0],["Juazeiro do Norte","CE",-7.196,-39.308,5,0],["Imperatriz","MA",-5.518,-47.478,5,0],["Uberaba","MG",-19.747,-47.938,5,0],["Criciúma","SC",-28.672,-49.373,5,0],["Ilhéus","BA",-14.793,-39.046,5,0],["Campos dos Goytacazes","RJ",-21.762,-41.318,5,0],["Mossoró","RN",-5.184,-37.347,5,0],["Bauru","SP",-22.325,-49.087,5,0],["Franca","SP",-20.535,-47.404,5,0],["Caruaru","PE",-8.285,-35.97,5,0],["Montes Claros","MG",-16.728,-43.858,5,0],["Pelotas","RS",-31.765,-52.337,5,0],["Caxias do Sul","RS",-29.163,-51.179,5,0],["Ponta Grossa","PR",-25.092,-50.167,5,0],["Vitória da Conquista","BA",-14.861,-40.844,5,0],["Petrolina","PE",-9.389,-40.503,5,0],["Santarém","PA",-2.438,-54.7,5,0],["Pouso Alegre","MG",-22.227,-45.939,4,0],["Barbacena","MG",-21.221,-43.77,4,0],["Poços de Caldas","MG",-21.78,-46.569,4,0],["Conselheiro Lafaiete","MG",-20.663,-43.785,4,0],["Santa Cruz do Sul","RS",-29.722,-52.434,4,0],["Paranaguá","PR",-25.516,-48.523,4,0],["Guarapuava","PR",-25.39,-51.462,4,0],["Apucarana","PR",-23.55,-51.464,4,0],["Jaraguá do Sul","SC",-26.485,-49.071,4,0],["Sobral","CE",-3.689,-40.348,4,0],["Rio Largo","AL",-9.478,-35.839,4,0],["Cachoeiro de Itapemirim","ES",-20.846,-41.12,4,0],["Barra Mansa","RJ",-22.548,-44.175,4,0],["Macaé","RJ",-22.377,-41.785,4,0],["Pindamonhangaba","SP",-22.925,-45.461,4,0],["Rio Claro","SP",-22.398,-47.555,4,0],["Bragança Paulista","SP",-22.953,-46.542,4,0],["Catanduva","SP",-21.131,-48.977,4,0],["Barretos","SP",-20.553,-48.57,4,0],["Itapetininga","SP",-23.589,-48.048,4,0],["Cabo de Santo Agostinho","PE",-8.282,-35.025,4,0],["Carpina","PE",-7.846,-35.251,4,0],["Castanhal","PA",-1.298,-47.917,4,0],["Divinópolis","MG",-20.145,-44.891,4,0],["Rondonópolis","MT",-16.467,-54.637,4,0],["Uruguaiana","RS",-29.761,-57.085,4,0],["Rio Grande","RS",-32.035,-52.107,4,0],["Lages","SC",-27.815,-50.326,4,0],["Porto Seguro","BA",-16.444,-39.064,4,0],["Jaú","SP",-22.294,-48.559,4,0],["Botucatu","SP",-22.884,-48.444,4,0],["Dourados","MS",-22.223,-54.812,4,0],["Passo Fundo","RS",-28.258,-52.409,4,0],["Chapecó","SC",-27.1,-52.615,4,0],["Alagoinhas","BA",-12.133,-38.421,4,0],["Nova Friburgo","RJ",-22.293,-42.538,4,0],["Araçatuba","SP",-21.208,-50.44,4,0],["Teófilo Otoni","MG",-17.86,-41.509,4,0],["Bagé","RS",-31.33,-54.1,4,0],["Parnaíba","PI",-2.906,-41.775,4,0],["Arapiraca","AL",-9.755,-36.661,4,0],["Jequié","BA",-13.851,-40.088,4,0],["Linhares","ES",-19.395,-40.064,4,0],["Garanhuns","PE",-8.882,-36.497,4,0],["Barreiras","BA",-12.144,-44.997,4,0],["Caxias","MA",-4.865,-43.362,4,0],["Marabá","PA",-5.381,-49.133,4,0],["Grajaú","MA",-5.814,-46.146,3,0],["Presidente Dutra","MA",-5.29,-44.495,3,0],["Itapecuru Mirim","MA",-3.402,-44.351,3,0],["São José de Ribamar","MA",-2.547,-44.06,3,0],["Santa Inês","MA",-3.651,-45.377,3,0],["Rosário","MA",-2.934,-44.253,3,0],["Capanema","PA",-1.205,-47.178,3,0],["Portel","PA",-1.936,-50.819,3,0],["Itupiranga","PA",-5.133,-49.336,3,0],["Pimenta Bueno","RO",-11.672,-61.198,3,0],["Ponta Porã","MS",-22.53,-55.72,3,0],["Maracaju","MS",-21.61,-55.168,3,0],["Jardim","MS",-21.48,-56.149,3,0],["Três Lagoas","MS",-20.785,-51.701,3,0],["Guanhães","MG",-18.771,-42.931,3,0],["Leopoldina","MG",-21.53,-42.642,3,0],["Nova Lima","MG",-19.976,-43.851,3,0],["Itaúna","MG",-20.082,-44.58,3,0],["Caratinga","MG",-19.787,-42.129,3,0],["Diamantina","MG",-18.241,-43.603,3,0],["Nanuque","MG",-17.848,-40.353,3,0],["Guaxupé","MG",-21.305,-46.708,3,0],["São João del Rei","MG",-21.131,-44.253,3,0],["Muriaé","MG",-21.13,-42.369,3,0],["Passos","MG",-20.719,-46.609,3,0],["Formiga","MG",-20.462,-45.427,3,0],["Frutal","MG",-20.026,-48.935,3,0],["Iturama","MG",-19.728,-50.197,3,0],["Ituiutaba","MG",-18.977,-49.464,3,0],["Araguari","MG",-18.646,-48.193,3,0],["Almenara","MG",-16.178,-40.694,3,0],["Cáceres","MT",-16.076,-57.682,3,0],["Quaraí","RS",-30.384,-56.448,3,0],["Santa Vitória do Palmar","RS",-33.525,-53.372,3,0],["São Lourenço do Sul","RS",-31.356,-51.971,3,0],["Canela","RS",-29.356,-50.812,3,0],["São Gabriel","RS",-30.334,-54.322,3,0],["Rosário do Sul","RS",-30.252,-54.922,3,0],["Cachoeira do Sul","RS",-30.033,-52.893,3,0],["Osório","RS",-29.888,-50.267,3,0],["São Luiz Gonzaga","RS",-28.412,-54.956,3,0],["Santo Ângelo","RS",-28.3,-54.267,3,0],["Carazinho","RS",-28.296,-52.793,3,0],["Erechim","RS",-27.636,-52.27,3,0],["Guaíra","PR",-24.085,-54.257,3,0],["Palmas","PR",-26.484,-51.989,3,0],["Arapongas","PR",-23.415,-51.426,3,0],["Rio Negro","PR",-26.095,-49.798,3,0],["Lapa","PR",-25.767,-49.717,3,0],["Irati","PR",-25.47,-50.649,3,0],["Castro","PR",-24.789,-50.011,3,0],["Telêmaco Borba","PR",-24.325,-50.618,3,0],["Jacarezinho","PR",-23.159,-49.974,3,0],["Concórdia","SC",-27.233,-52.026,3,0],["Brusque","SC",-27.098,-48.911,3,0],["Araranguá","SC",-28.936,-49.492,3,0],["Tubarão","SC",-28.471,-49.014,3,0],["Laguna","SC",-28.484,-48.777,3,0],["Joaçaba","SC",-27.172,-51.511,3,0],["Caçador","SC",-26.776,-51.012,3,0],["Canoinhas","SC",-26.177,-50.395,3,0],["Camocim","CE",-2.901,-40.854,3,0],["Russas","CE",-4.927,-37.972,3,0],["Iguatu","CE",-6.363,-39.289,3,0],["Quixadá","CE",-4.966,-39.016,3,0],["Canindé","CE",-4.352,-39.316,3,0],["Campo Maior","PI",-4.822,-42.164,3,0],["Barras","PI",-4.245,-42.292,3,0],["Palmeira dos Índios","AL",-9.406,-36.633,3,0],["Santa Cruz Cabrália","BA",-16.282,-39.029,3,0],["Paulo Afonso","BA",-9.398,-38.222,3,0],["Brumado","BA",-14.202,-41.67,3,0],["Jaguaquara","BA",-13.525,-39.964,3,0],["Itapetinga","BA",-15.248,-40.248,3,0],["Ubaitaba","BA",-14.303,-39.322,3,0],["Miracema","RJ",-21.415,-42.194,3,0],["Apodi","RN",-5.653,-37.795,3,0],["Santa Cruz","RN",-6.225,-36.019,3,0],["Morrinhos","GO",-17.733,-49.106,3,0],["Ceres","GO",-15.306,-49.6,3,0],["Catalão","GO",-18.166,-47.944,3,0],["Cristalina","GO",-16.768,-47.613,3,0],["Trindade","GO",-16.652,-49.493,3,0],["Iporá","GO",-16.44,-51.118,3,0],["Inhumas","GO",-16.361,-49.5,3,0],["Itaberaí","GO",-16.021,-49.806,3,0],["Ourinhos","SP",-22.98,-49.87,3,0],["Itanhaém","SP",-24.174,-46.788,3,0],["Jaboticabal","SP",-21.252,-48.325,3,0],["Pirassununga","SP",-21.996,-47.426,3,0],["São João da Boa Vista","SP",-21.971,-46.794,3,0],["Tupã","SP",-21.933,-50.519,3,0],["Penápolis","SP",-21.415,-50.077,3,0],["Registro","SP",-24.498,-47.845,3,0],["Tatuí","SP",-23.349,-47.846,3,0],["Avaré","SP",-23.107,-48.925,3,0],["Garça","SP",-22.212,-49.655,3,0],["Batatais","SP",-20.893,-47.592,3,0],["Arcoverde","PE",-8.415,-37.058,3,0],["Manacapuru","AM",-3.291,-60.622,3,0],["Maués","AM",-3.393,-57.707,3,0],["Pedreiras","MA",-4.565,-44.601,3,0],["Codó","MA",-4.456,-43.892,3,0],["Coroatá","MA",-4.134,-44.124,3,0],["Chapadinha","MA",-3.739,-43.354,3,0],["Pinheiro","MA",-2.522,-45.079,3,0],["Barra do Corda","MA",-5.497,-45.248,3,0],["Viana","MA",-3.205,-44.991,3,0],["Colinas","MA",-6.032,-44.254,3,0],["Viseu","PA",-1.191,-46.14,3,0],["Capitão Poço","PA",-1.748,-47.063,3,0],["Salinópolis","PA",-0.631,-47.346,3,0],["Alenquer","PA",-1.946,-54.738,3,0],["Oriximiná","PA",-1.76,-55.858,3,0],["Xinguara","PA",-7.098,-49.944,3,0],["Jacundá","PA",-4.446,-49.115,3,0],["Uruará","PA",-3.715,-53.74,3,0],["Altamira","PA",-3.204,-52.21,3,0],["Paragominas","PA",-3.002,-47.353,3,0],["Cametá","PA",-2.243,-49.498,3,0],["Ariquemes","RO",-9.906,-63.032,3,0],["Tocantinópolis","TO",-6.324,-47.422,3,0],["Gurupi","TO",-11.728,-49.068,3,0],["Aquidauana","MS",-20.467,-55.787,3,0],["Paranaíba","MS",-19.675,-51.191,3,0],["Araxá","MG",-19.59,-46.944,3,0],["Lavras","MG",-21.248,-45.001,3,0],["Ubá","MG",-21.12,-42.936,3,0],["Campo Belo","MG",-20.893,-45.27,3,0],["Ponte Nova","MG",-20.411,-42.898,3,0],["Curvelo","MG",-18.753,-44.43,3,0],["Paracatu","MG",-17.225,-46.871,3,0],["Bocaiúva","MG",-17.113,-43.81,3,0],["Araçuaí","MG",-16.852,-42.064,3,0],["Janaúba","MG",-15.802,-43.313,3,0],["Juína","MT",-11.373,-58.748,3,0],["Barra do Garças","MT",-15.88,-52.264,3,0],["Pontes e Lacerda","MT",-15.222,-59.343,3,0],["Barra do Bugres","MT",-15.07,-57.188,3,0],["São Borja","RS",-28.658,-56.004,3,0],["Camaquã","RS",-30.849,-51.804,3,0],["Bento Gonçalves","RS",-29.166,-51.517,3,0],["Vacaria","RS",-28.508,-50.942,3,0],["Ijuí","RS",-28.388,-53.92,3,0],["Santa Rosa","RS",-27.87,-54.48,3,0],["Campo Mourão","PR",-24.046,-52.378,3,0],["São Francisco do Sul","SC",-26.258,-48.634,3,0],["Porto União","SC",-26.245,-51.076,3,0],["Imbituba","SC",-28.228,-48.666,3,0],["Granja","CE",-3.128,-40.837,3,0],["Itapipoca","CE",-3.499,-39.584,3,0],["Paracuru","CE",-3.414,-39.03,3,0],["Acaraú","CE",-2.888,-40.118,3,0],["Tauá","CE",-5.986,-40.297,3,0],["Crateús","CE",-5.168,-40.654,3,0],["Baturité","CE",-4.326,-38.881,3,0],["Ipu","CE",-4.317,-40.706,3,0],["Floriano","PI",-6.772,-43.024,3,0],["Piripiri","PI",-4.272,-41.772,3,0],["Penedo","AL",-10.287,-36.582,3,0],["Itamaraju","BA",-17.038,-39.539,3,0],["Guanambi","BA",-14.223,-42.78,3,0],["Valença","BA",-13.367,-39.073,3,0],["Serrinha","BA",-11.658,-39.01,3,0],["Tucano","BA",-10.958,-38.789,3,0],["Senhor do Bonfim","BA",-10.459,-40.187,3,0],["Remanso","BA",-9.619,-42.085,3,0],["Itambé","BA",-15.243,-40.63,3,0],["Bom Jesus da Lapa","BA",-13.251,-43.411,3,0],["Itaberaba","BA",-12.524,-40.306,3,0],["São Mateus","ES",-18.721,-39.858,3,0],["Patos","PB",-7.017,-37.275,3,0],["Nova Cruz","RN",-6.475,-35.429,3,0],["Caicó","RN",-6.454,-37.107,3,0],["Açu","RN",-5.584,-36.914,3,0],["Estância","SE",-11.266,-37.448,3,0],["Caracaraí","RR",1.828,-61.13,3,0],["Santana","AP",-0.045,-51.173,3,0],["Rio Verde","GO",-17.792,-50.919,3,0],["Pires do Rio","GO",-17.302,-48.277,3,0],["Goianésia","GO",-15.312,-49.116,3,0],["Niquelândia","GO",-14.466,-48.46,3,0],["Itumbiara","GO",-18.409,-49.216,3,0],["Jataí","GO",-17.878,-51.72,3,0],["Mineiros","GO",-17.565,-52.554,3,0],["Formosa","GO",-15.54,-47.337,3,0],["Assis","SP",-22.66,-50.418,3,0],["Itapeva","SP",-23.979,-48.876,3,0],["Novo Horizonte","SP",-21.465,-49.223,3,0],["Andradina","SP",-20.895,-51.379,3,0],["Fernandópolis","SP",-20.281,-50.247,3,0],["Barreiros","PE",-8.816,-35.183,3,0],["Salgueiro","PE",-8.074,-39.125,3,0],["Goiana","PE",-7.561,-34.996,3,0],["Timbaúba","PE",-7.505,-35.312,3,0],["Bacabal","MA",-4.224,-44.783,3,0],["Bragança","PA",-1.061,-46.783,3,0],["Óbidos","PA",-1.901,-55.521,3,0],["Guajará-Mirim","RO",-10.789,-65.33,3,0],["Porto Nacional","TO",-10.703,-48.408,3,0],["Pirapora","MG",-17.339,-44.934,3,0],["Nova Viçosa","BA",-17.893,-39.374,3,0],["Juazeiro","BA",-9.416,-40.503,3,0],["Sena Madureira","AC",-9.066,-68.657,3,0],["Fonte Boa","AM",-2.523,-66.094,3,0],["Eirunepé","AM",-6.657,-69.866,3,0],["Manicoré","AM",-5.805,-61.289,3,0],["Barcelos","AM",-0.983,-62.931,3,0],["Tonantins","AM",-2.866,-67.792,3,0],["Tefé","AM",-3.368,-64.719,3,0],["Coari","AM",-4.094,-63.144,3,0],["São Gabriel da Cachoeira","AM",-0.119,-67.084,3,0],["Novo Airão","AM",-2.636,-60.943,3,0],["Itacoatiara","AM",-3.139,-58.445,3,0],["Parintins","AM",-2.637,-56.729,3,0],["Balsas","MA",-7.532,-46.037,3,0],["Breves","PA",-1.68,-50.479,3,0],["Jacareacanga","PA",-6.215,-57.754,3,0],["Tucuruí","PA",-3.766,-49.677,3,0],["Itaituba","PA",-4.267,-55.993,3,0],["Conceição do Araguaia","PA",-8.261,-49.269,3,0],["Abaetetuba","PA",-1.722,-48.879,3,0],["Araguaína","TO",-7.192,-48.204,3,0],["Januária","MG",-15.48,-44.364,3,0],["Aripuanã","MT",-10.172,-59.457,3,0],["Sinop","MT",-11.86,-55.509,3,0],["Jaguarão","RS",-32.56,-53.377,3,0],["Aracati","CE",-4.558,-37.768,3,0],["Icó","CE",-6.396,-38.855,3,0],["Picos","PI",-7.077,-41.467,3,0],["Canavieiras","BA",-15.672,-38.954,3,0],["Santa Maria da Vitória","BA",-13.386,-44.201,3,0],["Irecê","BA",-11.303,-41.853,3,0],["Xique-Xique","BA",-10.823,-42.724,3,0],["Iguape","SP",-24.699,-47.554,3,0],["Alvorada","TO",-12.479,-49.125,3,0],["Corumbá","MS",-19.008,-57.651,3,0],["Colíder","MT",-10.813,-55.461,3,0],["Alta Floresta","MT",-9.867,-56.087,3,0],["Cruzeiro do Sul","AC",-7.628,-72.676,3,0],["Vilhena","RO",-12.75,-60.149,3,0]];
+var NXP_LABELS=[["Fiji",177.98,-17.83,6],["Tanzânia",34.96,-6.05,3],["Sara Ocidental",-12.63,23.97,7],["Canadá",-101.91,60.32,2],["Estados Unidos",-97.48,39.54,2],["Cazaquistão",68.69,49.05,3],["Uzbequistão",64.01,41.69,3],["Papua-Nova Guiné",143.91,-5.7,2],["Indonésia",101.89,-0.95,2],["Argentina",-64.17,-33.5,2],["Chile",-72.32,-38.15,2],["República Democrática do Congo",23.46,-1.86,2],["Somália",45.19,3.57,6],["Quénia",37.91,0.55,2],["Sudão",29.26,16.33,3],["Chade",18.65,15.14,3],["Haiti",-72.22,19.26,5],["República Dominicana",-70.65,19.1,5],["Rússia",44.69,58.25,2],["Bahamas",-77.15,26.4,4],["Ilhas Malvinas",-58.74,-51.61,5],["Noruega",9.68,61.36,3],["Groenlândia",-39.34,74.32,3],["Terras Austrais e Antárticas Francesas",69.12,-49.3,6],["Timor-Leste",125.85,-8.8,5],["África do Sul",23.67,-29.71,2],["Lesoto",28.25,-29.48,6],["México",-102.29,23.92,2],["Uruguai",-55.97,-32.96,4],["Bolívia",-64.59,-16.67,3],["Peru",-72.9,-12.98,2],["Colômbia",-73.17,3.37,2],["Panamá",-80.35,8.72,4],["Costa Rica",-84.08,10.07,5],["Nicarágua",-85.07,12.67,5],["Honduras",-86.89,14.79,5],["El Salvador",-88.89,13.69,6],["Guatemala",-90.5,14.98,3],["Belize",-88.71,17.2,6],["Venezuela",-64.6,7.18,3],["Guiana",-58.94,5.12,4],["Suriname",-55.91,4.14,4],["França",2.55,46.7,2],["Equador",-78.19,-1.26,3],["Porto Rico",-66.48,18.23,5],["Jamaica",-77.32,18.14,4],["Cuba",-77.98,21.33,3],["Zimbábue",29.93,-18.91,3],["Botsuana",24.18,-22.1,4],["Namíbia",17.11,-20.58,3],["Senegal",-14.78,15.14,3],["Mali",-2.04,18.69,3],["Mauritânia",-9.74,19.59,3],["Benim",2.35,10.32,5],["Níger",9.5,17.45,3],["Nigéria",7.5,9.44,2],["Camarões",12.47,4.59,3],["Togo",1.06,8.81,6],["Gana",-1.04,7.72,3],["Costa do Marfim",-5.57,7.49,3],["Guiné",-10.02,10.62,3],["Guiné-Bissau",-14.52,12.16,6],["Libéria",-9.46,6.45,4],["Serra Leoa",-11.76,8.62,4],["Burkina Faso",-1.36,12.67,3],["República Centro-Africana",20.91,6.99,4],["República do Congo",15.9,0.14,4],["Gabão",11.84,-0.44,4],["Guiné Equatorial",8.99,2.33,4],["Zâmbia",26.4,-14.66,3],["Malawi",33.61,-13.39,6],["Moçambique",37.84,-13.94,3],["Essuatíni",31.47,-26.53,4],["Angola",17.98,-12.18,3],["Burundi",29.92,-3.33,6],["Israel",34.85,30.91,4],["Líbano",35.99,34.13,5],["Madagáscar",46.7,-18.63,3],["Palestina",35.29,32.05,5],["Gâmbia",-15.0,13.64,6],["Tunísia",9.01,33.69,3],["Argélia",2.81,27.4,3],["Jordânia",36.38,30.81,4],["Emirados Árabes Unidos",54.55,23.47,4],["Catar",51.14,25.24,5],["Kuwait",47.31,29.41,6],["Iraque",43.26,33.09,3],["Omã",57.34,22.12,4],["Vanuatu",166.91,-15.37,4],["Camboja",104.5,12.65,3],["Tailândia",101.07,15.46,3],["Laos",102.53,19.43,4],["Myanmar",95.8,21.57,3],["Vietname",105.39,21.72,2],["Coreia do Norte",126.44,39.89,3],["Coreia do Sul",128.13,36.38,2],["Mongólia",104.15,46.0,3],["Índia",79.36,22.69,2],["Bangladesh",89.68,24.21,3],["Butão",90.04,27.54,5],["Nepal",83.64,28.3,3],["Paquistão",68.55,29.33,2],["Afeganistão",66.5,34.16,3],["Tajiquistão",72.59,38.2,4],["Quirguistão",74.53,41.67,4],["Turquemenistão",58.68,39.86,4],["Irão",54.93,32.17,2],["Síria",38.28,35.01,3],["Arménia",44.8,40.46,6],["Suécia",19.02,65.86,3],["Bielorrússia",28.42,53.82,4],["Ucrânia",32.14,49.72,3],["Polónia",19.49,51.99,3],["Áustria",14.13,47.52,4],["Hungria",19.45,47.09,5],["Moldávia",28.49,47.43,6],["Roménia",24.97,45.73,3],["Lituânia",24.09,55.1,5],["Letónia",25.46,57.07,5],["Estónia",25.87,58.72,6],["Alemanha",9.68,50.96,2],["Bulgária",25.16,42.51,4],["Grécia",21.73,39.49,3],["Turquia",34.51,39.35,2],["Albânia",20.11,40.65,6],["Croácia",16.37,45.81,6],["Suíça",7.46,46.72,4],["Luxemburgo",6.08,49.73,6],["Bélgica",4.8,50.79,2],["Países Baixos",5.61,52.42,5],["Portugal",-8.27,39.61,2],["Espanha",-3.46,40.09,2],["República da Irlanda",-7.8,53.08,3],["Nova Caledónia",165.08,-21.06,3],["Ilhas Salomão",159.17,-8.03,3],["Nova Zelândia",172.79,-39.76,2],["Austrália",134.05,-24.13,2],["Sri Lanka",80.7,7.58,3],["China",106.34,32.5,2],["Taiwan",120.87,23.65,3],["Itália",11.08,44.73,2],["Dinamarca",9.02,55.97,4],["Reino Unido",-2.12,54.4,2],["Islândia",-18.67,64.78,3],["Azerbaijão",47.21,40.4,5],["Geórgia",43.74,41.87,5],["Filipinas",122.47,11.2,2],["Malásia",113.84,2.53,3],["Brunei",114.55,4.45,6],["Eslovénia",14.92,46.06,6],["Finlândia",27.28,63.25,3],["Eslováquia",19.05,48.73,6],["Chéquia",15.38,49.88,5],["Eritreia",38.29,15.79,4],["Japão",138.44,36.14,2],["Paraguai",-60.15,-21.67,4],["Iémen",45.87,15.33,3],["Arábia Saudita",44.7,23.81,2],["Antártida",35.89,-79.84,4],["República Turca do Chipre do Norte",33.69,35.22,6],["Chipre",33.08,34.91,5],["Marrocos",-7.19,31.65,3],["Egito",29.45,26.19,2],["Líbia",18.01,26.64,3],["Etiópia",39.09,8.03,2],["Djibouti",42.5,11.98,5],["Somalilândia",46.73,9.44,5],["Uganda",32.95,1.97,3],["Ruanda",30.1,-1.9,3],["Bósnia e Herzegovina",18.07,44.09,5],["Macedónia do Norte",21.56,41.56,6],["Sérvia",20.79,44.19,5],["Montenegro",19.14,42.8,6],["Kosovo",20.86,42.59,6],["Trinidad e Tobago",-60.92,11.0,5],["Sudão do Sul",30.39,7.23,3]];
+
+/* Nexa Prospect: territory map for the lead search.
+   Map data: Natural Earth (public domain) and IBGE municipalities (lib/nexa-municipios.js, loaded on demand). */
+(function(){
+"use strict";
+var view=document.getElementById("finder"),root=view&&view.querySelector(".nxp");
+if(!root)return;
+var $=function(id){return document.getElementById(id)};
+var box=$("nxpMap"),canvas=box.querySelector(".nxp-canvas"),ctx=canvas.getContext("2d");
+var base=document.createElement("canvas"),bctx=base.getContext("2d");
+var KEY="nexa-prospect-v1",MAX=3,RAD=Math.PI/180;
+var reduced=window.matchMedia?matchMedia("(prefers-reduced-motion: reduce)"):{matches:false};
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function norm(s){return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim()}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function toast(m){if(window.toast)window.toast(m)}
+function fine(a){return a&&isFinite(a.lat)&&isFinite(a.lng)&&Math.abs(a.lat)<=85&&Math.abs(a.lng)<=180}
+
+/* ---------- saved state ---------- */
+var st={};try{st=JSON.parse(localStorage.getItem(KEY)||"null")||{}}catch(e){st={}}
+st.areas=Array.isArray(st.areas)?st.areas.filter(fine).slice(0,MAX).map(function(a){return{lat:+a.lat,lng:+a.lng}}):[];
+st.r=clamp(Math.round(+st.r||10),1,50);
+st.found=st.found&&typeof st.found==="object"&&!Array.isArray(st.found)?st.found:{};
+st.last=st.last&&typeof st.last==="object"?st.last:null;
+st.me=fine(st.me)?st.me:null;
+var cam=st.view&&isFinite(st.view.z)&&fine(st.view)?{lng:+st.view.lng,lat:+st.view.lat,z:+st.view.z}:null;
+var saveTimer=0;
+function save(now){clearTimeout(saveTimer);saveTimer=setTimeout(function(){try{localStorage.setItem(KEY,JSON.stringify({areas:st.areas,r:st.r,
+  view:cam?{lng:+cam.lng.toFixed(4),lat:+cam.lat.toFixed(4),z:+cam.z.toFixed(2)}:null,found:st.found,last:st.last,me:st.me,fit:st.fit||0}))}catch(e){}},now?0:350)}
+
+/* ---------- projection (web mercator, 256 px tiles) ---------- */
+var W=0,H=0,dpr=1,ZMIN=3,ZMAX=13;
+function mx(lng){return(lng+180)/360}
+function my(lat){var s=Math.sin(clamp(lat,-85,85)*RAD);return .5-Math.log((1+s)/(1-s))/(4*Math.PI)}
+function ilng(x){return x*360-180}
+function ilat(y){var n=Math.PI-2*Math.PI*y;return Math.atan(.5*(Math.exp(n)-Math.exp(-n)))/RAD}
+function scale(){return 256*Math.pow(2,cam.z)}
+function px(lng,lat){var s=scale();return[(mx(lng)-mx(cam.lng))*s+W/2,(my(lat)-my(cam.lat))*s+H/2]}
+function geo(x,y){var s=scale();return{lng:ilng(mx(cam.lng)+(x-W/2)/s),lat:ilat(my(cam.lat)+(y-H/2)/s)}}
+function mpp(lat){return 156543.03392*Math.cos(lat*RAD)/Math.pow(2,cam.z)}
+function limit(){cam.z=clamp(cam.z,ZMIN,ZMAX);cam.lat=clamp(cam.lat,-62,40);cam.lng=clamp(cam.lng,-130,40)}
+function topInset(){var t=box.querySelector(".nxp-top");if(!t||getComputedStyle(t).position!=="absolute")return 0;return t.offsetTop+t.offsetHeight+8}
+function fitBox(w,s,e,n,maxZ){var dx=Math.abs(mx(e)-mx(w))||1e-6,dy=Math.abs(my(s)-my(n))||1e-6,pad=W<600?70:90,top=topInset();
+  var z=clamp(Math.min(Math.log(Math.min((W-pad)/(dx*256),(H-pad-top)/(dy*256)))/Math.LN2,maxZ||11),ZMIN,ZMAX);
+  return{lng:ilng((mx(w)+mx(e))/2),lat:ilat((my(s)+my(n))/2-top/2/(256*Math.pow(2,z))),z:z}}
+function brazil(){return fitBox(-74,-34,-34.5,5.5,5)}
+
+/* ---------- geometry, prepared once in mercator units ---------- */
+var shapes=null;
+function prepRing(flat){var n=flat.length/2,a=new Float64Array(flat.length),x0=1,y0=1,x1=0,y1=0;
+  for(var i=0;i<n;i++){var x=mx(flat[2*i]),y=my(flat[2*i+1]);a[2*i]=x;a[2*i+1]=y;if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  return{p:a,b:[x0,y0,x1,y1]}}
+function prepare(){if(shapes)return shapes;shapes={world:[],states:[],outline:[]};
+  var assets=null;try{var el=document.getElementById("clean-loader-earth-assets");assets=el&&JSON.parse(el.textContent)}catch(e){assets=null}
+  var bb=null;
+  if(assets&&Array.isArray(assets.brazil))assets.brazil.forEach(function(r){var f=[];r.forEach(function(p){f.push(p[0],p[1])});var s=prepRing(f);shapes.outline.push(s);bb=s.b});
+  if(assets&&Array.isArray(assets.countries))assets.countries.forEach(function(r){if(!Array.isArray(r)||r.length<3)return;var f=[];r.forEach(function(p){f.push(p[0],p[1])});var s=prepRing(f);
+    if(bb&&Math.abs(s.b[0]-bb[0])<.01&&Math.abs(s.b[2]-bb[2])<.01&&Math.abs(s.b[1]-bb[1])<.01)return;shapes.world.push(s)});
+  (window.NXP_STATES||[]).forEach(function(s){var rings=s.p.map(prepRing);shapes.states.push({c:s.c,n:s.n,l:s.l,r:rings})});
+  return shapes}
+function seen(b,s,ox,oy){return!(b[2]*s-ox<-20||b[0]*s-ox>W+20||b[3]*s-oy<-20||b[1]*s-oy>H+20)}
+function trace(c,ring,s,ox,oy){var p=ring.p,n=p.length;c.moveTo(p[0]*s-ox,p[1]*s-oy);
+  var lx=p[0]*s,ly=p[1]*s;for(var i=2;i<n;i+=2){var x=p[i]*s,y=p[i+1]*s;if(Math.abs(x-lx)+Math.abs(y-ly)<.7&&i<n-2)continue;c.lineTo(x-ox,y-oy);lx=x;ly=y}c.closePath()}
+
+/* ---------- cities ---------- */
+var CITIES=(window.NXP_CITIES||[]).map(function(c){return{n:c[0],uf:c[1],lat:c[2],lng:c[3],k:c[4],cap:c[5],key:norm(c[0])}});
+var MUN=null,munLoading=null;
+function loadMun(){if(MUN)return Promise.resolve(MUN);if(munLoading)return munLoading;
+  munLoading=new Promise(function(ok){function parse(){var raw=window.NXP_MUN;if(typeof raw!=="string")return ok(null);
+      MUN=raw.split("|").map(function(r){var f=r.split(";");return{n:f[0],uf:f[1],lat:+f[2],lng:+f[3],k:0,key:norm(f[0])}});
+      var big={};CITIES.forEach(function(c){big[c.key+"|"+c.uf]=c.k});MUN.forEach(function(m){m.k=big[m.key+"|"+m.uf]||0});ok(MUN);invalidate()}
+    if(typeof window.NXP_MUN==="string")return parse();
+    var s=document.createElement("script");s.src="lib/nexa-municipios.js";s.async=true;s.onload=parse;s.onerror=function(){munLoading=null;ok(null)};document.head.appendChild(s)});
+  return munLoading}
+function dist(aLat,aLng,bLat,bLng){var dLat=(bLat-aLat)*RAD,dLng=(bLng-aLng)*RAD,x=Math.sin(dLat/2),y=Math.sin(dLng/2);
+  return 12742000*Math.asin(Math.sqrt(x*x+Math.cos(aLat*RAD)*Math.cos(bLat*RAD)*y*y))}
+function nearest(lat,lng){var list=MUN||CITIES,best=null,bd=Infinity;for(var i=0;i<list.length;i++){var c=list[i],d=dist(lat,lng,c.lat,c.lng);if(d<bd){bd=d;best=c}}
+  return best&&bd<90000?best:null}
+function placeName(a){var c=nearest(a.lat,a.lng);return c?c.n+" - "+c.uf:a.lat.toFixed(2)+", "+a.lng.toFixed(2)}
+
+/* ---------- theme ---------- */
+var A="0,184,177";
+function readAccent(){var v=getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim();if(/^\d+\s*,\s*\d+\s*,\s*\d+$/.test(v))A=v.replace(/\s/g,"")}
+function rgba(a){return"rgba("+A+","+a+")"}
+var font=(getComputedStyle(document.body).fontFamily||"sans-serif");
+function quiet(){return reduced.matches||document.documentElement.getAttribute("data-cp-motion")==="quiet"}
+
+/* ---------- drawing ---------- */
+var dirty=true,leadsOnMap=[],hover=null;
+function invalidate(){dirty=true;kick()}
+function drawBase(){var c=bctx,sh=prepare(),s=scale(),ox=mx(cam.lng)*s-W/2,oy=my(cam.lat)*s-H/2;readAccent();
+  c.setTransform(dpr,0,0,dpr,0,0);
+  var g=c.createRadialGradient(W*.55,H*.42,0,W*.55,H*.42,Math.max(W,H)*.85);g.addColorStop(0,"#081a1b");g.addColorStop(1,"#020707");c.fillStyle=g;c.fillRect(0,0,W,H);
+  /* graticule */
+  var step=cam.z<5?10:cam.z<7?5:cam.z<9?1:cam.z<11?.25:.05,tl=geo(0,0),br=geo(W,H),v;
+  c.beginPath();for(v=Math.ceil(tl.lng/step)*step;v<=br.lng;v+=step){var x=(mx(v)*s-ox);c.moveTo(x,0);c.lineTo(x,H)}
+  for(v=Math.ceil(br.lat/step)*step;v<=tl.lat;v+=step){var y=(my(v)*s-oy);c.moveTo(0,y);c.lineTo(W,y)}
+  c.strokeStyle="rgba(255,255,255,.035)";c.lineWidth=1;c.stroke();
+  /* other countries */
+  c.beginPath();sh.world.forEach(function(r){if(seen(r.b,s,ox,oy))trace(c,r,s,ox,oy)});
+  c.fillStyle="rgba(255,255,255,.03)";c.fill("evenodd");c.strokeStyle="rgba(255,255,255,.1)";c.lineWidth=.8;c.stroke();
+  /* Brazil and its states */
+  c.beginPath();sh.states.forEach(function(st2){st2.r.forEach(function(r){if(seen(r.b,s,ox,oy))trace(c,r,s,ox,oy)})});
+  c.fillStyle=rgba(.075);c.fill();c.strokeStyle="rgba(255,255,255,.14)";c.lineWidth=.75;c.stroke();
+  if(cam.z<6.5&&sh.outline.length){c.save();c.beginPath();sh.outline.forEach(function(r){trace(c,r,s,ox,oy)});c.shadowColor=rgba(.8);c.shadowBlur=14;c.strokeStyle=rgba(.38);c.lineWidth=1.2;c.stroke();c.restore()}
+  /* labels */
+  var boxes=[[0,H-30,W,30]];function free(x,y,w,h){for(var i=0;i<boxes.length;i++){var b=boxes[i];if(x<b[0]+b[2]&&x+w>b[0]&&y<b[1]+b[3]&&y+h>b[1])return false}boxes.push([x,y,w,h]);return true}
+  function spaced(px2){if("letterSpacing"in c)c.letterSpacing=px2+"px"}
+  c.textAlign="center";c.textBaseline="middle";
+  if(cam.z<8.5){c.font="600 10px "+font;spaced(2);c.fillStyle="rgba(255,255,255,.24)";
+    (window.NXP_LABELS||[]).forEach(function(l){if(l[3]>cam.z-.5)return;var p=[mx(l[1])*s-ox,my(l[2])*s-oy];if(p[0]<-60||p[0]>W+60||p[1]<-20||p[1]>H+20)return;
+      var t=l[0].toUpperCase(),w=c.measureText(t).width;if(free(p[0]-w/2,p[1]-7,w,14))c.fillText(t,p[0],p[1])})}
+  if(cam.z>=4.2&&cam.z<9){c.font="600 "+(cam.z<5.5?9.5:10.5)+"px "+font;spaced(1.6);c.fillStyle="rgba(255,255,255,.2)";
+    sh.states.forEach(function(st2){var p=[mx(st2.l[0])*s-ox,my(st2.l[1])*s-oy];if(p[0]<-40||p[0]>W+40||p[1]<-20||p[1]>H+20)return;
+      var t=cam.z<5.6?st2.c:st2.n.toUpperCase(),w=c.measureText(t).width;if(free(p[0]-w/2,p[1]-7,w,14))c.fillText(t,p[0],p[1])})}
+  spaced(0);
+  var minK=cam.z<4.6?9:cam.z<5.5?8:cam.z<6.3?7:cam.z<7?6:cam.z<7.8?5:cam.z<8.6?4:cam.z<9.2?1:0;
+  var list=cam.z>=8.6&&MUN?MUN:CITIES;if(cam.z>=8&&!MUN)loadMun();
+  c.textAlign="left";c.font="500 11px "+font;
+  for(var i=0;i<list.length;i++){var ci=list[i];if(ci.k<minK)continue;var p=[mx(ci.lng)*s-ox,my(ci.lat)*s-oy];if(p[0]<-80||p[0]>W+10||p[1]<-10||p[1]>H+10)continue;
+    var w=c.measureText(ci.n).width;if(!free(p[0]-4,p[1]-8,w+14,16))continue;
+    c.beginPath();c.arc(p[0],p[1],ci.k>=8?2.6:1.9,0,7);c.fillStyle=ci.k>=8?"rgba(255,255,255,.75)":"rgba(255,255,255,.5)";c.fill();
+    c.fillStyle=ci.k>=8?"rgba(255,255,255,.66)":"rgba(255,255,255,.46)";c.fillText(ci.n,p[0]+7,p[1])}
+  /* found leads, in screen space for hit tests */
+  leadsOnMap=[];var leads=currentLeads();
+  for(var j=0;j<leads.length;j++){var L=leads[j],pos=st.found[L.id]||st.found["n:"+norm(L.nome||L.name)];if(!pos)continue;var q=[mx(pos[1])*s-ox,my(pos[0])*s-oy];
+    if(q[0]<-10||q[0]>W+10||q[1]<-10||q[1]>H+10)continue;leadsOnMap.push({x:q[0],y:q[1],lead:L})}
+  $("nxpZ").textContent=String(Math.round(cam.z));dirty=false}
+
+var sprite=null,spriteA="";
+function glowSprite(){if(sprite&&spriteA===A)return sprite;spriteA=A;sprite=document.createElement("canvas");sprite.width=sprite.height=48;var g=sprite.getContext("2d"),r=g.createRadialGradient(24,24,0,24,24,24);
+  r.addColorStop(0,rgba(.9));r.addColorStop(.25,rgba(.45));r.addColorStop(1,rgba(0));g.fillStyle=r;g.fillRect(0,0,48,48);return sprite}
+function frame(t){if(dirty)drawBase();var c=ctx;c.setTransform(1,0,0,1,0,0);c.drawImage(base,0,0);c.setTransform(dpr,0,0,dpr,0,0);
+  var still=quiet(),k=still?0:t/1000;
+  /* area circles */
+  st.areas.forEach(function(a,idx){var p=px(a.lng,a.lat),r=st.r*1000/mpp(a.lat),sel=selected===idx;
+    if(r>6){var g=c.createRadialGradient(p[0],p[1],0,p[0],p[1],r);g.addColorStop(0,rgba(.2));g.addColorStop(.7,rgba(.08));g.addColorStop(1,rgba(.02));
+      c.beginPath();c.arc(p[0],p[1],r,0,7);c.fillStyle=g;c.fill();c.lineWidth=sel?2:1.4;c.strokeStyle=rgba(sel?1:.75);c.stroke();
+      c.save();c.setLineDash([3,7]);c.lineDashOffset=-k*12;c.beginPath();c.arc(p[0],p[1],r+7,0,7);c.strokeStyle=rgba(.35);c.lineWidth=1;c.stroke();c.restore();
+      if(!still){var ph=(k*.42+idx*.33)%1;c.beginPath();c.arc(p[0],p[1],r*ph,0,7);c.strokeStyle=rgba(.45*(1-ph));c.lineWidth=1.2;c.stroke()}}
+    else{var h=c.createRadialGradient(p[0],p[1],0,p[0],p[1],34);h.addColorStop(0,rgba(.35));h.addColorStop(1,rgba(0));c.fillStyle=h;c.fillRect(p[0]-34,p[1]-34,68,68)}});
+  /* leads */
+  var spr=glowSprite();
+  for(var i=0;i<leadsOnMap.length;i++){var L=leadsOnMap[i],on=hover&&hover.lead===L.lead;c.globalAlpha=still?.9:.75+.25*Math.sin(k*2+i);
+    c.drawImage(spr,L.x-(on?16:11),L.y-(on?16:11),on?32:22,on?32:22);c.globalAlpha=1;c.beginPath();c.arc(L.x,L.y,on?4.6:3,0,7);c.fillStyle=on?"#fff":rgba(1);c.fill()}
+  /* you are here */
+  if(st.me){var m=px(st.me.lng,st.me.lat);c.beginPath();c.arc(m[0],m[1],10+(still?0:4*Math.sin(k*3)),0,7);c.fillStyle="rgba(255,255,255,.08)";c.fill();
+    c.beginPath();c.arc(m[0],m[1],5,0,7);c.fillStyle="#fff";c.fill();c.lineWidth=2;c.strokeStyle=rgba(1);c.stroke()}
+  /* area markers */
+  st.areas.forEach(function(a,idx){var p=px(a.lng,a.lat);
+    c.beginPath();c.arc(p[0],p[1],15,0,7);c.fillStyle="rgba(3,12,13,.92)";c.fill();c.lineWidth=2;c.strokeStyle=rgba(1);c.stroke();
+    c.beginPath();c.arc(p[0],p[1],19,0,7);c.lineWidth=1;c.strokeStyle=rgba(.3);c.stroke();
+    var o=still?-.8:k*1.4+idx;c.beginPath();c.arc(p[0]+Math.cos(o)*19,p[1]+Math.sin(o)*19,2.6,0,7);c.fillStyle="#fff";c.fill();
+    c.fillStyle="#fff";c.font="700 10px "+font;c.textAlign="center";c.textBaseline="middle";c.fillText("A"+(idx+1),p[0],p[1]+.5)});
+  /* hovered lead name */
+  if(hover&&hover.lead&&pop.hidden){var nm=String(hover.lead.nome||hover.lead.name||"Lead");c.font="600 11.5px "+font;var w=c.measureText(nm).width+18,x=clamp(hover.x+12,6,W-w-6),y=clamp(hover.y-34,6,H-30);
+    c.fillStyle="rgba(4,13,14,.94)";rr(c,x,y,w,26,8);c.fill();c.strokeStyle=rgba(.5);c.lineWidth=1;c.stroke();c.fillStyle="#fff";c.textAlign="left";c.textBaseline="middle";c.fillText(nm,x+9,y+13.5)}}
+function rr(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
+
+/* ---------- loop: only while the view is open ---------- */
+var raf=0,lastT=0,running=false;
+function active(){return view.classList.contains("active")&&!document.hidden&&W>0}
+function tick(t){raf=0;if(!active()){running=false;return}
+  if(anim)stepAnim(t);
+  if(quiet()&&!anim){if(dirty||needPaint){frame(t);needPaint=false}running=false;return}
+  if(t-lastT>=30||dirty||needPaint){lastT=t;frame(t);needPaint=false}
+  raf=requestAnimationFrame(tick)}
+var needPaint=true;
+function kick(){needPaint=true;if(!raf&&active()){running=true;raf=requestAnimationFrame(tick)}}
+
+/* ---------- size ---------- */
+function layout(){var r=canvas.getBoundingClientRect(),w=Math.round(r.width),h=Math.round(r.height);if(!w||!h)return;
+  var d=Math.min(window.devicePixelRatio||1,2);if(w===W&&h===H&&d===dpr)return;W=w;H=h;dpr=d;
+  canvas.width=base.width=Math.round(W*dpr);canvas.height=base.height=Math.round(H*dpr);
+  if(!cam){cam=brazil()}limit();placeChip();invalidate()}
+if(window.ResizeObserver)new ResizeObserver(function(){layout()}).observe(canvas);else addEventListener("resize",layout);
+
+/* ---------- camera motion ---------- */
+var anim=null;
+function flyTo(t,done){if(!cam)return;t.z=clamp(t.z,ZMIN,ZMAX);
+  if(quiet()){cam={lng:t.lng,lat:t.lat,z:t.z};limit();invalidate();save();if(done)done();return}
+  anim={a:{x:mx(cam.lng),y:my(cam.lat),z:cam.z},b:{x:mx(t.lng),y:my(t.lat),z:t.z},t0:0,d:850,done:done};kick()}
+function stepAnim(t){if(!anim.t0)anim.t0=t;var u=clamp((t-anim.t0)/anim.d,0,1),e=u<.5?4*u*u*u:1-Math.pow(-2*u+2,3)/2,a=anim.a,b=anim.b;
+  var zMid=Math.min(a.z,b.z)-Math.min(2,Math.abs(a.z-b.z)*.25+Math.hypot(b.x-a.x,b.y-a.y)*40),z=u<.5?a.z+(zMid-a.z)*Math.sin(u*Math.PI):b.z+(zMid-b.z)*Math.sin(u*Math.PI);
+  if(Math.hypot(b.x-a.x,b.y-a.y)<.002)z=a.z+(b.z-a.z)*e;
+  cam={lng:ilng(a.x+(b.x-a.x)*e),lat:ilat(a.y+(b.y-a.y)*e),z:z};
+  if(u>=1){cam={lng:ilng(b.x),lat:ilat(b.y),z:b.z};var d=anim.done;anim=null;limit();save();placeChip();if(d)d()}
+  dirty=true}
+function zoomAt(z,sx,sy){var g=geo(sx,sy);cam.z=clamp(z,ZMIN,ZMAX);var s=scale();cam.lng=ilng(mx(g.lng)-(sx-W/2)/s);cam.lat=ilat(my(g.lat)-(sy-H/2)/s);limit();anim=null;hidePop();invalidate();save()}
+
+/* ---------- areas ---------- */
+var selected=-1;
+function addArea(lat,lng){if(st.areas.length>=MAX){toast("Você já marcou 3 áreas. Remova uma na lista para marcar outra.");return false}
+  st.areas.push({lat:+lat.toFixed(5),lng:+lng.toFixed(5)});hideChip();sync();save();return true}
+function removeArea(i){st.areas.splice(i,1);selected=-1;hidePop();sync();save()}
+function sync(){var n=st.areas.length,list=$("nxpAreas");
+  $("nxpCount").textContent=n+"/"+MAX+" áreas";$("nxpRadiusOut").textContent=st.r+" km";$("nxpRadius").value=String(st.r);$("nxpRadius").style.setProperty("--p",((st.r-1)/49*100).toFixed(1)+"%");
+  $("nxpClear").hidden=!n;$("nxpAreasEmpty").hidden=!!n;
+  list.innerHTML=st.areas.map(function(a,i){return'<li data-i="'+i+'" tabindex="0"><span class="pin">A'+(i+1)+'</span><span class="nm"><b>'+esc(placeName(a))+'</b><small>'+a.lat.toFixed(4)+", "+a.lng.toFixed(4)+'</small></span><em>'+st.r+' km</em><button type="button" data-rm="'+i+'" aria-label="Remover área '+(i+1)+'"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></li>'}).join("");
+  $("nxpTerrT").textContent=n?n+(n>1?" áreas marcadas":" área marcada"):"Nenhuma área marcada";
+  $("nxpTerrN").textContent="0"+n+" / 0"+MAX;
+  var onMap=countOnMap();
+  $("nxpTerrS").textContent=n?"Raio de "+st.r+" km"+(onMap?" · "+onMap+" leads no mapa":""):onMap?onMap+" leads no mapa · clique para marcar":"Clique no mapa para marcar uma área";
+  var L=st.last,ring=root.querySelector(".nxp-ring");
+  if(L&&L.n){var pc=Math.round(L.phones/L.n*100);$("nxpPotP").textContent=pc+"%";$("nxpPotS").textContent=L.phones+" de "+L.n+" leads com telefone";ring.style.strokeDasharray=pc+" 100"}
+  else{$("nxpPotP").textContent=L?"0":"—";$("nxpPotS").textContent=L?"Nenhum lead na última busca":"Aguardando a primeira busca";ring.style.strokeDasharray="0 100"}
+  qualSummary();kick()}
+function countOnMap(){var n=0,leads=currentLeads();for(var i=0;i<leads.length;i++){var L=leads[i];if(st.found[L.id]||st.found["n:"+norm(L.nome||L.name)])n++}return n}
+function currentLeads(){var list=window.__searchResults;if(!Array.isArray(list)){try{list=JSON.parse(localStorage.getItem("clean-leads-last-search")||"[]")}catch(e){list=[]}}return Array.isArray(list)?list:[]}
+
+/* ---------- side panel ---------- */
+var qualBtn=root.querySelector(".nxp-qual"),qualBody=$("nxpQual");
+qualBtn.addEventListener("click",function(){var open=qualBtn.getAttribute("aria-expanded")!=="true";qualBtn.setAttribute("aria-expanded",String(open));qualBody.hidden=!open});
+function qualSummary(){var site=$("siteFilter"),vol=$("cleanFinderVolume"),a=site&&site.selectedOptions[0],b=vol&&vol.selectedOptions[0];
+  var t=(a?a.textContent.replace(/\s*·\s*Pro$/,""):"Qualquer presença")+(b?" · "+b.textContent.replace(/^Até/,"até"):"");$("nxpQualSum").textContent=t}
+root.addEventListener("change",function(e){if(e.target.closest(".nxp-qual-body"))qualSummary()});
+$("nxpRadius").addEventListener("input",function(){st.r=clamp(Math.round(+this.value)||10,1,50);sync();save()});
+$("nxpClear").addEventListener("click",function(){st.areas=[];selected=-1;hidePop();sync();save();toast("Áreas removidas do mapa")});
+$("nxpAreas").addEventListener("click",function(e){var rm=e.target.closest("[data-rm]");if(rm){removeArea(+rm.getAttribute("data-rm"));return}
+  var li=e.target.closest("li[data-i]");if(li)focusArea(+li.getAttribute("data-i"))});
+$("nxpAreas").addEventListener("keydown",function(e){var li=e.target.closest("li[data-i]");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();focusArea(+li.getAttribute("data-i"))}
+  if(li&&(e.key==="Delete"||e.key==="Backspace")){e.preventDefault();removeArea(+li.getAttribute("data-i"))}});
+function focusArea(i){var a=st.areas[i];if(!a)return;selected=i;var d=st.r*1000*2.6,dLat=d/111320,dLng=d/(111320*Math.cos(a.lat*RAD));
+  flyTo(fitBox(a.lng-dLng,a.lat-dLat,a.lng+dLng,a.lat+dLat,12));if(window.innerWidth<980)box.scrollIntoView({behavior:quiet()?"auto":"smooth",block:"center"})}
+var city=$("searchCity");
+city.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();var b=document.querySelector("#finder .query .btn");if(b&&!b.disabled)b.click()}});
+
+/* ---------- pointer: pan, pinch, click to mark, drag a marker ---------- */
+var ptrs={},drag=null,moved=false,pinch=null;
+function local(e){var r=canvas.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+function hit(x,y){var area=-1,ad=19;for(var i=st.areas.length-1;i>=0;i--){var p=px(st.areas[i].lng,st.areas[i].lat),d0=Math.hypot(p[0]-x,p[1]-y);if(d0<ad){ad=d0;area=i}}
+  var best=null,bd=10;for(var j=0;j<leadsOnMap.length;j++){var L=leadsOnMap[j],d=Math.hypot(L.x-x,L.y-y);if(d<bd){bd=d;best=L}}
+  if(best&&(area<0||bd+3<ad))return best;return area>=0?{area:area}:null}
+canvas.addEventListener("pointerdown",function(e){if(e.button>0)return;var p=local(e);ptrs[e.pointerId]=p;try{canvas.setPointerCapture(e.pointerId)}catch(x){}
+  var ids=Object.keys(ptrs);anim=null;
+  if(ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]];pinch={d:Math.hypot(a[0]-b[0],a[1]-b[1]),z:cam.z,c:[(a[0]+b[0])/2,(a[1]+b[1])/2]};drag=null;return}
+  var h=hit(p[0],p[1]);drag={x:p[0],y:p[1],sx:p[0],sy:p[1],area:h&&h.area!=null?h.area:-1};moved=false});
+canvas.addEventListener("pointermove",function(e){var p=local(e);
+  if(!(e.pointerId in ptrs)){var h=hit(p[0],p[1]),was=hover;hover=h&&h.lead?h:null;canvas.classList.toggle("is-hover",!!h);if(was!==hover&&(!was||!hover||was.lead!==hover.lead))kick();return}
+  ptrs[e.pointerId]=p;var ids=Object.keys(ptrs);
+  if(pinch&&ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a[0]-b[0],a[1]-b[1]),c=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+    zoomAt(pinch.z+Math.log(d/pinch.d)/Math.LN2,c[0],c[1]);var s=scale();cam.lng=ilng(mx(cam.lng)-(c[0]-pinch.c[0])/s);cam.lat=ilat(my(cam.lat)-(c[1]-pinch.c[1])/s);pinch.c=c;pinch.z=cam.z;pinch.d=d;limit();moved=true;return}
+  if(!drag)return;
+  if(!moved&&Math.hypot(p[0]-drag.sx,p[1]-drag.sy)<5)return;
+  if(!moved){moved=true;hidePop();hideChip();canvas.classList.add("is-drag")}
+  if(drag.area>=0){var g=geo(p[0],p[1]);st.areas[drag.area]={lat:+g.lat.toFixed(5),lng:+g.lng.toFixed(5)};kick();return}
+  var s2=scale();cam.lng=ilng(mx(cam.lng)-(p[0]-drag.x)/s2);cam.lat=ilat(my(cam.lat)-(p[1]-drag.y)/s2);limit();drag.x=p[0];drag.y=p[1];invalidate()});
+function up(e){if(!(e.pointerId in ptrs))return;delete ptrs[e.pointerId];canvas.classList.remove("is-drag");
+  if(pinch){if(Object.keys(ptrs).length<2){pinch=null;save()}drag=null;return}
+  var d=drag;drag=null;if(!d)return;
+  if(moved){if(d.area>=0)sync();save();return}
+  if(e.type==="pointercancel")return;
+  var h=hit(d.sx,d.sy);
+  if(h&&h.area!=null){showAreaPop(h.area);return}
+  if(h&&h.lead){showLeadPop(h);return}
+  if(!$("nxpPop").hidden){hidePop();return}
+  var g=geo(d.sx,d.sy);addArea(g.lat,g.lng)}
+canvas.addEventListener("pointerup",up);canvas.addEventListener("pointercancel",up);
+canvas.addEventListener("pointerleave",function(){if(hover){hover=null;kick()}canvas.classList.remove("is-hover")});
+canvas.addEventListener("wheel",function(e){e.preventDefault();var p=local(e),dz=-e.deltaY*(e.deltaMode===1?.05:e.deltaMode===2?1:.0022);hideChip();zoomAt(cam.z+clamp(dz,-1,1),p[0],p[1])},{passive:false});
+canvas.addEventListener("keydown",function(e){var k=e.key,s=scale(),step=90/s;
+  if(k==="+"||k==="="){zoomAt(cam.z+1,W/2,H/2)}else if(k==="-"||k==="_"){zoomAt(cam.z-1,W/2,H/2)}
+  else if(k==="ArrowLeft"){cam.lng=ilng(mx(cam.lng)-step)}else if(k==="ArrowRight"){cam.lng=ilng(mx(cam.lng)+step)}
+  else if(k==="ArrowUp"){cam.lat=ilat(my(cam.lat)-step)}else if(k==="ArrowDown"){cam.lat=ilat(my(cam.lat)+step)}
+  else if(k==="Enter"||k===" "){addArea(cam.lat,cam.lng)}else return;
+  e.preventDefault();limit();invalidate();save()});
+box.querySelector(".nxp-zoom").addEventListener("click",function(e){var b=e.target.closest("[data-nxp-z]");if(!b||!cam)return;var z=b.getAttribute("data-nxp-z");
+  if(z==="in")flyTo({lng:cam.lng,lat:cam.lat,z:Math.round(cam.z)+1});else if(z==="out")flyTo({lng:cam.lng,lat:cam.lat,z:Math.round(cam.z)-1});else locate()});
+function locate(){if(!navigator.geolocation){toast("Seu navegador não informa a localização.");return}
+  toast("Buscando a sua localização…");
+  navigator.geolocation.getCurrentPosition(function(p){st.me={lat:+p.coords.latitude.toFixed(4),lng:+p.coords.longitude.toFixed(4)};save();
+    flyTo({lng:st.me.lng,lat:st.me.lat,z:11},function(){showChip(st.me)})},
+    function(){toast("Não foi possível usar a sua localização. Libere a permissão no navegador ou busque a cidade no mapa.")},{enableHighAccuracy:false,timeout:9000,maximumAge:600000})}
+
+/* ---------- popups ---------- */
+var pop=$("nxpPop");
+function place(el,x,y){var cx=canvas.offsetLeft,cy=canvas.offsetTop,w=el.offsetWidth,h=el.offsetHeight;
+  el.style.left=clamp(cx+x-w/2,cx+8,cx+W-w-8)+"px";el.style.top=(y-h-26>8?cy+y-h-26:cy+y+26)+"px"}
+function showLeadPop(h){var L=h.lead,phone=L.telefone||L.phone||"",addr=L.endereco||L.address||"",maps=L.maps||"";
+  pop.innerHTML='<button type="button" class="nxp-pop-x" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><span class="nxp-mc-eb"><i></i>Lead no mapa</span><strong>'+esc(L.nome||L.name||"Lead")+"</strong>"+
+    (addr?"<p>"+esc(addr)+"</p>":"")+'<p class="nxp-pop-tel"><i class="fa-solid fa-phone" aria-hidden="true"></i>'+esc(phone||"Sem telefone")+'</p><div class="nxp-pop-act">'+
+    (/^https:\/\//.test(maps)?'<a href="'+esc(maps)+'" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot" aria-hidden="true"></i>Google Maps</a>':"")+
+    '<button type="button" data-nxp-lead>Ver nos leads</button></div>';
+  pop.hidden=false;pop.dataset.name=L.nome||L.name||"";place(pop,h.x,h.y);pop.querySelector(".nxp-pop-x").focus({preventScroll:true})}
+function showAreaPop(i){var a=st.areas[i],p=px(a.lng,a.lat);selected=i;kick();
+  pop.innerHTML='<button type="button" class="nxp-pop-x" aria-label="Fechar"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button><span class="nxp-mc-eb"><i></i>Área A'+(i+1)+"</span><strong>"+esc(placeName(a))+"</strong><p>Raio de "+st.r+" km · arraste o marcador para ajustar.</p>"+
+    '<div class="nxp-pop-act"><button type="button" data-nxp-focus="'+i+'">Aproximar</button><button type="button" class="ghost" data-nxp-rm="'+i+'">Remover</button></div>';
+  pop.hidden=false;delete pop.dataset.name;place(pop,p[0],p[1]-6)}
+function hidePop(){if(!pop.hidden){pop.hidden=true;if(selected>=0){selected=-1;kick()}}}
+pop.addEventListener("click",function(e){var t=e.target;
+  if(t.closest(".nxp-pop-x")){hidePop();canvas.focus({preventScroll:true});return}
+  var f=t.closest("[data-nxp-focus]");if(f){hidePop();focusArea(+f.getAttribute("data-nxp-focus"));return}
+  var r=t.closest("[data-nxp-rm]");if(r){removeArea(+r.getAttribute("data-nxp-rm"));return}
+  if(t.closest("[data-nxp-lead]")){var name=pop.dataset.name||"";hidePop();window.go&&window.go("leads");
+    setTimeout(function(){var s=document.getElementById("clean-saved-search");if(s){s.value=name;s.dispatchEvent(new Event("input",{bubbles:true}))}},120)}});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&!pop.hidden&&view.classList.contains("active"))hidePop()});
+
+/* ---------- "mark here" chip after a city search ---------- */
+var chip=$("nxpMarkHere"),chipAt=null;
+function showChip(at){chipAt=at;chip.hidden=false;placeChip()}
+function hideChip(){chipAt=null;chip.hidden=true}
+function placeChip(){if(!chipAt||chip.hidden||!cam)return;var p=px(chipAt.lng,chipAt.lat);chip.style.left=(canvas.offsetLeft+p[0])+"px";chip.style.top=(canvas.offsetTop+p[1]+30)+"px"}
+chip.addEventListener("click",function(){if(chipAt&&addArea(chipAt.lat,chipAt.lng))toast("Área marcada. Agora é só buscar.")});
+
+/* ---------- explore: city or state search ---------- */
+var STATES=window.NXP_STATES||[];
+function suggest(q){var n=norm(q),tail=n.match(/ ([a-z]{2})$/),out=[];if(tail&&STATES.some(function(s){return s.c===tail[1].toUpperCase()}))n=n.slice(0,-3).trim();if(n.length<2)return out;var list=MUN||CITIES;
+  STATES.forEach(function(s){if(norm(s.n).indexOf(n.replace(/ estado$/,""))===0)out.push({label:s.n+" (estado)",state:s,k:20})});
+  for(var i=0;i<list.length&&out.length<40;i++){var c=list[i];if(c.key.indexOf(n)===0)out.push({label:c.n+" - "+c.uf,city:c,k:c.k+(c.key===n?10:0)})}
+  if(out.length<8)for(var j=0;j<list.length&&out.length<40;j++){var d=list[j];if(d.key.indexOf(n)>0)out.push({label:d.n+" - "+d.uf,city:d,k:d.k-5})}
+  return out.sort(function(a,b){return b.k-a.k}).slice(0,8)}
+function find(q){var raw=String(q||"").trim();if(!raw)return null;
+  var asState=/\(estado\)$/i.test(raw);raw=raw.replace(/\s*\(estado\)$/i,"");var m=raw.match(/^(.+?)\s*(?:[-,/]|\s)\s*([A-Za-z]{2})$/),uf=m?m[2].toUpperCase():"",name=norm(m&&STATES.some(function(s){return s.c===uf})?m[1]:raw);
+  if(!m||!STATES.some(function(s){return s.c===uf}))uf="";
+  var list=MUN||CITIES,exact=list.filter(function(c){return c.key===name&&(!uf||c.uf===uf)});
+  var st2=STATES.filter(function(s){return norm(s.n)===name.replace(/^estado d[aeo]s? /,"")||s.c===raw.toUpperCase()})[0];
+  if(st2&&(asState||/^estado/.test(name)||!exact.length||raw.length===2))return{state:st2};
+  if(exact.length)return{city:exact.sort(function(a,b){return b.k-a.k})[0]};
+  var s=suggest(raw);return s[0]||null}
+var findIn=$("nxpFindIn"),dl=$("nxpCityList"),sugT=0;
+findIn.addEventListener("focus",function(){loadMun()});
+findIn.addEventListener("input",function(){clearTimeout(sugT);sugT=setTimeout(function(){dl.innerHTML=suggest(findIn.value).map(function(o){return'<option value="'+esc(o.label)+'"></option>'}).join("")},120)});
+$("nxpFind").addEventListener("submit",function(e){e.preventDefault();var q=findIn.value;
+  loadMun().then(function(){var r=find(q);if(!r){toast("Não encontrei “"+q.trim()+"” no mapa. Confira o nome da cidade ou do estado.");return}
+    hidePop();
+    if(r.state){var x0=180,y0=90,x1=-180,y1=-90;r.state.p.forEach(function(f){for(var i=0;i<f.length;i+=2){x0=Math.min(x0,f[i]);x1=Math.max(x1,f[i]);y0=Math.min(y0,f[i+1]);y1=Math.max(y1,f[i+1])}});
+      hideChip();flyTo(fitBox(x0,y0,x1,y1,9));findIn.value=r.state.n;return}
+    var c=r.city;findIn.value=c.n+" - "+c.uf;flyTo({lng:c.lng,lat:c.lat,z:Math.max(10.5,Math.min(11.5,cam.z))},function(){if(!st.areas.some(function(a){return dist(a.lat,a.lng,c.lat,c.lng)<st.r*500}))showChip({lat:c.lat,lng:c.lng})});
+    if(window.innerWidth<980)box.scrollIntoView({behavior:quiet()?"auto":"smooth",block:"center"})})});
+
+/* ---------- API used by the search ---------- */
+var pending={};
+window.nexaProspect={
+  query:function(v){v=String(v||"").trim();var c=String(city.value||"").trim();if(c&&v&&!/\s(?:em|no|na|nos|nas)\s/i.test(v))return v+" em "+c;return v},
+  areas:function(){return st.areas.map(function(a){var r=st.r*1000,dLat=r/111320,dLng=r/(111320*Math.max(.05,Math.cos(a.lat*RAD)));
+    return{lat:a.lat,lng:a.lng,r:r,rect:{low:{latitude:+(a.lat-dLat).toFixed(6),longitude:+(a.lng-dLng).toFixed(6)},high:{latitude:+(a.lat+dLat).toFixed(6),longitude:+(a.lng+dLng).toFixed(6)}}}})},
+  inside:function(loc,area){return dist(loc.latitude,loc.longitude,area.lat,area.lng)<=area.r*1.02},
+  here:function(c){if(c&&isFinite(c.latitude)){st.me={lat:+(+c.latitude).toFixed(4),lng:+(+c.longitude).toFixed(4)};save()}},
+  found:function(lead,loc){if(lead&&loc&&isFinite(loc.latitude)&&isFinite(loc.longitude))pending[lead.id||"n:"+norm(lead.nome)]=[+loc.latitude.toFixed(5),+loc.longitude.toFixed(5),norm(lead.nome)]},
+  done:function(leads,info){var n=0,phones=0;(leads||[]).forEach(function(L){n++;if(String(L.telefone||"").replace(/\D/g,"").length>=8)phones++;
+      var p=pending[L.id]||pending["n:"+norm(L.nome)];if(p){var v=[p[0],p[1]];delete st.found[L.id];st.found[L.id]=v;if(p[2]){delete st.found["n:"+p[2]];st.found["n:"+p[2]]=v}}});
+    pending={};var keys=Object.keys(st.found);if(keys.length>900)keys.slice(0,keys.length-900).forEach(function(k){delete st.found[k]});
+    st.last={n:n,phones:phones,t:Date.now(),seg:info&&info.segment||""};st.fit=n?1:0;save(true);sync();invalidate()},
+  info:function(){return{areas:st.areas.slice(),r:st.r,cam:cam&&{lng:cam.lng,lat:cam.lat,z:cam.z},onMap:countOnMap(),W:W,H:H,last:st.last}}
+};
+
+/* fit the camera to the leads of the last search the next time the map is shown */
+function fitLeads(){var leads=currentLeads(),pts=[];leads.forEach(function(L){var p=st.found[L.id]||st.found["n:"+norm(L.nome||L.name)];if(p)pts.push(p)});
+  pts=pts.slice(-Math.max(1,(st.last&&st.last.n)||pts.length));if(!pts.length)return;
+  var x0=180,y0=90,x1=-180,y1=-90;pts.forEach(function(p){x0=Math.min(x0,p[1]);x1=Math.max(x1,p[1]);y0=Math.min(y0,p[0]);y1=Math.max(y1,p[0])});
+  var pad=.02;cam=fitBox(x0-pad,y0-pad,x1+pad,y1+pad,13);limit()}
+
+/* ---------- view life cycle ---------- */
+function shown(){layout();if(!W)return;if(st.fit){st.fit=0;fitLeads();save()}sync();invalidate()}
+new MutationObserver(function(){if(view.classList.contains("active"))shown();else{hidePop()}}).observe(view,{attributes:true,attributeFilter:["class"]});
+new MutationObserver(function(){sprite=null;invalidate()}).observe(document.documentElement,{attributes:true,attributeFilter:["style","class","data-cp-motion"]});
+document.addEventListener("visibilitychange",kick);
+addEventListener("clean-leads-updated",function(){if(view.classList.contains("active"))sync();dirty=true});
+if(reduced.addEventListener)reduced.addEventListener("change",kick);
+sync();if(view.classList.contains("active"))shown();
 })();
 </script>
 <style id="nexa-skin-style">
