@@ -1,0 +1,11 @@
+{
+  "name": "smug-modas-site",
+  "private": true,
+  "description": "Site da SMUG MODAS (HTML/CSS/JS estático, sem dependências).",
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
