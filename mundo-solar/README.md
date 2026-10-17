@@ -46,7 +46,7 @@ Se algum contato mudar, atualize os três lugares.
 
 ## Tabela de kits (seção `#kits`)
 
-Os 9 kits da TABELA MUNDO SOLAR (preços de 17/10/2026: R$ 10.999,00 a R$ 26.499,00) estão em `index.html`, cada um em um `<li class="kit">`. O painel
+Os 9 kits da TABELA MUNDO SOLAR (R$ 11.499,00 a R$ 26.499,00) estão em `index.html`, cada um em um `<li class="kit">`. O painel
 "Kit selecionado" e a mensagem enviada pelo WhatsApp são montados a partir desses textos, então basta
 editar o `<li>` para mudar um kit. Os preços também aparecem no JSON-LD (`hasOfferCatalog`) e na
 pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
