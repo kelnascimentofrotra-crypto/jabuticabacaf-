@@ -8,11 +8,13 @@ enviar o conteúdo desta pasta para a raiz do domínio.
 
 ```
 mundo-solar/
-├── index.html              # página única com as 10 seções
+├── index.html              # página principal (todas as seções)
+├── privacidade.html        # Política de Privacidade (LGPD)
 ├── assets/
 │   ├── css/styles.css      # design system (tokens) + layout + responsivo
 │   ├── js/main.js          # interações + SITE_CONFIG (contatos)
-│   ├── js/meta-pixel.js    # Meta Pixel: PageView e Lead
+│   ├── js/meta-pixel.js    # Meta Pixel: PageView e Lead (só após consentimento)
+│   ├── js/cookies.js       # aviso de cookies (Aceitar / Recusar)
 │   ├── fonts/              # Sora e Inter (self-hosted, woff2)
 │   └── img/                # fotos reais das instalações (WebP) + og-image.jpg
 ├── favicon.svg, favicon-32.png, apple-touch-icon.png, icon-192/512.png
@@ -44,7 +46,7 @@ Se algum contato mudar, atualize os três lugares.
 
 ## Tabela de kits (seção `#kits`)
 
-Os 9 kits da TABELA MUNDO SOLAR estão em `index.html`, cada um em um `<li class="kit">`. O painel
+Os 9 kits da TABELA MUNDO SOLAR (preços de 17/10/2026: R$ 10.999,00 a R$ 26.499,00) estão em `index.html`, cada um em um `<li class="kit">`. O painel
 "Kit selecionado" e a mensagem enviada pelo WhatsApp são montados a partir desses textos, então basta
 editar o `<li>` para mudar um kit. Os preços também aparecem no JSON-LD (`hasOfferCatalog`) e na
 pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
@@ -73,8 +75,14 @@ somente falas reais, autorizadas pelos clientes.
 
 ## Meta Pixel (ID do conjunto de dados 1488152875517253)
 
-Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `index.html` (com o
-`<noscript>` de PageView logo após o `<body>`).
+Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `index.html` e do
+`privacidade.html`.
+
+- **Consentimento (LGPD):** o Pixel só é carregado depois que o visitante clica em **Aceitar** no aviso
+  de cookies (`assets/js/cookies.js`). Sem aceite (ou com "Recusar"), nada é enviado à Meta — por isso
+  não há `<noscript>` do Pixel nem `preconnect` para a Meta. A escolha fica salva no navegador
+  (`localStorage` "ms-cookie-consent") e pode ser alterada em "Preferências de cookies" no rodapé.
+  Ao aceitar, o PageView da página atual é enviado na hora.
 
 - **PageView:** uma vez por página carregada. Âncoras do menu (`#kits`, `#contato`…) não contam como
   nova página. Se o site passar a usar navegação SPA (`history.pushState`), cada troca real de endereço
@@ -92,26 +100,32 @@ Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `i
   (pronto para deduplicar com a API de Conversões, se ela for usada no futuro).
 - Nenhum dado pessoal digitado no formulário é enviado para a Meta.
 
-Para trocar o Pixel, altere `PIXEL_ID` em `assets/js/meta-pixel.js` e o `id=` do `<noscript>` no
-`index.html`.
+Para trocar o Pixel, altere `PIXEL_ID` em `assets/js/meta-pixel.js`.
 
-## Hospedagem na Vercel (mundosolar.vercel.app)
+## Política de Privacidade e cookies
 
-O site já está configurado para `https://mundosolar.vercel.app` (URL canônica, Open Graph, sitemap,
+`privacidade.html` explica os dados tratados, bases legais, compartilhamento (Meta e Vercel), cookies e
+direitos do titular (art. 18 da LGPD), com os contatos da empresa. Link no rodapé e no aviso de
+cookies. Revise o texto sempre que mudar a forma de coletar dados (por exemplo, ao adicionar outra
+ferramenta de medição) e atualize a data no início da página.
+
+## Hospedagem na Vercel (mundosolar1.vercel.app)
+
+O site está publicado e configurado para `https://mundosolar1.vercel.app` (URL canônica, Open Graph, sitemap,
 robots e JSON-LD). O `vercel.json` desta pasta define cabeçalhos de segurança e de cache.
 
 Pelo painel da Vercel (sem linha de comando):
 1. vercel.com → **Add New… → Project** → importe o repositório `jabuticabacaf-` do GitHub.
-2. **Project Name:** `mundosolar` (gera `mundosolar.vercel.app`, se o nome estiver livre).
+2. **Project Name:** `mundosolar1` (gera `mundosolar1.vercel.app`).
 3. **Root Directory:** `mundo-solar` · **Framework Preset:** Other · sem Build Command.
 4. A Vercel publica a branch de produção (por padrão `main`). Para publicar esta versão, faça o merge da
    branch do site na `main` ou, em *Settings → Git → Production Branch*, escolha a branch do site.
 
 Pela linha de comando (com um token da Vercel): dentro desta pasta,
-`npx vercel deploy --prod --name mundosolar --token SEU_TOKEN`.
+`npx vercel deploy --prod --name mundosolar1 --token SEU_TOKEN`.
 
-Se o nome `mundosolar` já estiver em uso na Vercel, o domínio será outro: nesse caso, troque
-`https://mundosolar.vercel.app` pelo domínio real em `index.html`, `sitemap.xml` e `robots.txt`.
+Se o domínio mudar (por exemplo, um domínio próprio), troque
+`https://mundosolar1.vercel.app` pelo domínio novo em `index.html`, `sitemap.xml` e `robots.txt`.
 
 ## Projetos
 

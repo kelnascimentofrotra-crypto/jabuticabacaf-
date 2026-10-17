@@ -12,42 +12,76 @@
      através do evento "mundosolar:lead".
    - Duplicidade: o mesmo contato dentro de 2 s é contado uma vez (duplo clique,
      toque duplo); cada Lead leva um eventID único.
+   - Consentimento (LGPD): o Pixel só é carregado depois que o visitante clica em
+     "Aceitar" no aviso de cookies (assets/js/cookies.js). Sem aceite, nada é
+     enviado à Meta. Se o visitante recusar depois, os envios param na hora.
    ========================================================================= */
 (function () {
   'use strict';
 
   var PIXEL_ID = '1488152875517253';
   var DEDUPE_MS = 2000;
+  var CONSENT_KEY = 'ms-cookie-consent'; // 'granted' | 'denied' (gravado por cookies.js)
 
   if (window.MundoSolarPixel) return; // nunca inicializar duas vezes
 
-  /* ---------- Código base oficial da Meta ---------- */
-  /* eslint-disable */
-  !function (f, b, e, v, n, t, s) {
-    if (f.fbq) return; n = f.fbq = function () {
-      n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
-    };
-    if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-    n.queue = []; t = b.createElement(e); t.async = !0;
-    t.src = v; s = b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t, s);
-  }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-  /* eslint-enable */
+  var loaded = false;
+  var enabled = false;
 
-  var fbq = window.fbq;
-  fbq('init', PIXEL_ID);
+  function storedConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch (err) { return null; }
+  }
+
+  /* ---------- Código base oficial da Meta (carregado só com consentimento) ---------- */
+  function loadPixel() {
+    if (loaded) return;
+    loaded = true;
+    /* eslint-disable */
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+      n.queue = []; t = b.createElement(e); t.async = !0;
+      t.src = v; s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s);
+    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    /* eslint-enable */
+    window.fbq('init', PIXEL_ID);
+  }
+
+  var fbq = function () { if (enabled && window.fbq) window.fbq.apply(window, arguments); };
 
   /* ---------- PageView ---------- */
   var lastPage = null;
   var pageKey = function () { return location.pathname + location.search; }; // o # é âncora na mesma página
 
   function trackPageView() {
+    if (!enabled) return;
     var key = pageKey();
     if (key === lastPage) return;
     lastPage = key;
     fbq('track', 'PageView');
   }
-  trackPageView();
+
+  function grant() {
+    if (enabled) return;
+    var wasLoaded = loaded;
+    loadPixel();
+    if (wasLoaded) window.fbq('consent', 'grant'); // voltou a aceitar na mesma visita
+    enabled = true;
+    trackPageView(); // PageView da página atual (uma vez)
+  }
+
+  function revoke() {
+    if (loaded && window.fbq) window.fbq('consent', 'revoke');
+    enabled = false;
+  }
+
+  if (storedConsent() === 'granted') grant();
+  document.addEventListener('mundosolar:consent', function (e) {
+    if (e && e.detail && e.detail.granted) grant(); else revoke();
+  });
 
   // Navegação SPA (se existir): pushState cria uma nova "página"; replaceState não.
   if (window.history && typeof history.pushState === 'function') {
@@ -64,6 +98,7 @@
   var recent = {};
 
   function lead(params, dedupeKey) {
+    if (!enabled) return false;
     var now = Date.now();
     var key = dedupeKey || JSON.stringify(params);
     if (recent[key] && now - recent[key] < DEDUPE_MS) return false;
@@ -151,5 +186,8 @@
     }, 'form|' + (d.dedupe || ''));
   });
 
-  window.MundoSolarPixel = { id: PIXEL_ID, lead: lead, trackPageView: trackPageView };
+  window.MundoSolarPixel = {
+    id: PIXEL_ID, lead: lead, trackPageView: trackPageView,
+    isEnabled: function () { return enabled; },
+  };
 })();
