@@ -157,13 +157,23 @@ const SITE_CONFIG = {
       if (consumo) lines.push(`Consumo médio / conta: ${consumo}`);
       if (msg) lines.push(`Mensagem: ${msg}`);
       const text = lines.join('\n');
+      // Lead (Meta Pixel, assets/js/meta-pixel.js): só depois de validar e abrir o canal de envio.
+      const notifyLead = (channel) => document.dispatchEvent(new CustomEvent('mundosolar:lead', {
+        detail: {
+          content_name: `Formulário de orçamento — ${data.get('tipo')}`,
+          lead_channel: channel,
+          dedupe: text,
+        },
+      }));
 
       if (hasWhatsApp) {
         window.open(waLink(text), '_blank', 'noopener');
         status.textContent = 'Abrimos o WhatsApp com a sua mensagem. É só enviar!';
+        notifyLead('WhatsApp');
       } else if (SITE_CONFIG.email) {
         window.location.href = `mailto:${SITE_CONFIG.email}?subject=${encodeURIComponent('Orçamento de energia solar')}&body=${encodeURIComponent(text)}`;
         status.textContent = 'Abrimos o seu aplicativo de e-mail com a solicitação.';
+        notifyLead('E-mail');
       } else {
         status.textContent = 'Nossos canais de atendimento estão sendo configurados. Por favor, tente novamente em breve.';
       }

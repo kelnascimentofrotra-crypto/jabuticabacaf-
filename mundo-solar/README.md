@@ -12,6 +12,7 @@ mundo-solar/
 ├── assets/
 │   ├── css/styles.css      # design system (tokens) + layout + responsivo
 │   ├── js/main.js          # interações + SITE_CONFIG (contatos)
+│   ├── js/meta-pixel.js    # Meta Pixel: PageView e Lead
 │   ├── fonts/              # Sora e Inter (self-hosted, woff2)
 │   └── img/                # fotos reais das instalações (WebP) + og-image.jpg
 ├── favicon.svg, favicon-32.png, apple-touch-icon.png, icon-192/512.png
@@ -69,6 +70,30 @@ anterior destacado.
 
 A seção lista os clientes dos projetos, sem frases inventadas. Para publicar depoimentos em texto, use
 somente falas reais, autorizadas pelos clientes.
+
+## Meta Pixel (ID do conjunto de dados 1488152875517253)
+
+Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `index.html` (com o
+`<noscript>` de PageView logo após o `<body>`).
+
+- **PageView:** uma vez por página carregada. Âncoras do menu (`#kits`, `#contato`…) não contam como
+  nova página. Se o site passar a usar navegação SPA (`history.pushState`), cada troca real de endereço
+  conta uma vez.
+- **Lead (cliques):** qualquer link cujo destino seja WhatsApp (`wa.me`, `api.whatsapp.com`) ou e-mail
+  (`mailto:`), em qualquer parte do site — não é preciso marcar os botões; um link novo para o WhatsApp
+  passa a ser medido automaticamente. Parâmetros enviados: `content_name` (ex.: "Kit 700 kWh/mês",
+  "Projeto Meneses Gás"), `content_category` (WhatsApp / E-mail), `lead_source` (cabecalho, kits,
+  rodape, pesquisa, botao-flutuante…) e, na pesquisa, `search_term`.
+- **Lead (formulário de orçamento):** só após o envio válido — o `main.js` dispara o evento
+  `mundosolar:lead` depois de abrir o WhatsApp (ou o e-mail) com a mensagem. Abrir o formulário ou
+  enviar com campos vazios não conta.
+- **Não são Lead:** menu, botões que só abrem o formulário, Instagram, seleção de kit, lupa, FAQ.
+- **Sem duplicidade:** o mesmo contato em até 2 s conta uma vez; cada Lead tem `eventID` único
+  (pronto para deduplicar com a API de Conversões, se ela for usada no futuro).
+- Nenhum dado pessoal digitado no formulário é enviado para a Meta.
+
+Para trocar o Pixel, altere `PIXEL_ID` em `assets/js/meta-pixel.js` e o `id=` do `<noscript>` no
+`index.html`.
 
 ## Hospedagem na Vercel (mundosolar.vercel.app)
 
