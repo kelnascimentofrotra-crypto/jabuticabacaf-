@@ -1,4 +1,4 @@
-import { esc, icon, img, delay } from '../lib.mjs';
+import { esc, icon, img, delay, words, wordCount } from '../lib.mjs';
 
 // Sem catálogo configurado, cada card leva ao formulário com o interesse preenchido.
 const cardLink = (item, catalogUrl) => {
@@ -36,9 +36,9 @@ export const categories = ({ categories: c }) => {
   <div class="container categories__inner">
     <header class="categories__head">
       <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>${esc(c.eyebrow)}</p>
-      <h2 class="section-title section-title--light" id="categories-title" data-reveal ${delay(1)}>
-        <span class="categories__title-plain">${esc(c.title.plain)}</span>
-        <em class="text-gold">${esc(c.title.italic)}</em>
+      <h2 class="section-title section-title--light" id="categories-title" data-reveal="words" ${delay(1)}>
+        <span class="categories__title-plain">${words(c.title.plain)}</span>
+        <em>${words(c.title.italic, { start: wordCount(c.title.plain), className: 'text-gold' })}</em>
       </h2>
       <p class="categories__text" data-reveal ${delay(2)}>${esc(c.text)}</p>
       <div data-reveal ${delay(3)}>
@@ -52,7 +52,7 @@ export const categories = ({ categories: c }) => {
 
     <div class="categories__closing" data-reveal>
       <p class="categories__words">${c.closing.words.map((w) => `<span>${esc(w)}</span>`).join('<span class="dot" aria-hidden="true">·</span>')}</p>
-      <p class="script categories__script">${esc(c.closing.script)}</p>
+      <p class="script categories__script" data-write>${esc(c.closing.script)}</p>
     </div>
   </div>
 </section>`;

@@ -109,6 +109,9 @@ export const hero = {
   },
 };
 
+// Faixa em movimento logo abaixo da hero
+export const marquee = ['Moda é mais que roupa, é expressão', 'SMUG MODAS', 'Mais que moda, é você', 'Estilo · Conforto · Você'];
+
 export const store = {
   eyebrow: 'Nossa loja',
   title: { plain: 'Mais que uma loja,', italic: 'um espaço feito para você.' },

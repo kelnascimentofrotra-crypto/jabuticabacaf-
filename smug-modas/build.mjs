@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import * as content from './src/content.mjs';
 import { esc } from './src/lib.mjs';
 import { header, mobileMenu, demoToast } from './src/components/header.mjs';
-import { hero } from './src/components/hero.mjs';
+import { hero, marquee } from './src/components/hero.mjs';
 import { store } from './src/components/store.mjs';
 import { categories } from './src/components/categories.mjs';
 import { about } from './src/components/about.mjs';
@@ -76,11 +76,13 @@ const page = () => `<!doctype html>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<span class="scroll-progress" aria-hidden="true"></span>
 ${header(content)}
 ${mobileMenu(content)}
 ${demoToast(content)}
 <main id="conteudo" tabindex="-1">
 ${hero(content)}
+${marquee(content)}
 ${store(content)}
 ${categories(content)}
 ${about(content)}

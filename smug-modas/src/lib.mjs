@@ -31,8 +31,9 @@ const ICONS = {
   instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.1 6.9h.01" stroke-width="2"/>',
 };
 
+// pathLength="1" permite animar o traço (ícones que se "desenham" ao aparecer)
 export const icon = (name, className = 'icon') =>
-  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${ICONS[name] ?? ''}</svg>`;
+  `<svg class="${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${(ICONS[name] ?? '').replace(/<(path|circle|rect)\b/g, '<$1 pathLength="1"')}</svg>`;
 
 // <img> com dimensões declaradas (evita mudanças de layout) e lazy-load por padrão.
 export const img = ({ src, srcset, width, height, alt = '' }, { className = '', sizes = '100vw', eager = false, priority = false } = {}) => {
@@ -67,3 +68,14 @@ export const whatsappUrl = (number, text = '') =>
 
 // Atraso escalonado para animações de entrada.
 export const delay = (i, step = 80) => `style="--d:${i * step}ms"`;
+
+// Quebra um texto em palavras com máscara, para revelar título palavra por palavra.
+// `start` continua a contagem quando o título tem mais de uma parte (ex.: texto + itálico).
+export const words = (text, { start = 0, className = '' } = {}) =>
+  String(text)
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w, i) => `<span class="w"><span class="w__i${className ? ` ${className}` : ''}" style="--wi:${start + i}">${esc(w)}</span></span>`)
+    .join(' ');
+
+export const wordCount = (text) => String(text).split(/\s+/).filter(Boolean).length;

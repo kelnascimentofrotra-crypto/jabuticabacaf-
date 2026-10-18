@@ -204,7 +204,7 @@ function initDemoActions(menu) {
 
 /* ---------- Revelação ao rolar (uma vez) ---------- */
 function initReveal() {
-  const items = document.querySelectorAll('[data-reveal]');
+  const items = document.querySelectorAll('[data-reveal], [data-write]');
   if (reducedMotion.matches) {
     items.forEach((el) => el.classList.add('is-visible'));
     return;
@@ -220,6 +220,124 @@ function initReveal() {
     { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
   );
   items.forEach((el) => observer.observe(el));
+}
+
+/* ---------- Cinema: parallax, inclinação 3D e pausa fora da tela ---------- */
+const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+
+// Animações contínuas (luz, poeira, faixa) param quando a área sai da tela
+function initAnimScopes() {
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) entry.target.classList.toggle('is-paused', !entry.isIntersecting);
+  });
+  document.querySelectorAll('[data-anim-scope]').forEach((el) => observer.observe(el));
+}
+
+// Hero: profundidade ao rolar (--p) e ao mover o mouse (--mx/--my), suavizada a cada quadro
+function initHeroDepth() {
+  const hero = document.querySelector('.hero');
+  if (!hero || reducedMotion.matches) return;
+  let inView = true;
+  let frame = 0;
+  const target = { x: 0, y: 0 };
+  const current = { x: 0, y: 0 };
+
+  const render = () => {
+    frame = 0;
+    current.x += (target.x - current.x) * 0.08;
+    current.y += (target.y - current.y) * 0.08;
+    const progress = clamp(window.scrollY / hero.offsetHeight, 0, 1);
+    hero.style.setProperty('--p', progress.toFixed(4));
+    hero.style.setProperty('--mx', current.x.toFixed(4));
+    hero.style.setProperty('--my', current.y.toFixed(4));
+    if (Math.abs(target.x - current.x) > 0.002 || Math.abs(target.y - current.y) > 0.002) request();
+  };
+  const request = () => {
+    if (!frame && inView) frame = requestAnimationFrame(render);
+  };
+
+  new IntersectionObserver(([entry]) => {
+    inView = entry.isIntersecting;
+    request();
+  }).observe(hero);
+  window.addEventListener('scroll', request, { passive: true });
+  hero.addEventListener('pointermove', (event) => {
+    if (!finePointer.matches) return;
+    const rect = hero.getBoundingClientRect();
+    target.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    target.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;
+    request();
+  });
+  hero.addEventListener('pointerleave', () => {
+    target.x = 0;
+    target.y = 0;
+    request();
+  });
+}
+
+// Fotos com leve deslocamento ao rolar ([data-parallax] = fração da altura da foto)
+function initParallax() {
+  const items = [...document.querySelectorAll('[data-parallax]')];
+  if (!items.length || reducedMotion.matches) return;
+  const visible = new Set();
+  let frame = 0;
+  const render = () => {
+    frame = 0;
+    const vh = window.innerHeight;
+    for (const el of visible) {
+      const rect = el.getBoundingClientRect();
+      const progress = clamp((rect.top + rect.height / 2 - vh / 2) / (vh / 2 + rect.height / 2), -1, 1);
+      el.style.setProperty('--py', `${(-progress * parseFloat(el.dataset.parallax) * rect.height).toFixed(1)}px`);
+    }
+  };
+  const request = () => {
+    if (!frame && visible.size) frame = requestAnimationFrame(render);
+  };
+  const observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target);
+    request();
+  });
+  items.forEach((el) => observer.observe(el));
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+}
+
+// Cards de categoria: inclinação 3D e brilho que seguem o cursor (só com mouse)
+function initTilt() {
+  if (reducedMotion.matches) return;
+  document.querySelectorAll('.cat-card__link').forEach((card) => {
+    card.addEventListener('pointermove', (event) => {
+      if (!finePointer.matches) return;
+      const rect = card.getBoundingClientRect();
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      card.classList.add('is-tilting');
+      card.style.setProperty('--ry', `${((x - 0.5) * 8).toFixed(2)}deg`);
+      card.style.setProperty('--rx', `${((0.5 - y) * 8).toFixed(2)}deg`);
+      card.style.setProperty('--gx', `${(x * 100).toFixed(1)}%`);
+      card.style.setProperty('--gy', `${(y * 100).toFixed(1)}%`);
+    });
+    card.addEventListener('pointerleave', () => {
+      card.classList.remove('is-tilting');
+      card.style.setProperty('--rx', '0deg');
+      card.style.setProperty('--ry', '0deg');
+    });
+  });
+}
+
+// Barra de progresso: CSS (animation-timeline) quando suportado; senão, JS leve
+function initScrollProgress() {
+  const bar = document.querySelector('.scroll-progress');
+  if (!bar || CSS.supports('animation-timeline: scroll()')) return;
+  let frame = 0;
+  const render = () => {
+    frame = 0;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.setProperty('--progress', max > 0 ? (window.scrollY / max).toFixed(4) : '0');
+  };
+  window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(render); }, { passive: true });
+  render();
 }
 
 /* ---------- Formulário de contato ---------- */
@@ -379,5 +497,10 @@ initHeader();
 const menu = initMenu();
 initDemoActions(menu);
 initReveal();
+initAnimScopes();
+initHeroDepth();
+initParallax();
+initTilt();
+initScrollProgress();
 initForm();
 window.__smugReady = true;

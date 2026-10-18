@@ -125,9 +125,24 @@ loja virtual por trás: ao tocar, mostram o aviso “Este site é apenas uma ver
 No celular, o header mostra só a sacola; pesquisa, conta e favoritos ficam dentro do menu.
 Quando a loja existir, troque cada botão pelo link ou ação real e remova o aviso.
 
+## Animações
+
+- **Hero (abertura cinematográfica):** a cena surge do preto entre barras de cinema, a câmera faz uma aproximação
+  lenta (Ken Burns), as letras de SMUG sobem uma a uma com sombra do sol, a Fabielly entra em foco, a frase fecha
+  o espaçamento das letras e o painel recebe um reflexo de luz. Depois disso ficam em movimento contínuo e suave:
+  o brilho do sol, uma faixa de luz pela parede, sombras de folhas balançando, poeira na luz e grão de filme.
+- **Profundidade:** as camadas da hero se deslocam em velocidades diferentes ao rolar e ao mover o mouse
+  (desktop); as fotos da loja e da Fabielly têm um leve parallax.
+- **Seções:** títulos aparecem palavra por palavra, fotos abrem com uma “cortina”, linhas douradas e ícones se
+  desenham, cards de categoria inclinam em 3D com brilho, botões têm reflexo, a assinatura é “escrita”, há uma
+  faixa em movimento após a hero, barra de progresso de leitura e a marca SMUG gigante no rodapé.
+- Tudo usa `transform`/`opacity`; animações contínuas pausam fora da tela (`data-anim-scope`).
+  Os tempos ficam em `assets/css/styles.css` (seções “Animações”, “Hero cinematográfica” e “Faixa em movimento”).
+
 ## Acessibilidade e movimento
 
 - HTML semântico, link “Pular para o conteúdo”, foco visível e áreas de toque de pelo menos 44 px.
 - Menu mobile em `<dialog>` modal: o foco fica preso no menu, Escape fecha, a rolagem do fundo
   é bloqueada e o foco volta ao botão ao fechar. Ao escolher uma seção, o foco vai para o título dela.
-- As animações respeitam `prefers-reduced-motion`. Sem JavaScript, todo o conteúdo continua visível.
+- As animações respeitam `prefers-reduced-motion`: com “reduzir movimento” ativo, tudo aparece pronto, sem
+  parallax, poeira, grão ou faixa em movimento. Sem JavaScript, todo o conteúdo continua visível.

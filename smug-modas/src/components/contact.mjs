@@ -1,4 +1,4 @@
-import { esc, icon, delay, whatsappUrl } from '../lib.mjs';
+import { esc, icon, delay, whatsappUrl, words, wordCount } from '../lib.mjs';
 
 // Define como o formulário envia, de acordo com o que está configurado.
 export const formMode = ({ form, contact }) => {
@@ -96,8 +96,8 @@ export const contactSection = ({ contactSection: s, contact, form }) => {
   <div class="contact__grid container">
     <div class="contact__info">
       <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>${esc(s.eyebrow)}</p>
-      <h2 class="section-title section-title--light" id="contact-title" data-reveal ${delay(1)}>
-        <span>${esc(s.title.plain)}</span> <em class="text-gold">${esc(s.title.italic)}</em>
+      <h2 class="section-title section-title--light" id="contact-title" data-reveal="words" ${delay(1)}>
+        <span>${words(s.title.plain)}</span> <em>${words(s.title.italic, { start: wordCount(s.title.plain), className: 'text-gold' })}</em>
       </h2>
       <p class="contact__text" data-reveal ${delay(2)}>${esc(s.text)}</p>
 
