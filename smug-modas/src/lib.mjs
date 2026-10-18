@@ -25,6 +25,8 @@ const ICONS = {
   pin: '<path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/>',
   clock: '<circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.1 2"/>',
   user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20.2a7 7 0 0 1 14 0"/>',
+  search: '<circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 5 5"/>',
+  bag: '<path d="M5.2 8.2h13.6l-.9 12.3H6.1z"/><path d="M8.8 8.2V6.9a3.2 3.2 0 0 1 6.4 0v1.3"/>',
   chat: '<path d="M12 4c4.7 0 8.5 3.2 8.5 7.2s-3.8 7.2-8.5 7.2c-1 0-2-.1-2.9-.4L4.6 20l1.2-3.5C4.4 15.2 3.5 13.3 3.5 11.2 3.5 7.2 7.3 4 12 4z"/><path d="M8.6 11.3h.01M12 11.3h.01M15.4 11.3h.01" stroke-width="2.2"/>',
   instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.1 6.9h.01" stroke-width="2"/>',
 };

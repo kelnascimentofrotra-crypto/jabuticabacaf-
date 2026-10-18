@@ -81,6 +81,21 @@ export const nav = [
   { id: 'contato', label: 'Contato' },
 ];
 
+// Ações do header. Ainda não existe loja virtual: cada botão mostra um aviso
+// de que o site é apenas uma versão de demonstração ({feature} vem de cada item).
+export const headerActions = {
+  items: [
+    { icon: 'search', label: 'Pesquisar', feature: 'a pesquisa de produtos' },
+    { icon: 'user', label: 'Minha conta', feature: 'a área do cliente' },
+    { icon: 'heart', label: 'Favoritos', feature: 'a lista de favoritos' },
+    { icon: 'bag', label: 'Sacola', feature: 'a sacola de compras', badge: 0 },
+  ],
+  demoNotice: {
+    title: 'Versão de demonstração',
+    text: 'Este site é apenas uma versão de demonstração: {feature} ainda não está disponível.',
+  },
+};
+
 export const hero = {
   brand: 'SMUG',
   tagline: ['Moda é mais', 'que roupa,', 'é expressão.'],

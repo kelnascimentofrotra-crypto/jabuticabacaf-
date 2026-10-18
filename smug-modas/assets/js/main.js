@@ -161,6 +161,45 @@ function initMenu() {
   window.matchMedia('(min-width: 75em)').addEventListener('change', (e) => {
     if (e.matches) close({ returnFocus: false });
   });
+  return { isOpen: () => dialog.open, close };
+}
+
+/* ---------- Ações da loja: aviso de versão de demonstração ---------- */
+function initDemoActions(menu) {
+  const toast = document.querySelector('[data-demo-toast]');
+  const live = document.querySelector('[data-demo-live]');
+  if (!toast || !live) return;
+  const text = toast.querySelector('[data-demo-text]');
+  const iconSlot = toast.querySelector('[data-demo-icon]');
+  let hideTimer;
+
+  const hide = () => {
+    clearTimeout(hideTimer);
+    toast.classList.remove('is-visible');
+  };
+  const show = (button) => {
+    const message = toast.dataset.template.replace('{feature}', button.dataset.demo);
+    text.textContent = message;
+    iconSlot.innerHTML = button.querySelector('svg')?.outerHTML ?? '';
+    toast.classList.add('is-visible');
+    // Região viva separada: o anúncio acontece mesmo se o aviso já estiver na tela
+    live.textContent = '';
+    requestAnimationFrame(() => { live.textContent = `Versão de demonstração. ${message}`; });
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(hide, 6000);
+  };
+
+  document.querySelectorAll('[data-demo]').forEach((button) => {
+    button.addEventListener('click', () => {
+      // Dentro do menu mobile: fecha o menu antes, para o aviso não ficar escondido atrás dele
+      if (menu?.isOpen() && button.closest('[data-menu]')) menu.close({ then: () => show(button) });
+      else show(button);
+    });
+  });
+  toast.querySelector('[data-demo-close]').addEventListener('click', hide);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && toast.classList.contains('is-visible') && !menu?.isOpen()) hide();
+  });
 }
 
 /* ---------- Revelação ao rolar (uma vez) ---------- */
@@ -337,7 +376,8 @@ function initForm() {
 }
 
 initHeader();
-initMenu();
+const menu = initMenu();
+initDemoActions(menu);
 initReveal();
 initForm();
 window.__smugReady = true;

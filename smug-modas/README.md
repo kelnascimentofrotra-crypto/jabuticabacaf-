@@ -59,6 +59,7 @@ nenhum link é gerado.
 | Catálogo | `categories.catalogUrl` / `items[].url` | sem catálogo: os cards levam ao formulário com o interesse já preenchido |
 | URL do site | `site.url` | necessária para canonical, Open Graph e dados estruturados |
 | Instagram | `contact.social.instagram` | opcional |
+| Pesquisa, conta, favoritos e sacola | `headerActions` | só demonstração: mostram aviso, sem função real |
 
 ### Formulário de contato
 
@@ -117,6 +118,11 @@ O header fixo tem dois estados, controlados em `assets/js/main.js` (`initHeader`
 A troca usa `IntersectionObserver` sobre a hero inteira, com 16 px de histerese para não alternar perto
 do limite. Abaixo de `75em` (1200 px com fonte padrão) a navegação usa o menu compacto. Sem JavaScript,
 o header já nasce no estado “após a hero”.
+
+Os ícones de **pesquisa, conta, favoritos e sacola** (`headerActions` em `src/content.mjs`) ainda não têm
+loja virtual por trás: ao tocar, mostram o aviso “Este site é apenas uma versão de demonstração…”.
+No celular, o header mostra só a sacola; pesquisa, conta e favoritos ficam dentro do menu.
+Quando a loja existir, troque cada botão pelo link ou ação real e remova o aviso.
 
 ## Acessibilidade e movimento
 

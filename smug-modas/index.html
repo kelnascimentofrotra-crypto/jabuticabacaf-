@@ -59,7 +59,25 @@
       </ul>
     </nav>
     <div class="site-header__actions">
-      <a class="btn btn--header" href="#contato">Fale conosco</a>
+      <ul class="header-actions" aria-label="Ações da loja">
+        <li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Pesquisar" data-demo="a pesquisa de produtos">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 5 5"/></svg>
+    
+  </button></li><li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Minha conta" data-demo="a área do cliente">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.2a7 7 0 0 1 14 0"/></svg>
+    
+  </button></li><li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Favoritos" data-demo="a lista de favoritos">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg>
+    
+  </button></li><li class="header-actions__item">
+  <button class="header-action" type="button" aria-label="Sacola, 0 itens" data-demo="a sacola de compras">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5.2 8.2h13.6l-.9 12.3H6.1z"/><path d="M8.8 8.2V6.9a3.2 3.2 0 0 1 6.4 0v1.3"/></svg>
+    <span class="header-action__badge" aria-hidden="true">0</span>
+  </button></li>
+      </ul>
       <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-mobile" data-menu-open>
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 6.5h17"/><path d="M3.5 12h17"/><path d="M3.5 17.5h17"/></svg>
       </button>
@@ -86,12 +104,25 @@
         <li style="--i:0"><a class="mobile-menu__link" href="#inicio" data-menu-link><span class="mobile-menu__num" aria-hidden="true">01</span>Início</a></li><li style="--i:1"><a class="mobile-menu__link" href="#loja" data-menu-link><span class="mobile-menu__num" aria-hidden="true">02</span>Nossa loja</a></li><li style="--i:2"><a class="mobile-menu__link" href="#categorias" data-menu-link><span class="mobile-menu__num" aria-hidden="true">03</span>Categorias</a></li><li style="--i:3"><a class="mobile-menu__link" href="#sobre" data-menu-link><span class="mobile-menu__num" aria-hidden="true">04</span>Sobre a Fabielly</a></li><li style="--i:4"><a class="mobile-menu__link" href="#contato" data-menu-link><span class="mobile-menu__num" aria-hidden="true">05</span>Contato</a></li>
       </ol>
     </nav>
+    <ul class="mobile-menu__actions" aria-label="Ações da loja">
+      <li><button class="mobile-menu__action" type="button" data-demo="a pesquisa de produtos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 5 5"/></svg><span>Pesquisar</span></button></li><li><button class="mobile-menu__action" type="button" data-demo="a área do cliente"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.2a7 7 0 0 1 14 0"/></svg><span>Minha conta</span></button></li><li><button class="mobile-menu__action" type="button" data-demo="a lista de favoritos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg><span>Favoritos</span></button></li>
+    </ul>
     <div class="mobile-menu__foot">
       <p class="mobile-menu__script" aria-hidden="true">Mais que moda, é você.</p>
       
     </div>
   </div>
 </dialog>
+
+<div class="demo-toast" data-demo-toast data-template="Este site é apenas uma versão de demonstração: {feature} ainda não está disponível.">
+  <span class="demo-toast__icon" aria-hidden="true" data-demo-icon></span>
+  <div class="demo-toast__body">
+    <p class="demo-toast__title">Versão de demonstração</p>
+    <p class="demo-toast__text" data-demo-text></p>
+  </div>
+  <button class="demo-toast__close" type="button" aria-label="Fechar aviso" data-demo-close><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5.5 5.5 13 13"/><path d="m18.5 5.5-13 13"/></svg></button>
+</div>
+<p class="sr-only" role="status" aria-live="polite" data-demo-live></p>
 <main id="conteudo" tabindex="-1">
 
 <section class="hero" id="inicio" data-tone="light" aria-labelledby="hero-title">

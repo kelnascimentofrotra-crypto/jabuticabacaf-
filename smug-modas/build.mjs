@@ -4,7 +4,7 @@ import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import * as content from './src/content.mjs';
 import { esc } from './src/lib.mjs';
-import { header, mobileMenu } from './src/components/header.mjs';
+import { header, mobileMenu, demoToast } from './src/components/header.mjs';
 import { hero } from './src/components/hero.mjs';
 import { store } from './src/components/store.mjs';
 import { categories } from './src/components/categories.mjs';
@@ -78,6 +78,7 @@ const page = () => `<!doctype html>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 ${header(content)}
 ${mobileMenu(content)}
+${demoToast(content)}
 <main id="conteudo" tabindex="-1">
 ${hero(content)}
 ${store(content)}
