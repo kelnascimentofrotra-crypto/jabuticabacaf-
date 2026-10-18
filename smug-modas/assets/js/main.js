@@ -234,10 +234,11 @@ function initAnimScopes() {
   document.querySelectorAll('[data-anim-scope]').forEach((el) => observer.observe(el));
 }
 
-// Hero: profundidade ao rolar (--p) e ao mover o mouse (--mx/--my), suavizada a cada quadro
+// Hero: profundidade ao mover o mouse (--mx/--my, só desktop), suavizada a cada quadro.
+// Ao rolar, as camadas não se deslocam: a hero sobe inteira.
 function initHeroDepth() {
   const hero = document.querySelector('.hero');
-  if (!hero || reducedMotion.matches) return;
+  if (!hero || reducedMotion.matches || !finePointer.matches) return;
   let inView = true;
   let frame = 0;
   const target = { x: 0, y: 0 };
@@ -247,8 +248,6 @@ function initHeroDepth() {
     frame = 0;
     current.x += (target.x - current.x) * 0.08;
     current.y += (target.y - current.y) * 0.08;
-    const progress = clamp(window.scrollY / hero.offsetHeight, 0, 1);
-    hero.style.setProperty('--p', progress.toFixed(4));
     hero.style.setProperty('--mx', current.x.toFixed(4));
     hero.style.setProperty('--my', current.y.toFixed(4));
     if (Math.abs(target.x - current.x) > 0.002 || Math.abs(target.y - current.y) > 0.002) request();
@@ -261,9 +260,7 @@ function initHeroDepth() {
     inView = entry.isIntersecting;
     request();
   }).observe(hero);
-  window.addEventListener('scroll', request, { passive: true });
   hero.addEventListener('pointermove', (event) => {
-    if (!finePointer.matches) return;
     const rect = hero.getBoundingClientRect();
     target.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     target.y = ((event.clientY - rect.top) / rect.height) * 2 - 1;

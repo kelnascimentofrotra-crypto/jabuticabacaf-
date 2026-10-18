@@ -201,7 +201,7 @@ export const about = {
     src: 'assets/img/fabielly-retrato.webp',
     srcset: [['assets/img/fabielly-retrato-480.webp', 480], ['assets/img/fabielly-retrato.webp', 852]],
     width: 852,
-    height: 630,
+    height: 712,
     alt: 'Fabielly dentro da SMUG MODAS, ao lado de araras de roupas e do letreiro neon “good vibes only”.',
   },
   values: [

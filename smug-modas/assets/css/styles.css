@@ -1292,7 +1292,7 @@ main:focus { outline: none; }
   width: 100%;
   aspect-ratio: 1 / 1.08;
   object-fit: cover;
-  object-position: 66% 0%;
+  object-position: 64% 0%;
 }
 .about__media::after {
   content: '';
@@ -1364,11 +1364,12 @@ main:focus { outline: none; }
     margin: 0 0 0 calc((100vw - min(100vw - 2 * var(--gutter), var(--container))) / -2);
     min-height: 620px;
   }
-  .about__photo { height: 100%; aspect-ratio: auto; object-position: 62% 10%; }
+  .about__photo { height: 100%; aspect-ratio: auto; object-position: 58% 0%; }
   .about__media::after {
     background:
       linear-gradient(270deg, var(--about-bg) 0%, rgba(46, 25, 16, 0.35) 20%, rgba(46, 25, 16, 0) 45%),
-      linear-gradient(0deg, var(--about-bg) 0%, rgba(46, 25, 16, 0) 30%);
+      linear-gradient(0deg, var(--about-bg) 0%, rgba(46, 25, 16, 0) 30%),
+      linear-gradient(180deg, var(--about-bg) 0%, rgba(46, 25, 16, 0) 9%);
   }
   .about__content { grid-area: content; }
   .about__quote { margin: 0.7em 0 1em; text-align: left; }
@@ -1838,8 +1839,9 @@ textarea.field__input { min-height: 132px; padding-top: 30px; resize: vertical; 
   100% { transform: scaleY(0); }
 }
 
-/* Câmera: aproximação inicial e respiração lenta; parallax por variáveis (--p, --mx, --my) */
-.hero__bg { translate: calc(var(--mx, 0) * -9px) calc(var(--p, 0) * 24% + var(--my, 0) * -6px); }
+/* Câmera: aproximação inicial e respiração lenta; profundidade com o mouse (--mx, --my).
+   Ao rolar, a hero se move inteira, sem deslocar camadas. */
+.hero__bg { translate: calc(var(--mx, 0) * -9px) calc(var(--my, 0) * -6px); }
 .hero__bg-layer { position: absolute; inset: 0; overflow: hidden; }
 .hero__bg-img { animation: camera-in 2.8s cubic-bezier(0.16, 1, 0.3, 1) both, camera-drift 24s ease-in-out 2.8s infinite alternate; }
 @keyframes camera-in {
@@ -1921,7 +1923,7 @@ textarea.field__input { min-height: 132px; padding-top: 30px; resize: vertical; 
 }
 
 /* SMUG: letras sobem por trás de uma linha, com sombra projetada pelo sol */
-.hero__brand { translate: calc(var(--mx, 0) * -12px) calc(var(--my, 0) * -7px + var(--p, 0) * 9%); }
+.hero__brand { translate: calc(var(--mx, 0) * -12px) calc(var(--my, 0) * -7px); }
 .hero__brand-word { display: inline-block; text-shadow: -0.035em 0.05em 0.06em rgba(70, 30, 18, 0.2); }
 .hero__letter {
   display: inline-block;
@@ -1935,7 +1937,7 @@ textarea.field__input { min-height: 132px; padding-top: 30px; resize: vertical; 
 /* Fabielly: entra em foco, com leve sombra na parede */
 .hero__figure {
   filter: drop-shadow(-0.5vw 0.9vw 1.2vw rgba(60, 28, 12, 0.2));
-  translate: calc(var(--mx, 0) * -20px) calc(var(--my, 0) * -9px + var(--p, 0) * -3%);
+  translate: calc(var(--mx, 0) * -20px) calc(var(--my, 0) * -9px);
 }
 .hero__photo { animation: focus-in 1.7s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both; }
 @keyframes focus-in {
@@ -1944,7 +1946,7 @@ textarea.field__input { min-height: 132px; padding-top: 30px; resize: vertical; 
 }
 
 /* Frase: letras se aproximam (tracking) enquanto aparecem */
-.hero__tagline { translate: calc(var(--mx, 0) * -8px) calc(var(--p, 0) * 14%); }
+.hero__tagline { translate: calc(var(--mx, 0) * -8px) 0; }
 .hero__tagline-line { display: block; animation: track-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) calc(1.55s + var(--d, 0ms)) both; }
 @keyframes track-in {
   from { opacity: 0; letter-spacing: 0.75em; filter: blur(3px); }

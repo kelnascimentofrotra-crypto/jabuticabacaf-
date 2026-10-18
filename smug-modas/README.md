@@ -88,7 +88,7 @@ referências (sem textos ou botões embutidos), e os títulos, textos e botões 
 | --- | --- | --- |
 | `fabielly-hero.webp` | referência do Início | recorte com remoção de fundo, para ficar à frente do “SMUG” em HTML |
 | `hero-fundo.webp` | imagem de referência desktop do Início | parede com a luz do sol, planta e piso; letras, pessoa, header e painel removidos (LaMa + interpolação ao longo dos feixes de luz) |
-| `fabielly-retrato*.webp` | referência Sobre | restos do título “Fabielly” removidos por preenchimento |
+| `fabielly-retrato*.webp` | referência Sobre | inclui o espaço acima da cabeça; textos “SOBRE A” e “Fabielly” removidos (LaMa) |
 | `loja-ambiente*.webp` | referência Nossa loja | área fotográfica completa |
 | `categorias-loja.webp`, `cat-*.webp` | referência Categorias | só a parte da foto acima dos rótulos |
 | `contato-recepcao.webp` | referência Contato | lado direito da foto (recepção) |
@@ -131,8 +131,8 @@ Quando a loja existir, troque cada botão pelo link ou ação real e remova o av
   lenta (Ken Burns), as letras de SMUG sobem uma a uma com sombra do sol, a Fabielly entra em foco, a frase fecha
   o espaçamento das letras e o painel recebe um reflexo de luz. Depois disso ficam em movimento contínuo e suave:
   o brilho do sol, uma faixa de luz pela parede, sombras de folhas balançando, poeira na luz e grão de filme.
-- **Profundidade:** as camadas da hero se deslocam em velocidades diferentes ao rolar e ao mover o mouse
-  (desktop); as fotos da loja e da Fabielly têm um leve parallax.
+- **Profundidade:** no desktop, as camadas da hero se deslocam levemente com o mouse. Ao rolar, a hero sobe
+  inteira (sem deslocar camadas). A foto da loja tem um leve parallax dentro da moldura.
 - **Seções:** títulos aparecem palavra por palavra, fotos abrem com uma “cortina”, linhas douradas e ícones se
   desenham, cards de categoria inclinam em 3D com brilho, botões têm reflexo, a assinatura é “escrita”, há uma
   faixa em movimento após a hero, barra de progresso de leitura e a marca SMUG gigante no rodapé.

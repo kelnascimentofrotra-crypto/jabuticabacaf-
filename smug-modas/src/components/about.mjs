@@ -10,7 +10,7 @@ export const about = ({ about: a }) => `
     </header>
 
     <figure class="about__media" data-reveal="zoom">
-      <span class="parallax" data-parallax="0.1">${img(a.photo, { className: 'about__photo', sizes: '(min-width: 1024px) 50vw, 100vw' })}</span>
+      ${img(a.photo, { className: 'about__photo', sizes: '(min-width: 1024px) 50vw, 100vw' })}
     </figure>
 
     <div class="about__content">
