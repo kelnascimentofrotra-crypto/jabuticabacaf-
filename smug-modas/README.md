@@ -87,6 +87,7 @@ referências (sem textos ou botões embutidos), e os títulos, textos e botões 
 | Arquivo | Origem | Observação |
 | --- | --- | --- |
 | `fabielly-hero.webp` | referência do Início | recorte com remoção de fundo, para ficar à frente do “SMUG” em HTML |
+| `hero-fundo.webp` | imagem de referência desktop do Início | parede com a luz do sol, planta e piso; letras, pessoa, header e painel removidos (LaMa + interpolação ao longo dos feixes de luz) |
 | `fabielly-retrato*.webp` | referência Sobre | restos do título “Fabielly” removidos por preenchimento |
 | `loja-ambiente*.webp` | referência Nossa loja | área fotográfica completa |
 | `categorias-loja.webp`, `cat-*.webp` | referência Categorias | só a parte da foto acima dos rótulos |

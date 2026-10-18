@@ -99,7 +99,8 @@ export const headerActions = {
 export const hero = {
   brand: 'SMUG',
   tagline: ['Moda é mais', 'que roupa,', 'é expressão.'],
-  intro: 'Peças selecionadas com carinho para você se sentir bem, confortável e linda, do seu jeito.',
+  // Fundo da hero: parede com luz do sol, extraído da referência (sem textos nem pessoas)
+  background: { src: 'assets/img/hero-fundo.webp', width: 1600, height: 853, alt: '' },
   photo: {
     src: 'assets/img/fabielly-hero.webp',
     width: 531,

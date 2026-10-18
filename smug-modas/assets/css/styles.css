@@ -169,7 +169,6 @@ main:focus { outline: none; }
   opacity: 0.55;
 }
 .eyebrow--light { color: var(--light-soft); }
-.eyebrow--wine { color: var(--wine); }
 
 .section-title {
   font-family: var(--serif);
@@ -695,92 +694,86 @@ main:focus { outline: none; }
 .demo-toast__close:hover { color: var(--light); background: rgba(250, 242, 231, 0.08); }
 
 /* ---------- Hero ---------- */
+/* Composição em camadas que cabe na primeira tela: fundo fotográfico com luz do sol,
+   SMUG grande, Fabielly com o rosto à frente do "U", frase e painel de vantagens.
+   Celular/tablet: palco de 100u × 148u seguido do painel; --u é calculado para que
+   palco + painel caibam na altura da tela. Desktop: camadas sobre 100svh (--v). */
 .hero {
   --u: 1vw;
+  --panel-room: 262px; /* altura reservada ao painel 2×2 + margem */
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-top: var(--header-h);
-  padding-bottom: clamp(28px, 6vw, 56px);
-  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100vh;
+  background: #e6d6c2;
   color: var(--wine);
 }
+@supports (height: 1svh) {
+  .hero {
+    --u: max(min(1vw, (100svh - var(--panel-room)) / 148), 2.9px);
+    min-height: 100svh;
+  }
+}
+@media (min-width: 768px) {
+  .hero { --panel-room: 200px; } /* painel em uma linha */
+}
 .hero__bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
-.hero__glow {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(55% 40% at 60% 28%, rgba(255, 251, 244, 0.95), transparent 72%),
-    radial-gradient(70% 55% at 15% 95%, rgba(216, 193, 165, 0.7), transparent 72%),
-    radial-gradient(60% 50% at 100% 70%, rgba(222, 201, 174, 0.55), transparent 70%),
-    linear-gradient(180deg, #f4eadc 0%, #efe1ce 100%);
-}
-.hero__beams {
-  position: absolute;
-  inset: -25% -30%;
-  background: repeating-linear-gradient(
-    122deg,
-    transparent 0 7%,
-    rgba(255, 253, 248, 0.55) 9% 13%,
-    transparent 15% 19%,
-    rgba(150, 118, 84, 0.1) 21% 23%,
-    transparent 25% 31%
-  );
-  filter: blur(22px);
-  opacity: 0.9;
-}
-.hero__leaves { position: absolute; top: 0; height: 100%; overflow: visible; filter: blur(7px); }
-.hero__leaves--left { left: -6%; width: min(46vw, 380px); color: rgba(86, 78, 46, 0.34); }
-.hero__leaves--right { right: -8%; width: min(40vw, 360px); color: rgba(120, 92, 58, 0.16); filter: blur(10px); }
+.hero__bg-img { width: 100%; height: 100%; object-fit: cover; object-position: 64% 50%; }
 
+/* Palco: caixa de 100u × 148u centralizada, onde as camadas são posicionadas */
 .hero__stage {
   position: relative;
-  display: grid;
-  justify-items: center;
+  flex: none;
   width: calc(var(--u) * 100);
-  max-width: 100%;
+  height: calc(var(--u) * 148);
   margin-inline: auto;
-  padding-top: calc(var(--u) * 7);
 }
-@supports (height: 1svh) {
-  .hero { --u: max(min(1vw, 0.6svh), 3.4px); }
-}
-.hero__stage > * { grid-area: 1 / 1; }
 
 .hero__brand {
+  --fs: calc(var(--u) * 34);
+  position: absolute;
   z-index: 1;
+  left: 0;
+  right: 0;
+  /* line-height 1: o topo das maiúsculas fica 0,2075em abaixo do topo da caixa */
+  top: calc(var(--u) * 27 - 0.2075 * var(--fs));
   font-family: var(--serif);
-  font-size: calc(var(--u) * 33.5);
+  font-size: var(--fs);
   font-weight: 500;
-  line-height: 0.8;
-  letter-spacing: -0.035em;
+  line-height: 1;
+  letter-spacing: -0.02em;
   text-align: center;
   color: var(--wine);
   white-space: nowrap;
   user-select: none;
 }
-.hero__brand-word { display: inline-block; padding-right: 0.035em; }
+.hero__brand-word { display: inline-block; padding-left: 0.02em; }
 
-/* Rosto da Fabielly centralizado na frente do "U" (deslocamento medido na composição) */
 .hero__figure {
-  position: relative;
-  left: calc(var(--u) * 8.2);
+  --w: calc(var(--u) * 65);
+  position: absolute;
   z-index: 2;
-  width: calc(var(--u) * 63);
-  margin-top: calc(var(--u) * 11);
+  top: calc(var(--u) * 38);
+  /* rosto (54,5% da largura do recorte) centralizado no "U" */
+  left: calc(var(--u) * 62.42 - 0.545 * var(--w));
+  width: var(--w);
+  margin: 0;
   pointer-events: none;
 }
 .hero__photo {
   width: 100%;
-  -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 84%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 92%, transparent 100%);
 }
 
 .hero__tagline {
+  position: absolute;
   z-index: 3;
-  justify-self: start;
-  align-self: start;
-  margin: calc(var(--u) * 33.5) 0 0 calc(var(--u) * 3);
+  top: calc(var(--u) * 60);
+  left: calc(var(--u) * 3);
   font-size: clamp(11.5px, calc(var(--u) * 2.75), 15px);
   font-weight: 400;
   letter-spacing: 0.26em;
@@ -798,69 +791,69 @@ main:focus { outline: none; }
   margin: 0.9em auto 0;
   background: var(--gold-gradient);
 }
-.hero__intro { display: none; }
 @media (max-width: 400px) {
-  .hero__tagline { letter-spacing: 0.22em; margin-left: calc(var(--u) * 2); }
+  .hero__tagline { letter-spacing: 0.22em; left: calc(var(--u) * 2); }
   .hero__tagline > span:not(.hero__tagline-rule) { margin-right: -0.22em; }
 }
 
+/* Painel de vantagens logo abaixo do palco (a foto continua por trás dele) — visível sem rolar */
 .hero__benefits {
   position: relative;
   z-index: 4;
-  width: min(100% - 2 * var(--gutter), 1180px);
-  margin: calc(var(--u) * -22) auto 0;
+  flex: none;
+  width: min(100% - 2 * var(--gutter), 1500px);
+  margin: 0 auto max(12px, calc(var(--u) * 3));
 }
 
 @media (min-width: 1024px) {
-  .hero { padding-bottom: clamp(32px, 4vh, 56px); }
-  .hero { --u: 1vw; }
-  .hero__stage {
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-    grid-template-rows: auto 1fr;
-    column-gap: clamp(24px, 3vw, 56px);
-    width: min(100% - 2 * var(--gutter), 1440px);
-    padding-top: clamp(16px, 3vh, 40px);
+  .hero {
+    --v: calc(max(100vh, 600px) / 100);
+    --fs: min(var(--v) * 51, 27.5vw);
+    height: calc(var(--v) * 100);
   }
   @supports (height: 1svh) {
-    .hero { --u: min(1vw, 1.75svh); }
+    .hero {
+      --v: calc(max(100svh, 600px) / 100);
+      height: calc(var(--v) * 100);
+    }
   }
-  .hero__brand { grid-area: 1 / 1 / 2 / 4; font-size: calc(var(--u) * 27); }
+  .hero { display: block; min-height: 0; }
+  .hero__bg-img { object-position: 36% 50%; } /* mantém a planta à esquerda e os feixes de luz */
+  .hero__stage { position: absolute; inset: 0; width: auto; height: auto; margin: 0; }
+  /* Proporções da referência desktop: maiúsculas de 29% a 66% da altura, palavra à esquerda */
+  .hero__brand {
+    --fs: min(var(--v) * 51, 27.5vw);
+    left: 5.5vw;
+    right: auto;
+    top: calc(var(--v) * 65.7 - 0.9155 * var(--fs));
+    text-align: left;
+  }
   .hero__figure {
-    grid-area: 1 / 2 / 3 / 3;
-    left: calc(var(--u) * 7.85);
-    width: auto;
-    margin: calc(var(--u) * 7.6) 0 0;
+    --h: calc(var(--v) * 72);
+    --w: calc(var(--h) * 0.5469);
+    top: calc(var(--v) * 13.8);
+    left: calc(5.5vw + 1.754 * var(--fs) - 0.545 * var(--w));
   }
-  .hero__photo { width: auto; height: calc(var(--u) * 44); max-height: 900px; }
+  .hero__photo { width: auto; height: var(--h); }
   .hero__tagline {
-    grid-area: 2 / 3 / 3 / 4;
-    justify-self: end;
-    margin: clamp(20px, 4vh, 48px) 0 0;
+    top: calc(var(--v) * 43);
+    left: auto;
+    right: 3.8vw;
     font-size: 0.82rem;
+    text-align: left;
   }
-  .hero__intro {
-    display: block;
-    grid-area: 2 / 1 / 3 / 2;
-    justify-self: end;
-    align-self: start;
-    max-width: 360px;
-    margin-top: clamp(16px, 3vh, 40px);
+  .hero__tagline > span:not(.hero__tagline-rule) { margin-right: 0; }
+  .hero__tagline-rule { margin-left: 0; }
+  .hero__benefits {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--v) * 5);
+    width: min(90vw, 1500px);
+    margin: 0 auto;
   }
-  .hero__intro-text {
-    margin: 12px 0 22px;
-    font-size: 1.05rem;
-    line-height: 1.65;
-    color: var(--ink-soft);
-  }
-  .hero__ctas { display: flex; flex-wrap: wrap; gap: 10px; }
-  .hero__intro-text { display: none; }
-  .hero__intro .eyebrow { margin-bottom: 16px; }
-  @media (min-width: 1280px) {
-    .hero__intro-text { display: block; }
-    .hero__intro .eyebrow { margin-bottom: 0; }
-  }
-  .hero__ctas .btn { min-height: 48px; padding: 0.8em 1.3em; font-size: 0.7rem; letter-spacing: 0.22em; }
-  .hero__benefits { margin-top: calc(var(--u) * -10); }
+  /* altura do painel como na referência (~17% da tela), cobrindo o fim da foto */
+  .hero__benefits .benefits--glass { min-height: calc(var(--v) * 16.5); align-items: center; }
 }
 
 /* ---------- Benefícios / valores ---------- */
@@ -904,23 +897,28 @@ main:focus { outline: none; }
 .benefits--glass .benefit {
   flex-direction: column;
   align-items: center;
-  padding: 20px 8px 18px;
+  gap: 6px;
+  padding: 12px 6px;
   text-align: center;
   animation: rise-in 0.7s var(--ease-out) both;
   animation-delay: calc(650ms + var(--d, 0ms));
 }
-.benefits--glass .benefit__icon { width: 42px; height: 42px; color: var(--wine); stroke-width: 1.15; }
+.benefits--glass .benefit__icon { width: 32px; height: 32px; color: var(--wine); stroke-width: 1.15; }
 .benefits--glass .benefit__title {
   font-family: var(--serif);
-  font-size: clamp(1.02rem, 0.9rem + 0.6vw, 1.2rem);
+  font-size: clamp(0.98rem, 0.9rem + 0.5vw, 1.2rem);
   line-height: 1.2;
   color: #2b1712;
 }
 .benefits--glass .benefit__text {
-  margin-top: 4px;
-  font-size: 0.875rem;
-  line-height: 1.4;
+  margin-top: 2px;
+  font-size: clamp(0.8rem, 0.76rem + 0.2vw, 0.875rem);
+  line-height: 1.35;
   color: #5e4b40;
+}
+@media (min-width: 768px) {
+  .benefits--glass .benefit { padding: 18px 10px; }
+  .benefits--glass .benefit__icon { width: 38px; height: 38px; }
 }
 
 /* Loja — fundo creme */
