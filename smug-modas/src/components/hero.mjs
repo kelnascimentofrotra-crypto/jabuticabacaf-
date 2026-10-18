@@ -1,10 +1,6 @@
-import { esc, img, delay } from '../lib.mjs';
-import { benefitList } from './benefits.mjs';
+import { esc, icon, img, talkLink, collectionLink } from '../lib.mjs';
 
-// Camadas "cinematográficas" da hero. Tudo é decorativo (aria-hidden) e para quando
-// o visitante pede menos movimento (prefers-reduced-motion).
-
-// Sombra de folhas de palmeira projetada na parede (balança como se houvesse vento).
+// Sombra de folhas de palmeira projetada na parede (balança devagar; decorativa).
 const frond = ({ x, y, rotate, length, spread = 1 }) => {
   const leaflets = [];
   for (let i = 1; i <= 15; i++) {
@@ -33,72 +29,44 @@ const leafShadow = () => `
     ].map(frond).join('')}</g>
   </svg>`;
 
-// Poeira suspensa na luz do sol: posições fixas, geradas de forma determinística.
-const dust = (count = 24) => {
-  let seed = 11;
-  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  return Array.from({ length: count }, () => {
-    const x = (34 + rnd() * 62).toFixed(1);
-    const y = (8 + rnd() * 72).toFixed(1);
-    const size = (1.6 + rnd() * 2.8).toFixed(1);
-    const dur = (10 + rnd() * 12).toFixed(1);
-    const dl = (-rnd() * 20).toFixed(1);
-    const dx = (-30 - rnd() * 50).toFixed(0);
-    const dy = (-40 - rnd() * 70).toFixed(0);
-    return `<span style="--x:${x}%;--y:${y}%;--s:${size}px;--t:${dur}s;--dl:${dl}s;--dx:${dx}px;--dy:${dy}px"></span>`;
-  }).join('');
-};
-
-// Cada letra de "SMUG" é revelada em sequência (o texto acessível fica no sr-only).
+// Cada letra de "SMUG" entra em sequência (o nome acessível fica no sr-only).
 const brandLetters = (word) =>
   [...word].map((ch, i) => `<span class="hero__letter" style="--li:${i}">${esc(ch)}</span>`).join('');
 
-export const hero = ({ hero: h, heroBenefits }) => `
-<section class="hero" id="inicio" data-tone="light" aria-labelledby="hero-title" data-anim-scope>
-  <div class="hero__bg" aria-hidden="true">
-    <div class="hero__bg-layer">
-      ${img(h.background, { className: 'hero__bg-img', eager: true, priority: true })}
-    </div>
-    ${leafShadow()}
-    <span class="hero__sun"></span>
-    <span class="hero__sweep"></span>
-    <div class="hero__dust">${dust()}</div>
-  </div>
-
-  <div class="hero__stage">
-    <h1 class="hero__brand" id="hero-title">
-      <span class="sr-only">${esc(h.brand)} MODAS</span>
-      <span class="hero__brand-word" aria-hidden="true">${brandLetters(h.brand)}</span>
-    </h1>
-
-    <figure class="hero__figure">
-      ${img(h.photo, { className: 'hero__photo', eager: true, priority: true })}
-    </figure>
-
-    <p class="hero__tagline">
-      ${h.tagline.map((line, i) => `<span class="hero__tagline-line" ${delay(i, 140)}>${esc(line)}</span>`).join(' ')}
-      <span class="hero__tagline-rule" aria-hidden="true"></span>
-    </p>
-  </div>
-
-  <span class="hero__vignette" aria-hidden="true"></span>
-
-  <div class="hero__benefits">
-    ${benefitList(heroBenefits, { variant: 'glass', label: 'Vantagens da SMUG MODAS', titleTag: 'p', reveal: false })}
-  </div>
-
-  <span class="hero__grain" aria-hidden="true"></span>
-  <span class="hero__letterbox" aria-hidden="true"></span>
-</section>`;
-
-// Faixa em movimento logo após a hero (texto decorativo repetido; oculto de leitores de tela).
-export const marquee = ({ marquee: items }) => {
-  const run = items.map((t) => `<span class="marquee__item">${esc(t)}</span><span class="marquee__star">✦</span>`).join('');
+export const hero = (content) => {
+  const { hero: h } = content;
+  const collection = collectionLink(content);
+  const talk = talkLink(content);
   return `
-<div class="marquee" aria-hidden="true" data-anim-scope>
-  <div class="marquee__track">
-    <div class="marquee__run">${run}</div>
-    <div class="marquee__run">${run}</div>
+<section class="hero" id="inicio" data-tone="light" aria-labelledby="hero-title" data-anim-scope>
+  <div class="hero__scene">
+    <div class="hero__bg" aria-hidden="true">
+      ${img(h.background, { className: 'hero__bg-img', eager: true, priority: true })}
+      ${leafShadow()}
+      <span class="hero__sun"></span>
+    </div>
+    <div class="hero__stage">
+      <h1 class="hero__brand" id="hero-title">
+        <span class="sr-only">${esc(h.brand)} MODAS</span>
+        <span class="hero__brand-word" aria-hidden="true">${brandLetters(h.brand)}</span>
+      </h1>
+      <figure class="hero__figure">
+        ${img(h.photo, { className: 'hero__photo', eager: true, priority: true })}
+      </figure>
+    </div>
   </div>
-</div>`;
+
+  <div class="hero__intro">
+    <p class="hero__eyebrow">${esc(h.eyebrow)}</p>
+    <p class="hero__tagline">${esc(h.tagline.plain)} <em>${esc(h.tagline.italic)}</em></p>
+    <div class="hero__actions">
+      <a class="btn btn--wine" href="${collection.href}" ${collection.attrs}>
+        <span>${esc(h.primaryCta)}</span>${icon('arrow', 'icon btn__arrow')}${collection.hint ? `<span class="sr-only">${esc(collection.hint)}</span>` : ''}
+      </a>
+      <a class="btn btn--line" href="${talk.href}" ${talk.attrs}>
+        ${content.contact.whatsapp.number ? icon('whatsapp') : ''}<span>${esc(h.secondaryCta)}</span>${talk.hint ? `<span class="sr-only">${esc(talk.hint)}</span>` : ''}
+      </a>
+    </div>
+  </div>
+</section>`;
 };

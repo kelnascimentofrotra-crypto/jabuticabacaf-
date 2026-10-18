@@ -157,54 +157,19 @@ function initMenu() {
       });
     });
   });
+  // Links externos (WhatsApp, Instagram): abrem em nova aba e o menu fecha
+  dialog.querySelectorAll('a:not([href^="#"])').forEach((link) => {
+    link.addEventListener('click', () => close());
+  });
   // Ao passar para a navegação completa (mesmo ponto de quebra do CSS), o menu deixa de existir
   window.matchMedia('(min-width: 75em)').addEventListener('change', (e) => {
     if (e.matches) close({ returnFocus: false });
-  });
-  return { isOpen: () => dialog.open, close };
-}
-
-/* ---------- Ações da loja: aviso de versão de demonstração ---------- */
-function initDemoActions(menu) {
-  const toast = document.querySelector('[data-demo-toast]');
-  const live = document.querySelector('[data-demo-live]');
-  if (!toast || !live) return;
-  const text = toast.querySelector('[data-demo-text]');
-  const iconSlot = toast.querySelector('[data-demo-icon]');
-  let hideTimer;
-
-  const hide = () => {
-    clearTimeout(hideTimer);
-    toast.classList.remove('is-visible');
-  };
-  const show = (button) => {
-    const message = toast.dataset.template.replace('{feature}', button.dataset.demo);
-    text.textContent = message;
-    iconSlot.innerHTML = button.querySelector('svg')?.outerHTML ?? '';
-    toast.classList.add('is-visible');
-    // Região viva separada: o anúncio acontece mesmo se o aviso já estiver na tela
-    live.textContent = '';
-    requestAnimationFrame(() => { live.textContent = `Versão de demonstração. ${message}`; });
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(hide, 6000);
-  };
-
-  document.querySelectorAll('[data-demo]').forEach((button) => {
-    button.addEventListener('click', () => {
-      // Dentro do menu mobile: fecha o menu antes, para o aviso não ficar escondido atrás dele
-      if (menu?.isOpen() && button.closest('[data-menu]')) menu.close({ then: () => show(button) });
-      else show(button);
-    });
-  });
-  toast.querySelector('[data-demo-close]').addEventListener('click', hide);
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && toast.classList.contains('is-visible') && !menu?.isOpen()) hide();
   });
 }
 
 /* ---------- Revelação ao rolar (uma vez) ---------- */
 function initReveal() {
-  const items = document.querySelectorAll('[data-reveal], [data-write]');
+  const items = document.querySelectorAll('[data-reveal]');
   if (reducedMotion.matches) {
     items.forEach((el) => el.classList.add('is-visible'));
     return;
@@ -217,16 +182,13 @@ function initReveal() {
         observer.unobserve(entry.target);
       }
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.12 }
+    { rootMargin: '0px 0px -6% 0px' }
   );
   items.forEach((el) => observer.observe(el));
 }
 
-/* ---------- Cinema: parallax, inclinação 3D e pausa fora da tela ---------- */
-const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-
-// Animações contínuas (luz, poeira, faixa) param quando a área sai da tela
+/* ---------- Hero: ambiente e profundidade ---------- */
+// Animações contínuas (folhas e sol) param quando a hero sai da tela
 function initAnimScopes() {
   const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) entry.target.classList.toggle('is-paused', !entry.isIntersecting);
@@ -234,11 +196,12 @@ function initAnimScopes() {
   document.querySelectorAll('[data-anim-scope]').forEach((el) => observer.observe(el));
 }
 
-// Hero: profundidade ao mover o mouse (--mx/--my, só desktop), suavizada a cada quadro.
+// Profundidade sutil ao mover o mouse (--mx/--my), só em desktop com mouse.
 // Ao rolar, as camadas não se deslocam: a hero sobe inteira.
 function initHeroDepth() {
   const hero = document.querySelector('.hero');
-  if (!hero || reducedMotion.matches || !finePointer.matches) return;
+  const desktopMouse = window.matchMedia('(hover: hover) and (pointer: fine) and (min-width: 1024px)');
+  if (!hero || reducedMotion.matches || !desktopMouse.matches) return;
   let inView = true;
   let frame = 0;
   const target = { x: 0, y: 0 };
@@ -273,71 +236,30 @@ function initHeroDepth() {
   });
 }
 
-// Fotos com leve deslocamento ao rolar ([data-parallax] = fração da altura da foto)
-function initParallax() {
-  const items = [...document.querySelectorAll('[data-parallax]')];
-  if (!items.length || reducedMotion.matches) return;
-  const visible = new Set();
-  let frame = 0;
-  const render = () => {
-    frame = 0;
-    const vh = window.innerHeight;
-    for (const el of visible) {
-      const rect = el.getBoundingClientRect();
-      const progress = clamp((rect.top + rect.height / 2 - vh / 2) / (vh / 2 + rect.height / 2), -1, 1);
-      el.style.setProperty('--py', `${(-progress * parseFloat(el.dataset.parallax) * rect.height).toFixed(1)}px`);
-    }
-  };
-  const request = () => {
-    if (!frame && visible.size) frame = requestAnimationFrame(render);
-  };
+/* ---------- WhatsApp flutuante ---------- */
+// Aparece depois da hero e some perto do contato e do rodapé, que já trazem o link.
+function initWhatsappFloat() {
+  const button = document.querySelector('[data-wa-float]');
+  const hero = document.querySelector('.hero');
+  if (!button || !hero) return;
+  const nearby = new Set();
+  let heroVisible = true;
+  const update = () => button.classList.toggle('is-visible', !heroVisible && nearby.size === 0);
+
+  new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+    update();
+  }).observe(hero);
   const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target);
-    request();
+    for (const entry of entries) entry.isIntersecting ? nearby.add(entry.target) : nearby.delete(entry.target);
+    update();
   });
-  items.forEach((el) => observer.observe(el));
-  window.addEventListener('scroll', request, { passive: true });
-  window.addEventListener('resize', request);
-}
-
-// Cards de categoria: inclinação 3D e brilho que seguem o cursor (só com mouse)
-function initTilt() {
-  if (reducedMotion.matches) return;
-  document.querySelectorAll('.cat-card__link').forEach((card) => {
-    card.addEventListener('pointermove', (event) => {
-      if (!finePointer.matches) return;
-      const rect = card.getBoundingClientRect();
-      const x = (event.clientX - rect.left) / rect.width;
-      const y = (event.clientY - rect.top) / rect.height;
-      card.classList.add('is-tilting');
-      card.style.setProperty('--ry', `${((x - 0.5) * 8).toFixed(2)}deg`);
-      card.style.setProperty('--rx', `${((0.5 - y) * 8).toFixed(2)}deg`);
-      card.style.setProperty('--gx', `${(x * 100).toFixed(1)}%`);
-      card.style.setProperty('--gy', `${(y * 100).toFixed(1)}%`);
-    });
-    card.addEventListener('pointerleave', () => {
-      card.classList.remove('is-tilting');
-      card.style.setProperty('--rx', '0deg');
-      card.style.setProperty('--ry', '0deg');
-    });
-  });
-}
-
-// Barra de progresso: CSS (animation-timeline) quando suportado; senão, JS leve
-function initScrollProgress() {
-  const bar = document.querySelector('.scroll-progress');
-  if (!bar || CSS.supports('animation-timeline: scroll()')) return;
-  let frame = 0;
-  const render = () => {
-    frame = 0;
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.setProperty('--progress', max > 0 ? (window.scrollY / max).toFixed(4) : '0');
-  };
-  window.addEventListener('scroll', () => { if (!frame) frame = requestAnimationFrame(render); }, { passive: true });
-  render();
+  document.querySelectorAll('#contato, .site-footer').forEach((el) => observer.observe(el));
 }
 
 /* ---------- Formulário de contato ---------- */
+// Só existe quando há um serviço real de envio (form.endpoint). A confirmação aparece apenas
+// quando o servidor responde com sucesso; em caso de erro, nada do que foi digitado é apagado.
 const MESSAGES = {
   nome: { valueMissing: 'Informe seu nome.', tooShort: 'O nome precisa ter pelo menos 2 letras.' },
   email: { valueMissing: 'Informe seu e-mail.', typeMismatch: 'Digite um e-mail válido, como nome@exemplo.com.' },
@@ -365,33 +287,24 @@ function validateField(input) {
   return !error;
 }
 
-function buildText(data) {
-  const lines = [`Olá, SMUG MODAS! Meu nome é ${data.nome}.`];
-  if (data.interesse) lines.push(`Interesse: ${data.interesse}.`);
-  lines.push('', data.mensagem, '', `E-mail: ${data.email}`);
-  if (data.telefone) lines.push(`Telefone: ${data.telefone}`);
-  return lines.join('\n');
-}
-
 function initForm() {
   const form = document.querySelector('[data-contact-form]');
   if (!form) return;
-  const mode = form.dataset.mode;
+  form.noValidate = true; // validação própria, com mensagens em português
   const status = form.querySelector('[data-form-status]');
   const submit = form.querySelector('[data-submit]');
   const submitLabel = form.querySelector('[data-submit-label]');
   const idleLabel = submitLabel.textContent;
   const fields = [...form.querySelectorAll('.field__input')];
-  const interestField = form.querySelector('[data-interest-field]');
-  const messageField = form.querySelector('[name="mensagem"]');
   let attempted = false;
-  let lastPrefill = '';
+  let sending = false;
 
   const setStatus = (text, state = 'info') => {
     status.dataset.state = state;
     status.textContent = text;
   };
   const setBusy = (busy) => {
+    sending = busy;
     submit.disabled = busy;
     submit.setAttribute('aria-busy', String(busy));
     submitLabel.textContent = busy ? 'Enviando…' : idleLabel;
@@ -402,102 +315,57 @@ function initForm() {
     input.addEventListener('input', () => { if (input.hasAttribute('aria-invalid')) validateField(input); });
   });
 
-  // Cards de categoria sem catálogo: preenche o interesse na mensagem
-  document.querySelectorAll('[data-interest]').forEach((link) => {
-    link.addEventListener('click', () => {
-      const interest = link.dataset.interest;
-      interestField.value = interest;
-      const prefill = `Olá! Tenho interesse em ${interest}. `;
-      if (!messageField.value.trim() || messageField.value === lastPrefill) {
-        messageField.value = prefill;
-        lastPrefill = prefill;
-      }
-      setStatus(`Interesse em “${interest}” adicionado à sua mensagem. Complete o formulário para falar com a equipe.`);
-    });
-  });
-
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (sending) return;
     attempted = true;
     const results = fields.map(validateField);
     if (results.includes(false)) {
-      const firstInvalid = fields[results.indexOf(false)];
       setStatus('Revise os campos destacados para continuar.', 'error');
-      firstInvalid.focus();
+      fields[results.indexOf(false)].focus();
       return;
     }
 
     const formData = new FormData(form);
     if (formData.get('_gotcha')) return; // armadilha anti-spam preenchida por robôs
-    const data = Object.fromEntries(
-      [...formData.entries()].filter(([k]) => k !== '_gotcha').map(([k, v]) => [k, String(v).trim()])
-    );
+    formData.delete('_gotcha');
+    const data = Object.fromEntries([...formData.entries()].map(([k, v]) => [k, String(v).trim()]));
 
-    if (mode === 'endpoint') {
-      setBusy(true);
-      setStatus('Enviando sua mensagem…');
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-      try {
-        const isJson = form.dataset.format === 'json';
-        const response = await fetch(form.action, {
-          method: 'POST',
-          headers: isJson ? { 'Content-Type': 'application/json', Accept: 'application/json' } : { Accept: 'application/json' },
-          body: isJson ? JSON.stringify(data) : formData,
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        form.reset();
-        interestField.value = '';
-        attempted = false;
-        setStatus('Mensagem enviada! Obrigada pelo contato — responderemos o mais breve possível.', 'success');
-      } catch (error) {
-        setStatus(
-          error.name === 'AbortError'
-            ? 'O envio demorou mais que o esperado e não foi concluído. Verifique sua conexão e tente novamente.'
-            : 'Não foi possível enviar sua mensagem agora. Seus dados continuam no formulário — tente novamente em instantes.',
-          'error'
-        );
-      } finally {
-        clearTimeout(timeout);
-        setBusy(false);
-      }
-      return;
-    }
-
-    if (mode === 'whatsapp') {
-      const url = `https://wa.me/${form.dataset.whatsapp}?text=${encodeURIComponent(buildText(data))}`;
-      // Sem 'noopener' nas features: com ele, window.open sempre retorna null.
-      const win = window.open(url, '_blank');
-      if (win) win.opener = null;
+    setBusy(true);
+    setStatus('Enviando sua mensagem…');
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const isJson = form.dataset.format === 'json';
+      const response = await fetch(form.action, {
+        method: 'POST',
+        headers: isJson ? { 'Content-Type': 'application/json', Accept: 'application/json' } : { Accept: 'application/json' },
+        body: isJson ? JSON.stringify(data) : formData,
+        signal: controller.signal,
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      form.reset();
+      attempted = false;
+      setStatus('Mensagem enviada! Obrigada pelo contato — responderemos o mais breve possível.', 'success');
+    } catch (error) {
       setStatus(
-        win === null
-          ? 'Não conseguimos abrir o WhatsApp automaticamente. Verifique se o navegador bloqueou a nova aba.'
-          : 'Abrimos o WhatsApp com a sua mensagem. Para concluir, toque em enviar na conversa.',
-        win === null ? 'error' : 'info'
+        error.name === 'AbortError'
+          ? 'O envio demorou mais que o esperado e não foi concluído. Verifique sua conexão e tente novamente.'
+          : 'Não foi possível enviar sua mensagem agora. O que você escreveu continua no formulário — tente novamente em instantes.',
+        'error'
       );
-      return;
+    } finally {
+      clearTimeout(timeout);
+      setBusy(false);
     }
-
-    if (mode === 'email') {
-      const subject = encodeURIComponent(`Contato pelo site — ${data.nome}`);
-      window.location.href = `mailto:${form.dataset.email}?subject=${subject}&body=${encodeURIComponent(buildText(data))}`;
-      setStatus('Abrimos o seu aplicativo de e-mail com a mensagem pronta. Para concluir, confirme o envio por lá.');
-      return;
-    }
-
-    setStatus('O envio on-line ainda não está disponível. Sua mensagem não foi enviada — por favor, tente novamente mais tarde.', 'error');
   });
 }
 
 initHeader();
-const menu = initMenu();
-initDemoActions(menu);
+initMenu();
 initReveal();
 initAnimScopes();
 initHeroDepth();
-initParallax();
-initTilt();
-initScrollProgress();
+initWhatsappFloat();
 initForm();
 window.__smugReady = true;

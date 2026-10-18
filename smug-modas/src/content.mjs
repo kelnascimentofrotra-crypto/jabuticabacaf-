@@ -12,93 +12,105 @@ export const site = {
   url: '',
   title: 'SMUG MODAS — Moda é mais que roupa, é expressão',
   description:
-    'SMUG MODAS: roupas, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.',
+    'SMUG MODAS: roupas, vestidos, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.',
   themeColor: '#160D09',
   shareImage: 'assets/img/og-smug-modas.jpg',
 };
 
-// Dados de contato. As referências de design traziam valores ilustrativos
+// Canais de atendimento. As referências de design traziam valores ilustrativos
 // ("(xx) xxxx-xxxx", "Rua Exemplo, 123"), que NÃO devem ir para o ar.
-// Preencha somente com dados confirmados pela loja.
+// Preencha somente com dados confirmados pela loja. Linhas vazias não aparecem no site.
 export const contact = {
   whatsapp: {
     // Somente dígitos, com DDI e DDD. Ex.: '5511912345678'.
     number: '',
     // Como o número aparece no site. Ex.: '(11) 91234-5678'.
     display: '',
-    note: 'Atendimento rápido e prático.',
+    // Mensagem inicial das conversas abertas pelo site.
+    message: 'Olá! Vim pelo site da SMUG MODAS e gostaria de mais informações.',
   },
   email: {
     // Na referência aparece 'contato@smugmodas.com.br' — confirme antes de usar.
     address: '',
-    note: 'Respondemos em até 24h.',
   },
   address: {
     // Ex.: ['Rua ..., 123 - Centro', 'Cidade - UF']
     lines: [],
-    // Link do Google Maps (ou similar) para o botão "Venha nos visitar".
+    // Link do Google Maps (ou similar). Habilita o botão "Venha nos visitar".
     mapsUrl: '',
-    note: 'Venha nos visitar!',
   },
   hours: {
     // Na referência aparece 'Segunda a Sábado' / '09h às 18h' — confirme antes de usar.
     lines: [],
-    note: 'Estamos te esperando!',
   },
   social: {
     instagram: '', // URL completa do perfil
   },
 };
 
-// Envio do formulário de contato.
-// - endpoint: URL que recebe POST (ex.: Formspree, Web3Forms, API própria).
-//   Com endpoint, a confirmação só aparece se o servidor responder com sucesso.
-// - Sem endpoint, mas com WhatsApp configurado: o botão vira "Enviar pelo WhatsApp"
-//   e abre a conversa com a mensagem pronta (o envio é concluído pela pessoa).
-// - Sem endpoint e sem WhatsApp, mas com e-mail: abre o aplicativo de e-mail.
-// - Sem nenhum dos três: o formulário valida, mas avisa que o envio online
-//   ainda não está disponível (nunca simula uma entrega).
+// Formulário de contato: só aparece no site quando existe um serviço real de envio
+// (ex.: Formspree, Web3Forms, API própria). A confirmação só é exibida se o
+// servidor responder com sucesso. Sem endpoint, a seção mostra os canais diretos.
 export const form = {
   endpoint: '',
   // 'json' envia application/json; 'form' envia multipart/form-data.
   format: 'json',
 };
 
-// Condições comerciais exibidas no topo do site (vindas da referência).
-// CONFIRME com a loja antes de publicar — `confirmed: false` gera aviso no build.
-export const heroBenefits = [
-  { icon: 'truck', title: 'Frete Grátis', text: 'Em compras acima de R$\u00a0299', confirmed: false },
-  { icon: 'card', title: 'Pagamento Seguro', text: 'Diversas formas de pagamento', confirmed: false },
-  { icon: 'dress', title: 'Coleções Exclusivas', text: 'Sempre as últimas tendências', confirmed: false },
+// Catálogo real (opcional). Com uma URL aqui, "Conhecer a coleção" e as categorias
+// passam a abrir o catálogo. Cada categoria também aceita sua própria `url`.
+export const catalog = {
+  url: '',
+};
+
+// "Escolhas da semana" — aparece logo após a hero somente quando houver produtos reais.
+// Não cadastre itens ilustrativos. Formato de cada produto:
+// {
+//   name: 'Vestido midi vinho',
+//   price: 'R$ 189,90',              // apenas preço confirmado ('' oculta)
+//   colors: ['Vinho', 'Off-white'],   // opcional
+//   sizes: ['P', 'M', 'G'],           // opcional
+//   image: { src: 'assets/img/produtos/vestido-1.webp', width: 900, height: 1200, alt: '...', position: '50% 20%' },
+//   imageHover: { src: '...', width: 900, height: 1200, alt: '' }, // outra foto do MESMO produto (opcional)
+//   url: '',                          // página do produto, se houver; senão abre o WhatsApp
+// }
+export const products = {
+  eyebrow: 'Novidades',
+  title: { plain: 'Escolhas', italic: 'da semana' },
+  // Usada quando a peça não tem `url` e o WhatsApp está configurado.
+  whatsappMessage: 'Olá! Vim pelo site da SMUG MODAS e tenho interesse na peça “{produto}”.',
+  items: [],
+};
+
+// Faixa logo abaixo da hero. Itens neutros, baseados nos textos da própria loja.
+// Condições comerciais (frete, pagamento, horário de suporte) só aparecem com
+// `confirmed: true` — confirme com a loja antes de ativar.
+export const highlights = [
+  { icon: 'sofa', title: 'Ambiente acolhedor', text: 'Um espaço pensado para você escolher com calma.' },
+  { icon: 'hanger', title: 'Do casual ao sofisticado', text: 'Peças para diferentes ocasiões.' },
+  { icon: 'diamond', title: 'Peças selecionadas', text: 'Escolhidas com carinho, detalhe a detalhe.' },
+  { icon: 'heart', title: 'Atendimento atencioso', text: 'Ajuda para encontrar o que combina com você.' },
+];
+export const commercialHighlights = [
+  { icon: 'truck', title: 'Frete grátis', text: 'Em compras acima de R$ 299', confirmed: false },
+  { icon: 'card', title: 'Pagamento seguro', text: 'Diversas formas de pagamento', confirmed: false },
   { icon: 'headset', title: 'Suporte 24/7', text: 'Estamos sempre com você', confirmed: false },
 ];
 
 export const nav = [
   { id: 'inicio', label: 'Início' },
-  { id: 'loja', label: 'Nossa loja' },
   { id: 'categorias', label: 'Categorias' },
+  { id: 'loja', label: 'Nossa loja' },
   { id: 'sobre', label: 'Sobre a Fabielly' },
   { id: 'contato', label: 'Contato' },
 ];
 
-// Ações do header. Ainda não existe loja virtual: cada botão mostra um aviso
-// de que o site é apenas uma versão de demonstração ({feature} vem de cada item).
-export const headerActions = {
-  items: [
-    { icon: 'search', label: 'Pesquisar', feature: 'a pesquisa de produtos' },
-    { icon: 'user', label: 'Minha conta', feature: 'a área do cliente' },
-    { icon: 'heart', label: 'Favoritos', feature: 'a lista de favoritos' },
-    { icon: 'bag', label: 'Sacola', feature: 'a sacola de compras', badge: 0 },
-  ],
-  demoNotice: {
-    title: 'Versão de demonstração',
-    text: 'Este site é apenas uma versão de demonstração: {feature} ainda não está disponível.',
-  },
-};
-
 export const hero = {
   brand: 'SMUG',
-  tagline: ['Moda é mais', 'que roupa,', 'é expressão.'],
+  eyebrow: 'SMUG MODAS',
+  tagline: { plain: 'Moda é mais que roupa,', italic: 'é expressão.' },
+  primaryCta: 'Conhecer a coleção',
+  secondaryCta: 'Falar com a loja',
   // Fundo da hero: parede com luz do sol, extraído da referência (sem textos nem pessoas)
   background: { src: 'assets/img/hero-fundo.webp', width: 1600, height: 853, alt: '' },
   photo: {
@@ -109,16 +121,50 @@ export const hero = {
   },
 };
 
-// Faixa em movimento logo abaixo da hero
-export const marquee = ['Moda é mais que roupa, é expressão', 'SMUG MODAS', 'Mais que moda, é você', 'Estilo · Conforto · Você'];
+export const categories = {
+  eyebrow: 'Categorias',
+  title: { plain: 'Encontre o', italic: 'seu estilo' },
+  text: 'Do básico ao sofisticado, escolha por onde começar.',
+  // Mensagem enviada pelo WhatsApp ao tocar em uma categoria ({categoria} em minúsculas).
+  whatsappMessage: 'Olá! Vim pelo site da SMUG MODAS e gostaria de conhecer os modelos de {categoria}.',
+  background: {
+    src: 'assets/img/categorias-loja.webp',
+    width: 365,
+    height: 494,
+  },
+  // Nomes baseados nas fotos disponíveis — confirme com a loja se correspondem ao acervo.
+  items: [
+    {
+      name: 'Roupas',
+      text: 'Estilo em todas as ocasiões.',
+      url: '',
+      image: { src: 'assets/img/cat-roupas.webp', width: 368, height: 292, position: '50% 30%', alt: 'Look com blazer bege, blusa de tricô e calça de alfaiataria.' },
+    },
+    {
+      name: 'Vestidos',
+      text: 'Beleza, estilo e autenticidade.',
+      url: '',
+      image: { src: 'assets/img/cat-feminino.webp', width: 367, height: 262, position: '45% 35%', alt: 'Vestidos em tons de vinho e off-white em cabides de madeira.' },
+    },
+    {
+      name: 'Calçados',
+      text: 'Conforto que te acompanha.',
+      url: '',
+      image: { src: 'assets/img/cat-calcados.webp', width: 367, height: 292, position: '60% 50%', alt: 'Par de tênis brancos em expositor de mármore.' },
+    },
+    {
+      name: 'Acessórios',
+      text: 'Detalhes que fazem a diferença.',
+      url: '',
+      image: { src: 'assets/img/cat-acessorios.webp', width: 368, height: 262, position: '50% 45%', alt: 'Bolsa preta matelassê com óculos de sol e relógio dourado.' },
+    },
+  ],
+};
 
 export const store = {
   eyebrow: 'Nossa loja',
   title: { plain: 'Mais que uma loja,', italic: 'um espaço feito para você.' },
-  paragraphs: [
-    'Aqui na SMUG MODAS, cada detalhe foi pensado para que você se sinta bem, confortável e à vontade para escolher o que mais combina com o seu estilo.',
-    'Nosso ambiente é acolhedor, moderno e cheio de inspirações, para tornar sua experiência de compra ainda mais especial.',
-  ],
+  text: 'Aqui na SMUG MODAS, cada detalhe foi pensado para que você se sinta bem e à vontade para escolher o que combina com o seu estilo — num ambiente acolhedor, moderno e cheio de inspirações.',
   cta: 'Venha nos visitar',
   photo: {
     src: 'assets/img/loja-ambiente.webp',
@@ -127,64 +173,6 @@ export const store = {
     height: 612,
     alt: 'Interior da loja SMUG MODAS: parede ripada iluminada com letreiro neon “good vibes only”, araras de roupas e expositor de tênis.',
   },
-  benefits: [
-    { icon: 'sofa', title: 'Ambiente Confortável', text: 'Espaço climatizado e acolhedor para você.' },
-    { icon: 'hanger', title: 'Variedade de Estilos', text: 'Do casual ao sofisticado, sempre com novidades.' },
-    { icon: 'diamond', title: 'Qualidade em Cada Detalhe', text: 'Peças selecionadas com muito carinho.' },
-    { icon: 'heart', title: 'Atendimento Especial', text: 'Nossa equipe está sempre pronta para te ajudar.' },
-  ],
-};
-
-export const categories = {
-  eyebrow: 'SMUG MODAS',
-  title: { plain: 'Nossas', italic: 'Categorias' },
-  text: 'Do básico ao sofisticado, encontre o que faz o seu estilo em cada categoria. Tudo pensado para você se sentir bem, em todos os momentos.',
-  cta: 'Ver todas as categorias',
-  // Se existir um catálogo/loja virtual, coloque a URL aqui e em cada categoria.
-  // Sem URL, os cards levam ao formulário com o interesse já preenchido.
-  catalogUrl: '',
-  background: {
-    src: 'assets/img/categorias-loja.webp',
-    width: 365,
-    height: 494,
-  },
-  items: [
-    {
-      name: 'Roupas',
-      text: 'Estilo em todas as ocasiões.',
-      url: '',
-      image: { src: 'assets/img/cat-roupas.webp', width: 368, height: 292, alt: 'Look com blazer bege, blusa de tricô e calça de alfaiataria.' },
-    },
-    {
-      name: 'Calçados',
-      text: 'Conforto que te acompanha.',
-      url: '',
-      image: { src: 'assets/img/cat-calcados.webp', width: 367, height: 292, alt: 'Par de tênis brancos em expositor de mármore.' },
-    },
-    {
-      name: 'Acessórios',
-      text: 'Detalhes que fazem a diferença.',
-      url: '',
-      image: { src: 'assets/img/cat-acessorios.webp', width: 368, height: 262, alt: 'Bolsa preta matelassê com óculos de sol e relógio dourado.' },
-    },
-    {
-      name: 'Feminino',
-      text: 'Beleza, estilo e autenticidade.',
-      url: '',
-      image: { src: 'assets/img/cat-feminino.webp', width: 367, height: 262, alt: 'Vestidos em tons de vinho e off-white em cabides de madeira.' },
-    },
-    {
-      name: 'Lançamentos',
-      text: 'Novidades para você se destacar.',
-      url: '',
-      wide: true,
-      image: { src: 'assets/img/cat-lancamentos.webp', width: 409, height: 215, alt: 'Manequim com blazer bege e blusa vinho.' },
-    },
-  ],
-  closing: {
-    words: ['SMUG MODAS', 'Estilo', 'Conforto', 'Você'],
-    script: 'Mais que moda, é você.',
-  },
 };
 
 export const about = {
@@ -192,8 +180,8 @@ export const about = {
   title: 'Fabielly',
   quote: ['Mais do que uma loja,', 'é um sonho que se veste.'],
   paragraphs: [
-    'Olá! Eu sou Fabielly, e sou a mente e o coração por trás da SMUG MODAS. Sempre acreditei que a moda vai muito além de roupas — ela é autoestima, é liberdade, é expressão.',
-    'A SMUG nasceu do meu desejo de oferecer para você mais do que peças, mas sim uma experiência. Cada detalhe da nossa loja é pensado com carinho, para que você se sinta bem, confortável e ainda mais linda, do seu jeito.',
+    'Olá! Eu sou Fabielly, a mente e o coração por trás da SMUG MODAS. Sempre acreditei que a moda vai muito além de roupas — ela é autoestima, é liberdade, é expressão.',
+    'A SMUG nasceu do meu desejo de oferecer mais do que peças: uma experiência. Cada detalhe da loja é pensado com carinho, para que você se sinta bem, confortável e ainda mais linda, do seu jeito.',
   ],
   signature: 'Fabielly',
   role: 'Fundadora da SMUG MODAS',
@@ -204,25 +192,22 @@ export const about = {
     height: 712,
     alt: 'Fabielly dentro da SMUG MODAS, ao lado de araras de roupas e do letreiro neon “good vibes only”.',
   },
-  values: [
-    { icon: 'heart', title: 'Paixão pela moda', text: 'Porque cada detalhe importa.' },
-    { icon: 'diamond', title: 'Qualidade em cada peça', text: 'Você merece o melhor.' },
-    { icon: 'people', title: 'Atendimento especial', text: 'Aqui você é única.' },
-    { icon: 'star', title: 'Confiança sempre', text: 'Sua satisfação é a nossa maior conquista.' },
-  ],
 };
 
 export const contactSection = {
   eyebrow: 'Fale conosco',
-  title: { plain: 'Estamos', italic: 'aqui para você!' },
-  text: 'Tem alguma dúvida, sugestão ou precisa de ajuda? Nossa equipe está pronta para te atender com todo o carinho e atenção que você merece.',
+  title: { plain: 'Estamos', italic: 'aqui para você' },
+  text: 'Tem alguma dúvida ou quer saber mais sobre as peças? Fale com a gente — vamos adorar ajudar.',
+  // Exibido enquanto nenhum canal nem formulário estiver configurado (sem fingir atendimento).
+  pendingText: 'Os canais de atendimento da SMUG MODAS serão publicados aqui em breve.',
   photo: {
     src: 'assets/img/contato-recepcao.webp',
     width: 374,
     height: 838,
+    alt: 'Recepção da SMUG MODAS, com balcão de mármore, logotipo dourado e letreiro neon.',
   },
   formTitle: 'Envie sua mensagem',
-  formText: 'Preencha o formulário abaixo e entraremos em contato o mais breve possível.',
+  formText: 'Preencha os campos e responderemos o mais breve possível.',
 };
 
 export const footer = {

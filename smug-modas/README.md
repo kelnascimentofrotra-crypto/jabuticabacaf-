@@ -16,7 +16,7 @@ python3 -m http.server 8080      # ou: npx serve .
 
 ## Como editar
 
-Todo o conteúdo (textos, imagens, links, contatos e condições comerciais) fica em
+Todo o conteúdo (textos, imagens, links, contatos, produtos e condições comerciais) fica em
 **`src/content.mjs`**. Depois de editar, gere o HTML novamente:
 
 ```bash
@@ -32,52 +32,64 @@ smug-modas/
 ├── src/
 │   ├── content.mjs         ← conteúdo central
 │   ├── lib.mjs             ← ícones, logo, helpers
-│   └── components/         ← header + menu, hero, benefícios, loja,
-│                              categorias, sobre, contato, rodapé
+│   └── components/         ← header + menu, hero, faixa de diferenciais,
+│                              produtos, categorias, loja, sobre, contato, rodapé
 └── assets/
     ├── css/styles.css      ← tokens de cor/tipografia + estilos (mobile first)
-    ├── js/main.js          ← menu, header, animações, formulário
+    ├── js/main.js          ← header, menu, animações, formulário, WhatsApp flutuante
     ├── fonts/              ← Playfair Display, Jost, Allura (self-hosted, OFL)
     ├── img/                ← fotos em WebP
     └── icons/              ← favicon e ícone para iOS
 ```
 
+## Ordem da página
+
+Hero → faixa de diferenciais → **Escolhas da semana** (só com produtos reais) → Categorias →
+Nossa loja → Sobre a Fabielly → Contato → Rodapé.
+
 ## Pendências antes de publicar
 
-Nenhum dado ilustrativo das referências foi publicado. Enquanto não forem preenchidos
-em `src/content.mjs`, os itens de contato aparecem como “Informação a confirmar” e
-nenhum link é gerado.
+Nenhum dado ilustrativo das referências foi publicado. O que não estiver preenchido em
+`src/content.mjs` simplesmente não aparece (sem links falsos, sem “a confirmar” na página),
+e o `node build.mjs` lista o que falta.
 
-| Item | Onde | Situação atual |
+| Item | Onde | Enquanto estiver vazio |
 | --- | --- | --- |
-| WhatsApp real | `contact.whatsapp` | vazio (a referência tinha “(xx) xxxx-xxxx”) |
-| E-mail | `contact.email` | vazio (a referência sugere `contato@smugmodas.com.br` — confirmar) |
-| Endereço + link do mapa | `contact.address` | vazio (a referência tinha “Rua Exemplo, 123”). Sem o link, “Venha nos visitar” leva ao contato |
-| Horário | `contact.hours` | vazio (a referência sugere “Segunda a Sábado, 09h às 18h” — confirmar) |
-| Envio do formulário | `form.endpoint` | **sem integração** — veja abaixo |
-| Condições comerciais | `heroBenefits` | “Frete Grátis acima de R$ 299”, “Pagamento Seguro”, “Coleções Exclusivas”, “Suporte 24/7” vêm da referência; confirme e marque `confirmed: true` |
-| Catálogo | `categories.catalogUrl` / `items[].url` | sem catálogo: os cards levam ao formulário com o interesse já preenchido |
-| URL do site | `site.url` | necessária para canonical, Open Graph e dados estruturados |
-| Instagram | `contact.social.instagram` | opcional |
-| Pesquisa, conta, favoritos e sacola | `headerActions` | só demonstração: mostram aviso, sem função real |
+| WhatsApp oficial | `contact.whatsapp` | “Falar com a loja” leva à seção de contato; categorias sem link; sem botão flutuante |
+| E-mail | `contact.email` | linha oculta no contato e no rodapé |
+| Endereço e link do mapa | `contact.address` | sem endereço; sem o botão “Venha nos visitar” |
+| Horário | `contact.hours` | linha oculta |
+| Instagram | `contact.social.instagram` | linha oculta |
+| Envio do formulário | `form.endpoint` | o formulário não aparece (veja abaixo) |
+| Catálogo | `catalog.url` | “Conhecer a coleção” leva às categorias (ou aos produtos, se houver) |
+| Produtos | `products.items` | “Escolhas da semana” fica oculta. Cadastre só peças reais, com foto, nome e preço confirmado |
+| Condições comerciais | `commercialHighlights` | frete grátis, pagamento seguro e suporte 24/7 ficam ocultos até `confirmed: true` |
+| Nomes das categorias | `categories.items` | Roupas, Vestidos, Calçados e Acessórios — confirmar se correspondem ao acervo |
+| URL do site | `site.url` | sem canonical, `og:url` e URL nos dados estruturados |
+
+Se nenhum canal nem formulário estiver configurado (situação atual), a seção de contato mostra
+apenas o aviso “Os canais de atendimento da SMUG MODAS serão publicados aqui em breve.”
+
+### Destinos dos botões
+
+- **Conhecer a coleção:** `catalog.url` → `#produtos` (com produtos) → `#categorias`.
+- **Falar com a loja** (hero, header e menu): WhatsApp com a mensagem de `contact.whatsapp.message` → `#contato`.
+- **Categorias:** `items[].url` → `catalog.url` → WhatsApp com “Olá! Vim pelo site da SMUG MODAS e gostaria de
+  conhecer os modelos de [categoria].” (codificada na URL). Sem nenhum desses dados, o card não vira link.
+- **Produtos:** `url` da peça → `catalog.url` → WhatsApp com `products.whatsappMessage` → `#contato`.
 
 ### Formulário de contato
 
-O formulário valida nome, e-mail, telefone (opcional) e mensagem, com mensagens de erro
-específicas, estado de envio e tratamento de falhas. Ele **nunca simula uma entrega**.
-O comportamento depende do que estiver configurado:
+O formulário só é exibido quando `form.endpoint` aponta para um serviço real de envio
+(Formspree, Web3Forms, Getform ou API própria). Ele:
 
-1. **`form.endpoint` preenchido** (recomendado: Formspree, Web3Forms, Getform ou API própria):
-   envia por `POST` (JSON ou multipart, conforme `form.format`) e só mostra a confirmação
-   quando o servidor responde com sucesso. Sem JavaScript, o formulário faz um POST comum.
-2. **Sem endpoint, com WhatsApp:** o botão vira “Enviar pelo WhatsApp” e abre a conversa
-   com a mensagem pronta — o aviso abaixo do botão explica isso.
-3. **Sem endpoint, só com e-mail:** abre o aplicativo de e-mail com a mensagem pronta.
-4. **Nada configurado (estado atual):** valida os campos e informa que o envio on-line ainda
-   não está disponível.
+- valida nome, e-mail, telefone (opcional, com DDD) e mensagem, com rótulos visíveis e erros específicos;
+- mostra “Enviando…” e bloqueia o botão durante o envio;
+- só mostra a confirmação quando o servidor responde com sucesso (`2xx`);
+- em caso de erro ou demora, avisa e **mantém o que foi digitado**;
+- envia JSON ou multipart, conforme `form.format`; sem JavaScript, faz um POST comum.
 
-Não coloque chaves secretas no front-end; serviços como Formspree usam apenas a URL pública
-do formulário.
+Não coloque chaves secretas no front-end; serviços como o Formspree usam apenas a URL pública do formulário.
 
 ## Imagens
 
@@ -111,38 +123,30 @@ Qualquer hospedagem estática serve (GitHub Pages, Netlify, Vercel, Cloudflare P
 
 O header fixo tem dois estados, controlados em `assets/js/main.js` (`initHeader`):
 
-- **Na hero:** a logo pequena fica oculta (o “SMUG” grande da hero já identifica a marca), os links
-  ficam à esquerda e o fundo é integrado à hero.
-- **Após a hero** (classe `is-past-hero`): quando o início da segunda seção alcança a base do header,
-  a logo aparece à esquerda, os links deslizam para o centro (só com `transform`) e o fundo fica creme.
+- **Na hero:** a logo pequena fica oculta (o “SMUG” grande já identifica a marca), os links ficam à esquerda,
+  “Falar com a loja” à direita e o fundo é integrado à hero.
+- **Após a hero** (classe `is-past-hero`): a logo aparece em bronze escuro (legível sobre o creme), os links
+  deslizam para o centro (só com `transform`) e o fundo fica creme opaco, com linha e sombra discretas.
 
-A troca usa `IntersectionObserver` sobre a hero inteira, com 16 px de histerese para não alternar perto
-do limite. Abaixo de `75em` (1200 px com fonte padrão) a navegação usa o menu compacto. Sem JavaScript,
-o header já nasce no estado “após a hero”.
-
-Os ícones de **pesquisa, conta, favoritos e sacola** (`headerActions` em `src/content.mjs`) ainda não têm
-loja virtual por trás: ao tocar, mostram o aviso “Este site é apenas uma versão de demonstração…”.
-No celular, o header mostra só a sacola; pesquisa, conta e favoritos ficam dentro do menu.
-Quando a loja existir, troque cada botão pelo link ou ação real e remova o aviso.
+A troca usa `IntersectionObserver` sobre a hero inteira, com 16 px de histerese. Abaixo de `75em` (1200 px)
+a navegação usa o menu compacto (`<dialog>` modal); de 600 px em diante, “Falar com a loja” fica visível no header.
+Sem JavaScript, o header já nasce no estado “após a hero”. `scroll-padding-top` evita que o header cubra os
+títulos ao navegar por âncoras.
 
 ## Animações
 
-- **Hero (abertura cinematográfica):** a cena surge do preto entre barras de cinema, a câmera faz uma aproximação
-  lenta (Ken Burns), as letras de SMUG sobem uma a uma com sombra do sol, a Fabielly entra em foco, a frase fecha
-  o espaçamento das letras e o painel recebe um reflexo de luz. Depois disso ficam em movimento contínuo e suave:
-  o brilho do sol, uma faixa de luz pela parede, sombras de folhas balançando, poeira na luz e grão de filme.
-- **Profundidade:** no desktop, as camadas da hero se deslocam levemente com o mouse. Ao rolar, a hero sobe
-  inteira (sem deslocar camadas). A foto da loja tem um leve parallax dentro da moldura.
-- **Seções:** títulos aparecem palavra por palavra, fotos abrem com uma “cortina”, linhas douradas e ícones se
-  desenham, cards de categoria inclinam em 3D com brilho, botões têm reflexo, a assinatura é “escrita”, há uma
-  faixa em movimento após a hero, barra de progresso de leitura e a marca SMUG gigante no rodapé.
-- Tudo usa `transform`/`opacity`; animações contínuas pausam fora da tela (`data-anim-scope`).
-  Os tempos ficam em `assets/css/styles.css` (seções “Animações”, “Hero cinematográfica” e “Faixa em movimento”).
+- **Abertura da hero (≈ 0,9 s):** letras de SMUG sobem em sequência, a Fabielly aparece e o texto com os botões
+  entra logo depois. Nada fica escondido por segundos.
+- **Ambiente:** sombras de folhas e brilho do sol bem lentos; pausam quando a hero sai da tela. No desktop com
+  mouse, as camadas da hero têm uma profundidade sutil. Ao rolar, nada se desloca dentro da hero.
+- **Seções:** entradas de 350–650 ms (opacidade + leve deslocamento) e microinterações de 150–250 ms.
+- Sem parallax de rolagem, sem sequestro do scroll e sem bibliotecas.
 
 ## Acessibilidade e movimento
 
 - HTML semântico, link “Pular para o conteúdo”, foco visível e áreas de toque de pelo menos 44 px.
-- Menu mobile em `<dialog>` modal: o foco fica preso no menu, Escape fecha, a rolagem do fundo
-  é bloqueada e o foco volta ao botão ao fechar. Ao escolher uma seção, o foco vai para o título dela.
-- As animações respeitam `prefers-reduced-motion`: com “reduzir movimento” ativo, tudo aparece pronto, sem
-  parallax, poeira, grão ou faixa em movimento. Sem JavaScript, todo o conteúdo continua visível.
+- Menu mobile em `<dialog>` modal: foco preso no menu, Escape fecha, a rolagem do fundo é bloqueada e o foco
+  volta ao botão ao fechar. Ao escolher uma seção, o menu fecha e o foco vai para o título dela.
+- Com “reduzir movimento” ativo, tudo aparece pronto e as animações contínuas param.
+  Sem JavaScript, todo o conteúdo continua visível.
+- Dados estruturados (`ClothingStore`) só com informações confirmadas: sem preços, estoque ou avaliações.

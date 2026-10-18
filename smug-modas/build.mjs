@@ -1,21 +1,23 @@
 // Gera index.html a partir de src/content.mjs e src/components/*.
 // Uso: node build.mjs   (sem dependências; Node 18+)
 import { writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import * as content from './src/content.mjs';
+import * as siteContent from './src/content.mjs';
 import { esc } from './src/lib.mjs';
-import { header, mobileMenu, demoToast } from './src/components/header.mjs';
-import { hero, marquee } from './src/components/hero.mjs';
-import { store } from './src/components/store.mjs';
+import { header, mobileMenu } from './src/components/header.mjs';
+import { hero } from './src/components/hero.mjs';
+import { highlightsStrip } from './src/components/highlights.mjs';
+import { products } from './src/components/products.mjs';
 import { categories } from './src/components/categories.mjs';
+import { store } from './src/components/store.mjs';
 import { about } from './src/components/about.mjs';
-import { contactSection, formMode } from './src/components/contact.mjs';
-import { footer } from './src/components/footer.mjs';
+import { contactSection, contactChannels } from './src/components/contact.mjs';
+import { footer, whatsappFloat } from './src/components/footer.mjs';
 
-const { site, contact } = content;
-const abs = (path) => (site.url ? `${site.url}/${path}` : path);
-
-const structuredData = () => {
+// Dados estruturados apenas com o que está confirmado (sem preços, avaliações ou estoque).
+const structuredData = ({ site, contact }) => {
+  const abs = (path) => (site.url ? `${site.url}/${path}` : path);
   const data = {
     '@context': 'https://schema.org',
     '@type': 'ClothingStore',
@@ -31,7 +33,10 @@ const structuredData = () => {
   return JSON.stringify(data).replace(/</g, '\\u003c');
 };
 
-const head = () => `
+const head = (content) => {
+  const { site, hero: h } = content;
+  const abs = (path) => (site.url ? `${site.url}/${path}` : path);
+  return `
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(site.title)}</title>
@@ -50,6 +55,8 @@ ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="preload" href="${esc(h.background.src)}" as="image" type="image/webp" fetchpriority="high">
+<link rel="preload" href="${esc(h.photo.src)}" as="image" type="image/webp" fetchpriority="high">
 <link rel="preload" href="assets/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -68,56 +75,66 @@ ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
   })(document.documentElement);
 </script>
 <script type="module" src="assets/js/main.js"></script>
-<script type="application/ld+json">${structuredData()}</script>`;
+<script type="application/ld+json">${structuredData(content)}</script>`;
+};
 
-const page = () => `<!doctype html>
-<html lang="${site.lang}">
-<head>${head()}
+// Ordem: hero → faixa de diferenciais → produtos reais (se houver) → categorias →
+// nossa loja → sobre a Fabielly → contato → rodapé.
+export const renderPage = (content) =>
+  `<!doctype html>
+<html lang="${content.site.lang}">
+<head>${head(content)}
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-<span class="scroll-progress" aria-hidden="true"></span>
 ${header(content)}
 ${mobileMenu(content)}
-${demoToast(content)}
 <main id="conteudo" tabindex="-1">
 ${hero(content)}
-${marquee(content)}
-${store(content)}
+${highlightsStrip(content)}
+${products(content)}
 ${categories(content)}
+${store(content)}
 ${about(content)}
 ${contactSection(content)}
 </main>
 ${footer(content)}
+${whatsappFloat(content)}
 </body>
 </html>
-`;
+`.replace(/\n{3,}/g, '\n\n');
 
 // Pendências que precisam ser resolvidas antes da publicação.
-const pending = () => {
+export const pendingList = (content) => {
+  const { site, contact, form, catalog, products: p, commercialHighlights } = content;
   const list = [];
   if (!site.url) list.push('site.url — URL pública (canonical, Open Graph, dados estruturados).');
-  if (!contact.whatsapp.number) list.push('contact.whatsapp — número real (o site não gera link sem ele).');
-  if (!contact.email.address) list.push('contact.email — e-mail real de atendimento.');
-  if (!contact.address.lines.length) list.push('contact.address — endereço real da loja.');
-  if (!contact.address.mapsUrl) list.push('contact.address.mapsUrl — link do mapa ("Venha nos visitar" leva ao contato enquanto isso).');
-  if (!contact.hours.lines.length) list.push('contact.hours — horário de atendimento confirmado.');
-  const mode = formMode(content);
-  if (mode !== 'endpoint')
-    list.push(`form.endpoint — integração de envio do formulário (modo atual: ${mode}).`);
-  for (const b of content.heroBenefits)
-    if (!b.confirmed) list.push(`heroBenefits — confirmar condição comercial "${b.title}: ${b.text}".`);
-  if (!content.categories.catalogUrl && content.categories.items.every((i) => !i.url))
-    list.push('categories.catalogUrl — sem catálogo: os cards levam ao formulário com o interesse preenchido.');
+  if (!contact.whatsapp.number)
+    list.push('contact.whatsapp — número oficial. Sem ele: sem botão flutuante, categorias sem link e "Falar com a loja" leva ao contato.');
+  if (!contact.email.address) list.push('contact.email — e-mail de atendimento.');
+  if (!contact.address.lines.length) list.push('contact.address.lines — endereço da loja.');
+  if (!contact.address.mapsUrl) list.push('contact.address.mapsUrl — link do mapa (habilita "Venha nos visitar").');
+  if (!contact.hours.lines.length) list.push('contact.hours — horário de atendimento.');
+  if (!contact.social.instagram) list.push('contact.social.instagram — perfil (opcional).');
+  if (!form.endpoint) list.push('form.endpoint — serviço de envio. Sem ele o formulário não aparece.');
+  if (!catalog.url && !p.items.length)
+    list.push('catalog.url / products.items — sem catálogo nem produtos: "Conhecer a coleção" leva às categorias e "Escolhas da semana" fica oculta.');
+  for (const item of commercialHighlights)
+    if (!item.confirmed) list.push(`commercialHighlights — "${item.title}: ${item.text}" oculto até confirmação (confirmed: true).`);
+  list.push('categories.items — confirmar se Roupas, Vestidos, Calçados e Acessórios correspondem ao acervo.');
+  if (!contactChannels(contact).length && !form.endpoint)
+    list.push('Contato — nenhum canal configurado: a seção mostra apenas o aviso de canais em breve.');
   return list;
 };
 
-const out = fileURLToPath(new URL('./index.html', import.meta.url));
-writeFileSync(out, page().replace(/\n{3,}/g, '\n\n'));
-console.log(`✔ index.html gerado (${out})`);
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  const out = fileURLToPath(new URL('./index.html', import.meta.url));
+  writeFileSync(out, renderPage(siteContent));
+  console.log(`✔ index.html gerado (${out})`);
 
-const todo = pending();
-if (todo.length) {
-  console.log(`\n⚠ ${todo.length} pendência(s) antes de publicar:`);
-  for (const item of todo) console.log(`  • ${item}`);
+  const todo = pendingList(siteContent);
+  if (todo.length) {
+    console.log(`\n⚠ ${todo.length} pendência(s) antes de publicar:`);
+    for (const item of todo) console.log(`  • ${item}`);
+  }
 }
