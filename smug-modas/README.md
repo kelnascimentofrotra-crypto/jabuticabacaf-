@@ -105,6 +105,19 @@ domínio da Jabuticaba Café. Para publicar a SMUG MODAS no próprio domínio, o
 esta pasta para um repositório (ou projeto de hospedagem) separado, com o `CNAME` da SMUG.
 Qualquer hospedagem estática serve (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
 
+## Header
+
+O header fixo tem dois estados, controlados em `assets/js/main.js` (`initHeader`):
+
+- **Na hero:** a logo pequena fica oculta (o “SMUG” grande da hero já identifica a marca), os links
+  ficam à esquerda e o fundo é integrado à hero.
+- **Após a hero** (classe `is-past-hero`): quando o início da segunda seção alcança a base do header,
+  a logo aparece à esquerda, os links deslizam para o centro (só com `transform`) e o fundo fica creme.
+
+A troca usa `IntersectionObserver` sobre a hero inteira, com 16 px de histerese para não alternar perto
+do limite. Abaixo de `75em` (1200 px com fonte padrão) a navegação usa o menu compacto. Sem JavaScript,
+o header já nasce no estado “após a hero”.
+
 ## Acessibilidade e movimento
 
 - HTML semântico, link “Pular para o conteúdo”, foco visível e áreas de toque de pelo menos 44 px.

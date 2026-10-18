@@ -331,41 +331,78 @@ main:focus { outline: none; }
 }
 
 /* ---------- Header ---------- */
+/* Dois estados:
+   - na hero (padrão com JS): logo pequena oculta, links à esquerda, fundo integrado à hero;
+   - após a hero (.is-past-hero): logo à esquerda, links centralizados, fundo creme.
+   Sem JS (sem a classe .js no <html>) o header já nasce no estado "após a hero". */
 .site-header {
+  --header-dur: 0.45s;
+  --header-ease: cubic-bezier(0.33, 1, 0.68, 1);
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
   height: var(--header-h);
   color: var(--wine);
-  transition: background-color 0.4s var(--ease), box-shadow 0.4s var(--ease), color 0.4s var(--ease);
+  background-color: rgba(243, 233, 219, 0.96);
+  border-bottom: 1px solid rgba(100, 28, 41, 0.1);
+  box-shadow: 0 10px 28px -24px rgba(50, 28, 19, 0.5);
+  transition:
+    background-color var(--header-dur) var(--header-ease),
+    border-color var(--header-dur) var(--header-ease),
+    box-shadow var(--header-dur) var(--header-ease);
   animation: header-in 0.7s var(--ease-out) both;
 }
-.site-header[data-tone='dark'] { color: var(--light); }
-.site-header.is-scrolled[data-tone='light'] {
-  background: rgba(243, 233, 219, 0.88);
-  box-shadow: 0 1px 0 rgba(100, 28, 41, 0.1), 0 10px 30px -22px rgba(50, 28, 19, 0.45);
+.js .site-header:not(.is-past-hero) {
+  background-color: rgba(243, 233, 219, 0);
+  border-bottom-color: rgba(100, 28, 41, 0);
+  box-shadow: 0 10px 28px -24px rgba(50, 28, 19, 0);
 }
-.site-header.is-scrolled[data-tone='dark'] {
-  background: rgba(22, 13, 9, 0.86);
-  box-shadow: 0 1px 0 rgba(197, 154, 98, 0.18);
-}
+/* Rolando dentro da hero: véu creme leve para manter o contraste dos links */
+.js .site-header.is-scrolled:not(.is-past-hero) { background-color: rgba(243, 233, 219, 0.72); }
 @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .site-header.is-scrolled {
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
-    backdrop-filter: blur(14px) saturate(1.2);
+  .site-header,
+  .js .site-header.is-scrolled {
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    backdrop-filter: blur(14px) saturate(1.15);
+  }
+  .js .site-header:not(.is-scrolled):not(.is-past-hero) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
+/* Estado inicial aplicado sem animação (página aberta já rolada ou com âncora) */
+.site-header.is-instant,
+.site-header.is-instant * { transition: none !important; }
 .site-header__inner {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 16px;
   height: 100%;
   width: min(100% - 2 * var(--gutter), 1360px);
   margin-inline: auto;
 }
+
+/* Logo pequena: aparece com opacidade e deslocamento mínimo; oculta, não recebe foco nem cliques */
+.site-header .logo {
+  transition:
+    opacity var(--header-dur) var(--header-ease),
+    transform var(--header-dur) var(--header-ease),
+    visibility 0s linear 0s;
+}
+.js .site-header:not(.is-past-hero) .logo {
+  opacity: 0;
+  transform: translateX(-10px);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--header-dur) var(--header-ease),
+    transform var(--header-dur) var(--header-ease),
+    visibility 0s linear var(--header-dur);
+}
+
 .site-nav { display: none; }
-.site-header__actions { display: flex; align-items: center; gap: 12px; }
+.site-header__actions { display: flex; align-items: center; gap: 12px; margin-left: auto; }
 
 .menu-toggle,
 .menu-close {
@@ -386,18 +423,46 @@ main:focus { outline: none; }
 .menu-close .icon { width: 30px; height: 30px; stroke-width: 1.4; }
 .menu-toggle:hover,
 .menu-close:hover { background: rgba(197, 154, 98, 0.14); }
+.btn--header { display: none; }
 
 @media (min-width: 1024px) {
   .site-header .logo__mark { font-size: 2.9rem; }
   .site-header .logo__name { font-size: 1.7rem; }
   .site-header .logo__sub { font-size: 0.6rem; }
   .site-header .logo__rule { height: 40px; }
-  .site-nav { display: block; }
-  .site-nav__list { display: flex; align-items: center; gap: clamp(18px, 2.6vw, 40px); }
+}
+
+/* Navegação completa só quando cabem logo, links e ações sem sobreposição
+   (em "em" para acompanhar o tamanho de fonte do navegador). Abaixo disso, menu compacto. */
+@media (min-width: 75em) {
+  .site-header__inner { container-type: inline-size; }
+  .site-header .logo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+  }
+  /* Os links ficam ancorados no centro e se deslocam só com transform:
+     na hero, translateX(-50cqw) leva a borda esquerda até o início do header;
+     após a hero, translateX(-50%) centraliza a lista na largura do header. */
+  .site-nav {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    transform: translateX(-50%);
+    transition: transform var(--header-dur) var(--header-ease);
+    will-change: transform;
+  }
+  .js .site-header:not(.is-past-hero) .site-nav { transform: translateX(-50cqw); }
+  .site-nav__list { display: flex; align-items: center; gap: 32px; }
   .site-nav__link {
     position: relative;
-    display: inline-block;
-    padding: 10px 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
     font-size: 0.78rem;
     font-weight: 400;
     letter-spacing: 0.22em;
@@ -408,7 +473,9 @@ main:focus { outline: none; }
   .site-nav__link::after {
     content: '';
     position: absolute;
-    left: 0; right: 0; bottom: 4px;
+    left: 0;
+    right: 0.22em;
+    bottom: 8px;
     height: 1px;
     background: var(--gold);
     transform: scaleX(0);
@@ -418,7 +485,7 @@ main:focus { outline: none; }
   .site-nav__link:hover::after,
   .site-nav__link[aria-current='true']::after { transform: scaleX(1); }
   .btn--header {
-    display: none;
+    display: inline-flex;
     min-height: 44px;
     padding: 0.75em 1.5em;
     font-size: 0.72rem;
@@ -427,10 +494,6 @@ main:focus { outline: none; }
     color: inherit;
   }
   .btn--header:hover { background: var(--wine); border-color: var(--wine); color: var(--light); }
-  @media (min-width: 1200px) {
-    .btn--header { display: inline-flex; }
-  }
-  [data-tone='dark'] .btn--header:hover { background: var(--gold); border-color: var(--gold); color: var(--dark); }
   .menu-toggle { display: none; }
 }
 

@@ -1,7 +1,9 @@
 import { esc, icon, logo } from '../lib.mjs';
 
-// Header fixo: logo à esquerda, navegação central (desktop) e ação à direita.
-// No mobile, apenas logo + botão do menu (não há carrinho implementado).
+// Header fixo com dois estados (controlados em assets/js/main.js):
+// na hero, a logo pequena fica oculta e os links à esquerda; após a hero, a logo aparece
+// e os links vão para o centro. Ações sempre à direita. No mobile/compacto: logo + botão do menu.
+// Uma única <nav>; não há busca, conta, favoritos ou carrinho implementados.
 export const header = ({ nav }) => `
 <header class="site-header" data-header data-tone="light">
   <div class="site-header__inner">

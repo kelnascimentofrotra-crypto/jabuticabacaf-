@@ -4,32 +4,73 @@
 const root = document.documentElement;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-/* ---------- Header: fundo ao rolar + tom da seção abaixo ---------- */
+/* ---------- Header: estado "na hero" × "após a hero" ---------- */
+// A troca acontece quando o fim da hero (início da segunda seção) cruza a base do header fixo.
+// A hero inteira é observada (um alvo grande não é "pulado" por saltos de âncora) contra duas
+// linhas: a base do header, para entrar no estado "após a hero", e HERO_HYSTERESIS px abaixo
+// dela, para voltar. Essa folga evita alternância repetida perto do limite.
+// Nenhum cálculo roda a cada pixel de scroll.
+const HERO_HYSTERESIS = 16;
+
 function initHeader() {
   const header = document.querySelector('[data-header]');
-  if (!header) return;
-  const sections = [...document.querySelectorAll('main > section[data-tone], .site-footer')];
-  let ticking = false;
+  const hero = document.querySelector('.hero');
+  if (!header || !hero) return;
 
-  const update = () => {
-    ticking = false;
-    header.classList.toggle('is-scrolled', window.scrollY > 8);
-    const probe = header.offsetHeight / 2;
-    const current = sections.find((s) => {
-      const r = s.getBoundingClientRect();
-      return r.top <= probe && r.bottom > probe;
-    });
-    header.dataset.tone = current ? current.dataset.tone : 'light';
+  const topMarker = document.createElement('span');
+  topMarker.setAttribute('aria-hidden', 'true');
+  Object.assign(topMarker.style, { position: 'absolute', top: '8px', left: '0', width: '1px', height: '1px', pointerEvents: 'none' });
+  hero.append(topMarker);
+
+  // Até a primeira interação, mudanças de estado vêm do navegador (página aberta já rolada,
+  // âncora na URL, restauração do scroll) e são aplicadas sem animação.
+  header.classList.add('is-instant');
+  const interaction = new AbortController();
+  const enableTransitions = () => {
+    header.classList.remove('is-instant');
+    interaction.abort();
   };
+  for (const type of ['pointerdown', 'wheel', 'touchstart', 'keydown']) {
+    window.addEventListener(type, enableTransitions, { passive: true, capture: true, signal: interaction.signal });
+  }
 
-  window.addEventListener('scroll', () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(update);
-    }
-  }, { passive: true });
-  window.addEventListener('resize', update);
-  update();
+  // Véu creme leve ao começar a rolar dentro da hero
+  new IntersectionObserver((entries) => {
+    const entry = entries.at(-1);
+    header.classList.toggle('is-scrolled', !entry.isIntersecting && entry.boundingClientRect.top < 0);
+  }).observe(topMarker);
+
+  let heroObservers = [];
+  let headerHeight = 0;
+  const observeHeroEnd = () => {
+    headerHeight = header.offsetHeight;
+    heroObservers.forEach((o) => o.disconnect());
+    // Área observada começando na base do header: a hero deixou de aparecer abaixo dele → após a hero
+    const leave = new IntersectionObserver(
+      (entries) => {
+        const entry = entries.at(-1);
+        if (!entry.isIntersecting && entry.boundingClientRect.bottom <= headerHeight + 1) {
+          header.classList.add('is-past-hero');
+        }
+      },
+      { rootMargin: `-${headerHeight}px 0px 0px 0px` }
+    );
+    // Área começando HERO_HYSTERESIS px abaixo do header: a hero voltou a aparecer → estado inicial
+    const back = new IntersectionObserver(
+      (entries) => {
+        if (entries.at(-1).isIntersecting) header.classList.remove('is-past-hero');
+      },
+      { rootMargin: `-${headerHeight + HERO_HYSTERESIS}px 0px 0px 0px` }
+    );
+    leave.observe(hero);
+    back.observe(hero);
+    heroObservers = [leave, back];
+  };
+  observeHeroEnd();
+  // A altura do header muda entre mobile e desktop: refaz a linha de referência
+  new ResizeObserver(() => {
+    if (header.offsetHeight !== headerHeight) observeHeroEnd();
+  }).observe(header);
 
   // Link ativo na navegação desktop
   const links = new Map(
@@ -116,8 +157,8 @@ function initMenu() {
       });
     });
   });
-  // Ao passar para o layout desktop, o menu deixa de existir
-  window.matchMedia('(min-width: 1024px)').addEventListener('change', (e) => {
+  // Ao passar para a navegação completa (mesmo ponto de quebra do CSS), o menu deixa de existir
+  window.matchMedia('(min-width: 75em)').addEventListener('change', (e) => {
     if (e.matches) close({ returnFocus: false });
   });
 }

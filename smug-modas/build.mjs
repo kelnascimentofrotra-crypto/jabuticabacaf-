@@ -54,12 +54,17 @@ ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
 <link rel="preload" href="assets/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/styles.css">
 <script>
-  // Habilita as animações de entrada apenas quando o JS está disponível.
-  // Se o main.js não iniciar em 2,5 s, o conteúdo é exibido normalmente.
+  // Habilita as animações de entrada e o header em dois estados apenas quando o JS está disponível.
+  // Se o main.js não iniciar em 2,5 s, o conteúdo é exibido e o header fica no estado completo.
   (function (d) {
     if (!('IntersectionObserver' in window)) return;
     d.classList.add('js');
-    setTimeout(function () { if (!window.__smugReady) d.classList.add('reveal-fallback'); }, 2500);
+    setTimeout(function () {
+      if (window.__smugReady) return;
+      d.classList.add('reveal-fallback');
+      var header = document.querySelector('[data-header]');
+      if (header) header.classList.add('is-past-hero');
+    }, 2500);
   })(document.documentElement);
 </script>
 <script type="module" src="assets/js/main.js"></script>
