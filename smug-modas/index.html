@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SMUG MODAS — Moda é mais que roupa, é expressão</title>
-<meta name="description" content="SMUG MODAS: roupas, vestidos, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.">
+<meta name="description" content="SMUG MODAS: roupas, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.">
 <meta name="theme-color" content="#160D09">
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="SMUG MODAS">
 <meta property="og:title" content="SMUG MODAS — Moda é mais que roupa, é expressão">
-<meta property="og:description" content="SMUG MODAS: roupas, vestidos, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.">
+<meta property="og:description" content="SMUG MODAS: roupas, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.">
 <meta property="og:image" content="assets/img/og-smug-modas.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -19,8 +19,6 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-<link rel="preload" href="assets/img/hero-fundo.webp" as="image" type="image/webp" fetchpriority="high">
-<link rel="preload" href="assets/img/fabielly-hero.webp" as="image" type="image/webp" fetchpriority="high">
 <link rel="preload" href="assets/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/styles.css">
@@ -39,10 +37,11 @@
   })(document.documentElement);
 </script>
 <script type="module" src="assets/js/main.js"></script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"SMUG MODAS","description":"SMUG MODAS: roupas, vestidos, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.","image":"assets/img/og-smug-modas.jpg"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"ClothingStore","name":"SMUG MODAS","description":"SMUG MODAS: roupas, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.","image":"assets/img/og-smug-modas.jpg"}</script>
 </head>
 <body>
 <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<span class="scroll-progress" aria-hidden="true"></span>
 
 <header class="site-header" data-header data-tone="light">
   <div class="site-header__inner">
@@ -57,13 +56,31 @@
   </a>
     <nav class="site-nav" aria-label="Principal">
       <ul class="site-nav__list">
-        <li><a class="site-nav__link" href="#inicio" data-nav-link>Início</a></li><li><a class="site-nav__link" href="#categorias" data-nav-link>Categorias</a></li><li><a class="site-nav__link" href="#loja" data-nav-link>Nossa loja</a></li><li><a class="site-nav__link" href="#sobre" data-nav-link>Sobre a Fabielly</a></li><li><a class="site-nav__link" href="#contato" data-nav-link>Contato</a></li>
+        <li><a class="site-nav__link" href="#inicio" data-nav-link>Início</a></li><li><a class="site-nav__link" href="#loja" data-nav-link>Nossa loja</a></li><li><a class="site-nav__link" href="#categorias" data-nav-link>Categorias</a></li><li><a class="site-nav__link" href="#sobre" data-nav-link>Sobre a Fabielly</a></li><li><a class="site-nav__link" href="#contato" data-nav-link>Contato</a></li>
       </ul>
     </nav>
     <div class="site-header__actions">
-      <a class="btn btn--sm btn--line site-header__cta" href="#contato" ><span>Falar com a loja</span></a>
+      <ul class="header-actions" aria-label="Ações da loja">
+        <li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Pesquisar" data-demo="a pesquisa de produtos">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="10.8" cy="10.8" r="6.3"/><path pathLength="1" d="m15.4 15.4 5 5"/></svg>
+    
+  </button></li><li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Minha conta" data-demo="a área do cliente">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="12" cy="8" r="3.6"/><path pathLength="1" d="M5 20.2a7 7 0 0 1 14 0"/></svg>
+    
+  </button></li><li class="header-actions__item header-actions__item--extra">
+  <button class="header-action" type="button" aria-label="Favoritos" data-demo="a lista de favoritos">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg>
+    
+  </button></li><li class="header-actions__item">
+  <button class="header-action" type="button" aria-label="Sacola, 0 itens" data-demo="a sacola de compras">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M5.2 8.2h13.6l-.9 12.3H6.1z"/><path pathLength="1" d="M8.8 8.2V6.9a3.2 3.2 0 0 1 6.4 0v1.3"/></svg>
+    <span class="header-action__badge" aria-hidden="true">0</span>
+  </button></li>
+      </ul>
       <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-haspopup="dialog" aria-expanded="false" aria-controls="menu-mobile" data-menu-open>
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3.5 6.5h17"/><path d="M3.5 12h17"/><path d="M3.5 17.5h17"/></svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M3.5 6.5h17"/><path pathLength="1" d="M3.5 12h17"/><path pathLength="1" d="M3.5 17.5h17"/></svg>
       </button>
     </div>
   </div>
@@ -81,207 +98,426 @@
       <span class="logo__sub">MODAS</span>
     </span>
   </a>
-      <button class="menu-close" type="button" aria-label="Fechar menu" data-menu-close><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5.5 5.5 13 13"/><path d="m18.5 5.5-13 13"/></svg></button>
+      <button class="menu-close" type="button" aria-label="Fechar menu" data-menu-close><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="m5.5 5.5 13 13"/><path pathLength="1" d="m18.5 5.5-13 13"/></svg></button>
     </div>
     <nav aria-label="Menu principal">
       <ol class="mobile-menu__list">
-        <li style="--i:0"><a class="mobile-menu__link" href="#inicio"><span class="mobile-menu__num" aria-hidden="true">01</span>Início</a></li><li style="--i:1"><a class="mobile-menu__link" href="#categorias"><span class="mobile-menu__num" aria-hidden="true">02</span>Categorias</a></li><li style="--i:2"><a class="mobile-menu__link" href="#loja"><span class="mobile-menu__num" aria-hidden="true">03</span>Nossa loja</a></li><li style="--i:3"><a class="mobile-menu__link" href="#sobre"><span class="mobile-menu__num" aria-hidden="true">04</span>Sobre a Fabielly</a></li><li style="--i:4"><a class="mobile-menu__link" href="#contato"><span class="mobile-menu__num" aria-hidden="true">05</span>Contato</a></li>
+        <li style="--i:0"><a class="mobile-menu__link" href="#inicio" data-menu-link><span class="mobile-menu__num" aria-hidden="true">01</span>Início</a></li><li style="--i:1"><a class="mobile-menu__link" href="#loja" data-menu-link><span class="mobile-menu__num" aria-hidden="true">02</span>Nossa loja</a></li><li style="--i:2"><a class="mobile-menu__link" href="#categorias" data-menu-link><span class="mobile-menu__num" aria-hidden="true">03</span>Categorias</a></li><li style="--i:3"><a class="mobile-menu__link" href="#sobre" data-menu-link><span class="mobile-menu__num" aria-hidden="true">04</span>Sobre a Fabielly</a></li><li style="--i:4"><a class="mobile-menu__link" href="#contato" data-menu-link><span class="mobile-menu__num" aria-hidden="true">05</span>Contato</a></li>
       </ol>
     </nav>
+    <ul class="mobile-menu__actions" aria-label="Ações da loja">
+      <li><button class="mobile-menu__action" type="button" data-demo="a pesquisa de produtos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="10.8" cy="10.8" r="6.3"/><path pathLength="1" d="m15.4 15.4 5 5"/></svg><span>Pesquisar</span></button></li><li><button class="mobile-menu__action" type="button" data-demo="a área do cliente"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="12" cy="8" r="3.6"/><path pathLength="1" d="M5 20.2a7 7 0 0 1 14 0"/></svg><span>Minha conta</span></button></li><li><button class="mobile-menu__action" type="button" data-demo="a lista de favoritos"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg><span>Favoritos</span></button></li>
+    </ul>
     <div class="mobile-menu__foot">
-      <a class="btn btn--gold btn--block mobile-menu__cta" href="#contato" ><span>Falar com a loja</span></a>
-      
       <p class="mobile-menu__script" aria-hidden="true">Mais que moda, é você.</p>
+      
     </div>
   </div>
 </dialog>
+
+<div class="demo-toast" data-demo-toast data-template="Este site é apenas uma versão de demonstração: {feature} ainda não está disponível.">
+  <span class="demo-toast__icon" aria-hidden="true" data-demo-icon></span>
+  <div class="demo-toast__body">
+    <p class="demo-toast__title">Versão de demonstração</p>
+    <p class="demo-toast__text" data-demo-text></p>
+  </div>
+  <button class="demo-toast__close" type="button" aria-label="Fechar aviso" data-demo-close><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="m5.5 5.5 13 13"/><path pathLength="1" d="m18.5 5.5-13 13"/></svg></button>
+</div>
+<p class="sr-only" role="status" aria-live="polite" data-demo-live></p>
 <main id="conteudo" tabindex="-1">
 
 <section class="hero" id="inicio" data-tone="light" aria-labelledby="hero-title" data-anim-scope>
-  <div class="hero__scene">
-    <div class="hero__bg" aria-hidden="true">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__bg-layer">
       <img class="hero__bg-img" src="assets/img/hero-fundo.webp" width="1600" height="853" alt="" loading="eager" decoding="async" fetchpriority="high">
-      
+    </div>
+    
   <svg class="hero__leaves" viewBox="0 0 600 500" preserveAspectRatio="xMinYMin slice" aria-hidden="true" focusable="false">
     <g fill="currentColor"><g transform="translate(-30 40) rotate(18)"><path d="M0 0Q180 -32.4 360 -10.799999999999999" fill="none" stroke="currentColor" stroke-width="4.3"/><path transform="translate(22.5 -5.1) rotate(-56.9)" d="M0 0Q65.5 -18.9 145.5 0Q65.5 18.9 0 0Z"/><path transform="translate(22.5 -5.1) rotate(56.9)" d="M0 0Q65.5 -18.9 145.5 0Q65.5 18.9 0 0Z"/><path transform="translate(45.0 -10.0) rotate(-55.8)" d="M0 0Q62.9 -18.2 139.9 0Q62.9 18.2 0 0Z"/><path transform="translate(45.0 -10.0) rotate(55.8)" d="M0 0Q62.9 -18.2 139.9 0Q62.9 18.2 0 0Z"/><path transform="translate(67.5 -14.6) rotate(-54.6)" d="M0 0Q60.4 -17.4 134.2 0Q60.4 17.4 0 0Z"/><path transform="translate(67.5 -14.6) rotate(54.6)" d="M0 0Q60.4 -17.4 134.2 0Q60.4 17.4 0 0Z"/><path transform="translate(90.0 -18.7) rotate(-53.5)" d="M0 0Q57.8 -16.7 128.5 0Q57.8 16.7 0 0Z"/><path transform="translate(90.0 -18.7) rotate(53.5)" d="M0 0Q57.8 -16.7 128.5 0Q57.8 16.7 0 0Z"/><path transform="translate(112.5 -22.3) rotate(-52.4)" d="M0 0Q55.3 -16.0 122.8 0Q55.3 16.0 0 0Z"/><path transform="translate(112.5 -22.3) rotate(52.4)" d="M0 0Q55.3 -16.0 122.8 0Q55.3 16.0 0 0Z"/><path transform="translate(135.0 -25.1) rotate(-51.3)" d="M0 0Q52.7 -15.2 117.2 0Q52.7 15.2 0 0Z"/><path transform="translate(135.0 -25.1) rotate(51.3)" d="M0 0Q52.7 -15.2 117.2 0Q52.7 15.2 0 0Z"/><path transform="translate(157.5 -27.2) rotate(-50.1)" d="M0 0Q50.2 -14.5 111.5 0Q50.2 14.5 0 0Z"/><path transform="translate(157.5 -27.2) rotate(50.1)" d="M0 0Q50.2 -14.5 111.5 0Q50.2 14.5 0 0Z"/><path transform="translate(180.0 -28.4) rotate(-49.0)" d="M0 0Q47.6 -13.8 105.8 0Q47.6 13.8 0 0Z"/><path transform="translate(180.0 -28.4) rotate(49.0)" d="M0 0Q47.6 -13.8 105.8 0Q47.6 13.8 0 0Z"/><path transform="translate(202.5 -28.8) rotate(-47.9)" d="M0 0Q45.1 -13.0 100.2 0Q45.1 13.0 0 0Z"/><path transform="translate(202.5 -28.8) rotate(47.9)" d="M0 0Q45.1 -13.0 100.2 0Q45.1 13.0 0 0Z"/><path transform="translate(225.0 -28.2) rotate(-46.8)" d="M0 0Q42.5 -12.3 94.5 0Q42.5 12.3 0 0Z"/><path transform="translate(225.0 -28.2) rotate(46.8)" d="M0 0Q42.5 -12.3 94.5 0Q42.5 12.3 0 0Z"/><path transform="translate(247.5 -26.8) rotate(-45.6)" d="M0 0Q40.0 -11.5 88.8 0Q40.0 11.5 0 0Z"/><path transform="translate(247.5 -26.8) rotate(45.6)" d="M0 0Q40.0 -11.5 88.8 0Q40.0 11.5 0 0Z"/><path transform="translate(270.0 -24.6) rotate(-44.5)" d="M0 0Q37.4 -10.8 83.2 0Q37.4 10.8 0 0Z"/><path transform="translate(270.0 -24.6) rotate(44.5)" d="M0 0Q37.4 -10.8 83.2 0Q37.4 10.8 0 0Z"/><path transform="translate(292.5 -21.5) rotate(-43.4)" d="M0 0Q34.9 -10.1 77.5 0Q34.9 10.1 0 0Z"/><path transform="translate(292.5 -21.5) rotate(43.4)" d="M0 0Q34.9 -10.1 77.5 0Q34.9 10.1 0 0Z"/><path transform="translate(315.0 -17.8) rotate(-42.3)" d="M0 0Q32.3 -9.3 71.8 0Q32.3 9.3 0 0Z"/><path transform="translate(315.0 -17.8) rotate(42.3)" d="M0 0Q32.3 -9.3 71.8 0Q32.3 9.3 0 0Z"/><path transform="translate(337.5 -13.6) rotate(-41.1)" d="M0 0Q29.8 -8.6 66.1 0Q29.8 8.6 0 0Z"/><path transform="translate(337.5 -13.6) rotate(41.1)" d="M0 0Q29.8 -8.6 66.1 0Q29.8 8.6 0 0Z"/></g><g transform="translate(-50 150) rotate(32)"><path d="M0 0Q150 -27 300 -9" fill="none" stroke="currentColor" stroke-width="3.6"/><path transform="translate(18.8 -4.2) rotate(-56.9)" d="M0 0Q60.0 -17.3 133.4 0Q60.0 17.3 0 0Z"/><path transform="translate(18.8 -4.2) rotate(56.9)" d="M0 0Q60.0 -17.3 133.4 0Q60.0 17.3 0 0Z"/><path transform="translate(37.5 -8.3) rotate(-55.8)" d="M0 0Q57.7 -16.7 128.2 0Q57.7 16.7 0 0Z"/><path transform="translate(37.5 -8.3) rotate(55.8)" d="M0 0Q57.7 -16.7 128.2 0Q57.7 16.7 0 0Z"/><path transform="translate(56.3 -12.1) rotate(-54.6)" d="M0 0Q55.4 -16.0 123.0 0Q55.4 16.0 0 0Z"/><path transform="translate(56.3 -12.1) rotate(54.6)" d="M0 0Q55.4 -16.0 123.0 0Q55.4 16.0 0 0Z"/><path transform="translate(75.0 -15.6) rotate(-53.5)" d="M0 0Q53.0 -15.3 117.8 0Q53.0 15.3 0 0Z"/><path transform="translate(75.0 -15.6) rotate(53.5)" d="M0 0Q53.0 -15.3 117.8 0Q53.0 15.3 0 0Z"/><path transform="translate(93.8 -18.6) rotate(-52.4)" d="M0 0Q50.7 -14.6 112.6 0Q50.7 14.6 0 0Z"/><path transform="translate(93.8 -18.6) rotate(52.4)" d="M0 0Q50.7 -14.6 112.6 0Q50.7 14.6 0 0Z"/><path transform="translate(112.5 -20.9) rotate(-51.3)" d="M0 0Q48.3 -14.0 107.4 0Q48.3 14.0 0 0Z"/><path transform="translate(112.5 -20.9) rotate(51.3)" d="M0 0Q48.3 -14.0 107.4 0Q48.3 14.0 0 0Z"/><path transform="translate(131.3 -22.7) rotate(-50.1)" d="M0 0Q46.0 -13.3 102.2 0Q46.0 13.3 0 0Z"/><path transform="translate(131.3 -22.7) rotate(50.1)" d="M0 0Q46.0 -13.3 102.2 0Q46.0 13.3 0 0Z"/><path transform="translate(150.0 -23.7) rotate(-49.0)" d="M0 0Q43.7 -12.6 97.0 0Q43.7 12.6 0 0Z"/><path transform="translate(150.0 -23.7) rotate(49.0)" d="M0 0Q43.7 -12.6 97.0 0Q43.7 12.6 0 0Z"/><path transform="translate(168.8 -24.0) rotate(-47.9)" d="M0 0Q41.3 -11.9 91.8 0Q41.3 11.9 0 0Z"/><path transform="translate(168.8 -24.0) rotate(47.9)" d="M0 0Q41.3 -11.9 91.8 0Q41.3 11.9 0 0Z"/><path transform="translate(187.5 -23.5) rotate(-46.8)" d="M0 0Q39.0 -11.3 86.6 0Q39.0 11.3 0 0Z"/><path transform="translate(187.5 -23.5) rotate(46.8)" d="M0 0Q39.0 -11.3 86.6 0Q39.0 11.3 0 0Z"/><path transform="translate(206.3 -22.3) rotate(-45.6)" d="M0 0Q36.6 -10.6 81.4 0Q36.6 10.6 0 0Z"/><path transform="translate(206.3 -22.3) rotate(45.6)" d="M0 0Q36.6 -10.6 81.4 0Q36.6 10.6 0 0Z"/><path transform="translate(225.0 -20.5) rotate(-44.5)" d="M0 0Q34.3 -9.9 76.2 0Q34.3 9.9 0 0Z"/><path transform="translate(225.0 -20.5) rotate(44.5)" d="M0 0Q34.3 -9.9 76.2 0Q34.3 9.9 0 0Z"/><path transform="translate(243.8 -17.9) rotate(-43.4)" d="M0 0Q32.0 -9.2 71.0 0Q32.0 9.2 0 0Z"/><path transform="translate(243.8 -17.9) rotate(43.4)" d="M0 0Q32.0 -9.2 71.0 0Q32.0 9.2 0 0Z"/><path transform="translate(262.5 -14.9) rotate(-42.3)" d="M0 0Q29.6 -8.6 65.8 0Q29.6 8.6 0 0Z"/><path transform="translate(262.5 -14.9) rotate(42.3)" d="M0 0Q29.6 -8.6 65.8 0Q29.6 8.6 0 0Z"/><path transform="translate(281.3 -11.3) rotate(-41.1)" d="M0 0Q27.3 -7.9 60.6 0Q27.3 7.9 0 0Z"/><path transform="translate(281.3 -11.3) rotate(41.1)" d="M0 0Q27.3 -7.9 60.6 0Q27.3 7.9 0 0Z"/></g><g transform="translate(10 -20) rotate(6)"><path d="M0 0Q140 -25.2 280 -8.4" fill="none" stroke="currentColor" stroke-width="3.4"/><path transform="translate(17.5 -3.9) rotate(-56.9)" d="M0 0Q50.9 -14.7 113.2 0Q50.9 14.7 0 0Z"/><path transform="translate(17.5 -3.9) rotate(56.9)" d="M0 0Q50.9 -14.7 113.2 0Q50.9 14.7 0 0Z"/><path transform="translate(35.0 -7.8) rotate(-55.8)" d="M0 0Q49.0 -14.1 108.8 0Q49.0 14.1 0 0Z"/><path transform="translate(35.0 -7.8) rotate(55.8)" d="M0 0Q49.0 -14.1 108.8 0Q49.0 14.1 0 0Z"/><path transform="translate(52.5 -11.3) rotate(-54.6)" d="M0 0Q47.0 -13.6 104.4 0Q47.0 13.6 0 0Z"/><path transform="translate(52.5 -11.3) rotate(54.6)" d="M0 0Q47.0 -13.6 104.4 0Q47.0 13.6 0 0Z"/><path transform="translate(70.0 -14.5) rotate(-53.5)" d="M0 0Q45.0 -13.0 100.0 0Q45.0 13.0 0 0Z"/><path transform="translate(70.0 -14.5) rotate(53.5)" d="M0 0Q45.0 -13.0 100.0 0Q45.0 13.0 0 0Z"/><path transform="translate(87.5 -17.3) rotate(-52.4)" d="M0 0Q43.0 -12.4 95.5 0Q43.0 12.4 0 0Z"/><path transform="translate(87.5 -17.3) rotate(52.4)" d="M0 0Q43.0 -12.4 95.5 0Q43.0 12.4 0 0Z"/><path transform="translate(105.0 -19.5) rotate(-51.3)" d="M0 0Q41.0 -11.8 91.1 0Q41.0 11.8 0 0Z"/><path transform="translate(105.0 -19.5) rotate(51.3)" d="M0 0Q41.0 -11.8 91.1 0Q41.0 11.8 0 0Z"/><path transform="translate(122.5 -21.2) rotate(-50.1)" d="M0 0Q39.0 -11.3 86.7 0Q39.0 11.3 0 0Z"/><path transform="translate(122.5 -21.2) rotate(50.1)" d="M0 0Q39.0 -11.3 86.7 0Q39.0 11.3 0 0Z"/><path transform="translate(140.0 -22.1) rotate(-49.0)" d="M0 0Q37.0 -10.7 82.3 0Q37.0 10.7 0 0Z"/><path transform="translate(140.0 -22.1) rotate(49.0)" d="M0 0Q37.0 -10.7 82.3 0Q37.0 10.7 0 0Z"/><path transform="translate(157.5 -22.4) rotate(-47.9)" d="M0 0Q35.1 -10.1 77.9 0Q35.1 10.1 0 0Z"/><path transform="translate(157.5 -22.4) rotate(47.9)" d="M0 0Q35.1 -10.1 77.9 0Q35.1 10.1 0 0Z"/><path transform="translate(175.0 -22.0) rotate(-46.8)" d="M0 0Q33.1 -9.6 73.5 0Q33.1 9.6 0 0Z"/><path transform="translate(175.0 -22.0) rotate(46.8)" d="M0 0Q33.1 -9.6 73.5 0Q33.1 9.6 0 0Z"/><path transform="translate(192.5 -20.9) rotate(-45.6)" d="M0 0Q31.1 -9.0 69.1 0Q31.1 9.0 0 0Z"/><path transform="translate(192.5 -20.9) rotate(45.6)" d="M0 0Q31.1 -9.0 69.1 0Q31.1 9.0 0 0Z"/><path transform="translate(210.0 -19.1) rotate(-44.5)" d="M0 0Q29.1 -8.4 64.7 0Q29.1 8.4 0 0Z"/><path transform="translate(210.0 -19.1) rotate(44.5)" d="M0 0Q29.1 -8.4 64.7 0Q29.1 8.4 0 0Z"/><path transform="translate(227.5 -16.7) rotate(-43.4)" d="M0 0Q27.1 -7.8 60.3 0Q27.1 7.8 0 0Z"/><path transform="translate(227.5 -16.7) rotate(43.4)" d="M0 0Q27.1 -7.8 60.3 0Q27.1 7.8 0 0Z"/><path transform="translate(245.0 -13.9) rotate(-42.3)" d="M0 0Q25.1 -7.3 55.9 0Q25.1 7.3 0 0Z"/><path transform="translate(245.0 -13.9) rotate(42.3)" d="M0 0Q25.1 -7.3 55.9 0Q25.1 7.3 0 0Z"/><path transform="translate(262.5 -10.6) rotate(-41.1)" d="M0 0Q23.2 -6.7 51.4 0Q23.2 6.7 0 0Z"/><path transform="translate(262.5 -10.6) rotate(41.1)" d="M0 0Q23.2 -6.7 51.4 0Q23.2 6.7 0 0Z"/></g></g>
   </svg>
-      <span class="hero__sun"></span>
-    </div>
-    <div class="hero__stage">
-      <h1 class="hero__brand" id="hero-title">
-        <span class="sr-only">SMUG MODAS</span>
-        <span class="hero__brand-word" aria-hidden="true"><span class="hero__letter" style="--li:0">S</span><span class="hero__letter" style="--li:1">M</span><span class="hero__letter" style="--li:2">U</span><span class="hero__letter" style="--li:3">G</span></span>
-      </h1>
-      <figure class="hero__figure">
-        <img class="hero__photo" src="assets/img/fabielly-hero.webp" width="531" height="971" alt="Fabielly, fundadora da SMUG MODAS, sorrindo, com colete e calça cor vinho e blusa creme." loading="eager" decoding="async" fetchpriority="high">
-      </figure>
-    </div>
+    <span class="hero__sun"></span>
+    <span class="hero__sweep"></span>
+    <div class="hero__dust"><span style="--x:34.0%;--y:40.2%;--s:2.5px;--t:10.5s;--dl:-17.2s;--dx:-50px;--dy:-76px"></span><span style="--x:63.0%;--y:42.0%;--s:2.4px;--t:12.6s;--dl:-14.3s;--dx:-37px;--dy:-67px"></span><span style="--x:70.5%;--y:67.5%;--s:2.7px;--t:11.0s;--dl:-4.4s;--dx:-67px;--dy:-81px"></span><span style="--x:68.4%;--y:42.5%;--s:2.3px;--t:13.7s;--dl:-15.9s;--dx:-31px;--dy:-54px"></span><span style="--x:69.7%;--y:59.3%;--s:1.6px;--t:14.6s;--dl:-17.7s;--dx:-56px;--dy:-47px"></span><span style="--x:71.9%;--y:77.0%;--s:2.5px;--t:20.8s;--dl:-0.4s;--dx:-66px;--dy:-97px"></span><span style="--x:92.9%;--y:28.7%;--s:2.1px;--t:19.6s;--dl:-19.0s;--dx:-67px;--dy:-110px"></span><span style="--x:83.6%;--y:39.1%;--s:2.3px;--t:17.4s;--dl:-0.5s;--dx:-78px;--dy:-98px"></span><span style="--x:55.8%;--y:70.9%;--s:1.6px;--t:18.0s;--dl:-19.0s;--dx:-57px;--dy:-88px"></span><span style="--x:65.6%;--y:69.4%;--s:2.8px;--t:21.1s;--dl:-20.0s;--dx:-51px;--dy:-97px"></span><span style="--x:65.5%;--y:24.2%;--s:1.7px;--t:10.6s;--dl:-16.5s;--dx:-35px;--dy:-65px"></span><span style="--x:68.2%;--y:35.1%;--s:2.9px;--t:11.3s;--dl:-7.6s;--dx:-39px;--dy:-80px"></span><span style="--x:68.1%;--y:74.6%;--s:1.9px;--t:21.8s;--dl:-19.9s;--dx:-69px;--dy:-80px"></span><span style="--x:56.9%;--y:70.0%;--s:3.4px;--t:16.0s;--dl:-6.1s;--dx:-57px;--dy:-58px"></span><span style="--x:93.7%;--y:49.0%;--s:4.1px;--t:11.8s;--dl:-3.2s;--dx:-78px;--dy:-88px"></span><span style="--x:51.9%;--y:67.5%;--s:2.6px;--t:20.5s;--dl:-9.7s;--dx:-55px;--dy:-56px"></span><span style="--x:40.2%;--y:65.5%;--s:4.0px;--t:13.1s;--dl:-15.1s;--dx:-47px;--dy:-100px"></span><span style="--x:61.0%;--y:8.1%;--s:1.7px;--t:10.4s;--dl:-11.1s;--dx:-45px;--dy:-97px"></span><span style="--x:53.6%;--y:54.0%;--s:4.4px;--t:15.9s;--dl:-15.1s;--dx:-39px;--dy:-86px"></span><span style="--x:64.7%;--y:25.6%;--s:2.3px;--t:16.0s;--dl:-12.5s;--dx:-53px;--dy:-61px"></span><span style="--x:64.5%;--y:44.7%;--s:1.9px;--t:17.6s;--dl:-16.3s;--dx:-55px;--dy:-79px"></span><span style="--x:47.3%;--y:63.7%;--s:2.6px;--t:11.3s;--dl:-11.4s;--dx:-49px;--dy:-54px"></span><span style="--x:65.7%;--y:74.4%;--s:2.7px;--t:12.0s;--dl:-16.8s;--dx:-72px;--dy:-91px"></span><span style="--x:48.9%;--y:28.3%;--s:2.3px;--t:13.7s;--dl:-18.4s;--dx:-65px;--dy:-79px"></span></div>
   </div>
 
-  <div class="hero__intro">
-    <p class="hero__eyebrow">SMUG MODAS</p>
-    <p class="hero__tagline">Moda é mais que roupa, <em>é expressão.</em></p>
-    <div class="hero__actions">
-      <a class="btn btn--wine" href="#categorias" >
-        <span>Conhecer a coleção</span><svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15"/><path d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg>
-      </a>
-      <a class="btn btn--line" href="#contato" >
-        <span>Falar com a loja</span>
-      </a>
-    </div>
+  <div class="hero__stage">
+    <h1 class="hero__brand" id="hero-title">
+      <span class="sr-only">SMUG MODAS</span>
+      <span class="hero__brand-word" aria-hidden="true"><span class="hero__letter" style="--li:0">S</span><span class="hero__letter" style="--li:1">M</span><span class="hero__letter" style="--li:2">U</span><span class="hero__letter" style="--li:3">G</span></span>
+    </h1>
+
+    <figure class="hero__figure">
+      <img class="hero__photo" src="assets/img/fabielly-hero.webp" width="531" height="971" alt="Fabielly, fundadora da SMUG MODAS, sorrindo, com colete e calça cor vinho e blusa creme." loading="eager" decoding="async" fetchpriority="high">
+    </figure>
+
+    <p class="hero__tagline">
+      <span class="hero__tagline-line" style="--d:0ms">Moda é mais</span> <span class="hero__tagline-line" style="--d:140ms">que roupa,</span> <span class="hero__tagline-line" style="--d:280ms">é expressão.</span>
+      <span class="hero__tagline-rule" aria-hidden="true"></span>
+    </p>
   </div>
+
+  <span class="hero__vignette" aria-hidden="true"></span>
+
+  <div class="hero__benefits">
+    
+  <ul class="benefits benefits--glass" aria-label="Vantagens da SMUG MODAS">
+    
+      <li class="benefit" style="--d:0ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M2.5 6.5h11v9.5h-11z"/><path pathLength="1" d="M13.5 9.5h4l3.5 3.6v2.9h-7.5"/><circle pathLength="1" cx="6.5" cy="17.5" r="1.7"/><circle pathLength="1" cx="17" cy="17.5" r="1.7"/><path pathLength="1" d="M1 9h3M.5 11.5h3"/></svg>
+        <div class="benefit__body">
+          <p class="benefit__title">Frete Grátis</p>
+          <p class="benefit__text">Em compras acima de R$ 299</p>
+        </div>
+      </li>
+      <li class="benefit" style="--d:80ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect pathLength="1" x="2.5" y="5" width="19" height="14" rx="2"/><path pathLength="1" d="M2.5 9.5h19"/><path pathLength="1" d="M6 15h4.5"/></svg>
+        <div class="benefit__body">
+          <p class="benefit__title">Pagamento Seguro</p>
+          <p class="benefit__text">Diversas formas de pagamento</p>
+        </div>
+      </li>
+      <li class="benefit" style="--d:160ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 4.3V3.1a1.3 1.3 0 1 1 1.3-1.3"/><path pathLength="1" d="M12 4.3 8.6 6.2M12 4.3l3.4 1.9"/><path pathLength="1" d="m9.2 5.9.7 3.7-3.6 10.9h11.4L14.1 9.6l.7-3.7"/><path pathLength="1" d="M9.9 9.6h4.2"/></svg>
+        <div class="benefit__body">
+          <p class="benefit__title">Coleções Exclusivas</p>
+          <p class="benefit__text">Sempre as últimas tendências</p>
+        </div>
+      </li>
+      <li class="benefit" style="--d:240ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4.5 14v-2a7.5 7.5 0 0 1 15 0v2"/><rect pathLength="1" x="3" y="13" width="4" height="6" rx="1.6"/><rect pathLength="1" x="17" y="13" width="4" height="6" rx="1.6"/><path pathLength="1" d="M19 19v.4a2.6 2.6 0 0 1-2.6 2.6H13"/></svg>
+        <div class="benefit__body">
+          <p class="benefit__title">Suporte 24/7</p>
+          <p class="benefit__text">Estamos sempre com você</p>
+        </div>
+      </li>
+  </ul>
+  </div>
+
+  <span class="hero__grain" aria-hidden="true"></span>
+  <span class="hero__letterbox" aria-hidden="true"></span>
 </section>
 
-<section class="highlights" aria-label="Diferenciais da SMUG MODAS">
-  <ul class="highlights__list container">
+<div class="marquee" aria-hidden="true" data-anim-scope>
+  <div class="marquee__track">
+    <div class="marquee__run"><span class="marquee__item">Moda é mais que roupa, é expressão</span><span class="marquee__star">✦</span><span class="marquee__item">SMUG MODAS</span><span class="marquee__star">✦</span><span class="marquee__item">Mais que moda, é você</span><span class="marquee__star">✦</span><span class="marquee__item">Estilo · Conforto · Você</span><span class="marquee__star">✦</span></div>
+    <div class="marquee__run"><span class="marquee__item">Moda é mais que roupa, é expressão</span><span class="marquee__star">✦</span><span class="marquee__item">SMUG MODAS</span><span class="marquee__star">✦</span><span class="marquee__item">Mais que moda, é você</span><span class="marquee__star">✦</span><span class="marquee__item">Estilo · Conforto · Você</span><span class="marquee__star">✦</span></div>
+  </div>
+</div>
+
+<section class="store" id="loja" data-tone="light" aria-labelledby="store-title">
+  <div class="store__grid container">
+    <div class="store__content">
+      <p class="eyebrow eyebrow--line" data-reveal>Nossa loja</p>
+      <h2 class="section-title section-title--wine" id="store-title" data-reveal="words" style="--d:80ms">
+        <span class="w"><span class="w__i" style="--wi:0">Mais</span></span> <span class="w"><span class="w__i" style="--wi:1">que</span></span> <span class="w"><span class="w__i" style="--wi:2">uma</span></span> <span class="w"><span class="w__i" style="--wi:3">loja,</span></span> <em><span class="w"><span class="w__i" style="--wi:4">um</span></span> <span class="w"><span class="w__i" style="--wi:5">espaço</span></span> <span class="w"><span class="w__i" style="--wi:6">feito</span></span> <span class="w"><span class="w__i" style="--wi:7">para</span></span> <span class="w"><span class="w__i" style="--wi:8">você.</span></span></em>
+      </h2>
+      <p class="store__text" data-reveal style="--d:160ms">Aqui na SMUG MODAS, cada detalhe foi pensado para que você se sinta bem, confortável e à vontade para escolher o que mais combina com o seu estilo.</p><p class="store__text" data-reveal style="--d:240ms">Nosso ambiente é acolhedor, moderno e cheio de inspirações, para tornar sua experiência de compra ainda mais especial.</p>
+      <div data-reveal style="--d:320ms"><a class="btn btn--wine btn--wide" href="#contato">Venha nos visitar <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></a></div>
+    </div>
+    <figure class="store__media" data-reveal="zoom">
+      <span class="parallax" data-parallax="0.12"><img class="store__photo" src="assets/img/loja-ambiente.webp" srcset="assets/img/loja-ambiente-480.webp 480w, assets/img/loja-ambiente.webp 851w" sizes="(min-width: 1024px) 55vw, 100vw" width="851" height="612" alt="Interior da loja SMUG MODAS: parede ripada iluminada com letreiro neon “good vibes only”, araras de roupas e expositor de tênis." loading="lazy" decoding="async"></span>
+    </figure>
+  </div>
+  <div class="container">
     
-    <li class="highlight">
-      <svg class="icon highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 10.5V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2.5"/><path d="M3 12.5a2 2 0 0 1 4 0V14h10v-1.5a2 2 0 0 1 4 0V18H3z"/><path d="M5.5 18v2M18.5 18v2"/></svg>
-      <div class="highlight__body">
-        <p class="highlight__title">Ambiente acolhedor</p>
-        <p class="highlight__text">Um espaço pensado para você escolher com calma.</p>
-      </div>
-    </li>
-    <li class="highlight">
-      <svg class="icon highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 5.5a2 2 0 1 1 2 2v1.3"/><path d="M12 8.8 3.4 15.4a1 1 0 0 0 .6 1.8h16a1 1 0 0 0 .6-1.8L12 8.8"/></svg>
-      <div class="highlight__body">
-        <p class="highlight__title">Do casual ao sofisticado</p>
-        <p class="highlight__text">Peças para diferentes ocasiões.</p>
-      </div>
-    </li>
-    <li class="highlight">
-      <svg class="icon highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6.5 4.5h11l3.5 4.8-9 10.7-9-10.7z"/><path d="M3 9.3h18"/><path d="m9.5 4.5-1.6 4.8L12 20l4.1-10.7-1.6-4.8"/></svg>
-      <div class="highlight__body">
-        <p class="highlight__title">Peças selecionadas</p>
-        <p class="highlight__text">Escolhidas com carinho, detalhe a detalhe.</p>
-      </div>
-    </li>
-    <li class="highlight">
-      <svg class="icon highlight__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg>
-      <div class="highlight__body">
-        <p class="highlight__title">Atendimento atencioso</p>
-        <p class="highlight__text">Ajuda para encontrar o que combina com você.</p>
-      </div>
-    </li>
+  <ul class="benefits benefits--light" aria-label="Diferenciais da loja">
+    
+      <li class="benefit" data-reveal style="--d:0ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M5 10.5V8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v2.5"/><path pathLength="1" d="M3 12.5a2 2 0 0 1 4 0V14h10v-1.5a2 2 0 0 1 4 0V18H3z"/><path pathLength="1" d="M5.5 18v2M18.5 18v2"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Ambiente Confortável</h3>
+          <p class="benefit__text">Espaço climatizado e acolhedor para você.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:80ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M10 5.5a2 2 0 1 1 2 2v1.3"/><path pathLength="1" d="M12 8.8 3.4 15.4a1 1 0 0 0 .6 1.8h16a1 1 0 0 0 .6-1.8L12 8.8"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Variedade de Estilos</h3>
+          <p class="benefit__text">Do casual ao sofisticado, sempre com novidades.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:160ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M6.5 4.5h11l3.5 4.8-9 10.7-9-10.7z"/><path pathLength="1" d="M3 9.3h18"/><path pathLength="1" d="m9.5 4.5-1.6 4.8L12 20l4.1-10.7-1.6-4.8"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Qualidade em Cada Detalhe</h3>
+          <p class="benefit__text">Peças selecionadas com muito carinho.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:240ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Atendimento Especial</h3>
+          <p class="benefit__text">Nossa equipe está sempre pronta para te ajudar.</p>
+        </div>
+      </li>
   </ul>
+  </div>
 </section>
 
 <section class="categories" id="categorias" data-tone="dark" aria-labelledby="categories-title">
   <div class="categories__bg" aria-hidden="true">
     <img src="assets/img/categorias-loja.webp" width="365" height="494" alt="" loading="lazy" decoding="async">
   </div>
-  <div class="container">
-    <header class="section-head">
-      <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>Categorias</p>
-      <h2 class="section-title section-title--light" id="categories-title" data-reveal style="--d:70ms">Encontre o <em class="text-gold">seu estilo</em></h2>
-      <p class="section-lead section-lead--light" data-reveal style="--d:140ms">Do básico ao sofisticado, escolha por onde começar.</p>
+  <div class="container categories__inner">
+    <header class="categories__head">
+      <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>SMUG MODAS</p>
+      <h2 class="section-title section-title--light" id="categories-title" data-reveal="words" style="--d:80ms">
+        <span class="categories__title-plain"><span class="w"><span class="w__i" style="--wi:0">Nossas</span></span></span>
+        <em><span class="w"><span class="w__i text-gold" style="--wi:1">Categorias</span></span></em>
+      </h2>
+      <p class="categories__text" data-reveal style="--d:160ms">Do básico ao sofisticado, encontre o que faz o seu estilo em cada categoria. Tudo pensado para você se sentir bem, em todos os momentos.</p>
+      <div data-reveal style="--d:240ms">
+        <a class="btn btn--outline-gold" href="#categorias-lista" >Ver todas as categorias <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></a>
+      </div>
     </header>
-    <ul class="cat-grid" aria-label="Categorias">
+
+    <ul class="cat-grid" id="categorias-lista" aria-label="Categorias" tabindex="-1">
       
     <li class="cat-card" data-reveal style="--d:0ms">
-      <div class="cat-card__inner">
+      <a class="cat-card__link" href="#contato" data-interest="Roupas">
         <span class="cat-card__media">
-          <img class="cat-card__img" src="assets/img/cat-roupas.webp" width="368" height="292" alt="Look com blazer bege, blusa de tricô e calça de alfaiataria." loading="lazy" decoding="async" style="object-position:50% 30%">
+          <img class="cat-card__img" src="assets/img/cat-roupas.webp" width="368" height="292" alt="Look com blazer bege, blusa de tricô e calça de alfaiataria." loading="lazy" decoding="async">
         </span>
         <span class="cat-card__body">
           <span class="cat-card__name">Roupas</span>
           <span class="cat-card__text">Estilo em todas as ocasiões.</span>
-          
-        </span></div>
-    </li>
-    <li class="cat-card" data-reveal style="--d:70ms">
-      <div class="cat-card__inner">
-        <span class="cat-card__media">
-          <img class="cat-card__img" src="assets/img/cat-feminino.webp" width="367" height="262" alt="Vestidos em tons de vinho e off-white em cabides de madeira." loading="lazy" decoding="async" style="object-position:45% 35%">
+          <span class="sr-only"> — falar com a equipe sobre esta categoria</span>
+          <span class="cat-card__arrow" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></span>
         </span>
-        <span class="cat-card__body">
-          <span class="cat-card__name">Vestidos</span>
-          <span class="cat-card__text">Beleza, estilo e autenticidade.</span>
-          
-        </span></div>
+      </a>
     </li>
-    <li class="cat-card" data-reveal style="--d:140ms">
-      <div class="cat-card__inner">
+    <li class="cat-card" data-reveal style="--d:90ms">
+      <a class="cat-card__link" href="#contato" data-interest="Calçados">
         <span class="cat-card__media">
-          <img class="cat-card__img" src="assets/img/cat-calcados.webp" width="367" height="292" alt="Par de tênis brancos em expositor de mármore." loading="lazy" decoding="async" style="object-position:60% 50%">
+          <img class="cat-card__img" src="assets/img/cat-calcados.webp" width="367" height="292" alt="Par de tênis brancos em expositor de mármore." loading="lazy" decoding="async">
         </span>
         <span class="cat-card__body">
           <span class="cat-card__name">Calçados</span>
           <span class="cat-card__text">Conforto que te acompanha.</span>
-          
-        </span></div>
+          <span class="sr-only"> — falar com a equipe sobre esta categoria</span>
+          <span class="cat-card__arrow" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></span>
+        </span>
+      </a>
     </li>
-    <li class="cat-card" data-reveal style="--d:210ms">
-      <div class="cat-card__inner">
+    <li class="cat-card" data-reveal style="--d:180ms">
+      <a class="cat-card__link" href="#contato" data-interest="Acessórios">
         <span class="cat-card__media">
-          <img class="cat-card__img" src="assets/img/cat-acessorios.webp" width="368" height="262" alt="Bolsa preta matelassê com óculos de sol e relógio dourado." loading="lazy" decoding="async" style="object-position:50% 45%">
+          <img class="cat-card__img" src="assets/img/cat-acessorios.webp" width="368" height="262" alt="Bolsa preta matelassê com óculos de sol e relógio dourado." loading="lazy" decoding="async">
         </span>
         <span class="cat-card__body">
           <span class="cat-card__name">Acessórios</span>
           <span class="cat-card__text">Detalhes que fazem a diferença.</span>
-          
-        </span></div>
+          <span class="sr-only"> — falar com a equipe sobre esta categoria</span>
+          <span class="cat-card__arrow" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></span>
+        </span>
+      </a>
+    </li>
+    <li class="cat-card" data-reveal style="--d:270ms">
+      <a class="cat-card__link" href="#contato" data-interest="Feminino">
+        <span class="cat-card__media">
+          <img class="cat-card__img" src="assets/img/cat-feminino.webp" width="367" height="262" alt="Vestidos em tons de vinho e off-white em cabides de madeira." loading="lazy" decoding="async">
+        </span>
+        <span class="cat-card__body">
+          <span class="cat-card__name">Feminino</span>
+          <span class="cat-card__text">Beleza, estilo e autenticidade.</span>
+          <span class="sr-only"> — falar com a equipe sobre esta categoria</span>
+          <span class="cat-card__arrow" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></span>
+        </span>
+      </a>
+    </li>
+    <li class="cat-card cat-card--wide" data-reveal style="--d:360ms">
+      <a class="cat-card__link" href="#contato" data-interest="Lançamentos">
+        <span class="cat-card__media">
+          <img class="cat-card__img" src="assets/img/cat-lancamentos.webp" width="409" height="215" alt="Manequim com blazer bege e blusa vinho." loading="lazy" decoding="async">
+        </span>
+        <span class="cat-card__body">
+          <span class="cat-card__name">Lançamentos</span>
+          <span class="cat-card__text">Novidades para você se destacar.</span>
+          <span class="sr-only"> — falar com a equipe sobre esta categoria</span>
+          <span class="cat-card__arrow" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg></span>
+        </span>
+      </a>
     </li>
     </ul>
-  </div>
-</section>
 
-<section class="store" id="loja" data-tone="light" aria-labelledby="store-title">
-  <div class="store__grid container">
-    <figure class="store__media" data-reveal="photo">
-      <img class="store__photo" src="assets/img/loja-ambiente.webp" srcset="assets/img/loja-ambiente-480.webp 480w, assets/img/loja-ambiente.webp 851w" sizes="(min-width: 1024px) 58vw, 100vw" width="851" height="612" alt="Interior da loja SMUG MODAS: parede ripada iluminada com letreiro neon “good vibes only”, araras de roupas e expositor de tênis." loading="lazy" decoding="async">
-    </figure>
-    <div class="store__content">
-      <p class="eyebrow eyebrow--line" data-reveal>Nossa loja</p>
-      <h2 class="section-title section-title--wine" id="store-title" data-reveal style="--d:70ms">Mais que uma loja, <em>um espaço feito para você.</em></h2>
-      <p class="section-lead" data-reveal style="--d:140ms">Aqui na SMUG MODAS, cada detalhe foi pensado para que você se sinta bem e à vontade para escolher o que combina com o seu estilo — num ambiente acolhedor, moderno e cheio de inspirações.</p>
-      
-      
+    <div class="categories__closing" data-reveal>
+      <p class="categories__words"><span>SMUG MODAS</span><span class="dot" aria-hidden="true">·</span><span>Estilo</span><span class="dot" aria-hidden="true">·</span><span>Conforto</span><span class="dot" aria-hidden="true">·</span><span>Você</span></p>
+      <p class="script categories__script" data-write>Mais que moda, é você.</p>
     </div>
   </div>
 </section>
 
 <section class="about" id="sobre" data-tone="dark" aria-labelledby="about-title">
   <div class="about__grid container">
-    <figure class="about__media" data-reveal="photo">
+    <header class="about__head">
+      <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>Sobre a</p>
+      <h2 class="about__title" id="about-title" data-reveal="words" style="--d:80ms"><span class="w"><span class="w__i" style="--wi:0">Fabielly</span></span></h2>
+    </header>
+
+    <figure class="about__media" data-reveal="zoom">
       <img class="about__photo" src="assets/img/fabielly-retrato.webp" srcset="assets/img/fabielly-retrato-480.webp 480w, assets/img/fabielly-retrato.webp 852w" sizes="(min-width: 1024px) 50vw, 100vw" width="852" height="712" alt="Fabielly dentro da SMUG MODAS, ao lado de araras de roupas e do letreiro neon “good vibes only”." loading="lazy" decoding="async">
     </figure>
 
     <div class="about__content">
-      <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>Sobre a</p>
-      <h2 class="about__title" id="about-title" data-reveal style="--d:70ms">Fabielly</h2>
-      <blockquote class="about__quote" data-reveal style="--d:140ms">
+      <blockquote class="about__quote" data-reveal>
         <p><span>Mais do que uma loja,</span> <span>é um sonho que se veste.</span></p>
       </blockquote>
-      <p class="about__text" data-reveal style="--d:210ms">Olá! Eu sou Fabielly, a mente e o coração por trás da SMUG MODAS. Sempre acreditei que a moda vai muito além de roupas — ela é autoestima, é liberdade, é expressão.</p><p class="about__text" data-reveal style="--d:280ms">A SMUG nasceu do meu desejo de oferecer mais do que peças: uma experiência. Cada detalhe da loja é pensado com carinho, para que você se sinta bem, confortável e ainda mais linda, do seu jeito.</p>
-      <div class="about__sign" data-reveal style="--d:350ms">
-        <p class="script about__signature">Fabielly</p>
+      <p class="about__text" data-reveal style="--d:80ms">Olá! Eu sou Fabielly, e sou a mente e o coração por trás da SMUG MODAS. Sempre acreditei que a moda vai muito além de roupas — ela é autoestima, é liberdade, é expressão.</p><p class="about__text" data-reveal style="--d:160ms">A SMUG nasceu do meu desejo de oferecer para você mais do que peças, mas sim uma experiência. Cada detalhe da nossa loja é pensado com carinho, para que você se sinta bem, confortável e ainda mais linda, do seu jeito.</p>
+      <div class="about__sign" data-reveal style="--d:240ms">
+        <p class="script about__signature" data-write>Fabielly <svg class="about__heart" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg></p>
         <p class="about__role">Fundadora da SMUG MODAS</p>
       </div>
     </div>
   </div>
+  <div class="container">
+    
+  <ul class="benefits benefits--dark" aria-label="Nossos valores">
+    
+      <li class="benefit" data-reveal style="--d:0ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 20s-7.4-4.5-9-9.1C1.9 7.7 4 4.6 7.1 4.6c2 0 3.5 1.1 4.9 3 1.4-1.9 2.9-3 4.9-3 3.1 0 5.2 3.1 4.1 6.3C19.4 15.5 12 20 12 20z"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Paixão pela moda</h3>
+          <p class="benefit__text">Porque cada detalhe importa.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:80ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M6.5 4.5h11l3.5 4.8-9 10.7-9-10.7z"/><path pathLength="1" d="M3 9.3h18"/><path pathLength="1" d="m9.5 4.5-1.6 4.8L12 20l4.1-10.7-1.6-4.8"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Qualidade em cada peça</h3>
+          <p class="benefit__text">Você merece o melhor.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:160ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="12" cy="8.2" r="3"/><path pathLength="1" d="M6.5 19.5v-.7a5.5 5.5 0 0 1 11 0v.7"/><circle pathLength="1" cx="5" cy="10.3" r="2.1"/><circle pathLength="1" cx="19" cy="10.3" r="2.1"/><path pathLength="1" d="M1.6 18.4v-.4A3.4 3.4 0 0 1 5 14.6"/><path pathLength="1" d="M22.4 18.4v-.4a3.4 3.4 0 0 0-3.4-3.4"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Atendimento especial</h3>
+          <p class="benefit__text">Aqui você é única.</p>
+        </div>
+      </li>
+      <li class="benefit" data-reveal style="--d:240ms">
+        <svg class="icon benefit__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="m12 3.2 2.7 5.5 6 .9-4.35 4.25 1.03 6L12 17l-5.38 2.85 1.03-6L3.3 9.6l6-.9z"/></svg>
+        <div class="benefit__body">
+          <h3 class="benefit__title">Confiança sempre</h3>
+          <p class="benefit__text">Sua satisfação é a nossa maior conquista.</p>
+        </div>
+      </li>
+  </ul>
+  </div>
 </section>
 
-<section class="contact" id="contato" data-tone="light" aria-labelledby="contact-title">
-  <div class="contact__grid container">
-    <figure class="contact__media" data-reveal="photo">
-      <img class="contact__photo" src="assets/img/contato-recepcao.webp" width="374" height="838" alt="Recepção da SMUG MODAS, com balcão de mármore, logotipo dourado e letreiro neon." loading="lazy" decoding="async">
-    </figure>
+<section class="contact" id="contato" data-tone="dark" aria-labelledby="contact-title">
+  <div class="contact__bg" aria-hidden="true">
+    <img src="assets/img/contato-recepcao.webp" width="374" height="838" alt="" loading="lazy" decoding="async">
+    <span class="contact__monogram">S</span>
+  </div>
 
+  <div class="contact__grid container">
     <div class="contact__info">
-      <p class="eyebrow eyebrow--line" data-reveal>Fale conosco</p>
-      <h2 class="section-title section-title--wine" id="contact-title" data-reveal style="--d:70ms">Estamos <em>aqui para você</em></h2>
-      <p class="section-lead" data-reveal style="--d:140ms">Tem alguma dúvida ou quer saber mais sobre as peças? Fale com a gente — vamos adorar ajudar.</p>
-      <p class="contact__pending" data-reveal style="--d:210ms">Os canais de atendimento da SMUG MODAS serão publicados aqui em breve.</p>
-      
-      
+      <p class="eyebrow eyebrow--line eyebrow--light" data-reveal>Fale conosco</p>
+      <h2 class="section-title section-title--light" id="contact-title" data-reveal="words" style="--d:80ms">
+        <span><span class="w"><span class="w__i" style="--wi:0">Estamos</span></span></span> <em><span class="w"><span class="w__i text-gold" style="--wi:1">aqui</span></span> <span class="w"><span class="w__i text-gold" style="--wi:2">para</span></span> <span class="w"><span class="w__i text-gold" style="--wi:3">você!</span></span></em>
+      </h2>
+      <p class="contact__text" data-reveal style="--d:160ms">Tem alguma dúvida, sugestão ou precisa de ajuda? Nossa equipe está pronta para te atender com todo o carinho e atenção que você merece.</p>
+
+      <ul class="contact-list">
+        
+        <li class="contact-item" data-reveal style="--d:0ms" data-pending>
+          <span class="contact-item__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M3.6 20.4 4.9 16A8.4 8.4 0 1 1 8 19.2z"/><path pathLength="1" d="M9.1 8.2c-.4.5-.5 1.2-.2 2.1.7 1.9 2.2 3.4 4.1 4.1.9.3 1.6.2 2.1-.2l.5-.6-1.9-1.1-.9.6c-.9-.4-1.6-1.1-2-2l.6-.9-1.1-1.9z"/></svg></span>
+          <div class="contact-item__body">
+            <h3 class="contact-item__label">WhatsApp</h3>
+            <p class="contact-item__value"><span class="contact-item__pending">Informação a confirmar</span></p>
+            
+          </div>
+        </li>
+        <li class="contact-item" data-reveal style="--d:80ms" data-pending>
+          <span class="contact-item__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect pathLength="1" x="3" y="5.5" width="18" height="13" rx="2"/><path pathLength="1" d="m3.6 7 8.4 6.4L20.4 7"/></svg></span>
+          <div class="contact-item__body">
+            <h3 class="contact-item__label">E-mail</h3>
+            <p class="contact-item__value"><span class="contact-item__pending">Informação a confirmar</span></p>
+            
+          </div>
+        </li>
+        <li class="contact-item" data-reveal style="--d:160ms" data-pending>
+          <span class="contact-item__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle pathLength="1" cx="12" cy="10" r="2.4"/></svg></span>
+          <div class="contact-item__body">
+            <h3 class="contact-item__label">Endereço</h3>
+            <p class="contact-item__value"><span class="contact-item__pending">Informação a confirmar</span></p>
+            
+          </div>
+        </li>
+        <li class="contact-item" data-reveal style="--d:240ms" data-pending>
+          <span class="contact-item__icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="12" cy="12" r="8.6"/><path pathLength="1" d="M12 7.4V12l3.1 2"/></svg></span>
+          <div class="contact-item__body">
+            <h3 class="contact-item__label">Horário de atendimento</h3>
+            <p class="contact-item__value"><span class="contact-item__pending">Informação a confirmar</span></p>
+            
+          </div>
+        </li>
+      </ul>
     </div>
-    
+
+    <div class="form-card" data-reveal>
+      <h3 class="form-card__title">Envie sua mensagem</h3>
+      <p class="form-card__text">Preencha o formulário abaixo e entraremos em contato o mais breve possível.</p>
+
+      <form class="contact-form" data-contact-form data-mode="unavailable" novalidate>
+        
+  <div class="field">
+    <div class="field__control">
+      <svg class="icon field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle pathLength="1" cx="12" cy="8" r="3.6"/><path pathLength="1" d="M5 20.2a7 7 0 0 1 14 0"/></svg>
+      <input class="field__input" id="cf-nome" name="nome" type="text" placeholder=" " aria-describedby="cf-nome-error" autocomplete="name" required minlength="2" maxlength="80">
+      <label class="field__label" for="cf-nome">Seu nome</label>
+    </div>
+    <p class="field__error" id="cf-nome-error" data-error-for="cf-nome"></p>
+  </div>
+        
+  <div class="field">
+    <div class="field__control">
+      <svg class="icon field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect pathLength="1" x="3" y="5.5" width="18" height="13" rx="2"/><path pathLength="1" d="m3.6 7 8.4 6.4L20.4 7"/></svg>
+      <input class="field__input" id="cf-email" name="email" type="email" placeholder=" " aria-describedby="cf-email-error" autocomplete="email" inputmode="email" required maxlength="120" spellcheck="false">
+      <label class="field__label" for="cf-email">Seu e-mail</label>
+    </div>
+    <p class="field__error" id="cf-email-error" data-error-for="cf-email"></p>
+  </div>
+        
+  <div class="field">
+    <div class="field__control">
+      <svg class="icon field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M3.6 20.4 4.9 16A8.4 8.4 0 1 1 8 19.2z"/><path pathLength="1" d="M9.1 8.2c-.4.5-.5 1.2-.2 2.1.7 1.9 2.2 3.4 4.1 4.1.9.3 1.6.2 2.1-.2l.5-.6-1.9-1.1-.9.6c-.9-.4-1.6-1.1-2-2l.6-.9-1.1-1.9z"/></svg>
+      <input class="field__input" id="cf-telefone" name="telefone" type="tel" placeholder=" " aria-describedby="cf-telefone-error" autocomplete="tel" inputmode="tel" maxlength="20">
+      <label class="field__label" for="cf-telefone">Seu telefone <span class="field__optional">(opcional)</span></label>
+    </div>
+    <p class="field__error" id="cf-telefone-error" data-error-for="cf-telefone"></p>
+  </div>
+        
+  <div class="field field--area">
+    <div class="field__control">
+      <svg class="icon field__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 4c4.7 0 8.5 3.2 8.5 7.2s-3.8 7.2-8.5 7.2c-1 0-2-.1-2.9-.4L4.6 20l1.2-3.5C4.4 15.2 3.5 13.3 3.5 11.2 3.5 7.2 7.3 4 12 4z"/><path pathLength="1" d="M8.6 11.3h.01M12 11.3h.01M15.4 11.3h.01" stroke-width="2.2"/></svg>
+      <textarea class="field__input" id="cf-mensagem" name="mensagem" rows="4" placeholder=" " aria-describedby="cf-mensagem-error" required minlength="10" maxlength="2000"></textarea>
+      <label class="field__label" for="cf-mensagem">Sua mensagem…</label>
+    </div>
+    <p class="field__error" id="cf-mensagem-error" data-error-for="cf-mensagem"></p>
+  </div>
+
+        <input type="hidden" name="interesse" value="" data-interest-field>
+        <div class="hp" aria-hidden="true">
+          <label for="cf-empresa">Não preencha este campo</label>
+          <input id="cf-empresa" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn btn--gold btn--block" type="submit" data-submit>
+          <span data-submit-label>Enviar mensagem</span>
+          <svg class="icon btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M4 12h15"/><path pathLength="1" d="m13.5 6.5 5.5 5.5-5.5 5.5"/></svg>
+        </button>
+        <p class="form-hint">O envio on-line ainda está em configuração.</p>
+        <noscript><p class="form-hint">Ative o JavaScript do navegador para enviar pelo formulário.</p></noscript>
+        <p class="form-status" role="status" aria-live="polite" data-form-status></p>
+      </form>
+    </div>
   </div>
 </section>
 </main>
 
-<footer class="site-footer" data-tone="dark">
+<footer class="site-footer" data-tone="dark" data-anim-scope>
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
       
@@ -293,20 +529,20 @@
       <span class="logo__sub">MODAS</span>
     </span>
   </a>
-      <p class="script site-footer__tagline">Mais que moda, é você.</p>
+      <p class="script site-footer__tagline" data-write>Mais que moda, é você.</p>
     </div>
     <nav class="site-footer__nav" aria-label="Rodapé">
       <ul>
-        <li><a href="#inicio">Início</a></li><li><a href="#categorias">Categorias</a></li><li><a href="#loja">Nossa loja</a></li><li><a href="#sobre">Sobre a Fabielly</a></li><li><a href="#contato">Contato</a></li>
+        <li><a href="#inicio">Início</a></li><li><a href="#loja">Nossa loja</a></li><li><a href="#categorias">Categorias</a></li><li><a href="#sobre">Sobre a Fabielly</a></li><li><a href="#contato">Contato</a></li>
       </ul>
     </nav>
     
   </div>
+  <p class="site-footer__wordmark" aria-hidden="true" data-reveal><span style="--li:0">S</span><span style="--li:1">M</span><span style="--li:2">U</span><span style="--li:3">G</span></p>
   <div class="container site-footer__bottom">
     <p>© 2026 SMUG MODAS. Todos os direitos reservados.</p>
-    <a class="to-top" href="#inicio"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 19V5"/><path d="m6.5 10.5 5.5-5.5 5.5 5.5"/></svg><span>Voltar ao topo</span></a>
+    <a class="to-top" href="#inicio"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 19V5"/><path pathLength="1" d="m6.5 10.5 5.5-5.5 5.5 5.5"/></svg><span>Voltar ao topo</span></a>
   </div>
 </footer>
-
 </body>
 </html>
