@@ -25,8 +25,8 @@ aprovar os candidatos.
 Antes de qualquer busca no Maps, conferir `captacoes/mercado.md`:
 
 - **Não existe, ou a data no cabeçalho tem mais de 14 dias, ou veio `--estudo`:**
-  refazer via WebSearch. Pesquisar: quais nichos locais (comércio/serviço de
-  cidade de interior de MG) estão aquecidos agora — sazonalidade, tendência de
+  refazer via WebSearch. Pesquisar: quais nichos locais (comércio/serviço da
+  região padrão do Passo 2) estão aquecidos agora — sazonalidade, tendência de
   consumo, nicho que costuma ter alta demanda e baixa presença digital; e, por
   nicho, o que esses negócios costumam estar precisando (site, cardápio digital,
   agendamento, portfólio, prova social). Não é pesquisa de mercado acadêmica —
@@ -50,11 +50,12 @@ com a justificativa e **perguntar antes de prospectar** — não escolher sozinh
 
 ## Passo 2 — Região padrão
 
-Lista fixa, definida por você (editar aqui pra fixar seu território de
-prospecção — **cidade(s)/bairros onde você capta por padrão**):
-**<preencher: ex. "Cidade A, Cidade B, Cidade C">**. Sem essa lista definida,
-perguntar a região ao usuário antes de prosseguir em vez de assumir uma. Se o
-usuário disser outra cidade no comando, usar só ela (não soma à lista, substitui).
+Lista fixa do território de prospecção (editar aqui pra mudar):
+**São Paulo – SP (capital)**. A cidade é grande demais pra uma busca só — o Maps
+devolve os mesmos resultados do centro. Buscar por zona, nesta ordem, até ter
+candidatos suficientes: **Zona Leste, Zona Norte, Zona Sul, Zona Oeste, Centro**
+(ex.: `vidraçaria+zona+leste+são+paulo`). Se o usuário disser outra cidade ou
+bairro no comando, usar só ela (não soma à lista, substitui).
 
 ## Passo 3 — Busca no Google Maps (Playwright)
 

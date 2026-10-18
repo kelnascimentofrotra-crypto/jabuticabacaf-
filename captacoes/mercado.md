@@ -1,8 +1,8 @@
 # Estudo de mercado — captação
 
 **Data:** 16/10/2026 (refazer depois de 30/10/2026, ou com `/captar --estudo`)
-**Região:** ainda não definida. Dados nacionais e de MG; conferir sazonalidade se a
-captação for em outro estado (ex.: São Luís – MA tem calor o ano todo e chuva de jan a jun).
+**Região:** São Paulo – SP (capital), definida em 18/10/2026. Os dados abaixo são
+nacionais e de MG; não há recorte por bairro de SP.
 
 ## O que vale para todos os nichos
 
@@ -34,6 +34,25 @@ captação for em outro estado (ex.: São Luís – MA tem calor o ano todo e ch
 | 7 | Pet shop, banho e tosa | Mercado de cerca de R$ 80 bi em 2026 (Abinpet), dominado por micro e pequenas empresas. Banho e tosa é o serviço mais procurado. | Agenda de banho e tosa só pelo WhatsApp; sem tabela de preço por porte | Sem categoria: demo do zero (ou mini-agenda) |
 | 8 | Pizzaria, restaurante, delivery | Demanda o ano todo; o pipeline já foi testado com pizzaria (23/09/2026). | Cardápio só em foto no Instagram ou PDF; sem link de pedido | Gastronomia (8) |
 
+## Vidraçaria (escolhida pelo usuário em 18/10/2026)
+
+Fora do ranking acima, mas faz sentido pelo mesmo motivo do nicho 2: serviço de valor
+alto, contratado por orçamento, em que o cliente compara antes de chamar.
+
+- **Ticket:** box de banheiro de R$ 400 a R$ 900 em 2026; fechamento de sacada e
+  guarda-corpo cobrados por m² ou metro linear, bem mais caros. Um cliente fechado
+  paga o site.
+- **Serviços típicos:** box (blindex/acrílico), envidraçamento de sacada, guarda-corpo,
+  espelhos, fachadas e portas de vidro temperado.
+- **Gap a procurar no Maps:** ficha sem site ou com link só pro WhatsApp; fotos de obra
+  só no Instagram, sem portfólio organizado por tipo de serviço; sem bairros atendidos
+  nem prazo; orçamento só por telefone. Reclamação de prazo nas avaliações é sinal de
+  risco do negócio, não gap pra abordagem.
+- **Demo:** categoria "Imóveis, arquitetura e construção" ou "Serviço residencial"
+  da biblioteca (`templates/sites/` ainda não está neste repositório). O demo natural é
+  a galeria de obras por tipo (box, sacada, guarda-corpo) + botão de orçamento com
+  foto e medida pelo WhatsApp.
+
 ## Ressalvas
 
 - Os números de pet, de agendamento online e de Google Maps vêm de reportagens e de
@@ -56,3 +75,5 @@ captação for em outro estado (ex.: São Luís – MA tem calor o ano todo e ch
 - [Mercado pet deve movimentar R$ 80 bi em 2026 (Band)](https://www.band.com.br/pets/noticias/mercado-pet-deve-movimentar-r-80-bilhoes-no-brasil-ate-o-fim-de-2026-202607131146)
 - [Setor pet movimenta R$ 77,9 bi (Band)](https://www.band.com.br/pets/noticias/setor-pet-no-brasil-movimenta-r-779-bi-confira-tendencias-e-a-petsa-2026-202608111327)
 - [Negócios em alta (Cielo)](https://blog.cielo.com.br/empreender/negocios-em-alta/?amp=1)
+- [Quanto custa box de vidro em 2026 (Monitor do Mercado)](https://monitordomercado.com.br/noticias/396053-quanto-um-instalador-cobra-para-colocar-box-de-vidro-em-um-banheiro-pequeno-em-2026-e-o-detalhe-que-aumenta-o-preco/)
+- [Quanto custa fechar uma varanda (Monitor do Mercado)](https://monitordomercado.com.br/economia-2/406214-quanto-um-vidraceiro-cobra-para-fechar-uma-varanda-e-por-que-vidro-temperado-esquadria-e-altura-do-predio-podem-mudar-todo-o-orcamento/)
