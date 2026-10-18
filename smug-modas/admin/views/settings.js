@@ -1,11 +1,29 @@
-import { esc, ico, toast, confirmDialog, modal, download, today, isUrl } from '../ui.js';
+import { esc, ico, toast, confirmDialog, modal, download, today, isUrl, isEmail } from '../ui.js';
+import * as auth from '../auth.js';
 
 export async function settingsView(app, root) {
   const s = app.settings;
+  const access = await app.db.getAuth();
   root.innerHTML = `
   <section class="page-head">
     <div><p class="eyebrow">Painel</p><h2 class="page-title">Configurações</h2></div>
   </section>
+
+  <form class="card" data-password novalidate>
+    <header class="card__head">
+      <h3 class="card__title">Acesso ao painel</h3>
+      <button class="btn btn--ghost btn--sm" type="button" data-action="logout">Sair</button>
+    </header>
+    <p class="muted">Conectado como <strong>${esc(access?.email || '')}</strong>. A senha criptografa os pedidos, clientes, respostas, o rascunho e o token guardados neste aparelho. Por segurança, o painel sai sozinho depois de 1 hora sem uso.</p>
+    <div class="fields">
+      <div class="field field--wide"><label for="pw-email">E-mail de acesso</label><input id="pw-email" name="email" type="email" autocomplete="username" value="${esc(access?.email || '')}"></div>
+      <div class="field field--wide"><label for="pw-current">Senha atual</label><input id="pw-current" name="current" type="password" autocomplete="current-password"></div>
+      <div class="field"><label for="pw-new">Nova senha</label><input id="pw-new" name="next" type="password" autocomplete="new-password" minlength="8"></div>
+      <div class="field"><label for="pw-confirm">Confirmar nova senha</label><input id="pw-confirm" name="confirm" type="password" autocomplete="new-password"></div>
+    </div>
+    <div class="inline-actions"><button class="btn btn--primary" type="submit">${ico('check')}Alterar senha</button></div>
+    <p class="progress" role="status" aria-live="polite" data-pw-status></p>
+  </form>
 
   <form class="card" data-gh novalidate>
     <h3 class="card__title">Conexão com o GitHub (publicação)</h3>
@@ -16,7 +34,7 @@ export async function settingsView(app, root) {
         <li>Entre no GitHub e abra <a class="link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Settings → Developer settings → Fine-grained tokens → Generate new token</a>.</li>
         <li>Em <em>Repository access</em>, escolha <strong>Only select repositories</strong> e selecione <code>${esc(s.repo)}</code>.</li>
         <li>Em <em>Permissions → Repository permissions</em>, deixe <strong>Contents: Read and write</strong>.</li>
-        <li>Gere o token, copie e cole abaixo. Ele fica só neste navegador e nunca vai para o site.</li>
+        <li>Gere o token, copie e cole abaixo. Ele fica só neste aparelho (criptografado) e nunca vai para o site.</li>
       </ol>
     </details>
     <div class="fields">
@@ -24,7 +42,7 @@ export async function settingsView(app, root) {
         <label for="gh-token">Token do GitHub</label>
         <input id="gh-token" name="token" type="password" autocomplete="off" spellcheck="false" placeholder="${app.token ? '•••••••• (token salvo — deixe em branco para manter)' : 'github_pat_…'}">
       </div>
-      <label class="check field--wide"><input type="checkbox" name="remember"${app.tokenRemembered() ? ' checked' : ''}> Lembrar neste aparelho (sem marcar, o token some ao fechar o navegador)</label>
+      <p class="hint field--wide">O token fica guardado neste aparelho, criptografado com a senha do painel.</p>
       <div class="field"><label for="gh-owner">Usuário ou organização</label><input id="gh-owner" name="owner" value="${esc(s.owner)}" required></div>
       <div class="field"><label for="gh-repo">Repositório</label><input id="gh-repo" name="repo" value="${esc(s.repo)}" required></div>
       <div class="field"><label for="gh-branch">Branch</label><input id="gh-branch" name="branch" value="${esc(s.branch)}" required></div>
@@ -49,6 +67,7 @@ export async function settingsView(app, root) {
   <section class="card">
     <h3 class="card__title">Backup dos dados deste aparelho</h3>
     <p class="muted">Pedidos, clientes e respostas prontas ficam salvos só neste navegador. Exporte um backup com frequência — e importe em outro aparelho para continuar de lá.</p>
+    <p class="hint">O arquivo de backup contém os dados dos clientes <strong>sem criptografia</strong>: guarde-o em local seguro.</p>
     <div class="inline-actions">
       <button class="btn btn--primary" type="button" data-export>${ico('download')}Baixar backup</button>
       <label class="btn btn--ghost file-btn">${ico('upload')}<span>Importar backup</span><input type="file" accept="application/json,.json" class="sr-only" data-import></label>
@@ -61,6 +80,38 @@ export async function settingsView(app, root) {
       <button class="btn btn--ghost btn--danger-text" type="button" data-wipe>${ico('trash')}Apagar pedidos, clientes e respostas deste aparelho</button>
     </div>
   </section>`;
+
+  const pw = root.querySelector('[data-password]');
+  pw.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const f = pw.elements;
+    const status = root.querySelector('[data-pw-status]');
+    const fail = (text, input) => {
+      status.dataset.state = 'error';
+      status.textContent = text;
+      input?.focus();
+    };
+    if (!isEmail(f.email.value.trim())) return fail('Digite um e-mail válido.', f.email);
+    if (!f.current.value) return fail('Digite a senha atual.', f.current);
+    if (f.next.value.length < 8) return fail('A nova senha precisa ter pelo menos 8 caracteres.', f.next);
+    if (f.next.value !== f.confirm.value) return fail('As senhas novas não conferem.', f.confirm);
+    status.dataset.state = 'busy';
+    status.textContent = 'Conferindo e protegendo os dados com a nova senha…';
+    const oldKey = await auth.checkPassword(access, access.email, f.current.value);
+    if (!oldKey) return fail('Senha atual incorreta.', f.current);
+    try {
+      const { key, record } = await auth.createAuth(f.email.value, f.next.value);
+      await app.db.reencryptAll(oldKey, key, record);
+      await auth.startSession(key, record.email);
+      pw.reset();
+      f.email.value = record.email;
+      status.dataset.state = 'ok';
+      status.textContent = 'Senha alterada.';
+      toast('Senha alterada com sucesso.', 'success');
+    } catch (error) {
+      fail(`Não foi possível alterar a senha: ${error.message}`);
+    }
+  });
 
   const gh = root.querySelector('[data-gh]');
   const status = root.querySelector('[data-gh-status]');
@@ -83,7 +134,7 @@ export async function settingsView(app, root) {
     try {
       const info = await app.github.testConnection(next, token);
       await app.saveSettings(next);
-      app.setToken(token, f.remember.checked);
+      await app.setToken(token);
       f.token.value = '';
       status.dataset.state = 'ok';
       status.textContent = `Conectado a ${info.fullName} (branch ${next.branch}). Pronto para publicar.`;
@@ -94,8 +145,8 @@ export async function settingsView(app, root) {
       toast('Não foi possível conectar.', 'error');
     }
   });
-  root.querySelector('[data-forget]')?.addEventListener('click', () => {
-    app.setToken('', false);
+  root.querySelector('[data-forget]')?.addEventListener('click', async () => {
+    await app.setToken('');
     toast('Token removido deste navegador.');
     settingsView(app, root);
   });

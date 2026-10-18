@@ -1,5 +1,7 @@
 // Painel da SMUG MODAS — estado, rascunho e navegação.
 import * as db from './db.js';
+import * as auth from './auth.js';
+import { ensureAuth } from './login.js';
 import * as github from './github.js';
 import { renderPage, pendingList } from '../src/render.mjs';
 import { toast, confirmDialog, isUrl, isEmail, esc } from './ui.js';
@@ -21,7 +23,7 @@ const DEFAULT_SETTINGS = {
   dir: 'smug-modas',
   inboxUrl: '',
 };
-const TOKEN_KEY = 'smug-admin-token';
+const LEGACY_TOKEN_KEY = 'smug-admin-token'; // versões anteriores guardavam o token sem criptografia
 
 const SECTION_LABELS = {
   site: 'Endereço do site e SEO',
@@ -121,8 +123,9 @@ export const app = {
     clearTimeout(this.persistTimer);
     this.persistTimer = setTimeout(() => {
       this.dropUnusedUploads();
+      if (!auth.hasKey()) return;
       db.kv
-        .set('draft', { content: this.content, uploads: this.uploads, originalText: this.originalText, savedAt: new Date().toISOString() })
+        .setSecret('draft', { content: this.content, uploads: this.uploads, originalText: this.originalText, savedAt: new Date().toISOString() })
         .catch(() => toast('Não foi possível salvar o rascunho neste navegador.', 'error'));
     }, 250);
   },
@@ -205,13 +208,22 @@ export const app = {
   },
 
   /* ---------- GitHub ---------- */
-  setToken(token, remember) {
+  // O token fica guardado criptografado com a senha do painel.
+  async setToken(token) {
     this.token = token;
-    sessionStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(TOKEN_KEY);
-    if (token) (remember ? localStorage : sessionStorage).setItem(TOKEN_KEY, token);
+    if (token) await db.kv.setSecret('ghToken', token);
+    else await db.kv.del('ghToken');
   },
-  tokenRemembered: () => Boolean(localStorage.getItem(TOKEN_KEY)),
+  async logout(reason = 'logout') {
+    if (this.formDirty && reason !== 'idle') {
+      const ok = await confirmDialog({ title: 'Sair sem salvar?', text: 'As alterações deste formulário ainda não foram salvas.', confirm: 'Sair', danger: true });
+      if (!ok) return;
+      this.formDirty = false;
+    }
+    clearTimeout(this.persistTimer);
+    auth.endSession(reason);
+    location.reload();
+  },
   async saveSettings(settings) {
     this.settings = { ...this.settings, ...settings };
     await db.kv.set('settings', this.settings);
@@ -252,14 +264,16 @@ async function loadContent() {
   // Com token, a fonte mais atual é a branch no GitHub (sem atraso de cache do servidor).
   if (app.token) {
     try {
-      siteText = (await github.readFile(app.settings, app.token, app.sitePath('src/content.json'))).text;
+      const remote = (await github.readFile(app.settings, app.token, app.sitePath('src/content.json'))).text;
+      JSON.parse(remote); // só substitui a cópia local por um conteúdo válido
+      siteText = remote;
     } catch (error) {
       app.remoteNotice = `Não foi possível ler a versão do GitHub (${error.message}). Usando a cópia do site.`;
     }
   }
   if (!siteText) throw new Error('Não foi possível carregar o conteúdo do site (src/content.json).');
 
-  const draft = await db.kv.get('draft').catch(() => null);
+  const draft = await db.kv.getSecret('draft').catch(() => null);
   const draftHasChanges = draft && (stringify(draft.content) !== draft.originalText || Object.keys(draft.uploads || {}).length);
   if (draftHasChanges) {
     app.content = draft.content;
@@ -344,6 +358,7 @@ function closeNav() {
 document.addEventListener('click', (event) => {
   const action = event.target.closest('[data-action]')?.dataset.action;
   if (action === 'open-nav') openNav();
+  if (action === 'logout') app.logout();
   if (action === 'close-nav') {
     closeNav();
     document.querySelector('[data-action="open-nav"]').focus();
@@ -374,12 +389,22 @@ window.addEventListener('beforeunload', (event) => {
 /* ---------- Início ---------- */
 async function start() {
   const main = document.getElementById('main');
+  await ensureAuth();
+  try {
+    await db.encryptLegacy();
+    const legacy = localStorage.getItem(LEGACY_TOKEN_KEY) || sessionStorage.getItem(LEGACY_TOKEN_KEY);
+    if (legacy && !(await db.kv.get('ghToken'))) await db.kv.setSecret('ghToken', legacy);
+    localStorage.removeItem(LEGACY_TOKEN_KEY);
+    sessionStorage.removeItem(LEGACY_TOKEN_KEY);
+  } catch (error) {
+    toast(`Não foi possível proteger os dados antigos: ${error.message}`, 'error', 8000);
+  }
   try {
     app.settings = { ...DEFAULT_SETTINGS, ...((await db.kv.get('settings')) || {}) };
   } catch (error) {
     toast(error.message, 'error', 8000);
   }
-  app.token = localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || '';
+  app.token = (await db.kv.getSecret('ghToken').catch(() => '')) || '';
   try {
     await loadContent();
   } catch (error) {
@@ -389,6 +414,12 @@ async function start() {
   app.refreshBadges();
   window.addEventListener('hashchange', route);
   await route();
+
+  // Sessão: renova a cada uso e encerra após 1 hora parada
+  for (const type of ['pointerdown', 'keydown', 'scroll']) document.addEventListener(type, () => auth.touch(), { passive: true, capture: true });
+  setInterval(() => {
+    if (auth.sessionExpired()) app.logout('idle');
+  }, 60 * 1000);
 }
 
 start();

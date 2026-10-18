@@ -1,6 +1,8 @@
 // Armazenamento local do painel (IndexedDB): rascunho do site, pedidos, clientes,
 // respostas rápidas e configurações. Fica apenas neste navegador — use o backup
 // em Configurações para levar os dados a outro aparelho.
+// Pedidos, clientes, respostas, rascunho e token ficam criptografados com a chave do login.
+import { encrypt, decrypt, encryptWith, decryptWith, setKey } from './auth.js';
 
 const DB_NAME = 'smug-admin';
 const DB_VERSION = 1;
@@ -40,20 +42,34 @@ async function run(store, mode, action) {
   });
 }
 
-// Chave-valor (rascunho, configurações, contadores)
+// Registro guardado: { id, enc: { iv, data } }. Registros antigos (sem `enc`) são lidos como estão
+// e recriptografados por `encryptLegacy` depois do login.
+const SECRET_KV = ['draft', 'ghToken'];
+const open_ = async (record) => (record && record.enc ? decrypt(record.enc) : record);
+
+// Chave-valor (configurações e contadores em texto; rascunho e token criptografados)
 export const kv = {
   get: (key) => run('kv', 'readonly', (s) => s.get(key)),
   set: (key, value) => run('kv', 'readwrite', (s) => s.put(value, key)),
   del: (key) => run('kv', 'readwrite', (s) => s.delete(key)),
+  getSecret: async (key) => open_(await run('kv', 'readonly', (s) => s.get(key))),
+  setSecret: async (key, value) => {
+    const box = { enc: await encrypt(value) };
+    return run('kv', 'readwrite', (s) => s.put(box, key));
+  },
 };
 
-// Coleções com `id`
+// Coleções com `id` (conteúdo criptografado)
 export const collection = (name) => ({
-  all: () => run(name, 'readonly', (s) => s.getAll()),
-  get: (id) => run(name, 'readonly', (s) => s.get(id)),
-  put: (item) => run(name, 'readwrite', (s) => s.put(item)),
+  all: async () => Promise.all((await run(name, 'readonly', (s) => s.getAll())).map(open_)),
+  get: async (id) => open_(await run(name, 'readonly', (s) => s.get(id))),
+  put: async (item) => {
+    const box = { id: item.id, enc: await encrypt(item) };
+    return run(name, 'readwrite', (s) => s.put(box));
+  },
   del: (id) => run(name, 'readwrite', (s) => s.delete(id)),
   clear: () => run(name, 'readwrite', (s) => s.clear()),
+  raw: () => run(name, 'readonly', (s) => s.getAll()),
 });
 
 export const orders = collection('orders');
@@ -105,4 +121,54 @@ export async function nextOrderNumber() {
 export async function clearLocalData() {
   for (const store of [orders, customers, templates]) await store.clear();
   await kv.del('orderSeq');
+}
+
+/* ---------- Login ---------- */
+export const getAuth = () => kv.get('auth');
+export const saveAuth = (record) => kv.set('auth', record);
+
+// Depois do primeiro login: criptografa o que ainda estiver em texto (dados de antes do login)
+export async function encryptLegacy() {
+  for (const store of [orders, customers, templates]) {
+    for (const record of await store.raw()) if (record && !record.enc) await store.put(record);
+  }
+  for (const key of SECRET_KV) {
+    const value = await kv.get(key);
+    if (value !== undefined && !(value && value.enc)) await kv.setSecret(key, value);
+  }
+}
+
+// Troca de senha: tudo é lido com a chave antiga, criptografado com a nova e gravado — junto com o
+// novo registro de acesso — numa única transação (ou tudo muda, ou nada muda).
+export async function reencryptAll(oldKey, newKey, authRecord) {
+  const read = async (record) => (record && record.enc ? decryptWith(oldKey, record.enc) : record);
+  const lock = async (value) => ({ enc: await encryptWith(newKey, value) });
+  const boxes = {};
+  for (const name of COLLECTIONS) {
+    const items = (await Promise.all((await collection(name).raw()).map(read))).filter((item) => item?.id);
+    boxes[name] = await Promise.all(items.map(async (item) => ({ id: item.id, ...(await lock(item)) })));
+  }
+  const secrets = {};
+  for (const key of SECRET_KV) {
+    const value = await kv.get(key);
+    if (value !== undefined) secrets[key] = await lock(await read(value));
+  }
+  const db = await open();
+  await new Promise((resolve, reject) => {
+    const tx = db.transaction([...COLLECTIONS, 'kv'], 'readwrite');
+    for (const name of COLLECTIONS) for (const box of boxes[name]) tx.objectStore(name).put(box);
+    const store = tx.objectStore('kv');
+    for (const [key, box] of Object.entries(secrets)) store.put(box, key);
+    store.put(authRecord, 'auth');
+    tx.oncomplete = resolve;
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error || new Error('Operação cancelada.'));
+  });
+  setKey(newKey);
+}
+
+// "Esqueci a senha": sem a senha não há como abrir os dados criptografados — apaga tudo deste aparelho.
+export async function resetDevice() {
+  for (const name of COLLECTIONS) await collection(name).clear();
+  for (const key of [...SECRET_KV, 'auth', 'authFail', 'orderSeq', 'templatesSeeded']) await kv.del(key);
 }

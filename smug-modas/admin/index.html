@@ -13,7 +13,9 @@
 <body>
 <a class="skip-link" href="#main">Pular para o conteúdo</a>
 
-<div class="shell">
+<div class="auth" data-auth hidden></div>
+
+<div class="shell" hidden>
   <aside class="sidebar" id="sidebar" aria-label="Menu do painel">
     <div class="sidebar__brand">
       <span class="brand-mark" aria-hidden="true">S</span>
@@ -37,7 +39,10 @@
       <a href="#/publicar" data-nav="publicar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 15v4h14v-4"/></svg>Publicar<span class="nav-badge" data-changes-badge hidden></span></a>
       <a href="#/config" data-nav="config"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>Configurações</a>
     </nav>
-    <a class="sidebar__site" href="../" target="_blank" rel="noopener">Ver o site<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg></a>
+    <div class="sidebar__foot">
+      <a class="sidebar__site" href="../" target="_blank" rel="noopener">Ver o site<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg></a>
+      <button class="sidebar__logout" type="button" data-action="logout"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4"/><path d="M10 8l-4 4 4 4"/><path d="M6 12h10"/></svg>Sair</button>
+    </div>
   </aside>
   <div class="sidebar-scrim" data-action="close-nav" hidden></div>
 
@@ -56,6 +61,7 @@
 </div>
 
 <div class="toasts" aria-live="polite" aria-atomic="false" data-toasts></div>
+<!-- O painel só aparece depois do login (veja admin/login.js). -->
 <dialog class="modal" data-modal></dialog>
 
 <noscript><p class="noscript">O painel precisa do JavaScript ativado.</p></noscript>

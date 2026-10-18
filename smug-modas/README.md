@@ -70,19 +70,33 @@ recarregar). Em “Publicar”, o painel gera o `index.html` com o mesmo código
 ele confere se a versão no GitHub mudou desde que a edição começou e pede confirmação para não sobrescrever.
 As fotos são redimensionadas (até 1400 px) e convertidas para WebP no próprio navegador.
 
+**Login com senha.** No primeiro acesso em cada aparelho, o painel pede para criar e-mail e senha. A senha não é
+guardada: ela gera (PBKDF2-SHA-256, 310 mil iterações) a chave AES-GCM que **criptografa** os pedidos, clientes,
+respostas prontas, o rascunho do site e o token do GitHub guardados no aparelho — sem a senha, esses dados não
+podem ser lidos e o painel não publica. Detalhes:
+
+- a sessão vale para a aba aberta (recarregar não pede a senha) e termina ao clicar em **Sair**, ao fechar a aba
+  ou depois de **1 hora sem uso**;
+- após 5 tentativas erradas, o login espera 30 s antes de aceitar outra (o tempo dobra a cada erro, até 15 min);
+- **Configurações → Acesso ao painel** troca o e-mail e a senha (tudo é recriptografado de uma vez);
+- **“Esqueci minha senha”** não recupera a senha (é impossível sem servidor): apaga os dados deste aparelho e cria
+  um acesso novo. O site publicado não é afetado; pedidos e clientes voltam com o backup;
+- como não há servidor, cada aparelho tem o seu próprio acesso. Uma conta única para vários aparelhos exigiria um
+  serviço de login on-line (ex.: Supabase).
+
 **Token do GitHub.** A publicação usa um *fine-grained personal access token* da dona do repositório, com acesso
 só a este repositório e permissão **Contents: Read and write** (o passo a passo está em Configurações).
-O token é digitado no painel e fica apenas no navegador (na sessão, ou no aparelho se marcar “Lembrar”);
+O token é digitado no painel e fica guardado no aparelho, criptografado com a senha do painel;
 ele não vai para o código do site nem para o backup. Sem token, dá para baixar `content.json` e `index.html`
 e publicar manualmente.
 
 **Pedidos, clientes e respostas prontas** ficam no IndexedDB do navegador usado. Para não perder dados ou para usar
 em outro aparelho, use **Configurações → Baixar backup / Importar backup**. Sincronização automática entre
-aparelhos, login com senha e recebimento automático de pedidos exigiriam um banco de dados on-line
+aparelhos, uma conta única de login e recebimento automático de pedidos exigiriam um banco de dados on-line
 (ex.: Supabase ou Firebase), que não foi incluído.
 
-**Acesso.** O endereço `/admin/` não aparece no site e tem `noindex`, mas não é secreto: qualquer pessoa que o abra
-vê apenas um painel vazio (sem os pedidos, que ficam no navegador da loja) e não consegue publicar sem o token.
+**Acesso.** O endereço `/admin/` não aparece no site e tem `noindex`. Quem o abrir em outro aparelho só vê a tela de
+login (e, sem os dados criptografados da loja nem o token, não tem o que ver nem como publicar).
 
 **Branch de publicação.** Por padrão o painel publica na branch `claude/busy-galileo-x8mcr4`, onde o site está hoje.
 Quando o site for para a branch principal (ou outro repositório), troque em Configurações.
