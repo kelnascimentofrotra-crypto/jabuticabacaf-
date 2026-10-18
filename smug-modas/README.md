@@ -16,8 +16,9 @@ python3 -m http.server 8080      # ou: npx serve .
 
 ## Como editar
 
-Todo o conteúdo (textos, imagens, links, contatos e condições comerciais) fica em
-**`src/content.mjs`**. Depois de editar, gere o HTML novamente:
+O jeito mais fácil é pelo **painel** (`/admin/`, veja abaixo). Por baixo, todo o conteúdo
+(textos, imagens, links, contatos, produtos e condições comerciais) fica em **`src/content.json`**.
+Quem preferir editar à mão pode alterar esse arquivo e gerar o HTML novamente:
 
 ```bash
 node build.mjs     # ou: npm run build  (Node 18+)
@@ -27,25 +28,69 @@ O build lista no terminal tudo o que ainda precisa ser configurado.
 
 ```
 smug-modas/
-├── index.html              ← gerado pelo build (não editar à mão)
-├── build.mjs               ← monta o index.html e lista pendências
+├── index.html              ← gerado (pelo build ou pelo painel); não editar à mão
+├── build.mjs               ← gera o index.html pelo terminal e lista pendências
+├── admin/                  ← painel da loja (abre em …/admin/)
 ├── src/
-│   ├── content.mjs         ← conteúdo central
+│   ├── content.json        ← conteúdo central (o painel edita este arquivo)
+│   ├── render.mjs          ← monta a página; usado pelo build e pelo painel
 │   ├── lib.mjs             ← ícones, logo, helpers
-│   └── components/         ← header + menu, hero, benefícios, loja,
+│   └── components/         ← header + menu, hero, produtos, benefícios, loja,
 │                              categorias, sobre, contato, rodapé
 └── assets/
     ├── css/styles.css      ← tokens de cor/tipografia + estilos (mobile first)
     ├── js/main.js          ← menu, header, animações, formulário
     ├── fonts/              ← Playfair Display, Jost, Allura (self-hosted, OFL)
-    ├── img/                ← fotos em WebP
+    ├── img/                ← fotos em WebP (produtos/ e categorias/ recebem as fotos do painel)
     └── icons/              ← favicon e ícone para iOS
 ```
+
+## Painel da loja (`/admin/`)
+
+Painel para a dona da loja administrar o site e as vendas pelo navegador, no celular ou no computador.
+Não tem servidor: o que é do **site** é publicado direto no GitHub; o que é de **vendas** fica salvo
+no próprio navegador.
+
+| Área | O que faz | Onde fica salvo |
+| --- | --- | --- |
+| Visão geral | produtos no site, pedidos em aberto, vendas do mês, aniversariantes, pendências do site | — |
+| Produtos | cadastrar, editar, duplicar, ordenar e excluir peças (foto principal + segunda foto, preço, categoria, cores, tamanhos, descrição, link); status disponível / esgotado / oculto | site (após publicar) |
+| Categorias | nome, texto, foto, link e ordem dos cards; textos da seção; link do catálogo | site (após publicar) |
+| Dados da loja | WhatsApp (com teste do link), e-mail, endereço, mapa, horário, Instagram, serviço do formulário, condições comerciais (com “confirmada”), título e descrição para o Google | site (após publicar) |
+| Textos do site | abertura, faixa, vitrine, nossa loja, sobre a Fabielly, contato e rodapé | site (após publicar) |
+| Pedidos | registrar vendas (WhatsApp, Instagram, loja), itens a partir dos produtos, desconto, frete, total automático, pagamento, status, entrega; recibo para imprimir; mensagem pronta no WhatsApp; planilha | este navegador |
+| Clientes | cadastro com WhatsApp, Instagram, aniversário, tamanho e observações; histórico e total comprado; planilha | este navegador |
+| Mensagens | mostra para onde vão as mensagens do formulário; respostas prontas para o WhatsApp | este navegador |
+| Publicar | lista do que muda, verificação, **prévia** (celular/tablet/computador), publicação no GitHub, histórico e download manual | GitHub |
+| Configurações | conexão com o GitHub, link da caixa de entrada do formulário, backup / restauração dos dados locais | este navegador |
+
+**Como funciona a publicação.** As alterações do site ficam num rascunho (salvo no navegador, não se perde ao
+recarregar). Em “Publicar”, o painel gera o `index.html` com o mesmo código do `build.mjs` e envia
+`src/content.json`, `index.html` e as fotos novas num **único commit** pela API do GitHub. Antes de publicar,
+ele confere se a versão no GitHub mudou desde que a edição começou e pede confirmação para não sobrescrever.
+As fotos são redimensionadas (até 1400 px) e convertidas para WebP no próprio navegador.
+
+**Token do GitHub.** A publicação usa um *fine-grained personal access token* da dona do repositório, com acesso
+só a este repositório e permissão **Contents: Read and write** (o passo a passo está em Configurações).
+O token é digitado no painel e fica apenas no navegador (na sessão, ou no aparelho se marcar “Lembrar”);
+ele não vai para o código do site nem para o backup. Sem token, dá para baixar `content.json` e `index.html`
+e publicar manualmente.
+
+**Pedidos, clientes e respostas prontas** ficam no IndexedDB do navegador usado. Para não perder dados ou para usar
+em outro aparelho, use **Configurações → Baixar backup / Importar backup**. Sincronização automática entre
+aparelhos, login com senha e recebimento automático de pedidos exigiriam um banco de dados on-line
+(ex.: Supabase ou Firebase), que não foi incluído.
+
+**Acesso.** O endereço `/admin/` não aparece no site e tem `noindex`, mas não é secreto: qualquer pessoa que o abra
+vê apenas um painel vazio (sem os pedidos, que ficam no navegador da loja) e não consegue publicar sem o token.
+
+**Branch de publicação.** Por padrão o painel publica na branch `claude/busy-galileo-x8mcr4`, onde o site está hoje.
+Quando o site for para a branch principal (ou outro repositório), troque em Configurações.
 
 ## Pendências antes de publicar
 
 Nenhum dado ilustrativo das referências foi publicado. Enquanto não forem preenchidos
-em `src/content.mjs`, os itens de contato aparecem como “Informação a confirmar” e
+(no painel ou em `src/content.json`), os itens de contato aparecem como “Informação a confirmar” e
 nenhum link é gerado.
 
 | Item | Onde | Situação atual |
@@ -98,7 +143,7 @@ As referências têm cerca de 850 px de largura, então as fotos ficam um pouco 
 grandes ou de alta densidade. **Para a versão final, envie as fotos originais em alta resolução**
 (Fabielly no fundo creme, Fabielly na loja, ambiente da loja, recepção e as cinco categorias)
 e substitua os arquivos mantendo os mesmos nomes, ou atualize `width`/`height` em
-`src/content.mjs`.
+`src/content.json`.
 
 ## Publicação
 
@@ -120,7 +165,7 @@ A troca usa `IntersectionObserver` sobre a hero inteira, com 16 px de histerese 
 do limite. Abaixo de `75em` (1200 px com fonte padrão) a navegação usa o menu compacto. Sem JavaScript,
 o header já nasce no estado “após a hero”.
 
-Os ícones de **pesquisa, conta, favoritos e sacola** (`headerActions` em `src/content.mjs`) ainda não têm
+Os ícones de **pesquisa, conta, favoritos e sacola** (`headerActions` em `src/content.json`) ainda não têm
 loja virtual por trás: ao tocar, mostram o aviso “Este site é apenas uma versão de demonstração…”.
 No celular, o header mostra só a sacola; pesquisa, conta e favoritos ficam dentro do menu.
 Quando a loja existir, troque cada botão pelo link ou ação real e remova o aviso.

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#1b100b">
+<title>Painel — SMUG MODAS</title>
+<link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="stylesheet" href="admin.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Pular para o conteúdo</a>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar" aria-label="Menu do painel">
+    <div class="sidebar__brand">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span class="brand-text"><strong>SMUG MODAS</strong><span>Painel</span></span>
+      <button class="icon-btn sidebar__close" type="button" data-action="close-nav" aria-label="Fechar menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <nav class="sidebar__nav" aria-label="Seções do painel">
+      <p class="sidebar__group">Loja</p>
+      <a href="#/inicio" data-nav="inicio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5V20h-5.5v-5h-5v5H4z"/></svg>Visão geral</a>
+      <a href="#/produtos" data-nav="produtos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5.5a2 2 0 1 1 2 2v1.3"/><path d="M12 8.8 3.4 15.4a1 1 0 0 0 .6 1.8h16a1 1 0 0 0 .6-1.8L12 8.8"/></svg>Produtos</a>
+      <a href="#/categorias" data-nav="categorias"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Categorias</a>
+      <p class="sidebar__group">Vendas</p>
+      <a href="#/pedidos" data-nav="pedidos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 8.2h13.6l-.9 12.3H6.1z"/><path d="M8.8 8.2V6.9a3.2 3.2 0 0 1 6.4 0v1.3"/></svg>Pedidos</a>
+      <a href="#/clientes" data-nav="clientes"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20.2a7 7 0 0 1 14 0"/></svg>Clientes</a>
+      <a href="#/mensagens" data-nav="mensagens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4c4.7 0 8.5 3.2 8.5 7.2s-3.8 7.2-8.5 7.2c-1 0-2-.1-2.9-.4L4.6 20l1.2-3.5C4.4 15.2 3.5 13.3 3.5 11.2 3.5 7.2 7.3 4 12 4z"/></svg>Mensagens</a>
+      <p class="sidebar__group">Site</p>
+      <a href="#/loja" data-nav="loja"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>Dados da loja</a>
+      <a href="#/textos" data-nav="textos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 10h14M5 14h9M5 18h6"/></svg>Textos do site</a>
+      <a href="#/publicar" data-nav="publicar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M5 15v4h14v-4"/></svg>Publicar<span class="nav-badge" data-changes-badge hidden></span></a>
+      <a href="#/config" data-nav="config"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>Configurações</a>
+    </nav>
+    <a class="sidebar__site" href="../" target="_blank" rel="noopener">Ver o site<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg></a>
+  </aside>
+  <div class="sidebar-scrim" data-action="close-nav" hidden></div>
+
+  <div class="workspace">
+    <header class="topbar">
+      <button class="icon-btn topbar__menu" type="button" data-action="open-nav" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+      <h1 class="topbar__title" data-page-title>Painel</h1>
+      <a class="changes-pill" href="#/publicar" data-changes-pill hidden></a>
+    </header>
+    <main id="main" class="main" tabindex="-1">
+      <div class="loading" role="status">Carregando o painel…</div>
+    </main>
+  </div>
+</div>
+
+<div class="toasts" aria-live="polite" aria-atomic="false" data-toasts></div>
+<dialog class="modal" data-modal></dialog>
+
+<noscript><p class="noscript">O painel precisa do JavaScript ativado.</p></noscript>
+</body>
+</html>
