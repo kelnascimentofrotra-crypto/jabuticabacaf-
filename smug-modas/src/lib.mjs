@@ -29,6 +29,8 @@ const ICONS = {
   bag: '<path d="M5.2 8.2h13.6l-.9 12.3H6.1z"/><path d="M8.8 8.2V6.9a3.2 3.2 0 0 1 6.4 0v1.3"/>',
   chat: '<path d="M12 4c4.7 0 8.5 3.2 8.5 7.2s-3.8 7.2-8.5 7.2c-1 0-2-.1-2.9-.4L4.6 20l1.2-3.5C4.4 15.2 3.5 13.3 3.5 11.2 3.5 7.2 7.3 4 12 4z"/><path d="M8.6 11.3h.01M12 11.3h.01M15.4 11.3h.01" stroke-width="2.2"/>',
   instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.1 6.9h.01" stroke-width="2"/>',
+  sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/>',
+  moon: '<path d="M19.5 14.6A8 8 0 0 1 9.4 4.5a8 8 0 1 0 10.1 10.1z"/>',
 };
 
 // pathLength="1" permite animar o traço (ícones que se "desenham" ao aparecer)

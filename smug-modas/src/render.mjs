@@ -58,6 +58,11 @@ ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
   // Habilita as animações de entrada e o header em dois estados apenas quando o JS está disponível.
   // Se o main.js não iniciar em 2,5 s, o conteúdo é exibido e o header fica no estado completo.
   (function (d) {
+    // Tema escolhido pelo visitante (escuro é o padrão)
+    try {
+      var theme = localStorage.getItem('smug-theme');
+      if (theme === 'light' || theme === 'dark') d.setAttribute('data-theme', theme);
+    } catch (e) {}
     if (!('IntersectionObserver' in window)) return;
     d.classList.add('js');
     setTimeout(function () {
@@ -81,7 +86,7 @@ const withProductsNav = (content) =>
 export const renderPage = (data) => {
   const content = withProductsNav(data);
   return `<!doctype html>
-<html lang="${esc(content.site.lang)}">
+<html lang="${esc(content.site.lang)}" data-theme="dark">
 <head>${head(content)}
 </head>
 <body>

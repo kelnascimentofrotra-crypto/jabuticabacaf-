@@ -2185,3 +2185,125 @@ textarea.field__input { min-height: 132px; padding-top: 30px; resize: vertical; 
   .hero__sweep { display: none; }
   .parallax { translate: none !important; }
 }
+
+/* =========================================================================
+   Tema escuro (padrão). O tema claro original continua disponível pelo botão
+   sol/lua do header (a escolha fica salva no navegador do visitante).
+   ========================================================================= */
+.theme-toggle__icon { display: grid; place-items: center; }
+[data-theme='dark'] .theme-toggle__icon--moon,
+:root:not([data-theme='dark']) .theme-toggle__icon--sun { display: none; }
+
+[data-theme='dark'] { color-scheme: dark; }
+[data-theme='dark'] ::selection { background: rgba(197, 154, 98, 0.35); color: #fff8ef; }
+[data-theme='dark'] [data-tone='light'] :focus-visible { outline-color: var(--gold-light); }
+
+/* Header: vidro escuro com logo dourada */
+[data-theme='dark'] .site-header {
+  color: #f3e7d6;
+  background-color: rgba(16, 10, 6, 0.9);
+  border-bottom-color: rgba(197, 154, 98, 0.18);
+  box-shadow: 0 14px 34px -24px rgba(0, 0, 0, 0.9);
+}
+[data-theme='dark'].js .site-header.is-scrolled:not(.is-past-hero) { background-color: rgba(16, 10, 6, 0.55); }
+[data-theme='dark'] .site-header .logo {
+  color: var(--gold-light);
+  --logo-gradient: linear-gradient(160deg, #f1d6a6 0%, #d1a76d 55%, #a87a44 100%);
+}
+[data-theme='dark'] .site-header .logo__mark::before { -webkit-text-stroke-color: var(--gold-light); }
+[data-theme='dark'] .header-action:hover,
+[data-theme='dark'] .menu-toggle:hover { background: rgba(226, 192, 143, 0.14); }
+[data-theme='dark'] .header-action__badge { background: var(--gold); color: var(--dark); }
+
+/* Hero: a mesma cena ao entardecer — parede escurecida, luz dourada e SMUG em ouro */
+[data-theme='dark'] .hero { background: #140c08; color: var(--light); }
+[data-theme='dark'] .hero__bg-img { filter: brightness(0.42) sepia(0.5) saturate(1.15) hue-rotate(-8deg) contrast(1.06); }
+[data-theme='dark'] .hero__bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(12, 7, 4, 0.6) 0%, rgba(12, 7, 4, 0) 28%),
+    linear-gradient(0deg, rgba(12, 7, 4, 0.55) 0%, rgba(12, 7, 4, 0) 35%);
+  pointer-events: none;
+}
+[data-theme='dark'] .hero__sun {
+  background: radial-gradient(40% 46% at 80% 16%, rgba(255, 196, 120, 0.42), rgba(255, 180, 100, 0.1) 45%, transparent 70%);
+}
+[data-theme='dark'] .hero__leaves { color: rgba(0, 0, 0, 0.75); mix-blend-mode: normal; opacity: 0.32; }
+[data-theme='dark'] .hero__brand-word {
+  text-shadow: none;
+  filter: drop-shadow(0 0.05em 0.08em rgba(0, 0, 0, 0.55));
+}
+[data-theme='dark'] .hero__letter {
+  background: linear-gradient(180deg, #f8e3ba 0%, #dcb377 46%, #a5733c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+[data-theme='dark'] .hero__figure { filter: drop-shadow(0 1.2vw 2.2vw rgba(0, 0, 0, 0.6)); }
+[data-theme='dark'] .hero__tagline { color: #f3e4cd; text-shadow: 0 1px 14px rgba(0, 0, 0, 0.7); }
+[data-theme='dark'] .hero__vignette { background: radial-gradient(120% 95% at 50% 42%, transparent 48%, rgba(0, 0, 0, 0.55) 100%); }
+[data-theme='dark'] .hero__grain { opacity: 0.09; }
+
+/* Painel de vantagens: vidro fumê */
+[data-theme='dark'] .benefits--glass {
+  background: rgba(20, 12, 8, 0.66);
+  border-color: rgba(226, 192, 143, 0.26);
+  box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  [data-theme='dark'] .benefits--glass { background: rgba(20, 12, 8, 0.48); }
+}
+[data-theme='dark'] .benefits--glass::after { background: linear-gradient(105deg, transparent 32%, rgba(255, 236, 205, 0.14) 48%, transparent 64%); }
+[data-theme='dark'] .benefits--glass .benefit__icon { color: var(--gold-light); }
+[data-theme='dark'] .benefits--glass .benefit__title { color: #f6ead8; }
+[data-theme='dark'] .benefits--glass .benefit__text { color: rgba(250, 242, 231, 0.72); }
+
+/* Seções claras viram escuras, com filetes dourados entre elas */
+[data-theme='dark'] .store,
+[data-theme='dark'] .categories,
+[data-theme='dark'] .about,
+[data-theme='dark'] .contact { border-top: 1px solid rgba(197, 154, 98, 0.12); }
+[data-theme='dark'] .store {
+  background:
+    radial-gradient(70% 50% at 85% 0%, rgba(197, 154, 98, 0.12), transparent 70%),
+    linear-gradient(180deg, #1e120c 0%, #160d09 100%);
+  color: var(--light);
+}
+[data-theme='dark'] .store::before { background: repeating-linear-gradient(122deg, transparent 0 10%, rgba(226, 192, 143, 0.05) 12% 16%, transparent 18% 30%); }
+[data-theme='dark'] .store__text { color: var(--light-soft); }
+[data-theme='dark'] .store__media { --curtain: #24150e; }
+[data-theme='dark'] .eyebrow:not(.eyebrow--light) { color: rgba(250, 242, 231, 0.72); }
+[data-theme='dark'] .section-title--wine { color: #f6ead8; }
+[data-theme='dark'] .section-title--wine em .w__i {
+  color: var(--gold-light);
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.08em;
+}
+[data-theme='dark'] .benefits--light { --divider: rgba(250, 242, 231, 0.14); }
+[data-theme='dark'] .benefits--light .benefit__icon { color: var(--gold-light); }
+[data-theme='dark'] .benefits--light .benefit__title { color: #f6ead8; }
+[data-theme='dark'] .benefits--light .benefit__text { color: var(--light-muted); }
+[data-theme='dark'] .btn--wine { box-shadow: inset 0 0 0 1px rgba(226, 192, 143, 0.28); }
+[data-theme='dark'] .btn--wine:hover { box-shadow: inset 0 0 0 1px rgba(226, 192, 143, 0.45), 0 14px 30px -14px rgba(0, 0, 0, 0.8); }
+
+/* Vitrine de produtos (quando houver) */
+[data-theme='dark'] .products {
+  background: radial-gradient(60% 40% at 10% 0%, rgba(197, 154, 98, 0.1), transparent 70%), #160d09;
+  border-top: 1px solid rgba(197, 154, 98, 0.12);
+  color: var(--light);
+}
+[data-theme='dark'] .products__text { color: var(--light-soft); }
+[data-theme='dark'] .product__media { background: #2a1a12; }
+[data-theme='dark'] .product__cat { color: var(--light-muted); }
+[data-theme='dark'] .product__name { color: #f6ead8; }
+[data-theme='dark'] .product__desc,
+[data-theme='dark'] .product__specs { color: var(--light-muted); }
+[data-theme='dark'] .product__spec dt { color: var(--light-soft); }
+[data-theme='dark'] .product__price,
+[data-theme='dark'] .product__action { color: var(--gold-light); }
+[data-theme='dark'] .product__card:has(.product__action:focus-visible) { outline-color: var(--gold-light); }

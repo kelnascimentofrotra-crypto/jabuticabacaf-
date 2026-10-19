@@ -22,6 +22,10 @@ export const header = ({ nav, headerActions }) => `
       </ul>
     </nav>
     <div class="site-header__actions">
+      <button class="header-action theme-toggle" type="button" aria-label="Tema escuro" aria-pressed="true" data-theme-toggle>
+        <span class="theme-toggle__icon theme-toggle__icon--sun">${icon('sun')}</span>
+        <span class="theme-toggle__icon theme-toggle__icon--moon">${icon('moon')}</span>
+      </button>
       <ul class="header-actions" aria-label="Ações da loja">
         ${headerActions.items
           .map((item) => `<li class="header-actions__item${isExtra(item) ? ' header-actions__item--extra' : ''}">${actionButton(item)}</li>`)

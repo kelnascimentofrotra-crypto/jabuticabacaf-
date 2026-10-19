@@ -490,7 +490,29 @@ function initForm() {
   });
 }
 
+/* ---------- Tema escuro / claro ---------- */
+function initThemeToggle() {
+  const buttons = document.querySelectorAll('[data-theme-toggle]');
+  const sync = () => {
+    const dark = root.dataset.theme !== 'light';
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(dark)));
+  };
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      root.dataset.theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+      try {
+        localStorage.setItem('smug-theme', root.dataset.theme);
+      } catch {
+        /* sem armazenamento: o tema vale só nesta visita */
+      }
+      sync();
+    })
+  );
+  sync();
+}
+
 initHeader();
+initThemeToggle();
 const menu = initMenu();
 initDemoActions(menu);
 initReveal();
