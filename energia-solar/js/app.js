@@ -693,7 +693,11 @@
     if (!section) return;
     section.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
     section.focus({ preventScroll: true });
-    if (history.replaceState) history.replaceState(null, '', '#' + id);
+    try {
+      history.replaceState(null, '', '#' + id);
+    } catch (err) {
+      /* alguns ambientes isolados não permitem alterar a URL */
+    }
   }
 
   /* ------------------------------------------------------------------ */
