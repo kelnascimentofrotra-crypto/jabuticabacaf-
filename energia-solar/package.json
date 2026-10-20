@@ -1,0 +1,12 @@
+{
+  "name": "energia-solar",
+  "private": true,
+  "description": "Site cinematográfico de energia solar (HTML/CSS/JS estático gerado por build.mjs).",
+  "scripts": {
+    "build": "node build.mjs",
+    "images": "python3 tools/derive-images.py",
+    "start": "python3 -m http.server 8080",
+    "test": "node --test tests/lib.test.mjs",
+    "test:e2e": "node tests/e2e.mjs"
+  }
+}
