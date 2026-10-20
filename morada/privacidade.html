@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Política de Privacidade — Cleuma Maia Corretora de Imóveis</title>
+  <title>Política de Privacidade — O Cara dos Apartamentos</title>
   <meta name="description" content="Como a imobiliária trata os seus dados pessoais no site, de acordo com a LGPD." />
   <meta name="theme-color" content="#faf8f3" />
-  <link rel="icon" href="/cm.ico" sizes="32x32" />
-  <link rel="icon" href="/cm.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/cm-180.png" />
+  <link rel="icon" href="/ca.ico" sizes="32x32" />
+  <link rel="icon" href="/ca.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/ca-180.png" />
   <!--
     Modelo de política de privacidade para o site. Revise com o responsável pela imobiliária
     (e, se possível, com um advogado) e ajuste o que for preciso antes de divulgar.
@@ -44,14 +44,14 @@
 </head>
 <body>
   <header>
-    <a class="logo" href="/" aria-label="Cleuma Maia Corretora de Imóveis — voltar ao site"><span class="brand" aria-hidden="true"><span class="brand-w">Cleuma Maia</span><span class="brand-s">Corretora de Imóveis</span></span></a>
+    <a class="logo" href="/" aria-label="O Cara dos Apartamentos — voltar ao site"><span class="brand" aria-hidden="true"><span class="brand-s">O Cara dos</span><span class="brand-w">Apartamentos</span></span></a>
     <a class="back" href="/">Voltar ao site</a>
   </header>
   <main>
     <h1>Política de Privacidade</h1>
     <p class="updated">Atualizada em 5 de outubro de 2026</p>
 
-    <p>Esta política explica como <b data-nome>Cleuma Maia Corretora de Imóveis</b> trata os seus dados pessoais quando você usa este site, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
+    <p>Esta política explica como <b data-nome>O Cara dos Apartamentos</b> trata os seus dados pessoais quando você usa este site, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD).</p>
 
     <h2>1. Quais dados coletamos</h2>
     <ul>
@@ -88,7 +88,7 @@
 
     <h2>8. Fale com a gente</h2>
     <div class="box">
-      <p style="margin:0"><b data-nome>Cleuma Maia Corretora de Imóveis</b><span data-extra></span></p>
+      <p style="margin:0"><b data-nome>O Cara dos Apartamentos</b><span data-extra></span></p>
     </div>
   </main>
   <script src="/supabase-config.js"></script>
@@ -103,7 +103,7 @@
       const c = res && res.ok ? (await res.json())[0] : null;
       if (!c) return;
       const nome = (c.nome_imobiliaria || '').trim();
-      if (nome && !/^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$|^o cara dos apartamentos$/i.test(nome)) {
+      if (nome && !/^morada$|artur|arthur|guimar|^recanto do acre flats$|^thiago liro$|^cleuma maia corretora de imóveis$|^joão batista corretor$/i.test(nome)) {
         document.querySelectorAll('[data-nome]').forEach((el) => { el.textContent = nome; });
         document.title = `Política de Privacidade — ${nome}`;
       }
