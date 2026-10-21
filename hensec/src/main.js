@@ -59,6 +59,41 @@ document.addEventListener('click', (event) => {
 desktopNav.addEventListener('change', () => setMenu(false));
 
 /* --------------------------------------------------------------------------
+   Menu completo só quando cabe de verdade na barra. Mede sempre no layout
+   completo; se os itens transbordam ou encostam no nome, volta ao menu de
+   botão (.nav-compact). Cobre zoom de texto, fonte do sistema maior etc.
+   -------------------------------------------------------------------------- */
+
+const navBar = nav.querySelector('.nav__bar');
+const navBrand = nav.querySelector('.nav__brand');
+const navMenu = nav.querySelector('.nav__menu');
+const NAV_MIN_GAP = 24;
+let navFrame = 0;
+
+function fitNav() {
+  navFrame = 0;
+  root.classList.remove('nav-compact');
+  if (!desktopNav.matches) return;
+  const fits =
+    navBar.scrollWidth <= navBar.clientWidth + 1 &&
+    navMenu.getBoundingClientRect().left - navBrand.getBoundingClientRect().right >= NAV_MIN_GAP;
+  if (fits) {
+    if (nav.classList.contains('is-open')) setMenu(false);
+  } else {
+    root.classList.add('nav-compact');
+  }
+}
+
+function requestFitNav() {
+  if (!navFrame) navFrame = requestAnimationFrame(fitNav);
+}
+
+fitNav();
+document.fonts?.ready.then(fitNav);
+window.addEventListener('resize', requestFitNav);
+desktopNav.addEventListener('change', requestFitNav);
+
+/* --------------------------------------------------------------------------
    Seção ativa: a que cruza o centro da viewport define o item do menu.
    -------------------------------------------------------------------------- */
 

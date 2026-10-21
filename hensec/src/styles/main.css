@@ -1379,13 +1379,15 @@ em {
 
   /* --- Navbar --- */
 
+  /* A barra acompanha a coluna de conteúdo (1522u, centralizada), mas nunca
+     fica mais estreita que 1120px: em telas baixas o --u diminui e o texto do
+     menu, que tem tamanho mínimo para continuar legível, deixaria de caber. */
   .nav {
-    /* em telas mais largas que 16:9 a coluna de conteúdo mantém a proporção
-       da referência; a fotografia continua de ponta a ponta */
-    --gutter: max(0px, (100vw - var(--u) * 1672) / 2);
     top: calc(var(--u) * 32);
-    left: calc(var(--gutter) + var(--u) * 75);
-    right: calc(var(--gutter) + var(--u) * 75);
+    left: 0;
+    right: 0;
+    width: min(100% - 32px, max(var(--u) * 1522, 1120px));
+    margin-inline: auto;
   }
 
   /* --- Cena --- */
@@ -1981,12 +1983,14 @@ em {
 }
 
 /* ==========================================================================
-   Menu completo na barra: só a partir de 1280px, onde os cinco itens e o
-   botão cabem com folga. Entre 1024 e 1279px o desktop usa o menu de botão.
+   Menu completo na barra: a partir de 1280px. Entre 1024 e 1279px o desktop
+   usa o menu de botão, e o main.js põe .nav-compact no <html> (volta ao menu
+   de botão) sempre que o menu completo não cabe de fato, por exemplo com zoom
+   de texto ou fonte do sistema maior.
    ========================================================================== */
 
 @media (min-width: 1280px) and (min-aspect-ratio: 1/1) {
-  .nav__bar {
+  html:not(.nav-compact) .nav__bar {
     flex-wrap: nowrap;
     height: calc(var(--u) * 90);
     min-height: 58px;
@@ -1994,16 +1998,16 @@ em {
     border-radius: max(10px, calc(var(--u) * 14));
   }
 
-  .brand-name {
+  html:not(.nav-compact) .brand-name {
     font-size: max(20px, calc(var(--u) * 30));
   }
 
-  .nav__toggle {
+  html:not(.nav-compact) .nav__toggle {
     display: none;
   }
 
-  .nav__menu,
-  .nav.is-open .nav__menu {
+  html:not(.nav-compact) .nav__menu,
+  html:not(.nav-compact) .nav.is-open .nav__menu {
     display: flex;
     flex-direction: row;
     flex-basis: auto;
@@ -2014,24 +2018,25 @@ em {
     animation: none;
   }
 
-  .nav__links {
+  html:not(.nav-compact) .nav__links {
     flex-direction: row;
     gap: calc(var(--u) * 65);
   }
 
-  .nav__link {
+  html:not(.nav-compact) .nav__link {
     min-height: 0;
     padding: calc(var(--u) * 10) 0;
     border: 0;
     font-size: max(14px, calc(var(--u) * 17));
     line-height: 1.2;
+    white-space: nowrap;
   }
 
-  .nav__link[aria-current='true'] {
+  html:not(.nav-compact) .nav__link[aria-current='true'] {
     color: var(--text);
   }
 
-  .nav__link::after {
+  html:not(.nav-compact) .nav__link::after {
     content: '';
     position: absolute;
     left: calc(var(--u) * -8);
@@ -2045,11 +2050,11 @@ em {
     transition: transform 0.45s var(--ease-out);
   }
 
-  .nav__link[aria-current='true']::after {
+  html:not(.nav-compact) .nav__link[aria-current='true']::after {
     transform: scaleX(1);
   }
 
-  .nav__divider {
+  html:not(.nav-compact) .nav__divider {
     display: block;
     width: 1px;
     height: calc(var(--u) * 46);
@@ -2057,7 +2062,7 @@ em {
     background: var(--line-gold);
   }
 
-  .nav__cta {
+  html:not(.nav-compact) .nav__cta {
     align-self: center;
     min-height: 36px;
     height: calc(var(--u) * 47);

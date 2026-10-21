@@ -93,6 +93,9 @@ Se existirem as fotos originais sem texto, basta substituir os arquivos em
   baixas a seção cresce e a página rola normalmente.
 - **Menu:** a lista completa na barra aparece a partir de 1280 px de largura;
   abaixo disso (inclusive no desktop de 1024–1279 px) o menu abre pelo botão.
+  A barra tem no mínimo 1120 px, mesmo em telas baixas (notebook com zoom do
+  Windows em 125–150%), e o `main.js` volta ao menu de botão sempre que os
+  itens não cabem numa linha (zoom de texto, fonte do sistema maior).
 - **Mobile e tablet:** cenas recompostas (foto em destaque + texto em fluxo),
   menu hambúrguer, cards em coluna (horizontais no tablet) e a foto do celular
   após o CTA de Contato.
@@ -105,7 +108,8 @@ Se existirem as fotos originais sem texto, basta substituir os arquivos em
 
 Capturas com Chromium (Playwright) em 1920×1080, 1672×941, 1600×900,
 1440×900, 1366×768, 1280×720, 2560×1080, 1024×768, 768×1024, 390×844,
-375×812 e 360×800: sem rolagem horizontal, sem erros de console, todas as
+375×812 e 360×800, e nas áreas úteis reais de notebooks com barra do
+navegador e zoom do Windows (1280×600 a 150%, 1366×657, 1536×730 a 125%): sem rolagem horizontal, sem erros de console, todas as
 cenas desktop dentro de uma viewport, menu ativo acompanhando a rolagem,
 cliques nos links âncora alinhando cada cena ao topo, conteúdo visível com
 JavaScript desativado e com `prefers-reduced-motion`.
