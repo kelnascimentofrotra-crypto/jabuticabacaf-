@@ -1,0 +1,1045 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Cobertura Verde do Planeta Azul</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Capítulo 12 de Geografia — apresentação interativa sobre as formações vegetais do planeta. Escola Comunitária Santa Maria Bestila.">
+<meta name="theme-color" content="#040806">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script>
+  /* Texturas do globo (NASA Blue Marble / Black Marble). No build, são embutidas como data URI. */
+  window.EARTH_TEX = { day: "assets/earth-day.jpg", night: "assets/earth-night.jpg", water: "assets/earth-water.png" };
+</script>
+</head>
+<body class="is-gate" data-mood="space">
+
+<!-- Ícones -------------------------------------------------------------- -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+  <symbol id="i-vol" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m23 9-6 6M17 9l6 6"/></symbol>
+  <symbol id="i-max" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></symbol>
+  <symbol id="i-min" viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></symbol>
+  <symbol id="i-restart" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M14 14.8V3.5a2.5 2.5 0 0 0-5 0v11.3a4.5 4.5 0 1 0 5 0z"/></symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24"><path d="M16 13v8M8 13v8M12 15v8M20 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M4.5 7h15M4.5 17h15M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+  <symbol id="i-mount" viewBox="0 0 24 24"><path d="m2 20 7-13 4 7 3-4 6 10z"/><path d="m7.5 10 1.5 1.5L10.5 10"/></symbol>
+  <symbol id="i-soil" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 17.7 8.3a8 8 0 1 1-11.3 0z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6C9.5 14.5 12 13 13 12"/></symbol>
+  <symbol id="i-life" viewBox="0 0 24 24"><path d="M12 7v13"/><path d="M12 9C9.5 4.5 4 4.5 4 8.5S9 15 12 13"/><path d="M12 9c2.5-4.5 8-4.5 8-.5S15 15 12 13"/><path d="M9 3l3 4 3-4"/></symbol>
+  <symbol id="i-co2" viewBox="0 0 24 24"><path d="M17.5 19H8a6 6 0 1 1 1.4-11.8A7 7 0 0 1 22 10.5 4.5 4.5 0 0 1 17.5 19z"/><path d="M9 13.5a1.5 1.5 0 1 0 0 1M13 13a1.5 1.5 0 1 1 0 2 1.5 1.5 0 0 1 0-2zM16.5 15.5h1.5l-1.5 1.5h1.5"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 21h10M12 21v-8"/><path d="M12 13c0-4 3-7 8-7 0 4-3 7-8 7z"/><path d="M12 11C12 7.5 9.5 5 5 5c0 3.5 2.5 6 7 6z"/></symbol>
+  <symbol id="i-sat" viewBox="0 0 24 24"><path d="m13 7-4-4-4 4 4 4M17 11l4 4-4 4-4-4"/><path d="m8 12 4 4 6-6-4-4z"/><path d="M4 16a4 4 0 0 0 4 4M3 13a8 8 0 0 0 8 8"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M1 2h4l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 6H6"/></symbol>
+  <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
+  <symbol id="i-water" viewBox="0 0 24 24"><path d="M2 6c2 0 2-1.5 4-1.5S8 6 10 6s2-1.5 4-1.5S16 6 18 6s2-1.5 4-1.5M2 12c2 0 2-1.5 4-1.5S8 12 10 12s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5M2 18c2 0 2-1.5 4-1.5S8 18 10 18s2-1.5 4-1.5 2 1.5 4 1.5 2-1.5 4-1.5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+</svg>
+
+<!-- Fundo, globo, partículas ------------------------------------------- -->
+<div id="bg" aria-hidden="true"><div class="topo" id="topo"></div><div class="orb a"></div><div class="orb b"></div></div>
+<canvas id="globe" aria-hidden="true"></canvas>
+
+<!-- Tela inicial (desbloqueia o áudio por gesto do usuário) ------------ -->
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+  <div class="orbs" aria-hidden="true"><i></i><i></i></div>
+  <div class="gate-inner">
+    <p class="gate-kicker">Geografia · Capítulo 12</p>
+    <h1 class="gate-title" id="gateTitle">A cobertura verde do planeta azul</h1>
+    <button class="pill pill--glow gate-start" id="startSound" type="button"><span class="ring" aria-hidden="true"></span>Iniciar com som</button>
+    <button class="gate-alt" id="startMute" type="button">Iniciar sem som</button>
+    <p class="gate-hint">Navegue com as setas <kbd>←</kbd> <kbd>→</kbd> do teclado, com os botões da tela ou deslizando o dedo. Use fones ou caixas de som para a trilha ambiente.</p>
+  </div>
+</div>
+
+<main id="stage" aria-live="off">
+
+<!-- ========================= ABERTURA ========================= -->
+<section class="scene scene--opening" id="opening" data-section="abertura" data-mood="space" data-title="Abertura" data-beat="0" data-globe="off" data-trans="fade" aria-label="Abertura">
+  <div class="op-dot" aria-hidden="true"></div>
+  <div class="op-rings" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+  <p class="op-coords" id="opCoordL">00°00′00″ N · 000°00′00″ O</p>
+  <p class="op-coords r" id="opCoordR">ALT 35.786 KM · ÓRBITA</p>
+
+  <!-- Cena 3: escola -->
+  <div class="op-layer op-school">
+    <svg class="carto" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path style="--i:0" d="M-20 610 C 200 560, 380 680, 620 620 S 1040 520, 1260 600 S 1520 660, 1640 620"/>
+      <path style="--i:1" d="M-20 660 C 220 610, 400 720, 640 670 S 1060 570, 1280 650 S 1540 700, 1640 680"/>
+      <path style="--i:2" d="M-20 300 C 260 260, 420 350, 700 300 S 1100 220, 1320 290 S 1560 330, 1640 300"/>
+      <path style="--i:3" d="M-20 250 C 240 210, 440 300, 690 250 S 1120 180, 1340 240 S 1560 280, 1640 250"/>
+      <line style="--i:4" x1="0" y1="450" x2="1600" y2="450"/>
+      <line style="--i:5" x1="800" y1="0" x2="800" y2="900"/>
+      <circle style="--i:6" cx="800" cy="450" r="330"/>
+      <circle style="--i:7" cx="800" cy="450" r="260"/>
+      <path class="leaf" style="--i:8" d="M210 780 C 250 700, 340 690, 380 640 C 360 720, 300 770, 210 780 Z M210 780 C 270 740, 320 700, 380 640"/>
+      <path class="leaf" style="--i:9" d="M1390 170 C 1350 250, 1260 260, 1220 310 C 1240 230, 1300 180, 1390 170 Z M1390 170 C 1330 210, 1280 250, 1220 310"/>
+      <path class="leaf" style="--i:10" d="M1300 760 C 1330 700, 1400 690, 1430 650 C 1415 710, 1370 750, 1300 760 Z"/>
+    </svg>
+    <div class="inner">
+      <p class="kicker">Escola Comunitária</p>
+      <h2 class="name">Santa Maria <span class="serif">Bestila</span></h2>
+      <div class="rule" aria-hidden="true"></div>
+      <p class="sub">Trabalho de Geografia</p>
+    </div>
+  </div>
+
+  <!-- Cena 4: professor e alunos -->
+  <div class="op-layer op-team">
+    <div class="inner">
+      <div class="col">
+        <div class="op-field"><span class="k">Professor</span><span class="v">Valdemir</span></div>
+        <div class="op-field"><span class="k">Componente curricular</span><span class="v">Geografia</span></div>
+      </div>
+      <div class="students">
+        <span class="k">Alunos</span>
+        <div class="stack3d">
+          <div class="slab">Miguel Vinícius <span>01</span></div>
+          <div class="slab">Benjamin Henrique <span>02</span></div>
+          <div class="slab">Everton <span>03</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cena 5: título -->
+  <div class="op-layer op-title">
+    <div class="forest-mask" aria-hidden="true"><figure class="ph" data-img="amazon_ciat" data-size="1920" data-credit="none"></figure></div>
+    <div class="inner">
+      <p class="pre">Trabalho de Geografia</p>
+      <h2 class="big-title" aria-label="A cobertura verde do planeta azul">
+        <span class="ln"><span class="w">A</span> <span class="w">cobertura</span> <span class="w verde">verde</span></span>
+        <span class="ln"><span class="w">do</span> <span class="w">planeta</span> <span class="w azul">azul</span></span>
+      </h2>
+    </div>
+  </div>
+
+  <!-- Cena 6: capítulo 12 -->
+  <div class="op-layer op-chapter">
+    <div class="inner">
+      <p class="lbl">Capítulo</p>
+      <p class="num" aria-label="12">12</p>
+      <p class="tt">A cobertura verde do planeta azul</p>
+    </div>
+  </div>
+
+  <button class="pill op-skip" id="skipOpening" type="button">Pular abertura <svg aria-hidden="true"><use href="#i-right"/></svg></button>
+</section>
+
+<!-- ========================= 01 · INTRODUÇÃO ========================= -->
+<section class="scene" id="s01-a" data-section="s01" data-mood="space" data-title="A cobertura verde do planeta azul" data-globe="right" data-trans="zoom" data-coord="Terra · 12.742 km de diâmetro">
+  <div class="wrap">
+    <div class="hero-copy" style="max-width:640px">
+      <span class="eyebrow a" data-a="fade">01 · Introdução</span>
+      <h2 class="h-1 split" data-split="words" style="--d:200ms">A cobertura <span class="accent glow">verde</span> do planeta <span class="serif" style="color:var(--sky)">azul</span></h2>
+      <p class="lead a" data-a="rise" style="--d:900ms">Vista do espaço, a Terra parece azul: cerca de <strong>71%</strong> da superfície é coberta por água. Nos continentes, um manto verde muda de forma, de cor e de altura conforme o clima de cada lugar.</p>
+      <div class="stats a" data-a="rise" style="--d:1300ms">
+        <div class="stat"><span class="num" data-count="71">71<small>%</small></span><span class="lbl">da superfície terrestre coberta por oceanos, mares, rios e lagos</span></div>
+        <div class="stat"><span class="num" data-count="31">31<small>%</small></span><span class="lbl">das terras emersas cobertas por florestas</span></div>
+      </div>
+      <p class="source a" data-a="fade" style="--d:1700ms">Fonte das florestas: FAO, Avaliação dos Recursos Florestais Globais (FRA 2020) — cerca de 4,06 bilhões de hectares.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s01-b" data-section="s01" data-mood="space" data-title="Planeta azul visto do espaço" data-globe="off" data-trans="fade" data-coord="Apollo 17 · 7 dez. 1972">
+  <div class="wrap grid-2 wide-right">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Fotografia histórica</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:150ms">Cada cor da Terra revela <span class="serif accent">uma paisagem</span></h2>
+      <p class="body a" data-a="rise" style="--d:400ms">Em 7 de dezembro de 1972, a tripulação da Apollo 17 fotografou o planeta inteiro iluminado pelo Sol. Na imagem aparecem a África, a Península Arábica e a Antártida.</p>
+      <dl class="facts a" data-a="rise" style="--d:650ms">
+        <div class="fact"><dt>Azul</dt><dd>Oceanos e mares</dd></div>
+        <div class="fact"><dt>Branco</dt><dd>Nuvens e gelo polar</dd></div>
+        <div class="fact"><dt>Ocre</dt><dd>Desertos e áreas secas, como o Saara</dd></div>
+        <div class="fact"><dt>Verde-escuro</dt><dd>Florestas e savanas úmidas, como na África Central</dd></div>
+      </dl>
+    </div>
+    <figure class="a" data-a="scale" style="--d:200ms">
+      <div class="ph" data-img="apollo17" data-size="1280" style="aspect-ratio:1/1;border-radius:50%;max-width:min(560px,100%);margin-inline:auto;box-shadow:0 0 80px rgba(80,160,255,.25)"></div>
+    </figure>
+  </div>
+</section>
+
+<section class="scene" id="s01-c" data-section="s01" data-mood="space" data-title="O que define a vegetação" data-globe="off" data-trans="iris" data-coord="Fatores naturais">
+  <div class="wrap arc-wrap">
+    <div class="neon-arc a" data-a="fade" style="--d:200ms;--dur:2s" aria-hidden="true"></div>
+    <div class="stack" style="justify-items:center;text-align:center;position:relative">
+      <span class="eyebrow a" data-a="fade">O que define a vegetação?</span>
+      <h2 class="h-1 split" data-split="letters" style="--d:150ms">Clima, relevo e solo</h2>
+      <p class="lead a" data-a="rise" style="--d:900ms;margin-inline:auto">A vegetação de cada lugar depende de um conjunto de fatores que atuam juntos. Os dois mais importantes são a temperatura e a quantidade de chuva.</p>
+    </div>
+    <div class="factors">
+      <article class="factor a" data-a="tilt" style="--d:1000ms" tabindex="0"><svg aria-hidden="true"><use href="#i-temp"/></svg><h3>Temperatura</h3><p>Define o ritmo de crescimento e quais plantas suportam calor intenso ou congelamento.</p></article>
+      <article class="factor a" data-a="tilt" style="--d:1150ms" tabindex="0"><svg aria-hidden="true"><use href="#i-rain"/></svg><h3>Precipitação</h3><p>O total de chuva e sua distribuição ao longo do ano decidem entre floresta, campo ou deserto.</p></article>
+      <article class="factor a" data-a="tilt" style="--d:1300ms" tabindex="0"><svg aria-hidden="true"><use href="#i-globe"/></svg><h3>Latitude</h3><p>Quanto mais longe do Equador, mais inclinados chegam os raios solares e mais frio tende a ser o clima.</p></article>
+      <article class="factor a" data-a="tilt" style="--d:1450ms" tabindex="0"><svg aria-hidden="true"><use href="#i-mount"/></svg><h3>Altitude e relevo</h3><p>Subir uma montanha tem efeito parecido com viajar em direção aos polos: a temperatura diminui.</p></article>
+      <article class="factor a" data-a="tilt" style="--d:1600ms" tabindex="0"><svg aria-hidden="true"><use href="#i-soil"/></svg><h3>Solo</h3><p>Profundidade, fertilidade e drenagem influenciam as raízes e os nutrientes disponíveis.</p></article>
+      <article class="factor a" data-a="tilt" style="--d:1750ms" tabindex="0"><svg aria-hidden="true"><use href="#i-drop"/></svg><h3>Água disponível</h3><p>Rios, lençóis subterrâneos e umidade do ar sustentam as plantas mesmo nos períodos sem chuva.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s01-d" data-section="s01" data-mood="space" data-title="Do Equador aos polos" data-globe="off" data-trans="fade" data-coord="0° → 90° de latitude">
+  <div class="wrap grid-2 wide-left">
+    <div class="stack">
+      <div class="latmap a" data-a="blur" id="latmap">
+        <img id="latmapImg" alt="Mapa-múndi em projeção equiretangular feito com imagens do satélite da NASA (Blue Marble), com faixas de latitude destacadas.">
+      </div>
+      <p class="source a" data-a="fade" style="--d:400ms">Imagem de fundo: NASA Blue Marble (domínio público). As faixas são aproximadas: o relevo, as correntes marinhas e a distância do mar alteram esse padrão.</p>
+    </div>
+    <div class="stack">
+      <span class="eyebrow a" data-a="fade">Distribuição pelo planeta</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:150ms">Do Equador aos polos, a vegetação muda em <span class="serif accent">faixas</span></h2>
+      <div class="band-btns a" data-a="rise" style="--d:350ms" id="bandBtns" role="group" aria-label="Escolha uma formação vegetal"></div>
+      <div class="panel band-info a" data-a="rise" style="--d:500ms" id="bandInfo" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s01-e" data-section="s01" data-mood="restore" data-title="Por que a vegetação importa" data-globe="off" data-trans="fade" data-coord="Serviços ambientais">
+  <div class="wrap stack-lg">
+    <div class="stack">
+      <span class="eyebrow a" data-a="fade">Por que a vegetação importa?</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Sem a cobertura verde, o planeta azul <span class="serif accent">perde o equilíbrio</span></h2>
+    </div>
+    <div class="why">
+      <article class="why-card a" data-a="rise" style="--d:300ms">
+        <div class="ph" data-img="amazon_rain" data-size="960"></div>
+        <div class="txt"><h3>Ciclo da água</h3><p>As plantas devolvem água ao ar pela transpiração. Os “rios voadores” da Amazônia levam essa umidade para o Centro-Oeste, o Sudeste e o Sul do Brasil.</p></div>
+      </article>
+      <article class="why-card a" data-a="rise" style="--d:450ms">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-co2"/></svg></div>
+        <div class="txt"><h3>Equilíbrio climático</h3><p>Na fotossíntese, as plantas retiram gás carbônico (CO₂) da atmosfera e o armazenam em troncos, raízes e no solo. A sombra e a evaporação também amenizam a temperatura.</p></div>
+      </article>
+      <article class="why-card a" data-a="rise" style="--d:600ms">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-life"/></svg></div>
+        <div class="txt"><h3>Biodiversidade</h3><p>A vegetação oferece abrigo, alimento e locais de reprodução para animais, fungos e microrganismos. Cada formação vegetal abriga espécies próprias.</p></div>
+      </article>
+      <article class="why-card a" data-a="rise" style="--d:750ms">
+        <div class="ico"><svg aria-hidden="true"><use href="#i-soil"/></svg></div>
+        <div class="txt"><h3>Conservação dos solos</h3><p>Raízes seguram a terra, as copas amortecem a chuva e as folhas caídas formam matéria orgânica. Sem vegetação, aumentam a erosão e o assoreamento dos rios.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s01-f" data-section="s01" data-mood="space" data-title="Atlas das formações vegetais" data-globe="off" data-trans="fade" data-coord="9 formações vegetais">
+  <div class="wrap wrap--wide">
+    <div class="atlas-head">
+      <div class="stack">
+        <span class="eyebrow a" data-a="fade">Atlas interativo</span>
+        <h2 class="h-2 a" data-a="rise" style="--d:100ms">Explore as formações vegetais</h2>
+        <p class="small a" data-a="rise" style="--d:250ms">Toque em um cartão para abrir a ficha completa, com mapa, clima, adaptações e ameaças.</p>
+      </div>
+      <div class="track-ctrls a" data-a="fade" style="--d:300ms">
+        <button class="icon-btn" type="button" data-track="-1" aria-label="Cartões anteriores"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+        <button class="icon-btn" type="button" data-track="1" aria-label="Próximos cartões"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+    <div class="cards-track a" data-a="right" style="--d:350ms" id="cardsTrack" data-noswipe tabindex="0" aria-label="Cartões das formações vegetais"></div>
+  </div>
+</section>
+
+<!-- ========================= 02 · FLORESTAS EQUATORIAIS E TROPICAIS ========================= -->
+<section class="scene" id="s02-a" data-section="s02" data-mood="tropical" data-title="Florestas equatoriais e tropicais" data-globe="off" data-trans="organic" data-coord="3°06′ S · 60°01′ O — Amazônia">
+  <div class="scene-bg"><div class="ph" data-img="amazon_aerial" data-size="1920" style="--kb-x:-2%;--kb-y:1%"></div><div class="rays" aria-hidden="true"></div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade">02 · Florestas equatoriais e tropicais</span>
+      <h2 class="h-display split" data-split="letters" style="--d:200ms">Calor, chuva e vida</h2>
+      <p class="lead a" data-a="rise" style="--d:1200ms">Na faixa intertropical, o calor constante e as chuvas abundantes formam as florestas mais densas e com a maior diversidade de espécies do planeta.</p>
+      <div class="row a" data-a="rise" style="--d:1500ms">
+        <button class="pill pill--glow" type="button" data-biome="tropical">Ver ficha do bioma <svg aria-hidden="true"><use href="#i-right"/></svg></button>
+        <span class="chip"><i></i>Amazônia · Congo · Sudeste Asiático · Mata Atlântica</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s02-b" data-section="s02" data-mood="tropical" data-title="Onde estão e qual é o clima" data-globe="off" data-trans="organic" data-coord="Entre os trópicos · 23°26′ N e S">
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Localização e clima</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Perto do Equador, <span class="serif accent">o verão não acaba</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">As florestas equatoriais e tropicais ocupam áreas da <strong>América do Sul</strong> (Amazônia e Mata Atlântica), da <strong>África Central</strong> (bacia do rio Congo) e do <strong>Sudeste Asiático</strong> (Indonésia, Malásia e Papua-Nova Guiné).</p>
+      <p class="body a" data-a="rise" style="--d:450ms">No clima equatorial chove o ano inteiro. Nas florestas tropicais, como a Mata Atlântica, pode haver meses menos chuvosos, mas a umidade continua alta — em parte trazida pelos ventos do oceano.</p>
+      <div class="minimap a" data-a="blur" style="--d:600ms" data-minimap="tropical" aria-label="Mapa com a localização das principais florestas tropicais"></div>
+    </div>
+    <div class="panel stack-lg a" data-a="left" style="--d:400ms">
+      <div class="gauge" style="--v:86%;--d:.8s"><div class="lbl"><span>Temperatura média anual</span><b>24 a 28 °C</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:92%;--d:1s"><div class="lbl"><span>Chuva anual</span><b>em geral, acima de 2.000 mm</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:90%;--d:1.2s"><div class="lbl"><span>Umidade do ar</span><b>muito alta</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:12%;--d:1.4s"><div class="lbl"><span>Variação de temperatura no ano</span><b>pequena (2 a 3 °C)</b></div><div class="bar"><i></i></div></div>
+      <p class="source">Valores médios aproximados para áreas de clima equatorial.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s02-c" data-section="s02" data-mood="tropical" data-title="Os andares da floresta" data-globe="off" data-trans="organic" data-coord="Estratificação vertical">
+  <div class="wrap grid-2 wide-left">
+    <div class="strata a" data-a="blur" id="strata">
+      <svg viewBox="0 0 620 440" role="img" aria-labelledby="strataT">
+        <title id="strataT">Corte de uma floresta tropical mostrando os estratos: emergente, dossel, sub-bosque e chão da floresta.</title>
+        <defs>
+          <linearGradient id="gSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c2d1f"/><stop offset="1" stop-color="#03100a"/></linearGradient>
+          <linearGradient id="gLight" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e9ffb0" stop-opacity=".55"/><stop offset="1" stop-color="#e9ffb0" stop-opacity="0"/></linearGradient>
+        </defs>
+        <rect x="0" y="0" width="620" height="440" fill="url(#gSky)" rx="18"/>
+        <!-- luz que atravessa -->
+        <path d="M120 0 L170 0 L210 400 L190 400 Z M330 0 L350 0 L360 400 L352 400 Z M470 0 L520 0 L500 400 L485 400 Z" fill="url(#gLight)" opacity=".5"/>
+        <!-- escala de altura -->
+        <g font-family="JetBrains Mono, monospace" font-size="10" fill="#a7bdb1">
+          <line x1="44" y1="400" x2="44" y2="40" stroke="#a7bdb1" stroke-opacity=".4"/>
+          <g><line x1="38" y1="400" x2="50" y2="400" stroke="#a7bdb1"/><text x="6" y="404">0 m</text></g>
+          <g><line x1="38" y1="340" x2="50" y2="340" stroke="#a7bdb1"/><text x="2" y="344">10 m</text></g>
+          <g><line x1="38" y1="280" x2="50" y2="280" stroke="#a7bdb1"/><text x="2" y="284">20 m</text></g>
+          <g><line x1="38" y1="220" x2="50" y2="220" stroke="#a7bdb1"/><text x="2" y="224">30 m</text></g>
+          <g><line x1="38" y1="160" x2="50" y2="160" stroke="#a7bdb1"/><text x="2" y="164">40 m</text></g>
+          <g><line x1="38" y1="100" x2="50" y2="100" stroke="#a7bdb1"/><text x="2" y="104">50 m</text></g>
+          <g><line x1="38" y1="40" x2="50" y2="40" stroke="#a7bdb1"/><text x="2" y="44">60 m</text></g>
+        </g>
+        <!-- chão -->
+        <g class="lvl chao layer-hit" data-layer="chao">
+          <rect x="52" y="398" width="560" height="30" fill="#3a2a17"/>
+          <g fill="#7a5a2c"><ellipse cx="90" cy="404" rx="9" ry="3"/><ellipse cx="160" cy="410" rx="7" ry="2.5"/><ellipse cx="240" cy="405" rx="10" ry="3"/><ellipse cx="330" cy="412" rx="8" ry="2.5"/><ellipse cx="410" cy="404" rx="9" ry="3"/><ellipse cx="500" cy="410" rx="11" ry="3"/><ellipse cx="575" cy="405" rx="8" ry="2.5"/></g>
+          <g fill="#c99a52"><circle cx="120" cy="416" r="2"/><circle cx="280" cy="418" r="2"/><circle cx="450" cy="417" r="2"/></g>
+        </g>
+        <!-- troncos das emergentes -->
+        <g class="lvl emergente layer-hit" data-layer="emergente">
+          <path d="M150 398 L156 120 L162 120 L170 398 Z" fill="#5b4126"/>
+          <path d="M455 398 L460 70 L466 70 L474 398 Z" fill="#5b4126"/>
+          <path d="M470 120 Q500 105 520 112" stroke="#5b4126" stroke-width="4" fill="none"/>
+          <g fill="#2f9a55"><ellipse cx="158" cy="112" rx="58" ry="26"/><ellipse cx="128" cy="122" rx="30" ry="16"/><ellipse cx="190" cy="120" rx="32" ry="16"/></g>
+          <g fill="#3fb866"><ellipse cx="463" cy="64" rx="66" ry="28"/><ellipse cx="425" cy="76" rx="34" ry="15"/><ellipse cx="505" cy="78" rx="36" ry="16"/><ellipse cx="520" cy="108" rx="24" ry="10"/></g>
+        </g>
+        <!-- dossel -->
+        <g class="lvl dossel layer-hit" data-layer="dossel">
+          <g fill="#4a3320"><rect x="96" y="230" width="7" height="168"/><rect x="236" y="215" width="8" height="183"/><rect x="330" y="225" width="7" height="173"/><rect x="398" y="210" width="8" height="188"/><rect x="560" y="228" width="7" height="170"/></g>
+          <g fill="#1f7a43"><ellipse cx="100" cy="215" rx="58" ry="34"/><ellipse cx="190" cy="200" rx="62" ry="36"/><ellipse cx="275" cy="212" rx="58" ry="32"/><ellipse cx="350" cy="198" rx="56" ry="34"/><ellipse cx="420" cy="208" rx="54" ry="32"/><ellipse cx="520" cy="200" rx="64" ry="36"/><ellipse cx="590" cy="214" rx="36" ry="28"/></g>
+          <g fill="#2a8f50"><ellipse cx="140" cy="190" rx="40" ry="20"/><ellipse cx="320" cy="182" rx="44" ry="20"/><ellipse cx="560" cy="186" rx="40" ry="20"/></g>
+        </g>
+        <!-- sub-bosque -->
+        <g class="lvl subbosque layer-hit" data-layer="subbosque">
+          <g fill="#4a3320"><rect x="205" y="350" width="4" height="48"/><rect x="372" y="345" width="4" height="53"/><rect x="530" y="352" width="4" height="46"/></g>
+          <g fill="#145c33"><ellipse cx="207" cy="345" rx="26" ry="16"/><ellipse cx="374" cy="340" rx="24" ry="17"/><ellipse cx="532" cy="347" rx="25" ry="15"/><ellipse cx="80" cy="378" rx="24" ry="18"/><ellipse cx="290" cy="380" rx="22" ry="16"/><ellipse cx="455" cy="382" rx="20" ry="15"/></g>
+          <g stroke="#2e8a4e" stroke-width="3" fill="none" stroke-linecap="round"><path d="M120 398 Q110 370 92 360 M120 398 Q122 366 134 352 M120 398 Q132 372 150 366"/><path d="M600 398 Q590 372 576 364 M600 398 Q604 370 612 358"/></g>
+        </g>
+        <!-- epífitas e cipós -->
+        <g stroke="#6bd38b" stroke-width="1.5" fill="none" opacity=".7"><path d="M236 230 C 220 280, 250 320, 232 398"/><path d="M398 220 C 420 270, 392 320, 410 398"/></g>
+      </svg>
+    </div>
+    <div class="stack">
+      <span class="eyebrow a" data-a="fade">Estratificação</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Os andares da floresta</h2>
+      <p class="small a" data-a="rise" style="--d:200ms">Escolha um estrato para destacá-lo no desenho.</p>
+      <div class="strata-list" id="strataList">
+        <button class="strata-btn a" data-a="left" style="--d:350ms" type="button" data-layer="emergente" aria-pressed="false"><b>+ 45 m</b><span><strong>Emergentes</strong><small>Árvores que ultrapassam o dossel. Na Amazônia, um angelim-vermelho do Amapá mede cerca de 88 m.</small></span></button>
+        <button class="strata-btn a" data-a="left" style="--d:500ms" type="button" data-layer="dossel" aria-pressed="false"><b>25–40 m</b><span><strong>Dossel</strong><small>As copas se encostam e formam um “teto” verde que retém a maior parte da luz do Sol.</small></span></button>
+        <button class="strata-btn a" data-a="left" style="--d:650ms" type="button" data-layer="subbosque" aria-pressed="false"><b>2–10 m</b><span><strong>Sub-bosque</strong><small>Pouca luz: arbustos, palmeiras e árvores jovens tolerantes à sombra.</small></span></button>
+        <button class="strata-btn a" data-a="left" style="--d:800ms" type="button" data-layer="chao" aria-pressed="false"><b>0 m</b><span><strong>Chão da floresta</strong><small>Só cerca de 2% da luz chega aqui. A serrapilheira (folhas e galhos) é decomposta por fungos e bactérias.</small></span></button>
+      </div>
+      <p class="small a" data-a="fade" style="--d:1000ms">Cipós (lianas) e epífitas, como bromélias e orquídeas, vivem apoiados sobre as árvores para alcançar a luz.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s02-d" data-section="s02" data-mood="tropical" data-title="Características da vegetação" data-globe="off" data-trans="organic" data-coord="22°20′ S · 42°20′ O — Mata Atlântica (RJ)">
+  <div class="wrap grid-2 wide-right">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Características</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Como é essa vegetação</h2>
+      <div class="pillstack">
+        <div class="slab a" data-a="tilt" style="--d:300ms"><b>01</b><strong>Latifoliada</strong><small>Folhas largas, que captam muita luz.</small></div>
+        <div class="slab a" data-a="tilt" style="--d:450ms"><b>02</b><strong>Perenifólia</strong><small>Sempre verde: não perde todas as folhas em uma estação.</small></div>
+        <div class="slab a" data-a="tilt" style="--d:600ms"><b>03</b><strong>Higrófila</strong><small>Adaptada à alta umidade; muitas folhas têm ponta afinada para escorrer a água.</small></div>
+        <div class="slab a" data-a="tilt" style="--d:750ms"><b>04</b><strong>Heterogênea</strong><small>Enorme variedade de espécies, inclusive em uma pequena área.</small></div>
+        <div class="slab a" data-a="tilt" style="--d:900ms"><b>05</b><strong>Densa e estratificada</strong><small>Árvores muito próximas, organizadas em andares.</small></div>
+      </div>
+    </div>
+    <div class="stack">
+      <figure class="a" data-a="scale" style="--d:200ms"><div class="ph" data-img="mata_atlantica" data-size="1280" style="aspect-ratio:4/5;max-height:56vh"></div></figure>
+      <div class="panel a" data-a="rise" style="--d:700ms">
+        <p class="tag">Um paradoxo</p>
+        <p class="body" style="margin-top:6px">Apesar da floresta exuberante, muitos solos tropicais são <strong>pobres em nutrientes</strong>: as chuvas lavam o solo. A fertilidade depende da decomposição rápida das folhas que caem — a <strong>ciclagem de nutrientes</strong>. Sem a floresta, o solo se empobrece rapidamente.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s02-e" data-section="s02" data-mood="tropical" data-title="Importância e ameaças" data-globe="off" data-trans="organic" data-coord="3°08′ S · 59°55′ O — Várzea do Amazonas">
+  <div class="scene-bg bg-soft"><div class="ph" data-img="amazon_varzea" data-size="1920" style="--kb-x:2%"></div><div class="rays" aria-hidden="true"></div></div>
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Importância</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Um tesouro <span class="serif accent">vivo</span></h2>
+      <ul class="body a" data-a="rise" style="--d:300ms;display:grid;gap:10px;padding-left:1.1em;margin:0">
+        <li>Estima-se que as florestas tropicais abriguem <strong>mais da metade das espécies</strong> terrestres conhecidas.</li>
+        <li>A <strong>Amazônia</strong> é a maior floresta tropical do mundo; cerca de 60% dela fica em território brasileiro.</li>
+        <li>Guarda enormes estoques de carbono e regula as chuvas de grande parte da América do Sul.</li>
+        <li>É o território de <strong>povos indígenas</strong> e comunidades tradicionais, como ribeirinhos e extrativistas.</li>
+      </ul>
+    </div>
+    <div class="panel stack a" data-a="left" style="--d:400ms">
+      <span class="eyebrow" style="color:var(--danger)">Ameaças</span>
+      <div class="causes">
+        <span class="chip"><i style="background:var(--danger);box-shadow:0 0 8px var(--danger)"></i>Desmatamento para pecuária e lavouras</span>
+        <span class="chip"><i style="background:var(--danger);box-shadow:0 0 8px var(--danger)"></i>Extração ilegal de madeira</span>
+        <span class="chip"><i style="background:var(--danger);box-shadow:0 0 8px var(--danger)"></i>Garimpo e mineração</span>
+        <span class="chip"><i style="background:var(--danger);box-shadow:0 0 8px var(--danger)"></i>Queimadas</span>
+        <span class="chip"><i style="background:var(--danger);box-shadow:0 0 8px var(--danger)"></i>Estradas e grandes obras</span>
+      </div>
+      <p class="body">Quando a floresta é derrubada, o solo fica exposto à chuva forte, perde nutrientes e sofre erosão. Espécies perdem o habitat e o clima da região fica mais seco e quente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= 03 · FLORESTAS DE CONÍFERAS ========================= -->
+<section class="scene" id="s03-a" data-section="s03" data-mood="conifer" data-title="Florestas de coníferas" data-globe="off" data-trans="fog" data-coord="52°50′ N · 93°20′ L — Sibéria">
+  <div class="scene-bg"><div class="ph" data-img="taiga_ergaki" data-size="1920" style="--kb-y:-2%"></div><div class="fog" aria-hidden="true"><i></i><i></i><i></i></div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade" style="--d:300ms">03 · Florestas de coníferas</span>
+      <h2 class="h-display split" data-split="letters" style="--d:600ms">Taiga</h2>
+      <p class="lead a" data-a="blur" style="--d:1500ms;--dur:1.8s">O grande cinturão verde do Norte: florestas de pinheiros, abetos e lariços que atravessam o Canadá, a Escandinávia e a Rússia.</p>
+      <div class="row a" data-a="fade" style="--d:2000ms">
+        <button class="pill pill--glow" type="button" data-biome="conifer">Ver ficha do bioma <svg aria-hidden="true"><use href="#i-right"/></svg></button>
+        <span class="chip"><i></i>Também chamada de floresta boreal</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s03-b" data-section="s03" data-mood="conifer" data-title="Onde e como é o clima" data-globe="off" data-trans="fog" data-coord="50° a 70° de latitude norte">
+  <div class="wrap grid-2 wide-left">
+    <div class="stack">
+      <figure class="a" data-a="blur" style="--dur:1.6s"><div class="ph" data-img="boreal_finland" data-size="1280" style="aspect-ratio:16/9"></div></figure>
+      <div class="minimap a" data-a="fade" style="--d:500ms" data-minimap="conifer" aria-label="Mapa com a localização da taiga"></div>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Localização e clima</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:150ms;--dur:1.4s">Invernos longos, <span class="serif accent">verões curtos</span></h2>
+      <p class="body a" data-a="fade" style="--d:400ms;--dur:1.4s">A taiga ocupa as altas latitudes do <strong>Hemisfério Norte</strong>, aproximadamente entre 50° e 70° N: Alasca, Canadá, Escandinávia, Finlândia e Rússia (Sibéria). É considerada a maior formação vegetal terrestre contínua do planeta.</p>
+      <dl class="facts a" data-a="fade" style="--d:650ms;--dur:1.4s">
+        <div class="fact"><dt>Inverno</dt><dd>Longo e rigoroso<small>Na Sibéria, as mínimas podem passar de −40 °C.</small></dd></div>
+        <div class="fact"><dt>Verão</dt><dd>Curto e ameno<small>Período de crescimento de poucos meses.</small></dd></div>
+        <div class="fact"><dt>Chuvas</dt><dd>Moderadas<small>Boa parte cai como neve.</small></dd></div>
+        <div class="fact"><dt>Hemisfério Sul</dt><dd>Não há taiga<small>Quase não existem terras emersas nessas latitudes ao sul.</small></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s03-c" data-section="s03" data-mood="conifer" data-title="Adaptações das coníferas" data-globe="off" data-trans="fog" data-coord="Picea · Pinus · Abies · Larix">
+  <div class="wrap grid-2">
+    <div class="tree-diagram a" data-a="blur" style="--dur:1.6s">
+      <svg viewBox="0 0 400 520" role="img" aria-labelledby="treeT">
+        <title id="treeT">Desenho de uma conífera com pontos interativos sobre suas adaptações ao frio.</title>
+        <defs>
+          <linearGradient id="gTree" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0f3a2c"/><stop offset=".5" stop-color="#1c5a40"/><stop offset="1" stop-color="#0b2e22"/></linearGradient>
+          <radialGradient id="gSnowGround" cx=".5" cy="0" r="1"><stop offset="0" stop-color="#e8f4f8"/><stop offset="1" stop-color="#9fb7c4"/></radialGradient>
+        </defs>
+        <ellipse cx="200" cy="500" rx="190" ry="22" fill="url(#gSnowGround)" opacity=".85"/>
+        <rect x="188" y="400" width="24" height="98" fill="#4a3424"/>
+        <path d="M200 30 L270 150 L240 150 L300 250 L262 250 L330 360 L285 360 L350 440 L50 440 L115 360 L70 360 L138 250 L100 250 L160 150 L130 150 Z" fill="url(#gTree)"/>
+        <!-- neve nos galhos -->
+        <g fill="#eef7fb"><path d="M200 30 L222 68 L206 62 L196 70 L180 64 Z"/><path d="M160 150 L190 140 L215 150 L240 150 L232 142 L200 128 L168 142 Z"/><path d="M138 250 L170 236 L200 246 L230 238 L262 250 L250 240 L200 224 L148 240 Z"/><path d="M115 360 L160 342 L200 352 L245 340 L285 360 L272 348 L200 330 L128 348 Z"/><path d="M50 440 L120 420 L200 430 L280 420 L350 440 L330 428 L200 410 L70 428 Z"/></g>
+        <!-- cones -->
+        <g fill="#7a4e2a"><ellipse cx="248" cy="282" rx="7" ry="13"/><ellipse cx="146" cy="300" rx="7" ry="13"/><ellipse cx="290" cy="392" rx="7" ry="13"/></g>
+        <!-- agulhas (detalhe) -->
+        <g stroke="#2a7a58" stroke-width="2" stroke-linecap="round"><path d="M322 356 l14 -10 M326 362 l16 -4 M318 350 l8 -14"/></g>
+        <!-- resina -->
+        <path d="M206 430 q4 10 0 18 q-5 -8 0 -18z" fill="#d9a441"/>
+        <!-- pontos interativos -->
+        <g class="hotspot" tabindex="0" role="button" aria-pressed="false" data-k="cone" aria-label="Formato cônico"><circle class="halo" cx="200" cy="58" r="10"/><circle class="core" cx="200" cy="58" r="7"/></g>
+        <g class="hotspot" tabindex="0" role="button" aria-pressed="false" data-k="agulha" aria-label="Folhas em forma de agulha"><circle class="halo" cx="330" cy="352" r="10"/><circle class="core" cx="330" cy="352" r="7"/></g>
+        <g class="hotspot" tabindex="0" role="button" aria-pressed="false" data-k="perene" aria-label="Folhagem perene e escura"><circle class="halo" cx="160" cy="200" r="10"/><circle class="core" cx="160" cy="200" r="7"/></g>
+        <g class="hotspot" tabindex="0" role="button" aria-pressed="false" data-k="semente" aria-label="Sementes em cones"><circle class="halo" cx="248" cy="282" r="10"/><circle class="core" cx="248" cy="282" r="7"/></g>
+        <g class="hotspot" tabindex="0" role="button" aria-pressed="false" data-k="resina" aria-label="Resina"><circle class="halo" cx="206" cy="438" r="10"/><circle class="core" cx="206" cy="438" r="7"/></g>
+      </svg>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Adaptações ao frio</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:150ms;--dur:1.4s">Uma árvore desenhada <span class="serif accent">pela neve</span></h2>
+      <div class="adapt-list a" data-a="fade" style="--d:400ms" id="adaptList" role="group" aria-label="Escolha uma adaptação">
+        <button type="button" data-k="cone" aria-pressed="true">Formato cônico</button>
+        <button type="button" data-k="agulha" aria-pressed="false">Folhas-agulha</button>
+        <button type="button" data-k="perene" aria-pressed="false">Sempre verde</button>
+        <button type="button" data-k="semente" aria-pressed="false">Cones</button>
+        <button type="button" data-k="resina" aria-pressed="false">Resina</button>
+      </div>
+      <div class="panel adapt-card a" data-a="fade" style="--d:600ms" id="adaptCard" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s03-d" data-section="s03" data-mood="conifer" data-title="Homogênea e valiosa" data-globe="off" data-trans="fog" data-coord="51°50′ N · 104°50′ L — Lago Baikal">
+  <div class="scene-bg bg-soft"><div class="ph" data-img="taiga_baikal" data-size="1920"></div><div class="fog" aria-hidden="true"><i></i><i></i><i></i></div></div>
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Uso e importância</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:150ms;--dur:1.4s">Poucas espécies, <span class="serif accent">área imensa</span></h2>
+      <p class="body a" data-a="fade" style="--d:400ms;--dur:1.4s">A taiga é <strong>homogênea</strong>: poucas espécies predominam — pinheiros, abetos, espruces e lariços. Isso facilita a exploração comercial de <strong>madeira e celulose</strong>, usada na fabricação de papel.</p>
+      <p class="body a" data-a="fade" style="--d:600ms;--dur:1.4s">Seus solos e turfeiras guardam enormes quantidades de carbono. É o habitat de alces, ursos, lobos, linces e renas. O corte raso e os incêndios florestais, cada vez mais frequentes com o aquecimento global, são as principais ameaças.</p>
+    </div>
+    <div class="panel stack a" data-a="left" style="--d:700ms;--dur:1.4s">
+      <p class="tag">E no Brasil?</p>
+      <div class="ph" data-img="araucaria" data-size="960" style="aspect-ratio:16/9"></div>
+      <p class="body">No Sul do país, a <strong>Mata de Araucárias</strong> tem como destaque uma conífera, a araucária (<em>Araucaria angustifolia</em>). Mas ela é uma floresta subtropical, diferente da taiga. Foi muito explorada e hoje a araucária está ameaçada de extinção.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= 04 · TUNDRA ========================= -->
+<section class="scene" id="s04-a" data-section="s04" data-mood="tundra" data-title="Tundra" data-globe="off" data-trans="wind" data-coord="68°00′ N · 35°00′ L — Península de Kola">
+  <div class="scene-bg"><div class="ph" data-img="tundra_kola" data-size="1920" style="--kb-dur:30s"></div><div class="wind" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade" style="--d:500ms;--dur:1.6s">04 · Tundra</span>
+      <h2 class="h-display split" data-split="letters" style="--d:900ms">Tundra</h2>
+      <p class="lead a" data-a="fade" style="--d:1900ms;--dur:2s">No limite do frio, a vida cresce rente ao chão: musgos, liquens, gramíneas e arbustos que cabem na palma da mão.</p>
+      <div class="row a" data-a="fade" style="--d:2500ms;--dur:1.6s">
+        <button class="pill pill--glow" type="button" data-biome="tundra">Ver ficha do bioma <svg aria-hidden="true"><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s04-b" data-section="s04" data-mood="tundra" data-title="Onde e como é o clima" data-globe="off" data-trans="wind" data-coord="Ao redor do Oceano Ártico">
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade" style="--dur:1.6s">Localização e clima</span>
+      <h2 class="h-2 a" data-a="fade" style="--d:300ms;--dur:1.8s">Um <span class="serif accent">deserto frio</span></h2>
+      <p class="body a" data-a="fade" style="--d:600ms;--dur:1.8s">A tundra ocupa as terras ao redor do <strong>Oceano Ártico</strong>, ao norte da taiga: norte do Alasca e do Canadá, litoral da Groenlândia, norte da Escandinávia e da Rússia. Também existe <strong>tundra alpina</strong>, no alto de montanhas.</p>
+      <div class="minimap a" data-a="fade" style="--d:900ms;--dur:1.8s" data-minimap="tundra" aria-label="Mapa com a localização da tundra"></div>
+    </div>
+    <div class="panel stack-lg a" data-a="fade" style="--d:800ms;--dur:1.8s">
+      <div class="gauge" style="--v:10%;--d:1.2s"><div class="lbl"><span>Período de crescimento</span><b>cerca de 50 a 60 dias</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:22%;--d:1.4s"><div class="lbl"><span>Verão</span><b>poucos graus acima de 0 °C</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:14%;--d:1.6s"><div class="lbl"><span>Chuva e neve no ano</span><b>em geral, menos de 250 mm</b></div><div class="bar"><i></i></div></div>
+      <div class="gauge" style="--v:88%;--d:1.8s"><div class="lbl"><span>Ventos</span><b>fortes e frios</b></div><div class="bar"><i></i></div></div>
+      <p class="body">No inverno, longo e muito frio, há semanas de <strong>noite polar</strong>. No verão curto, o Sol quase não se põe, e as plantas crescem, florescem e produzem sementes às pressas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s04-c" data-section="s04" data-mood="tundra" data-title="Permafrost" data-globe="off" data-trans="wind" data-coord="Solo congelado permanentemente">
+  <div class="wrap grid-2 wide-left">
+    <div class="stack">
+      <div class="perma a" data-a="fade" style="--dur:1.6s" id="perma" data-season="summer">
+        <svg viewBox="0 0 640 380" role="img" aria-labelledby="permaT">
+          <title id="permaT">Corte do solo da tundra mostrando a camada ativa e o permafrost no inverno e no verão.</title>
+          <defs>
+            <linearGradient id="gPerma" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f5d7a"/><stop offset="1" stop-color="#16324a"/></linearGradient>
+            <linearGradient id="gSkyS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fb6d8"/><stop offset="1" stop-color="#d6ecf5"/></linearGradient>
+            <linearGradient id="gSkyW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050b1a"/><stop offset="1" stop-color="#1c2c48"/></linearGradient>
+            <pattern id="pIce" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M2 9 h10 M15 4 h8 M14 14 h9" stroke="#9fd3ef" stroke-width="2" stroke-linecap="round" opacity=".6"/></pattern>
+          </defs>
+          <rect class="summer-only" width="640" height="120" fill="url(#gSkyS)"/>
+          <rect class="winter-only" width="640" height="120" fill="url(#gSkyW)"/>
+          <g class="winter-only" fill="#fff"><circle cx="80" cy="30" r="1.2"/><circle cx="210" cy="18" r="1"/><circle cx="350" cy="40" r="1.4"/><circle cx="470" cy="22" r="1"/><circle cx="590" cy="44" r="1.2"/><path d="M520 30 a16 16 0 1 0 12 26 a12 12 0 1 1 -12 -26z" fill="#e8eef8"/></g>
+          <circle class="summer-only" cx="560" cy="44" r="20" fill="#fff3c4"/>
+          <!-- camada ativa -->
+          <rect class="active-layer" x="0" y="120" width="640" height="78" fill="#5a4630"/>
+          <rect class="winter-only" x="0" y="120" width="640" height="78" fill="#6c8fa8"/>
+          <rect class="winter-only" x="0" y="120" width="640" height="78" fill="url(#pIce)"/>
+          <!-- permafrost -->
+          <rect x="0" y="198" width="640" height="182" fill="url(#gPerma)"/>
+          <rect x="0" y="198" width="640" height="182" fill="url(#pIce)"/>
+          <line x1="0" y1="198" x2="640" y2="198" stroke="#bfe6ff" stroke-width="2" stroke-dasharray="8 6"/>
+          <!-- verão: poças, plantas, flores -->
+          <g class="summer-only">
+            <ellipse cx="200" cy="122" rx="62" ry="7" fill="#6fb3d6"/>
+            <ellipse cx="470" cy="123" rx="40" ry="5" fill="#6fb3d6"/>
+            <g fill="#4f8f3a"><ellipse cx="60" cy="118" rx="26" ry="7"/><ellipse cx="320" cy="117" rx="30" ry="8"/><ellipse cx="600" cy="118" rx="28" ry="7"/></g>
+            <g fill="#8fb35a"><ellipse cx="110" cy="117" rx="16" ry="6"/><ellipse cx="390" cy="118" rx="18" ry="6"/><ellipse cx="545" cy="117" rx="14" ry="5"/></g>
+            <g><circle cx="300" cy="108" r="3" fill="#ffd34d"/><circle cx="330" cy="106" r="3" fill="#f7f7f7"/><circle cx="72" cy="109" r="3" fill="#d58cff"/><circle cx="604" cy="108" r="3" fill="#ffd34d"/></g>
+            <g stroke="#9ad0ea" stroke-width="2" stroke-dasharray="3 5"><path d="M200 130 v40"/><path d="M470 130 v36"/></g>
+          </g>
+          <!-- inverno: neve -->
+          <path class="winter-only" d="M0 112 Q 80 104 160 112 T 320 110 T 480 112 T 640 108 V 122 H 0 Z" fill="#eef6fb"/>
+          <!-- rótulos -->
+          <g font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">
+            <rect x="420" y="146" width="206" height="28" rx="8" fill="rgba(0,0,0,.45)"/>
+            <text class="summer-only" x="432" y="165" fill="#ffe2b0">CAMADA ATIVA — DEGELADA</text>
+            <text class="winter-only" x="432" y="165" fill="#d8eeff">CAMADA ATIVA — CONGELADA</text>
+            <rect x="420" y="282" width="206" height="28" rx="8" fill="rgba(0,0,0,.45)"/>
+            <text x="432" y="301" fill="#cfeaff">PERMAFROST — SEMPRE GELADO</text>
+          </g>
+        </svg>
+      </div>
+      <div class="row a" data-a="fade" style="--d:500ms">
+        <div class="seg" role="group" aria-label="Estação do ano no diagrama">
+          <button type="button" data-perma="winter" aria-pressed="false">Inverno</button>
+          <button type="button" data-perma="summer" aria-pressed="true">Verão</button>
+        </div>
+        <span class="small">Alterne as estações e observe o solo.</span>
+      </div>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade" style="--dur:1.6s">O chão que nunca derrete</span>
+      <h2 class="h-2 a" data-a="fade" style="--d:300ms;--dur:1.8s">Permafrost</h2>
+      <p class="body a" data-a="fade" style="--d:600ms;--dur:1.8s">É a camada do subsolo que permanece <strong>congelada o ano todo</strong> — por definição, por pelo menos dois anos seguidos. Em alguns lugares, tem centenas de metros de espessura.</p>
+      <p class="body a" data-a="fade" style="--d:800ms;--dur:1.8s">No verão, só a parte de cima, a <strong>camada ativa</strong>, descongela. Como a água não consegue se infiltrar no gelo de baixo, formam-se brejos, poças e lagoas. As raízes não aprofundam — por isso quase não há árvores.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s04-d" data-section="s04" data-mood="tundra" data-title="Vegetação e adaptações" data-globe="off" data-trans="wind" data-coord="78°N Svalbard · 71°N Alasca">
+  <div class="wrap grid-2">
+    <div class="collage a" data-a="fade" style="--dur:1.8s">
+      <figure class="ph" data-img="lichen" data-size="960"><figcaption>Líquen-das-renas</figcaption></figure>
+      <figure class="ph" data-img="tundra_svalbard" data-size="960"><figcaption>Musgos · Svalbard</figcaption></figure>
+      <figure class="ph" data-img="tundra_barrow" data-size="1280"><figcaption>Tundra em julho · Alasca</figcaption></figure>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade" style="--dur:1.6s">Vegetação</span>
+      <h2 class="h-2 a" data-a="fade" style="--d:300ms;--dur:1.8s">Pequena por <span class="serif accent">estratégia</span></h2>
+      <p class="body a" data-a="fade" style="--d:500ms;--dur:1.8s">Predominam <strong>musgos, liquens, gramíneas, juncos</strong> e <strong>arbustos anões</strong>, como bétulas e salgueiros que não passam de alguns centímetros. O “musgo-de-rena” é, na verdade, um líquen — o principal alimento das renas no inverno.</p>
+      <dl class="facts a" data-a="fade" style="--d:800ms;--dur:1.8s">
+        <div class="fact"><dt>Porte baixo</dt><dd>Escapa do vento e fica sob a neve, que funciona como isolante térmico.</dd></div>
+        <div class="fact"><dt>Ciclo rápido</dt><dd>Brota, floresce e produz sementes em poucas semanas de verão.</dd></div>
+        <div class="fact"><dt>Tufos e almofadas</dt><dd>Crescer agrupado conserva calor e umidade.</dd></div>
+        <div class="fact"><dt>Cores escuras</dt><dd>Absorvem mais calor do Sol.</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s04-e" data-section="s04" data-mood="tundra" data-title="Alerta: degelo do permafrost" data-globe="off" data-trans="wind" data-coord="Ártico · aquecimento acelerado">
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade" style="--dur:1.6s">Alerta</span>
+      <h2 class="h-2 a" data-a="fade" style="--d:300ms;--dur:1.8s">Quando o gelo derrete, <span class="serif accent">o clima reage</span></h2>
+      <p class="body a" data-a="fade" style="--d:600ms;--dur:1.8s">O Ártico está aquecendo mais rápido que a média do planeta. O permafrost guarda restos de plantas e animais acumulados por milhares de anos — cerca de <strong>o dobro do carbono</strong> que existe hoje na atmosfera.</p>
+      <p class="body a" data-a="fade" style="--d:800ms;--dur:1.8s">Ao descongelar, essa matéria orgânica é decomposta e libera <strong>gás carbônico (CO₂)</strong> e <strong>metano (CH₄)</strong>, que intensificam o efeito estufa. Petróleo, gás e mineração também pressionam a tundra.</p>
+    </div>
+    <div class="loop a" data-a="scale" style="--d:400ms;--dur:1.6s" aria-label="Ciclo: aquecimento, degelo, decomposição, liberação de gases, mais aquecimento">
+      <svg viewBox="0 0 400 400" aria-hidden="true"><defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="currentColor"/></marker></defs><circle class="ring-path" cx="200" cy="200" r="140"/><g style="color:var(--accent)"><path d="M300 100 A 140 140 0 0 1 340 200" fill="none" stroke="currentColor" stroke-width="3" marker-end="url(#arr)"/><path d="M300 300 A 140 140 0 0 1 200 340" fill="none" stroke="currentColor" stroke-width="3" marker-end="url(#arr)"/><path d="M100 300 A 140 140 0 0 1 60 200" fill="none" stroke="currentColor" stroke-width="3" marker-end="url(#arr)"/><path d="M100 100 A 140 140 0 0 1 200 60" fill="none" stroke="currentColor" stroke-width="3" marker-end="url(#arr)"/></g></svg>
+      <div class="node" style="left:50%;top:15%"><b>Aquecimento</b>temperaturas sobem</div>
+      <div class="node" style="left:85%;top:50%"><b>Degelo</b>o permafrost descongela</div>
+      <div class="node" style="left:50%;top:85%"><b>Decomposição</b>da matéria orgânica</div>
+      <div class="node" style="left:15%;top:50%"><b>CO₂ + CH₄</b>vão para o ar</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= 05 · FLORESTAS TEMPERADAS ========================= -->
+<section class="scene" id="s05-a" data-section="s05" data-mood="temperate" data-title="Florestas temperadas" data-globe="off" data-trans="season" data-coord="35° a 55° de latitude">
+  <div class="scene-bg"><div class="season-stage" id="seasonStage">
+    <div class="ph" data-img="temp_spring" data-size="1920" data-season="primavera" data-credit="none"></div>
+    <div class="ph" data-img="temp_summer" data-size="1920" data-season="verao" data-credit="none"></div>
+    <div class="ph" data-img="temp_autumn" data-size="1920" data-season="outono" data-credit="none"></div>
+    <div class="ph" data-img="temp_winter" data-size="1920" data-season="inverno" data-credit="none"></div>
+  </div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade">05 · Florestas temperadas</span>
+      <h2 class="h-display split" data-split="words" style="--d:200ms">Quatro estações</h2>
+      <p class="lead a" data-a="rise" style="--d:900ms">Nas latitudes médias, a mesma floresta muda de cor ao longo do ano. Escolha uma estação:</p>
+      <div class="season-switch a" data-a="rise" style="--d:1100ms" id="seasonSwitch" role="group" aria-label="Estações do ano">
+        <button type="button" data-season="primavera" style="--sc:#a6e35d" aria-pressed="true"><i></i>Primavera<span class="t"></span></button>
+        <button type="button" data-season="verao" style="--sc:#2fbf6b" aria-pressed="false"><i></i>Verão<span class="t"></span></button>
+        <button type="button" data-season="outono" style="--sc:#ff8a3d" aria-pressed="false"><i></i>Outono<span class="t"></span></button>
+        <button type="button" data-season="inverno" style="--sc:#bcd3e8" aria-pressed="false"><i></i>Inverno<span class="t"></span></button>
+      </div>
+      <p class="body season-note a" data-a="rise" style="--d:1300ms" id="seasonNote" aria-live="polite"></p>
+      <p class="source a" data-a="fade" style="--d:1400ms" id="seasonCredit"></p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s05-b" data-section="s05" data-mood="temperate" data-title="Onde e como é o clima" data-globe="off" data-trans="season" data-coord="Europa · Leste dos EUA · Leste da Ásia">
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Localização e clima</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Estações <span class="serif accent">bem definidas</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">As florestas temperadas aparecem nas <strong>latitudes médias</strong>: leste dos Estados Unidos, Europa Ocidental e Central e leste da Ásia (China, Coreia e Japão). No Hemisfério Sul, ocupam áreas menores, como o sul do Chile, a Nova Zelândia e o sudeste da Austrália.</p>
+      <p class="body a" data-a="rise" style="--d:500ms">O clima temperado tem <strong>verões quentes e invernos frios</strong>, muitas vezes com neve. As chuvas são bem distribuídas ao longo do ano.</p>
+    </div>
+    <div class="stack">
+      <div class="minimap a" data-a="blur" style="--d:300ms" data-minimap="temperate" aria-label="Mapa com a localização das florestas temperadas"></div>
+      <div class="grid-4 a" data-a="rise" style="--d:600ms" id="seasonWheel">
+        <div class="panel" style="padding:14px"><p class="tag" style="color:#a6e35d">Primavera</p><p class="small">Brotam folhas novas e flores.</p></div>
+        <div class="panel" style="padding:14px"><p class="tag" style="color:#2fbf6b">Verão</p><p class="small">Copas densas, fotossíntese máxima.</p></div>
+        <div class="panel" style="padding:14px"><p class="tag" style="color:#ff8a3d">Outono</p><p class="small">Folhas mudam de cor e caem.</p></div>
+        <div class="panel" style="padding:14px"><p class="tag" style="color:#bcd3e8">Inverno</p><p class="small">Galhos nus: as árvores entram em repouso.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s05-c" data-section="s05" data-mood="temperate" data-title="Por que as folhas mudam de cor" data-globe="off" data-trans="season" data-coord="Fagus · Quercus · Acer">
+  <div class="wrap leafsim">
+    <div class="stack" style="justify-items:center">
+      <svg viewBox="0 0 300 380" role="img" aria-labelledby="leafT" class="a" data-a="scale">
+        <title id="leafT">Folha que muda de cor conforme os dias encurtam.</title>
+        <g class="leaf-wrap" id="leafWrap">
+          <path d="M150 8 C 150 8, 120 40, 96 60 C 70 82, 40 92, 30 130 C 20 168, 46 196, 40 230 C 36 262, 70 300, 110 312 C 130 318, 142 332, 150 352 C 158 332, 170 318, 190 312 C 230 300, 264 262, 260 230 C 254 196, 280 168, 270 130 C 260 92, 230 82, 204 60 C 180 40, 150 8, 150 8 Z" id="leafShape" fill="#2fbf6b" stroke="rgba(0,0,0,.3)" stroke-width="2"/>
+          <g stroke="rgba(255,255,255,.35)" stroke-width="2" fill="none" stroke-linecap="round"><path d="M150 30 V 372"/><path d="M150 120 L 80 90 M150 170 L 60 160 M150 220 L 70 240 M150 120 L 220 90 M150 170 L 240 160 M150 220 L 230 240 M150 270 L 110 300 M150 270 L 190 300"/></g>
+        </g>
+      </svg>
+      <label class="range-row" style="width:min(380px,100%)" for="leafRange"><span><b>Verão</b><b>Outono</b></span>
+        <input class="range" id="leafRange" type="range" min="0" max="100" value="0" aria-describedby="leafState"></label>
+      <p class="small" id="leafState" aria-live="polite">Dias longos: a folha está cheia de clorofila.</p>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Caducifólias</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Por que as folhas <span class="serif accent">mudam de cor?</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">Muitas árvores temperadas são <strong>caducifólias</strong> (ou decíduas): perdem as folhas no outono. Assim economizam água e energia no inverno, quando o solo congelado dificulta a absorção de água.</p>
+      <div class="pigments a" data-a="rise" style="--d:500ms">
+        <div class="gauge"><div class="lbl"><span>Clorofila (verde)</span><b id="pgC">100%</b></div><div class="bar"><i id="barC" style="--v:100%;transform:none"></i></div></div>
+        <div class="gauge"><div class="lbl"><span>Carotenoides (amarelo e laranja)</span><b id="pgY">sempre presentes</b></div><div class="bar"><i id="barY" style="--v:60%;transform:none;background:#ffb43d;box-shadow:0 0 12px #ffb43d"></i></div></div>
+        <div class="gauge"><div class="lbl"><span>Antocianinas (vermelho)</span><b id="pgR">0%</b></div><div class="bar"><i id="barR" style="--v:2%;transform:none;background:#ff4d4d;box-shadow:0 0 12px #ff4d4d"></i></div></div>
+      </div>
+      <p class="small a" data-a="fade" style="--d:700ms">Com os dias mais curtos, a árvore deixa de produzir clorofila. O verde some e revela os carotenoides, que já estavam na folha. Algumas espécies, como os bordos, também produzem antocianinas, de cor vermelha.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s05-d" data-section="s05" data-mood="temperate" data-title="Diversidade e ocupação humana" data-globe="off" data-trans="season" data-coord="Europa · ocupação milenar">
+  <div class="wrap grid-2">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Diversidade e ocupação</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Florestas que <span class="serif accent">deram lugar a cidades</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">Predominam árvores latifoliadas, como <strong>carvalhos, faias, bordos, castanheiras e nogueiras</strong>. Em algumas áreas, misturam-se com coníferas, formando florestas mistas. A diversidade é maior que a da taiga, mas bem menor que a das florestas tropicais.</p>
+      <p class="body a" data-a="rise" style="--d:500ms">Os solos ricos em matéria orgânica atraíram a agricultura. Como essas regiões são habitadas há muitos séculos, as florestas temperadas estão entre as <strong>mais devastadas</strong> do mundo. Na Europa restam poucas áreas de floresta original, como a de Białowieża, na Polônia e em Belarus.</p>
+    </div>
+    <div class="stack">
+      <figure class="a" data-a="scale" style="--d:200ms"><div class="ph" data-img="temp_autumn" data-size="1280" style="aspect-ratio:3/2" data-credit="corner"></div></figure>
+      <div class="stats a" data-a="rise" style="--d:500ms">
+        <div class="stat"><span class="num">4</span><span class="lbl">estações bem marcadas ao longo do ano</span></div>
+        <div class="stat"><span class="num">35–55°</span><span class="lbl">faixa de latitude mais comum</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= 06 · FORMAÇÕES ARBUSTIVAS E HERBÁCEAS ========================= -->
+<section class="scene" id="s06-a" data-section="s06" data-mood="grass" data-title="Formações arbustivas e herbáceas" data-globe="off" data-trans="pan" data-coord="2°20′ S · 34°50′ L — Serengeti">
+  <div class="scene-bg"><div class="ph" data-img="savanna_serengeti" data-size="1920" style="--kb-x:-6%;--kb-dur:26s"></div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade">06 · Formações arbustivas e herbáceas</span>
+      <h2 class="h-1 split" data-split="words" style="--d:200ms">Quando a chuva <span class="accent">não basta</span> para uma floresta</h2>
+      <p class="lead a" data-a="right" style="--d:1000ms">Onde chove menos, onde há uma longa estação seca ou onde o fogo é frequente, predominam <strong>gramíneas</strong> (plantas herbáceas) e <strong>arbustos</strong>. Cada formação tem seu clima e suas plantas.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s06-b" data-section="s06" data-mood="grass" data-title="Herbáceas e arbustivas" data-globe="off" data-trans="pan" data-coord="Gramíneas ↔ arbustos">
+  <div class="wrap stack-lg">
+    <div class="grid-2">
+      <div class="stack">
+        <span class="eyebrow a" data-a="fade">Duas palavras-chave</span>
+        <h2 class="h-2 a" data-a="right" style="--d:100ms">Herbáceas × <span class="serif accent">arbustivas</span></h2>
+      </div>
+      <div class="grid-2 a" data-a="right" style="--d:300ms;gap:16px">
+        <div class="panel"><p class="tag">Herbácea</p><p class="small" style="margin-top:6px">Planta de caule macio, não lenhoso, como as <strong>gramíneas</strong> (capins).</p></div>
+        <div class="panel"><p class="tag">Arbustiva</p><p class="small" style="margin-top:6px">Planta lenhosa e baixa, com galhos que saem perto da base.</p></div>
+      </div>
+    </div>
+    <div class="spectrum a" data-a="right" style="--d:500ms" id="spectrum">
+      <div class="track"></div>
+      <div class="ends"><span>Só gramíneas</span><span>Gramíneas + árvores esparsas</span><span>Arbustos densos</span></div>
+    </div>
+    <div class="panel a" data-a="rise" style="--d:700ms" id="spectrumInfo" aria-live="polite"></div>
+  </div>
+</section>
+
+<section class="scene" id="s06-c" data-section="s06" data-mood="grass" data-title="Cinco paisagens diferentes" data-globe="off" data-trans="pan" data-coord="Arraste para o lado →">
+  <div class="wrap wrap--wide stack">
+    <div class="atlas-head" style="margin-bottom:6px">
+      <div class="stack"><span class="eyebrow a" data-a="fade">Panorama</span><h2 class="h-2 a" data-a="right" style="--d:100ms">Não são todas iguais</h2></div>
+      <div class="track-ctrls a" data-a="fade" style="--d:300ms">
+        <button class="icon-btn" type="button" data-pano="-1" aria-label="Painel anterior"><svg aria-hidden="true"><use href="#i-left"/></svg></button>
+        <button class="icon-btn" type="button" data-pano="1" aria-label="Próximo painel"><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+    <div class="pano a" data-a="right" style="--d:300ms" id="pano" data-noswipe tabindex="0" aria-label="Painéis das formações herbáceas e arbustivas">
+      <article class="pano-panel"><div class="ph" data-img="savanna_acacia" data-size="1280"></div><div class="txt">
+        <p class="tag">Tropical · estação seca marcada</p><h3>Savanas</h3>
+        <p>Gramíneas altas com árvores e arbustos espalhados. O clima tem uma estação chuvosa e outra seca, e o fogo faz parte do ambiente. Exemplos: savanas africanas (Serengeti, com acácias e baobás), Cerrado brasileiro, Llanos da Venezuela e da Colômbia e o norte da Austrália.</p>
+        <div class="meter"><div class="bar" style="--m:50%"><i></i></div><div class="lbl"><span>gramíneas</span><span>arbustos/árvores</span></div></div></div></article>
+      <article class="pano-panel"><div class="ph" data-img="prairie" data-size="1280"></div><div class="txt">
+        <p class="tag">Temperado · chuvas moderadas</p><h3>Pradarias</h3>
+        <p>Mar de gramíneas, quase sem árvores. Os solos, muito ricos em matéria orgânica, estão entre os mais férteis do mundo — hoje são grandes áreas de cultivo de grãos e de pecuária. Exemplos: Grandes Planícies (EUA e Canadá) e Pampas (Argentina, Uruguai e sul do Brasil).</p>
+        <div class="meter"><div class="bar" style="--m:12%"><i></i></div><div class="lbl"><span>gramíneas</span><span>arbustos/árvores</span></div></div></div></article>
+      <article class="pano-panel"><div class="ph" data-img="steppe" data-size="1280"></div><div class="txt">
+        <p class="tag">Temperado continental · seco</p><h3>Estepes</h3>
+        <p>Mais secas que as pradarias, com gramíneas <strong>baixas e esparsas</strong> e invernos rigorosos. Exemplos: a grande estepe da Eurásia, que vai da Ucrânia ao Cazaquistão e à Mongólia, e a Patagônia, na Argentina.</p>
+        <div class="meter"><div class="bar" style="--m:8%"><i></i></div><div class="lbl"><span>gramíneas</span><span>arbustos/árvores</span></div></div></div></article>
+      <article class="pano-panel"><div class="ph" data-img="maquis" data-size="1280"></div><div class="txt">
+        <p class="tag">Mediterrâneo · verão seco</p><h3>Vegetação mediterrânea</h3>
+        <p>Arbustos e árvores baixas com folhas duras e coriáceas, muitas aromáticas, resistentes à seca do verão e ao fogo. Recebe nomes locais: maquis e garrigue (Europa), chaparral (Califórnia), matorral (Chile) e fynbos (África do Sul).</p>
+        <div class="meter"><div class="bar" style="--m:82%"><i></i></div><div class="lbl"><span>gramíneas</span><span>arbustos/árvores</span></div></div></div></article>
+      <article class="pano-panel"><div class="ph" data-img="desert" data-size="1280"></div><div class="txt">
+        <p class="tag">Árido · chuva escassa</p><h3>Vegetação de deserto</h3>
+        <p>Plantas <strong>xerófilas</strong>, adaptadas à falta de água: cactos e suculentas armazenam água, as folhas viram espinhos e as raízes são profundas ou muito espalhadas. Exemplos: Deserto de Sonora (EUA e México), Saara e Atacama.</p>
+        <div class="meter"><div class="bar" style="--m:68%"><i></i></div><div class="lbl"><span>gramíneas</span><span>arbustos/árvores</span></div></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s06-d" data-section="s06" data-mood="grass" data-title="No Brasil" data-globe="off" data-trans="pan" data-coord="Cerrado · Pampa · Caatinga">
+  <div class="wrap stack-lg">
+    <div class="stack"><span class="eyebrow a" data-a="fade">No Brasil</span><h2 class="h-2 a" data-a="right" style="--d:100ms">Três exemplos <span class="serif accent">brasileiros</span></h2></div>
+    <div class="br-cards">
+      <article class="br-card a" data-a="right" style="--d:250ms"><div class="ph" data-img="cerrado" data-size="960"></div><div class="txt"><p class="tag">Savana</p><h3>Cerrado</h3><p>A savana com maior biodiversidade do mundo. Árvores de troncos tortuosos e casca grossa, que protege do fogo, e raízes profundas que alcançam a água subterrânea. Nele nascem rios de grandes bacias brasileiras.</p></div></article>
+      <article class="br-card a" data-a="right" style="--d:400ms"><div class="ph" data-img="pampa" data-size="960"></div><div class="txt"><p class="tag">Campos</p><h3>Pampa</h3><p>Campos de gramíneas sobre um relevo suave de colinas, as coxilhas, no Rio Grande do Sul. É tradicionalmente usado para a criação de gado.</p></div></article>
+      <article class="br-card a" data-a="right" style="--d:550ms"><div class="ph" data-img="caatinga" data-size="960"></div><div class="txt"><p class="tag">Formação arbustiva xerófila</p><h3>Caatinga</h3><p>Exclusiva do Brasil, no semiárido nordestino. Na seca, a maioria das plantas perde as folhas e a paisagem fica acinzentada — “mata branca”, em tupi. Destacam-se cactos como o mandacaru e o xique-xique.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= 07 · SER HUMANO E NATUREZA ========================= -->
+<section class="scene" id="s07-a" data-section="s07" data-mood="restore" data-title="O ser humano e a natureza" data-globe="off" data-trans="fade" data-coord="Floresta em pé">
+  <div class="scene-bg bg-center"><div class="ph" data-img="amazon4" data-size="1920" style="--kb-dur:40s"></div></div>
+  <div class="wrap wrap--narrow" style="text-align:center">
+    <div class="stack-lg" style="justify-items:center">
+      <span class="eyebrow a" data-a="fade" style="--d:400ms">07 · O ser humano e a natureza</span>
+      <h2 class="h-1 split" data-split="words" style="--d:800ms">Uma relação <span class="serif accent">desigual?</span></h2>
+      <p class="lead a" data-a="fade" style="--d:2000ms;--dur:2s;margin-inline:auto;text-align:center">Uma floresta em pé regula as chuvas, guarda carbono, abriga milhares de espécies e sustenta povos inteiros. O que acontece quando ela cai?</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-b" data-section="s07" data-mood="impact" data-title="Desmatamento" data-globe="off" data-trans="cut" data-coord="Amazônia · agosto de 2020">
+  <div class="scene-bg"><div class="ph" data-img="defor_a" data-size="1920" style="--kb-dur:16s"></div></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade">Desmatamento</span>
+      <p class="impact-num a" data-a="pop" style="--d:250ms"><span data-count="10">10</span> milhões</p>
+      <p class="lead a" data-a="rise" style="--d:550ms;color:var(--paper)">de hectares de florestas derrubados por ano no mundo (média de 2015 a 2020) — a cada ano, uma área maior que a do estado de Pernambuco.</p>
+      <p class="body a" data-a="rise" style="--d:800ms">A principal causa é a <strong>expansão da agropecuária</strong>: segundo a FAO, ela está ligada a quase 90% do desmatamento no mundo. Somam-se a extração de madeira, a mineração e as grandes obras.</p>
+      <p class="source a" data-a="fade" style="--d:1000ms">Fonte: FAO, FRA 2020 e Levantamento por Sensoriamento Remoto (2021).</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-c" data-section="s07" data-mood="impact" data-title="Queimadas" data-globe="off" data-trans="cut" data-coord="Rondônia · fronteira do desmatamento">
+  <div class="scene-bg"><div class="ph" data-img="defor_b" data-size="1920" style="--kb-dur:18s;--kb-x:3%"></div></div>
+  <div class="wrap grid-2">
+    <div class="hero-copy">
+      <span class="eyebrow a" data-a="fade">Queimadas</span>
+      <h2 class="h-1 a" data-a="blur" style="--d:150ms">Fogo onde <span class="serif accent">havia floresta</span></h2>
+      <p class="body a" data-a="rise" style="--d:500ms">Depois da derrubada, o fogo é usado para “limpar” a área. A floresta amazônica, úmida, <strong>não é adaptada ao fogo</strong> — diferente do Cerrado, onde algumas queimadas naturais fazem parte do ciclo.</p>
+      <div class="causes a" data-a="rise" style="--d:700ms">
+        <span class="chip"><i></i>Emissão de gases de efeito estufa</span>
+        <span class="chip"><i></i>Fumaça e doenças respiratórias</span>
+        <span class="chip"><i></i>Morte da fauna</span>
+        <span class="chip"><i></i>Empobrecimento do solo</span>
+      </div>
+    </div>
+    <figure class="a" data-a="scale" style="--d:600ms"><div class="ph" data-img="fires_nasa" data-size="1280" style="aspect-ratio:4/3"></div><figcaption class="figcap">Vista de satélite: focos de fogo e áreas desmatadas em Rondônia (NASA, 12/08/2007).</figcaption></figure>
+  </div>
+</section>
+
+<section class="scene" id="s07-d" data-section="s07" data-mood="impact" data-title="Cidades e exploração de recursos" data-globe="off" data-trans="cut" data-coord="23°33′ S · 46°38′ O — São Paulo">
+  <div class="wrap grid-2 wide-right">
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Expansão urbana e exploração</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:100ms">Concreto, minério <span class="serif accent">e mercúrio</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">As cidades crescem sobre áreas de vegetação nativa. Cerca de <strong>70% da população brasileira</strong> vive no domínio da Mata Atlântica, e restam pouco mais de <strong>12% da floresta original</strong> (SOS Mata Atlântica e INPE).</p>
+      <p class="body a" data-a="rise" style="--d:500ms">A mineração e o <strong>garimpo ilegal</strong> abrem clareiras, contaminam rios com mercúrio e invadem terras indígenas. Hidrelétricas e estradas também fragmentam os habitats.</p>
+    </div>
+    <div class="split-imgs">
+      <figure class="a" data-a="drop" style="--d:300ms"><div class="ph" data-img="saopaulo" data-size="960"></div><figcaption class="figcap">São Paulo vista do alto.</figcaption></figure>
+      <figure class="a" data-a="drop" style="--d:500ms"><div class="ph" data-img="mining" data-size="960"></div><figcaption class="figcap">Fiscalização contra garimpo ilegal em terra indígena no Amazonas (Ibama, 2018).</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-e" data-section="s07" data-mood="impact" data-title="Rondônia vista do espaço" data-globe="off" data-trans="cut" data-coord="Rondônia · 2000 × 2010">
+  <div class="wrap grid-2 wide-left">
+    <div class="stack">
+      <div class="compare a" data-a="fade" id="compare" style="--cut:50%">
+        <div class="ph before" data-img="rondonia_2000" data-size="1280"></div>
+        <div class="ph after" data-img="rondonia_2010" data-size="1280"></div>
+        <span class="lbl l">30 jul. 2000</span><span class="lbl r">2 ago. 2010</span>
+        <div class="handle" aria-hidden="true"></div>
+        <input type="range" min="0" max="100" value="50" id="compareRange" aria-label="Arraste para comparar as imagens de 2000 e 2010">
+      </div>
+      <p class="source">Imagens: NASA Earth Observatory, série <em>World of Change</em> (domínio público).</p>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Antes e depois</span>
+      <h2 class="h-2 a" data-a="blur" style="--d:100ms">Dez anos de <span class="serif accent">espinha de peixe</span></h2>
+      <p class="body a" data-a="rise" style="--d:300ms">Arraste a linha sobre a imagem. As áreas em verde-escuro são floresta; as áreas claras foram desmatadas.</p>
+      <p class="body a" data-a="rise" style="--d:500ms">Primeiro abre-se uma estrada principal; depois, estradas laterais. Ao longo delas, a floresta é derrubada em lotes, formando um desenho parecido com uma <strong>espinha de peixe</strong>.</p>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-f" data-section="s07" data-mood="impact" data-title="Contrastes" data-globe="off" data-trans="cut" data-coord="Uma relação desigual?">
+  <div class="wrap stack-lg">
+    <div class="grid-2" style="align-items:end">
+      <div class="stack"><span class="eyebrow a" data-a="fade">Contrastes</span><h2 class="h-2 a" data-a="blur" style="--d:100ms">Por que uma relação <span class="serif accent">desigual?</span></h2></div>
+      <p class="body a" data-a="rise" style="--d:300ms">Retiramos recursos mais rápido do que a natureza consegue repor. E os benefícios costumam ficar com poucos, enquanto secas, enchentes, calor e poluição atingem mais quem tem menos recursos — e as próximas gerações.</p>
+    </div>
+    <div class="contrasts">
+      <button class="contrast a" data-a="rise" style="--d:400ms" type="button" aria-expanded="false"><span class="sides"><span>Preservação</span><i>×</i><span>Destruição</span></span><span class="beam"></span><span class="hint">Toque para comparar</span><p>Florestas em pé produzem chuva, sombra, água limpa e alimento.</p><p class="more">Derrubadas, viram pasto ou lavoura por alguns anos — e, sem cuidado, solo degradado por décadas. Terras indígenas e unidades de conservação estão entre as áreas mais preservadas da Amazônia, segundo o MapBiomas.</p></button>
+      <button class="contrast a" data-a="rise" style="--d:550ms" type="button" aria-expanded="false"><span class="sides"><span>Biodiversidade</span><i>×</i><span>Perda de habitats</span></span><span class="beam"></span><span class="hint">Toque para comparar</span><p>Cada formação vegetal abriga espécies que só existem ali.</p><p class="more">Quando o habitat é fragmentado, populações ficam isoladas, a polinização e a dispersão de sementes diminuem e espécies podem ser extintas antes mesmo de serem descritas pela ciência.</p></button>
+      <button class="contrast a" data-a="rise" style="--d:700ms" type="button" aria-expanded="false"><span class="sides"><span>Desenvolvimento econômico</span><i>×</i><span>Responsabilidade ambiental</span></span><span class="beam"></span><span class="hint">Toque para comparar</span><p>Agricultura, mineração e cidades geram empregos e renda.</p><p class="more">Mas o lucro rápido pode deixar custos para toda a sociedade: rios assoreados, falta de água, perda de solo e mudança do clima. Desenvolver com responsabilidade é produzir sem destruir a base natural da própria economia.</p></button>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-g" data-section="s07" data-mood="restore" data-title="Caminhos de recuperação" data-globe="off" data-trans="iris" data-coord="Década da ONU da Restauração · 2021–2030">
+  <div class="wrap grid-2 wide-right">
+    <div class="stack">
+      <figure class="a" data-a="scale" style="--d:150ms"><div class="ph" data-img="nursery" data-size="1280" style="aspect-ratio:4/3"></div><figcaption class="figcap">Viveiro de mudas de árvores nativas no IFMG, campus Bambuí (MG).</figcaption></figure>
+    </div>
+    <div class="stack-lg">
+      <span class="eyebrow a" data-a="fade">Recuperação e conservação</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Existem <span class="serif accent">caminhos</span></h2>
+      <div class="paths">
+        <article class="path-card a" data-a="rise" style="--d:300ms"><span class="ico"><svg aria-hidden="true"><use href="#i-sprout"/></svg></span><h3>Reflorestamento</h3><p>Plantio de espécies nativas e recuperação de matas ciliares e nascentes.</p></article>
+        <article class="path-card a" data-a="rise" style="--d:400ms"><span class="ico"><svg aria-hidden="true"><use href="#i-cycle"/></svg></span><h3>Áreas degradadas</h3><p>Sistemas agroflorestais combinam árvores e cultivos e recuperam o solo.</p></article>
+        <article class="path-card a" data-a="rise" style="--d:500ms"><span class="ico"><svg aria-hidden="true"><use href="#i-shield"/></svg></span><h3>Áreas protegidas</h3><p>Unidades de conservação e terras indígenas freiam o desmatamento.</p></article>
+        <article class="path-card a" data-a="rise" style="--d:600ms"><span class="ico"><svg aria-hidden="true"><use href="#i-sat"/></svg></span><h3>Monitoramento</h3><p>O INPE acompanha o desmatamento por satélite com os sistemas PRODES e DETER.</p></article>
+        <article class="path-card a" data-a="rise" style="--d:700ms"><span class="ico"><svg aria-hidden="true"><use href="#i-cart"/></svg></span><h3>Consumo consciente</h3><p>Preferir produtos de origem legal e rastreada e reduzir desperdícios.</p></article>
+        <article class="path-card a" data-a="rise" style="--d:800ms"><span class="ico"><svg aria-hidden="true"><use href="#i-book"/></svg></span><h3>Educação ambiental</h3><p>Conhecer os biomas é o primeiro passo para defendê-los.</p></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene" id="s07-h" data-section="s07" data-mood="restore" data-title="A pergunta" data-globe="center-dim" data-trans="zoom" data-coord="Desenvolvimento sustentável">
+  <div class="wrap wrap--narrow stack-lg" style="justify-items:center;text-align:center">
+    <span class="eyebrow a" data-a="fade" style="--d:300ms">Para refletir e debater</span>
+    <h2 class="question split" data-split="words" style="--d:700ms">É possível desenvolver a sociedade <span class="serif">sem destruir</span> os sistemas naturais que sustentam a vida?</h2>
+    <p class="small a" data-a="fade" style="--d:3200ms;--dur:2s;max-width:60ch">Desenvolvimento sustentável é aquele que atende às necessidades do presente sem comprometer a capacidade das gerações futuras de atenderem às suas próprias necessidades (Relatório Brundtland, ONU, 1987).</p>
+  </div>
+</section>
+
+<!-- ========================= 08 · QUIZ ========================= -->
+<section class="scene" id="s08" data-section="s08" data-mood="quiz" data-title="Exercitando o que aprendemos" data-globe="off" data-trans="iris" data-coord="10 questões">
+  <div class="wrap stack-lg">
+    <div class="stack" style="text-align:center;justify-items:center">
+      <span class="eyebrow a" data-a="fade">08 · Exercitando o que aprendemos</span>
+      <h2 class="h-2 a" data-a="rise" style="--d:100ms">Teste seus conhecimentos</h2>
+      <p class="small a" data-a="fade" style="--d:200ms">Responda clicando na alternativa ou usando as teclas <kbd>1</kbd> a <kbd>4</kbd>.</p>
+    </div>
+    <div class="quiz a" data-a="rise" style="--d:300ms" id="quiz"></div>
+  </div>
+</section>
+
+<!-- ========================= ENCERRAMENTO ========================= -->
+<section class="scene" id="s09" data-section="s09" data-mood="space" data-title="Encerramento" data-globe="final" data-trans="zoom" data-coord="Terra · planeta azul">
+  <div class="wrap final">
+    <div class="seq stack-lg" id="finalSeq" style="justify-items:center">
+      <p class="phrase">Proteger a cobertura <span class="verde">verde</span> é preservar o equilíbrio da vida no planeta <span class="azul">azul</span>.</p>
+      <div class="credits">
+        <p class="school">Escola Comunitária Santa Maria Bestila</p>
+        <p class="line">Professor: <b>Valdemir</b></p>
+        <p class="line">Componente curricular: <b>Geografia</b></p>
+        <p class="line">Alunos: <b>Miguel Vinícius</b>, <b>Benjamin Henrique</b> e <b>Everton</b>.</p>
+      </div>
+      <div class="row" style="justify-content:center">
+        <button class="pill pill--glow" type="button" data-action="restart"><svg aria-hidden="true"><use href="#i-restart"/></svg>Reiniciar experiência</button>
+        <button class="pill" type="button" data-action="credits">Créditos de imagens e sons</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="grain" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+
+<!-- HUD ------------------------------------------------------------------- -->
+<header class="hud hud-top">
+  <div class="brand"><span class="dot" aria-hidden="true"></span><b>Cap. 12</b><span class="long">· Geografia</span></div>
+  <p class="hud-section" id="hudSection"></p>
+  <div class="hud-actions">
+    <button class="icon-btn" id="btnAudio" type="button" aria-pressed="false" aria-expanded="false" aria-controls="audioPanel" aria-label="Som e trilha"><svg class="off" aria-hidden="true"><use href="#i-mute"/></svg><svg class="on" aria-hidden="true"><use href="#i-vol"/></svg></button>
+    <button class="icon-btn" id="btnFull" type="button" aria-pressed="false" aria-label="Tela cheia"><svg class="off" aria-hidden="true"><use href="#i-max"/></svg><svg class="on" aria-hidden="true"><use href="#i-min"/></svg></button>
+    <button class="icon-btn" id="btnRestart" type="button" aria-label="Reiniciar apresentação"><svg aria-hidden="true"><use href="#i-restart"/></svg></button>
+    <button class="icon-btn" id="btnMenu" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menu de seções"><svg aria-hidden="true"><use href="#i-menu"/></svg></button>
+  </div>
+</header>
+
+<nav class="hud hud-bottom" aria-label="Navegação da apresentação">
+  <button class="nav-btn" id="btnPrev" type="button" aria-label="Cena anterior"><svg aria-hidden="true"><use href="#i-left"/></svg><span class="txt">Voltar</span></button>
+  <div class="progress">
+    <div class="progress-track" id="progressTrack"></div>
+    <div class="progress-meta"><span class="coords" id="hudCoords"></span><span><b id="hudIndex">01</b> / <span id="hudTotal">00</span></span></div>
+  </div>
+  <button class="nav-btn nav-btn--next" id="btnNext" type="button" aria-label="Próxima cena"><span class="txt">Avançar</span><svg aria-hidden="true"><use href="#i-right"/></svg></button>
+</nav>
+
+<!-- Painel de áudio -------------------------------------------------------- -->
+<div class="popover" id="audioPanel" hidden role="dialog" aria-label="Controles de som">
+  <h3>Som da experiência</h3>
+  <div class="toggle-row"><span>Áudio</span><button class="switch" id="swMaster" type="button" role="switch" aria-checked="false" aria-label="Ativar áudio"></button></div>
+  <label class="range-row" for="volRange"><span>Volume <b id="volVal">70%</b></span><input class="range" id="volRange" type="range" min="0" max="100" value="70"></label>
+  <div class="toggle-row"><span>Efeitos sonoros</span><button class="switch" id="swSfx" type="button" role="switch" aria-checked="true" aria-label="Efeitos sonoros"></button></div>
+  <div class="toggle-row"><span>Trilha instrumental</span><button class="switch" id="swMusic" type="button" role="switch" aria-checked="true" aria-label="Trilha instrumental"></button></div>
+  <div class="toggle-row"><span>Sons da natureza</span><button class="switch" id="swAmb" type="button" role="switch" aria-checked="true" aria-label="Sons da natureza"></button></div>
+  <div class="toggle-row"><span>Reduzir movimento</span><button class="switch" id="swMotion" type="button" role="switch" aria-checked="false" aria-label="Reduzir movimento"></button></div>
+  <p class="audio-status" id="audioStatus">A trilha e os efeitos são gerados no navegador. Os sons da natureza são gravações reais do Wikimedia Commons e precisam de internet.</p>
+</div>
+
+<!-- Menu ----------------------------------------------------------------- -->
+<div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+  <div class="menu-inner">
+    <div class="menu-head">
+      <div class="stack"><span class="eyebrow">Capítulo 12</span><h2 class="h-2" id="menuTitle">Seções da apresentação</h2></div>
+      <button class="icon-btn" type="button" data-close="menu" aria-label="Fechar menu"><svg aria-hidden="true"><use href="#i-x"/></svg></button>
+    </div>
+    <ul class="menu-list" id="menuList"></ul>
+    <div class="menu-tools">
+      <button class="pill" type="button" data-action="restart"><svg aria-hidden="true"><use href="#i-restart"/></svg>Reiniciar apresentação</button>
+      <button class="pill" type="button" data-action="credits">Créditos de imagens e sons</button>
+    </div>
+    <div class="stack">
+      <span class="eyebrow">Atalhos de teclado</span>
+      <div class="kbd-list">
+        <span><kbd>→</kbd> <kbd>Espaço</kbd> avançar</span>
+        <span><kbd>←</kbd> voltar</span>
+        <span><kbd>M</kbd> ligar/desligar som</span>
+        <span><kbd>F</kbd> tela cheia</span>
+        <span><kbd>Esc</kbd> fechar janelas</span>
+        <span><kbd>Home</kbd> primeira cena · <kbd>End</kbd> última</span>
+      </div>
+    </div>
+    <div class="stack" id="creditsBox" hidden>
+      <span class="eyebrow">Créditos de imagens e sons</span>
+      <p class="small">Fotografias e gravações do Wikimedia Commons, usadas conforme as licenças indicadas em cada página de arquivo (clique no nome para ver autor e licença completos). Texturas do globo: NASA Blue Marble e Black Marble (domínio público), obtidas do pacote de código aberto three-globe. Trilha e efeitos sintetizados em tempo real no navegador (Web Audio API).</p>
+      <ul class="media-credits" id="mediaCredits"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Modal dos biomas -------------------------------------------------------- -->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-backdrop" data-close="modal"></div>
+  <article class="modal-card" id="modalCard" tabindex="-1"></article>
+</div>
+
+<div id="flash" aria-hidden="true"></div>
+<p class="sr-only" id="announcer" aria-live="polite"></p>
+
+<script src="media.js"></script>
+<script src="content.js"></script>
+<script src="globe.js"></script>
+<script src="audio.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
