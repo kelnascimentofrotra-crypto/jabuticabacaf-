@@ -22,6 +22,10 @@ npm run build     # gera dist/ (caminhos relativos: serve na raiz ou numa subpas
 npm run preview   # serve o build em http://localhost:4173
 ```
 
+O conteúdo de `dist/` também abre com dois cliques no `index.html`, sem
+servidor: o build usa um script clássico (`defer`) em vez de módulo, porque o
+navegador bloqueia módulos e arquivos `crossorigin` abertos direto do disco.
+
 ## WhatsApp
 
 Todos os botões de contato abrem o WhatsApp da Helder Segurança
