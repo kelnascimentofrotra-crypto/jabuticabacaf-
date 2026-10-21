@@ -349,7 +349,7 @@ const QUIZ = [
   ["Qual ação ajuda a recuperar áreas degradadas?", ["Usar queimadas para limpar o terreno", "Ampliar o garimpo nos rios", "Drenar nascentes para abrir pastos", "Reflorestar com espécies nativas"], 3, "Mudas nativas e matas ciliares protegem o solo, as nascentes e a fauna."]
 ];
 
-const SCENES = [
+const SCENES_LONGO = [
   { id: "intro-trans", dur: 3.2, sec: "s01", coord: "TERRA · 12.742 KM DE DIÂMETRO", fx: "ember", trans: "none",
     globe: [[0, G0], [3.2, gp({ x: 1360, y: 560, r: 330, lon: -45, tilt: 0.3 })]], html: "" },
   { id: "intro", dur: 10, sec: "s01", coord: "TERRA · 12.742 KM DE DIÂMETRO", fx: "ember",
@@ -584,6 +584,13 @@ const SCENES = [
       <p class="src"${A(10, "fade", 1.2)}>IMAGENS DE SATÉLITE: NASA BLUE MARBLE E BLACK MARBLE · TRILHA E EFEITOS GERADOS POR COMPUTADOR</p></div>` }
 ];
 
+/* ======================= VERSÃO CURTA (até 3 min) ======================= */
+const SCENES_CURTO = [
+  /*CURTO*/
+];
+const CURTO = /versao=curto/.test(location.search);
+const SCENES = CURTO ? SCENES_CURTO : SCENES_LONGO;
+
 /* ======================= MONTAGEM ======================= */
 let T0 = 0;
 SCENES.forEach((s, i) => { s.start = T0; T0 += s.dur; s.end = T0; s.prev = SCENES[i - 1]; s.next = SCENES[i + 1]; });
@@ -615,19 +622,19 @@ SCENES.forEach((s) => { s.anims = $$("[data-in]", s.el).filter((e) => !e.dataset
 // mapa de latitudes
 const BANDS = [["Florestas equatoriais", [[-10, 10]], "Perto do Equador, calor e chuva o ano todo: Amazônia, Congo, Indonésia."], ["Savanas", [[5, 20], [-20, -5]], "Entre 5° e 20°, uma estação seca marcada: Serengeti, Cerrado, Llanos."], ["Desertos", [[15, 35], [-35, -15]], "Perto dos trópicos, o ar seco das altas pressões dificulta as chuvas: Saara, Atacama."], ["Mediterrânea", [[30, 42], [-38, -30]], "Entre 30° e 40°: verões secos e invernos chuvosos."], ["Temperadas e pradarias", [[35, 55], [-55, -35]], "Latitudes médias: florestas onde chove bem; pradarias e estepes no interior seco."], ["Taiga", [[50, 70]], "Entre 50° e 70° N, invernos longos. Só no Hemisfério Norte."], ["Tundra", [[63, 78]], "Ao redor do Ártico: solo congelado e vegetação rasteira."], ["Gelo polar", [[78, 90], [-90, -62]], "Nos polos, gelo permanente. Montanhas altas também ficam frias, mesmo no Equador."]];
 (function () {
-  const map = $("#lmap");
+  const map = $("#lmap"); if (!map) return;
   [[0, "Equador"], [23.44, "Trópico de Câncer"], [-23.44, "Trópico de Capricórnio"], [66.56, "Círculo Polar Ártico"]].forEach(([lat, n]) => { const g = document.createElement("div"); g.className = "gl"; g.style.top = yP(lat) + "%"; g.innerHTML = `<span>${n}</span>`; map.appendChild(g); });
   BANDS.forEach(([n, rs], k) => rs.forEach(([a, b]) => { const d = document.createElement("div"); d.className = "band"; d.dataset.b = k; d.style.top = yP(Math.max(a, b)) + "%"; d.style.height = (Math.abs(b - a) / 180) * 100 + "%"; map.appendChild(d); }));
   $("#blist").innerHTML = BANDS.map(([n], k) => `<div data-b="${k}"><i></i>${n}</div>`).join("");
 })();
 // espectro
 (function () {
-  const sp = $("#spec");
+  const sp = $("#spec"); if (!sp) return;
   [["Estepe", 7], ["Pradaria", 22], ["Savana", 50], ["Caatinga", 74], ["Mediterrânea", 92]].forEach(([n, at], k) => {
     const m = document.createElement("div"); m.className = "mk" + (k % 2 ? " low" : ""); m.style.left = at + "%"; m.innerHTML = `<span>${n}</span><i></i>`; m.dataset.in = (3.4 + k * 0.45).toFixed(2); m.dataset.fx = "pop"; m.dataset.dur = "0.6"; m.dataset.sfx = "tick";
     sp.appendChild(m);
   });
-  const s = SCENES.find((x) => x.id === "herb"); s.anims = $$("[data-in]", s.el).filter((e) => !e.dataset.split && !e.dataset.count);
+  const s = SCENES.find((x) => x.el.contains(sp)); s.anims = $$("[data-in]", s.el).filter((e) => !e.dataset.split && !e.dataset.count);
 })();
 
 /* ======================= FUNDO E PARTÍCULAS ======================= */
@@ -821,6 +828,10 @@ function anim(el, t) {
     case "grow": tr = `scaleX(${e})`; op = k > 0 ? 1 : 0; break;
     case "drop": tr = `translateY(${-(1 - e) * 40}px)`; break;
   }
+  if (el.dataset.out) {
+    const ko = easeIO(seg(t, Number(el.dataset.out), Number(el.dataset.odur) || 0.35));
+    if (ko > 0) { op *= 1 - ko; tr = (tr === "none" ? "" : tr + " ") + `scale(${1 + ko * 0.18})`; fl = `blur(${ko * 10}px)`; }
+  }
   el.style.opacity = op; el.style.transform = tr; el.style.filter = fl;
 }
 function animSplit(el, t) {
@@ -834,38 +845,43 @@ function animSplit(el, t) {
 /* ======================= CENAS PERSONALIZADAS ======================= */
 const CUSTOM = {
   latmap(s, t) {
-    const idx = t < 1.6 ? -1 : Math.min(BANDS.length - 1, Math.floor((t - 1.6) / 1.6));
+    const P = s.p || {}, t0 = P.t0 ?? 1.6, st = P.step ?? 1.6;
+    const idx = t < t0 ? -1 : Math.min(BANDS.length - 1, Math.floor((t - t0) / st));
     $$("#lmap .band").forEach((b) => (b.style.opacity = Number(b.dataset.b) === idx ? 1 : 0));
     $$("#blist div").forEach((d) => d.classList.toggle("on", Number(d.dataset.b) === idx));
     $("#btext").textContent = idx >= 0 ? BANDS[idx][2] : "";
   },
   strata(s, t) {
-    const idx = t < 1.8 ? -1 : Math.min(3, Math.floor((t - 1.8) / 2.6));
+    const P = s.p || {}, t0 = P.t0 ?? 1.8, st = P.step ?? 2.6;
+    const idx = t < t0 ? -1 : Math.min(3, Math.floor((t - t0) / st));
     $$(".L", s.el).forEach((g) => (g.style.opacity = idx < 0 || Number(g.dataset.l) === idx ? 1 : 0.22));
     $$("#lay > div").forEach((d, k) => d.classList.toggle("on", k === idx));
   },
   tree(s, t) {
-    const idx = t < 1.8 ? -1 : Math.min(4, Math.floor((t - 1.8) / 2.3));
+    const P = s.p || {}, t0 = P.t0 ?? 1.8, st = P.step ?? 2.3;
+    const idx = t < t0 ? -1 : Math.min(4, Math.floor((t - t0) / st));
     $$(".hs", s.el).forEach((g) => { const on = Number(g.dataset.h) === idx; g.style.opacity = idx < 0 ? 0.6 : on ? 1 : 0.25; g.style.transform = on ? "scale(1)" : ""; });
     $$("#adapt > div").forEach((d, k) => d.classList.toggle("on", k === idx));
   },
   perma(s, t) {
-    const sum = t > 4.2;
-    $$(".sum", s.el).forEach((e) => (e.style.opacity = sum ? clamp((t - 4.2) / 1.2) : 0));
-    $$(".win", s.el).forEach((e) => (e.style.opacity = sum ? 1 - clamp((t - 4.2) / 1.2) : 1));
+    const sw = (s.p || {}).sw ?? 4.2, sum = t > sw;
+    $$(".sum", s.el).forEach((e) => (e.style.opacity = sum ? clamp((t - sw) / 1.0) : 0));
+    $$(".win", s.el).forEach((e) => (e.style.opacity = sum ? 1 - clamp((t - sw) / 1.0) : 1));
     $("#pw").style.borderColor = sum ? "" : "var(--orange)"; $("#ps").style.borderColor = sum ? "var(--orange)" : "";
     $("#pw").style.opacity = sum ? 0.45 : 1; $("#ps").style.opacity = sum ? 1 : 0.45;
   },
-  loop(s, t) { $$(".ar", s.el).forEach((a, k) => (a.style.opacity = clamp((t - 2.2 - k * 1.1) / 0.5))); },
+  loop(s, t) { const P = s.p || {}; $$(".ar", s.el).forEach((a, k) => (a.style.opacity = clamp((t - (P.t0 ?? 2.2) - k * (P.step ?? 1.1)) / 0.4))); },
   seasons(s, t) {
     const names = [["Primavera: dias mais longos, folhas novas e flores.", ["#f6c6d8", "#ffffff", "#c8f08a"]], ["Verão: copas cheias e fotossíntese no máximo.", ["#3fbf6b", "#4fd47f", "#1f9a52"]], ["Outono: as folhas ficam amarelas, laranja e vermelhas e caem.", ["#ff8a3d", "#ffb43d", "#e8562e", "#c43d24"]], ["Inverno: galhos nus, muitas vezes com neve.", ["#ffffff", "#e6f0f8", "#cfe0ee"]]];
-    const idx = t < 2.8 ? 0 : Math.min(3, Math.floor((t - 2.8) / 1.8));
+    const P = s.p || {}, t0 = P.t0 ?? 2.8, st = P.step ?? 1.8;
+    const idx = t < t0 ? 0 : Math.min(3, Math.floor((t - t0) / st));
     $$("#seas .chip").forEach((c, k) => { c.style.borderColor = k === idx ? c.dataset.c : ""; c.style.background = k === idx ? c.dataset.c + "33" : ""; c.querySelector("i").style.background = c.dataset.c; c.querySelector("i").style.boxShadow = "0 0 10px " + c.dataset.c; });
     $("#seasT").textContent = names[idx][0];
     leafPal = names[idx][1];
   },
   leaf(s, t) {
-    const v = clamp((t - 2.2) / 7) * 100;
+    const P = s.p || {}, l0 = P.t0 ?? 2.2, ld = P.dur ?? 7;
+    const v = clamp((t - l0) / ld) * 100;
     const stops = [[0, [47, 191, 107]], [35, [140, 196, 64]], [55, [242, 190, 52]], [78, [255, 122, 47]], [100, [205, 52, 40]]];
     let col = "rgb(205,52,40)";
     for (let i = 1; i < stops.length; i++) { const [t1, c1] = stops[i], [t0, c0] = stops[i - 1]; if (v <= t1) { const k = (v - t0) / (t1 - t0); col = "rgb(" + c0.map((x, j) => Math.round(x + (c1[j] - x) * k)).join(",") + ")"; break; } }
@@ -873,28 +889,29 @@ const CUSTOM = {
     const chl = Math.max(0, Math.round(100 - v * 1.15)), ant = clamp(Math.round((v - 55) * 2.2), 0, 100);
     $("#pc").textContent = chl + "%"; $("#bc").style.width = Math.max(chl, 1) + "%";
     $("#pr").textContent = ant + "%"; $("#br").style.width = Math.max(ant, 1) + "%";
-    const fall = clamp((t - 9.6) / 1.6);
+    const fall = clamp((t - (l0 + ld + 0.4)) / 1.4);
     $("#leafG").setAttribute("transform", `translate(${fall * 30} ${fall * 70}) rotate(${fall * 28} 150 200)`);
     $("#leafS").textContent = v < 30 ? "Dias longos: muita clorofila." : v < 60 ? "Os dias encurtam: a clorofila se desfaz." : v < 95 ? "Aparecem carotenoides e antocianinas." : "Fim do outono: a folha cai.";
   },
   spectrum() {},
   pano(s, t) {
-    const n = 5, hold = 3.0, move = 0.6, step = hold + move, w = 1680;
+    const P = s.p || {}, n = $$("#strip .pp").length, hold = P.hold ?? 3.0, move = P.move ?? 0.6, step = hold + move, w = 1680, t0 = P.t0 ?? 0.4;
     let x = 0;
-    for (let i = 1; i < n; i++) x -= easeIO(seg(t, 0.4 + i * step - move, move)) * w;
+    for (let i = 1; i < n; i++) x -= easeIO(seg(t, t0 + i * step - move, move)) * w;
     $("#strip").style.transform = `translateX(${x}px)`;
   },
   fishbone(s, t) {
-    const k = clamp((t - 0.8) / 8.5);
+    const P = s.p || {}, k = clamp((t - (P.t0 ?? 0.8)) / (P.dur ?? 8.5));
     $$("#fish .rd").forEach((r) => r.setAttribute("stroke-dashoffset", String(1 - clamp((k - Number(r.dataset.t)) / 0.15))));
     $$("#fish .cl").forEach((r) => r.setAttribute("opacity", String(0.85 * clamp((k - Number(r.dataset.t)) / 0.12))));
     $("#year").textContent = String(2000 + Math.round(k * 10));
   },
   quiz(s, t) {
-    const left = clamp(1 - (t - 1.6) / 5), num = Math.ceil(left * 5);
+    const P = s.p || {}, c0 = P.c0 ?? 1.6, n = P.n ?? 5, rv = c0 + n;
+    const left = clamp(1 - (t - c0) / n), num = Math.ceil(left * n);
     $(".ring .fg", s.el).setAttribute("stroke-dashoffset", String(691.15 * (1 - left)));
-    $(".ring text", s.el).textContent = t < 6.6 ? String(Math.max(1, num)) : "✓";
-    const rev = t >= 6.6;
+    $(".ring text", s.el).textContent = t < rv ? String(Math.max(1, num)) : "✓";
+    const rev = t >= rv;
     $$(".opt", s.el).forEach((o) => { o.classList.toggle("right", rev && Number(o.dataset.k) === s.qa); o.classList.toggle("dim", rev && Number(o.dataset.k) !== s.qa); });
   },
   final() {}
@@ -916,11 +933,14 @@ function frame(T) {
 
   // transição da cena
   const trans = s.trans || "fade";
-  const enter = trans === "none" ? 1 : trans === "cut" ? 1 : easeOut(seg(t, 0, 0.7));
-  const exitK = s.next && (s.next.trans === "cut") ? seg(t, s.dur - 0.15, 0.15) : easeIO(seg(t, s.dur - 0.55, 0.55));
+  const ED = CURTO ? 0.42 : 0.7, XD = CURTO ? 0.32 : 0.55;
+  const enter = trans === "none" ? 1 : trans === "cut" ? 1 : easeOut(seg(t, 0, ED));
+  const exitK = s.next && (s.next.trans === "cut") ? seg(t, s.dur - 0.15, 0.15) : easeIO(seg(t, s.dur - XD, XD));
   let op = Math.min(enter, 1 - exitK), tr = "none", fl = "none";
-  if (trans === "pan") tr = `translateX(${(1 - enter) * 160 - exitK * 120}px)`;
-  else if (trans === "fade" || trans === "zoom") { tr = `scale(${1 + (1 - enter) * 0.03 + exitK * 0.03})`; if (exitK > 0) fl = `blur(${exitK * 8}px)`; }
+  const push = CURTO && !s.noPush ? 1 + 0.022 * clamp(t / s.dur) : 1;
+  if (trans === "pan") tr = `translateX(${(1 - enter) * 160 - exitK * 120}px) scale(${push})`;
+  else if (trans === "fade" || trans === "zoom") { tr = `scale(${push + (1 - enter) * 0.04 + exitK * 0.04})`; if (exitK > 0) fl = `blur(${exitK * 8}px)`; }
+  else if (trans === "cut" || trans === "none") tr = `scale(${push})`;
   s.el.style.opacity = op; s.el.style.transform = tr; s.el.style.filter = fl;
   s.anims.forEach((el) => anim(el, t));
   s.splits.forEach((el) => animSplit(el, t));
@@ -1028,6 +1048,23 @@ async function renderAudio() {
   });
   whoosh(16.2, 1.2, 400, 3000, 0.22, -0.4, 0.4); riser(15.7, 1.5); impact(17.2, 0.95); impact(17.92, 0.5); shimmer(19.8, 0.1, 660); shimmer(20.2, 0.06, 990);
 
+  // --- batida da versão curta (mais dinâmica) ---
+  if (CURTO) {
+    const beat = 60 / 104, endB = HEAD + TOTAL - 5;
+    const calm = (tt) => { const T = tt - HEAD; const sc = SCENES.find((x) => T >= x.start && T < x.end); return !sc || sc.calm; };
+    const kick = (t, g0) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(46, t + 0.22); env(g, t, 0.004, g0, 0.3); o.connect(g).connect(master); o.start(t); o.stop(t + 0.4); };
+    const hat = (t, g0) => { const n = noise(t, 0.08), hp = ctx.createBiquadFilter(); hp.type = "highpass"; hp.frequency.value = 7200; const g = ctx.createGain(); env(g, t, 0.002, g0, 0.045); n.connect(hp).connect(g).connect(master); };
+    const bass = (t, m) => { const o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain(); o.type = "sawtooth"; o.frequency.value = mtof(m); lp.type = "lowpass"; lp.frequency.value = 380; env(g, t, 0.01, 0.07, beat * 1.6); o.connect(lp).connect(g).connect(master); o.start(t); o.stop(t + beat * 2); };
+    const roots = [38, 38, 35, 31, 33];
+    for (let tt = HEAD + 0.2, i = 0; tt < endB; tt += beat / 2, i++) {
+      if (calm(tt)) continue;
+      if (i % 4 === 0) kick(tt, i % 16 === 0 ? 0.5 : 0.36);
+      if (i % 8 === 6) kick(tt, 0.22);
+      hat(tt, i % 2 ? 0.045 : 0.025);
+      if (i % 4 === 0) bass(tt, roots[Math.floor(i / 16) % roots.length]);
+    }
+  }
+
   // --- capítulo ---
   const CH = { s01: [[50, 57, 61, 64, 69], [47, 54, 59, 62, 66], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]], s02: [[50, 57, 62, 66, 69], [47, 54, 59, 62, 66], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]], s03: [[38, 45, 50, 57, 62], [41, 48, 53, 57, 60], [36, 43, 48, 55, 60]], s04: [[38, 45, 52, 57], [36, 43, 50, 55], [41, 48, 55, 60]], s05: [[48, 55, 60, 64, 67], [45, 52, 57, 60, 64], [41, 48, 53, 57, 60], [43, 50, 55, 59, 62]], s06: [[43, 50, 57, 62, 66], [45, 52, 57, 64], [40, 47, 55, 59, 62]], s07: [[38, 45, 48, 53], [37, 44, 49, 52], [34, 41, 46, 50]], s07r: [[48, 55, 62, 64, 67], [53, 60, 65, 69, 72], [45, 52, 59, 64, 67]], s08: [[48, 55, 60, 64], [45, 52, 57, 64], [41, 48, 57, 60], [43, 50, 55, 62]], fim: [[50, 57, 61, 64, 69], [47, 54, 57, 62, 66], [43, 50, 55, 59, 62, 66], [45, 52, 57, 61, 64, 69]] };
   let ci = 0;
@@ -1049,7 +1086,7 @@ async function renderAudio() {
     if (s.sfx === "shimmer") shimmer(t0 + 0.4, 0.08);
     if (s.sfx === "final") { shimmer(t0 + 1.2, 0.1, 660); impact(t0 + 7.5, 0.35); shimmer(t0 + 10, 0.06, 990); }
     $$("[data-sfx='tick']", s.el).forEach((e, k) => tick(t0 + (Number(e.dataset.in) || 0) + 0.05, 1200 + (k % 5) * 180, 0.08));
-    if (s.custom === "quiz") { for (let k = 0; k < 5; k++) tick(t0 + 1.6 + k, k === 4 ? 1800 : 1200, 0.12); chime(t0 + 6.6); }
+    if (s.custom === "quiz") { const P = s.p || {}, c0 = P.c0 ?? 1.6, n = P.n ?? 5; for (let k = 0; k < n; k++) tick(t0 + c0 + k, k === n - 1 ? 1800 : 1200, 0.12); chime(t0 + c0 + n); }
   });
 
   const buf = await ctx.startRendering();

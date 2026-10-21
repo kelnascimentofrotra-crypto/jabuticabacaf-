@@ -5,6 +5,7 @@
    Uso:
      node tools/render_capitulo.js                      → video/capitulo-12-completo.mp4
      node tools/render_capitulo.js --workers 3          → renderizadores em paralelo
+     node tools/render_capitulo.js --versao curto       → versão de até 3 min (video/capitulo-12-curto.mp4)
      node tools/render_capitulo.js --stills mid         → quadros de teste de cada cena
      node tools/render_capitulo.js --stills 12.5,40     → quadros de teste nesses instantes
    A renderização é feita em blocos de 300 quadros numa pasta de trabalho (--work). Se o processo
@@ -19,11 +20,12 @@ try { playwright = require("playwright"); } catch (e) { playwright = require("/o
 
 const ROOT = path.resolve(__dirname, "..");
 const arg = (n, d) => { const i = process.argv.indexOf(n); return i > 0 ? process.argv[i + 1] : d; };
-const OUT = path.resolve(arg("--out", path.join(ROOT, "video", "capitulo-12-completo.mp4")));
+const VERSAO = arg("--versao", "longo");
+const OUT = path.resolve(arg("--out", path.join(ROOT, "video", VERSAO === "curto" ? "capitulo-12-curto.mp4" : "capitulo-12-completo.mp4")));
 const HEADER = path.join(ROOT, "video", "cabecalho-capitulo-12.mp4");
 const WORKERS = Number(arg("--workers", 3));
 const STILLS = arg("--stills", null);
-const WORK = path.resolve(arg("--work", path.join(os.tmpdir(), "cap12-trabalho")));
+const WORK = path.resolve(arg("--work", path.join(os.tmpdir(), "cap12-trabalho-" + VERSAO)));
 const CHUNK = Number(arg("--chunk", 300));
 
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".jpg": "image/jpeg", ".png": "image/png" };
@@ -41,7 +43,7 @@ async function openPage(port) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on("console", (m) => { if (m.type() === "error") console.error("[página]", m.text()); });
   page.on("pageerror", (e) => console.error("[erro]", e.message));
-  await page.goto(`http://127.0.0.1:${port}/video/capitulo.html?render=1`);
+  await page.goto(`http://127.0.0.1:${port}/video/capitulo.html?render=1&versao=${VERSAO}`);
   await page.evaluate(() => window.ready);
   return { browser, page };
 }
