@@ -5,7 +5,15 @@ Apresentação interativa de Geografia, em estilo de documentário, feita para a
 
 - **Professor:** Valdemir
 - **Componente curricular:** Geografia
-- **Alunos:** Miguel Vinícius, Benjamin Henrique e Everton
+- **Alunos:** Miguel, Henrique, Vinícius e Everton
+
+## Vídeo do cabeçalho
+
+`video/cabecalho-capitulo-12.mp4` (1920×1080, 30 fps, com som, paleta laranja): cada informação
+aparece no centro da tela e depois vai para o seu canto — escola, professor, componente curricular
+e alunos —, até formar o cabeçalho com o título no centro e o planeta nascendo embaixo.
+Fonte da animação: `video/cabecalho.html` (abrir por um servidor local mostra a prévia em loop);
+para gerar de novo: `node tools/render_video.js` (precisa de Playwright e ffmpeg).
 
 ## Como abrir
 

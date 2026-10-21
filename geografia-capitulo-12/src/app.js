@@ -435,7 +435,7 @@
           Globe.pose("op-team", { damp: 0.9 });
           altTarget = 9000;
           S.whoosh(1.2, { from: 300, to: 2200, gain: 0.35, panFrom: 0.7, panTo: -0.7 });
-          [1300, 1700, 2100].forEach((t, k) => later(OWN, t + 200, () => S.tick(1500 + k * 300, 0.1)));
+          [1300, 1700, 2100, 2500].forEach((t, k) => later(OWN, t + 200, () => S.tick(1500 + k * 300, 0.1)));
           break;
         case 5:
           Globe.pose("op-title", { damp: 1.2 });

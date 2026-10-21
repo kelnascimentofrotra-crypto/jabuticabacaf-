@@ -446,6 +446,7 @@ figure { margin: 0; }
 .scene--opening[data-beat="4"] .stack3d .slab:nth-child(1) { transition-delay: 1.3s; }
 .scene--opening[data-beat="4"] .stack3d .slab:nth-child(2) { transition-delay: 1.7s; }
 .scene--opening[data-beat="4"] .stack3d .slab:nth-child(3) { transition-delay: 2.1s; }
+.scene--opening[data-beat="4"] .stack3d .slab:nth-child(4) { transition-delay: 2.5s; }
 
 /* Título */
 .op-title .inner { display: grid; justify-items: center; gap: 22px; text-align: center; width: min(1300px, 100%); }
