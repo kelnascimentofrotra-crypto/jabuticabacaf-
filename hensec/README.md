@@ -22,12 +22,11 @@ npm run build     # gera dist/ (caminhos relativos: serve na raiz ou numa subpas
 npm run preview   # serve o build em http://localhost:4173
 ```
 
-## Pendência de configuração
+## WhatsApp
 
-- **Número de WhatsApp:** defina `WHATSAPP_NUMBER` em `src/config.js`
-  (formato `55DDDNUMERO`, só dígitos). As mensagens de cada botão ficam no
-  mesmo arquivo. Enquanto estiver vazio, os botões abrem o WhatsApp com a
-  mensagem pronta, mas sem destinatário.
+Todos os botões de contato abrem o WhatsApp da Helder Segurança
+(+55 11 98655-8019) com uma mensagem pronta para cada contexto. O número
+(`WHATSAPP_NUMBER`, só dígitos) e as mensagens ficam em `src/config.js`.
 
 ## Estrutura
 

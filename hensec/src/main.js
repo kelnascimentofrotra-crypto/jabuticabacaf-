@@ -24,9 +24,6 @@ document.querySelectorAll('[data-wa]').forEach((link) => {
   link.rel = 'noopener';
 });
 
-if (import.meta.env.DEV && !WHATSAPP_NUMBER) {
-  console.warn('[Helder Segurança] Defina WHATSAPP_NUMBER em src/config.js para direcionar os botões ao número oficial.');
-}
 
 /* --------------------------------------------------------------------------
    Menu mobile

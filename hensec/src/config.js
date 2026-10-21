@@ -1,14 +1,10 @@
 /**
  * Configuração central de contato da Helder Segurança.
  *
- * TODO: informar o número oficial de WhatsApp da Helder Segurança.
- * Formato internacional, apenas dígitos: 55 + DDD + número.
- * Exemplo de formato (NÃO é o número real): '5511900000000'.
- *
- * Enquanto estiver vazio, os botões abrem o WhatsApp com a mensagem
- * já preenchida, mas sem destinatário (a pessoa escolhe o contato).
+ * Número de WhatsApp em formato internacional, apenas dígitos:
+ * 55 + DDD + número. Aqui: +55 11 98655-8019.
  */
-export const WHATSAPP_NUMBER = '';
+export const WHATSAPP_NUMBER = '5511986558019';
 
 /**
  * Mensagens pré-preenchidas por botão. A chave corresponde ao atributo
