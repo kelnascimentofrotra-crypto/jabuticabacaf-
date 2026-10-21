@@ -185,6 +185,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 /* 6. Cabeçalho, navegação e menu ------------------------------------------ */
 .site-header {
   position: fixed; inset: 0 0 auto; z-index: 70;
+  padding-top: env(safe-area-inset-top, 0px);
   color: var(--ink);
   border-bottom: 1px solid transparent;
   transition: transform 0.6s var(--ease-out), background-color var(--dur-base), color var(--dur-base), border-color var(--dur-base);
@@ -244,7 +245,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .menu {
   position: fixed; inset: 0; z-index: 65; overflow-y: auto;
   display: flex; flex-direction: column; justify-content: space-between; gap: 3rem;
-  padding: calc(var(--header-h) + 2.5rem) var(--gutter) 2.5rem;
+  padding: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 2.5rem) var(--gutter) calc(2.5rem + env(safe-area-inset-bottom, 0px));
   background: var(--onyx); color: var(--ivory);
   opacity: 0; visibility: hidden;
   transition: opacity var(--dur-base) var(--ease-out), visibility 0s linear var(--dur-base);
@@ -403,7 +404,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 .filters {
   position: fixed; inset: auto 0 0; z-index: 80; max-height: 88svh; overflow-y: auto;
-  display: grid; gap: 1.75rem; padding: 1.5rem var(--gutter) 1.5rem;
+  display: grid; gap: 1.75rem; padding: 1.5rem var(--gutter) calc(1.5rem + env(safe-area-inset-bottom, 0px));
   background: var(--ivory); color: var(--ink);
   transform: translateY(100%); visibility: hidden;
   transition: transform 0.6s var(--ease-out), visibility 0s linear 0.6s;
@@ -643,6 +644,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .form-success__icon { width: 3.5rem; height: 3.5rem; border: 1px solid var(--gold); border-radius: 50%; display: grid; place-items: center; color: var(--gold); }
 .form-success__icon svg { width: 1.5rem; height: 1.5rem; }
 .form-success p { color: rgba(246, 243, 238, 0.8); max-width: 34rem; }
+.form-success .form-success__note { font-size: 0.8125rem; color: var(--mist); }
 
 /* 16. Rodapé --------------------------------------------------------------- */
 .site-footer { background: var(--onyx); color: var(--ivory); padding-block: clamp(4rem, 8vw, 7rem) 2rem; border-top: 1px solid var(--line-dark); }
@@ -659,7 +661,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 
 /* 17. WhatsApp flutuante, toast e lightbox -------------------------------- */
 .wa-float {
-  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 60;
+  position: fixed; right: calc(1.25rem + env(safe-area-inset-right, 0px)); bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px)); z-index: 60;
   display: inline-grid; place-items: center; width: 3.5rem; height: 3.5rem; border-radius: 50%;
   background: var(--onyx); color: var(--gold-soft); border: 1px solid rgba(201, 173, 127, 0.4);
   box-shadow: 0 12px 30px -12px rgba(20, 20, 20, 0.5);
@@ -669,11 +671,13 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .wa-float.is-visible { opacity: 1; transform: none; pointer-events: auto; }
 .wa-float:hover { background: var(--graphite); }
 .wa-float svg { width: 1.5rem; height: 1.5rem; }
-.has-mobile-bar .wa-float { bottom: 6rem; }
-@media (min-width: 1024px) { .has-mobile-bar .wa-float { bottom: 1.5rem; } .wa-float { right: 2rem; bottom: 2rem; } }
+.has-mobile-bar .wa-float { bottom: calc(6rem + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 1024px) {
+  .wa-float, .has-mobile-bar .wa-float { right: calc(2rem + env(safe-area-inset-right, 0px)); bottom: calc(2rem + env(safe-area-inset-bottom, 0px)); }
+}
 
 .toast {
-  position: fixed; left: 50%; bottom: 2rem; z-index: 120; padding: 0.875rem 1.5rem;
+  position: fixed; left: 50%; bottom: calc(2rem + env(safe-area-inset-bottom, 0px)); z-index: 120; padding: 0.875rem 1.5rem;
   background: var(--onyx); color: var(--ivory); font-size: var(--fs-small); border: 1px solid var(--line-dark);
   transform: translate(-50%, 20px); opacity: 0; transition: opacity var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);
 }

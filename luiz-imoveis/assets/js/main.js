@@ -432,7 +432,7 @@
         link.href = 'imoveis.html' + queryString(s);
         link.firstChild.nodeValue = (active && results.length > shown.length ? 'Ver todas as ' + results.length + ' residências ' : 'Ver toda a coleção ');
       }
-      if (syncUrl) history.replaceState(null, '', location.pathname + queryString(s));
+      if (syncUrl) { try { history.replaceState(null, '', location.pathname + queryString(s)); } catch (err) { /* ambiente sem histórico */ } }
 
       function paint() {
         grid.innerHTML = shown.length ? shown.map(cardHTML).join('') : emptyHTML();
@@ -739,6 +739,7 @@
           '<span class="form-success__icon">' + icon('check') + '</span>' +
           '<p class="h3">Obrigado, ' + esc(first) + '.</p>' +
           '<p>' + msg.summary + '</p>' +
+          (wa ? '' : '<p class="form-success__note">Protótipo: nesta versão, a solicitação não é enviada a ninguém.</p>') +
           '<div class="form-actions" style="margin-top:1rem;justify-content:flex-start">' +
             (wa ? '<a class="btn btn--gold" href="' + wa + '" target="_blank" rel="noopener">Continuar no WhatsApp ' + icon('whatsapp') + '</a>' : '') +
             '<button class="link link--light" type="button" data-form-again>Enviar outra solicitação</button>' +
@@ -858,9 +859,14 @@
     // Compartilhar
     $$('[data-share]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var data = { title: p.name, text: p.tagline, url: location.href };
-        if (navigator.share) navigator.share(data).catch(function () {});
-        else if (navigator.clipboard) navigator.clipboard.writeText(location.href).then(function () { toast('Link copiado'); });
+        var url = location.href;
+        function copy() {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(function () { toast('Link copiado'); }, function () { toast('Não foi possível copiar o link'); });
+          } else toast('Não foi possível copiar o link');
+        }
+        if (navigator.share) navigator.share({ title: p.name, text: p.tagline, url: url }).catch(function (err) { if (!err || err.name !== 'AbortError') copy(); });
+        else copy();
       });
     });
 
