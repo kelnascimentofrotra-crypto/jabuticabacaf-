@@ -26,7 +26,7 @@ Sem acesso ao Wikimedia neste ambiente, o vídeo não usa fotografias: as cenas 
 mapa com imagens de satélite da NASA, diagramas animados e paisagens ilustradas.
 Fonte: `video/capitulo.html`; para gerar de novo: `node tools/render_capitulo.js`.
 
-## Versão curta (2 min 55 s)
+## Versão curta (2 min 57 s)
 
 `video/capitulo-12-curto.mp4`: o mesmo vídeo, só com os pontos mais importantes de cada seção e
 num ritmo mais dinâmico (transições rápidas, batida por baixo da trilha). Tem cabeçalho, seções 01 a 07

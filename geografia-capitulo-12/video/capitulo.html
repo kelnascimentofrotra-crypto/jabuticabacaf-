@@ -127,6 +127,7 @@ canvas { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
 .map .band { position: absolute; left: 0; right: 0; background: rgba(255, 122, 26, .32); border-block: 2px solid var(--amber); mix-blend-mode: screen; }
 .map .gl { position: absolute; left: 0; right: 0; height: 1px; background: rgba(255, 241, 226, .35); }
 .map .gl span { position: absolute; left: 10px; top: -22px; font-family: var(--f-mono); font-size: 14px; color: rgba(255,241,226,.85); text-shadow: 0 1px 3px #000; }
+.map.lab .gl span { background: rgba(10, 6, 4, .65); padding: 1px 6px; border-radius: 4px; }
 .map .mp { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--cream); box-shadow: 0 0 0 3px rgba(0,0,0,.5), 0 0 14px var(--amber); }
 .map .mp span { position: absolute; left: 18px; top: -9px; font-size: 18px; font-weight: 700; white-space: nowrap; text-shadow: 0 1px 4px #000, 0 0 2px #000; }
 .bandlist { display: grid; gap: 10px; }
@@ -599,7 +600,7 @@ const SCENES_CURTO = [
       </div>
       <p class="src"${A(4.0, "fade")}>FONTE DAS FLORESTAS: FAO, FRA 2020</p></div>` },
   { id: "faixas", dur: 7, sec: "s01", coord: "0° → 90° DE LATITUDE", fx: "ember", custom: "latmap", p: { t0: 1.0, step: 0.7 },
-    html: `<div class="g2 wl" style="gap:60px"><div class="col"><div class="map" id="lmap"${A(0.2, "blur", 1.0)}><img data-tex alt=""></div>
+    html: `<div class="g2 wl" style="gap:60px"><div class="col"><div class="map lab" id="lmap"${A(0.2, "blur", 1.0)}><img data-tex alt=""></div>
         <p class="src"${A(0.8, "fade")}>IMAGEM: NASA BLUE MARBLE · FAIXAS APROXIMADAS</p></div>
       <div class="col" style="gap:22px"><h2 class="h2"${A(0.3)}>A vegetação muda em <span class="serif">faixas</span></h2>
         <p class="txt"${A(0.7)}>Clima, relevo e solo atuam juntos.</p>
@@ -613,7 +614,7 @@ const SCENES_CURTO = [
 
   { id: "trop", dur: 6, sec: "s02", coord: "3°06′ S · 60°01′ O — AMAZÔNIA", fx: "pollen", sfx: "impact",
     globe: [[0, gp({ x: 560, y: 560, r: 340, lon: 10, tilt: 0.1 })], [2.4, gp({ x: 560, y: 560, r: 375, lon: -42, tilt: 0.12 })], [6, gp({ x: 560, y: 560, r: 385, lon: -48, tilt: 0.12 })]],
-    pins: [["Amazônia", -62, -4, 1.8], ["Mata Atlântica", -43, -21, 2.1]],
+    pins: [["Amazônia", -62, -4, 1.8]],
     html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:820px;gap:30px">
       <span class="eye"${A(0.3, "fade")}>02 · Florestas equatoriais e tropicais</span>
       <h2 class="hx" data-split="letters" data-in="0.5" style="font-size:132px">Calor, chuva e vida</h2>
@@ -621,7 +622,7 @@ const SCENES_CURTO = [
         <div class="stat" data-sfx="tick"${A(2.0, "pop", 0.6)}><div class="n" style="font-size:96px">24 a 28 <small>°C</small></div><div class="l">temperatura média</div></div>
         <div class="stat" data-sfx="tick"${A(2.5, "pop", 0.6)}><div class="n" style="font-size:96px">+2.000 <small>mm</small></div><div class="l">de chuva por ano</div></div></div>
       <p class="src"${A(3.0, "fade")}>CLIMA EQUATORIAL · VALORES MÉDIOS APROXIMADOS</p></div>` },
-  { id: "estratos", dur: 6, sec: "s02", coord: "ESTRATIFICAÇÃO VERTICAL", fx: "pollen", custom: "strata", p: { t0: 0.9, step: 1.1 },
+  { id: "estratos", dur: 6.5, sec: "s02", coord: "ESTRATIFICAÇÃO VERTICAL", fx: "pollen", custom: "strata", p: { t0: 0.9, step: 1.2 },
     html: `<div class="g2 wl" style="gap:56px"><div class="diagram"${A(0.2, "blur", 1.0)}>${STRATA}</div>
       <div class="col" style="gap:18px"><span class="eye"${A(0.2, "fade")}>Os andares da floresta</span>
         <div class="lay" id="lay">${[["+45 m", "Emergentes", ""], ["25–40 m", "Dossel", ""], ["2–10 m", "Sub-bosque", ""], ["0 m", "Chão da floresta", "recebe só cerca de 2% da luz"]]
@@ -629,7 +630,7 @@ const SCENES_CURTO = [
   { id: "trop-carac", dur: 6, sec: "s02", coord: "LATIFOLIADA · PERENE · HETEROGÊNEA", fx: "pollen",
     html: `<div class="g2 wr"><div class="col"><h2 class="h1"${A(0.2)}>Como é essa <span class="serif">vegetação</span></h2></div>
       <div class="slabs">${[["Latifoliada", "folhas largas"], ["Perenifólia", "sempre verde"], ["Higrófila", "adaptada à umidade"], ["Heterogênea", "muitas espécies"]]
-        .map(([t, d], k) => `<div class="sl" data-sfx="tick"${A(0.6 + k * 0.4, "tilt", 0.8)}><b>0${k + 1}</b><strong>${t}</strong><small>${d}</small></div>`).join("")}</div></div>` },
+        .map(([t, d], k) => `<div class="sl" data-sfx="tick"${A(0.5 + k * 0.25, "tilt", 0.8)}><b>0${k + 1}</b><strong>${t}</strong><small>${d}</small></div>`).join("")}</div></div>` },
 
   { id: "taiga", dur: 5.5, sec: "s03", coord: "60° N · 100° L — SIBÉRIA", fx: "snow", sfx: "impact",
     globe: [[0, gp({ x: 580, y: 556, r: 345, lon: -40, tilt: 0.1, sx: -0.5, sy: 0.6, sz: 0.6 })], [2.4, gp({ x: 580, y: 556, r: 375, lon: 60, tilt: -0.95, sx: -0.5, sy: 0.6, sz: 0.6 })], [5.5, gp({ x: 580, y: 556, r: 385, lon: 70, tilt: -0.95, sx: -0.5, sy: 0.6, sz: 0.6 })]],
@@ -637,7 +638,7 @@ const SCENES_CURTO = [
     html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:780px">
       <span class="eye"${A(0.3, "fade")}>03 · Florestas de coníferas</span>
       <h2 class="hx" data-split="letters" data-in="0.6">Taiga</h2>
-      <p class="lead"${A(1.3, "blur", 1.0)}>Invernos longos. Só existe no Hemisfério Norte.</p>
+      <p class="lead"${A(1.3, "blur", 1.0)}>Invernos longos. Só existe no Hemisfério&nbsp;Norte.</p>
       <div class="row"><span class="chip" data-sfx="tick"${A(2.8, "pop", 0.6)}><i></i>Homogênea</span><span class="chip" data-sfx="tick"${A(3.1, "pop", 0.6)}><i></i>Madeira e celulose</span></div></div>` },
   { id: "conifera", dur: 7, sec: "s03", coord: "PICEA · PINUS · ABIES · LARIX", fx: "snow", custom: "tree", p: { t0: 1.0, step: 2.0, hs: [0, 1, 3] },
     html: `<div class="g2" style="grid-template-columns:560px 1fr;gap:80px"><div class="diagram" style="width:520px"${A(0.3, "blur", 1.0)}>${TREE}</div>
@@ -647,23 +648,23 @@ const SCENES_CURTO = [
 
   { id: "tundra", dur: 5, sec: "s04", coord: "68° N · 35° L — PENÍNSULA DE KOLA", fx: "wind", sfx: "impact",
     globe: [[0, gp({ x: 580, y: 556, r: 375, lon: 70, tilt: -0.95, sx: -0.3, sy: 0.7, sz: 0.5 })], [2.2, gp({ x: 580, y: 556, r: 375, lon: -10, tilt: -1.3, sx: -0.3, sy: 0.7, sz: 0.5 })], [5, gp({ x: 580, y: 556, r: 385, lon: -20, tilt: -1.3, sx: -0.3, sy: 0.7, sz: 0.5 })]],
-    pins: [["Groenlândia", -45, 72, 1.8], ["Península de Kola", 35, 68, 2.1], ["Ártico canadense", -100, 67, 2.4]],
+    pins: [["Litoral da Groenlândia", -51, 67, 1.8, "l"], ["Península de Kola", 35, 68, 2.1], ["Ártico canadense", -100, 67, 2.4]],
     html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:780px">
       <span class="eye"${A(0.3, "fade")}>04 · Tundra</span>
       <h2 class="hx" data-split="letters" data-in="0.5">Tundra</h2>
-      <p class="lead"${A(1.2, "fade")}>Um <span class="serif">deserto frio</span>: musgos, liquens e arbustos anões.</p></div>` },
+      <p class="lead"${A(1.2, "fade")}>Um <span class="serif">deserto frio</span>: musgos, liquens e arbustos&nbsp;anões.</p></div>` },
   { id: "permafrost", dur: 7.5, sec: "s04", coord: "SOLO CONGELADO PERMANENTEMENTE", fx: "wind", custom: "perma", p: { sw: 3.0 },
     html: `<div class="g2 wl"><div class="col"><div class="diagram" id="perma"${A(0.2, "fade", 1.0)}>${PERMA}</div>
         <div class="row"><span class="chip" id="pw"><i></i>Inverno</span><span class="chip" id="ps"><i></i>Verão</span></div></div>
       <div class="col" style="gap:24px"><h2 class="h1"${A(0.4)}>Permafrost</h2>
         <p class="txt"${A(0.8)}><b>Subsolo sempre congelado.</b></p>
         <p class="txt"${A(3.1)}>No verão, só a <b>camada ativa</b> descongela.</p>
-        <p class="txt" style="color:var(--ember)"${A(4.9, "pop", 0.6)}>Ao descongelar, libera <b style="color:var(--ember)">CO₂ e metano</b>.</p></div></div>` },
+        <p class="txt" style="color:var(--ember)"${A(4.9, "pop", 0.6)}>Se o permafrost descongelar, libera <b style="color:var(--ember)">CO₂ e metano</b>.</p></div></div>` },
 
   { id: "temperadas", dur: 6, sec: "s05", coord: "35° A 55° DE LATITUDE", fx: "leaf", sfx: "impact", custom: "seasons", p: { t0: 2.2, step: 0.8 },
     globe: [[0, gp({ x: 580, y: 556, r: 375, lon: -20, tilt: -1.3, sx: -0.5, sy: 0.5, sz: 0.7 })], [2.2, gp({ x: 580, y: 556, r: 375, lon: 15, tilt: -0.75, sx: -0.5, sy: 0.5, sz: 0.7 })], [6, gp({ x: 580, y: 556, r: 385, lon: 25, tilt: -0.75, sx: -0.5, sy: 0.5, sz: 0.7 })]],
     pins: [["Europa Ocidental", 2, 47, 1.9]],
-    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:820px">
+    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:790px">
       <span class="eye"${A(0.3, "fade")}>05 · Florestas temperadas</span>
       <h2 class="hx" data-split="words" data-in="0.5" style="font-size:128px">Quatro estações</h2>
       <p class="lead"${A(1.3)}>Verões quentes e invernos frios, muitas vezes com neve.</p>
@@ -676,12 +677,12 @@ const SCENES_CURTO = [
         <div style="display:none"><b id="pr">0%</b><i id="br"></i><p id="leafS"></p></div>
         <p class="txt"${A(1.5)}>Sem folhas, a árvore poupa <b>água e energia</b> no inverno.</p></div></div>` },
 
-  { id: "herb", dur: 5, sec: "s06", coord: "GRAMÍNEAS ↔ ARBUSTOS", fx: "dust", sfx: "impact", trans: "pan",
+  { id: "herb", dur: 6.5, sec: "s06", coord: "GRAMÍNEAS ↔ ARBUSTOS", fx: "dust", sfx: "impact", trans: "pan",
     html: `<div class="col" style="position:absolute;inset:0;gap:34px;align-content:center">
       <span class="eye"${A(0.3, "fade")}>06 · Formações arbustivas e herbáceas</span>
       <h2 class="h1" data-split="words" data-in="0.5">Quando a chuva <span class="acc">não basta</span> para uma floresta</h2>
-      <div class="row" style="gap:24px;flex-wrap:nowrap"><div class="panel" style="flex:1 1 0"${A(2.0, "right")}><span class="eye">Herbácea</span><p class="txt" style="margin-top:8px;font-size:32px;color:var(--cream)">não lenhosa, como os capins</p></div>
-        <div class="panel" style="flex:1 1 0"${A(2.3, "right")}><span class="eye">Arbustiva</span><p class="txt" style="margin-top:8px;font-size:32px;color:var(--cream)">lenhosa e baixa</p></div></div></div>` },
+      <div class="row" style="gap:24px;flex-wrap:nowrap"><div class="panel" style="flex:1 1 0"${A(1.5, "right")}><span class="eye">Herbácea</span><p class="txt" style="margin-top:8px;font-size:32px;color:var(--cream)">não lenhosa, como os capins</p></div>
+        <div class="panel" style="flex:1 1 0"${A(1.7, "right")}><span class="eye">Arbustiva</span><p class="txt" style="margin-top:8px;font-size:32px;color:var(--cream)">lenhosa e baixa</p></div></div></div>` },
   { id: "panorama", dur: 11, sec: "s06", coord: "SAVANA · PRADARIA · ESTEPE · DESERTO", fx: "dust", trans: "pan", custom: "pano", noPush: true, p: { t0: 0.5, hold: 2.3, move: 0.45 },
     html: `<div class="pano"><div class="strip" id="strip">${[
       ["savana", "Savanas", "Tropical", "Gramíneas altas e árvores espalhadas.", 50],
@@ -700,7 +701,7 @@ const SCENES_CURTO = [
       <h2 class="hx" data-split="words" data-in="0.4" style="font-size:140px;text-shadow:0 8px 40px rgba(0,0,0,.7)">Uma relação <span class="serif" style="text-transform:none">desigual?</span></h2>
       <p class="lead" style="max-width:40ch;color:var(--cream)"${A(1.5, "fade")}>Tiramos da natureza mais do que ela repõe.</p></div>` },
   { id: "desmat", dur: 5.5, sec: "s07", coord: "MUNDO · 2015 A 2020", fx: "fire", trans: "cut", sfx: "cut",
-    html: `<div class="col" style="position:absolute;inset:0;align-content:center;gap:26px"><span class="eye" style="color:var(--ember)"${A(0.1, "fade")}>Desmatamento</span>
+    html: `<div class="center" style="gap:26px"><span class="eye" style="color:var(--ember)"${A(0.1, "fade")}>Desmatamento</span>
       <div class="stat"${A(0.2, "pop", 0.6)}><div class="n" style="font-size:260px;color:var(--ember)"><span data-count="10" data-in="0.3" data-dur="1.2">10</span> <small style="font-size:.4em">milhões</small></div></div>
       <p class="lead" style="max-width:44ch;color:var(--cream)"${A(0.9)}>de hectares de floresta derrubados por ano</p>
       <p class="txt"${A(2.0)}>Principal causa: <b>agropecuária</b>.</p>
@@ -721,7 +722,7 @@ const SCENES_CURTO = [
     html: `<div class="center" style="gap:36px"><span class="eye"${A(0.3, "fade")}>Para refletir e debater</span>
       <h2 class="h1" data-split="words" data-in="0.6" style="max-width:20ch;font-size:96px">É possível desenvolver a sociedade <span class="serif">sem destruir</span> os sistemas naturais que sustentam a vida?</h2></div>` },
 
-  { id: "quiz-in", dur: 3, sec: "s08", coord: "2 PERGUNTAS · 3 SEGUNDOS", fx: "ember", sfx: "impact",
+  { id: "quiz-in", dur: 3, sec: "s08", coord: "2 PERGUNTAS · 3 SEGUNDOS CADA", fx: "ember", sfx: "impact",
     html: `<div class="center"><span class="eye"${A(0.2, "fade")}>08 · Exercitando o que aprendemos</span><h2 class="h1" data-split="words" data-in="0.4">Responda em voz alta!</h2></div>` },
   ...QUIZ_CURTO.map(([q, o, a], n) => ({ id: "q" + n, dur: 6, sec: "s08", coord: `PERGUNTA ${n + 1} DE ${QUIZ_CURTO.length}`, fx: "ember", custom: "quiz", qa: a, p: { c0: 1.4, n: 3 },
     html: `<div class="quiz"><div><span class="eye"${A(0.1, "fade")}>Pergunta ${String(n + 1).padStart(2, "0")}</span><p class="qq"${A(0.2, "rise", 0.6)} style="margin-top:18px;font-size:72px">${q}</p>
@@ -729,7 +730,7 @@ const SCENES_CURTO = [
       <div class="exp" style="font-size:32px" data-in="4.5" data-fx="rise"><b>Resposta: ${"AB"[a]}.</b></div></div>
       <svg class="ring" viewBox="0 0 260 260"${A(0.6, "pop", 0.6)}><circle class="bg" cx="130" cy="130" r="110"/><circle class="fg" cx="130" cy="130" r="110" stroke-dasharray="691.15" stroke-dashoffset="0"/><text x="130" y="163" text-anchor="middle">3</text></svg></div>` })),
 
-  { id: "final", dur: 12, sec: "fim", coord: "TERRA · PLANETA AZUL", fx: "ember", sfx: "final", custom: "final", trans: "fade", p: { sfx: [0.8, 4.2, 5.6] },
+  { id: "final", dur: 12, sec: "fim", coord: "TERRA · PLANETA AZUL", fx: "ember", sfx: "final", custom: "final", trans: "fade", p: { sfx: [0.8, 4.2, 5.6], frameOut: 3.4 },
     globe: [[0, gp({ x: 960, y: 1500, r: 760, lon: -40, tilt: 1.2, sx: 0.1, sy: 0.6, sz: -0.4, grade: 0.55 })], [2.6, gp({ x: 960, y: 560, r: 400, lon: -55, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, grade: 0.5 })], [4.6, gp({ x: 960, y: 560, r: 410, lon: -62, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, alpha: 0.3 })], [12, gp({ x: 960, y: 560, r: 430, lon: -75, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, alpha: 0.3 })]],
     html: `<div class="center" style="gap:40px"><p class="h1" data-split="words" data-in="0.8" style="max-width:22ch;font-size:84px;text-shadow:0 8px 50px rgba(0,0,0,.8)">Proteger a cobertura <span class="amb">verde</span> é preservar o equilíbrio da vida no planeta <span class="acc">azul</span>.</p>
       <div class="panel" style="display:grid;gap:12px;justify-items:center;padding:30px 50px"${A(4.2, "rise", 1.2)}>
@@ -1110,11 +1111,11 @@ function frame(T) {
   const g = globeAt(T);
   if (g) Globe.draw(g);
   const pins = $("#pins"); pins.innerHTML = "";
-  if (g && s.pins && g.alpha > 0.3) s.pins.forEach(([n, lo, la, tin]) => {
+  if (g && s.pins && g.alpha > 0.3) s.pins.forEach(([n, lo, la, tin, side]) => {
     const p = project(g, lo, la); if (p.z < 0.12) return;
     const k = easeOut(seg(t, tin, 0.6)) * clamp((p.z - 0.12) / 0.15) * Math.min(1, 1 - exitK);
     if (k <= 0) return;
-    const d = document.createElement("div"); d.className = "pin" + (p.x > 1300 ? " l" : ""); d.style.left = p.x + "px"; d.style.top = p.y + "px"; d.style.opacity = k; d.style.transform = `scale(${0.5 + 0.5 * k})`;
+    const d = document.createElement("div"); d.className = "pin" + (p.x > 1300 || side === "l" ? " l" : ""); d.style.left = p.x + "px"; d.style.top = p.y + "px"; d.style.opacity = k; d.style.transform = `scale(${0.5 + 0.5 * k})`;
     d.innerHTML = `<span>${n}</span>`; pins.appendChild(d);
   });
 
@@ -1124,7 +1125,7 @@ function frame(T) {
   $("#bSchool").style.transform = `translateY(${-14 * m}px) scale(${sc})`;
   $("#bProf").style.transform = `translateY(${-14 * m}px) scale(${sc})`;
   $("#bComp").style.transform = `translateY(${28 * m}px) scale(${sc})`;
-  const F = 1 - (s.id === "final" ? easeIO(seg(t, 6.5, 1.2)) : 0);
+  const F = 1 - (s.id === "final" ? easeIO(seg(t, (s.p && s.p.frameOut) ?? 6.5, 1.2)) : 0);
   ["#bSchool", "#bProf", "#bComp", "#ruleT", "#tk1", "#tk2", "#tk3", "#tk4"].forEach((id) => ($(id).style.opacity = F));
   $("#bAlunos").style.transform = `scale(${lerp(1, 0.4, m)})`; $("#bAlunos").style.opacity = 1 - easeOut(seg(T, 0.3, 1.2));
   $("#alLine").style.opacity = easeOut(seg(T, 1.4, 1)) * F; $("#alLine").style.transform = `translateY(${(1 - easeOut(seg(T, 1.4, 1))) * 14}px)`;
