@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Residência · Luiz, Curadoria Imobiliária</title>
+  <meta name="description" content="Residência de alto padrão apresentada por Luiz, Curadoria Imobiliária.">
+  <meta name="theme-color" content="#f6f3ee">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="has-mobile-bar">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header" data-header>
+    <div class="container site-header__inner">
+      <a class="brand" href="index.html" aria-label="Luiz, Curadoria Imobiliária — página inicial">
+        <span class="brand__name">Luiz</span>
+        <span class="brand__tag">Curadoria Imobiliária</span>
+      </a>
+      <nav class="primary-nav" aria-label="Principal">
+        <ul>
+          <li><a href="imoveis.html?categoria=venda">Venda</a></li>
+          <li><a href="imoveis.html?categoria=aluguel">Aluguel</a></li>
+          <li><a href="imoveis.html?categoria=lancamento">Lançamentos</a></li>
+          <li><a href="sobre.html">Sobre</a></li>
+          <li><a href="#contato" data-open-visit>Contato</a></li>
+        </ul>
+      </nav>
+      <div class="site-header__actions">
+        <a class="btn btn--ghost btn--sm" href="#contato" data-open-visit>Agendar visita</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menu" data-menu-toggle>
+          <span data-menu-label>Menu</span><span class="menu-toggle__icon" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="menu" id="menu" data-menu>
+    <nav aria-label="Menu">
+      <ul class="menu__list">
+        <li><a class="menu__link" style="--i:0" href="imoveis.html?categoria=venda"><small>01</small>Venda</a></li>
+        <li><a class="menu__link" style="--i:1" href="imoveis.html?categoria=aluguel"><small>02</small>Aluguel</a></li>
+        <li><a class="menu__link" style="--i:2" href="imoveis.html?categoria=lancamento"><small>03</small>Lançamentos</a></li>
+        <li><a class="menu__link" style="--i:3" href="sobre.html"><small>04</small>Sobre Luiz</a></li>
+        <li><a class="menu__link" style="--i:4" href="#contato" data-open-visit><small>05</small>Contato</a></li>
+      </ul>
+    </nav>
+    <div class="menu__foot">
+      <a class="btn btn--gold btn--block" href="#contato" data-open-visit>Agendar visita privativa</a>
+      <p>Atendimento pessoal · Seg. a sáb., 9h às 19h<br><a href="#" data-wa-link>WhatsApp</a> · <a href="#" data-email-link>E-mail</a></p>
+    </div>
+  </div>
+
+  <main id="conteudo" data-property-page>
+    <section class="pd-gallery" aria-label="Fotos da residência">
+      <div class="pd-gallery__track" data-pd-track></div>
+      <span class="pd-gallery__counter" data-pd-counter aria-hidden="true"></span>
+      <button class="btn btn--sm pd-gallery__all" type="button" data-pd-all><svg aria-hidden="true"><use href="#i-grid"/></svg><span>Ver as <span data-pd-total></span> fotos</span></button>
+    </section>
+
+    <div class="container">
+      <div class="pd-head">
+        <ol class="breadcrumb" aria-label="Você está em" data-pd-breadcrumb></ol>
+        <p class="eyebrow" data-pd-location></p>
+        <h1 class="h1" data-pd-name>Residência</h1>
+        <p class="lead" data-pd-tagline></p>
+      </div>
+      <dl class="pd-facts" data-pd-facts></dl>
+
+      <div class="pd-layout">
+        <div class="pd-main">
+          <section class="pd-block" aria-labelledby="pd-sobre">
+            <h2 class="eyebrow" id="pd-sobre">A residência</h2>
+            <div class="pd-description" data-pd-description></div>
+          </section>
+          <section class="pd-block" aria-labelledby="pd-diferenciais">
+            <h2 class="h3" id="pd-diferenciais">Diferenciais</h2>
+            <ul class="pd-highlights" data-pd-highlights></ul>
+          </section>
+          <section class="pd-block" aria-labelledby="pd-galeria">
+            <h2 class="h3" id="pd-galeria">Galeria</h2>
+            <div class="masonry" data-masonry data-property-masonry></div>
+          </section>
+          <section class="pd-block" aria-labelledby="pd-local">
+            <h2 class="h3" id="pd-local">Localização · <span data-pd-neighborhood></span></h2>
+            <p class="muted" data-pd-neighborhood-text></p>
+            <div class="map-placeholder" role="img" aria-label="Mapa ilustrativo com a região aproximada da residência"><span data-pd-map-label></span></div>
+            <p class="muted" style="font-size:.875rem">Por privacidade do proprietário, o endereço exato é informado no agendamento da visita.</p>
+          </section>
+        </div>
+
+        <aside class="pd-aside" aria-label="Valor e agendamento">
+          <div class="price-card">
+            <p class="eyebrow" data-pd-price-title></p>
+            <p class="price-card__value" data-pd-price></p>
+            <p class="price-card__note" data-pd-price-note></p>
+            <a class="btn btn--dark btn--block" href="#contato" data-open-visit>Agendar visita privativa <svg aria-hidden="true"><use href="#i-calendar"/></svg></a>
+            <a class="btn btn--ghost btn--block" href="#" data-wa-link>Falar pelo WhatsApp <svg aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
+            <hr class="rule">
+            <div class="price-card__agent">
+              <span class="price-card__avatar" aria-hidden="true">L</span>
+              <p><strong>Luiz</strong><br><span class="muted" data-creci>CRECI</span></p>
+            </div>
+            <button class="link" type="button" data-share>Compartilhar residência <svg aria-hidden="true"><use href="#i-share"/></svg></button>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <section class="section bg-linen" aria-labelledby="relacionados-title" data-hide-if-missing>
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow" data-reveal>Continue explorando</p>
+            <h2 class="h2" id="relacionados-title" data-reveal style="--d:.1s">Você também <em>pode se encantar.</em></h2>
+          </div>
+          <a class="link" href="imoveis.html" data-reveal style="--d:.2s">Ver toda a coleção <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+        <div class="property-grid" data-related-grid></div>
+      </div>
+    </section>
+
+    <!-- CONTATO ---------------------------------------------------------- -->
+    <section class="section on-dark" id="contato" aria-labelledby="contato-title" data-hide-if-missing>
+      <div class="container contact">
+        <div class="contact__intro">
+          <p class="eyebrow" data-reveal>Contato</p>
+          <h2 class="h2" id="contato-title" data-reveal style="--d:.1s">Uma visita privativa, <em>no seu tempo.</em></h2>
+          <p class="muted" data-reveal style="--d:.15s">Escolha a data e o período de sua preferência. Confirmo pessoalmente o horário e acompanho você durante toda a visita.</p>
+          <div class="contact-list" data-reveal style="--d:.2s">
+            <a href="#" data-wa-link><svg aria-hidden="true"><use href="#i-whatsapp"/></svg><span><small>WhatsApp</small>Conversar agora</span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a href="#" data-email-link><svg aria-hidden="true"><use href="#i-mail"/></svg><span><small>E-mail</small><span data-email-text></span></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+            <a href="#" data-phone-link><svg aria-hidden="true"><use href="#i-phone"/></svg><span><small>Telefone</small><span data-phone-text></span></span><svg class="arrow" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+          <p class="contact__privacy" data-reveal style="--d:.25s"><svg aria-hidden="true"><use href="#i-lock"/></svg>Suas informações são tratadas com confidencialidade e nunca compartilhadas com terceiros.</p>
+        </div>
+
+        <div class="form-card" data-reveal style="--d:.15s" data-contact>
+          <div class="tabs" role="tablist" aria-label="Tipo de contato">
+            <button type="button" role="tab" id="tab-visita" aria-controls="painel-visita" aria-selected="true" data-tab="visita">Agendar visita</button>
+            <button type="button" role="tab" id="tab-mensagem" aria-controls="painel-mensagem" aria-selected="false" tabindex="-1" data-tab="mensagem">Enviar mensagem</button>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="painel-visita" aria-labelledby="tab-visita">
+            <form class="form-grid" data-form="visita" novalidate>
+              <div class="field field--static span-2">
+                <select id="v-imovel" name="imovel" data-property-options></select>
+                <label for="v-imovel">Residência de interesse</label>
+                <span class="field__line"></span>
+              </div>
+              <div class="field field--static">
+                <input id="v-data" name="data" type="date" required data-min-today>
+                <label for="v-data">Data preferida</label>
+                <span class="field__line"></span>
+                <span class="field__error">Escolha uma data a partir de amanhã.</span>
+              </div>
+              <fieldset class="field-group chips">
+                <legend>Período</legend>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                  <label><input type="radio" name="periodo" value="Manhã" checked><span>Manhã</span></label>
+                  <label><input type="radio" name="periodo" value="Tarde"><span>Tarde</span></label>
+                  <label><input type="radio" name="periodo" value="Noite"><span>Noite</span></label>
+                </div>
+              </fieldset>
+              <div class="field">
+                <input id="v-nome" name="nome" type="text" placeholder=" " autocomplete="name" required>
+                <label for="v-nome">Nome completo</label>
+                <span class="field__line"></span>
+                <span class="field__error">Como podemos chamar você?</span>
+              </div>
+              <div class="field">
+                <input id="v-tel" name="telefone" type="tel" placeholder=" " autocomplete="tel" inputmode="tel" required data-phone>
+                <label for="v-tel">Telefone / WhatsApp</label>
+                <span class="field__line"></span>
+                <span class="field__error">Informe um telefone com DDD.</span>
+              </div>
+              <fieldset class="field-group chips span-2">
+                <legend>Prefiro ser contatado por</legend>
+                <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+                  <label><input type="radio" name="canal" value="WhatsApp" checked><span>WhatsApp</span></label>
+                  <label><input type="radio" name="canal" value="Ligação"><span>Ligação</span></label>
+                  <label><input type="radio" name="canal" value="E-mail"><span>E-mail</span></label>
+                </div>
+              </fieldset>
+              <label class="consent span-2">
+                <input type="checkbox" name="consentimento" required>
+                <span>Autorizo o contato e o uso dos meus dados para este atendimento, conforme a <a href="#">Política de Privacidade</a>.</span>
+              </label>
+              <div class="form-actions span-2">
+                <p>Visitas privativas, sempre acompanhadas por Luiz.</p>
+                <button class="btn btn--gold" type="submit">Solicitar visita <svg aria-hidden="true"><use href="#i-calendar"/></svg></button>
+              </div>
+            </form>
+          </div>
+
+          <div class="tab-panel" role="tabpanel" id="painel-mensagem" aria-labelledby="tab-mensagem" hidden>
+            <form class="form-grid" data-form="mensagem" novalidate>
+              <div class="field">
+                <input id="m-nome" name="nome" type="text" placeholder=" " autocomplete="name" required>
+                <label for="m-nome">Nome completo</label>
+                <span class="field__line"></span>
+                <span class="field__error">Como podemos chamar você?</span>
+              </div>
+              <div class="field">
+                <input id="m-email" name="email" type="email" placeholder=" " autocomplete="email" required>
+                <label for="m-email">E-mail</label>
+                <span class="field__line"></span>
+                <span class="field__error">Informe um e-mail válido.</span>
+              </div>
+              <div class="field span-2">
+                <input id="m-tel" name="telefone" type="tel" placeholder=" " autocomplete="tel" inputmode="tel" data-phone>
+                <label for="m-tel">Telefone (opcional)</label>
+                <span class="field__line"></span>
+              </div>
+              <div class="field span-2">
+                <textarea id="m-msg" name="mensagem" placeholder=" " rows="4" required></textarea>
+                <label for="m-msg">O que você procura?</label>
+                <span class="field__line"></span>
+                <span class="field__error">Conte um pouco sobre o que procura.</span>
+              </div>
+              <label class="consent span-2">
+                <input type="checkbox" name="consentimento" required>
+                <span>Autorizo o contato e o uso dos meus dados para este atendimento, conforme a <a href="#">Política de Privacidade</a>.</span>
+              </label>
+              <div class="form-actions span-2">
+                <p>Resposta em até duas horas úteis.</p>
+                <button class="btn btn--gold" type="submit">Enviar mensagem <svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="footer__brand" aria-hidden="true">Luiz</p>
+      <div class="footer__grid">
+        <div>
+          <h2>Curadoria imobiliária</h2>
+          <p>Residências de alto padrão em São Paulo, no litoral e no campo. Atendimento pessoal e confidencial.</p>
+        </div>
+        <div>
+          <h2>Coleção</h2>
+          <ul>
+            <li><a href="imoveis.html?categoria=venda">Venda</a></li>
+            <li><a href="imoveis.html?categoria=aluguel">Aluguel</a></li>
+            <li><a href="imoveis.html?categoria=lancamento">Lançamentos</a></li>
+            <li><a href="index.html#colecao-privada">Coleção privada</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Luiz</h2>
+          <ul>
+            <li><a href="sobre.html">Sobre</a></li>
+            <li><a href="sobre.html#metodo">Método</a></li>
+            <li><a href="#contato" data-open-visit>Agendar visita</a></li>
+          </ul>
+        </div>
+        <div>
+          <h2>Contato</h2>
+          <ul>
+            <li><a href="#" data-wa-link>WhatsApp</a></li>
+            <li><a href="#" data-email-link><span data-email-text></span></a></li>
+            <li><a href="#" data-instagram-link target="_blank" rel="noopener">Instagram</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__legal">
+        <p>© <span data-year>2026</span> Luiz · Curadoria Imobiliária · <span data-creci>CRECI</span></p>
+        <p>Protótipo conceitual — imóveis, valores e números ilustrativos.</p>
+      </div>
+    </div>
+  </footer>
+
+  <div class="mobile-bar" data-mobile-bar data-hide-if-missing>
+    <p class="mobile-bar__price"><small data-mobile-price-title></small><strong data-mobile-price></strong></p>
+    <a class="btn btn--dark btn--sm" href="#contato" data-open-visit>Agendar visita</a>
+  </div>
+  <a class="wa-float" href="#" data-wa-link data-wa-float aria-label="Conversar com Luiz pelo WhatsApp"><svg aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
+
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
