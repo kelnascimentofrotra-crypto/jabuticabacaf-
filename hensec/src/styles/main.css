@@ -425,17 +425,13 @@ em {
   border-radius: 6px;
 }
 
-.logo {
-  width: auto;
-  height: 38px;
-  overflow: visible;
-}
-
-.logo__tagline {
-  font-family: var(--sans);
-  font-size: 9.6px;
-  font-weight: 600;
-  fill: currentColor;
+.brand-name {
+  font-family: var(--serif);
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.005em;
+  white-space: nowrap;
 }
 
 .nav__toggle {
@@ -1237,8 +1233,8 @@ em {
     padding-left: 20px;
   }
 
-  .logo {
-    height: 44px;
+  .brand-name {
+    font-size: 24px;
   }
 
   .hero__title {
@@ -1391,8 +1387,8 @@ em {
     border-radius: max(10px, calc(var(--u) * 14));
   }
 
-  .logo {
-    height: max(38px, calc(var(--u) * 59));
+  .brand-name {
+    font-size: max(20px, calc(var(--u) * 30));
   }
 
   .nav__toggle {

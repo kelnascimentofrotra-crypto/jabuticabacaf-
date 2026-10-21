@@ -30,14 +30,14 @@ npm run preview   # serve o build em http://localhost:4173
 ## Estrutura
 
 ```
-index.html            marcação das 4 cenas, navbar, ícones (sprite SVG) e logo
+index.html            marcação das cenas, navbar e ícones (sprite SVG)
 src/config.js         número e mensagens de WhatsApp
 src/main.js           links de WhatsApp, menu mobile, seção ativa, reveal, parallax
 src/styles/main.css   tokens, layout mobile/tablet e cena desktop
 src/styles/shield.css seção The Shield Experience (#protecao)
 src/assets/img/       fotografias limpas (WebP)
 public/favicon.svg    escudo HENSEC
-tools/                scripts que geraram as imagens e a logo a partir do PDF
+tools/                scripts que geraram as imagens e o favicon a partir do PDF
 ```
 
 ## Como as imagens foram obtidas
@@ -54,8 +54,9 @@ clicáveis falsas, cada cena foi limpa:
   (`shield_shot()` em `tools/prepare_assets.py`). Para usar uma fotografia
   própria, substitua o arquivo e ajuste as coordenadas da camada de vigilância
   no `index.html` (elas estão em pixels da imagem, viewBox 1422 × 921).
-- `tools/trace_logo.py` vetoriza o escudo e a palavra "HENSEC" da navbar; a
-  linha "MONITORAMENTO 24HS" é texto SVG.
+- A navbar mostra o nome "Helder Segurança" em texto (classe `.brand-name`),
+  sem logotipo. O favicon ainda é o escudo vetorizado da referência por
+  `tools/trace_logo.py`.
 
 Limitações honestas:
 
@@ -64,11 +65,10 @@ Limitações honestas:
 - As áreas reconstruídas ficam sob degradês escuros, mas são reconstrução,
   não a fotografia original. Na cena Soluções, a região atrás dos cards é
   apenas textura ambiente.
-- A logo é uma vetorização da referência, não o arquivo oficial.
+- O favicon é uma vetorização da referência, não um arquivo oficial.
 
-Se existirem as fotos originais sem texto ou a logo vetorial oficial, basta
-substituir os arquivos em `src/assets/img/` (mesmos nomes) e o `<path>` da logo
-no `index.html`.
+Se existirem as fotos originais sem texto, basta substituir os arquivos em
+`src/assets/img/` (mesmos nomes).
 
 ## Decisões de layout
 
