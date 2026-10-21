@@ -6,7 +6,9 @@
      node tools/render_capitulo.js                      → video/capitulo-12-completo.mp4
      node tools/render_capitulo.js --workers 3          → renderizadores em paralelo
      node tools/render_capitulo.js --stills mid         → quadros de teste de cada cena
-     node tools/render_capitulo.js --stills 12.5,40     → quadros de teste nesses instantes */
+     node tools/render_capitulo.js --stills 12.5,40     → quadros de teste nesses instantes
+   A renderização é feita em blocos de 300 quadros numa pasta de trabalho (--work). Se o processo
+   for interrompido, rode o mesmo comando de novo: os blocos prontos são reaproveitados. */
 const path = require("path");
 const fs = require("fs");
 const http = require("http");
@@ -21,7 +23,8 @@ const OUT = path.resolve(arg("--out", path.join(ROOT, "video", "capitulo-12-comp
 const HEADER = path.join(ROOT, "video", "cabecalho-capitulo-12.mp4");
 const WORKERS = Number(arg("--workers", 3));
 const STILLS = arg("--stills", null);
-const TMP = fs.mkdtempSync(path.join(os.tmpdir(), "cap12-"));
+const WORK = path.resolve(arg("--work", path.join(os.tmpdir(), "cap12-trabalho")));
+const CHUNK = Number(arg("--chunk", 300));
 
 const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".jpg": "image/jpeg", ".png": "image/png" };
 const server = http.createServer((req, res) => {
@@ -69,41 +72,55 @@ function wavHeader(bytes, sr, ch) {
     await main.browser.close(); server.close(); console.log("quadros em", dir); return;
   }
 
-  // 1) trilha completa
-  const info = await main.page.evaluate(() => window.renderAudio());
-  const parts = [];
-  for (let i = 0; i * info.chunk < info.bytes; i++) parts.push(Buffer.from(await main.page.evaluate(([k, n]) => window.audioChunk(k, n), [i, info.chunk]), "base64"));
-  const pcm = Buffer.concat(parts);
-  const wav = path.join(TMP, "trilha.wav");
-  fs.writeFileSync(wav, Buffer.concat([wavHeader(pcm.length, info.sampleRate, info.channels), pcm]));
+  fs.mkdirSync(WORK, { recursive: true });
+  // 1) trilha completa (reaproveitada se já existir)
+  const wav = path.join(WORK, "trilha.wav");
+  if (!fs.existsSync(wav + ".done")) {
+    const info = await main.page.evaluate(() => window.renderAudio());
+    const parts = [];
+    for (let i = 0; i * info.chunk < info.bytes; i++) parts.push(Buffer.from(await main.page.evaluate(([k, n]) => window.audioChunk(k, n), [i, info.chunk]), "base64"));
+    const pcm = Buffer.concat(parts);
+    fs.writeFileSync(wav, Buffer.concat([wavHeader(pcm.length, info.sampleRate, info.channels), pcm]));
+    fs.writeFileSync(wav + ".done", "");
+    console.log("trilha:", (pcm.length / 1048576).toFixed(1), "MB");
+  }
   await main.browser.close();
-  console.log("trilha:", (pcm.length / 1048576).toFixed(1), "MB");
 
-  // 2) quadros em paralelo
-  const frames = Math.round(V.DUR * V.FPS), per = Math.ceil(frames / WORKERS), t0 = Date.now();
+  // 2) quadros em blocos, com vários renderizadores em paralelo
+  const frames = Math.round(V.DUR * V.FPS), nChunks = Math.ceil(frames / CHUNK), t0 = Date.now();
+  const chunkFile = (i) => path.join(WORK, `bloco${String(i).padStart(3, "0")}.mp4`);
+  const queue = Array.from({ length: nChunks }, (_, i) => i).filter((i) => !fs.existsSync(chunkFile(i) + ".done"));
+  console.log(`blocos: ${nChunks - queue.length}/${nChunks} já prontos`);
   let done = 0;
-  const segs = await Promise.all(Array.from({ length: WORKERS }, async (_, w) => {
-    const a = w * per, b = Math.min(frames, a + per), seg = path.join(TMP, `seg${w}.mp4`);
+  await Promise.all(Array.from({ length: Math.min(WORKERS, queue.length) }, async () => {
     const { browser, page } = await openPage(port);
-    const ff = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(V.FPS), "-c:v", "png", "-i", "-",
-      "-c:v", "libx264", "-preset", "veryfast", "-crf", "14", "-pix_fmt", "yuv420p", "-r", String(V.FPS), seg], { stdio: ["pipe", "inherit", "inherit"] });
-    for (let f = a; f < b; f++) {
-      await page.evaluate((t) => window.renderFrame(t), f / V.FPS);
-      const png = await page.screenshot({ type: "png" });
-      if (!ff.stdin.write(png)) await new Promise((r) => ff.stdin.once("drain", r));
-      if (++done % 150 === 0) console.log(`quadros ${done}/${frames} (${((Date.now() - t0) / 60000).toFixed(1)} min)`);
+    while (queue.length) {
+      const i = queue.shift(), a = i * CHUNK, b = Math.min(frames, a + CHUNK), out = chunkFile(i);
+      const ff = spawn("ffmpeg", ["-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(V.FPS), "-c:v", "png", "-i", "-",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "14", "-pix_fmt", "yuv420p", "-r", String(V.FPS), out], { stdio: ["pipe", "inherit", "inherit"] });
+      const closed = new Promise((r) => ff.on("close", r));
+      for (let f = a; f < b; f++) {
+        await page.evaluate((t) => window.renderFrame(t), f / V.FPS);
+        const png = await page.screenshot({ type: "png" });
+        if (!ff.stdin.write(png)) await new Promise((r) => ff.stdin.once("drain", r));
+      }
+      ff.stdin.end();
+      if ((await closed) === 0) fs.writeFileSync(out + ".done", "");
+      done++;
+      console.log(`bloco ${i + 1}/${nChunks} pronto (${done} nesta execução, ${((Date.now() - t0) / 60000).toFixed(1)} min)`);
     }
-    ff.stdin.end(); await new Promise((r) => ff.on("close", r)); await browser.close();
-    return seg;
+    await browser.close();
   }));
   server.close();
 
   // 3) cabeçalho + capítulo + trilha
-  const inputs = [HEADER, ...segs], n = inputs.length;
-  const filter = inputs.map((_, i) => `[${i}:v]`).join("") + `concat=n=${n}:v=1:a=0[v]`;
-  await run("ffmpeg", ["-y", "-loglevel", "error", ...inputs.flatMap((f) => ["-i", f]), "-i", wav, "-filter_complex", filter,
-    "-map", "[v]", "-map", `${n}:a`, "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-r", String(V.FPS),
+  const list = path.join(WORK, "blocos.txt");
+  fs.writeFileSync(list, Array.from({ length: nChunks }, (_, i) => `file '${chunkFile(i)}'`).join("\n"));
+  const cap = path.join(WORK, "capitulo.mp4");
+  await run("ffmpeg", ["-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", list, "-c", "copy", cap]);
+  await run("ffmpeg", ["-y", "-loglevel", "error", "-i", HEADER, "-i", cap, "-i", wav, "-filter_complex", "[0:v][1:v]concat=n=2:v=1:a=0[v]",
+    "-map", "[v]", "-map", "2:a", "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-r", String(V.FPS),
     "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", OUT]);
-  fs.rmSync(TMP, { recursive: true, force: true });
-  console.log("vídeo:", OUT, `(${((Date.now() - t0) / 60000).toFixed(1)} min)`);
+  if (!process.argv.includes("--keep")) fs.rmSync(WORK, { recursive: true, force: true });
+  console.log("vídeo:", OUT);
 })().catch((e) => { console.error(e); process.exit(1); });
