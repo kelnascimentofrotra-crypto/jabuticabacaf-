@@ -361,8 +361,8 @@ function renderFrame(t) {
 /* ---------- trilha sonora (renderizada offline) ---------- */
 async function renderAudio() {
   const SR = 48000, ctx = new OfflineAudioContext(2, Math.ceil(SR * DUR), SR);
-  const master = ctx.createGain(); master.gain.setValueAtTime(0.9, 0); master.gain.setValueAtTime(0.9, T_END); master.gain.linearRampToValueAtTime(0.0001, DUR);
-  const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -14; comp.ratio.value = 4; comp.knee.value = 16;
+  const master = ctx.createGain(); master.gain.setValueAtTime(0.6, 0); master.gain.setValueAtTime(0.6, T_END); master.gain.linearRampToValueAtTime(0.0001, DUR);
+  const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 6; comp.knee.value = 12; comp.attack.value = 0.003; comp.release.value = 0.25;
   master.connect(comp).connect(ctx.destination);
   const rev = ctx.createConvolver(), irLen = Math.floor(SR * 3.4), ir = ctx.createBuffer(2, irLen, SR);
   let seed = 3; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;

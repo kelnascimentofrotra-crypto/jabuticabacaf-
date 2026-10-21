@@ -3,7 +3,8 @@
    Requer: Node, Playwright (Chromium) e ffmpeg.
    Uso: node tools/render_video.js [saida.mp4] [--preview N]
    --preview N  renderiza só os N primeiros segundos (teste rápido).
-   --stills a,b,c  salva apenas quadros PNG nesses instantes (em segundos) ao lado da saída. */
+   --stills a,b,c  salva apenas quadros PNG nesses instantes (em segundos) ao lado da saída.
+   --audio-only  refaz só a trilha e recodifica o MP4 existente com ela. */
 const path = require("path");
 const fs = require("fs");
 const http = require("http");
@@ -42,6 +43,14 @@ const server = http.createServer((req, res) => {
       await page.screenshot({ path: path.join(dir, "t" + t.toFixed(1).padStart(4, "0") + ".png") });
     }
     await browser.close(); server.close(); console.log("quadros em", dir); return;
+  }
+  if (process.argv.includes("--audio-only")) {
+    const wav = OUT.replace(/\.mp4$/, ".wav"), tmp = OUT.replace(/\.mp4$/, ".tmp.mp4");
+    fs.writeFileSync(wav, Buffer.from(await page.evaluate(() => window.renderAudio()), "base64"));
+    await new Promise((r, j) => spawn("ffmpeg", ["-y", "-loglevel", "error", "-i", OUT, "-i", wav, "-map", "0:v", "-map", "1:a", "-c:v", "libx264", "-preset", "slow", "-crf", "20",
+      "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", tmp], { stdio: "inherit" }).on("close", (c) => (c ? j(new Error("ffmpeg " + c)) : r())));
+    fs.renameSync(tmp, OUT); fs.unlinkSync(wav);
+    await browser.close(); server.close(); console.log("vídeo:", OUT); return;
   }
   const dur = LIMIT ? Math.min(LIMIT, DUR) : DUR;
   const frames = Math.round(dur * FPS);
