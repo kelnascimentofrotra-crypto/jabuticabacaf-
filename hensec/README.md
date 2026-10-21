@@ -1,8 +1,10 @@
-# HENSEC · Monitoramento 24h
+# Helder Segurança · Monitoramento 24h
 
-Site institucional em quatro cenas (Hero → Soluções → Sobre a Hensec → Contato),
-construído a partir do documento `HENSEC_Referencia_Desktop_Cinematografica.pdf`,
-mais a seção **The Shield Experience** entre a Hero e Soluções.
+Site institucional em cinco seções (Início → Proteção → Soluções → Sobre a
+Helder Segurança → Contato). O layout veio do documento de referência
+`HENSEC_Referencia_Desktop_Cinematografica.pdf` (feito para a marca anterior,
+HENSEC); todo o conteúdo, as fotos e o favicon já usam o nome Helder Segurança.
+A pasta do projeto continua se chamando `hensec/`.
 
 **Stack:** Vite + HTML/CSS/JS sem framework. O conteúdo é estático, então HTML
 semântico com aprimoramento progressivo é o caminho mais enxuto: todo texto,
@@ -36,8 +38,8 @@ src/main.js           links de WhatsApp, menu mobile, seção ativa, reveal, par
 src/styles/main.css   tokens, layout mobile/tablet e cena desktop
 src/styles/shield.css seção The Shield Experience (#protecao)
 src/assets/img/       fotografias limpas (WebP)
-public/favicon.svg    escudo HENSEC
-tools/                scripts que geraram as imagens e o favicon a partir do PDF
+public/favicon.svg    monograma "HS"
+tools/                scripts que geram as imagens (a partir do PDF) e o favicon
 ```
 
 ## Como as imagens foram obtidas
@@ -49,14 +51,18 @@ clicáveis falsas, cada cena foi limpa:
 - `tools/prepare_assets.py` mascara toda a interface (detecção automática dos
   traços de texto + formas de botões, cards e navbar) e reconstrói as áreas com
   o modelo de inpainting **LaMa**; também recorta as fotos dos três cards.
+- O mesmo script troca a marca antiga impressa nas fotos: o escudo + "HENSEC"
+  do teclado de alarme e do leitor de acesso e o contato do WhatsApp no
+  celular viram "Helder Segurança" (desenhado com a fonte do site, na mesma
+  posição, cor e inclinação), e o emblema da manga do técnico é removido.
 - A foto de The Shield Experience (`protecao.webp`) é um contraplano da hero:
   recorte mais fechado da mesma casa, espelhado e com tratamento mais frio
   (`shield_shot()` em `tools/prepare_assets.py`). Para usar uma fotografia
   própria, substitua o arquivo e ajuste as coordenadas da camada de vigilância
   no `index.html` (elas estão em pixels da imagem, viewBox 1422 × 921).
 - A navbar mostra o nome "Helder Segurança" em texto (classe `.brand-name`),
-  sem logotipo. O favicon ainda é o escudo vetorizado da referência por
-  `tools/trace_logo.py`.
+  sem logotipo. O favicon é um monograma "HS" na fonte dos títulos, gerado por
+  `tools/make_favicon.py`.
 
 Limitações honestas:
 
@@ -65,7 +71,6 @@ Limitações honestas:
 - As áreas reconstruídas ficam sob degradês escuros, mas são reconstrução,
   não a fotografia original. Na cena Soluções, a região atrás dos cards é
   apenas textura ambiente.
-- O favicon é uma vetorização da referência, não um arquivo oficial.
 
 Se existirem as fotos originais sem texto, basta substituir os arquivos em
 `src/assets/img/` (mesmos nomes).
@@ -75,7 +80,7 @@ Se existirem as fotos originais sem texto, basta substituir os arquivos em
 - **The Shield Experience** (`#protecao`): seção de 750–950 px no desktop, com
   a coluna de texto alinhada à da seção Sobre. A camada de vigilância (moldura,
   ponto da câmera, etiquetas e varredura) é só ilustrativa: não há gravação,
-  transmissão nem sistema conectado. No menu, a seção conta como "Início".
+  transmissão nem sistema conectado. No menu, aparece como "Proteção".
 
 - **Desktop** (≥ 1024 px e paisagem): cada cena ocupa `100svh` e todas as
   medidas derivam de `--u = min(100vw / 1672, 100svh / 941)`, ou seja, 1u = 1 px
@@ -83,6 +88,8 @@ Se existirem as fotos originais sem texto, basta substituir os arquivos em
   interna. Em telas mais largas que 16:9 a coluna de conteúdo mantém a
   proporção da referência e a foto segue de ponta a ponta; em alturas muito
   baixas a seção cresce e a página rola normalmente.
+- **Menu:** a lista completa na barra aparece a partir de 1280 px de largura;
+  abaixo disso (inclusive no desktop de 1024–1279 px) o menu abre pelo botão.
 - **Mobile e tablet:** cenas recompostas (foto em destaque + texto em fluxo),
   menu hambúrguer, cards em coluna (horizontais no tablet) e a foto do celular
   após o CTA de Contato.

@@ -1,7 +1,7 @@
 /**
- * Configuração central de contato da HENSEC.
+ * Configuração central de contato da Helder Segurança.
  *
- * TODO(HENSEC): informar o número oficial de WhatsApp.
+ * TODO: informar o número oficial de WhatsApp da Helder Segurança.
  * Formato internacional, apenas dígitos: 55 + DDD + número.
  * Exemplo de formato (NÃO é o número real): '5511900000000'.
  *
@@ -15,13 +15,13 @@ export const WHATSAPP_NUMBER = '';
  * `data-wa` de cada link no index.html.
  */
 export const WHATSAPP_MESSAGES = {
-  geral: 'Olá, Hensec! Vim pelo site e gostaria de conversar sobre segurança.',
+  geral: 'Olá, Helder Segurança! Vim pelo site e gostaria de conversar sobre segurança.',
   seguranca: 'Olá! Quero mais segurança para meu imóvel.',
-  cameras: 'Olá, Hensec! Gostaria de conhecer a solução de câmeras de segurança.',
-  alarmes: 'Olá, Hensec! Gostaria de conhecer a solução de sistemas de alarme.',
-  acesso: 'Olá, Hensec! Gostaria de conhecer a solução de controle de acesso.',
-  escolha: 'Olá, Hensec! Quero ajuda para entender qual solução faz sentido para mim.',
-  conversar: 'Olá, Hensec! Gostaria de conversar sobre a segurança do meu espaço.',
-  chamar: 'Olá, Hensec! Quero contar o que preciso proteger.',
-  duvidas: 'Olá, Hensec! Tenho algumas dúvidas sobre as soluções de vocês.',
+  cameras: 'Olá, Helder Segurança! Gostaria de conhecer a solução de câmeras de segurança.',
+  alarmes: 'Olá, Helder Segurança! Gostaria de conhecer a solução de sistemas de alarme.',
+  acesso: 'Olá, Helder Segurança! Gostaria de conhecer a solução de controle de acesso.',
+  escolha: 'Olá, Helder Segurança! Quero ajuda para entender qual solução faz sentido para mim.',
+  conversar: 'Olá, Helder Segurança! Gostaria de conversar sobre a segurança do meu espaço.',
+  chamar: 'Olá, Helder Segurança! Quero contar o que preciso proteger.',
+  duvidas: 'Olá, Helder Segurança! Tenho algumas dúvidas sobre as soluções de vocês.',
 };

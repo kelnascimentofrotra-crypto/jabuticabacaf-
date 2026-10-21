@@ -1,7 +1,8 @@
-# Somente para regenerar as imagens/logo a partir do PDF (não é dependência do site).
+# Somente para regenerar as imagens (a partir do PDF) e o favicon (não é dependência do site).
 # Também requer o utilitário `pdfimages` (poppler-utils).
 numpy
 pillow
 scipy
 torch
-potracer
+fonttools
+brotli

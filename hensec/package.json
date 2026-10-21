@@ -1,8 +1,8 @@
 {
-  "name": "hensec-site",
+  "name": "helder-seguranca-site",
   "private": true,
   "version": "1.0.0",
-  "description": "Site institucional HENSEC — Monitoramento 24h",
+  "description": "Site institucional Helder Segurança — Monitoramento 24h",
   "type": "module",
   "scripts": {
     "dev": "vite",

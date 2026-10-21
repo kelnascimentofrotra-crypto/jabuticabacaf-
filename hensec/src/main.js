@@ -5,6 +5,7 @@ import { WHATSAPP_NUMBER, WHATSAPP_MESSAGES } from './config.js';
 const root = document.documentElement;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const desktopScene = window.matchMedia('(min-width: 1024px) and (min-aspect-ratio: 1/1)');
+const desktopNav = window.matchMedia('(min-width: 1280px) and (min-aspect-ratio: 1/1)');
 
 /* --------------------------------------------------------------------------
    Links de WhatsApp: cada [data-wa] recebe a mensagem da sua chave.
@@ -24,7 +25,7 @@ document.querySelectorAll('[data-wa]').forEach((link) => {
 });
 
 if (import.meta.env.DEV && !WHATSAPP_NUMBER) {
-  console.warn('[HENSEC] Defina WHATSAPP_NUMBER em src/config.js para direcionar os botões ao número oficial.');
+  console.warn('[Helder Segurança] Defina WHATSAPP_NUMBER em src/config.js para direcionar os botões ao número oficial.');
 }
 
 /* --------------------------------------------------------------------------
@@ -58,11 +59,10 @@ document.addEventListener('click', (event) => {
   if (nav.classList.contains('is-open') && !nav.contains(event.target)) setMenu(false);
 });
 
-desktopScene.addEventListener('change', () => setMenu(false));
+desktopNav.addEventListener('change', () => setMenu(false));
 
 /* --------------------------------------------------------------------------
    Seção ativa: a que cruza o centro da viewport define o item do menu.
-   Seções sem item próprio apontam para um com data-nav-key.
    -------------------------------------------------------------------------- */
 
 const sections = [...document.querySelectorAll('[data-section]')];
@@ -84,7 +84,7 @@ setActive(sections[0].id);
 const activeObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) setActive(entry.target.dataset.navKey || entry.target.id);
+      if (entry.isIntersecting) setActive(entry.target.id);
     });
   },
   { rootMargin: '-50% 0px -50% 0px', threshold: 0 },

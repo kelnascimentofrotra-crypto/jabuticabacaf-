@@ -1069,17 +1069,26 @@ em {
 }
 
 .wa-cta__logo {
+  flex: none;
   font-size: 26px;
 }
 
+/* em telas estreitas o nome desce inteiro para a segunda linha */
 .wa-cta__label {
-  font-size: clamp(16px, 4.8vw, 20px);
+  min-width: 0;
+  padding-block: 8px;
+  font-size: clamp(16px, 4.6vw, 20px);
   font-weight: 700;
+  line-height: 1.15;
   letter-spacing: -0.01em;
+}
+
+.nowrap {
   white-space: nowrap;
 }
 
 .wa-cta__disc {
+  flex: none;
   display: grid;
   place-items: center;
   width: 46px;
@@ -1377,87 +1386,6 @@ em {
     top: calc(var(--u) * 32);
     left: calc(var(--gutter) + var(--u) * 75);
     right: calc(var(--gutter) + var(--u) * 75);
-  }
-
-  .nav__bar {
-    flex-wrap: nowrap;
-    height: calc(var(--u) * 90);
-    min-height: 58px;
-    padding: 0 calc(var(--u) * 25) 0 calc(var(--u) * 37);
-    border-radius: max(10px, calc(var(--u) * 14));
-  }
-
-  .brand-name {
-    font-size: max(20px, calc(var(--u) * 30));
-  }
-
-  .nav__toggle {
-    display: none;
-  }
-
-  .nav__menu,
-  .nav.is-open .nav__menu {
-    display: flex;
-    flex-direction: row;
-    flex-basis: auto;
-    align-items: center;
-    gap: 0;
-    margin-left: auto;
-    padding: 0;
-    animation: none;
-  }
-
-  .nav__links {
-    flex-direction: row;
-    gap: calc(var(--u) * 65);
-  }
-
-  .nav__link {
-    min-height: 0;
-    padding: calc(var(--u) * 10) 0;
-    border: 0;
-    font-size: max(14px, calc(var(--u) * 17));
-    line-height: 1.2;
-  }
-
-  .nav__link[aria-current='true'] {
-    color: var(--text);
-  }
-
-  .nav__link::after {
-    content: '';
-    position: absolute;
-    left: calc(var(--u) * -8);
-    right: calc(var(--u) * -8);
-    bottom: calc(var(--u) * -8);
-    height: max(2px, calc(var(--u) * 3));
-    border-radius: 3px;
-    background: linear-gradient(90deg, var(--gold-deep), var(--gold-light) 50%, var(--gold-deep));
-    box-shadow: 0 0 10px rgba(229, 184, 98, 0.55);
-    transform: scaleX(0);
-    transition: transform 0.45s var(--ease-out);
-  }
-
-  .nav__link[aria-current='true']::after {
-    transform: scaleX(1);
-  }
-
-  .nav__divider {
-    display: block;
-    width: 1px;
-    height: calc(var(--u) * 46);
-    margin: 0 calc(var(--u) * 38) 0 calc(var(--u) * 58);
-    background: var(--line-gold);
-  }
-
-  .nav__cta {
-    align-self: center;
-    min-height: 36px;
-    height: calc(var(--u) * 47);
-    padding: 0 calc(var(--u) * 24) 0 calc(var(--u) * 29);
-    gap: calc(var(--u) * 9);
-    border-radius: max(7px, calc(var(--u) * 8));
-    font-size: max(13px, calc(var(--u) * 16.2));
   }
 
   /* --- Cena --- */
@@ -1959,8 +1887,8 @@ em {
     min-height: 52px;
     height: calc(var(--u) * 76);
     margin-top: calc(var(--u) * 22);
-    padding: 0 calc(var(--u) * 10) 0 calc(var(--u) * 36);
-    gap: calc(var(--u) * 28);
+    padding: 0 calc(var(--u) * 10) 0 calc(var(--u) * 32);
+    gap: calc(var(--u) * 20);
   }
 
   .wa-cta__logo {
@@ -1968,7 +1896,9 @@ em {
   }
 
   .wa-cta__label {
-    font-size: max(18px, calc(var(--u) * 29));
+    padding-block: 0;
+    font-size: max(16px, calc(var(--u) * 24));
+    white-space: nowrap;
   }
 
   .wa-cta__disc {
@@ -2047,6 +1977,94 @@ em {
     width: max(50px, calc(var(--u) * 67));
     height: max(50px, calc(var(--u) * 67));
     font-size: max(24px, calc(var(--u) * 32));
+  }
+}
+
+/* ==========================================================================
+   Menu completo na barra: só a partir de 1280px, onde os cinco itens e o
+   botão cabem com folga. Entre 1024 e 1279px o desktop usa o menu de botão.
+   ========================================================================== */
+
+@media (min-width: 1280px) and (min-aspect-ratio: 1/1) {
+  .nav__bar {
+    flex-wrap: nowrap;
+    height: calc(var(--u) * 90);
+    min-height: 58px;
+    padding: 0 calc(var(--u) * 25) 0 calc(var(--u) * 37);
+    border-radius: max(10px, calc(var(--u) * 14));
+  }
+
+  .brand-name {
+    font-size: max(20px, calc(var(--u) * 30));
+  }
+
+  .nav__toggle {
+    display: none;
+  }
+
+  .nav__menu,
+  .nav.is-open .nav__menu {
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+    align-items: center;
+    gap: 0;
+    margin-left: auto;
+    padding: 0;
+    animation: none;
+  }
+
+  .nav__links {
+    flex-direction: row;
+    gap: calc(var(--u) * 65);
+  }
+
+  .nav__link {
+    min-height: 0;
+    padding: calc(var(--u) * 10) 0;
+    border: 0;
+    font-size: max(14px, calc(var(--u) * 17));
+    line-height: 1.2;
+  }
+
+  .nav__link[aria-current='true'] {
+    color: var(--text);
+  }
+
+  .nav__link::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--u) * -8);
+    right: calc(var(--u) * -8);
+    bottom: calc(var(--u) * -8);
+    height: max(2px, calc(var(--u) * 3));
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--gold-deep), var(--gold-light) 50%, var(--gold-deep));
+    box-shadow: 0 0 10px rgba(229, 184, 98, 0.55);
+    transform: scaleX(0);
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .nav__link[aria-current='true']::after {
+    transform: scaleX(1);
+  }
+
+  .nav__divider {
+    display: block;
+    width: 1px;
+    height: calc(var(--u) * 46);
+    margin: 0 calc(var(--u) * 38) 0 calc(var(--u) * 58);
+    background: var(--line-gold);
+  }
+
+  .nav__cta {
+    align-self: center;
+    min-height: 36px;
+    height: calc(var(--u) * 47);
+    padding: 0 calc(var(--u) * 24) 0 calc(var(--u) * 29);
+    gap: calc(var(--u) * 9);
+    border-radius: max(7px, calc(var(--u) * 8));
+    font-size: max(13px, calc(var(--u) * 16.2));
   }
 }
 
