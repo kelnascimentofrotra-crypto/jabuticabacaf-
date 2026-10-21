@@ -43,6 +43,19 @@
         <path d="M12 2.8 19.5 5.6v5.6c0 4.6-3.1 8.4-7.5 10-4.4-1.6-7.5-5.4-7.5-10V5.6Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
         <path d="m8.6 12.1 2.4 2.4 4.6-4.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
       </symbol>
+      <symbol id="i-cctv" viewBox="0 0 24 24">
+        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16.75 12h3.632a1 1 0 0 1 .894 1.447l-2.034 4.069a1 1 0 0 1-1.708.134l-2.124-2.97" />
+          <path d="M17.106 9.053a1 1 0 0 1 .447 1.341l-3.106 6.211a1 1 0 0 1-1.342.447L3.61 12.3a2.92 2.92 0 0 1-1.3-3.91L3.69 5.6a2.92 2.92 0 0 1 3.92-1.3z" />
+          <path d="M2 19h3.76a2 2 0 0 0 1.8-1.1L9 15M2 21v-4M7 9h.01" />
+        </g>
+      </symbol>
+      <symbol id="i-signal" viewBox="0 0 14 12">
+        <rect x="0" y="8" width="2.2" height="4" rx=".6" fill="currentColor" />
+        <rect x="3.9" y="5.5" width="2.2" height="6.5" rx=".6" fill="currentColor" />
+        <rect x="7.8" y="3" width="2.2" height="9" rx=".6" fill="currentColor" />
+        <rect x="11.7" y="0" width="2.2" height="12" rx=".6" fill="currentColor" opacity=".35" />
+      </symbol>
       <symbol id="i-chat" viewBox="0 0 24 24">
         <path d="M5.5 4.2h13a2.3 2.3 0 0 1 2.3 2.3v8.1a2.3 2.3 0 0 1-2.3 2.3h-6.4l-4.6 3.7v-3.7H5.5a2.3 2.3 0 0 1-2.3-2.3V6.5a2.3 2.3 0 0 1 2.3-2.3Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
         <circle cx="9.3" cy="10.6" r="1.05" fill="currentColor" />
@@ -128,9 +141,78 @@
 
           <div class="hero__foot" data-intro style="--i: 9">
             <p class="signature">HENSEC / Proteção inteligente</p>
-            <a class="scroll-cue" href="#solucoes">
+            <a class="scroll-cue" href="#protecao">
               <span class="scroll-cue__line" aria-hidden="true"></span>
               <span>Role para conhecer</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- THE SHIELD EXPERIENCE · contraplano da hero com camada de vigilância (puramente visual) -->
+      <section class="shield" id="protecao" aria-labelledby="shield-title" data-section data-nav-key="inicio">
+        <div class="shield__visual" aria-hidden="true" data-reveal="fade">
+          <div class="shield__shot" data-parallax>
+            <img
+              class="shield__img"
+              src="./src/assets/img/protecao.webp"
+              alt=""
+              width="1422"
+              height="921"
+              loading="lazy"
+              decoding="async"
+            />
+
+            <svg class="hud-lines" viewBox="0 0 1422 921" preserveAspectRatio="none" focusable="false">
+              <rect class="hud-lines__area" x="365" y="565" width="405" height="220" />
+              <path
+                class="hud-lines__corners"
+                d="M365 593V565h28M742 565h28v28M770 757v28h-28M393 785h-28v-28"
+              />
+              <path class="hud-lines__cross" d="M561 675h12M567 669v12" />
+              <path class="hud-lines__link" d="M395 346V478h33" pathLength="1" />
+              <circle class="hud-lines__halo" cx="395" cy="338" r="13" />
+              <circle class="hud-lines__dot" cx="395" cy="338" r="4.5" />
+            </svg>
+
+            <div class="hud-scan" style="--x: 25.668%; --y: 61.346%; --w: 28.481%; --h: 23.887%"></div>
+
+            <p class="hud-tag" style="--x: 30.098%; --y: 51.9%">
+              <svg class="icon"><use href="#i-cctv" /></svg>
+              <strong>CAM 01</strong><span>Perímetro externo</span>
+            </p>
+            <p class="hud-label" style="--x: 25.668%; --y: 61.346%">Área de observação</p>
+            <p class="hud-chip" style="--x: 54.149%; --y: 85.233%">
+              <span class="hud-chip__dot"></span>
+              Sistema de vigilância
+              <svg class="hud-chip__signal"><use href="#i-signal" /></svg>
+            </p>
+          </div>
+        </div>
+        <div class="shield__shade" aria-hidden="true"></div>
+
+        <div class="shield__body">
+          <div class="shield__content">
+            <p class="shield__eyebrow" data-reveal>
+              <span>Proteção inteligente&nbsp;<span aria-hidden="true">•</span> Segurança&nbsp;24/7</span>
+            </p>
+            <h2 class="shield__title" id="shield-title" data-reveal style="--i: 1">
+              <span class="shield__title-strong">O perigo <br class="br-wide" />não avisa.</span>
+              <span class="shield__title-soft">
+                Sua segurança <br class="br-wide" />precisa estar <br class="br-wide" /><em class="shield__accent">pronta.</em>
+              </span>
+            </h2>
+            <p class="shield__lead" data-reveal style="--i: 2">
+              Proteção inteligente para o que realmente importa. Tecnologia, estratégia e monitoramento trabalhando juntos
+              para manter seu patrimônio protegido.
+            </p>
+            <p class="shield__support" data-reveal style="--i: 3">
+              Da primeira câmera ao controle de acesso, cada detalhe é pensado para ampliar sua tranquilidade e proteger o
+              que você construiu.
+            </p>
+            <a class="shield__cta" href="#solucoes" data-reveal style="--i: 4">
+              <span>Descubra nossa proteção</span>
+              <span class="shield__cta-icon" aria-hidden="true"><svg class="icon"><use href="#i-arrow-right" /></svg></span>
             </a>
           </div>
         </div>

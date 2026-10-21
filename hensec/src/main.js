@@ -1,4 +1,5 @@
 import './styles/main.css';
+import './styles/shield.css';
 import { WHATSAPP_NUMBER, WHATSAPP_MESSAGES } from './config.js';
 
 const root = document.documentElement;
@@ -61,6 +62,7 @@ desktopScene.addEventListener('change', () => setMenu(false));
 
 /* --------------------------------------------------------------------------
    Seção ativa: a que cruza o centro da viewport define o item do menu.
+   Seções sem item próprio apontam para um com data-nav-key.
    -------------------------------------------------------------------------- */
 
 const sections = [...document.querySelectorAll('[data-section]')];
@@ -82,7 +84,7 @@ setActive(sections[0].id);
 const activeObserver = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) setActive(entry.target.id);
+      if (entry.isIntersecting) setActive(entry.target.dataset.navKey || entry.target.id);
     });
   },
   { rootMargin: '-50% 0px -50% 0px', threshold: 0 },

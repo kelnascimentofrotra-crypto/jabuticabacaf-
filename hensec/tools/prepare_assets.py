@@ -201,6 +201,22 @@ def overlay(arr, mask):
     return o
 
 
+def shield_shot(clean_hero):
+    """Plano da seção "The Shield Experience": contraplano da hero.
+
+    Recorte mais fechado da mesma casa, espelhado (câmera à esquerda olhando
+    para a sala) e com tratamento mais frio e escuro. A foto não tem texto,
+    então o espelhamento não inverte nenhuma informação.
+    """
+    a = clean_hero[20:941, 250:1672].astype(np.float32) / 255
+    lum = (0.2126 * a[..., 0] + 0.7152 * a[..., 1] + 0.0722 * a[..., 2])[..., None]
+    a = lum + (a - lum) * 0.78                                   # dessatura levemente
+    shadow = np.clip(1 - lum * 2.2, 0, 1)
+    a = a + shadow * np.array([-0.012, 0.004, 0.03])             # sombras mais frias
+    a = np.clip(a * 0.9, 0, 1) ** 1.06                           # um ponto mais escuro
+    return np.ascontiguousarray((a * 255).astype(np.uint8)[:, ::-1])
+
+
 def save_webp(arr, path, quality=84):
     Image.fromarray(arr).save(path, "WEBP", quality=quality, method=6)
 
@@ -239,6 +255,9 @@ def main():
             Image.fromarray(clean).save(dbg / f"{name}-clean.png")
         save_webp(clean, out / f"{name}.webp")
         print("ok", name)
+        if name == "hero":
+            save_webp(shield_shot(clean), out / "protecao.webp")
+            print("ok protecao")
 
     # Fotos dos cards de Soluções: recorte interno a cada borda + remoção de texto.
     for i, (x0, y0, x1, y1) in enumerate(CARDS, 1):

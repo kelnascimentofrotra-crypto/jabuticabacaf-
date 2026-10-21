@@ -1,7 +1,8 @@
 # HENSEC · Monitoramento 24h
 
 Site institucional em quatro cenas (Hero → Soluções → Sobre a Hensec → Contato),
-construído a partir do documento `HENSEC_Referencia_Desktop_Cinematografica.pdf`.
+construído a partir do documento `HENSEC_Referencia_Desktop_Cinematografica.pdf`,
+mais a seção **The Shield Experience** entre a Hero e Soluções.
 
 **Stack:** Vite + HTML/CSS/JS sem framework. O conteúdo é estático, então HTML
 semântico com aprimoramento progressivo é o caminho mais enxuto: todo texto,
@@ -33,6 +34,7 @@ index.html            marcação das 4 cenas, navbar, ícones (sprite SVG) e log
 src/config.js         número e mensagens de WhatsApp
 src/main.js           links de WhatsApp, menu mobile, seção ativa, reveal, parallax
 src/styles/main.css   tokens, layout mobile/tablet e cena desktop
+src/styles/shield.css seção The Shield Experience (#protecao)
 src/assets/img/       fotografias limpas (WebP)
 public/favicon.svg    escudo HENSEC
 tools/                scripts que geraram as imagens e a logo a partir do PDF
@@ -47,6 +49,11 @@ clicáveis falsas, cada cena foi limpa:
 - `tools/prepare_assets.py` mascara toda a interface (detecção automática dos
   traços de texto + formas de botões, cards e navbar) e reconstrói as áreas com
   o modelo de inpainting **LaMa**; também recorta as fotos dos três cards.
+- A foto de The Shield Experience (`protecao.webp`) é um contraplano da hero:
+  recorte mais fechado da mesma casa, espelhado e com tratamento mais frio
+  (`shield_shot()` em `tools/prepare_assets.py`). Para usar uma fotografia
+  própria, substitua o arquivo e ajuste as coordenadas da camada de vigilância
+  no `index.html` (elas estão em pixels da imagem, viewBox 1422 × 921).
 - `tools/trace_logo.py` vetoriza o escudo e a palavra "HENSEC" da navbar; a
   linha "MONITORAMENTO 24HS" é texto SVG.
 
@@ -64,6 +71,11 @@ substituir os arquivos em `src/assets/img/` (mesmos nomes) e o `<path>` da logo
 no `index.html`.
 
 ## Decisões de layout
+
+- **The Shield Experience** (`#protecao`): seção de 750–950 px no desktop, com
+  a coluna de texto alinhada à da seção Sobre. A camada de vigilância (moldura,
+  ponto da câmera, etiquetas e varredura) é só ilustrativa: não há gravação,
+  transmissão nem sistema conectado. No menu, a seção conta como "Início".
 
 - **Desktop** (≥ 1024 px e paisagem): cada cena ocupa `100svh` e todas as
   medidas derivam de `--u = min(100vw / 1672, 100svh / 941)`, ou seja, 1u = 1 px
