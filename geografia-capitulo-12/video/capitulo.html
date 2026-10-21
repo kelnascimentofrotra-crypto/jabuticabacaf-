@@ -1,0 +1,1080 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capítulo 12 em vídeo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+/* Capítulo 12 em vídeo — continuação do cabeçalho (1920×1080, 30 fps).
+   Moldura fixa nos cantos (escola, professor, componente, alunos) e o
+   conteúdo no centro. Paleta laranja: preto quente, laranja, âmbar, brasa, creme. */
+:root {
+  --bg: #0a0604;
+  --orange: #ff7a1a;
+  --amber: #ffb24d;
+  --ember: #ff4d12;
+  --cream: #fff1e2;
+  --mute: #c9a88e;
+  --dim: #8a6a55;
+  --line: rgba(255, 150, 80, .22);
+  --panel: rgba(30, 14, 6, .72);
+  --f-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --f-serif: "Instrument Serif", Georgia, serif;
+  --f-body: "Manrope", system-ui, Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+#stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; background: var(--bg); overflow: hidden; transform-origin: 0 0; font-family: var(--f-body); color: var(--cream); -webkit-font-smoothing: antialiased; }
+.orb { position: absolute; width: 1150px; height: 1150px; border-radius: 50%; filter: blur(90px); }
+#orbA { background: radial-gradient(circle, rgba(255, 112, 30, .5), transparent 62%); }
+#orbB { background: radial-gradient(circle, rgba(255, 64, 12, .4), transparent 62%); }
+#orbC { width: 900px; height: 900px; background: radial-gradient(circle, rgba(255, 178, 77, .26), transparent 64%); }
+#topo { position: absolute; inset: -40px; background-size: cover; mix-blend-mode: screen; opacity: .12; }
+canvas { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+#pins { position: absolute; inset: 0; }
+.pin { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 0 4px rgba(0,0,0,.4), 0 0 18px var(--orange); }
+.pin span { position: absolute; left: 22px; top: -10px; white-space: nowrap; font-family: var(--f-display); font-weight: 700; font-size: 26px; color: var(--cream); text-shadow: 0 2px 8px #000, 0 0 3px #000; }
+.pin.l span { left: auto; right: 22px; }
+
+/* ---------- moldura fixa (cabeçalho) ---------- */
+.block { position: absolute; display: grid; gap: 8px; white-space: nowrap; }
+.block .k { font-family: var(--f-mono); font-size: 16px; font-weight: 600; letter-spacing: .38em; text-transform: uppercase; color: var(--orange); }
+.block .v { font-family: var(--f-display); font-size: 48px; font-weight: 740; letter-spacing: -.025em; line-height: 1; font-variation-settings: "wdth" 86; }
+.block .v .s { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: 0; color: var(--amber); font-size: 1.1em; }
+#bSchool { left: 96px; top: 64px; transform-origin: 0 0; }
+#bProf { right: 96px; top: 64px; justify-items: end; text-align: right; transform-origin: 100% 0; }
+#bComp { left: 96px; bottom: 66px; transform-origin: 0 100%; }
+#bAlunos { right: 96px; bottom: 66px; justify-items: end; transform-origin: 100% 100%; }
+.stack { display: grid; gap: 7px; justify-items: end; }
+.slab { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-width: 220px; padding: 8px 16px 8px 18px; border-radius: 11px; background: linear-gradient(180deg, #2b1508, #120804); border: 1px solid rgba(255, 122, 26, .6); box-shadow: 0 8px 22px rgba(0, 0, 0, .55), 0 0 18px rgba(255, 122, 26, .2); font-family: var(--f-display); font-size: 27px; font-weight: 700; letter-spacing: -.01em; }
+.slab i { font-style: normal; font-family: var(--f-mono); font-size: 10px; font-weight: 600; letter-spacing: .2em; color: var(--orange); }
+#alLine { position: absolute; right: 96px; bottom: 40px; display: grid; gap: 5px; justify-items: end; white-space: nowrap; }
+#alLine .k { font-family: var(--f-mono); font-size: 10px; font-weight: 600; letter-spacing: .38em; color: var(--orange); }
+#alLine .v { font-family: var(--f-display); font-size: 27px; font-weight: 720; letter-spacing: -.02em; line-height: 1; }
+#alLine .v b { color: var(--orange); font-weight: 600; padding: 0 .25em; }
+#ruleT, #ruleB { position: absolute; left: 96px; right: 96px; height: 1px; background: linear-gradient(90deg, transparent, var(--orange) 18%, var(--amber) 50%, var(--orange) 82%, transparent); }
+#ruleB { top: 962px; }
+#progress { position: absolute; left: 96px; top: 961px; height: 3px; width: 0; background: var(--amber); box-shadow: 0 0 12px var(--orange); border-radius: 2px; }
+.rpill { position: absolute; left: 50%; padding: 7px 20px; border-radius: 999px; border: 1px solid rgba(255, 122, 26, .7); background: #120804; font-family: var(--f-mono); font-size: 15px; font-weight: 600; letter-spacing: .3em; color: var(--amber); box-shadow: 0 0 22px rgba(255, 122, 26, .3); white-space: nowrap; text-transform: uppercase; }
+#pillB { top: 962px; transform: translate(-50%, -50%); color: var(--mute); font-size: 13px; letter-spacing: .2em; }
+.tick { position: absolute; width: 22px; height: 22px; border-color: rgba(255, 140, 50, .7); border-style: solid; border-width: 0; }
+#htitle { position: absolute; left: 0; right: 0; top: 300px; display: grid; justify-items: center; gap: 30px; text-align: center; }
+#htitle .k { font-family: var(--f-mono); font-size: 17px; font-weight: 600; text-transform: uppercase; color: var(--mute); letter-spacing: .5em; }
+#htitle h1 { margin: 0; font-family: var(--f-display); font-size: 148px; font-weight: 800; line-height: .86; letter-spacing: -.045em; text-transform: uppercase; font-variation-settings: "wdth" 78; display: grid; justify-items: center; }
+#htitle .hl1 { color: var(--amber); text-shadow: 0 0 18px rgba(255,178,77,.55), 0 0 60px rgba(255,178,77,.28); }
+#htitle .hl2 { color: var(--orange); text-shadow: 0 0 18px rgba(255,122,26,.55), 0 0 60px rgba(255,122,26,.28); }
+
+/* ---------- cenas ---------- */
+.sc { position: absolute; left: 140px; right: 140px; top: 168px; bottom: 140px; display: none; }
+.sc.on { display: block; }
+.fill { position: absolute; inset: 0; }
+.row { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.col { display: grid; gap: 22px; align-content: center; }
+.g2 { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
+.g2.wl { grid-template-columns: 1.2fr 1fr; }
+.g2.wr { grid-template-columns: 1fr 1.25fr; }
+.center { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; text-align: center; gap: 26px; }
+.eye { font-family: var(--f-mono); font-size: 17px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--orange); display: inline-flex; gap: 14px; align-items: center; }
+.eye::before { content: ""; width: 44px; height: 1px; background: currentColor; }
+.center .eye::after { content: ""; width: 44px; height: 1px; background: currentColor; }
+.h1 { font-family: var(--f-display); font-size: 92px; font-weight: 760; line-height: .95; letter-spacing: -.035em; font-variation-settings: "wdth" 84; margin: 0; }
+.hx { font-family: var(--f-display); font-size: 150px; font-weight: 800; line-height: .88; letter-spacing: -.045em; font-variation-settings: "wdth" 78; margin: 0; text-transform: uppercase; }
+.h2 { font-family: var(--f-display); font-size: 62px; font-weight: 720; line-height: 1; letter-spacing: -.03em; font-variation-settings: "wdth" 86; margin: 0; }
+.h3 { font-family: var(--f-display); font-size: 34px; font-weight: 700; line-height: 1.05; letter-spacing: -.02em; margin: 0; }
+.serif { font-family: var(--f-serif); font-style: italic; font-weight: 400; letter-spacing: 0; color: var(--amber); }
+.acc { color: var(--orange); }
+.amb { color: var(--amber); }
+.lead { font-size: 32px; line-height: 1.42; color: var(--mute); max-width: 34ch; margin: 0; }
+.lead b, .txt b, li b { color: var(--cream); font-weight: 700; }
+.txt { font-size: 27px; line-height: 1.45; color: var(--mute); margin: 0; }
+.small { font-size: 20px; line-height: 1.4; color: var(--dim); margin: 0; }
+.src { font-family: var(--f-mono); font-size: 14px; letter-spacing: .06em; color: var(--dim); margin: 0; }
+.chip { display: inline-flex; align-items: center; gap: 12px; padding: 12px 22px; border-radius: 999px; border: 1px solid rgba(255, 150, 80, .45); background: rgba(30, 14, 6, .7); font-size: 24px; font-weight: 600; white-space: nowrap; }
+.chip i { width: 11px; height: 11px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 10px var(--orange); }
+.panel { padding: 30px 34px; border-radius: 26px; border: 1px solid var(--line); background: var(--panel); }
+.stat .n { font-family: var(--f-display); font-size: 150px; font-weight: 800; line-height: .85; letter-spacing: -.05em; color: var(--orange); text-shadow: 0 0 40px rgba(255, 122, 26, .45); }
+.stat .n small { font-size: .42em; color: var(--cream); letter-spacing: -.02em; text-shadow: none; }
+.stat .l { font-size: 24px; color: var(--mute); max-width: 18ch; line-height: 1.35; margin-top: 12px; }
+.cards { display: grid; gap: 20px; }
+.card { padding: 28px; border-radius: 22px; border: 1px solid rgba(255, 150, 80, .35); background: linear-gradient(180deg, rgba(44, 20, 8, .92), rgba(16, 7, 3, .95)); display: grid; gap: 12px; align-content: start; }
+.card svg.ic { width: 52px; height: 52px; fill: none; stroke: var(--orange); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.card h3 { font-family: var(--f-display); font-size: 34px; font-weight: 720; margin: 0; letter-spacing: -.02em; }
+.card p { font-size: 22px; line-height: 1.4; color: var(--mute); margin: 0; }
+.gauge { display: grid; gap: 12px; }
+.gauge .lbl { display: flex; justify-content: space-between; gap: 20px; font-size: 24px; color: var(--mute); }
+.gauge .lbl b { color: var(--cream); }
+.gauge .bar { height: 12px; border-radius: 99px; background: rgba(255, 255, 255, .08); overflow: hidden; }
+.gauge .bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--amber), var(--orange)); box-shadow: 0 0 16px var(--orange); transform-origin: left; }
+.facts { display: grid; border-top: 1px solid var(--line); }
+.fact { display: grid; grid-template-columns: 260px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
+.fact dt { font-family: var(--f-mono); font-size: 17px; letter-spacing: .18em; text-transform: uppercase; color: var(--orange); }
+.fact dd { margin: 0; font-size: 27px; color: var(--cream); line-height: 1.3; }
+.fact dd small { display: block; font-size: 21px; color: var(--mute); margin-top: 4px; }
+.slabs { display: grid; gap: 14px; perspective: 1200px; }
+.slabs .sl { display: grid; grid-template-columns: 52px 1fr; gap: 4px 18px; align-items: center; padding: 18px 26px; border-radius: 18px; background: linear-gradient(180deg, #2b1508, #110703); border: 1px solid rgba(255, 122, 26, .55); box-shadow: 0 16px 40px rgba(0,0,0,.5), 0 0 22px rgba(255,122,26,.15); }
+.slabs .sl b { grid-row: span 2; font-family: var(--f-mono); font-size: 16px; color: var(--orange); }
+.slabs .sl strong { font-family: var(--f-display); font-size: 34px; font-weight: 740; letter-spacing: -.02em; }
+.slabs .sl small { font-size: 21px; color: var(--mute); }
+.list { margin: 0; padding: 0; list-style: none; display: grid; gap: 16px; }
+.list li { position: relative; padding-left: 34px; font-size: 27px; line-height: 1.4; color: var(--mute); }
+.list li::before { content: ""; position: absolute; left: 0; top: .55em; width: 14px; height: 14px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 10px var(--orange); }
+.map { position: relative; width: 980px; aspect-ratio: 2 / 1; border-radius: 22px; overflow: hidden; border: 1px solid var(--line); }
+.map img { width: 100%; height: 100%; display: block; filter: sepia(.55) saturate(1.3) hue-rotate(-12deg) brightness(.92); }
+.map .band { position: absolute; left: 0; right: 0; background: rgba(255, 122, 26, .32); border-block: 2px solid var(--amber); mix-blend-mode: screen; }
+.map .gl { position: absolute; left: 0; right: 0; height: 1px; background: rgba(255, 241, 226, .35); }
+.map .gl span { position: absolute; left: 10px; top: -22px; font-family: var(--f-mono); font-size: 14px; color: rgba(255,241,226,.85); text-shadow: 0 1px 3px #000; }
+.map .mp { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; background: var(--cream); box-shadow: 0 0 0 3px rgba(0,0,0,.5), 0 0 14px var(--amber); }
+.map .mp span { position: absolute; left: 18px; top: -9px; font-size: 18px; font-weight: 700; white-space: nowrap; text-shadow: 0 1px 4px #000, 0 0 2px #000; }
+.bandlist { display: grid; gap: 10px; }
+.bandlist div { display: flex; gap: 16px; align-items: center; font-family: var(--f-display); font-size: 30px; font-weight: 650; color: var(--dim); }
+.bandlist div i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--dim); }
+.bandlist div.on { color: var(--cream); }
+.bandlist div.on i { background: var(--orange); border-color: var(--orange); box-shadow: 0 0 12px var(--orange); }
+.diagram svg { width: 100%; height: auto; display: block; overflow: visible; }
+.lay { display: grid; gap: 12px; }
+.lay > div { display: grid; grid-template-columns: 130px 1fr; gap: 18px; align-items: center; padding: 16px 20px; border-radius: 18px; border: 1px solid var(--line); background: rgba(30, 14, 6, .6); }
+.lay > div b { font-family: var(--f-mono); font-size: 18px; color: var(--orange); }
+.lay > div strong { display: block; font-family: var(--f-display); font-size: 32px; font-weight: 720; }
+.lay > div small { font-size: 21px; color: var(--mute); line-height: 1.35; }
+.lay > div.on { border-color: var(--orange); background: rgba(70, 28, 8, .8); box-shadow: 0 0 26px rgba(255, 122, 26, .25); }
+.landscape { position: relative; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); }
+.landscape svg { display: block; width: 100%; height: 100%; }
+.pano { position: absolute; inset: 0; overflow: hidden; }
+.pano .strip { position: absolute; top: 0; bottom: 0; left: 0; display: flex; gap: 40px; }
+.pano .pp { position: relative; width: 1640px; height: 100%; flex: none; display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; }
+.meter { display: grid; gap: 8px; }
+.meter .bar { position: relative; height: 10px; border-radius: 99px; background: linear-gradient(90deg, #e6c46a, #c98a3a 50%, #8a4a1c); }
+.meter .bar i { position: absolute; top: -8px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; background: var(--cream); box-shadow: 0 0 0 4px var(--orange), 0 0 18px var(--orange); }
+.meter .ends { display: flex; justify-content: space-between; font-family: var(--f-mono); font-size: 14px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.spec { position: relative; height: 150px; }
+.spec .track { position: absolute; left: 0; right: 0; top: 70px; height: 16px; border-radius: 99px; background: linear-gradient(90deg, #e6c46a, #c98a3a 50%, #8a4a1c); }
+.spec .mk { position: absolute; top: 0; transform: translateX(-50%); display: grid; justify-items: center; gap: 6px; }
+.spec .mk span { font-family: var(--f-display); font-size: 24px; font-weight: 700; padding: 6px 14px; border-radius: 999px; background: #1a0b04; border: 1px solid rgba(255, 150, 80, .5); white-space: nowrap; }
+.spec .mk i { width: 2px; height: 30px; background: var(--orange); }
+.spec .mk.low { top: 78px; }
+.spec .mk.low { display: flex; flex-direction: column-reverse; align-items: center; gap: 6px; }
+.quiz { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 300px; gap: 60px; align-items: center; }
+.qq { font-family: var(--f-display); font-size: 54px; font-weight: 720; line-height: 1.08; letter-spacing: -.025em; margin: 0 0 30px; }
+.opts { display: grid; gap: 14px; }
+.opt { display: grid; grid-template-columns: 56px 1fr; gap: 20px; align-items: center; padding: 16px 22px; border-radius: 18px; border: 1px solid rgba(255, 150, 80, .35); background: rgba(30, 14, 6, .7); font-size: 27px; line-height: 1.3; }
+.opt b { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 14px; border: 1px solid rgba(255, 150, 80, .5); font-family: var(--f-mono); font-size: 22px; }
+.opt.right { border-color: var(--amber); background: rgba(255, 140, 40, .22); box-shadow: 0 0 30px rgba(255, 122, 26, .35); }
+.opt.right b { background: var(--amber); color: #1a0800; border-color: var(--amber); }
+.opt.dim { opacity: .35; }
+.ring { width: 260px; height: 260px; }
+.ring circle { fill: none; stroke-width: 14; }
+.ring .bg { stroke: rgba(255,255,255,.08); }
+.ring .fg { stroke: var(--orange); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; filter: drop-shadow(0 0 10px var(--orange)); }
+.ring text { fill: var(--cream); font-family: var(--f-display); font-weight: 800; font-size: 96px; }
+.exp { margin-top: 26px; padding: 20px 26px; border-left: 4px solid var(--amber); border-radius: 14px; background: rgba(255, 140, 40, .08); font-size: 25px; line-height: 1.45; color: var(--mute); }
+.exp b { color: var(--cream); }
+.ch, .wd { display: inline-block; white-space: pre; }
+#flash { position: absolute; inset: 0; background: #ff5a1a; mix-blend-mode: screen; opacity: 0; }
+#grain { position: absolute; inset: -60px; opacity: .07; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+#vig { position: absolute; inset: 0; background: radial-gradient(120% 100% at 50% 45%, transparent 52%, rgba(0, 0, 0, .62) 100%); }
+#fade { position: absolute; inset: 0; background: #000; opacity: 0; }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M14 14.8V3.5a2.5 2.5 0 0 0-5 0v11.3a4.5 4.5 0 1 0 5 0z"/></symbol>
+  <symbol id="i-rain" viewBox="0 0 24 24"><path d="M16 13v8M8 13v8M12 15v8M20 16.6A5 5 0 0 0 18 7h-1.3A8 8 0 1 0 4 15.3"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M4.5 7h15M4.5 17h15M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10 15 15 0 0 1-4-10 15 15 0 0 1 4-10z"/></symbol>
+  <symbol id="i-mount" viewBox="0 0 24 24"><path d="m2 20 7-13 4 7 3-4 6 10z"/></symbol>
+  <symbol id="i-soil" viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></symbol>
+  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 2.7 17.7 8.3a8 8 0 1 1-11.3 0z"/></symbol>
+  <symbol id="i-life" viewBox="0 0 24 24"><path d="M12 7v13"/><path d="M12 9C9.5 4.5 4 4.5 4 8.5S9 15 12 13"/><path d="M12 9c2.5-4.5 8-4.5 8-.5S15 15 12 13"/><path d="M9 3l3 4 3-4"/></symbol>
+  <symbol id="i-co2" viewBox="0 0 24 24"><path d="M17.5 19H8a6 6 0 1 1 1.4-11.8A7 7 0 0 1 22 10.5 4.5 4.5 0 0 1 17.5 19z"/></symbol>
+  <symbol id="i-sprout" viewBox="0 0 24 24"><path d="M7 21h10M12 21v-8"/><path d="M12 13c0-4 3-7 8-7 0 4-3 7-8 7z"/><path d="M12 11C12 7.5 9.5 5 5 5c0 3.5 2.5 6 7 6z"/></symbol>
+  <symbol id="i-sat" viewBox="0 0 24 24"><path d="m13 7-4-4-4 4 4 4M17 11l4 4-4 4-4-4"/><path d="m8 12 4 4 6-6-4-4z"/><path d="M4 16a4 4 0 0 0 4 4M3 13a8 8 0 0 0 8 8"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="20" r="1.3"/><circle cx="18" cy="20" r="1.3"/><path d="M1 2h4l2.7 12.4a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L22 6H6"/></symbol>
+  <symbol id="i-cycle" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+</svg>
+
+<div id="stage">
+  <div class="orb" id="orbA"></div><div class="orb" id="orbB"></div><div class="orb" id="orbC"></div>
+  <div id="topo"></div>
+  <canvas id="globe" width="1920" height="1080"></canvas>
+  <div id="pins"></div>
+  <canvas id="fx" width="1920" height="1080"></canvas>
+  <div id="scenes"></div>
+
+  <!-- moldura (continua do cabeçalho) -->
+  <div id="ruleT" style="top:186px"></div>
+  <div id="ruleB"></div><div id="progress"></div>
+  <div class="rpill" id="pillT" style="top:186px;transform:translate(-50%,-50%)">CAPÍTULO 12</div>
+  <div class="rpill" id="pillB"></div>
+  <div class="tick" id="tk1"></div><div class="tick" id="tk2"></div><div class="tick" id="tk3"></div><div class="tick" id="tk4"></div>
+  <div class="block" id="bSchool"><span class="k">Escola Comunitária</span><span class="v">Santa Maria <span class="s">Bestila</span></span></div>
+  <div class="block" id="bProf"><span class="k">Professor</span><span class="v">Valdemir</span></div>
+  <div class="block" id="bComp"><span class="k">Componente curricular</span><span class="v">Geografia</span></div>
+  <div class="block" id="bAlunos"><span class="k">Alunos</span><div class="stack">
+    <div class="slab">Miguel <i>01</i></div><div class="slab">Henrique <i>02</i></div><div class="slab">Vinícius <i>03</i></div><div class="slab">Everton <i>04</i></div></div></div>
+  <div id="alLine"><span class="k">ALUNOS</span><span class="v">Miguel<b>·</b>Henrique<b>·</b>Vinícius<b>·</b>Everton</span></div>
+  <div id="htitle"><span class="k">Trabalho de Geografia</span><h1><span>A cobertura <span class="hl1">verde</span></span><span>do planeta <span class="hl2">azul</span></span></h1></div>
+
+  <div id="flash"></div>
+  <div id="grain"></div>
+  <div id="vig"></div>
+  <div id="fade"></div>
+</div>
+
+<script>
+"use strict";
+const FPS = 30, HEAD = 24.5;           // duração do cabeçalho já renderizado
+const W = 1920, H = 1080;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, k) => a + (b - a) * k;
+const seg = (t, a, d) => clamp((t - a) / d);
+const easeOut = (k) => 1 - Math.pow(1 - k, 3);
+const easeIO = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+const easeBack = (k) => { const c = 1.6; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); };
+const rng = (seed) => { let s = seed % 2147483647 || 1; return () => (s = (s * 16807) % 2147483647) / 2147483647; };
+const ic = (id) => `<svg class="ic"><use href="#i-${id}"/></svg>`;
+const xP = (lon) => ((lon + 180) / 360) * 100, yP = (lat) => ((90 - lat) / 180) * 100;
+
+/* ======================= ILUSTRAÇÕES ======================= */
+function landscape(type, w = 800, h = 450) {
+  const r = rng(type.split("").reduce((a, c) => a + c.charCodeAt(0) * 31, 7));
+  const id = "sky" + type;
+  let s = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c0a04"/><stop offset=".5" stop-color="#8a3412"/><stop offset=".82" stop-color="#e8702a"/><stop offset="1" stop-color="#ffc070"/></linearGradient></defs>`;
+  s += `<rect width="${w}" height="${h}" fill="url(#${id})"/>`;
+  s += `<circle cx="${w * (0.3 + r() * 0.4)}" cy="${h * 0.66}" r="${h * 0.14}" fill="#ffd9a0" opacity=".9"/>`;
+  const hz = h * 0.72;
+  const hills = (y, amp, col, op) => { let d = `M0 ${h} L0 ${y}`; for (let x = 0; x <= w; x += 40) d += ` L${x} ${(y - amp * (0.5 + 0.5 * Math.sin(x / 90 + r() * 0.6))).toFixed(1)}`; return `<path d="${d} L${w} ${h}Z" fill="${col}" opacity="${op}"/>`; };
+  const grass = (n, y0, y1, hmin, hmax, col) => { let d = ""; for (let i = 0; i < n; i++) { const x = r() * w, y = lerp(y0, y1, r()), hh = lerp(hmin, hmax, r()), lean = (r() - 0.5) * hh * 0.5; d += `M${x.toFixed(1)} ${y.toFixed(1)} q${(lean * 0.3).toFixed(1)} ${(-hh * 0.6).toFixed(1)} ${lean.toFixed(1)} ${(-hh).toFixed(1)} `; } return `<path d="${d}" stroke="${col}" stroke-width="2" fill="none" stroke-linecap="round"/>`; };
+  const ground = (y) => `<rect x="0" y="${y}" width="${w}" height="${h - y}" fill="#140703"/>`;
+  const acacia = (x, y, sc) => `<path d="M${x} ${y} C ${x - 4 * sc} ${y - 30 * sc}, ${x + 6 * sc} ${y - 50 * sc}, ${x - 2 * sc} ${y - 70 * sc} M${x - 1 * sc} ${y - 50 * sc} L${x + 26 * sc} ${y - 72 * sc} M${x} ${y - 46 * sc} L${x - 24 * sc} ${y - 70 * sc}" stroke="#140703" stroke-width="${5 * sc}" fill="none" stroke-linecap="round"/><ellipse cx="${x}" cy="${y - 76 * sc}" rx="${62 * sc}" ry="${12 * sc}" fill="#140703"/><ellipse cx="${x + 20 * sc}" cy="${y - 84 * sc}" rx="${36 * sc}" ry="${8 * sc}" fill="#140703"/>`;
+  const shrub = (x, y, sc) => { let c = ""; for (let i = 0; i < 6; i++) c += `<circle cx="${(x + (r() - 0.5) * 40 * sc).toFixed(1)}" cy="${(y - r() * 22 * sc).toFixed(1)}" r="${((10 + r() * 12) * sc).toFixed(1)}" fill="#140703"/>`; return c; };
+  const saguaro = (x, y, sc, arms = 2) => { let d = `M${x} ${y} V${y - 120 * sc}`; if (arms > 0) d += ` M${x} ${y - 55 * sc} h${-22 * sc} v${-34 * sc}`; if (arms > 1) d += ` M${x} ${y - 70 * sc} h${20 * sc} v${-30 * sc}`; if (arms > 2) d += ` M${x} ${y - 40 * sc} h${16 * sc} v${-22 * sc}`; return `<path d="${d}" stroke="#140703" stroke-width="${14 * sc}" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`; };
+  const twisted = (x, y, sc) => `<path d="M${x} ${y} C ${x + 14 * sc} ${y - 20 * sc}, ${x - 16 * sc} ${y - 40 * sc}, ${x + 6 * sc} ${y - 62 * sc} M${x + 2 * sc} ${y - 40 * sc} C ${x + 18 * sc} ${y - 48 * sc}, ${x + 22 * sc} ${y - 58 * sc}, ${x + 30 * sc} ${y - 66 * sc}" stroke="#140703" stroke-width="${6 * sc}" fill="none" stroke-linecap="round"/>` + shrub(x + 8 * sc, y - 64 * sc, sc * 0.9);
+  const thorny = (x, y, sc) => { let d = ""; for (let i = 0; i < 7; i++) { const a = -Math.PI / 2 + (r() - 0.5) * 1.6, l = (30 + r() * 30) * sc; d += `M${x} ${y} l${(Math.cos(a) * l).toFixed(1)} ${(Math.sin(a) * l).toFixed(1)} `; } return `<path d="${d}" stroke="#140703" stroke-width="${3 * sc}" fill="none" stroke-linecap="round"/>`; };
+  if (type === "savana" || type === "cerrado") {
+    s += hills(hz - 10, 14, "#5a2310", 0.75) + ground(hz) + grass(220, hz, h, 10, 26, "#2a1006");
+    if (type === "savana") { s += acacia(w * 0.22, hz + 6, 1.4) + acacia(w * 0.62, hz + 2, 1.0) + acacia(w * 0.85, hz + 4, 0.7); }
+    else { for (let i = 0; i < 6; i++) s += twisted(w * (0.08 + i * 0.16 + r() * 0.05), hz + 4 + r() * 20, 0.9 + r() * 0.5); }
+  } else if (type === "pradaria" || type === "pampa") {
+    s += hills(hz - 20, 30, "#6a2a12", 0.8) + hills(hz + 10, 24, "#2a1006", 1) + grass(520, hz, h, 18, 44, "#120603");
+    if (type === "pampa") { let d = ""; for (let i = 0; i < 9; i++) d += `M${60 + i * 80} ${hz + 40} v-30 `; s += `<path d="${d} M60 ${hz + 22} H${60 + 8 * 80}" stroke="#140703" stroke-width="4"/>`; }
+  } else if (type === "estepe") {
+    s += `<path d="M0 ${hz} L120 ${hz - 70} L210 ${hz - 30} L330 ${hz - 110} L460 ${hz - 40} L560 ${hz - 80} L700 ${hz - 20} L${w} ${hz - 50} L${w} ${hz}Z" fill="#5a2310" opacity=".7"/>` + ground(hz) + grass(160, hz + 4, h, 6, 14, "#3a1608");
+  } else if (type === "mediterranea") {
+    s += `<rect x="0" y="${hz - 18}" width="${w}" height="26" fill="#ffc888" opacity=".45"/>` + hills(hz + 30, 26, "#140703", 1);
+    for (let i = 0; i < 16; i++) { const x = (i + r() * 0.6) * (w / 16); s += shrub(x, hz + 18 + Math.sin(x / 90) * 8, 0.9 + r() * 0.9); }
+    s += `<path d="M${w * 0.7} ${hz + 20} c -4 -30 6 -50 -2 -78" stroke="#140703" stroke-width="7" fill="none"/>` + shrub(w * 0.7, hz - 50, 2.1);
+  } else if (type === "deserto") {
+    s += hills(hz, 30, "#7a3214", 0.75) + hills(hz + 30, 22, "#1a0904", 1) + saguaro(w * 0.2, hz + 50, 1.3, 2) + saguaro(w * 0.68, hz + 40, 0.9, 1) + saguaro(w * 0.86, hz + 46, 0.7, 2);
+  } else if (type === "caatinga") {
+    s += hills(hz, 18, "#6a2a12", 0.7) + ground(hz + 6) + grass(60, hz + 6, h, 6, 12, "#3a1608");
+    for (let i = 0; i < 7; i++) s += thorny(w * (0.06 + i * 0.14), hz + 30 + r() * 30, 0.9 + r() * 0.6);
+    s += saguaro(w * 0.5, hz + 60, 1.0, 3);
+  }
+  return s + "</svg>";
+}
+
+const STRATA = `<svg viewBox="0 0 620 440"><defs><linearGradient id="gS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1006"/><stop offset="1" stop-color="#0d0503"/></linearGradient><linearGradient id="gL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd9a0" stop-opacity=".5"/><stop offset="1" stop-color="#ffd9a0" stop-opacity="0"/></linearGradient></defs>
+<rect width="620" height="440" rx="18" fill="url(#gS)"/><path d="M120 0 L170 0 L210 400 L190 400 Z M330 0 L350 0 L360 400 L352 400 Z M470 0 L520 0 L500 400 L485 400 Z" fill="url(#gL)" opacity=".5"/>
+<g font-family="JetBrains Mono, monospace" font-size="11" fill="#c9a88e"><line x1="44" y1="400" x2="44" y2="40" stroke="#c9a88e" stroke-opacity=".4"/>
+<text x="6" y="404">0 m</text><text x="2" y="344">10 m</text><text x="2" y="284">20 m</text><text x="2" y="224">30 m</text><text x="2" y="164">40 m</text><text x="2" y="104">50 m</text><text x="2" y="44">60 m</text></g>
+<g class="L" data-l="3"><rect x="52" y="398" width="560" height="30" fill="#4a2410"/><g fill="#a2602c"><ellipse cx="90" cy="404" rx="9" ry="3"/><ellipse cx="240" cy="405" rx="10" ry="3"/><ellipse cx="410" cy="404" rx="9" ry="3"/><ellipse cx="575" cy="405" rx="8" ry="2.5"/></g></g>
+<g class="L" data-l="0"><path d="M150 398 L156 120 L162 120 L170 398 Z M455 398 L460 70 L466 70 L474 398 Z" fill="#5a2d14"/><g fill="#ffb24d"><ellipse cx="158" cy="112" rx="58" ry="26"/><ellipse cx="128" cy="122" rx="30" ry="16"/><ellipse cx="190" cy="120" rx="32" ry="16"/><ellipse cx="463" cy="64" rx="66" ry="28"/><ellipse cx="425" cy="76" rx="34" ry="15"/><ellipse cx="505" cy="78" rx="36" ry="16"/></g></g>
+<g class="L" data-l="1"><g fill="#4a2410"><rect x="96" y="230" width="7" height="168"/><rect x="236" y="215" width="8" height="183"/><rect x="330" y="225" width="7" height="173"/><rect x="398" y="210" width="8" height="188"/><rect x="560" y="228" width="7" height="170"/></g><g fill="#e8682a"><ellipse cx="100" cy="215" rx="58" ry="34"/><ellipse cx="190" cy="200" rx="62" ry="36"/><ellipse cx="275" cy="212" rx="58" ry="32"/><ellipse cx="350" cy="198" rx="56" ry="34"/><ellipse cx="420" cy="208" rx="54" ry="32"/><ellipse cx="520" cy="200" rx="64" ry="36"/><ellipse cx="590" cy="214" rx="36" ry="28"/></g><g fill="#ff8a3d"><ellipse cx="140" cy="190" rx="40" ry="20"/><ellipse cx="320" cy="182" rx="44" ry="20"/><ellipse cx="560" cy="186" rx="40" ry="20"/></g></g>
+<g class="L" data-l="2"><g fill="#4a2410"><rect x="205" y="350" width="4" height="48"/><rect x="372" y="345" width="4" height="53"/><rect x="530" y="352" width="4" height="46"/></g><g fill="#a8401a"><ellipse cx="207" cy="345" rx="26" ry="16"/><ellipse cx="374" cy="340" rx="24" ry="17"/><ellipse cx="532" cy="347" rx="25" ry="15"/><ellipse cx="80" cy="378" rx="24" ry="18"/><ellipse cx="290" cy="380" rx="22" ry="16"/><ellipse cx="455" cy="382" rx="20" ry="15"/></g></g></svg>`;
+
+const TREE = `<svg viewBox="0 0 400 520"><defs><linearGradient id="gT" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a220c"/><stop offset=".5" stop-color="#a8441a"/><stop offset="1" stop-color="#4a1c0a"/></linearGradient></defs>
+<ellipse cx="200" cy="500" rx="190" ry="22" fill="#fff1e2" opacity=".85"/><rect x="188" y="400" width="24" height="98" fill="#3a1a0c"/>
+<path d="M200 30 L270 150 L240 150 L300 250 L262 250 L330 360 L285 360 L350 440 L50 440 L115 360 L70 360 L138 250 L100 250 L160 150 L130 150 Z" fill="url(#gT)"/>
+<g fill="#fff1e2"><path d="M200 30 L222 68 L206 62 L196 70 L180 64 Z"/><path d="M160 150 L190 140 L215 150 L240 150 L232 142 L200 128 L168 142 Z"/><path d="M138 250 L170 236 L200 246 L230 238 L262 250 L250 240 L200 224 L148 240 Z"/><path d="M115 360 L160 342 L200 352 L245 340 L285 360 L272 348 L200 330 L128 348 Z"/><path d="M50 440 L120 420 L200 430 L280 420 L350 440 L330 428 L200 410 L70 428 Z"/></g>
+<g fill="#ffb24d"><ellipse cx="248" cy="282" rx="7" ry="13"/><ellipse cx="146" cy="300" rx="7" ry="13"/><ellipse cx="290" cy="392" rx="7" ry="13"/></g><path d="M206 430 q4 10 0 18 q-5 -8 0 -18z" fill="#ffd27a"/>
+<g class="hs" data-h="0"><circle cx="200" cy="58" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/><circle cx="200" cy="58" r="8" fill="#ff7a1a"/></g>
+<g class="hs" data-h="1"><circle cx="330" cy="352" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/><circle cx="330" cy="352" r="8" fill="#ff7a1a"/></g>
+<g class="hs" data-h="2"><circle cx="160" cy="200" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/><circle cx="160" cy="200" r="8" fill="#ff7a1a"/></g>
+<g class="hs" data-h="3"><circle cx="248" cy="282" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/><circle cx="248" cy="282" r="8" fill="#ff7a1a"/></g>
+<g class="hs" data-h="4"><circle cx="206" cy="438" r="22" fill="none" stroke="#ff7a1a" stroke-width="3"/><circle cx="206" cy="438" r="8" fill="#ff7a1a"/></g></svg>`;
+
+const PERMA = `<svg viewBox="0 0 640 380"><defs><linearGradient id="pS" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8702a"/><stop offset="1" stop-color="#ffd9a0"/></linearGradient><linearGradient id="pW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0402"/><stop offset="1" stop-color="#2a1408"/></linearGradient><linearGradient id="pP" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a3430"/><stop offset="1" stop-color="#241614"/></linearGradient>
+<pattern id="pI" width="26" height="18" patternUnits="userSpaceOnUse"><path d="M2 9 h10 M15 4 h8 M14 14 h9" stroke="#fff1e2" stroke-width="2" stroke-linecap="round" opacity=".45"/></pattern></defs>
+<rect width="640" height="120" fill="url(#pW)"/><rect class="sum" width="640" height="120" fill="url(#pS)"/>
+<circle class="sum" cx="560" cy="44" r="20" fill="#fff4d8"/><path class="win" d="M520 30 a16 16 0 1 0 12 26 a12 12 0 1 1 -12 -26z" fill="#fff1e2"/>
+<rect x="0" y="120" width="640" height="78" fill="#d8c8b8"/><rect x="0" y="120" width="640" height="78" fill="url(#pI)"/><rect class="sum" x="0" y="120" width="640" height="78" fill="#6a3a1c"/>
+<rect x="0" y="198" width="640" height="182" fill="url(#pP)"/><rect x="0" y="198" width="640" height="182" fill="url(#pI)"/>
+<line x1="0" y1="198" x2="640" y2="198" stroke="#ffb24d" stroke-width="2" stroke-dasharray="8 6"/>
+<g class="sum"><ellipse cx="200" cy="122" rx="62" ry="7" fill="#7ab0c8"/><ellipse cx="470" cy="123" rx="40" ry="5" fill="#7ab0c8"/><g fill="#8a5a2a"><ellipse cx="60" cy="118" rx="26" ry="7"/><ellipse cx="320" cy="117" rx="30" ry="8"/><ellipse cx="600" cy="118" rx="28" ry="7"/></g><circle cx="300" cy="108" r="3" fill="#ffd34d"/><circle cx="330" cy="106" r="3" fill="#fff"/><circle cx="604" cy="108" r="3" fill="#ffd34d"/></g>
+<path class="win" d="M0 112 Q 80 104 160 112 T 320 110 T 480 112 T 640 108 V 122 H 0 Z" fill="#fff1e2"/>
+<g font-family="JetBrains Mono, monospace" font-size="13" font-weight="600"><rect x="400" y="145" width="226" height="30" rx="8" fill="rgba(0,0,0,.55)"/><text class="sum" x="412" y="165" fill="#ffe2b0">CAMADA ATIVA — DEGELADA</text><text class="win" x="412" y="165" fill="#fff1e2">CAMADA ATIVA — CONGELADA</text>
+<rect x="400" y="282" width="226" height="30" rx="8" fill="rgba(0,0,0,.55)"/><text x="412" y="302" fill="#fff1e2">PERMAFROST — SEMPRE GELADO</text></g></svg>`;
+
+const LEAF = `<svg viewBox="0 0 300 380"><g id="leafG"><path id="leafP" d="M150 8 C 150 8, 120 40, 96 60 C 70 82, 40 92, 30 130 C 20 168, 46 196, 40 230 C 36 262, 70 300, 110 312 C 130 318, 142 332, 150 352 C 158 332, 170 318, 190 312 C 230 300, 264 262, 260 230 C 254 196, 280 168, 270 130 C 260 92, 230 82, 204 60 C 180 40, 150 8, 150 8 Z" fill="#2fbf6b" stroke="rgba(0,0,0,.3)" stroke-width="2"/><g stroke="rgba(255,255,255,.35)" stroke-width="2" fill="none" stroke-linecap="round"><path d="M150 30 V 372"/><path d="M150 120 L 80 90 M150 170 L 60 160 M150 220 L 70 240 M150 120 L 220 90 M150 170 L 240 160 M150 220 L 230 240 M150 270 L 110 300 M150 270 L 190 300"/></g></g></svg>`;
+
+const LOOP = `<svg viewBox="0 0 400 400"><defs><marker id="arr" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ff7a1a"/></marker></defs><circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,122,26,.4)" stroke-width="2" stroke-dasharray="6 8"/><g fill="none" stroke="#ff7a1a" stroke-width="4" marker-end="url(#arr)"><path class="ar" d="M300 100 A 140 140 0 0 1 340 200"/><path class="ar" d="M300 300 A 140 140 0 0 1 200 340"/><path class="ar" d="M100 300 A 140 140 0 0 1 60 200"/><path class="ar" d="M100 100 A 140 140 0 0 1 200 60"/></g></svg>`;
+
+function fishbone() {
+  const r = rng(99); let roads = "", clears = "";
+  for (let i = 0; i < 9; i++) {
+    const y = 60 + i * 50, side = i % 2 ? 1 : -1, len = 120 + r() * 160;
+    roads += `<line class="rd" data-t="${(0.2 + i * 0.08).toFixed(2)}" x1="400" y1="${y}" x2="${400 + side * len}" y2="${y + 14}" stroke="#ffd9a0" stroke-width="3" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`;
+    for (let j = 0; j < 4; j++) {
+      const x = 400 + side * (30 + j * (len / 4)), wv = len / 4 - 6;
+      clears += `<rect class="cl" data-t="${(0.3 + i * 0.06 + j * 0.05 + r() * 0.1).toFixed(2)}" x="${side > 0 ? x : x - wv}" y="${y - 22 + j * 3.5}" width="${wv}" height="44" fill="#e8b27a" opacity="0"/>`;
+    }
+  }
+  return `<svg viewBox="0 0 800 520"><defs><pattern id="fz" width="14" height="14" patternUnits="userSpaceOnUse"><rect width="14" height="14" fill="#3a2208"/><circle cx="4" cy="5" r="3.5" fill="#5a3810"/><circle cx="11" cy="10" r="3" fill="#4a2c0c"/></pattern></defs><rect width="800" height="520" rx="22" fill="url(#fz)"/>${clears}<line class="rd" data-t="0" x1="400" y1="0" x2="400" y2="520" stroke="#fff1e2" stroke-width="5" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>${roads}</svg>`;
+}
+
+/* ======================= CENAS ======================= */
+// a(attr): data-in (s), data-fx, data-dur. Cenas: dur, sec, coord, fx (partículas), trans, globe [[t, pose]], pins, sfx.
+const SEC = {
+  s01: "01 · A cobertura verde do planeta azul", s02: "02 · Florestas equatoriais e tropicais", s03: "03 · Florestas de coníferas",
+  s04: "04 · Tundra", s05: "05 · Florestas temperadas", s06: "06 · Formações arbustivas e herbáceas", s07: "07 · O ser humano e a natureza",
+  s08: "08 · Exercitando o que aprendemos", fim: "Encerramento"
+};
+const A = (tin, fx = "rise", dur) => ` data-in="${tin}" data-fx="${fx}"${dur ? ` data-dur="${dur}"` : ""}`;
+const G0 = { x: 960, y: 1772, r: 900, lon: -52 + HEAD * 0.55, tilt: 1.46, alpha: 1, sx: 0.12, sy: 0.62, sz: -0.18, grade: 0.55 };
+const gp = (o) => Object.assign({ x: 960, y: 540, r: 340, lon: 0, tilt: 0.3, alpha: 1, sx: -0.55, sy: 0.42, sz: 0.72, grade: 0.42 }, o);
+
+const QUIZ = [
+  ["Quais condições explicam as florestas densas da faixa equatorial?", ["Temperaturas altas e chuvas abundantes o ano todo", "Solos sempre muito férteis e profundos", "Invernos rigorosos e verões curtos", "Baixa umidade do ar e ventos fortes"], 0, "Calor constante e muita chuva permitem crescimento o ano inteiro. Os solos, aliás, costumam ser pobres."],
+  ["Folhas em forma de agulha e copa em forma de cone são adaptações de qual formação?", ["Savana", "Floresta equatorial", "Floresta de coníferas (taiga)", "Vegetação mediterrânea"], 2, "As agulhas perdem pouca água e o formato cônico faz a neve escorregar."],
+  ["O que é o permafrost?", ["Um líquen que alimenta as renas", "A camada do subsolo congelada o ano todo", "O vento gelado da tundra", "A estação chuvosa do Ártico"], 1, "No verão, só a camada ativa, na superfície, descongela."],
+  ["Por que muitas árvores temperadas perdem as folhas no outono?", ["Para poupar água e energia no inverno", "Porque chove demais no outono", "Para atrair polinizadores", "Porque o solo fica quente demais"], 0, "São caducifólias: sem folhas, perdem menos água quando o solo está congelado."],
+  ["Qual é a diferença entre pradarias e estepes?", ["Estepes são florestas densas", "Estepes são mais secas, com gramíneas baixas e esparsas", "Pradarias só existem nos polos", "As duas são dominadas por cactos"], 1, "Ambas são herbáceas de clima temperado, mas a estepe recebe menos chuva."],
+  ["Qual ação ajuda a recuperar áreas degradadas?", ["Usar queimadas para limpar o terreno", "Ampliar o garimpo nos rios", "Drenar nascentes para abrir pastos", "Reflorestar com espécies nativas"], 3, "Mudas nativas e matas ciliares protegem o solo, as nascentes e a fauna."]
+];
+
+const SCENES = [
+  { id: "intro-trans", dur: 3.2, sec: "s01", coord: "TERRA · 12.742 KM DE DIÂMETRO", fx: "ember", trans: "none",
+    globe: [[0, G0], [3.2, gp({ x: 1360, y: 560, r: 330, lon: -45, tilt: 0.3 })]], html: "" },
+  { id: "intro", dur: 10, sec: "s01", coord: "TERRA · 12.742 KM DE DIÂMETRO", fx: "ember",
+    globe: [[0, gp({ x: 1360, y: 560, r: 330, lon: -45, tilt: 0.3 })], [10, gp({ x: 1360, y: 560, r: 345, lon: -62, tilt: 0.3 })]],
+    html: `<div class="col" style="position:absolute;left:0;top:0;bottom:0;width:900px">
+      <span class="eye"${A(0.2, "fade")}>01 · Introdução</span>
+      <h2 class="h1" data-split="words" data-in="0.5">A cobertura <span class="acc">verde</span> do planeta <span class="serif">azul</span></h2>
+      <p class="lead"${A(1.6)}>Vista do espaço, a Terra parece azul. Nos continentes, um manto verde muda de <b>forma</b>, de <b>cor</b> e de <b>altura</b> conforme o clima.</p>
+      <div class="row" style="gap:70px"${A(2.6)}>
+        <div class="stat" data-sfx="tick"${A(2.6, "fade")}><div class="n"><span data-count="71" data-in="2.8">71</span><small>%</small></div><div class="l">da superfície coberta por água</div></div>
+        <div class="stat" data-sfx="tick"${A(3.4, "fade")}><div class="n"><span data-count="31" data-in="3.6">31</span><small>%</small></div><div class="l">das terras emersas cobertas por florestas</div></div>
+      </div>
+      <p class="src"${A(4.4, "fade")}>FONTE DAS FLORESTAS: FAO, FRA 2020</p></div>` },
+  { id: "fatores", dur: 11, sec: "s01", coord: "FATORES NATURAIS", fx: "ember",
+    html: `<div class="center" style="gap:34px"><span class="eye"${A(0.2, "fade")}>O que define a vegetação?</span>
+      <h2 class="h2" data-split="words" data-in="0.4">Clima, relevo e solo atuam <span class="serif">juntos</span></h2>
+      <div class="cards" style="grid-template-columns:repeat(3,500px);text-align:left">
+        ${[["temp", "Temperatura", "Calor ou frio definem o ritmo de crescimento."], ["rain", "Chuva", "O total de chuva e sua distribuição no ano."], ["globe", "Latitude", "Longe do Equador, o clima tende a ser mais frio."], ["mount", "Altitude e relevo", "Subir uma montanha esfria, como ir aos polos."], ["soil", "Solo", "Fertilidade, profundidade e drenagem."], ["drop", "Água disponível", "Rios, lençóis subterrâneos e umidade do ar."]]
+          .map(([i, t, d], k) => `<div class="card" data-sfx="tick"${A(1.4 + k * 0.45, "tilt", 0.9)}>${ic(i)}<h3>${t}</h3><p>${d}</p></div>`).join("")}
+      </div></div>` },
+  { id: "latitudes", dur: 15, sec: "s01", coord: "0° → 90° DE LATITUDE", fx: "ember", custom: "latmap",
+    html: `<div class="g2 wl" style="gap:60px"><div class="col"><div class="map" id="lmap"${A(0.3, "blur", 1.2)}><img data-tex alt=""></div>
+        <p class="src"${A(1, "fade")}>IMAGEM: NASA BLUE MARBLE · FAIXAS APROXIMADAS</p></div>
+      <div class="col" style="gap:26px"><span class="eye"${A(0.2, "fade")}>Do Equador aos polos</span>
+        <h2 class="h2"${A(0.5)}>A vegetação muda em <span class="serif">faixas</span></h2>
+        <div class="bandlist" id="blist"${A(0.9, "fade")}></div>
+        <p class="txt" id="btext" style="min-height:4.4em;font-size:25px"${A(1.1, "fade")}></p></div></div>` },
+  { id: "importancia", dur: 11, sec: "s01", coord: "SERVIÇOS AMBIENTAIS", fx: "ember",
+    html: `<div class="center" style="gap:40px"><span class="eye"${A(0.2, "fade")}>Por que a vegetação importa?</span>
+      <h2 class="h2" data-split="words" data-in="0.4">Sem a cobertura verde, o planeta <span class="serif">perde o equilíbrio</span></h2>
+      <div class="cards" style="grid-template-columns:repeat(4,370px);text-align:left">
+        ${[["drop", "Ciclo da água", "A transpiração das plantas devolve água ao ar. Os “rios voadores” da Amazônia levam chuva ao Centro-Sul do Brasil."], ["co2", "Clima", "Na fotossíntese, as plantas retiram CO₂ do ar e guardam carbono em troncos, raízes e solo."], ["life", "Biodiversidade", "Abrigo, alimento e reprodução para animais, fungos e microrganismos."], ["soil", "Solos", "Raízes seguram a terra e folhas caídas viram matéria orgânica. Sem elas, há erosão."]]
+          .map(([i, t, d], k) => `<div class="card" data-sfx="tick"${A(1.5 + k * 0.6, "rise", 0.9)}>${ic(i)}<h3>${t}</h3><p>${d}</p></div>`).join("")}
+      </div></div>` },
+
+  { id: "trop", dur: 9, sec: "s02", coord: "3°06′ S · 60°01′ O — AMAZÔNIA", fx: "pollen", sfx: "impact",
+    globe: [[0, gp({ x: 560, y: 560, r: 340, lon: 10, tilt: 0.1, alpha: 1 })], [3, gp({ x: 560, y: 560, r: 375, lon: -42, tilt: 0.12 })], [9, gp({ x: 560, y: 560, r: 385, lon: -48, tilt: 0.12 })]],
+    pins: [["Amazônia", -62, -4, 2.6], ["Mata Atlântica", -43, -21, 3.0]],
+    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:820px">
+      <span class="eye"${A(0.4, "fade")}>02 · Florestas equatoriais e tropicais</span>
+      <h2 class="hx" data-split="letters" data-in="0.7" style="font-size:132px">Calor, chuva e vida</h2>
+      <p class="lead"${A(2.4)}>Na faixa intertropical, calor constante e muita chuva formam as florestas mais densas e ricas em espécies do planeta.</p>
+      <div class="row"${A(3.4)}><span class="chip"><i></i>Amazônia</span><span class="chip"><i></i>Congo</span><span class="chip"><i></i>Sudeste Asiático</span><span class="chip"><i></i>Mata Atlântica</span></div></div>` },
+  { id: "trop-clima", dur: 10, sec: "s02", coord: "ENTRE OS TRÓPICOS · 23°26′ N E S", fx: "pollen",
+    html: `<div class="g2"><div class="col" style="gap:28px"><span class="eye"${A(0.2, "fade")}>Clima</span>
+        <h2 class="h2"${A(0.4)}>Perto do Equador, <span class="serif">o verão não acaba</span></h2>
+        <p class="txt"${A(1.1)}>No clima equatorial chove o ano inteiro. Nas florestas tropicais, como a Mata Atlântica, pode haver meses menos chuvosos, mas a umidade continua alta.</p></div>
+      <div class="panel col" style="gap:30px"${A(0.8, "left")}>
+        ${[["Temperatura média", "24 a 28 °C", 86], ["Chuva anual", "acima de 2.000 mm", 92], ["Umidade do ar", "muito alta", 90], ["Variação de temperatura no ano", "pequena", 12]]
+          .map(([l, v, p], k) => `<div class="gauge"><div class="lbl"><span>${l}</span><b>${v}</b></div><div class="bar"><i style="width:${p}%"${A(1.4 + k * 0.4, "grow", 1.4)}></i></div></div>`).join("")}
+        <p class="src">VALORES MÉDIOS APROXIMADOS</p></div></div>` },
+  { id: "estratos", dur: 13, sec: "s02", coord: "ESTRATIFICAÇÃO VERTICAL", fx: "pollen", custom: "strata",
+    html: `<div class="g2 wl" style="gap:56px"><div class="diagram"${A(0.3, "blur", 1.2)}>${STRATA}</div>
+      <div class="col" style="gap:18px"><span class="eye"${A(0.2, "fade")}>Os andares da floresta</span>
+        <div class="lay" id="lay">
+          <div${A(0.6, "left")}><b>+45 m</b><span><strong>Emergentes</strong><small>Ultrapassam o dossel. No Amapá, um angelim-vermelho mede cerca de 88 m.</small></span></div>
+          <div${A(0.8, "left")}><b>25–40 m</b><span><strong>Dossel</strong><small>Copas encostadas formam um “teto” que retém a maior parte da luz.</small></span></div>
+          <div${A(1.0, "left")}><b>2–10 m</b><span><strong>Sub-bosque</strong><small>Pouca luz: arbustos, palmeiras e árvores jovens.</small></span></div>
+          <div${A(1.2, "left")}><b>0 m</b><span><strong>Chão da floresta</strong><small>Só cerca de 2% da luz chega aqui; folhas caídas viram nutrientes.</small></span></div>
+        </div></div></div>` },
+  { id: "trop-carac", dur: 11, sec: "s02", coord: "LATIFOLIADA · PERENE · HETEROGÊNEA", fx: "pollen",
+    html: `<div class="g2 wr"><div class="col"><span class="eye"${A(0.2, "fade")}>Características</span>
+        <h2 class="h2"${A(0.4)}>Como é essa <span class="serif">vegetação</span></h2>
+        <div class="panel"${A(4.2, "rise")}><p class="txt"><b>Um paradoxo:</b> muitos solos tropicais são pobres. A fertilidade vem da decomposição rápida das folhas — sem a floresta, o solo se empobrece.</p></div></div>
+      <div class="slabs">${[["Latifoliada", "folhas largas, que captam muita luz"], ["Perenifólia", "sempre verde"], ["Higrófila", "adaptada à alta umidade"], ["Heterogênea", "enorme variedade de espécies"], ["Densa e estratificada", "árvores próximas, em andares"]]
+        .map(([t, d], k) => `<div class="sl" data-sfx="tick"${A(0.8 + k * 0.5, "tilt", 0.9)}><b>0${k + 1}</b><strong>${t}</strong><small>${d}</small></div>`).join("")}</div></div>` },
+  { id: "trop-amea", dur: 11, sec: "s02", coord: "AMAZÔNIA · CERCA DE 60% NO BRASIL", fx: "pollen",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade")}>Importância</span><h2 class="h2"${A(0.4)}>Um tesouro <span class="serif">vivo</span></h2>
+        <ul class="list"><li${A(1.0)}>Abrigam <b>mais da metade das espécies</b> terrestres conhecidas (estimativa).</li><li${A(1.6)}>A <b>Amazônia</b> é a maior floresta tropical do mundo.</li><li${A(2.2)}>Guardam carbono e regulam as chuvas.</li><li${A(2.8)}>São território de <b>povos indígenas</b> e comunidades tradicionais.</li></ul></div>
+      <div class="panel col" style="gap:20px"${A(3.6, "left")}><span class="eye" style="color:var(--ember)">Ameaças</span>
+        <div class="row" style="gap:12px">${["Desmatamento para pecuária e lavouras", "Extração ilegal de madeira", "Garimpo e mineração", "Queimadas", "Estradas e grandes obras"].map((c, k) => `<span class="chip"${A(4 + k * 0.3, "pop", 0.6)}><i style="background:var(--ember)"></i>${c}</span>`).join("")}</div></div></div>` },
+
+  { id: "taiga", dur: 9, sec: "s03", coord: "60° N · 100° L — SIBÉRIA", fx: "snow", sfx: "impact",
+    globe: [[0, gp({ x: 580, y: 556, r: 345, lon: -40, tilt: 0.1, sx: -0.5, sy: 0.6, sz: 0.6 })], [3.2, gp({ x: 580, y: 556, r: 375, lon: 60, tilt: -0.95, sx: -0.5, sy: 0.6, sz: 0.6 })], [9, gp({ x: 580, y: 556, r: 385, lon: 70, tilt: -0.95, sx: -0.5, sy: 0.6, sz: 0.6 })]],
+    pins: [["Escandinávia", 18, 63, 3.0], ["Sibéria", 100, 60, 3.4], ["Canadá", -100, 56, 3.8]],
+    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:780px">
+      <span class="eye"${A(0.5, "fade", 1.2)}>03 · Florestas de coníferas</span>
+      <h2 class="hx" data-split="letters" data-in="0.9">Taiga</h2>
+      <p class="lead"${A(2.2, "blur", 1.4)}>O grande cinturão verde do Norte: pinheiros, abetos e lariços que atravessam o Canadá, a Escandinávia e a Rússia.</p></div>` },
+  { id: "taiga-clima", dur: 10, sec: "s03", coord: "50° A 70° DE LATITUDE NORTE", fx: "snow",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade", 1.2)}>Clima</span><h2 class="h2"${A(0.4, "blur", 1.3)}>Invernos longos, <span class="serif">verões curtos</span></h2>
+        <p class="txt"${A(1.2, "fade", 1.3)}>A taiga ocupa as altas latitudes do <b>Hemisfério Norte</b> e é a maior formação vegetal contínua do planeta.</p></div>
+      <dl class="facts">${[["Inverno", "Longo e rigoroso", "Na Sibéria, pode passar de −40 °C."], ["Verão", "Curto e ameno", "Poucos meses de crescimento."], ["Chuvas", "Moderadas", "Boa parte cai como neve."], ["Hemisfério Sul", "Não há taiga", "Faltam terras nessas latitudes."]]
+        .map(([a, b, c], k) => `<div class="fact"${A(1.4 + k * 0.6, "fade", 1.1)}><dt>${a}</dt><dd>${b}<small>${c}</small></dd></div>`).join("")}</dl></div>` },
+  { id: "conifera", dur: 14, sec: "s03", coord: "PICEA · PINUS · ABIES · LARIX", fx: "snow", custom: "tree",
+    html: `<div class="g2" style="grid-template-columns:560px 1fr;gap:80px"><div class="diagram" style="width:520px"${A(0.3, "blur", 1.3)}>${TREE}</div>
+      <div class="col" style="gap:20px"><span class="eye"${A(0.2, "fade")}>Adaptações ao frio</span>
+        <div class="lay" id="adapt">${[["01", "Formato cônico", "A neve escorrega e os galhos não quebram."], ["02", "Folhas-agulha", "Finas e com cera: perdem pouca água e resistem ao gelo."], ["03", "Sempre verde e escura", "Já faz fotossíntese quando esquenta; a cor escura absorve calor."], ["04", "Sementes em cones", "São gimnospermas — daí o nome “coníferas”."], ["05", "Resina", "Fecha ferimentos e protege contra insetos e fungos."]]
+          .map(([n, t, d], k) => `<div${A(0.6 + k * 0.15, "left")}><b>${n}</b><span><strong>${t}</strong><small>${d}</small></span></div>`).join("")}</div></div></div>` },
+  { id: "taiga-uso", dur: 10, sec: "s03", coord: "MADEIRA · CELULOSE · CARBONO", fx: "snow",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade", 1.2)}>Uso e importância</span><h2 class="h2"${A(0.4, "blur", 1.3)}>Poucas espécies, <span class="serif">área imensa</span></h2>
+        <p class="txt"${A(1.2, "fade", 1.3)}>Por ser <b>homogênea</b>, a taiga é muito explorada para <b>madeira e celulose</b>. Guarda muito carbono em solos e turfeiras e abriga alces, ursos, lobos e renas.</p>
+        <p class="txt"${A(2.4, "fade", 1.3)}>Ameaças: corte raso e incêndios, mais frequentes com o aquecimento global.</p></div>
+      <div class="panel col" style="gap:18px"${A(3.2, "left", 1.2)}><span class="eye">E no Brasil?</span><p class="txt">No Sul, a <b>Mata de Araucárias</b> tem como destaque uma conífera, a araucária. Mas é uma floresta subtropical, diferente da taiga — e a araucária está ameaçada de extinção.</p></div></div>` },
+
+  { id: "tundra", dur: 9, sec: "s04", coord: "68° N · 35° L — PENÍNSULA DE KOLA", fx: "wind", sfx: "impact",
+    globe: [[0, gp({ x: 580, y: 556, r: 375, lon: 70, tilt: -0.95, sx: -0.3, sy: 0.7, sz: 0.5 })], [3.4, gp({ x: 580, y: 556, r: 375, lon: -10, tilt: -1.3, sx: -0.3, sy: 0.7, sz: 0.5 })], [9, gp({ x: 580, y: 556, r: 385, lon: -20, tilt: -1.3, sx: -0.3, sy: 0.7, sz: 0.5 })]],
+    pins: [["Groenlândia", -45, 72, 3.2], ["Península de Kola", 35, 68, 3.6], ["Ártico canadense", -100, 67, 4.0]],
+    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:780px">
+      <span class="eye"${A(0.6, "fade", 1.4)}>04 · Tundra</span>
+      <h2 class="hx" data-split="letters" data-in="1.0">Tundra</h2>
+      <p class="lead"${A(2.4, "fade", 1.6)}>No limite do frio, a vida cresce rente ao chão: musgos, liquens, gramíneas e arbustos anões.</p></div>` },
+  { id: "tundra-clima", dur: 10, sec: "s04", coord: "AO REDOR DO OCEANO ÁRTICO", fx: "wind",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade", 1.4)}>Clima</span><h2 class="h2"${A(0.5, "fade", 1.5)}>Um <span class="serif">deserto frio</span></h2>
+        <p class="txt"${A(1.2, "fade", 1.5)}>Ocupa o norte do Alasca e do Canadá, o litoral da Groenlândia e o norte da Escandinávia e da Rússia. Também existe no alto de montanhas.</p></div>
+      <div class="panel col" style="gap:30px"${A(0.9, "fade", 1.4)}>
+        ${[["Período de crescimento", "50 a 60 dias", 10], ["Verão", "poucos graus acima de 0 °C", 22], ["Chuva e neve no ano", "menos de 250 mm", 14], ["Ventos", "fortes e frios", 88]]
+          .map(([l, v, p], k) => `<div class="gauge"><div class="lbl"><span>${l}</span><b>${v}</b></div><div class="bar"><i style="width:${p}%"${A(1.6 + k * 0.5, "grow", 1.6)}></i></div></div>`).join("")}</div></div>` },
+  { id: "permafrost", dur: 12, sec: "s04", coord: "SOLO CONGELADO PERMANENTEMENTE", fx: "wind", custom: "perma",
+    html: `<div class="g2 wl"><div class="col"><div class="diagram" id="perma"${A(0.3, "fade", 1.4)}>${PERMA}</div>
+        <div class="row"><span class="chip" id="pw"><i></i>Inverno</span><span class="chip" id="ps"><i></i>Verão</span></div></div>
+      <div class="col"><span class="eye"${A(0.2, "fade", 1.4)}>O chão que nunca derrete</span><h2 class="h2"${A(0.5, "fade", 1.5)}>Permafrost</h2>
+        <p class="txt"${A(1.2, "fade", 1.5)}>Camada do subsolo <b>congelada o ano todo</b>. No verão, só a parte de cima — a <b>camada ativa</b> — descongela.</p>
+        <p class="txt"${A(5.6, "fade", 1.5)}>A água não se infiltra no gelo: formam-se brejos e lagoas, e as raízes não aprofundam. Por isso quase não há árvores.</p></div></div>` },
+  { id: "tundra-veg", dur: 10, sec: "s04", coord: "MUSGOS · LIQUENS · ARBUSTOS ANÕES", fx: "wind",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade", 1.4)}>Vegetação</span><h2 class="h2"${A(0.5, "fade", 1.5)}>Pequena por <span class="serif">estratégia</span></h2>
+        <p class="txt"${A(1.2, "fade", 1.5)}>Musgos, liquens, gramíneas e arbustos anões. O “musgo-de-rena” é na verdade um líquen — o principal alimento das renas no inverno.</p></div>
+      <dl class="facts">${[["Porte baixo", "Escapa do vento; a neve serve de cobertor."], ["Ciclo rápido", "Brota, floresce e dá sementes em semanas."], ["Tufos", "Crescer agrupado conserva calor."], ["Cores escuras", "Absorvem mais calor do Sol."]]
+        .map(([a, b], k) => `<div class="fact"${A(1.6 + k * 0.6, "fade", 1.2)}><dt>${a}</dt><dd>${b}</dd></div>`).join("")}</dl></div>` },
+  { id: "degelo", dur: 11, sec: "s04", coord: "ÁRTICO · AQUECIMENTO ACELERADO", fx: "wind", custom: "loop",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade", 1.4)}>Alerta</span><h2 class="h2"${A(0.5, "fade", 1.5)}>Quando o gelo derrete, <span class="serif">o clima reage</span></h2>
+        <p class="txt"${A(1.2, "fade", 1.5)}>O permafrost guarda cerca do <b>dobro do carbono</b> que existe hoje na atmosfera. Ao descongelar, libera <b>CO₂</b> e <b>metano</b>, que aquecem ainda mais o planeta.</p></div>
+      <div style="position:relative;width:620px;height:620px;justify-self:center" id="loopbox"><div class="diagram" style="position:absolute;inset:0"${A(0.6, "fade", 1.2)}>${LOOP}</div>
+        ${[["Aquecimento", "temperaturas sobem", 50, 15], ["Degelo", "o permafrost descongela", 85, 50], ["Decomposição", "da matéria orgânica", 50, 85], ["CO₂ + CH₄", "vão para o ar", 15, 50]]
+          .map(([b, s, x, y], k) => `<div class="panel" style="position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);padding:16px 22px;text-align:center;width:260px;border-color:rgba(255,122,26,.6)" data-sfx="tick"${A(1.6 + k * 1.1, "pop", 0.7)}><div class="h3" style="color:var(--orange);font-size:30px">${b}</div><div style="font-size:20px;color:var(--mute)">${s}</div></div>`).join("")}</div></div>` },
+
+  { id: "temperadas", dur: 10, sec: "s05", coord: "35° A 55° DE LATITUDE", fx: "leaf", sfx: "impact", custom: "seasons",
+    globe: [[0, gp({ x: 580, y: 556, r: 375, lon: -20, tilt: -1.3, sx: -0.5, sy: 0.5, sz: 0.7 })], [3.2, gp({ x: 580, y: 556, r: 375, lon: 15, tilt: -0.75, sx: -0.5, sy: 0.5, sz: 0.7 })], [10, gp({ x: 580, y: 556, r: 385, lon: 25, tilt: -0.75, sx: -0.5, sy: 0.5, sz: 0.7 })]],
+    pins: [["Europa Ocidental", 2, 47, 3.0], ["Białowieża", 23.8, 52.7, 3.6]],
+    html: `<div class="col" style="position:absolute;right:0;top:0;bottom:0;width:820px">
+      <span class="eye"${A(0.4, "fade")}>05 · Florestas temperadas</span>
+      <h2 class="hx" data-split="words" data-in="0.7" style="font-size:128px">Quatro estações</h2>
+      <p class="lead"${A(2.0)}>Nas latitudes médias, a mesma floresta muda de cor ao longo do ano.</p>
+      <div class="row" id="seas"${A(2.6, "fade")}><span class="chip" data-c="#a6e35d"><i></i>Primavera</span><span class="chip" data-c="#3fbf6b"><i></i>Verão</span><span class="chip" data-c="#ff8a3d"><i></i>Outono</span><span class="chip" data-c="#e8eef4"><i></i>Inverno</span></div>
+      <p class="txt" id="seasT" style="min-height:2.9em"${A(2.8, "fade")}></p></div>` },
+  { id: "temp-clima", dur: 10, sec: "s05", coord: "EUROPA · LESTE DOS EUA · LESTE DA ÁSIA", fx: "leaf",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade")}>Clima</span><h2 class="h2"${A(0.4)}>Estações <span class="serif">bem definidas</span></h2>
+        <p class="txt"${A(1.0)}><b>Verões quentes e invernos frios</b>, muitas vezes com neve, e chuvas bem distribuídas. No Hemisfério Sul aparecem no sul do Chile, na Nova Zelândia e no sudeste da Austrália.</p></div>
+      <div class="cards" style="grid-template-columns:1fr 1fr">${[["Primavera", "Brotam folhas novas e flores.", "#a6e35d"], ["Verão", "Copas densas, fotossíntese máxima.", "#3fbf6b"], ["Outono", "Folhas mudam de cor e caem.", "#ff8a3d"], ["Inverno", "Galhos nus: as árvores repousam.", "#e8eef4"]]
+        .map(([t, d, c], k) => `<div class="card" style="border-color:${c}55"${A(1.4 + k * 0.5, "pop", 0.7)}><h3 style="color:${c}">${t}</h3><p>${d}</p></div>`).join("")}</div></div>` },
+  { id: "folha", dur: 12, sec: "s05", coord: "FAGUS · QUERCUS · ACER", fx: "leaf", custom: "leaf",
+    html: `<div class="g2" style="grid-template-columns:520px 1fr;gap:90px"><div class="diagram" style="width:440px;justify-self:center"${A(0.2, "pop", 0.8)}>${LEAF}</div>
+      <div class="col" style="gap:26px"><span class="eye"${A(0.2, "fade")}>Caducifólias</span><h2 class="h2"${A(0.4)}>Por que as folhas <span class="serif">mudam de cor?</span></h2>
+        <p class="txt"${A(1.0)}>Com os dias mais curtos, a árvore para de produzir <b>clorofila</b>. O verde some e aparecem os <b>carotenoides</b> (amarelo e laranja); algumas espécies produzem <b>antocianinas</b> (vermelho).</p>
+        <div class="col" style="gap:18px"${A(1.6, "fade")}>
+          <div class="gauge"><div class="lbl"><span>Clorofila</span><b id="pc">100%</b></div><div class="bar"><i id="bc" style="width:100%;background:#3fbf6b;box-shadow:0 0 12px #3fbf6b"></i></div></div>
+          <div class="gauge"><div class="lbl"><span>Carotenoides</span><b>sempre presentes</b></div><div class="bar"><i style="width:60%;background:#ffb43d"></i></div></div>
+          <div class="gauge"><div class="lbl"><span>Antocianinas</span><b id="pr">0%</b></div><div class="bar"><i id="br" style="width:1%;background:#e8402a;box-shadow:0 0 12px #e8402a"></i></div></div></div>
+        <p class="txt" id="leafS" style="font-size:24px;color:var(--amber)"></p></div></div>` },
+  { id: "temp-ocup", dur: 10, sec: "s05", coord: "EUROPA · OCUPAÇÃO MILENAR", fx: "leaf",
+    html: `<div class="g2"><div class="col"><span class="eye"${A(0.2, "fade")}>Diversidade e ocupação</span><h2 class="h2"${A(0.4)}>Florestas que deram <span class="serif">lugar a cidades</span></h2>
+        <p class="txt"${A(1.0)}>Carvalhos, faias, bordos, castanheiras e nogueiras. Diversidade maior que a da taiga, menor que a das tropicais.</p></div>
+      <div class="col"><p class="txt"${A(1.8)}>Solos férteis atraíram a agricultura há séculos. Por isso estão entre as florestas <b>mais devastadas</b> do mundo.</p>
+        <div class="panel"${A(2.8, "left")}><p class="txt">Na Europa restam poucas áreas originais, como a <b>Floresta de Białowieża</b>, na Polônia e em Belarus.</p></div></div></div>` },
+
+  { id: "herb", dur: 12, sec: "s06", coord: "GRAMÍNEAS ↔ ARBUSTOS", fx: "dust", sfx: "impact", trans: "pan", custom: "spectrum",
+    html: `<div class="col" style="position:absolute;inset:0;gap:30px;align-content:center">
+      <span class="eye"${A(0.3, "fade")}>06 · Formações arbustivas e herbáceas</span>
+      <h2 class="h1" data-split="words" data-in="0.5">Quando a chuva <span class="acc">não basta</span> para uma floresta</h2>
+      <div class="row" style="gap:24px"><div class="panel" style="width:780px"${A(1.8, "right")}><span class="eye">Herbácea</span><p class="txt" style="margin-top:8px">Caule macio, não lenhoso, como as <b>gramíneas</b> (capins).</p></div>
+        <div class="panel" style="width:780px"${A(2.2, "right")}><span class="eye">Arbustiva</span><p class="txt" style="margin-top:8px">Planta lenhosa e baixa, com galhos desde a base.</p></div></div>
+      <div class="spec" id="spec"${A(3, "fade")}><div class="track"></div></div></div>` },
+  { id: "panorama", dur: 18, sec: "s06", coord: "SAVANA · PRADARIA · ESTEPE · MEDITERRÂNEA · DESERTO", fx: "dust", trans: "pan", custom: "pano",
+    html: `<div class="pano"><div class="strip" id="strip">${[
+      ["savana", "Savanas", "Tropical · estação seca marcada", "Gramíneas altas com árvores espalhadas; o fogo faz parte do ambiente.", "Serengeti (África), Cerrado, Llanos, norte da Austrália", 50],
+      ["pradaria", "Pradarias", "Temperado · chuvas moderadas", "Mar de gramíneas quase sem árvores, sobre solos muito férteis — hoje grandes lavouras de grãos.", "Grandes Planícies (EUA e Canadá), Pampas", 12],
+      ["estepe", "Estepes", "Temperado continental · seco", "Mais secas que as pradarias: gramíneas baixas e esparsas, invernos rigorosos.", "Ucrânia, Cazaquistão, Mongólia, Patagônia", 8],
+      ["mediterranea", "Mediterrânea", "Verão seco · inverno chuvoso", "Arbustos de folhas duras, resistentes à seca e ao fogo.", "Maquis (Europa), chaparral (Califórnia), matorral (Chile)", 82],
+      ["deserto", "Deserto", "Árido · chuva escassa", "Plantas xerófilas: cactos armazenam água e as folhas viram espinhos.", "Sonora (EUA e México), Saara, Atacama", 68]]
+      .map(([k, t, tag, d, ex, m]) => `<div class="pp"><div class="landscape" style="height:640px">${landscape(k)}</div><div class="col" style="gap:20px"><span class="eye">${tag}</span><h2 class="h1">${t}</h2><p class="txt">${d}</p><p class="txt" style="font-size:23px"><b>Exemplos:</b> ${ex}</p><div class="meter"><div class="bar"><i style="left:${m}%"></i></div><div class="ends"><span>gramíneas</span><span>arbustos e árvores</span></div></div></div></div>`).join("")}</div></div>` },
+  { id: "brasil", dur: 11, sec: "s06", coord: "CERRADO · PAMPA · CAATINGA", fx: "dust", trans: "pan",
+    html: `<div class="col" style="position:absolute;inset:0;gap:28px;align-content:center"><span class="eye"${A(0.2, "fade")}>No Brasil</span><h2 class="h2"${A(0.4, "right")}>Três exemplos <span class="serif">brasileiros</span></h2>
+      <div class="cards" style="grid-template-columns:repeat(3,1fr)">${[["cerrado", "Savana", "Cerrado", "A savana mais rica em espécies do mundo. Troncos tortuosos, casca grossa e raízes profundas."], ["pampa", "Campos", "Pampa", "Campos de gramíneas sobre colinas suaves, as coxilhas, no Rio Grande do Sul."], ["caatinga", "Arbustiva xerófila", "Caatinga", "Só existe no Brasil. Na seca, as plantas perdem as folhas — “mata branca”, em tupi."]]
+        .map(([k, tag, t, d], i) => `<div class="card" style="padding:0;overflow:hidden"${A(1 + i * 0.6, "right", 1)}><div class="landscape" style="height:250px;border:0;border-radius:0">${landscape(k, 800, 360)}</div><div style="padding:22px 26px 28px;display:grid;gap:10px"><span class="eye" style="font-size:14px">${tag}</span><h3>${t}</h3><p>${d}</p></div></div>`).join("")}</div></div>` },
+
+  { id: "humano", dur: 8, sec: "s07", coord: "FLORESTA EM PÉ", fx: "pollen", sfx: "impact",
+    html: `<div class="center"><span class="eye"${A(0.5, "fade", 1.4)}>07 · O ser humano e a natureza</span>
+      <h2 class="hx" data-split="words" data-in="1.0" style="font-size:140px">Uma relação <span class="serif" style="text-transform:none">desigual?</span></h2>
+      <p class="lead" style="max-width:40ch"${A(2.8, "fade", 1.6)}>Uma floresta em pé regula as chuvas, guarda carbono, abriga milhares de espécies e sustenta povos inteiros. O que acontece quando ela cai?</p></div>` },
+  { id: "desmat", dur: 10, sec: "s07", coord: "MUNDO · 2015 A 2020", fx: "fire", trans: "cut", sfx: "cut",
+    html: `<div class="col" style="position:absolute;inset:0;align-content:center;gap:26px"><span class="eye" style="color:var(--ember)"${A(0.1, "fade")}>Desmatamento</span>
+      <div class="stat"${A(0.2, "pop", 0.6)}><div class="n" style="font-size:260px;color:var(--ember)"><span data-count="10" data-in="0.3" data-dur="1.2">10</span> <small style="font-size:.4em">milhões</small></div></div>
+      <p class="lead" style="max-width:44ch;color:var(--cream)"${A(1.0)}>de hectares de florestas derrubados por ano no mundo — a cada ano, uma área maior que a do estado de Pernambuco.</p>
+      <p class="txt" style="max-width:60ch"${A(2.2)}>A principal causa é a <b>expansão da agropecuária</b>, ligada a quase 90% do desmatamento (FAO). Somam-se madeira, mineração e obras.</p>
+      <p class="src"${A(2.8, "fade")}>FONTE: FAO, FRA 2020 E LEVANTAMENTO POR SENSORIAMENTO REMOTO (2021)</p></div>` },
+  { id: "queimadas", dur: 9, sec: "s07", coord: "AMAZÔNIA · ARCO DO DESMATAMENTO", fx: "fire", trans: "cut", sfx: "cut",
+    html: `<div class="g2"><div class="col"><span class="eye" style="color:var(--ember)"${A(0.1, "fade")}>Queimadas</span><h2 class="h1"${A(0.2, "blur", 0.8)}>Fogo onde <span class="serif">havia floresta</span></h2>
+        <p class="txt"${A(0.9)}>Depois da derrubada, o fogo é usado para “limpar” a área. A floresta amazônica, úmida, <b>não é adaptada ao fogo</b> — diferente do Cerrado.</p></div>
+      <div class="col" style="gap:16px">${["Emissão de gases de efeito estufa", "Fumaça e doenças respiratórias", "Morte da fauna", "Empobrecimento do solo"].map((c, k) => `<span class="chip" style="font-size:28px;justify-self:start" data-sfx="tick"${A(1.6 + k * 0.5, "left", 0.6)}><i style="background:var(--ember)"></i>${c}</span>`).join("")}</div></div>` },
+  { id: "cidades", dur: 10, sec: "s07", coord: "23°33′ S · 46°38′ O — SÃO PAULO", fx: "fire", trans: "cut", sfx: "cut",
+    html: `<div class="g2"><div class="col"><span class="eye" style="color:var(--ember)"${A(0.1, "fade")}>Cidades e exploração</span><h2 class="h2"${A(0.2, "blur", 0.8)}>Concreto, minério <span class="serif">e mercúrio</span></h2>
+        <p class="txt"${A(1.0)}>A mineração e o <b>garimpo ilegal</b> abrem clareiras, contaminam rios com mercúrio e invadem terras indígenas.</p></div>
+      <div class="row" style="gap:70px"><div class="stat"${A(1.4, "pop", 0.6)}><div class="n">~<span data-count="70" data-in="1.5">70</span><small>%</small></div><div class="l">dos brasileiros vivem no domínio da Mata Atlântica</div></div>
+        <div class="stat"${A(2.4, "pop", 0.6)}><div class="n" style="color:var(--ember)">~<span data-count="12" data-in="2.5">12</span><small>%</small></div><div class="l">da Mata Atlântica original ainda resta</div></div></div></div>` },
+  { id: "espinha", dur: 12, sec: "s07", coord: "RONDÔNIA · 2000 → 2010", fx: "fire", trans: "cut", custom: "fishbone",
+    html: `<div class="g2 wl"><div class="col"><div class="diagram" id="fish" style="border-radius:22px;overflow:hidden"${A(0.2, "fade", 0.6)}>${fishbone()}</div>
+        <p class="src">ILUSTRAÇÃO BASEADA NAS IMAGENS DE SATÉLITE DA NASA (WORLD OF CHANGE)</p></div>
+      <div class="col"><span class="eye" style="color:var(--ember)"${A(0.2, "fade")}>Visto do espaço</span><h2 class="h2"${A(0.4)}>Espinha de <span class="serif">peixe</span></h2>
+        <div class="stat"><div class="n" id="year" style="font-size:120px">2000</div></div>
+        <p class="txt"${A(1.4)}>Primeiro abre-se uma estrada; depois, estradas laterais. Ao longo delas a floresta é derrubada em lotes, formando um desenho parecido com uma espinha de peixe.</p></div></div>` },
+  { id: "contrastes", dur: 11, sec: "s07", coord: "UMA RELAÇÃO DESIGUAL?", fx: "fire", trans: "fade",
+    html: `<div class="col" style="position:absolute;inset:0;align-content:center;gap:30px"><span class="eye"${A(0.2, "fade")}>Contrastes</span><h2 class="h2"${A(0.4)}>Por que <span class="serif">desigual?</span></h2>
+      <p class="txt" style="max-width:68ch"${A(1.0)}>Retiramos recursos mais rápido do que a natureza repõe. Os lucros ficam com poucos; secas, enchentes, calor e poluição atingem mais quem tem menos — e as próximas gerações.</p>
+      <div class="cards" style="grid-template-columns:repeat(3,1fr)">${[["Preservação", "Destruição", "Terras indígenas e unidades de conservação estão entre as áreas mais preservadas da Amazônia (MapBiomas)."], ["Biodiversidade", "Perda de habitats", "Habitats fragmentados isolam populações e levam espécies à extinção."], ["Desenvolvimento", "Responsabilidade", "Produzir sem destruir a base natural da própria economia."]]
+        .map(([a, b, d], k) => `<div class="card"${A(2.2 + k * 0.7, "rise")}><h3><span style="color:var(--amber)">${a}</span> <span style="color:var(--dim);font-family:var(--f-mono);font-size:22px">×</span> <span style="color:var(--ember)">${b}</span></h3><p>${d}</p></div>`).join("")}</div></div>` },
+  { id: "caminhos", dur: 11, sec: "s07", coord: "DÉCADA DA ONU DA RESTAURAÇÃO · 2021–2030", fx: "pollen", trans: "fade", sfx: "shimmer",
+    html: `<div class="col" style="position:absolute;inset:0;align-content:center;gap:30px"><span class="eye"${A(0.2, "fade")}>Recuperação e conservação</span><h2 class="h2"${A(0.4)}>Existem <span class="serif">caminhos</span></h2>
+      <div class="cards" style="grid-template-columns:repeat(3,1fr)">${[["sprout", "Reflorestamento", "Espécies nativas, matas ciliares e nascentes."], ["cycle", "Áreas degradadas", "Sistemas agroflorestais recuperam o solo."], ["shield", "Áreas protegidas", "Unidades de conservação e terras indígenas."], ["sat", "Monitoramento", "O INPE vigia por satélite (PRODES e DETER)."], ["cart", "Consumo consciente", "Produtos de origem legal e menos desperdício."], ["book", "Educação ambiental", "Conhecer os biomas para defendê-los."]]
+        .map(([i, t, d], k) => `<div class="card" style="grid-template-columns:52px 1fr;column-gap:20px" data-sfx="tick"${A(1 + k * 0.45, "rise")}>${ic(i)}<div><h3>${t}</h3><p>${d}</p></div></div>`).join("")}</div></div>` },
+  { id: "pergunta", dur: 12, sec: "s07", coord: "DESENVOLVIMENTO SUSTENTÁVEL", fx: "pollen", trans: "fade",
+    globe: [[0, gp({ x: 960, y: 560, r: 420, lon: -50, tilt: 0.2, alpha: 0 })], [1.5, gp({ x: 960, y: 560, r: 430, lon: -54, tilt: 0.2, alpha: 0.28 })], [12, gp({ x: 960, y: 560, r: 450, lon: -66, tilt: 0.2, alpha: 0.3 })]],
+    html: `<div class="center" style="gap:36px"><span class="eye"${A(0.5, "fade")}>Para refletir e debater</span>
+      <h2 class="h1" data-split="words" data-in="1.0" style="max-width:20ch;font-size:96px">É possível desenvolver a sociedade <span class="serif">sem destruir</span> os sistemas naturais que sustentam a vida?</h2>
+      <p class="small" style="max-width:62ch;font-size:22px"${A(5.5, "fade", 1.6)}>Desenvolvimento sustentável: atender às necessidades do presente sem comprometer as das gerações futuras (Relatório Brundtland, ONU, 1987).</p></div>` },
+
+  { id: "quiz-in", dur: 4.5, sec: "s08", coord: "6 PERGUNTAS", fx: "ember", sfx: "impact",
+    html: `<div class="center"><span class="eye"${A(0.3, "fade")}>08 · Exercitando o que aprendemos</span><h2 class="h1" data-split="words" data-in="0.6">Responda em voz alta!</h2>
+      <p class="lead" style="max-width:40ch"${A(1.6, "fade")}>Você tem 5 segundos para cada pergunta antes de a resposta aparecer.</p></div>` },
+  ...QUIZ.map(([q, o, a, e], n) => ({ id: "q" + n, dur: 10.5, sec: "s08", coord: `PERGUNTA ${n + 1} DE ${QUIZ.length}`, fx: "ember", custom: "quiz", qa: a,
+    html: `<div class="quiz"><div><span class="eye"${A(0.1, "fade")}>Pergunta ${String(n + 1).padStart(2, "0")}</span><p class="qq"${A(0.2, "rise", 0.6)} style="margin-top:18px">${q}</p>
+      <div class="opts">${o.map((t, k) => `<div class="opt" data-k="${k}"${A(0.5 + k * 0.15, "left", 0.5)}><b>${"ABCD"[k]}</b><span>${t}</span></div>`).join("")}</div>
+      <div class="exp" data-in="6.9" data-fx="rise"><b>Resposta: ${"ABCD"[a]}.</b> ${e}</div></div>
+      <svg class="ring" viewBox="0 0 260 260"${A(0.6, "pop", 0.6)}><circle class="bg" cx="130" cy="130" r="110"/><circle class="fg" cx="130" cy="130" r="110" stroke-dasharray="691.15" stroke-dashoffset="0"/><text x="130" y="163" text-anchor="middle">5</text></svg></div>` })),
+
+  { id: "final", dur: 16, sec: "fim", coord: "TERRA · PLANETA AZUL", fx: "ember", sfx: "final", custom: "final", trans: "fade",
+    globe: [[0, gp({ x: 960, y: 1500, r: 760, lon: -40, tilt: 1.2, sx: 0.1, sy: 0.6, sz: -0.4, grade: 0.55 })], [4, gp({ x: 960, y: 560, r: 400, lon: -55, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, grade: 0.5 })], [8, gp({ x: 960, y: 560, r: 410, lon: -62, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, alpha: 0.3 })], [16, gp({ x: 960, y: 560, r: 430, lon: -75, tilt: 0.25, sx: -0.4, sy: 0.4, sz: 0.8, alpha: 0.3 })]],
+    html: `<div class="center" style="gap:40px"><p class="h1" data-split="words" data-in="1.2" style="max-width:22ch;font-size:84px;text-shadow:0 8px 50px rgba(0,0,0,.8)">Proteger a cobertura <span class="amb">verde</span> é preservar o equilíbrio da vida no planeta <span class="acc">azul</span>.</p>
+      <div class="panel" style="display:grid;gap:12px;justify-items:center;padding:30px 50px"${A(7.5, "rise", 1.2)}>
+        <span class="eye" style="font-size:16px">Escola Comunitária Santa Maria Bestila</span>
+        <p class="txt" style="color:var(--cream)">Professor: <b>Valdemir</b> · Componente curricular: <b>Geografia</b></p>
+        <p class="txt" style="color:var(--cream)">Alunos: <b>Miguel</b>, <b>Henrique</b>, <b>Vinícius</b> e <b>Everton</b></p></div>
+      <p class="src"${A(10, "fade", 1.2)}>IMAGENS DE SATÉLITE: NASA BLUE MARBLE E BLACK MARBLE · TRILHA E EFEITOS GERADOS POR COMPUTADOR</p></div>` }
+];
+
+/* ======================= MONTAGEM ======================= */
+let T0 = 0;
+SCENES.forEach((s, i) => { s.start = T0; T0 += s.dur; s.end = T0; s.prev = SCENES[i - 1]; s.next = SCENES[i + 1]; });
+const TOTAL = T0;
+const root = $("#scenes");
+SCENES.forEach((s) => {
+  const el = document.createElement("section"); el.className = "sc"; el.innerHTML = s.html; root.appendChild(el); s.el = el;
+  $$("[data-tex]", el).forEach((im) => (im.src = "../src/assets/earth-day.jpg"));
+});
+function split(el) {
+  const mode = el.dataset.split; let i = 0;
+  const walk = (node) => Array.from(node.childNodes).forEach((c) => {
+    if (c.nodeType === 3) {
+      const f = document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { f.appendChild(document.createTextNode(" ")); return; }
+        if (mode === "letters") { const w = document.createElement("span"); w.style.cssText = "display:inline-block;white-space:nowrap"; Array.from(part).forEach((ch) => { const s = document.createElement("span"); s.className = "ch"; s.textContent = ch; s.dataset.i = i++; w.appendChild(s); }); f.appendChild(w); }
+        else { const s = document.createElement("span"); s.className = "wd"; s.textContent = part; s.dataset.i = i++; f.appendChild(s); }
+      });
+      c.replaceWith(f);
+    } else walk(c);
+  });
+  walk(el);
+}
+$$("[data-split]").forEach(split);
+SCENES.forEach((s) => { s.anims = $$("[data-in]", s.el).filter((e) => !e.dataset.split && !e.dataset.count); s.splits = $$("[data-split]", s.el); s.counts = $$("[data-count]", s.el); });
+
+// mapa de latitudes
+const BANDS = [["Florestas equatoriais", [[-10, 10]], "Perto do Equador, calor e chuva o ano todo: Amazônia, Congo, Indonésia."], ["Savanas", [[5, 20], [-20, -5]], "Entre 5° e 20°, uma estação seca marcada: Serengeti, Cerrado, Llanos."], ["Desertos", [[15, 35], [-35, -15]], "Perto dos trópicos, o ar seco das altas pressões dificulta as chuvas: Saara, Atacama."], ["Mediterrânea", [[30, 42], [-38, -30]], "Entre 30° e 40°: verões secos e invernos chuvosos."], ["Temperadas e pradarias", [[35, 55], [-55, -35]], "Latitudes médias: florestas onde chove bem; pradarias e estepes no interior seco."], ["Taiga", [[50, 70]], "Entre 50° e 70° N, invernos longos. Só no Hemisfério Norte."], ["Tundra", [[63, 78]], "Ao redor do Ártico: solo congelado e vegetação rasteira."], ["Gelo polar", [[78, 90], [-90, -62]], "Nos polos, gelo permanente. Montanhas altas também ficam frias, mesmo no Equador."]];
+(function () {
+  const map = $("#lmap");
+  [[0, "Equador"], [23.44, "Trópico de Câncer"], [-23.44, "Trópico de Capricórnio"], [66.56, "Círculo Polar Ártico"]].forEach(([lat, n]) => { const g = document.createElement("div"); g.className = "gl"; g.style.top = yP(lat) + "%"; g.innerHTML = `<span>${n}</span>`; map.appendChild(g); });
+  BANDS.forEach(([n, rs], k) => rs.forEach(([a, b]) => { const d = document.createElement("div"); d.className = "band"; d.dataset.b = k; d.style.top = yP(Math.max(a, b)) + "%"; d.style.height = (Math.abs(b - a) / 180) * 100 + "%"; map.appendChild(d); }));
+  $("#blist").innerHTML = BANDS.map(([n], k) => `<div data-b="${k}"><i></i>${n}</div>`).join("");
+})();
+// espectro
+(function () {
+  const sp = $("#spec");
+  [["Estepe", 7], ["Pradaria", 22], ["Savana", 50], ["Caatinga", 74], ["Mediterrânea", 92]].forEach(([n, at], k) => {
+    const m = document.createElement("div"); m.className = "mk" + (k % 2 ? " low" : ""); m.style.left = at + "%"; m.innerHTML = `<span>${n}</span><i></i>`; m.dataset.in = (3.4 + k * 0.45).toFixed(2); m.dataset.fx = "pop"; m.dataset.dur = "0.6"; m.dataset.sfx = "tick";
+    sp.appendChild(m);
+  });
+  const s = SCENES.find((x) => x.id === "herb"); s.anims = $$("[data-in]", s.el).filter((e) => !e.dataset.split && !e.dataset.count);
+})();
+
+/* ======================= FUNDO E PARTÍCULAS ======================= */
+(function topo() {
+  let paths = ""; const rnd = rng(7);
+  [[380, 300], [1500, 760], [1460, 160], [640, 900]].forEach(([cx, cy], ci) => {
+    for (let k = 1; k <= 13; k++) {
+      const r = k * 34 + ci * 9, ph = rnd() * 6.28, ph2 = rnd() * 6.28; let d = "";
+      for (let a = 0; a <= 80; a++) { const t = (a / 80) * Math.PI * 2, rr = r * (1 + 0.12 * Math.sin(3 * t + ph) + 0.06 * Math.sin(5 * t + ph2 + k * 0.3)); d += (a ? "L" : "M") + (cx + Math.cos(t) * rr * 1.3).toFixed(1) + " " + (cy + Math.sin(t) * rr).toFixed(1); }
+      paths += '<path d="' + d + 'Z"/>';
+    }
+  });
+  $("#topo").style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1160" preserveAspectRatio="xMidYMid slice"><g fill="none" stroke="#ff8a3d" stroke-width="1.1" opacity=".55">' + paths + "</g></svg>") + '")';
+})();
+const fx = $("#fx").getContext("2d");
+const PSETS = {};
+function mkSet(name, n, seed, f) { const r = rng(seed); PSETS[name] = Array.from({ length: n }, () => f(r)); }
+mkSet("ember", 95, 11, (r) => ({ x: r() * W, y: r() * H, v: 14 + r() * 48, a: r() * 6.28, f: 0.6 + r() * 2.2, sz: 0.7 + r() * 2.4, z: 0.3 + r() * 0.7, hue: r() }));
+mkSet("pollen", 80, 23, (r) => ({ x: r() * W, y: r() * H, v: 8 + r() * 26, a: r() * 6.28, f: 0.4 + r() * 1.4, sz: 0.8 + r() * 2.6, z: 0.3 + r() * 0.7, hue: r() }));
+mkSet("snow", 140, 31, (r) => ({ x: r() * W, y: r() * H, v: 30 + r() * 60, a: r() * 6.28, f: 0.4 + r() * 1.2, sz: 0.8 + r() * 2.6, z: 0.3 + r() * 0.7 }));
+mkSet("wind", 160, 41, (r) => ({ x: r() * W, y: r() * H, v: 260 + r() * 420, a: r() * 6.28, sz: 0.6 + r() * 1.6, z: 0.3 + r() * 0.7 }));
+mkSet("leaf", 40, 53, (r) => ({ x: r() * W, y: r() * H, v: 40 + r() * 50, a: r() * 6.28, f: 0.5 + r(), sz: 5 + r() * 5, z: 0.4 + r() * 0.6, c: Math.floor(r() * 4) }));
+mkSet("dust", 70, 61, (r) => ({ x: r() * W, y: r() * H, v: 20 + r() * 50, a: r() * 6.28, f: 0.3 + r(), sz: 0.8 + r() * 2, z: 0.3 + r() * 0.7, hue: r() }));
+mkSet("fire", 150, 71, (r) => ({ x: r() * W, y: r() * H, v: 40 + r() * 110, a: r() * 6.28, f: 1 + r() * 3, sz: 0.8 + r() * 2.8, z: 0.3 + r() * 0.7, hue: r() }));
+let leafPal = ["#ff8a3d", "#ffb43d", "#e8562e", "#c43d24"];
+const wrapY = (y) => ((y % (H + 60)) + H + 60) % (H + 60) - 30, wrapX = (x) => ((x % (W + 80)) + W + 80) % (W + 80) - 40;
+function drawSet(name, T, amt) {
+  if (amt <= 0.001) return;
+  const P = PSETS[name];
+  P.forEach((e) => {
+    let x, y, c, al;
+    switch (name) {
+      case "ember": case "pollen": case "fire":
+        y = wrapY(e.y - e.v * T * e.z); x = e.x + Math.sin(T * 0.7 * e.f + e.a) * 22 * e.z;
+        al = (0.55 + 0.45 * Math.sin(T * 3 * e.f + e.a * 3)) * 0.75;
+        c = name === "pollen" ? (e.hue < 0.6 ? "255,214,140" : "255,170,90") : name === "fire" ? (e.hue < 0.6 ? "255,90,30" : "255,180,80") : (e.hue < 0.7 ? "255,140,60" : "255,205,130");
+        break;
+      case "snow": y = wrapY(e.y + e.v * T * e.z); x = wrapX(e.x + Math.sin(T * e.f + e.a) * 30); al = 0.7; c = "255,241,226"; break;
+      case "wind": x = wrapX(e.x + e.v * T * e.z); y = e.y + Math.sin(T + e.a) * 6; fx.strokeStyle = `rgba(255,236,214,${0.5 * amt})`; fx.lineWidth = e.sz; fx.beginPath(); fx.moveTo(x, y); fx.lineTo(x - e.v * e.z * 0.09, y - 2); fx.stroke(); return;
+      case "leaf": {
+        y = wrapY(e.y + e.v * T * e.z); x = wrapX(e.x + Math.sin(T * e.f + e.a) * 50); const rot = T * 1.5 * e.f + e.a;
+        fx.save(); fx.translate(x, y); fx.rotate(rot); fx.globalAlpha = 0.85 * amt; fx.fillStyle = leafPal[e.c % leafPal.length];
+        fx.beginPath(); fx.ellipse(0, 0, e.sz, e.sz * 0.45, 0, 0, 6.283); fx.fill(); fx.restore(); return;
+      }
+      case "dust": x = wrapX(e.x + e.v * T * e.z); y = e.y + Math.sin(T * e.f + e.a) * 14; al = 0.5; c = e.hue < 0.7 ? "241,207,107" : "255,240,200"; break;
+    }
+    fx.fillStyle = `rgba(${c},${al * amt})`; fx.beginPath(); fx.arc(x, y, e.sz, 0, 6.283); fx.fill();
+    if (e.sz > 1.6 && name !== "snow") { fx.fillStyle = `rgba(${c},${0.1 * amt})`; fx.beginPath(); fx.arc(x, y, e.sz * 4, 0, 6.283); fx.fill(); }
+  });
+}
+
+/* ======================= GLOBO ======================= */
+const Globe = (function () {
+  const cv = $("#globe");
+  const gl = cv.getContext("webgl", { premultipliedAlpha: true, alpha: true, preserveDrawingBuffer: true, antialias: false });
+  if (!gl) return { draw() {}, ready: Promise.resolve() };
+  const VS = "attribute vec2 a; void main(){ gl_Position = vec4(a, 0.0, 1.0); }";
+  const FS = `
+precision highp float;
+uniform sampler2D uDay, uNight, uWater;
+uniform vec2 uCenter; uniform float uRadius, uRot, uTilt, uAlpha, uGrade;
+uniform vec3 uSun;
+const float PI = 3.14159265;
+void main(){
+  vec2 p = (gl_FragCoord.xy - uCenter) / uRadius;
+  float r = length(p), px = 1.0 / uRadius;
+  vec3 col = vec3(0.0); float a = 0.0;
+  vec3 L = normalize(uSun);
+  vec2 l2 = normalize(L.xy + vec2(0.0001));
+  if (r > 1.0 - px) {
+    float d = r - 1.0;
+    float side = 0.35 + 0.65 * max(0.0, dot(p / max(r, 0.0001), l2));
+    float glow = exp(-max(d, 0.0) / 0.05) * side;
+    float wide = exp(-max(d, 0.0) / 0.22) * side * 0.35;
+    col += vec3(1.0, 0.52, 0.16) * glow + vec3(1.0, 0.35, 0.08) * wide;
+    a = max(a, clamp(glow + wide, 0.0, 1.0));
+  }
+  if (r < 1.0 + px) {
+    float z = sqrt(max(0.0, 1.0 - r * r));
+    vec3 n = vec3(p, z);
+    float ct = cos(uTilt), st = sin(uTilt);
+    vec3 n1 = vec3(n.x, n.y * ct - n.z * st, n.y * st + n.z * ct);
+    float cr = cos(uRot), sr = sin(uRot);
+    vec3 w = vec3(n1.x * cr + n1.z * sr, n1.y, -n1.x * sr + n1.z * cr);
+    float lat = asin(clamp(w.y, -1.0, 1.0)), lon = atan(w.x, w.z);
+    vec2 uv = vec2(lon / (2.0 * PI) + 0.5, 0.5 - lat / PI);
+    vec3 day = texture2D(uDay, uv).rgb;
+    vec3 night = texture2D(uNight, uv).rgb;
+    float water = texture2D(uWater, uv).r;
+    float ndl = dot(n, L);
+    float lit = smoothstep(-0.12, 0.35, ndl);
+    vec3 c = day * (0.05 + 1.05 * lit);
+    c += night * vec3(1.0, 0.62, 0.25) * (1.0 - lit) * 1.9;
+    vec3 refl = reflect(-L, n);
+    c += vec3(1.0, 0.7, 0.4) * pow(max(refl.z, 0.0), 30.0) * water * lit * 0.8;
+    float lum = dot(c, vec3(0.299, 0.587, 0.114));
+    vec3 warm = mix(vec3(0.05, 0.015, 0.0), vec3(1.0, 0.58, 0.22), smoothstep(0.0, 0.75, lum)) + vec3(0.25, 0.12, 0.04) * smoothstep(0.6, 1.0, lum);
+    c = mix(c, warm, uGrade);
+    c += vec3(1.0, 0.45, 0.1) * exp(-pow(ndl / 0.09, 2.0)) * 0.35;
+    float fres = pow(1.0 - z, 2.4);
+    c += vec3(1.0, 0.5, 0.15) * fres * (0.25 + 0.9 * max(0.0, dot(n.xy, l2)));
+    float inside = 1.0 - smoothstep(1.0 - px, 1.0 + px, r);
+    col = mix(col, c, inside); a = max(a, inside);
+  }
+  gl_FragColor = vec4(col * uAlpha, clamp(a, 0.0, 1.0) * uAlpha);
+}`;
+  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(o)); return o; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, VS)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, FS)); gl.linkProgram(pr); gl.useProgram(pr);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+  const al = gl.getAttribLocation(pr, "a"); gl.enableVertexAttribArray(al); gl.vertexAttribPointer(al, 2, gl.FLOAT, false, 0, 0);
+  const U = {}; ["uDay", "uNight", "uWater", "uCenter", "uRadius", "uRot", "uTilt", "uAlpha", "uGrade", "uSun"].forEach((n) => (U[n] = gl.getUniformLocation(pr, n)));
+  gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  const load = (unit, src, name) => new Promise((res) => {
+    const t = gl.createTexture(), img = new Image();
+    img.onload = () => {
+      gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.uniform1i(U[name], unit); res(true);
+    };
+    img.onerror = () => { console.error("textura não carregou: " + src); res(false); };
+    img.src = src;
+  });
+  const ready = Promise.all([load(0, "../src/assets/earth-day.jpg", "uDay"), load(1, "../src/assets/earth-night.jpg", "uNight"), load(2, "../src/assets/earth-water.png", "uWater")]);
+  return {
+    ready,
+    draw(o) {
+      gl.viewport(0, 0, W, H); gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+      if (o.alpha <= 0.002) return;
+      gl.uniform2f(U.uCenter, o.x, H - o.y); gl.uniform1f(U.uRadius, o.r);
+      gl.uniform1f(U.uRot, o.lon * Math.PI / 180); gl.uniform1f(U.uTilt, o.tilt);
+      gl.uniform1f(U.uAlpha, o.alpha); gl.uniform1f(U.uGrade, o.grade);
+      gl.uniform3f(U.uSun, o.sx, o.sy, o.sz);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    }
+  };
+})();
+// quadros-chave globais do globo
+const GKF = [];
+let carry = G0;
+SCENES.forEach((s) => {
+  if (s.globe) {
+    const prevHas = s.prev && s.prev.globe;
+    s.globe.forEach(([t, p], j) => {
+      if (j === 0 && !prevHas && s.start > 0) { GKF.push([s.start, Object.assign({}, p, { alpha: 0 })]); GKF.push([s.start + Math.max(t, 1.0), p]); }
+      else GKF.push([s.start + t, p]);
+    });
+    carry = s.globe[s.globe.length - 1][1];
+  } else {
+    const z = Object.assign({}, carry, { alpha: 0 });
+    GKF.push([s.start + (s.prev && s.prev.globe ? 0.9 : 0), z]); GKF.push([s.end - 0.001, z]);
+  }
+});
+GKF.sort((a, b) => a[0] - b[0]);
+function globeAt(T) {
+  if (!GKF.length) return null;
+  if (T <= GKF[0][0]) return GKF[0][1];
+  for (let i = 0; i < GKF.length - 1; i++) {
+    const [ta, a] = GKF[i], [tb, b] = GKF[i + 1];
+    if (T >= ta && T <= tb) {
+      const k = easeIO(clamp((T - ta) / Math.max(0.0001, tb - ta)));
+      const o = {}; for (const key in a) o[key] = lerp(a[key], b[key], k); return o;
+    }
+  }
+  return GKF[GKF.length - 1][1];
+}
+function project(g, lon, lat) {
+  const la = lat * Math.PI / 180, lo = lon * Math.PI / 180;
+  const w = [Math.cos(la) * Math.sin(lo), Math.sin(la), Math.cos(la) * Math.cos(lo)];
+  const cr = Math.cos(g.lon * Math.PI / 180), sr = Math.sin(g.lon * Math.PI / 180);
+  const n1 = [w[0] * cr - w[2] * sr, w[1], w[0] * sr + w[2] * cr];
+  const ct = Math.cos(g.tilt), st = Math.sin(g.tilt);
+  const n = [n1[0], n1[1] * ct + n1[2] * st, -n1[1] * st + n1[2] * ct];
+  return { x: g.x + n[0] * g.r, y: g.y - n[1] * g.r, z: n[2] };
+}
+
+/* ======================= ANIMAÇÃO DOS ELEMENTOS ======================= */
+function anim(el, t) {
+  const tin = Number(el.dataset.in) || 0, dur = Number(el.dataset.dur) || 0.8, f = el.dataset.fx || "rise";
+  const k = seg(t, tin, dur), e = f === "pop" ? easeBack(k) : easeOut(k);
+  let op = clamp(k * 1.6), tr = "none", fl = "none";
+  switch (f) {
+    case "rise": tr = `translateY(${(1 - e) * 34}px)`; break;
+    case "blur": fl = k < 1 ? `blur(${(1 - e) * 14}px)` : "none"; tr = `scale(${1 + (1 - e) * 0.06})`; break;
+    case "left": tr = `translateX(${-(1 - e) * 60}px)`; break;
+    case "right": tr = `translateX(${(1 - e) * 60}px)`; break;
+    case "pop": tr = `scale(${0.4 + 0.6 * e})`; break;
+    case "tilt": tr = `perspective(900px) rotateX(${(1 - e) * 50}deg) translateY(${(1 - e) * 30}px)`; break;
+    case "grow": tr = `scaleX(${e})`; op = k > 0 ? 1 : 0; break;
+    case "drop": tr = `translateY(${-(1 - e) * 40}px)`; break;
+  }
+  el.style.opacity = op; el.style.transform = tr; el.style.filter = fl;
+}
+function animSplit(el, t) {
+  const tin = Number(el.dataset.in) || 0, st = el.dataset.split === "letters" ? 0.045 : 0.11;
+  $$(".ch, .wd", el).forEach((u) => {
+    const k = easeOut(seg(t, tin + Number(u.dataset.i) * st, 0.8));
+    u.style.opacity = k; u.style.filter = k < 1 ? `blur(${(1 - k) * 10}px)` : "none"; u.style.transform = `translateY(${(1 - k) * 0.3}em) scale(${1 + (1 - k) * 0.2})`;
+  });
+}
+
+/* ======================= CENAS PERSONALIZADAS ======================= */
+const CUSTOM = {
+  latmap(s, t) {
+    const idx = t < 1.6 ? -1 : Math.min(BANDS.length - 1, Math.floor((t - 1.6) / 1.6));
+    $$("#lmap .band").forEach((b) => (b.style.opacity = Number(b.dataset.b) === idx ? 1 : 0));
+    $$("#blist div").forEach((d) => d.classList.toggle("on", Number(d.dataset.b) === idx));
+    $("#btext").textContent = idx >= 0 ? BANDS[idx][2] : "";
+  },
+  strata(s, t) {
+    const idx = t < 1.8 ? -1 : Math.min(3, Math.floor((t - 1.8) / 2.6));
+    $$(".L", s.el).forEach((g) => (g.style.opacity = idx < 0 || Number(g.dataset.l) === idx ? 1 : 0.22));
+    $$("#lay > div").forEach((d, k) => d.classList.toggle("on", k === idx));
+  },
+  tree(s, t) {
+    const idx = t < 1.8 ? -1 : Math.min(4, Math.floor((t - 1.8) / 2.3));
+    $$(".hs", s.el).forEach((g) => { const on = Number(g.dataset.h) === idx; g.style.opacity = idx < 0 ? 0.6 : on ? 1 : 0.25; g.style.transform = on ? "scale(1)" : ""; });
+    $$("#adapt > div").forEach((d, k) => d.classList.toggle("on", k === idx));
+  },
+  perma(s, t) {
+    const sum = t > 4.2;
+    $$(".sum", s.el).forEach((e) => (e.style.opacity = sum ? clamp((t - 4.2) / 1.2) : 0));
+    $$(".win", s.el).forEach((e) => (e.style.opacity = sum ? 1 - clamp((t - 4.2) / 1.2) : 1));
+    $("#pw").style.borderColor = sum ? "" : "var(--orange)"; $("#ps").style.borderColor = sum ? "var(--orange)" : "";
+    $("#pw").style.opacity = sum ? 0.45 : 1; $("#ps").style.opacity = sum ? 1 : 0.45;
+  },
+  loop(s, t) { $$(".ar", s.el).forEach((a, k) => (a.style.opacity = clamp((t - 2.2 - k * 1.1) / 0.5))); },
+  seasons(s, t) {
+    const names = [["Primavera: dias mais longos, folhas novas e flores.", ["#f6c6d8", "#ffffff", "#c8f08a"]], ["Verão: copas cheias e fotossíntese no máximo.", ["#3fbf6b", "#4fd47f", "#1f9a52"]], ["Outono: as folhas ficam amarelas, laranja e vermelhas e caem.", ["#ff8a3d", "#ffb43d", "#e8562e", "#c43d24"]], ["Inverno: galhos nus, muitas vezes com neve.", ["#ffffff", "#e6f0f8", "#cfe0ee"]]];
+    const idx = t < 2.8 ? 0 : Math.min(3, Math.floor((t - 2.8) / 1.8));
+    $$("#seas .chip").forEach((c, k) => { c.style.borderColor = k === idx ? c.dataset.c : ""; c.style.background = k === idx ? c.dataset.c + "33" : ""; c.querySelector("i").style.background = c.dataset.c; c.querySelector("i").style.boxShadow = "0 0 10px " + c.dataset.c; });
+    $("#seasT").textContent = names[idx][0];
+    leafPal = names[idx][1];
+  },
+  leaf(s, t) {
+    const v = clamp((t - 2.2) / 7) * 100;
+    const stops = [[0, [47, 191, 107]], [35, [140, 196, 64]], [55, [242, 190, 52]], [78, [255, 122, 47]], [100, [205, 52, 40]]];
+    let col = "rgb(205,52,40)";
+    for (let i = 1; i < stops.length; i++) { const [t1, c1] = stops[i], [t0, c0] = stops[i - 1]; if (v <= t1) { const k = (v - t0) / (t1 - t0); col = "rgb(" + c0.map((x, j) => Math.round(x + (c1[j] - x) * k)).join(",") + ")"; break; } }
+    $("#leafP").setAttribute("fill", col);
+    const chl = Math.max(0, Math.round(100 - v * 1.15)), ant = clamp(Math.round((v - 55) * 2.2), 0, 100);
+    $("#pc").textContent = chl + "%"; $("#bc").style.width = Math.max(chl, 1) + "%";
+    $("#pr").textContent = ant + "%"; $("#br").style.width = Math.max(ant, 1) + "%";
+    const fall = clamp((t - 9.6) / 1.6);
+    $("#leafG").setAttribute("transform", `translate(${fall * 30} ${fall * 70}) rotate(${fall * 28} 150 200)`);
+    $("#leafS").textContent = v < 30 ? "Dias longos: muita clorofila." : v < 60 ? "Os dias encurtam: a clorofila se desfaz." : v < 95 ? "Aparecem carotenoides e antocianinas." : "Fim do outono: a folha cai.";
+  },
+  spectrum() {},
+  pano(s, t) {
+    const n = 5, hold = 3.0, move = 0.6, step = hold + move, w = 1680;
+    let x = 0;
+    for (let i = 1; i < n; i++) x -= easeIO(seg(t, 0.4 + i * step - move, move)) * w;
+    $("#strip").style.transform = `translateX(${x}px)`;
+  },
+  fishbone(s, t) {
+    const k = clamp((t - 0.8) / 8.5);
+    $$("#fish .rd").forEach((r) => r.setAttribute("stroke-dashoffset", String(1 - clamp((k - Number(r.dataset.t)) / 0.15))));
+    $$("#fish .cl").forEach((r) => r.setAttribute("opacity", String(0.85 * clamp((k - Number(r.dataset.t)) / 0.12))));
+    $("#year").textContent = String(2000 + Math.round(k * 10));
+  },
+  quiz(s, t) {
+    const left = clamp(1 - (t - 1.6) / 5), num = Math.ceil(left * 5);
+    $(".ring .fg", s.el).setAttribute("stroke-dashoffset", String(691.15 * (1 - left)));
+    $(".ring text", s.el).textContent = t < 6.6 ? String(Math.max(1, num)) : "✓";
+    const rev = t >= 6.6;
+    $$(".opt", s.el).forEach((o) => { o.classList.toggle("right", rev && Number(o.dataset.k) === s.qa); o.classList.toggle("dim", rev && Number(o.dataset.k) !== s.qa); });
+  },
+  final() {}
+};
+
+/* ======================= QUADRO ======================= */
+function frame(T) {
+  const Tg = T + HEAD;
+  // fundo (contínuo com o cabeçalho)
+  $("#orbA").style.cssText = `left:${-330 + 140 * Math.sin(Tg * 0.17)}px;top:${-380 + 90 * Math.cos(Tg * 0.13)}px;opacity:.95`;
+  $("#orbB").style.cssText = `left:${1080 + 120 * Math.cos(Tg * 0.11)}px;top:${420 + 70 * Math.sin(Tg * 0.15)}px;opacity:.9`;
+  $("#orbC").style.cssText = `left:${520 + 60 * Math.sin(Tg * 0.2)}px;top:640px;opacity:.75`;
+  $("#topo").style.transform = `translate(${-1.2 * Tg}px,${0.8 * Tg % 40}px) scale(1.03)`;
+  const gi = Math.floor(Tg * FPS); $("#grain").style.transform = `translate(${(gi * 37) % 60 - 30}px,${(gi * 53) % 60 - 30}px)`;
+
+  const s = SCENES.find((x) => T >= x.start && T < x.end) || SCENES[SCENES.length - 1];
+  const t = T - s.start;
+  SCENES.forEach((x) => x.el.classList.toggle("on", x === s));
+
+  // transição da cena
+  const trans = s.trans || "fade";
+  const enter = trans === "none" ? 1 : trans === "cut" ? 1 : easeOut(seg(t, 0, 0.7));
+  const exitK = s.next && (s.next.trans === "cut") ? seg(t, s.dur - 0.15, 0.15) : easeIO(seg(t, s.dur - 0.55, 0.55));
+  let op = Math.min(enter, 1 - exitK), tr = "none", fl = "none";
+  if (trans === "pan") tr = `translateX(${(1 - enter) * 160 - exitK * 120}px)`;
+  else if (trans === "fade" || trans === "zoom") { tr = `scale(${1 + (1 - enter) * 0.03 + exitK * 0.03})`; if (exitK > 0) fl = `blur(${exitK * 8}px)`; }
+  s.el.style.opacity = op; s.el.style.transform = tr; s.el.style.filter = fl;
+  s.anims.forEach((el) => anim(el, t));
+  s.splits.forEach((el) => animSplit(el, t));
+  s.counts.forEach((el) => { const k = easeOut(seg(t, Number(el.dataset.in) || 0, Number(el.dataset.dur) || 1.4)); el.textContent = String(Math.round(Number(el.dataset.count) * k)); });
+  leafPal = ["#ff8a3d", "#ffb43d", "#e8562e", "#c43d24"];
+  if (s.custom && CUSTOM[s.custom]) CUSTOM[s.custom](s, t);
+  const fl2 = trans === "cut" ? Math.exp(-t / 0.18) * 0.55 : 0;
+  $("#flash").style.opacity = fl2;
+
+  // partículas
+  fx.clearRect(0, 0, W, H);
+  const pin = s.prev && s.prev.fx === s.fx ? 1 : seg(t, 0, 1);
+  const pout = s.next && s.next.fx === s.fx ? 1 : 1 - seg(t, s.dur - 0.6, 0.6);
+  drawSet(s.fx || "ember", Tg, Math.min(pin, pout) * (T < 3 ? 1 : 1));
+
+  // globo e marcadores
+  const g = globeAt(T);
+  if (g) Globe.draw(g);
+  const pins = $("#pins"); pins.innerHTML = "";
+  if (g && s.pins && g.alpha > 0.3) s.pins.forEach(([n, lo, la, tin]) => {
+    const p = project(g, lo, la); if (p.z < 0.12) return;
+    const k = easeOut(seg(t, tin, 0.6)) * clamp((p.z - 0.12) / 0.15) * Math.min(1, 1 - exitK);
+    if (k <= 0) return;
+    const d = document.createElement("div"); d.className = "pin" + (p.x > 1300 ? " l" : ""); d.style.left = p.x + "px"; d.style.top = p.y + "px"; d.style.opacity = k; d.style.transform = `scale(${0.5 + 0.5 * k})`;
+    d.innerHTML = `<span>${n}</span>`; pins.appendChild(d);
+  });
+
+  // moldura: do tamanho do cabeçalho para a versão fina
+  const m = easeIO(seg(T, 0.3, 2.2));
+  const sc = lerp(1, 0.58, m);
+  $("#bSchool").style.transform = `translateY(${-14 * m}px) scale(${sc})`;
+  $("#bProf").style.transform = `translateY(${-14 * m}px) scale(${sc})`;
+  $("#bComp").style.transform = `translateY(${28 * m}px) scale(${sc})`;
+  const F = 1 - (s.id === "final" ? easeIO(seg(t, 6.5, 1.2)) : 0);
+  ["#bSchool", "#bProf", "#bComp", "#ruleT", "#tk1", "#tk2", "#tk3", "#tk4"].forEach((id) => ($(id).style.opacity = F));
+  $("#bAlunos").style.transform = `scale(${lerp(1, 0.4, m)})`; $("#bAlunos").style.opacity = 1 - easeOut(seg(T, 0.3, 1.2));
+  $("#alLine").style.opacity = easeOut(seg(T, 1.4, 1)) * F; $("#alLine").style.transform = `translateY(${(1 - easeOut(seg(T, 1.4, 1))) * 14}px)`;
+  const ry = lerp(186, 130, m);
+  $("#ruleT").style.top = ry + "px"; $("#pillT").style.top = ry + "px";
+  [["#tk1", 60, lerp(44, 34, m)], ["#tk2", W - 82, lerp(44, 34, m)], ["#tk3", 60, H - 66 + 26 * m], ["#tk4", W - 82, H - 66 + 26 * m]].forEach(([id, x, y], i) => { const e = $(id); e.style.left = x + "px"; e.style.top = y + "px"; e.style.borderWidth = ["2px 0 0 2px", "2px 2px 0 0", "0 0 2px 2px", "0 2px 2px 0"][i]; });
+  const bk = easeOut(seg(T, 1.2, 1.2));
+  $("#ruleB").style.opacity = bk * F; $("#ruleB").style.transform = `scaleX(${bk})`;
+  $("#progress").style.width = (1728 * clamp(T / TOTAL)) + "px"; $("#progress").style.opacity = bk * F;
+  // título do cabeçalho saindo
+  const hk = easeIO(seg(T, 0.1, 1.3));
+  $("#htitle").style.opacity = 1 - hk; $("#htitle").style.transform = `scale(${1 + hk * 0.25})`; $("#htitle").style.filter = hk > 0 ? `blur(${hk * 14}px)` : "none";
+  // etiqueta da seção e local
+  const label = s.sec ? SEC[s.sec] : "Capítulo 12";
+  const secStart = (() => { let x = s; while (x.prev && x.prev.sec === s.sec) x = x.prev; return x.start; })();
+  const pk = T < 1.6 ? 0 : easeOut(seg(T, Math.max(secStart, 1.6), 0.6));
+  $("#pillT").textContent = T < 1.6 ? "CAPÍTULO 12" : label;
+  $("#pillT").style.transform = `translate(-50%,-50%) scaleX(${T < 1.6 ? 1 : 0.6 + 0.4 * pk})`; $("#pillT").style.opacity = (T < 1.6 ? 1 - seg(T, 1.2, 0.4) : pk) * F;
+  $("#pillB").textContent = s.coord || ""; $("#pillB").style.opacity = bk * easeOut(seg(t, 0.2, 0.6)) * (1 - exitK) * F;
+  $("#fade").style.opacity = s.id === "final" ? easeIO(seg(t, s.dur - 1.6, 1.6)) : 0;
+}
+
+/* ======================= TRILHA (cabeçalho + capítulo) ======================= */
+let WAV16 = null;
+async function renderAudio() {
+  const SR = 48000, DUR = HEAD + TOTAL, ctx = new OfflineAudioContext(2, Math.ceil(SR * DUR), SR);
+  const master = ctx.createGain(); master.gain.setValueAtTime(0.6, 0); master.gain.setValueAtTime(0.6, DUR - 2.5); master.gain.linearRampToValueAtTime(0.0001, DUR);
+  const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -18; comp.ratio.value = 6; comp.knee.value = 12; comp.attack.value = 0.003; comp.release.value = 0.25;
+  master.connect(comp).connect(ctx.destination);
+  const rnd = rng(3);
+  const rev = ctx.createConvolver(), irLen = Math.floor(SR * 3.4), ir = ctx.createBuffer(2, irLen, SR);
+  for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < irLen; i++) d[i] = (rnd() * 2 - 1) * Math.pow(1 - i / irLen, 2.4); }
+  rev.buffer = ir; const wet = ctx.createGain(); wet.gain.value = 0.55; wet.connect(rev).connect(master);
+  const nb = ctx.createBuffer(1, SR * 3, SR), nd = nb.getChannelData(0); for (let i = 0; i < nd.length; i++) nd[i] = rnd() * 2 - 1;
+  const noise = (t, dur) => { const s = ctx.createBufferSource(); s.buffer = nb; s.loop = true; s.start(t, rnd() * 2); s.stop(t + dur + 0.1); return s; };
+  const mtof = (m) => 440 * Math.pow(2, (m - 69) / 12);
+  const env = (g, t, a, peak, d) => { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.0001, t + a + d); };
+  const chord = (t0, end, notes, bright, vol = 0.1) => {
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(700, t0); lp.frequency.linearRampToValueAtTime(bright, t0 + 4); lp.Q.value = 0.5;
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t0); g.gain.linearRampToValueAtTime(vol, t0 + 2.6); g.gain.setValueAtTime(vol, Math.max(t0 + 2.7, end - 2.5)); g.gain.linearRampToValueAtTime(0.0001, end);
+    lp.connect(g); g.connect(master); g.connect(wet);
+    notes.forEach((m) => ["sawtooth", "triangle"].forEach((type, j) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = mtof(m); o.detune.value = j ? 6 : -6; const og = ctx.createGain(); og.gain.value = type === "sawtooth" ? 0.045 : 0.1; o.connect(og).connect(lp); o.start(t0); o.stop(end + 0.1); }));
+  };
+  const whoosh = (t, dur, from, to, gain, panFrom, panTo) => {
+    const n = noise(t, dur), bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 1;
+    bp.frequency.setValueAtTime(from, t); bp.frequency.exponentialRampToValueAtTime(to, t + dur * 0.7); bp.frequency.exponentialRampToValueAtTime(to * 0.5, t + dur);
+    const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gain, t + dur * 0.55); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    const p = ctx.createStereoPanner(); p.pan.setValueAtTime(panFrom, t); p.pan.linearRampToValueAtTime(panTo, t + dur);
+    n.connect(bp).connect(g).connect(p); p.connect(master); p.connect(wet);
+  };
+  const impact = (t, gain) => {
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(82, t); o.frequency.exponentialRampToValueAtTime(34, t + 1.1);
+    env(g, t, 0.008, gain, 1.5); o.connect(g); g.connect(master); g.connect(wet); o.start(t); o.stop(t + 1.7);
+    const n = noise(t, 0.9), lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.setValueAtTime(2600, t); lp.frequency.exponentialRampToValueAtTime(120, t + 0.6);
+    const ng = ctx.createGain(); env(ng, t, 0.004, gain * 0.45, 0.7); n.connect(lp).connect(ng); ng.connect(master); ng.connect(wet);
+  };
+  const shimmer = (t, gain, base = 880) => [1, 1.5, 2, 3].forEach((k, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = base * k; env(g, t + i * 0.05, 0.02, gain / (i + 1), 2.8); o.connect(g); g.connect(master); g.connect(wet); o.start(t); o.stop(t + 3.2); });
+  const tick = (t, f, gain) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; env(g, t, 0.003, gain, 0.12); o.connect(g); g.connect(master); g.connect(wet); o.start(t); o.stop(t + 0.2); };
+  const riser = (t, dur) => { const n = noise(t, dur), bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 2; bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(5200, t + dur); const g = ctx.createGain(); g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.3, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + 0.06); n.connect(bp).connect(g); g.connect(master); g.connect(wet); };
+  const glitch = (t0) => { for (let i = 0; i < 6; i++) { const t = t0 + i * 0.045, o = ctx.createOscillator(), g = ctx.createGain(); o.type = "square"; o.frequency.value = 70 + rnd() * 170; env(g, t, 0.002, 0.07, 0.03); o.connect(g).connect(master); o.start(t); o.stop(t + 0.06); } };
+  const chime = (t) => [[659.25, 0], [987.77, 0.11]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; env(g, t + d, 0.01, 0.16, 1.2); o.connect(g); g.connect(master); g.connect(wet); o.start(t + d); o.stop(t + d + 1.4); });
+
+  // --- cabeçalho (mesmos tempos do vídeo do cabeçalho) ---
+  [[0.4, [50, 57, 61, 64, 69], 1300], [6.4, [47, 54, 57, 62, 66], 1300], [12.4, [43, 50, 55, 59, 62, 66], 1300]].forEach(([t0, n, b], i, arr) => chord(t0, (arr[i + 1] ? arr[i + 1][0] : 17.2) + 2.5, n, b));
+  chord(17.2, HEAD + 6, [45, 52, 57, 61, 64, 69, 73], 2400, 0.13);
+  { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = 36.7; g.gain.setValueAtTime(0.0001, 0.5); g.gain.linearRampToValueAtTime(0.16, 3); g.gain.setValueAtTime(0.16, DUR - 3); g.gain.linearRampToValueAtTime(0.0001, DUR); o.connect(g).connect(master); o.start(0.5); o.stop(DUR); }
+  whoosh(0.35, 1.6, 200, 2200, 0.35, -0.9, 0.9);
+  [[1.0, 3.8, -1, false], [5.0, 7.3, 1, false], [8.5, 10.8, -1, false], [12.0, 15.2, 1, true]].forEach(([tIn, tMove, side, st]) => {
+    impact(tIn + 0.2, 0.42); shimmer(tIn + 0.3, 0.07, st ? 740 : 880); whoosh(tMove - 0.05, 1.35, 260, 2600, 0.42, 0, side * 0.9);
+    if (st) [0, 1, 2, 3].forEach((j) => tick(tIn + 0.5 + j * 0.45, 1300 + j * 220, 0.12));
+  });
+  whoosh(16.2, 1.2, 400, 3000, 0.22, -0.4, 0.4); riser(15.7, 1.5); impact(17.2, 0.95); impact(17.92, 0.5); shimmer(19.8, 0.1, 660); shimmer(20.2, 0.06, 990);
+
+  // --- capítulo ---
+  const CH = { s01: [[50, 57, 61, 64, 69], [47, 54, 59, 62, 66], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]], s02: [[50, 57, 62, 66, 69], [47, 54, 59, 62, 66], [43, 50, 55, 59, 62], [45, 52, 57, 61, 64]], s03: [[38, 45, 50, 57, 62], [41, 48, 53, 57, 60], [36, 43, 48, 55, 60]], s04: [[38, 45, 52, 57], [36, 43, 50, 55], [41, 48, 55, 60]], s05: [[48, 55, 60, 64, 67], [45, 52, 57, 60, 64], [41, 48, 53, 57, 60], [43, 50, 55, 59, 62]], s06: [[43, 50, 57, 62, 66], [45, 52, 57, 64], [40, 47, 55, 59, 62]], s07: [[38, 45, 48, 53], [37, 44, 49, 52], [34, 41, 46, 50]], s07r: [[48, 55, 62, 64, 67], [53, 60, 65, 69, 72], [45, 52, 59, 64, 67]], s08: [[48, 55, 60, 64], [45, 52, 57, 64], [41, 48, 57, 60], [43, 50, 55, 62]], fim: [[50, 57, 61, 64, 69], [47, 54, 57, 62, 66], [43, 50, 55, 59, 62, 66], [45, 52, 57, 61, 64, 69]] };
+  let ci = 0;
+  for (let t = HEAD + 6; t < DUR - 1; t += 8) {
+    const T = t - HEAD, s = SCENES.find((x) => T >= x.start && T < x.end) || SCENES[SCENES.length - 1];
+    const key = s.sec === "s07" && ["caminhos", "pergunta"].includes(s.id) ? "s07r" : s.sec || "s01";
+    const set = CH[key]; chord(t, Math.min(DUR, t + 10.5), set[ci++ % set.length], key === "s07" ? 900 : key === "s04" || key === "s03" ? 1100 : 1700, key === "fim" ? 0.12 : 0.095);
+  }
+  SCENES.forEach((s, i) => {
+    const t0 = HEAD + s.start;
+    if (i > 0) {
+      if (s.trans === "cut") { impact(t0, 0.8); glitch(t0); }
+      else if (s.trans === "pan") whoosh(t0 - 0.2, 1.2, 250, 2000, 0.32, 0.9, -0.9);
+      else if (s.fx === "wind") whoosh(t0 - 0.3, 1.8, 400, 3200, 0.28, 0.8, -0.8);
+      else if (s.fx === "snow") whoosh(t0 - 0.3, 1.6, 160, 900, 0.26, -0.5, 0.5);
+      else whoosh(t0 - 0.25, 1.0, 280, 2400, 0.26, -0.6, 0.6);
+    }
+    if (s.sfx === "impact") { impact(t0 + 0.7, 0.6); shimmer(t0 + 0.9, 0.07); }
+    if (s.sfx === "shimmer") shimmer(t0 + 0.4, 0.08);
+    if (s.sfx === "final") { shimmer(t0 + 1.2, 0.1, 660); impact(t0 + 7.5, 0.35); shimmer(t0 + 10, 0.06, 990); }
+    $$("[data-sfx='tick']", s.el).forEach((e, k) => tick(t0 + (Number(e.dataset.in) || 0) + 0.05, 1200 + (k % 5) * 180, 0.08));
+    if (s.custom === "quiz") { for (let k = 0; k < 5; k++) tick(t0 + 1.6 + k, k === 4 ? 1800 : 1200, 0.12); chime(t0 + 6.6); }
+  });
+
+  const buf = await ctx.startRendering();
+  const ch = 2, len = buf.length, L = buf.getChannelData(0), R = buf.getChannelData(1);
+  WAV16 = new Int16Array(len * ch);
+  for (let i = 0; i < len; i++) { const l = Math.max(-1, Math.min(1, L[i])), r = Math.max(-1, Math.min(1, R[i])); WAV16[i * 2] = l < 0 ? l * 0x8000 : l * 0x7fff; WAV16[i * 2 + 1] = r < 0 ? r * 0x8000 : r * 0x7fff; }
+  return { sampleRate: SR, channels: ch, bytes: WAV16.byteLength, chunk: 6 * 1024 * 1024 };
+}
+function audioChunk(i, size) {
+  const u8 = new Uint8Array(WAV16.buffer, i * size, Math.min(size, WAV16.byteLength - i * size)); let bin = "";
+  for (let j = 0; j < u8.length; j += 0x8000) bin += String.fromCharCode.apply(null, u8.subarray(j, j + 0x8000));
+  return btoa(bin);
+}
+
+window.renderFrame = frame;
+window.renderAudio = renderAudio;
+window.audioChunk = audioChunk;
+window.VIDEO = { FPS, DUR: TOTAL, HEAD, scenes: SCENES.map((x) => ({ id: x.id, start: x.start, dur: x.dur })) };
+window.ready = Promise.all([document.fonts.ready, document.fonts.load('800 100px "Bricolage Grotesque"'), document.fonts.load('600 14px "JetBrains Mono"'), document.fonts.load('italic 40px "Instrument Serif"'), document.fonts.load('600 24px "Manrope"'), Globe.ready]).then(() => true);
+if (!/render/.test(location.search)) {
+  const fit = () => { const s = Math.min(innerWidth / W, innerHeight / H); $("#stage").style.transform = `translate(${(innerWidth - W * s) / 2}px,${(innerHeight - H * s) / 2}px) scale(${s})`; };
+  addEventListener("resize", fit); fit();
+  const q = new URLSearchParams(location.search), start = Number(q.get("t") || 0);
+  window.ready.then(() => { const t0 = performance.now(); const loop = (now) => { frame((start + (now - t0) / 1000) % TOTAL); requestAnimationFrame(loop); }; requestAnimationFrame(loop); });
+} else frame(0);
+</script>
+</body>
+</html>

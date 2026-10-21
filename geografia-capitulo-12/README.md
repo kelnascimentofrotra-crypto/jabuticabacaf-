@@ -15,6 +15,17 @@ e alunos —, até formar o cabeçalho com o título no centro e o planeta nasce
 Fonte da animação: `video/cabecalho.html` (abrir por um servidor local mostra a prévia em loop);
 para gerar de novo: `node tools/render_video.js` (precisa de Playwright e ffmpeg).
 
+## Vídeo completo do capítulo
+
+`video/capitulo-12-completo.mp4` (1920×1080, 30 fps, com trilha, cerca de 8 minutos, paleta laranja):
+cabeçalho + seções 01 a 07 + quiz em formato de vídeo (pergunta, 5 segundos para responder e
+resposta comentada) + encerramento. Durante todo o vídeo, os dados da escola, do professor, do
+componente curricular e dos alunos ficam como moldura nos cantos.
+
+Sem acesso ao Wikimedia neste ambiente, o vídeo não usa fotografias: as cenas usam o globo e o
+mapa com imagens de satélite da NASA, diagramas animados e paisagens ilustradas.
+Fonte: `video/capitulo.html`; para gerar de novo: `node tools/render_capitulo.js`.
+
 ## Como abrir
 
 Abra o arquivo **`index.html`** em um navegador moderno (Chrome, Edge, Firefox ou Safari).
