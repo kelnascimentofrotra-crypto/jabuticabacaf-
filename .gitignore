@@ -1,0 +1,2 @@
+# Saída do Playwright MCP (snapshots, logs de console, capturas de tela)
+.playwright-mcp/
