@@ -334,8 +334,8 @@ body.is-intro .topbar { animation: rise 1s var(--ease-out) 1.1s both; }
 .logo .brand { font-size: max(22px, calc(2.4 * var(--u))); }
 /* no topo e na entrada a assinatura fica em duas linhas: "Marcos" em cima, "Corretor de Imóveis" embaixo */
 .logo .brand, .gate-logo .brand { flex-direction: column; align-items: flex-start; }
-.logo .brand .brand-s, .gate-logo .brand .brand-s { font-size: 0.62em; margin: 0.02em 0 0 0.04em; }
-.logo .brand .brand-w, .gate-logo .brand .brand-w { font-size: 0.86em; margin-left: 0; }
+.logo .brand .brand-s, .gate-logo .brand .brand-s { font-size: 0.62em; margin: 0.16em 0 0 0.04em; }
+.logo .brand .brand-w, .gate-logo .brand .brand-w { font-size: 1.32em; margin-left: 0; line-height: .95; }
 .logo.has-img { height: calc(2.6 * var(--u)); }
 
 .nav-pill {
