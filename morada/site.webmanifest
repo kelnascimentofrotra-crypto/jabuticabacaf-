@@ -1,6 +1,6 @@
 {
-  "name": "O Cara dos Apartamentos",
-  "short_name": "O Cara dos Aptos",
+  "name": "Marcos Corretor de Imóveis",
+  "short_name": "Marcos Corretor",
   "description": "Flats mobiliados e imóveis selecionados.",
   "lang": "pt-BR",
   "start_url": "/",
@@ -9,25 +9,25 @@
   "theme_color": "#faf8f3",
   "icons": [
     {
-      "src": "/ca-192.png",
+      "src": "/mc-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/ca-512.png",
+      "src": "/mc-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/ca-512.png",
+      "src": "/mc-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/ca.svg",
+      "src": "/mc.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
