@@ -34,11 +34,19 @@ Para testar localmente: `python3 -m http.server` dentro desta pasta e abra `http
 
 ## Logo
 
-O monograma "MS" é uma **recriação vetorial** da logo enviada (símbolo `#logo-ms` no início do
-`<body>` do `index.html`), usada no cabeçalho, no rodapé, no favicon (`favicon.svg` e PNGs) e na
-imagem de compartilhamento (`assets/img/og-image.jpg`). Quando o arquivo original da logo estiver
-disponível (de preferência SVG ou PNG com fundo transparente), substitua o conteúdo do símbolo — ou
-troque os `<svg class="brand__mark">` por `<img>` — e gere o favicon a partir dele.
+Logomarca **ED+ Energia Solar** ("ED+ viver bem, gastando menos."), recortada da arte original com fundo
+transparente, em `assets/img/`:
+
+| Arquivo | Uso |
+| --- | --- |
+| `logo-ed-marca.webp` | marca "ED+" com o sol — cabeçalho do site e da política de privacidade |
+| `logo-ed-nome.webp` | nome "ENERGIA SOLAR" — ao lado da marca no cabeçalho (some em telas abaixo de 360px) |
+| `logo-ed-energia-solar.webp` | logo completa com o slogan — rodapé |
+
+Os ícones (`favicon.svg`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192/512.png`) usam a marca
+"ED+" sobre fundo escuro, e a imagem de compartilhamento (`assets/img/og-image.jpg`) usa marca + nome.
+A logo foi preparada para fundo escuro (as letras são brancas/prateadas). Para trocar, substitua esses
+arquivos mantendo os nomes.
 
 Os contatos ficam em `SITE_CONFIG`, no topo de `assets/js/main.js` (botões de WhatsApp, formulário de
 orçamento e rodapé), e também escritos no rodapé do `index.html` e nos dados estruturados (JSON-LD).

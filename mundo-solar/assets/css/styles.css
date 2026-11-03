@@ -261,26 +261,15 @@ button { cursor: pointer; background: none; border: 0; padding: 0; }
 .site-header.is-scrolled::before { opacity: 1; }
 .site-header__inner { height: 100%; display: flex; align-items: center; gap: 24px; }
 
-.brand { display: inline-flex; align-items: center; gap: 12px; color: var(--text); flex: none; }
-.brand__mark { width: 32px; height: 40px; color: var(--sun); transition: transform .8s var(--ease); }
-.brand:hover .brand__mark { transform: translateY(-2px); }
-.brand__name {
-  font-family: var(--font-display); font-size: 17px; font-weight: 400;
-  letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap;
-}
-.brand__name strong { font-weight: 700; }
+.brand { display: inline-flex; align-items: center; gap: 10px; color: var(--text); flex: none; }
+/* Logomarca ED+ Energia Solar: marca "ED+" + nome "ENERGIA SOLAR" (imagens com fundo transparente) */
+.brand__logo { height: 40px; width: auto; transition: transform .8s var(--ease); }
+.brand__wordmark { height: 12px; width: auto; }
+.brand:hover .brand__logo { transform: translateY(-2px); }
 
-/* Assinatura completa (rodapé): monograma + nome + tagline */
-.brand--lockup { display: inline-grid; justify-items: start; gap: 0; }
-.brand--lockup .brand__mark { width: 45px; height: 56px; margin-bottom: 14px; }
-.brand--lockup .brand__name { font-size: 24px; line-height: 1.1; }
-.brand__tagline, .brand__since {
-  font-family: var(--font-display); font-size: 10.5px; font-weight: 500;
-  letter-spacing: .16em; text-transform: uppercase; color: var(--text-2);
-}
-.brand__tagline { display: inline-flex; align-items: center; gap: 10px; margin-top: 10px; }
-.brand__tagline::before { content: ""; width: 18px; height: 1px; background: var(--sun); }
-.brand__since { margin-top: 4px; padding-left: 28px; color: var(--text-3); }
+/* Logomarca completa (rodapé): marca + nome + slogan */
+.brand--lockup { display: inline-block; }
+.brand__full { width: min(360px, 100%); height: auto; }
 
 .nav { position: relative; margin-inline: auto; }
 .nav__list { display: flex; align-items: center; gap: clamp(18px, 2vw, 32px); }
@@ -1707,7 +1696,8 @@ body.nav-open { overflow: hidden; }
 
 @media (max-width: 899px) {
   :root { --header-h: 68px; }
-  .brand__name { font-size: 14px; }
+  .brand__logo { height: 34px; }
+  .brand__wordmark { height: 10px; }
   .site-header__cta { display: none; }
   .search-toggle { width: 46px; height: 46px; }
 
@@ -1752,7 +1742,6 @@ body.nav-open { overflow: hidden; }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat:nth-child(3) { border-left: 0; }
   .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
-  .brand--lockup .brand__name { font-size: 22px; }
 
   .solutions__head { grid-template-columns: minmax(0, 1fr); }
   .solutions__list { grid-template-columns: minmax(0, 1fr); }
@@ -1964,6 +1953,14 @@ body.nav-open { overflow: hidden; }
 @media (max-width: 400px) {
   .btn { white-space: normal; padding-inline: 18px; }
   .btn--lg, .btn--xl { padding-block: 10px; }
-  .legal-header .brand__name { display: none; }
   .legal-header__inner { gap: 12px; }
 }
+
+/* Logomarca em celulares estreitos */
+@media (max-width: 399px) {
+  .brand { gap: 8px; }
+  .brand__logo { height: 30px; }
+  .brand__wordmark { height: 9px; }
+}
+@media (max-width: 379px) { .legal-header .brand__wordmark { display: none; } }
+@media (max-width: 359px) { .brand__wordmark { display: none; } }
