@@ -117,23 +117,23 @@ direitos do titular (art. 18 da LGPD), com os contatos da empresa. Link no rodap
 cookies. Revise o texto sempre que mudar a forma de coletar dados (por exemplo, ao adicionar outra
 ferramenta de medição) e atualize a data no início da página.
 
-## Hospedagem na Vercel (mundosolar1.vercel.app)
+## Hospedagem na Vercel (mundosolar2.vercel.app)
 
-O site está publicado e configurado para `https://mundosolar1.vercel.app` (URL canônica, Open Graph, sitemap,
+O site está publicado e configurado para `https://mundosolar2.vercel.app` (URL canônica, Open Graph, sitemap,
 robots e JSON-LD). O `vercel.json` desta pasta define cabeçalhos de segurança e de cache.
 
 Pelo painel da Vercel (sem linha de comando):
 1. vercel.com → **Add New… → Project** → importe o repositório `jabuticabacaf-` do GitHub.
-2. **Project Name:** `mundosolar1` (gera `mundosolar1.vercel.app`).
+2. **Project Name:** `mundosolar2` (gera `mundosolar2.vercel.app`).
 3. **Root Directory:** `mundo-solar` · **Framework Preset:** Other · sem Build Command.
 4. A Vercel publica a branch de produção (por padrão `main`). Para publicar esta versão, faça o merge da
    branch do site na `main` ou, em *Settings → Git → Production Branch*, escolha a branch do site.
 
 Pela linha de comando (com um token da Vercel): dentro desta pasta,
-`npx vercel deploy --prod --name mundosolar1 --token SEU_TOKEN`.
+`npx vercel deploy --prod --name mundosolar2 --token SEU_TOKEN`.
 
 Se o domínio mudar (por exemplo, um domínio próprio), troque
-`https://mundosolar1.vercel.app` pelo domínio novo em `index.html`, `sitemap.xml` e `robots.txt`.
+`https://mundosolar2.vercel.app` pelo domínio novo em `index.html`, `sitemap.xml` e `robots.txt`.
 
 ## Projetos
 
