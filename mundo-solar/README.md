@@ -27,7 +27,7 @@ Para testar localmente: `python3 -m http.server` dentro desta pasta e abra `http
 
 ## Dados da empresa
 
-- WhatsApp: (94) 9124-3878 · Instagram: @mundosolar.redencao · E-mail: atendimentomundosolar@gmail.com
+- WhatsApp: (94) 9205-2661 · Instagram: @mundosolar.redencao · E-mail: atendimentomundosolar@gmail.com
 - Localização: Redenção — PA
 - No mercado de energia solar desde 2020; Mundo Solar fundada em 2022
 - +500 usinas entregues · +500 famílias e empresas atendidas (seção Sobre)

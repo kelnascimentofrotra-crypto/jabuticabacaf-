@@ -8,9 +8,9 @@
  */
 const SITE_CONFIG = {
   // Número com DDI + DDD, somente dígitos
-  whatsapp: '559491243878',
+  whatsapp: '559492052661',
   // Como o número aparece no rodapé
-  whatsappDisplay: '(94) 9124-3878',
+  whatsappDisplay: '(94) 9205-2661',
   // Usuário do Instagram, sem @
   instagram: 'mundosolar.redencao',
   // E-mail de atendimento
@@ -396,7 +396,7 @@ const SITE_CONFIG = {
       ['Benefícios da energia solar', 'Economia, valorização e autonomia', '#beneficios', 'beneficios vantagens economia economizar valorizacao sustentavel'],
       ['Projetos de alto padrão', 'Empresas da região que já geram a própria energia', '#alto-padrao', 'alto padrao empresas empresa grandes comercial negocio usina usinas estrutura elevada solo'],
       ['Sobre a Mundo Solar', 'Desde 2022 · +500 usinas entregues', '#sobre', 'sobre empresa historia quem somos redencao usinas'],
-      ['Contato e orçamento', 'WhatsApp (94) 9124-3878', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
+      ['Contato e orçamento', 'WhatsApp (94) 9205-2661', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
     ].map(([title, desc, href, kw]) => ({ type: 'section', title, desc, href, words: words(`${title} ${kw}`) }));
 
     const STOP = new Set(('a o e as os de da do das dos um uma uns umas para pra pro com sem no na nos nas em por que qual quais ' +
