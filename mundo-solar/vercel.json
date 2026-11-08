@@ -4,14 +4,14 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/(.*)",
       "has": [
         {
           "type": "host",
           "value": "mundosolar2.vercel.app"
         }
       ],
-      "destination": "https://edenergiasolar.vercel.app/:path*",
+      "destination": "https://edenergiasolar.vercel.app/$1",
       "permanent": true
     }
   ],
