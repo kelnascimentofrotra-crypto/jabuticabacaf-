@@ -1,5 +1,5 @@
 /* =========================================================================
-   MUNDO SOLAR — Meta Pixel (ID do conjunto de dados: 1488152875517253)
+   ED+ ENERGIA SOLAR — Meta Pixel (ID do conjunto de dados: 1488152875517253)
 
    Toda a medição da Meta fica neste arquivo:
    - PageView: uma vez por página carregada. Âncoras (#kits, #contato…) não contam
@@ -9,7 +9,7 @@
      ou ao e-mail (mailto:), decidido pelo destino do link no momento do clique.
      Links que só abrem o formulário de orçamento NÃO contam no clique.
    - Lead (formulário): disparado pelo main.js somente após o envio bem-sucedido,
-     através do evento "mundosolar:lead".
+     através do evento "edsolar:lead".
    - Duplicidade: o mesmo contato dentro de 2 s é contado uma vez (duplo clique,
      toque duplo); cada Lead leva um eventID único.
    - Consentimento (LGPD): o Pixel só é carregado depois que o visitante clica em
@@ -21,9 +21,9 @@
 
   var PIXEL_ID = '1488152875517253';
   var DEDUPE_MS = 2000;
-  var CONSENT_KEY = 'ms-cookie-consent'; // 'granted' | 'denied' (gravado por cookies.js)
+  var CONSENT_KEY = 'ed-cookie-consent'; // 'granted' | 'denied' (gravado por cookies.js)
 
-  if (window.MundoSolarPixel) return; // nunca inicializar duas vezes
+  if (window.EdSolarPixel) return; // nunca inicializar duas vezes
 
   var loaded = false;
   var enabled = false;
@@ -79,7 +79,7 @@
   }
 
   if (storedConsent() === 'granted') grant();
-  document.addEventListener('mundosolar:consent', function (e) {
+  document.addEventListener('edsolar:consent', function (e) {
     if (e && e.detail && e.detail.granted) grant(); else revoke();
   });
 
@@ -176,7 +176,7 @@
   document.addEventListener('auxclick', onContactClick, true);
 
   // Formulário de orçamento: o main.js avisa somente após o envio bem-sucedido.
-  document.addEventListener('mundosolar:lead', function (e) {
+  document.addEventListener('edsolar:lead', function (e) {
     var d = (e && e.detail) || {};
     lead({
       content_name: d.content_name || 'Formulário de orçamento',
@@ -186,7 +186,7 @@
     }, 'form|' + (d.dedupe || ''));
   });
 
-  window.MundoSolarPixel = {
+  window.EdSolarPixel = {
     id: PIXEL_ID, lead: lead, trackPageView: trackPageView,
     isEnabled: function () { return enabled; },
   };

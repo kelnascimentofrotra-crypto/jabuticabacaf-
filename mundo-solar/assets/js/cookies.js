@@ -1,15 +1,15 @@
 /* =========================================================================
-   MUNDO SOLAR — Aviso de cookies (LGPD)
+   ED+ ENERGIA SOLAR — Aviso de cookies (LGPD)
 
    - Mostra o aviso enquanto o visitante não escolher "Aceitar" ou "Recusar".
-   - Guarda a escolha neste navegador (localStorage "ms-cookie-consent").
-   - Avisa o Meta Pixel (assets/js/meta-pixel.js) pelo evento "mundosolar:consent".
+   - Guarda a escolha neste navegador (localStorage "ed-cookie-consent").
+   - Avisa o Meta Pixel (assets/js/meta-pixel.js) pelo evento "edsolar:consent".
    - Qualquer elemento com [data-cookie-settings] reabre o aviso para mudar a escolha.
    ========================================================================= */
 (function () {
   'use strict';
 
-  var KEY = 'ms-cookie-consent';
+  var KEY = 'ed-cookie-consent';
   var root = document.documentElement;
   var banner = null;
 
@@ -58,7 +58,7 @@
     var granted = value === 'granted';
     save(granted ? 'granted' : 'denied');
     hide();
-    document.dispatchEvent(new CustomEvent('mundosolar:consent', { detail: { granted: granted } }));
+    document.dispatchEvent(new CustomEvent('edsolar:consent', { detail: { granted: granted } }));
   }
 
   function init() {

@@ -1,6 +1,6 @@
-# Mundo Solar — site institucional
+# ED+ Energia Solar — site institucional
 
-Site estático (HTML + CSS + JavaScript puro, sem etapa de build) da **Mundo Solar — Energia que transforma**.
+Site estático (HTML + CSS + JavaScript puro, sem etapa de build) da **ED+ Energia Solar — Viver bem, gastando menos.**
 Pode ser publicado em qualquer hospedagem estática (GitHub Pages, Netlify, Vercel, cPanel etc.): basta
 enviar o conteúdo desta pasta para a raiz do domínio.
 
@@ -27,9 +27,9 @@ Para testar localmente: `python3 -m http.server` dentro desta pasta e abra `http
 
 ## Dados da empresa
 
-- WhatsApp: (94) 9205-2661 · Instagram: @mundosolar.redencao · E-mail: atendimentomundosolar@gmail.com
+- WhatsApp: (94) 9205-2661 · Instagram: @edsolarredencao · E-mail: edsolarredencao@gmail.com
 - Localização: Redenção — PA
-- No mercado de energia solar desde 2020; Mundo Solar fundada em 2022
+- No mercado de energia solar desde 2020; empresa fundada em 2022
 - +500 usinas entregues · +500 famílias e empresas atendidas (seção Sobre)
 
 ## Logo
@@ -54,7 +54,7 @@ Se algum contato mudar, atualize os três lugares.
 
 ## Tabela de kits (seção `#kits`)
 
-Os 9 kits da TABELA MUNDO SOLAR (R$ 11.499,00 a R$ 26.499,00) estão em `index.html`, cada um em um `<li class="kit">`. O painel
+Os 9 kits da tabela ED+ Energia Solar (R$ 11.499,00 a R$ 26.499,00) estão em `index.html`, cada um em um `<li class="kit">`. O painel
 "Kit selecionado" e a mensagem enviada pelo WhatsApp são montados a partir desses textos, então basta
 editar o `<li>` para mudar um kit. Os preços também aparecem no JSON-LD (`hasOfferCatalog`) e na
 pergunta "Quanto custa um sistema de energia solar?" do FAQ — atualize junto.
@@ -89,7 +89,7 @@ Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `i
 - **Consentimento (LGPD):** o Pixel só é carregado depois que o visitante clica em **Aceitar** no aviso
   de cookies (`assets/js/cookies.js`). Sem aceite (ou com "Recusar"), nada é enviado à Meta — por isso
   não há `<noscript>` do Pixel nem `preconnect` para a Meta. A escolha fica salva no navegador
-  (`localStorage` "ms-cookie-consent") e pode ser alterada em "Preferências de cookies" no rodapé.
+  (`localStorage` "ed-cookie-consent") e pode ser alterada em "Preferências de cookies" no rodapé.
   Ao aceitar, o PageView da página atual é enviado na hora.
 
 - **PageView:** uma vez por página carregada. Âncoras do menu (`#kits`, `#contato`…) não contam como
@@ -101,7 +101,7 @@ Toda a medição está em `assets/js/meta-pixel.js`, carregado no `<head>` do `i
   "Projeto Meneses Gás"), `content_category` (WhatsApp / E-mail), `lead_source` (cabecalho, kits,
   rodape, pesquisa, botao-flutuante…) e, na pesquisa, `search_term`.
 - **Lead (formulário de orçamento):** só após o envio válido — o `main.js` dispara o evento
-  `mundosolar:lead` depois de abrir o WhatsApp (ou o e-mail) com a mensagem. Abrir o formulário ou
+  `edsolar:lead` depois de abrir o WhatsApp (ou o e-mail) com a mensagem. Abrir o formulário ou
   enviar com campos vazios não conta.
 - **Não são Lead:** menu, botões que só abrem o formulário, Instagram, seleção de kit, lupa, FAQ.
 - **Sem duplicidade:** o mesmo contato em até 2 s conta uma vez; cada Lead tem `eventID` único
@@ -125,7 +125,7 @@ robots e JSON-LD). O `vercel.json` desta pasta define cabeçalhos de segurança 
 Pelo painel da Vercel (sem linha de comando):
 1. vercel.com → **Add New… → Project** → importe o repositório `jabuticabacaf-` do GitHub.
 2. **Project Name:** `mundosolar2`, com o domínio `edenergiasolar.vercel.app` adicionado em *Settings → Domains*
-   (o endereço `mundosolar2.vercel.app` continua funcionando).
+   (o endereço antigo `mundosolar2.vercel.app` redireciona para o novo — regra em `vercel.json`).
 3. **Root Directory:** `mundo-solar` · **Framework Preset:** Other · sem Build Command.
 4. A Vercel publica a branch de produção (por padrão `main`). Para publicar esta versão, faça o merge da
    branch do site na `main` ou, em *Settings → Git → Production Branch*, escolha a branch do site.
@@ -152,7 +152,7 @@ precisar trocar, altere apenas o `src`/`srcset` da imagem no card.
 
 ### Alto padrão (empresas) — bloco `#alto-padrao`
 
-No início da seção de Projetos. Dados exatamente como nos posts da Mundo Solar:
+No início da seção de Projetos. Dados exatamente como informados pela empresa:
 
 | Empresa | Geração | Economia mensal | Economia anual | Equipamento | Foto |
 | --- | --- | --- | --- | --- | --- |

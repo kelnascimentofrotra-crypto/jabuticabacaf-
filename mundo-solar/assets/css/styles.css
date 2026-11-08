@@ -1,5 +1,5 @@
 /* =========================================================================
-   MUNDO SOLAR — Energia que transforma
+   ED+ ENERGIA SOLAR — Viver bem, gastando menos
    Design system: preto + branco + amarelo solar
    ========================================================================= */
 
@@ -877,7 +877,7 @@ body.nav-open { overflow: hidden; }
 .solutions__cta .btn { width: 100%; }
 
 /* =========================================================================
-   KITS — TABELA MUNDO SOLAR
+   KITS — TABELA ED+ ENERGIA SOLAR
    ========================================================================= */
 .kits {
   --kit-cols: minmax(0, 0.9fr) minmax(0, 1.25fr) minmax(0, 1.6fr) minmax(0, 0.95fr) 18px;
@@ -1498,11 +1498,6 @@ body.nav-open { overflow: hidden; }
   gap: 48px; padding-bottom: clamp(48px, 6vw, 80px);
 }
 .site-footer__brand p { margin-top: 20px; color: var(--text-2); max-width: 30ch; }
-.site-footer__brand .site-footer__slogan {
-  margin-top: 28px;
-  font-family: var(--font-display); font-size: 12px; font-weight: 600;
-  letter-spacing: .24em; text-transform: uppercase; color: var(--sun);
-}
 .site-footer__heading {
   font-family: var(--font-display); font-size: 12px; font-weight: 600;
   letter-spacing: .2em; text-transform: uppercase; color: var(--text-3);

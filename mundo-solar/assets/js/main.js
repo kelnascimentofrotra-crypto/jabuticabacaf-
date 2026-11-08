@@ -1,5 +1,5 @@
 /* =========================================================================
-   MUNDO SOLAR — interações do site
+   ED+ ENERGIA SOLAR — interações do site
    ========================================================================= */
 
 /**
@@ -12,11 +12,11 @@ const SITE_CONFIG = {
   // Como o número aparece no rodapé
   whatsappDisplay: '(94) 9205-2661',
   // Usuário do Instagram, sem @
-  instagram: 'mundosolar.redencao',
+  instagram: 'edsolarredencao',
   // E-mail de atendimento
-  email: 'atendimentomundosolar@gmail.com',
+  email: 'edsolarredencao@gmail.com',
   // Mensagem inicial das conversas pelo WhatsApp
-  whatsappMessage: 'Olá, Mundo Solar! Gostaria de saber mais sobre energia solar.',
+  whatsappMessage: 'Olá, ED+ Energia Solar! Gostaria de saber mais sobre energia solar.',
 };
 
 (() => {
@@ -146,7 +146,7 @@ const SITE_CONFIG = {
       }
 
       const lines = [
-        'Olá, Mundo Solar! Gostaria de solicitar um orçamento de energia solar.',
+        'Olá, ED+ Energia Solar! Gostaria de solicitar um orçamento de energia solar.',
         '',
         `Nome: ${String(data.get('nome')).trim()}`,
         `Cidade: ${String(data.get('cidade')).trim()}`,
@@ -158,7 +158,7 @@ const SITE_CONFIG = {
       if (msg) lines.push(`Mensagem: ${msg}`);
       const text = lines.join('\n');
       // Lead (Meta Pixel, assets/js/meta-pixel.js): só depois de validar e abrir o canal de envio.
-      const notifyLead = (channel) => document.dispatchEvent(new CustomEvent('mundosolar:lead', {
+      const notifyLead = (channel) => document.dispatchEvent(new CustomEvent('edsolar:lead', {
         detail: {
           content_name: `Formulário de orçamento — ${data.get('tipo')}`,
           lead_channel: channel,
@@ -255,7 +255,7 @@ const SITE_CONFIG = {
     return { kwh: field('kwh'), tag: field('tag'), placas: field('placas'), inversor: field('inversor'), preco: field('preco') };
   };
   const kitMessage = (k) =>
-    `Olá, Mundo Solar! Tenho interesse no kit de ${k.kwh} kWh/mês${k.tag ? ` (${k.tag})` : ''}: ${k.placas} + ${k.inversor} — ${k.preco}. Gostaria de mais informações.`;
+    `Olá, ED+ Energia Solar! Tenho interesse no kit de ${k.kwh} kWh/mês${k.tag ? ` (${k.tag})` : ''}: ${k.placas} + ${k.inversor} — ${k.preco}. Gostaria de mais informações.`;
   const setKitLink = (a, k) => {
     if (!hasWhatsApp) return;
     a.href = waLink(kitMessage(k));
@@ -395,7 +395,7 @@ const SITE_CONFIG = {
       ['Como funciona', 'Do primeiro contato à geração de energia', '#como-funciona', 'como funciona etapas processo instalacao instalar prazo'],
       ['Benefícios da energia solar', 'Economia, valorização e autonomia', '#beneficios', 'beneficios vantagens economia economizar valorizacao sustentavel'],
       ['Projetos de alto padrão', 'Empresas da região que já geram a própria energia', '#alto-padrao', 'alto padrao empresas empresa grandes comercial negocio usina usinas estrutura elevada solo'],
-      ['Sobre a Mundo Solar', 'Desde 2022 · +500 usinas entregues', '#sobre', 'sobre empresa historia quem somos redencao usinas'],
+      ['Sobre a ED+ Energia Solar', 'Desde 2022 · +500 usinas entregues', '#sobre', 'sobre empresa historia quem somos redencao usinas'],
       ['Contato e orçamento', 'WhatsApp (94) 9205-2661', '#contato', 'contato orcamento whatsapp zap telefone email instagram falar atendimento'],
     ].map(([title, desc, href, kw]) => ({ type: 'section', title, desc, href, words: words(`${title} ${kw}`) }));
 
@@ -521,11 +521,11 @@ const SITE_CONFIG = {
       const kwText = kwSet.length > 1 ? `${kwSet.slice(0, -1).map(fmtKw).join(', ')} e ${fmtKw(kwSet[kwSet.length - 1])}` : fmtKw(kwSet[0]);
 
       let notice = null;
-      if (p.watts) notice = { missing: true, title: 'Não temos esse modelo', text: `Não trabalhamos com placas de ${fmtInt(p.watts)}W — os kits da Mundo Solar usam placas RONMA 620W.` };
+      if (p.watts) notice = { missing: true, title: 'Não temos esse modelo', text: `Não trabalhamos com placas de ${fmtInt(p.watts)}W — os kits da ED+ Energia Solar usam placas RONMA 620W.` };
       else if (kwMissing) notice = { missing: true, title: 'Não temos esse modelo', text: `Não temos kit com inversor de ${fmtKw(p.kw)} — os kits usam inversores AUXSOL de ${kwText}.` };
-      else if (unmatched.length && !strong) notice = { missing: true, title: 'Não temos esse modelo', text: `Não encontramos “${unmatched.join(' ')}” na tabela Mundo Solar.` };
+      else if (unmatched.length && !strong) notice = { missing: true, title: 'Não temos esse modelo', text: `Não encontramos “${unmatched.join(' ')}” na tabela ED+ Energia Solar.` };
       else if (p.priceMax && p.priceMax < cheapest.price) notice = { missing: true, title: 'Não temos kit nessa faixa de valor', text: `O kit de menor valor da tabela é o de ${cheapest.k.kwh} kWh/mês, por ${cheapest.k.preco}.` };
-      else if (p.kwh && p.kwh > last.kwh) notice = { missing: false, title: 'Precisa de um sistema maior?', text: `Para consumos acima de ${last.k.kwh} kWh/mês, a Mundo Solar faz projetos personalizados.` };
+      else if (p.kwh && p.kwh > last.kwh) notice = { missing: false, title: 'Precisa de um sistema maior?', text: `Para consumos acima de ${last.k.kwh} kWh/mês, a ED+ Energia Solar faz projetos personalizados.` };
       else if (p.placas != null && !exactPlacas && !p.kwh && !p.kw) notice = { missing: false, title: `Não temos kit com exatamente ${fmtInt(p.placas)} placas`, text: 'Veja abaixo os kits mais próximos.' };
 
       const total = kitsOut.length + projectsOut.length + faqOut.length + sectionsOut.length;
@@ -537,7 +537,7 @@ const SITE_CONFIG = {
     };
 
     const hintFor = (p, res) => {
-      if (!p.raw) return 'Todos os kits da <strong>tabela Mundo Solar</strong>. Digite o seu consumo em kWh para ver o kit mais indicado.';
+      if (!p.raw) return 'Todos os kits da <strong>tabela ED+ Energia Solar</strong>. Digite o seu consumo em kWh para ver o kit mais indicado.';
       const parts = [];
       const last = kitIndex[kitIndex.length - 1];
       if (p.kwh && res.rec && p.kwh <= last.kwh) {
@@ -559,7 +559,7 @@ const SITE_CONFIG = {
       if (!parts.length && res.kitsOut.length) {
         const first = kitIndex[0].k.preco;
         const last = kitIndex[kitIndex.length - 1].k.preco;
-        if (p.priceIntent) parts.push(`Valores da tabela Mundo Solar: de <strong>${first}</strong> a <strong>${last}</strong>. Digite o seu consumo para ver o kit indicado.`);
+        if (p.priceIntent) parts.push(`Valores da tabela ED+ Energia Solar: de <strong>${first}</strong> a <strong>${last}</strong>. Digite o seu consumo para ver o kit indicado.`);
         else if (p.kitIntent) parts.push('Todos os kits usam <strong>placas RONMA 620W</strong> e <strong>inversores AUXSOL</strong>. Digite o seu consumo em kWh para ver o kit indicado.');
       }
       return parts.join(' ');
@@ -657,7 +657,7 @@ const SITE_CONFIG = {
           searchNoticeTitle.textContent = notice.title;
           searchNoticeText.textContent = notice.text;
           if (hasWhatsApp) {
-            searchNoticeWa.href = waLink(`Olá, Mundo Solar! Pesquisei por “${p.raw}” no site e gostaria de uma pesquisa mais a fundo. Podem me ajudar?`);
+            searchNoticeWa.href = waLink(`Olá, ED+ Energia Solar! Pesquisei por “${p.raw}” no site e gostaria de uma pesquisa mais a fundo. Podem me ajudar?`);
             searchNoticeWa.target = '_blank';
             searchNoticeWa.rel = 'noopener';
           }
