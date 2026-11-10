@@ -28,6 +28,7 @@ Para testar localmente: `python3 -m http.server` dentro desta pasta e abra `http
 ## Dados da empresa
 
 - WhatsApp: (94) 9205-2661 · Instagram: @edsolarredencao · E-mail: edsolarredencao@gmail.com
+- CNPJ: 61.045.821/0001-39 (rodapé, política de privacidade e JSON-LD `taxID`)
 - Localização: Redenção — PA
 - No mercado de energia solar desde 2020; empresa fundada em 2022
 - +500 usinas entregues · +500 famílias e empresas atendidas (seção Sobre)
@@ -147,8 +148,8 @@ precisar trocar, altere apenas o `src`/`srcset` da imagem no card.
 | --- | --- |
 | 01 — Goianésio Selaria | `instalacao-telhado-ceramico.webp` |
 | 02 — Verá Lúcia | `instalacao-residencial-telhado-ceramico.webp` |
-| 03 — Gilvan Barbearia Fashion Man | `instalacao-aerea-residencial.webp` |
-| 04 — Telma Freitas | `instalacao-aerea-telhado-metalico.webp` |
+| 03 — Gilvan Barbearia Fashion Man | `instalacao-aerea-telhado-metalico.webp` |
+| 04 — Telma Freitas | `instalacao-aerea-residencial.webp` |
 
 ### Alto padrão (empresas) — bloco `#alto-padrao`
 
