@@ -1,7 +1,6 @@
 // Conteúdo do site publicado pelo painel. O arquivo fica público (o site o lê ao abrir);
 // sem nenhuma publicação ainda, vale o src/content.json que veio no deploy.
 import { promises as fs } from 'node:fs';
-import path from 'node:path';
 import { readJson, writeJson } from './store.js';
 
 export const CONTENT_PATH = 'site/content.json';
@@ -9,8 +8,8 @@ export const CONTENT_PATH = 'site/content.json';
 let bundledCache;
 export async function bundledContent() {
   if (!bundledCache) {
-    const file = path.join(process.cwd(), 'src', 'content.json');
-    bundledCache = JSON.parse(await fs.readFile(file, 'utf8'));
+    // relativo a este arquivo: na Vercel a função roda em /var/task e o projeto fica numa subpasta
+    bundledCache = JSON.parse(await fs.readFile(new URL('../../src/content.json', import.meta.url), 'utf8'));
   }
   return structuredClone(bundledCache);
 }
