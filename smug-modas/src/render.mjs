@@ -5,6 +5,7 @@ import { esc } from './lib.mjs';
 import { header, mobileMenu, demoToast } from './components/header.mjs';
 import { hero, marquee } from './components/hero.mjs';
 import { products, visibleProducts } from './components/products.mjs';
+import { posts, visiblePosts } from './components/posts.mjs';
 import { store } from './components/store.mjs';
 import { categories } from './components/categories.mjs';
 import { about } from './components/about.mjs';
@@ -38,6 +39,8 @@ const head = (content) => {
 <title>${esc(site.title)}</title>
 <meta name="description" content="${esc(site.description)}">
 <meta name="theme-color" content="${esc(site.themeColor)}">
+<meta name="smug-content-version" content="${esc(content.updatedAt || '')}">
+${content.live?.url ? `<meta name="smug-live" content="${esc(content.live.url)}">` : ''}
 ${site.url ? `<link rel="canonical" href="${esc(site.url)}/">` : ''}
 <meta property="og:type" content="website">
 <meta property="og:locale" content="pt_BR">
@@ -68,18 +71,22 @@ ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
     }, 2500);
   })(document.documentElement);
 </script>
-<script type="module" src="assets/js/main.js"></script>
+<script type="module" src="assets/js/live.js"></script>
 <script type="application/ld+json">${structuredData(content)}</script>`;
 };
 
 // "Novidades" entra no menu logo após "Início" quando há produtos visíveis.
-const withProductsNav = (content) =>
-  visibleProducts(content).length
-    ? { ...content, nav: [content.nav[0], { id: 'novidades', label: content.products.eyebrow }, ...content.nav.slice(1)] }
-    : content;
+// "Novidades" e "Postagens" entram no menu logo após "Início" quando há itens visíveis.
+const withDynamicNav = (content) => {
+  const extra = [
+    visibleProducts(content).length && { id: 'novidades', label: content.products.eyebrow },
+    visiblePosts(content).length && { id: 'postagens', label: content.posts.navLabel || 'Postagens' },
+  ].filter(Boolean);
+  return extra.length ? { ...content, nav: [content.nav[0], ...extra, ...content.nav.slice(1)] } : content;
+};
 
 export const renderPage = (data) => {
-  const content = withProductsNav(data);
+  const content = withDynamicNav(data);
   return `<!doctype html>
 <html lang="${esc(content.site.lang)}">
 <head>${head(content)}
@@ -94,6 +101,7 @@ ${demoToast(content)}
 ${hero(content)}
 ${marquee(content)}
 ${products(content)}
+${posts(content)}
 ${store(content)}
 ${categories(content)}
 ${about(content)}

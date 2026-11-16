@@ -2,104 +2,103 @@
 
 Site de página única (one-page) da SMUG MODAS, construído a partir das cinco referências
 de design (Início, Nossa loja, Categorias, Sobre a Fabielly e Contato).
-HTML, CSS e JavaScript puros, sem dependências; o `index.html` já vem gerado.
+HTML, CSS e JavaScript puros no navegador; um painel (`/admin/`) com funções na Vercel atualiza
+postagens, produtos e textos do site sem novo deploy.
 
 ## Como visualizar
 
-Os scripts usam `type="module"`, que não carrega em `file://`. Use um servidor local:
+Para ver o site **com o painel funcionando** (login, publicação e fotos) no computador:
 
 ```bash
 cd smug-modas
-python3 -m http.server 8080      # ou: npx serve .
-# abra http://localhost:8080
+npm install
+npm run dev        # abre em http://localhost:3000  (painel: /admin/, código de teste: SMUG-TESTE)
 ```
+
+O servidor local imita as funções da Vercel e guarda tudo em `.local-blob/` (fora do Git).
+Só para olhar o site, sem painel, qualquer servidor estático serve (`python3 -m http.server 8080`).
 
 ## Como editar
 
-O jeito mais fácil é pelo **painel** (`/admin/`, veja abaixo). Por baixo, todo o conteúdo
-(textos, imagens, links, contatos, produtos e condições comerciais) fica em **`src/content.json`**.
-Quem preferir editar à mão pode alterar esse arquivo e gerar o HTML novamente:
+O jeito mais fácil é pelo **painel** (`/admin/`, veja abaixo): o que se publica nele aparece no site em instantes.
+Por baixo, o conteúdo de partida (textos, imagens, links, contatos, produtos e condições comerciais) fica em
+**`src/content.json`**. Quem preferir editar à mão altera esse arquivo e gera o HTML de novo:
 
 ```bash
-node build.mjs     # ou: npm run build  (Node 18+)
+node build.mjs     # ou: npm run build  (Node 20+)
 ```
 
-O build lista no terminal tudo o que ainda precisa ser configurado.
+O build gera o `index.html`, monta a pasta `public/` (o que a Vercel publica) e lista no terminal
+tudo o que ainda precisa ser configurado.
 
 ```
 smug-modas/
-├── index.html              ← gerado (pelo build ou pelo painel); não editar à mão
-├── build.mjs               ← gera o index.html pelo terminal e lista pendências
+├── index.html              ← gerado pelo build; não editar à mão
+├── build.mjs               ← gera o index.html, monta public/ e lista pendências
+├── vercel.json             ← build, pasta publicada, /conteudo.json e cabeçalhos
 ├── admin/                  ← painel da loja (abre em …/admin/)
+│   ├── index.html, admin.css, app.js, login.js, api.js, ui.js, images.js
+│   └── views/              ← Início, Postagens, Produtos (+ Categorias), Configurações
+├── api/                    ← funções da Vercel (login, conteúdo, fotos)
+│   └── _lib/               ← armazenamento (Vercel Blob), sessão, validação
+├── scripts/dev-server.mjs  ← servidor local com as mesmas funções
 ├── src/
-│   ├── content.json        ← conteúdo central (o painel edita este arquivo)
-│   ├── render.mjs          ← monta a página; usado pelo build e pelo painel
+│   ├── content.json        ← conteúdo de partida (antes da primeira publicação no painel)
+│   ├── render.mjs          ← monta a página; usado pelo build e pelo navegador
 │   ├── lib.mjs             ← ícones, logo, helpers
-│   └── components/         ← header + menu, hero, produtos, benefícios, loja,
+│   └── components/         ← header + menu, hero, produtos, postagens, benefícios, loja,
 │                              categorias, sobre, contato, rodapé
 └── assets/
     ├── css/styles.css      ← tokens de cor/tipografia + estilos (mobile first)
-    ├── js/main.js          ← menu, header, animações, formulário
+    ├── js/live.js          ← busca o conteúdo publicado no painel e atualiza a página
+    ├── js/main.js          ← menu, header, animações, postagens, formulário
     ├── fonts/              ← Playfair Display, Jost, Allura (self-hosted, OFL)
-    ├── img/                ← fotos em WebP (produtos/ e categorias/ recebem as fotos do painel)
+    ├── img/                ← fotos em WebP
     └── icons/              ← favicon e ícone para iOS
 ```
 
 ## Painel da loja (`/admin/`)
 
-Painel para a dona da loja administrar o site e as vendas pelo navegador, no celular ou no computador.
-Não tem servidor: o que é do **site** é publicado direto no GitHub; o que é de **vendas** fica salvo
-no próprio navegador.
+Painel no mesmo visual da abertura do site (parede creme iluminada, SMUG em vinho, Fabielly e o vidro),
+para usar no celular ou no computador. São quatro áreas:
 
-| Área | O que faz | Onde fica salvo |
-| --- | --- | --- |
-| Visão geral | produtos no site, pedidos em aberto, vendas do mês, aniversariantes, pendências do site | — |
-| Produtos | cadastrar, editar, duplicar, ordenar e excluir peças (foto principal + segunda foto, preço, categoria, cores, tamanhos, descrição, link); status disponível / esgotado / oculto | site (após publicar) |
-| Categorias | nome, texto, foto, link e ordem dos cards; textos da seção; link do catálogo | site (após publicar) |
-| Dados da loja | WhatsApp (com teste do link), e-mail, endereço, mapa, horário, Instagram, serviço do formulário, condições comerciais (com “confirmada”), título e descrição para o Google | site (após publicar) |
-| Textos do site | abertura, faixa, vitrine, nossa loja, sobre a Fabielly, contato e rodapé | site (após publicar) |
-| Pedidos | registrar vendas (WhatsApp, Instagram, loja), itens a partir dos produtos, desconto, frete, total automático, pagamento, status, entrega; recibo para imprimir; mensagem pronta no WhatsApp; planilha | este navegador |
-| Clientes | cadastro com WhatsApp, Instagram, aniversário, tamanho e observações; histórico e total comprado; planilha | este navegador |
-| Mensagens | mostra para onde vão as mensagens do formulário; respostas prontas para o WhatsApp | este navegador |
-| Publicar | lista do que muda, verificação, **prévia** (celular/tablet/computador), publicação no GitHub, histórico e download manual | GitHub |
-| Configurações | conexão com o GitHub, link da caixa de entrada do formulário, backup / restauração dos dados locais | este navegador |
+| Área | O que faz |
+| --- | --- |
+| **Início** | resumo (postagens publicadas, rascunhos, produtos disponíveis e esgotados), últimas postagens, produtos que precisam de atenção, data da última atualização do site |
+| **Postagens** | escrever, editar, publicar/tirar do site, fixar em destaque e excluir postagens (título, texto, data, foto de capa, botão com link opcional), com prévia igual ao site; filtros e busca |
+| **Produtos** | ver o que está disponível / esgotado / oculto e mudar a situação direto na lista; cadastrar, editar, duplicar e excluir peças (fotos, preço, categoria, cores, tamanhos, descrição, link); aba **Categorias** (nome, texto, foto, link, ordem; renomear atualiza os produtos) |
+| **Configurações** | **Dados da loja** (WhatsApp com teste do link, e-mail, endereço, mapa, horário, Instagram, serviço do formulário, vantagens da abertura com “confirmada”), **Textos do site** (todas as seções) e **Conta** (trocar e-mail/senha, sair) |
 
-**Como funciona a publicação.** As alterações do site ficam num rascunho (salvo no navegador, não se perde ao
-recarregar). Em “Publicar”, o painel gera o `index.html` com o mesmo código do `build.mjs` e envia
-`src/content.json`, `index.html` e as fotos novas num **único commit** pela API do GitHub. Antes de publicar,
-ele confere se a versão no GitHub mudou desde que a edição começou e pede confirmação para não sobrescrever.
-As fotos são redimensionadas (até 1400 px) e convertidas para WebP no próprio navegador.
+**Como o site é atualizado.** Cada “Salvar e publicar” envia o conteúdo para a função `/api/content`, que confere o
+login, valida os dados (links só `https://`, tamanhos, listas) e grava um único arquivo público no **Vercel Blob**.
+O site lê esse arquivo por `/conteudo.json` ao abrir (`assets/js/live.js`) e refaz só as seções que mudaram —
+sem novo deploy. Sem rede ou sem o arquivo, a página continua como foi gerada. O CDN pode levar até 1 minuto para
+mostrar a mudança a todos; pelo botão “Ver site” do painel ela aparece na hora.
 
-**Login com senha.** No primeiro acesso em cada aparelho, o painel pede para criar e-mail e senha. A senha não é
-guardada: ela gera (PBKDF2-SHA-256, 310 mil iterações) a chave AES-GCM que **criptografa** os pedidos, clientes,
-respostas prontas, o rascunho do site e o token do GitHub guardados no aparelho — sem a senha, esses dados não
-podem ser lidos e o painel não publica. Detalhes:
+**Dois aparelhos ao mesmo tempo.** Cada publicação leva a versão em que a edição começou. Se o site mudou em outro
+aparelho, a função recusa (409), o painel carrega a versão nova e pede para salvar de novo — nada é sobrescrito.
 
-- a sessão vale para a aba aberta (recarregar não pede a senha) e termina ao clicar em **Sair**, ao fechar a aba
-  ou depois de **1 hora sem uso**;
-- após 5 tentativas erradas, o login espera 30 s antes de aceitar outra (o tempo dobra a cada erro, até 15 min);
-- **Configurações → Acesso ao painel** troca o e-mail e a senha (tudo é recriptografado de uma vez);
-- **“Esqueci minha senha”** não recupera a senha (é impossível sem servidor): apaga os dados deste aparelho e cria
-  um acesso novo. O site publicado não é afetado; pedidos e clientes voltam com o backup;
-- como não há servidor, cada aparelho tem o seu próprio acesso. Uma conta única para vários aparelhos exigiria um
-  serviço de login on-line (ex.: Supabase).
+**Fotos.** São reduzidas e convertidas para WebP no próprio aparelho e enviadas por `/api/upload` (até 3 MB, só
+JPG/PNG/WebP, conferindo o conteúdo do arquivo) para o Blob, com nome aleatório.
 
-**Token do GitHub.** A publicação usa um *fine-grained personal access token* da dona do repositório, com acesso
-só a este repositório e permissão **Contents: Read and write** (o passo a passo está em Configurações).
-O token é digitado no painel e fica guardado no aparelho, criptografado com a senha do painel;
-ele não vai para o código do site nem para o backup. Sem token, dá para baixar `content.json` e `index.html`
-e publicar manualmente.
+**Login.** Uma conta única (e-mail e senha) para todos os aparelhos:
 
-**Pedidos, clientes e respostas prontas** ficam no IndexedDB do navegador usado. Para não perder dados ou para usar
-em outro aparelho, use **Configurações → Baixar backup / Importar backup**. Sincronização automática entre
-aparelhos, uma conta única de login e recebimento automático de pedidos exigiriam um banco de dados on-line
-(ex.: Supabase ou Firebase), que não foi incluído.
+- **primeiro acesso:** o painel pede o **código de ativação** (variável `ADMIN_SETUP_CODE` na Vercel) e cria o
+  e-mail e a senha. Depois disso o código não vale mais;
+- a senha é guardada só como hash **scrypt** com sal, num arquivo privado de nome imprevisível no Blob;
+- a sessão é um cookie `HttpOnly`, `Secure`, `SameSite=Strict`, assinado (HMAC) e válido por 7 dias;
+  trocar a senha desconecta os outros aparelhos;
+- após 5 tentativas erradas, o login espera 30 s (o tempo dobra a cada novo erro, até 15 min); publicações
+  exigem a mesma origem do site;
+- **esqueceu a senha?** Quem cuida da Vercel apaga o arquivo `private/admin-….json` no Blob (Storage → Browser)
+  e o painel volta a pedir o código de ativação (troque também o `ADMIN_SETUP_CODE` e faça um novo deploy).
+  Não troque o `SMUG_SESSION_SECRET` à toa: ele também define onde fica a conta.
 
-**Acesso.** O endereço `/admin/` não aparece no site e tem `noindex`. Quem o abrir em outro aparelho só vê a tela de
-login (e, sem os dados criptografados da loja nem o token, não tem o que ver nem como publicar).
+**Variáveis na Vercel** (Project → Settings → Environment Variables): `BLOB_READ_WRITE_TOKEN` (criada ao
+conectar o Blob), `ADMIN_SETUP_CODE` e `SMUG_SESSION_SECRET` (ambas *sensitive*). Nenhuma chave vai para o
+navegador.
 
-**Branch de publicação.** Por padrão o painel publica na branch `claude/busy-galileo-x8mcr4`, onde o site está hoje.
-Quando o site for para a branch principal (ou outro repositório), troque em Configurações.
+**Acesso.** O endereço `/admin/` não aparece no site e tem `noindex`.
 
 ## Pendências antes de publicar
 
@@ -161,10 +160,13 @@ e substitua os arquivos mantendo os mesmos nomes, ou atualize `width`/`height` e
 
 ## Publicação
 
-Esta pasta é independente. Atenção: o `CNAME` na raiz deste repositório aponta para o
-domínio da Jabuticaba Café. Para publicar a SMUG MODAS no próprio domínio, o ideal é mover
-esta pasta para um repositório (ou projeto de hospedagem) separado, com o `CNAME` da SMUG.
-Qualquer hospedagem estática serve (GitHub Pages, Netlify, Vercel, Cloudflare Pages).
+O site e o painel estão na **Vercel** (projeto `smugmodassite`, endereço `https://smugmodassite.vercel.app`),
+publicados a partir desta pasta (`Root Directory: smug-modas`). O build roda `npm run build` e publica `public/`;
+as funções ficam em `api/`.
+
+Atenção: o `CNAME` na raiz deste repositório aponta para o domínio da Jabuticaba Café. Para um domínio próprio da
+SMUG, adicione-o em Project → Settings → Domains na Vercel (e, de preferência, mova esta pasta para um
+repositório só da SMUG).
 
 ## Header
 

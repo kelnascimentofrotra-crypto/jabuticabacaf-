@@ -1,11 +1,16 @@
 {
   "name": "smug-modas-site",
   "private": true,
-  "description": "Site da SMUG MODAS (HTML/CSS/JS estático, sem dependências).",
+  "description": "Site da SMUG MODAS (HTML/CSS/JS estático) com painel e API na Vercel.",
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "dev": "node scripts/dev-server.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": "24.x"
+  },
+  "type": "module",
+  "dependencies": {
+    "@vercel/blob": "^2.9.0"
   }
 }

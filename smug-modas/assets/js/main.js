@@ -490,7 +490,38 @@ function initForm() {
   });
 }
 
+/* ---------- Postagens: abre a postagem completa num diálogo ---------- */
+function initPosts() {
+  const dialog = document.querySelector('[data-post-dialog]');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const box = dialog.querySelector('[data-post-content]');
+  let opener = null;
+
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-post-open]');
+    if (!button) return;
+    const template = document.getElementById(`post-${button.dataset.postOpen}`);
+    if (!template) return;
+    box.replaceChildren(template.content.cloneNode(true));
+    box.querySelector('[data-post-title]')?.setAttribute('id', 'post-dialog-title');
+    opener = button;
+    dialog.showModal();
+    root.classList.add('menu-open');
+    dialog.scrollTop = 0;
+    dialog.querySelector('[data-post-close]').focus();
+  });
+  dialog.querySelector('[data-post-close]').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+  dialog.addEventListener('close', () => {
+    root.classList.remove('menu-open');
+    opener?.focus();
+  });
+}
+
 initHeader();
+initPosts();
 const menu = initMenu();
 initDemoActions(menu);
 initReveal();

@@ -1087,6 +1087,158 @@ main:focus { outline: none; }
 .product__card:hover .product__arrow { transform: translateX(4px); }
 .product__card:has(.product__action:focus-visible) { outline: 2px solid var(--wine); outline-offset: 4px; border-radius: 12px; }
 
+/* ---------- Mural de postagens (só aparece com postagens publicadas) ---------- */
+.posts {
+  position: relative;
+  padding: var(--section-pad) 0 clamp(48px, 8vw, 96px);
+  background:
+    radial-gradient(60% 40% at 90% 0%, rgba(255, 252, 246, 0.9), transparent 70%),
+    linear-gradient(180deg, #f3e8da 0%, #efe2d0 100%);
+  color: var(--ink);
+}
+.posts__head { max-width: 640px; margin-bottom: clamp(28px, 5vw, 48px); }
+.posts__text { max-width: 34em; color: var(--ink-soft); line-height: 1.68; }
+.post-grid { display: grid; gap: 28px; }
+@media (min-width: 600px) {
+  .post-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 22px; }
+}
+@media (min-width: 1024px) {
+  .post-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 28px; }
+}
+.post__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(100, 28, 41, 0.1);
+  border-radius: 14px;
+  background: rgba(255, 252, 247, 0.72);
+  box-shadow: 0 18px 40px -32px rgba(50, 28, 19, 0.55);
+  transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.45s var(--ease);
+}
+.post__card:hover { transform: translateY(-4px); border-color: rgba(197, 154, 98, 0.55); box-shadow: 0 26px 50px -32px rgba(50, 28, 19, 0.6); }
+.post__media { position: relative; aspect-ratio: 4 / 3.4; overflow: hidden; background: #e7d6c0; }
+.post__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.9s var(--ease); }
+.post__card:hover .post__img { transform: scale(1.04); }
+.post__placeholder {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--wine) 0%, #3d0f19 100%);
+  font-family: var(--serif);
+  font-size: 5rem;
+  color: var(--gold-light);
+}
+.post__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(100, 28, 41, 0.9);
+  color: var(--light);
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.post__body { display: flex; flex: 1; flex-direction: column; gap: 8px; padding: 18px 20px 20px; }
+.post__date { font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+.post__title { font-family: var(--serif); font-size: clamp(1.2rem, 1.08rem + 0.5vw, 1.45rem); font-weight: 400; line-height: 1.25; color: var(--wine); }
+.post__open {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+/* o card inteiro abre a postagem */
+.post__open::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+.post__open:focus-visible { outline: none; }
+.post__card:has(.post__open:focus-visible) { outline: 2px solid var(--wine); outline-offset: 4px; }
+.post__excerpt { font-size: 0.96rem; line-height: 1.6; color: var(--ink-soft); }
+.post__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+.post__arrow { width: 20px; height: 20px; transition: transform 0.35s var(--ease); }
+.post__card:hover .post__arrow { transform: translateX(4px); }
+
+.post-dialog {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.post-dialog::backdrop { background: rgba(14, 8, 5, 0.72); }
+.post-dialog__panel {
+  position: relative;
+  min-height: 100%;
+  background: var(--cream-light);
+  color: var(--ink);
+}
+.post-dialog__close {
+  position: sticky;
+  top: 12px;
+  z-index: 2;
+  float: right;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 12px 12px -60px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(22, 13, 9, 0.75);
+  color: var(--light);
+  cursor: pointer;
+}
+.post-dialog__close .icon { width: 24px; height: 24px; }
+.post-full__img { width: 100%; max-height: 70vh; object-fit: cover; }
+.post-full__body { padding: 26px var(--gutter) 40px; }
+.post-full__date { font-size: 0.76rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-soft); }
+.post-full__title {
+  margin: 8px 0 16px;
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 1.4rem + 1.8vw, 2.6rem);
+  font-weight: 400;
+  line-height: 1.12;
+  color: var(--wine);
+}
+.post-full__text p { margin-bottom: 1em; font-size: clamp(1rem, 0.96rem + 0.25vw, 1.1rem); line-height: 1.75; color: var(--ink-soft); }
+.post-full__body .btn { margin-top: 8px; }
+@media (min-width: 800px) {
+  .post-dialog { padding: 5vh 0; }
+  .post-dialog__panel { width: min(760px, 92vw); min-height: 0; margin: 0 auto; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 0.8); }
+  .post-full__body { padding: 34px 44px 44px; }
+}
+
+/* Menu com muitos itens (novidades e postagens ativas): links mais compactos */
+@media (min-width: 75em) {
+  .site-nav__list:has(> li:nth-child(6)) { gap: 22px; }
+  .site-nav__list:has(> li:nth-child(6)) .site-nav__link { letter-spacing: 0.15em; }
+  .site-nav__list:has(> li:nth-child(7)) { gap: 18px; }
+  .site-nav__list:has(> li:nth-child(7)) .site-nav__link { font-size: 0.74rem; letter-spacing: 0.12em; }
+}
+
 /* ---------- Nossa loja ---------- */
 .store {
   position: relative;

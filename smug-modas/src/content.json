@@ -149,6 +149,16 @@
     "soldOutMessage": "Olá! Vim pelo site da SMUG MODAS e gostaria de saber se a peça “{produto}” vai voltar.",
     "items": []
   },
+  "posts": {
+    "eyebrow": "Mural da SMUG",
+    "navLabel": "Postagens",
+    "title": {
+      "plain": "Últimas",
+      "italic": "postagens"
+    },
+    "text": "Novidades, lançamentos e bastidores da loja.",
+    "items": []
+  },
   "store": {
     "eyebrow": "Nossa loja",
     "title": {
@@ -350,5 +360,9 @@
   },
   "footer": {
     "tagline": "Mais que moda, é você."
-  }
+  },
+  "live": {
+    "url": "/conteudo.json"
+  },
+  "updatedAt": ""
 }
