@@ -270,7 +270,7 @@ export async function contaView(app, root) {
             <li><b>Publicação direta.</b> Cada “Salvar” atualiza o site na hora, sem precisar de outro programa.</li>
             <li><b>Fotos.</b> São reduzidas e otimizadas no próprio aparelho antes do envio.</li>
             <li><b>Dois aparelhos ao mesmo tempo.</b> Se o site mudar em outro aparelho, o painel avisa e carrega a versão mais nova antes de salvar.</li>
-            <li><b>Esqueceu a senha?</b> Quem cuida da hospedagem do site (Vercel) libera um novo acesso.</li>
+            <li><b>Esqueceu a senha?</b> Na tela de entrada, clique em “Esqueci minha senha” e use o código de acesso da loja para criar um e-mail e uma senha novos. O código não expira.</li>
           </ul>
         </section>
       </div>

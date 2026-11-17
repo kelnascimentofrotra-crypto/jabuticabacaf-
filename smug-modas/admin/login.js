@@ -24,19 +24,19 @@ const loginForm = () => `
     <p class="form-msg" role="alert" data-error></p>
     <button class="btn btn-primary btn-block btn-lg" type="submit" data-submit><span>ENTRAR</span></button>
     <button class="link-btn" type="button" data-forgot>Esqueci minha senha</button>
-  </form>
-  <div class="login-help" data-forgot-box hidden>
-    <b>Esqueceu a senha?</b>
-    <span>Por segurança, a senha não é enviada por e-mail. Quem cuida da hospedagem do site (Vercel) libera um novo acesso: o painel volta a pedir o código de ativação e você cria uma senha nova.</span>
-  </div>`;
+  </form>`;
 
-const setupForm = () => `
-  <h1 id="login-title">PRIMEIRO ACESSO</h1>
-  <p class="login-sub">Digite o código de ativação e crie o e-mail e a senha que serão usados para entrar.</p>
+const codeForm = (reset) => `
+  <h1 id="login-title">${reset ? 'NOVO ACESSO' : 'PRIMEIRO ACESSO'}</h1>
+  <p class="login-sub">${
+    reset
+      ? 'Esqueceu a senha? Digite o código de acesso da loja e crie um e-mail e uma senha novos.'
+      : 'Digite o código de acesso da loja e crie o e-mail e a senha que serão usados para entrar.'
+  }</p>
   <form novalidate data-form="setup">
     <label class="field">
-      <span>Código de ativação</span>
-      <input id="code" name="code" autocomplete="one-time-code" autocapitalize="characters" spellcheck="false" required placeholder="SMUG-XXXX-XXXX">
+      <span>Código de acesso</span>
+      <input id="code" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" required placeholder="SMUG-XXXX-XXXX">
     </label>
     <label class="field">
       <span>E-mail</span>
@@ -45,18 +45,20 @@ const setupForm = () => `
     ${passwordField('password', 'Senha (mínimo 8 caracteres)', 'new-password', 'Crie uma senha')}
     ${passwordField('confirm', 'Confirmar senha', 'new-password', 'Repita a senha')}
     <p class="form-msg" role="alert" data-error></p>
-    <button class="btn btn-primary btn-block btn-lg" type="submit" data-submit><span>ATIVAR E ENTRAR</span></button>
-  </form>`;
+    <button class="btn btn-primary btn-block btn-lg" type="submit" data-submit><span>${reset ? 'CRIAR NOVO ACESSO' : 'ATIVAR E ENTRAR'}</span></button>
+    ${reset ? '<button class="link-btn" type="button" data-back>Voltar para entrar</button>' : ''}
+  </form>
+  <p class="login-help">O código de acesso não expira: guarde em lugar seguro. Ele serve sempre que você esquecer a senha.</p>`;
 
-export function renderLogin(root, status, { onSuccess, themeButton = () => '' }) {
-  const setup = Boolean(status?.setupRequired);
+export function renderLogin(root, status, { onSuccess, themeButton = () => '', reset = false }) {
+  const setup = Boolean(status?.setupRequired) || reset;
   root.innerHTML = `
     <main class="login">
       ${themeButton()}
       <section class="login-card" aria-labelledby="login-title">
         <div class="login-brand" role="img" aria-label="SMUG MODAS">${BRAND}</div>
-        ${setup ? setupForm() : loginForm()}
-        <p class="login-foot">${ico('lock')}<span>Acesso restrito. Só a conta de administrador criada na ativação entra no painel.</span></p>
+        ${setup ? codeForm(reset && !status?.setupRequired) : loginForm()}
+        <p class="login-foot">${ico('lock')}<span>Acesso restrito ao administrador da loja.</span></p>
         <a class="login-back" href="../">${ico('left')}<span>Voltar para o site</span></a>
       </section>
       <div class="login-art" aria-hidden="true"></div>
@@ -78,10 +80,9 @@ export function renderLogin(root, status, { onSuccess, themeButton = () => '' })
       button.innerHTML = ico(show ? 'eyeOff' : 'eye');
     })
   );
-  root.querySelector('[data-forgot]')?.addEventListener('click', () => {
-    const box = root.querySelector('[data-forgot-box]');
-    box.hidden = !box.hidden;
-  });
+  const again = (options) => renderLogin(root, status, { onSuccess, themeButton, ...options });
+  root.querySelector('[data-forgot]')?.addEventListener('click', () => again({ reset: true }));
+  root.querySelector('[data-back]')?.addEventListener('click', () => again({ reset: false }));
 
   const fail = (message, input) => {
     error.textContent = message;
@@ -109,7 +110,6 @@ export function renderLogin(root, status, { onSuccess, themeButton = () => '' })
       submit.removeAttribute('aria-busy');
       submit.innerHTML = `<span>${label}</span>`;
       if (err.data?.setupRequired) return renderLogin(root, { setupRequired: true }, { onSuccess, themeButton });
-      if (setup && err.status === 409) return renderLogin(root, { setupRequired: false }, { onSuccess, themeButton });
       f.password.value = '';
       fail(err.message, setup && err.status === 403 ? f.code : f.password);
     }

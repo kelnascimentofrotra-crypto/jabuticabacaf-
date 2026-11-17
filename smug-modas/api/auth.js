@@ -27,23 +27,26 @@ export default handler(async (req, res) => {
     return send(res, 200, { authenticated: false }, { 'Set-Cookie': clearCookie(req) });
   }
 
+  // Código de acesso permanente (ADMIN_SETUP_CODE): cria o acesso no primeiro uso e, depois,
+  // serve para criar um e-mail e uma senha novos quando a senha for esquecida. Não expira.
+  // Trocar o acesso derruba as sessões abertas em outros aparelhos.
   if (body.action === 'setup') {
     const expected = normalizeCode(process.env.ADMIN_SETUP_CODE);
-    if (!expected) return fail(res, 503, 'Código de ativação não configurado na Vercel.');
-    if (await getAdmin()) return fail(res, 409, 'O acesso ao painel já foi criado. Entre com o seu e-mail e senha.');
+    if (!expected) return fail(res, 503, 'Código de acesso não configurado na Vercel.');
     const blocked = loginBlocked(ip);
     if (blocked) return fail(res, 429, `Muitas tentativas. Tente de novo em ${blocked} s.`);
     if (!safeEqual(normalizeCode(body.code), expected)) {
       loginFailed(ip);
-      return fail(res, 403, 'Código de ativação incorreto.');
+      return fail(res, 403, 'Código de acesso incorreto.');
     }
     if (!EMAIL.test(String(body.email || '').trim())) return fail(res, 400, 'Digite um e-mail válido.');
     if (String(body.password || '').length < 8) return fail(res, 400, 'A senha precisa ter pelo menos 8 caracteres.');
-    const record = await newAdminRecord(body.email, body.password);
+    const admin = await getAdmin();
+    const record = await newAdminRecord(body.email, body.password, admin?.data);
     try {
-      await saveAdmin(record, null);
+      await saveAdmin(record, admin ? admin.etag : null);
     } catch (error) {
-      if (error instanceof ConflictError) return fail(res, 409, 'O acesso ao painel já foi criado.');
+      if (error instanceof ConflictError) return fail(res, 409, 'O acesso foi alterado agora há pouco em outro aparelho. Tente de novo.');
       throw error;
     }
     loginSucceeded(ip);

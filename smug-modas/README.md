@@ -86,16 +86,16 @@ JPG/PNG/WebP, conferindo o conteúdo do arquivo) para o Blob, com nome aleatóri
 
 **Login.** Uma conta única (e-mail e senha) para todos os aparelhos:
 
-- **primeiro acesso:** o painel pede o **código de ativação** (variável `ADMIN_SETUP_CODE` na Vercel) e cria o
-  e-mail e a senha. Depois disso o código não vale mais;
+- **código de acesso permanente** (variável `ADMIN_SETUP_CODE` na Vercel): no primeiro acesso, cria o e-mail e a
+  senha; depois, em “Esqueci minha senha”, cria um e-mail e uma senha novos (derrubando as sessões abertas). Ele não
+  expira — guarde em lugar seguro e troque o valor na Vercel se ele vazar;
 - a senha é guardada só como hash **scrypt** com sal, num arquivo privado de nome imprevisível no Blob;
 - a sessão é um cookie `HttpOnly`, `Secure`, `SameSite=Strict`, assinado (HMAC) e válido por 7 dias;
   trocar a senha desconecta os outros aparelhos;
 - após 5 tentativas erradas, o login espera 30 s (o tempo dobra a cada novo erro, até 15 min); publicações
   exigem a mesma origem do site;
-- **esqueceu a senha?** Quem cuida da Vercel apaga o arquivo `private/admin-….json` no Blob (Storage → Browser)
-  e o painel volta a pedir o código de ativação (troque também o `ADMIN_SETUP_CODE` e faça um novo deploy).
-  Não troque o `SMUG_SESSION_SECRET` à toa: ele também define onde fica a conta.
+- **esqueceu a senha?** Use o código de acesso em “Esqueci minha senha”. Não troque o `SMUG_SESSION_SECRET` à toa:
+  ele também define onde fica a conta.
 
 **Variáveis na Vercel** (Project → Settings → Environment Variables): `BLOB_READ_WRITE_TOKEN` (criada ao
 conectar o Blob), `ADMIN_SETUP_CODE` e `SMUG_SESSION_SECRET` (ambas *sensitive*). Nenhuma chave vai para o
