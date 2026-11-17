@@ -13,6 +13,14 @@ process.env.ADMIN_SETUP_CODE ||= 'SMUG-TESTE';
 delete process.env.BLOB_READ_WRITE_TOKEN;
 const PORT = Number(process.env.PORT || 3000);
 
+// Mesmos cabeçalhos de segurança da Vercel (vercel.json), menos os que só valem em HTTPS
+const vercel = JSON.parse(await fs.readFile(path.join(ROOT, 'vercel.json'), 'utf8'));
+const SECURITY = Object.fromEntries(
+  (vercel.headers.find((h) => h.source === '/(.*)')?.headers || [])
+    .filter((h) => h.key !== 'Strict-Transport-Security')
+    .map((h) => [h.key, h.key === 'Content-Security-Policy' ? h.value.replace(/;\s*upgrade-insecure-requests/, '') : h.value])
+);
+
 const TYPES = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.mjs': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.webp': 'image/webp',
@@ -24,21 +32,20 @@ async function serveFile(res, file) {
     const stat = await fs.stat(file);
     if (stat.isDirectory()) return serveFile(res, path.join(file, 'index.html'));
     let data = await fs.readFile(file);
-    // O site lê o conteúdo publicado no armazenamento local
-    if (file === path.join(ROOT, 'index.html')) {
-      data = Buffer.from(data.toString('utf8').replace(/<meta name="smug-live"[^>]*>|(<meta name="smug-content-version"[^>]*>)/, (m, version) => (version ? `${version}\n<meta name="smug-live" content="/_local-blob/site/content.json">` : '')));
-    }
-    res.writeHead(200, { 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
+    res.writeHead(200, { ...SECURITY, 'Content-Type': TYPES[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-cache' });
     res.end(data);
   } catch {
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('Não encontrado');
+    // Como na Vercel: endereço inexistente mostra a página 404 do site
+    const page = await fs.readFile(path.join(ROOT, '404.html')).catch(() => 'Não encontrado');
+    res.writeHead(404, { ...SECURITY, 'Content-Type': 'text/html; charset=utf-8' });
+    res.end(page);
   }
 }
 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  const pathname = decodeURIComponent(url.pathname);
+  let pathname = decodeURIComponent(url.pathname);
+  if (pathname === '/conteudo.json') pathname = '/api/site'; // mesma regra do vercel.json
 
   if (pathname.startsWith('/api/')) {
     const name = pathname.slice(5).replace(/[^\w-]/g, '');

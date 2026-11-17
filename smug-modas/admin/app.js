@@ -1,27 +1,29 @@
-// Painel da SMUG MODAS — acesso, navegação (4 seções) e publicação direta no site.
+// Painel da SMUG MODAS — mesmo layout do painel do Marcos: menu lateral (4 opções), topo com
+// modo claro/escuro, conta e "Sair". Cada "Salvar" publica direto no site (via /api).
 import { api } from './api.js';
 import { renderLogin } from './login.js';
-import { toast, confirmDialog, esc, ico } from './ui.js';
+import { toast, confirmDialog, esc, ico, BRAND } from './ui.js';
 import { inicioView } from './views/inicio.js';
 import { postagensView, postagemFormView } from './views/postagens.js';
 import { produtosView, produtoFormView, categoriasView } from './views/produtos.js';
-import { configuracoesView } from './views/configuracoes.js';
+import { configuracoesView, contaView } from './views/configuracoes.js';
 
 const NAV = [
-  { id: 'inicio', label: 'Início', icon: 'home' },
+  { id: 'inicio', label: 'Dashboard', icon: 'dash' },
   { id: 'postagens', label: 'Postagens', icon: 'posts' },
   { id: 'produtos', label: 'Produtos', icon: 'hanger' },
   { id: 'configuracoes', label: 'Configurações', icon: 'gear' },
 ];
 
 const ROUTES = [
-  [/^inicio$/, inicioView, 'inicio', 'Início'],
+  [/^inicio$/, inicioView, 'inicio', 'Dashboard'],
   [/^postagens$/, postagensView, 'postagens', 'Postagens'],
   [/^postagens\/(.+)$/, postagemFormView, 'postagens', 'Postagem'],
   [/^produtos$/, produtosView, 'produtos', 'Produtos'],
   [/^produtos\/categorias$/, categoriasView, 'produtos', 'Categorias'],
   [/^produtos\/(.+)$/, produtoFormView, 'produtos', 'Produto'],
   [/^configuracoes$/, configuracoesView, 'configuracoes', 'Configurações'],
+  [/^conta$/, contaView, '', 'Minha conta'],
 ];
 
 const $ = (selector) => document.querySelector(selector);
@@ -51,7 +53,7 @@ export const app = {
       return true;
     } catch (error) {
       if (error.status === 401) {
-        toast('Sua sessão expirou. Entre de novo para continuar.', 'error', 7000);
+        toast('Sua sessão terminou. Entre de novo para continuar.', 'error', 7000);
         showLogin({ setupRequired: false });
       } else if (error.status === 409) {
         await this.reload().catch(() => {});
@@ -77,14 +79,55 @@ export const app = {
   },
 };
 
-/* ---------- Navegação ---------- */
-function buildNav() {
-  $('[data-nav]').innerHTML = NAV.map((item) => `<a class="app-nav__link" href="#/${item.id}" data-nav-id="${item.id}">${esc(item.label)}</a>`).join('');
-  $('[data-tabbar]').innerHTML = NAV.map(
-    (item) => `<a class="tabbar__link" href="#/${item.id}" data-nav-id="${item.id}">${ico(item.icon)}<span>${esc(item.label)}</span></a>`
-  ).join('');
+/* ---------- Tema claro / escuro (igual ao painel do Marcos) ---------- */
+const isDark = () => document.documentElement.dataset.theme === 'dark';
+function paintThemeButtons() {
+  document.querySelectorAll('[data-theme-btn]').forEach((button) => {
+    const label = isDark() ? 'Usar modo claro' : 'Usar modo escuro';
+    button.innerHTML = ico(isDark() ? 'sun' : 'moon');
+    button.setAttribute('aria-label', label);
+    button.title = label;
+  });
+  $('meta[name="theme-color"]').content = isDark() ? '#1a100d' : '#f7f3ec';
+}
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('[data-theme-btn]')) return;
+  document.documentElement.dataset.theme = isDark() ? 'light' : 'dark';
+  try {
+    localStorage.setItem('smug:admin-tema', isDark() ? 'escuro' : 'claro');
+  } catch {
+    /* sem armazenamento: vale só nesta visita */
+  }
+  paintThemeButtons();
+});
+
+/* ---------- Estrutura: menu lateral + topo ---------- */
+function buildShell() {
+  document.querySelectorAll('[data-brand]').forEach((el) => (el.innerHTML = BRAND));
+  $('[data-nav]').innerHTML = NAV.map((item) => `<a href="#/${item.id}" data-nav-id="${item.id}">${ico(item.icon)}<span>${esc(item.label)}</span></a>`).join('');
+  $('[data-site-link]').innerHTML = `${ico('external')}<span>Ver o site</span>`;
+  $('[data-menu]').innerHTML = ico('menu');
+  $('[data-logout]').innerHTML = `${ico('out')}<span>Sair</span>`;
+  paintThemeButtons();
 }
 
+const toggleDrawer = (open = !document.body.classList.contains('drawer-open')) => {
+  document.body.classList.toggle('drawer-open', open);
+  $('[data-menu]').setAttribute('aria-expanded', String(open));
+};
+$('[data-menu]').addEventListener('click', () => toggleDrawer());
+$('[data-close-drawer]').addEventListener('click', () => toggleDrawer(false));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && document.body.classList.contains('drawer-open')) toggleDrawer(false);
+});
+
+function paintIdentity() {
+  $('[data-email]').textContent = app.email;
+  $('[data-avatar]').textContent = (app.email[0] || 'S').toUpperCase();
+}
+app.paintIdentity = paintIdentity;
+
+/* ---------- Navegação ---------- */
 let currentHash = '';
 let ignoreHash = false;
 
@@ -93,11 +136,12 @@ async function route() {
     ignoreHash = false;
     return;
   }
+  toggleDrawer(false);
   const hash = location.hash.replace(/^#\/?/, '') || 'inicio';
   if (app.formDirty && `#/${hash}` !== currentHash) {
     const leave = await confirmDialog({
       title: 'Sair sem salvar?',
-      text: 'As alterações deste formulário ainda não foram publicadas.',
+      text: 'Existem alterações que não foram salvas.',
       confirm: 'Sair sem salvar',
       cancel: 'Continuar editando',
       danger: true,
@@ -114,17 +158,22 @@ async function route() {
   const [re, view, nav, title] = ROUTES.find(([pattern]) => pattern.test(path)) || ROUTES[0];
   const params = (path.match(re) || []).slice(1);
   document.querySelectorAll('[data-nav-id]').forEach((link) => {
-    if (link.dataset.navId === nav) link.setAttribute('aria-current', 'page');
+    const on = link.dataset.navId === nav;
+    link.classList.toggle('is-on', on);
+    if (on) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   });
   app.setTitle(title);
-  const main = $('#main');
+  // página nova a cada rota: nenhum evento da tela anterior continua ligado
+  const old = $('#main');
+  const main = old.cloneNode(false);
+  old.replaceWith(main);
   window.scrollTo(0, 0);
   try {
     await view(app, main, ...params);
   } catch (error) {
     console.error(error);
-    main.innerHTML = `<div class="container empty"><h2>Algo deu errado</h2><p>${esc(error.message)}</p><a class="btn btn--wine" href="#/inicio">Voltar ao início</a></div>`;
+    main.innerHTML = `<div class="state state--error"><span class="state-ico">${ico('alert')}</span><h3>Algo deu errado</h3><p>${esc(error.message)}</p><div class="state-actions"><a class="btn btn-primary" href="#/inicio">Voltar ao Dashboard</a></div></div>`;
   }
   main.focus({ preventScroll: true });
 }
@@ -133,28 +182,33 @@ async function route() {
 function showLogin(status) {
   $('[data-app]').hidden = true;
   $('[data-boot]').hidden = true;
-  $('[data-login]').hidden = false;
-  document.body.classList.add('is-login');
+  const root = $('[data-login]');
+  root.hidden = false;
   app.setTitle('Entrar');
-  renderLogin($('[data-login-card]'), status, { onSuccess: enterApp });
+  const themeButton = () => {
+    const label = isDark() ? 'Usar modo claro' : 'Usar modo escuro';
+    return `<button class="btn icon-btn theme-btn theme-float" type="button" data-theme-btn aria-label="${label}" title="${label}">${ico(isDark() ? 'sun' : 'moon')}</button>`;
+  };
+  renderLogin(root, status, { onSuccess: enterApp, themeButton });
 }
 
 async function enterApp(email) {
   app.email = email;
   await app.reload();
-  $('[data-login]').hidden = true;
-  $('[data-login-card]').innerHTML = ''; // sem campos de senha escondidos na página
+  const login = $('[data-login]');
+  login.hidden = true;
+  login.innerHTML = ''; // sem campos de senha escondidos na página
   $('[data-boot]').hidden = true;
   $('[data-app]').hidden = false;
-  document.body.classList.remove('is-login');
+  paintIdentity();
   await route();
 }
 
 $('[data-logout]').addEventListener('click', async () => {
-  if (app.formDirty && !(await confirmDialog({ title: 'Sair sem salvar?', text: 'As alterações deste formulário ainda não foram publicadas.', confirm: 'Sair', danger: true }))) return;
+  if (app.formDirty && !(await confirmDialog({ title: 'Sair sem salvar?', text: 'Existem alterações que não foram salvas.', confirm: 'Sair', danger: true }))) return;
   app.formDirty = false;
   await api.logout().catch(() => {});
-  toast('Você saiu do painel.');
+  toast('Você saiu do painel.', 'info');
   showLogin({ setupRequired: false });
 });
 
@@ -165,20 +219,24 @@ window.addEventListener('beforeunload', (event) => {
   if (app.formDirty) event.preventDefault();
 });
 
+function fatal(message) {
+  $('[data-boot]').innerHTML = `<span class="state-ico">${ico('alert')}</span><p>${esc(message)}</p><a class="btn" href="../">Voltar para o site</a>`;
+}
+
 async function start() {
-  buildNav();
+  buildShell();
   let status;
   try {
     status = await api.status();
   } catch (error) {
-    $('[data-boot]').innerHTML = `<span class="boot__mark" aria-hidden="true">S</span><p>${esc(error.message)}</p><a class="btn btn--line" href="../">Voltar ao site</a>`;
+    fatal(error.message);
     return;
   }
   if (status.authenticated) {
     try {
       await enterApp(status.email);
     } catch (error) {
-      $('[data-boot]').innerHTML = `<span class="boot__mark" aria-hidden="true">S</span><p>${esc(error.message)}</p>`;
+      fatal(error.message);
     }
   } else showLogin(status);
 }

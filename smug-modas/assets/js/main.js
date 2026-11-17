@@ -520,6 +520,58 @@ function initPosts() {
   });
 }
 
+/* ---------- Cookies e Google Analytics ----------
+   O aviso só existe quando há um ID do Google Analytics configurado no painel.
+   Nada do Google é carregado antes de a pessoa clicar em "Aceitar". */
+function initConsent() {
+  const box = document.querySelector('[data-consent]');
+  if (!box) return;
+  const KEY = 'smug:cookies';
+  const id = box.dataset.ga;
+  const read = () => {
+    try {
+      return localStorage.getItem(KEY) || '';
+    } catch {
+      return '';
+    }
+  };
+  const loadAnalytics = () => {
+    if (window.__smugGa || !/^G-[A-Z0-9]{4,14}$/.test(id)) return;
+    window.__smugGa = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function gtag() {
+      window.dataLayer.push(arguments);
+    };
+    window.gtag('js', new Date());
+    window.gtag('config', id, { anonymize_ip: true });
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
+    document.head.append(script);
+  };
+  const show = (on) => {
+    box.hidden = !on;
+    if (on) box.querySelector('[data-consent-choice="aceito"]')?.focus({ preventScroll: true });
+  };
+  box.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-consent-choice]');
+    if (!button) return;
+    const choice = button.dataset.consentChoice;
+    try {
+      localStorage.setItem(KEY, choice);
+    } catch {
+      /* sem armazenamento: vale só nesta visita */
+    }
+    show(false);
+    if (choice === 'aceito') loadAnalytics();
+    else if (window.__smugGa) window.location.reload(); // tira o Analytics que já estava carregado
+  });
+  document.querySelector('[data-consent-open]')?.addEventListener('click', () => show(true));
+  const choice = read();
+  if (choice === 'aceito') loadAnalytics();
+  else if (!choice) show(true);
+}
+
 initHeader();
 initPosts();
 const menu = initMenu();
@@ -531,4 +583,5 @@ initParallax();
 initTilt();
 initScrollProgress();
 initForm();
+initConsent();
 window.__smugReady = true;

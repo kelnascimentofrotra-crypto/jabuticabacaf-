@@ -59,21 +59,24 @@ smug-modas/
 
 ## Painel da loja (`/admin/`)
 
-Painel no mesmo visual da abertura do site (parede creme iluminada, SMUG em vinho, Fabielly e o vidro),
-para usar no celular ou no computador. São quatro áreas:
+Mesmo layout do painel do Marcos (menu lateral escuro, topo com modo claro/escuro, conta e “Sair”,
+cartões com números, tabelas e login com a tela dividida), nas cores da SMUG. Funciona no celular
+(o menu vira gaveta e as tabelas viram cartões) e no computador. São quatro opções no menu:
 
-| Área | O que faz |
+| Opção | O que faz |
 | --- | --- |
-| **Início** | resumo (postagens publicadas, rascunhos, produtos disponíveis e esgotados), últimas postagens, produtos que precisam de atenção, data da última atualização do site |
-| **Postagens** | escrever, editar, publicar/tirar do site, fixar em destaque e excluir postagens (título, texto, data, foto de capa, botão com link opcional), com prévia igual ao site; filtros e busca |
-| **Produtos** | ver o que está disponível / esgotado / oculto e mudar a situação direto na lista; cadastrar, editar, duplicar e excluir peças (fotos, preço, categoria, cores, tamanhos, descrição, link); aba **Categorias** (nome, texto, foto, link, ordem; renomear atualiza os produtos) |
-| **Configurações** | **Dados da loja** (WhatsApp com teste do link, e-mail, endereço, mapa, horário, Instagram, serviço do formulário, vantagens da abertura com “confirmada”), **Textos do site** (todas as seções) e **Conta** (trocar e-mail/senha, sair) |
+| **Dashboard** | cartões (postagens no site, rascunhos, produtos disponíveis, esgotados, categorias), lista “Para o site ficar completo” com botão “Resolver”, últimas postagens e últimos produtos |
+| **Postagens** | tabela com busca e filtro; situação (publicada/rascunho) e destaque (estrela) mudam na própria lista; formulário com título, texto, foto de capa, botão com link, data e destaque |
+| **Produtos** | tabela com busca e filtros; situação (disponível/esgotado/oculto) muda na lista; formulário com fotos, preço, categoria, cores, tamanhos, link; duplicar e excluir. Botão **Categorias** (nome, texto, foto, link, ordem e link do catálogo) |
+| **Configurações** | contato (WhatsApp com teste do link, e-mail, Instagram), endereço e horário, razão social e CNPJ para o rodapé, serviço do formulário, Google Analytics, vantagens da abertura e todos os textos do site |
+
+**Minha conta** (clicando no nome, no topo): trocar e-mail ou senha e sair.
 
 **Como o site é atualizado.** Cada “Salvar e publicar” envia o conteúdo para a função `/api/content`, que confere o
 login, valida os dados (links só `https://`, tamanhos, listas) e grava um único arquivo público no **Vercel Blob**.
-O site lê esse arquivo por `/conteudo.json` ao abrir (`assets/js/live.js`) e refaz só as seções que mudaram —
-sem novo deploy. Sem rede ou sem o arquivo, a página continua como foi gerada. O CDN pode levar até 1 minuto para
-mostrar a mudança a todos; pelo botão “Ver site” do painel ela aparece na hora.
+O site lê esse conteúdo por `/conteudo.json` (função `api/site.js`) ao abrir (`assets/js/live.js`) e refaz só as
+seções que mudaram — sem novo deploy. Sem publicação ainda, a função devolve o conteúdo original (nunca dá erro).
+A Vercel guarda a resposta por até 15 segundos; pelo botão “Ver o site” do painel a mudança aparece na hora.
 
 **Dois aparelhos ao mesmo tempo.** Cada publicação leva a versão em que a edição começou. Se o site mudou em outro
 aparelho, a função recusa (409), o painel carrega a versão nova e pede para salvar de novo — nada é sobrescrito.
@@ -157,6 +160,25 @@ grandes ou de alta densidade. **Para a versão final, envie as fotos originais e
 (Fabielly no fundo creme, Fabielly na loja, ambiente da loja, recepção e as cinco categorias)
 e substitua os arquivos mantendo os mesmos nomes, ou atualize `width`/`height` em
 `src/content.json`.
+
+## Checklist de lançamento
+
+| Item | Situação |
+| --- | --- |
+| Celular | testado de 320 a 1440 px, sem rolagem lateral; menu do celular |
+| Formulário | com serviço de envio: só diz “enviada” se o serviço confirmar; sem ele, abre o WhatsApp (ou e-mail) com a mensagem pronta; sem nenhum contato, avisa que não enviou |
+| WhatsApp | links `wa.me` só existem com número cadastrado no painel (nenhum número inventado) |
+| Página 404 | `404.html` gerada pelo build, com a identidade do site e botão para o início |
+| HTTPS / hospedagem | Vercel, HTTPS automático + HSTS |
+| Imagens | WebP; foto da abertura com versão de 360 px para celular |
+| Favicon | `favicon.ico` + PNG 32 px + ícone do iPhone |
+| Imagem de compartilhamento | `og:image` 1200×630 com endereço completo e texto alternativo |
+| `sitemap.xml` e `robots.txt` | gerados pelo build (painel e API fora das buscas) |
+| Google Analytics e cookies | opcional: com o ID em Configurações, aparece o aviso e o Analytics só carrega depois de “Aceitar”. Sem o ID o site não usa cookies |
+| Dados no rodapé | WhatsApp, e-mail, Instagram, endereço, horário, razão social e CNPJ (o que estiver preenchido) |
+| Títulos e descrições | título e descrição da página, Open Graph, dados estruturados; 404 e painel com `noindex` |
+| Segurança | Content-Security-Policy (script embutido liberado só pelo hash, conferido pelo build), HSTS, X-Frame-Options, nosniff, Referrer-Policy, Permissions-Policy, COOP |
+| Domínio próprio | pendente: precisa comprar o domínio (Vercel → Domains) |
 
 ## Publicação
 

@@ -2,11 +2,14 @@
   "site": {
     "name": "SMUG MODAS",
     "lang": "pt-BR",
-    "url": "",
+    "url": "https://smugmodassite.vercel.app",
     "title": "SMUG MODAS — Moda é mais que roupa, é expressão",
     "description": "SMUG MODAS: roupas, calçados e acessórios escolhidos com carinho para você se sentir bem, do seu jeito. Conheça a loja e a história da Fabielly.",
     "themeColor": "#160D09",
-    "shareImage": "assets/img/og-smug-modas.jpg"
+    "shareImage": "assets/img/og-smug-modas.jpg",
+    "shareImageAlt": "SMUG MODAS — Moda é mais que roupa, é expressão",
+    "legalName": "",
+    "cnpj": ""
   },
   "contact": {
     "whatsapp": {
@@ -127,6 +130,10 @@
     },
     "photo": {
       "src": "assets/img/fabielly-hero.webp",
+      "srcset": [
+        ["assets/img/fabielly-hero-360.webp", 360],
+        ["assets/img/fabielly-hero.webp", 531]
+      ],
       "width": 531,
       "height": 971,
       "alt": "Fabielly, fundadora da SMUG MODAS, sorrindo, com colete e calça cor vinho e blusa creme."
@@ -360,6 +367,9 @@
   },
   "footer": {
     "tagline": "Mais que moda, é você."
+  },
+  "analytics": {
+    "gaId": ""
   },
   "live": {
     "url": "/conteudo.json"

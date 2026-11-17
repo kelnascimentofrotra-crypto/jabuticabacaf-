@@ -56,102 +56,105 @@ export const waLink = (number, text = '') => `https://wa.me/${whatsappNumber(num
 export const isUrl = (text) => /^https:\/\/[^\s]+\.[^\s]+/.test(String(text || ''));
 export const isEmail = (text) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(text || ''));
 
-/* ---------- Campos de formulário ---------- */
+/* ---------- Campos de formulário (mesmo padrão do painel do Marcos) ---------- */
 const attrs = (obj) =>
   Object.entries(obj)
     .filter(([, v]) => v !== false && v !== undefined && v !== null)
     .map(([k, v]) => (v === true ? k : `${k}="${esc(v)}"`))
     .join(' ');
 
-let fieldSeq = 0;
-const fieldId = (name) => `f-${String(name).replace(/[^\w-]/g, '-')}-${++fieldSeq}`;
+const labelText = (label, required) => `<span>${esc(label)}${required ? ' <span class="req" aria-hidden="true">*</span>' : ''}</span>`;
+const hintText = (hint) => (hint ? `<small class="hint">${hint}</small>` : '');
 
-export function field({ label, name, value = '', type = 'text', hint = '', required = false, placeholder = '', extra = {}, wide = false, counter = 0 }) {
-  const id = fieldId(name);
-  const hintId = hint ? `${id}-hint` : undefined;
+export function field({ label, name, value = '', type = 'text', hint = '', required = false, placeholder = '', extra = {}, wide = false, counter = 0, money = false }) {
+  const input = `<input ${attrs({ name, type, value, placeholder, required, maxlength: counter || undefined, 'data-counter': counter || undefined, ...extra })}>`;
   return `
-    <div class="field${wide ? ' field--wide' : ''}">
-      <label for="${id}">${esc(label)}${required ? ' <span class="req" aria-hidden="true">*</span>' : ''}</label>
-      <input ${attrs({ id, name, type, value, placeholder, required, 'aria-describedby': hintId, maxlength: counter || undefined, 'data-counter': counter || undefined, ...extra })}>
-      ${hint ? `<p class="hint" id="${hintId}">${hint}</p>` : ''}
-    </div>`;
+    <label class="field${wide ? ' col-2' : ''}">
+      ${labelText(label, required)}
+      ${money ? `<span class="money"><em>R$</em>${input}</span>` : input}
+      ${hintText(hint)}<small class="err"></small>
+    </label>`;
 }
 
-export function textarea({ label, name, value = '', hint = '', rows = 3, required = false, placeholder = '', counter = 0, wide = true }) {
-  const id = fieldId(name);
-  const hintId = hint ? `${id}-hint` : undefined;
+export function textarea({ label, name, value = '', hint = '', rows = 4, required = false, placeholder = '', counter = 0, wide = true }) {
   return `
-    <div class="field${wide ? ' field--wide' : ''}">
-      <label for="${id}">${esc(label)}${required ? ' <span class="req" aria-hidden="true">*</span>' : ''}</label>
-      <textarea ${attrs({ id, name, rows, placeholder, required, 'aria-describedby': hintId, maxlength: counter || undefined, 'data-counter': counter || undefined })}>${esc(value)}</textarea>
-      ${hint ? `<p class="hint" id="${hintId}">${hint}</p>` : ''}
-    </div>`;
+    <label class="field${wide ? ' col-2' : ''}">
+      ${labelText(label, required)}
+      <textarea ${attrs({ name, rows, placeholder, required, maxlength: counter || undefined, 'data-counter': counter || undefined })}>${esc(value)}</textarea>
+      ${hintText(hint)}<small class="err"></small>
+    </label>`;
 }
 
 export function select({ label, name, value = '', options, hint = '', required = false, wide = false }) {
-  const id = fieldId(name);
   return `
-    <div class="field${wide ? ' field--wide' : ''}">
-      <label for="${id}">${esc(label)}${required ? ' <span class="req" aria-hidden="true">*</span>' : ''}</label>
-      <select ${attrs({ id, name, required })}>
+    <label class="field${wide ? ' col-2' : ''}">
+      ${labelText(label, required)}
+      <select ${attrs({ name, required })}>
         ${options.map((o) => `<option value="${esc(o.value)}"${String(o.value) === String(value) ? ' selected' : ''}>${esc(o.label)}</option>`).join('')}
       </select>
-      ${hint ? `<p class="hint">${hint}</p>` : ''}
-    </div>`;
+      ${hintText(hint)}<small class="err"></small>
+    </label>`;
 }
 
 export function toggle({ label, name, checked = false, hint = '' }) {
-  const id = fieldId(name);
   return `
-    <div class="field field--wide field--toggle">
-      <label class="switch" for="${id}">
-        <input type="checkbox" role="switch" ${attrs({ id, name, checked })}>
-        <span class="switch__track" aria-hidden="true"></span>
-        <span class="switch__label">${esc(label)}</span>
-      </label>
-      ${hint ? `<p class="hint">${hint}</p>` : ''}
+    <div class="field col-2">
+      <label class="switch"><input type="checkbox" role="switch" ${attrs({ name, checked })}><span class="switch-ui" aria-hidden="true"></span><span>${label}</span></label>
+      ${hintText(hint)}
     </div>`;
 }
 
 /* ---------- Ícones ---------- */
 const ICONS = {
+  dash: '<path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"/>',
+  home: '<path d="M4 11.5 12 5l8 6.5V19H4z"/>',
+  posts: '<rect x="3.5" y="4" width="17" height="16" rx="2.5"/><path d="M3.5 14.5 8 10l4 4 2.5-2.5 6 6"/><circle cx="15.5" cy="8.5" r="1.6"/>',
+  hanger: '<path d="M10 5.5a2 2 0 1 1 2 2v1.3"/><path d="M12 8.8 3.4 15.4a1 1 0 0 0 .6 1.8h16a1 1 0 0 0 .6-1.8L12 8.8"/>',
+  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M4.2 7.5l2.1 1.2M17.7 15.3l2.1 1.2M4.2 16.5l2.1-1.2M17.7 8.7l2.1-1.2"/><circle cx="12" cy="12" r="6.6"/>',
+  grid: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
-  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/>',
-  trash: '<path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
-  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
-  up: '<path d="m6 14 6-6 6 6"/>',
-  down: '<path d="m6 10 6 6 6-6"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16zM13.5 6.5l4 4"/>',
+  trash: '<path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13M10 11v6M14 11v6"/>',
+  copy: '<rect x="8.5" y="8.5" width="11.5" height="11.5" rx="2.2"/><path d="M15.5 5.5V5a1.5 1.5 0 0 0-1.5-1.5H5A1.5 1.5 0 0 0 3.5 5v9A1.5 1.5 0 0 0 5 15.5h.5"/>',
+  up: '<path d="M5 15l7-7 7 7"/>',
+  down: '<path d="M5 9l7 7 7-7"/>',
+  left: '<path d="M15 5l-7 7 7 7"/>',
+  right: '<path d="M9 5l7 7-7 7"/>',
   eye: '<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
-  whatsapp: '<path d="M3.6 20.4 4.9 16A8.4 8.4 0 1 1 8 19.2z"/><path d="M9.1 8.2c-.4.5-.5 1.2-.2 2.1.7 1.9 2.2 3.4 4.1 4.1.9.3 1.6.2 2.1-.2l.5-.6-1.9-1.1-.9.6c-.9-.4-1.6-1.1-2-2l.6-.9-1.1-1.9z"/>',
-  image: '<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5.5-5.5 4 4 2.5-2.5 4.5 4.5"/>',
-  download: '<path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 19h14"/>',
-  upload: '<path d="M12 16V5"/><path d="m7 10 5-5 5 5"/><path d="M5 19h14"/>',
-  print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="1.5"/><path d="M7 14h10v6H7z"/>',
-  back: '<path d="M19 12H5"/><path d="m11 6-6 6 6 6"/>',
+  eyeOff: '<path d="M9.9 5.8A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.9 3.7M6.6 7.2C4 8.9 2.5 12 2.5 12S6 18.5 12 18.5c1.7 0 3.2-.5 4.5-1.2M9.9 9.9a3 3 0 0 0 4.2 4.2M4 4l16 16"/>',
+  whatsapp: '<path d="M12 3.2a8.6 8.6 0 0 0-7.4 13l-1.2 4.4 4.5-1.2A8.6 8.6 0 1 0 12 3.2z"/>',
+  image: '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.8"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/>',
+  upload: '<path d="M12 16V5M7.5 9.5 12 5l4.5 4.5M5 19h14"/>',
+  swap: '<path d="M7 7h11l-3-3M17 17H6l3 3"/>',
   external: '<path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/>',
   check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
-  alert: '<path d="M12 4 2.8 20h18.4z"/><path d="M12 10v4.5M12 17.2v.1"/>',
-  search: '<circle cx="10.8" cy="10.8" r="6.3"/><path d="m15.4 15.4 5 5"/>',
-  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
-  home: '<path d="M4 11.5 12 5l8 6.5V20h-5.5v-5h-5v5H4z"/>',
-  posts: '<rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M3.5 14.5 8 10l4 4 2.5-2.5 6 6"/><circle cx="15.5" cy="8.5" r="1.6"/>',
-  hanger: '<path d="M10 5.5a2 2 0 1 1 2 2v1.3"/><path d="M12 8.8 3.4 15.4a1 1 0 0 0 .6 1.8h16a1 1 0 0 0 .6-1.8L12 8.8"/>',
-  gear: '<circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
-  star: '<path d="m12 3.2 2.7 5.5 6 .9-4.35 4.25 1.03 6L12 17l-5.38 2.85 1.03-6L3.3 9.6l6-.9z"/>',
-  calendar: '<rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  alert: '<path d="M12 4 2.8 20h18.4zM12 10v4.5M12 17.3v.2"/>',
+  search: '<circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/>',
+  star: '<path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+  clock: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+  bag: '<path d="M5.5 8.5h13l-1 11h-11z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  out: '<path d="M10 5H5v14h5M14 8l4 4-4 4M18 12H9"/>',
+  sun: '<circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+  moon: '<path d="M19.5 14.6A7.8 7.8 0 0 1 9.4 4.5a7.8 7.8 0 1 0 10.1 10.1z"/>',
+  lock: '<rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+  mail: '<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/>',
   user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20.2a7 7 0 0 1 14 0"/>',
-  lock: '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
-  eyeOff: '<path d="M3 3l18 18"/><path d="M10.6 5.6A9.7 9.7 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-2.9 3.7M6.6 6.6C3.9 8.3 2.5 12 2.5 12S6 18.5 12 18.5c1.6 0 3-.4 4.3-1.1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/>',
+  link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 };
 export const ico = (name) => `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${ICONS[name] || ''}</svg>`;
 
-/* ---------- Avisos e diálogos ---------- */
-export function toast(message, type = 'info', timeout = 4200) {
+// Marca SMUG MODAS (mesma do site: S + linha + SMUG/MODAS)
+export const BRAND = '<span class="brand" aria-hidden="true"><span class="brand-mark">S</span><span class="brand-rule"></span><span class="brand-type"><span class="brand-name">SMUG</span><span class="brand-sub">MODAS</span></span></span>';
+
+/* ---------- Avisos e janelas ---------- */
+export function toast(message, type = 'success', timeout = 4600) {
   const box = document.querySelector('[data-toasts]');
   const el = document.createElement('div');
   el.className = `toast toast--${type}`;
   el.setAttribute('role', type === 'error' ? 'alert' : 'status');
-  el.textContent = message;
+  el.innerHTML = `${ico(type === 'error' ? 'alert' : type === 'info' ? 'alert' : 'check')}<span></span>`;
+  el.querySelector('span').textContent = message;
   box.append(el);
   requestAnimationFrame(() => el.classList.add('is-in'));
   setTimeout(() => {
@@ -161,10 +164,9 @@ export function toast(message, type = 'info', timeout = 4200) {
 }
 
 // Abre o <dialog> do painel com o HTML informado. Resolve com o valor de `close(value)`.
-export function modal(html, { onMount, wide = false, full = false } = {}) {
+export function modal(html, { onMount } = {}) {
   const dialog = document.querySelector('[data-modal]');
   const opener = document.activeElement;
-  dialog.className = `modal${wide ? ' modal--wide' : ''}${full ? ' modal--full' : ''}`;
   dialog.innerHTML = html;
   return new Promise((resolve) => {
     let result;
@@ -193,14 +195,12 @@ export function modal(html, { onMount, wide = false, full = false } = {}) {
 
 export function confirmDialog({ title, text = '', confirm = 'Confirmar', cancel = 'Cancelar', danger = false }) {
   return modal(`
-    <form method="dialog" class="modal__body modal__body--small">
-      <h2 class="modal__title">${esc(title)}</h2>
-      ${text ? `<p class="modal__text">${text}</p>` : ''}
-      <div class="modal__actions">
-        <button class="btn btn--ghost" type="button" data-close="">${esc(cancel)}</button>
-        <button class="btn ${danger ? 'btn--danger' : 'btn--wine'}" type="button" data-close="ok">${esc(confirm)}</button>
-      </div>
-    </form>`).then((value) => value === 'ok');
+    <h2>${esc(title)}</h2>
+    ${text ? `<p>${text}</p>` : ''}
+    <div class="modal-actions">
+      <button class="btn" type="button" data-close="">${esc(cancel)}</button>
+      <button class="btn ${danger ? 'btn-danger' : 'btn-primary'}" type="button" data-close="ok">${esc(confirm)}</button>
+    </div>`).then((value) => value === 'ok');
 }
 
 // Lê os campos de um <form> em um objeto simples (checkbox → boolean)
@@ -208,20 +208,24 @@ export function formValues(form) {
   const out = {};
   for (const el of form.elements) {
     if (!el.name || el.disabled) continue;
-    if (el.type === 'checkbox') out[el.name] = el.checked;
-    else if (el.type === 'radio') {
+    if (el.type === 'checkbox') {
+      if (el.name in out && typeof out[el.name] !== 'boolean') continue;
+      out[el.name] = el.checked;
+    } else if (el.type === 'radio') {
       if (el.checked) out[el.name] = el.value;
     } else out[el.name] = el.value.trim();
   }
   return out;
 }
 
-// Some com a mensagem de erro de um campo assim que ele é corrigido
+// O aviso de erro de um campo some assim que ele é corrigido
 export function bindErrorClear(form) {
   const clear = (event) => {
-    const box = event.target.closest('.field, [data-photo]');
+    const box = event.target.closest('.field, .photo-slot');
     if (!box) return;
-    box.querySelectorAll('.field-error').forEach((e) => e.remove());
+    box.classList.remove('has-error');
+    const err = box.querySelector('.err');
+    if (err) err.textContent = '';
     box.querySelectorAll('[aria-invalid]').forEach((e) => e.removeAttribute('aria-invalid'));
   };
   form.addEventListener('input', clear);
@@ -232,13 +236,13 @@ export function bindErrorClear(form) {
 export function bindCounters(root) {
   root.querySelectorAll('[data-counter]').forEach((input) => {
     const max = Number(input.dataset.counter);
-    const out = document.createElement('span');
+    const out = document.createElement('small');
     out.className = 'counter';
     out.setAttribute('aria-hidden', 'true');
     const update = () => {
       out.textContent = `${input.value.length}/${max}`;
     };
-    input.insertAdjacentElement('afterend', out);
+    (input.closest('.money') || input).insertAdjacentElement('afterend', out);
     input.addEventListener('input', update);
     update();
   });

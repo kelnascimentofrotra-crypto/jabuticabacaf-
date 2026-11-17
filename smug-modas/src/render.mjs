@@ -12,6 +12,24 @@ import { about } from './components/about.mjs';
 import { contactSection, formMode } from './components/contact.mjs';
 import { footer } from './components/footer.mjs';
 
+// Script do <head>: liga as animações só com JS disponível (com reserva de 2,5 s).
+// Fica embutido na página; a política de segurança (CSP) libera exatamente este texto pelo hash,
+// que o build confere em vercel.json.
+export const BOOT_SCRIPT = `
+// Habilita as animações de entrada e o header em dois estados apenas quando o JS está disponível.
+// Se o main.js não iniciar em 2,5 s, o conteúdo é exibido e o header fica no estado completo.
+(function (d) {
+  if (!('IntersectionObserver' in window)) return;
+  d.classList.add('js');
+  setTimeout(function () {
+    if (window.__smugReady) return;
+    d.classList.add('reveal-fallback');
+    var header = document.querySelector('[data-header]');
+    if (header) header.classList.add('is-past-hero');
+  }, 2500);
+})(document.documentElement);
+`;
+
 // Dados estruturados apenas com o que está confirmado (sem preços, estoque ou avaliações).
 const structuredData = ({ site, contact }) => {
   const abs = (path) => (site.url ? `${site.url}/${path}` : path);
@@ -50,27 +68,16 @@ ${site.url ? `<link rel="canonical" href="${esc(site.url)}/">` : ''}
 <meta property="og:image" content="${esc(abs(site.shareImage))}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+${site.shareImageAlt ? `<meta property="og:image:alt" content="${esc(site.shareImageAlt)}">` : ''}
 ${site.url ? `<meta property="og:url" content="${esc(site.url)}/">` : ''}
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.ico" sizes="any">
 <link rel="icon" href="assets/icons/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
 <link rel="preload" href="assets/fonts/playfair-display-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/jost-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/styles.css">
-<script>
-  // Habilita as animações de entrada e o header em dois estados apenas quando o JS está disponível.
-  // Se o main.js não iniciar em 2,5 s, o conteúdo é exibido e o header fica no estado completo.
-  (function (d) {
-    if (!('IntersectionObserver' in window)) return;
-    d.classList.add('js');
-    setTimeout(function () {
-      if (window.__smugReady) return;
-      d.classList.add('reveal-fallback');
-      var header = document.querySelector('[data-header]');
-      if (header) header.classList.add('is-past-hero');
-    }, 2500);
-  })(document.documentElement);
-</script>
+<script>${BOOT_SCRIPT}</script>
 <script type="module" src="assets/js/live.js"></script>
 <script type="application/ld+json">${structuredData(content)}</script>`;
 };

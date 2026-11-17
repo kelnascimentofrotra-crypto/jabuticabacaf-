@@ -72,7 +72,7 @@ export const hero = ({ hero: h, heroBenefits }) => `
     </h1>
 
     <figure class="hero__figure">
-      ${img(h.photo, { className: 'hero__photo', eager: true, priority: true })}
+      ${img(h.photo, { className: 'hero__photo', eager: true, priority: true, sizes: '(min-width: 1024px) 40vh, 66vw' })}
     </figure>
 
     <p class="hero__tagline">
