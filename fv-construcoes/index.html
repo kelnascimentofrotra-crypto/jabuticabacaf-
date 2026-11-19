@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR" class="no-js">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>FV Construções e Serviços | Ferramentas, máquinas e equipamentos em Chapadinha - MA</title>
+    <meta
+      name="description"
+      content="Há mais de 12 anos em Chapadinha (MA), a FV Construções e Serviços fornece ferramentas elétricas, bombas d'água e motores, máquinas e equipamentos para profissionais, empresas e obras."
+    />
+    <meta name="theme-color" content="#0a0b0d" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="geo.region" content="BR-MA" />
+    <meta name="geo.placename" content="Chapadinha" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="FV Construções e Serviços" />
+    <meta property="og:title" content="FV Construções e Serviços | Chapadinha - MA" />
+    <meta
+      property="og:description"
+      content="Ferramentas, equipamentos e fornecimento para profissionais, empresas e obras, com variedade e atendimento próximo."
+    />
+    <meta property="og:image" content="og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Fachada da loja FV Construções e Serviços em Chapadinha" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--seo-extra-->
+
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <link rel="preload" href="fonts/archivo-variable-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      as="image"
+      type="image/avif"
+      imagesrcset="img/hero-industrial-720.avif 720w, img/hero-industrial-1080.avif 1080w, img/hero-industrial-1544.avif 1544w"
+      imagesizes="(min-width: 960px) 64vw, 100vw"
+      fetchpriority="high"
+    />
+
+    <style>
+      @font-face {
+        font-family: 'Archivo';
+        src: url('fonts/archivo-variable-latin.woff2') format('woff2-variations'),
+          url('fonts/archivo-variable-latin.woff2') format('woff2');
+        font-weight: 100 900;
+        font-stretch: 62% 125%;
+        font-style: normal;
+        font-display: swap;
+      }
+      /* Métricas próximas da Archivo para reduzir o deslocamento na troca de fonte */
+      @font-face {
+        font-family: 'Archivo Fallback';
+        src: local('Arial');
+        size-adjust: 103%;
+        ascent-override: 88%;
+        descent-override: 22%;
+      }
+      html { background: #0a0b0d; }
+    </style>
+
+    <script>
+      // Habilita animações apenas com JS; se o app não iniciar em 4s, o conteúdo aparece mesmo assim.
+      document.documentElement.classList.replace('no-js', 'js');
+      setTimeout(function () {
+        if (!window.__fvReady) document.documentElement.classList.add('reveal-fallback');
+      }, 4000);
+    </script>
+    <!--jsonld-->
+  </head>
+  <body>
+    <div id="root"><!--app-html--></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

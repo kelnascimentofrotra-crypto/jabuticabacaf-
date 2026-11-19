@@ -1,0 +1,164 @@
+/* ---------- Contato e localização ---------- */
+.contact {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+  border-top: 1px solid var(--line);
+}
+
+.contact__head {
+  display: grid;
+  gap: 1.5rem;
+  align-items: end;
+  margin-bottom: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+.contact__intro {
+  max-width: 30rem;
+  color: var(--text-2);
+}
+
+.contact__panel {
+  display: grid;
+  border-radius: 22px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 60px 100px -60px rgba(0, 0, 0, 0.95);
+}
+
+.contact__photo {
+  border-radius: 0;
+  min-height: 300px;
+  aspect-ratio: 4 / 3;
+}
+
+.contact__photo picture {
+  position: absolute;
+  inset: 0;
+}
+
+.contact__photo img {
+  object-position: 6% center;
+}
+
+.contact__photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(10, 11, 13, 0.7) 0%, rgba(10, 11, 13, 0) 40%);
+}
+
+.contact__photo figcaption {
+  position: absolute;
+  z-index: 1;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contact__info {
+  display: grid;
+  gap: 2rem;
+  align-content: start;
+  padding: clamp(1.5rem, 4vw, 3rem);
+}
+
+.contact__list {
+  display: grid;
+}
+
+.contact__list > div {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact__list > div:first-child {
+  padding-top: 0;
+}
+
+.contact__list dt {
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.contact__list dd {
+  display: grid;
+  gap: 0.6rem;
+  justify-items: start;
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.contact__phone {
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 760;
+  font-stretch: 85%;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  transition: color 0.3s;
+}
+
+.contact__phone:hover {
+  color: var(--orange);
+}
+
+.contact__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.contact__map {
+  position: relative;
+  height: 230px;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.contact__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(0.85) invert(0.9) hue-rotate(180deg) contrast(0.92) brightness(0.95);
+}
+
+.contact__map-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-3);
+  font-size: 0.9rem;
+}
+
+@media (min-width: 960px) {
+  .contact__head {
+    grid-template-columns: 1fr auto;
+  }
+  .contact__panel {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  }
+  .contact__photo {
+    aspect-ratio: auto;
+    min-height: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  .contact__actions .btn {
+    flex: 1 1 100%;
+  }
+}
