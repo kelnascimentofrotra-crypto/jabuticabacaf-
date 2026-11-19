@@ -13,6 +13,17 @@ export default function Picture({
   className,
   imgClassName,
 }) {
+  // Versão em arquivo único (npm run build:standalone): imagens embutidas por nome.
+  const embedded = globalThis.__FV_IMG__?.[image.name];
+  if (embedded) {
+    return (
+      <picture className={className}>
+        <img src={embedded} alt={alt} width={image.width} height={image.height} loading={loading}
+          decoding="async" fetchPriority={fetchPriority} className={imgClassName} />
+      </picture>
+    );
+  }
+
   const srcSet = (ext) => image.widths.map((w) => `${BASE}img/${image.name}-${w}.${ext} ${w}w`).join(', ');
   const fallbackWidth = image.widths[Math.min(1, image.widths.length - 1)];
 
